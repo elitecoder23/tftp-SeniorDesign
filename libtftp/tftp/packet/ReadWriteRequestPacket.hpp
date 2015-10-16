@@ -1,0 +1,213 @@
+/**
+ * @file
+ * @copyright
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * $Date$
+ * $Revision$
+ * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ *
+ * @brief Declaration of class ReadWriteRequestPacket.
+ **/
+
+#ifndef TFTP_PACKET_READWRITEREQUESTPACKET_HPP
+#define TFTP_PACKET_READWRITEREQUESTPACKET_HPP
+
+#include <tftp/packet/Packet.hpp>
+#include <tftp/packet/TftpPacket.hpp>
+#include <tftp/options/OptionList.hpp>
+
+#include <map>
+#include <string>
+
+namespace Tftp
+{
+	namespace Packet
+	{
+		using Tftp::Options::OptionList;
+		using Tftp::TransferMode;
+
+		/**
+		 * @brief Base class for TFTP Read-/ Write- Request packet.
+		 *
+		 * | RRQ/WRQ | FName |  0  | Mode |  0  | Opt 1 |  0  | OptV 1 |  0  | ... | Opt N |  0  | OptV N |  0  |
+		 * |:-------:|:-----:|:---:|:----:|:---:|:-----:|:---:|:------:|:---:|:---:|:-----:|:---:|:------:|:---:|
+		 * |   2 B   |  str  | 1 B | str  | 1 B |  str  | 1 B |   str  | 1 B |     |  str  | 1 B |  str   | 1 B |
+		 **/
+		class ReadWriteRequestPacket: public TftpPacket
+		{
+			public:
+				/**
+				 * @brief Converts the mode enumeration to the corresponding packet
+				 *   string.
+				 *
+				 * @param[in] mode
+				 *   The transfer mode.
+				 *
+				 * @return The corresponding string representation.
+				 *
+				 * @throw InvalidPacketException
+				 *   When mode is not a valid transfer mode.
+				 **/
+				static string getMode( const TransferMode mode);
+
+				/**
+				 * @brief Converts the mode string to the corresponding enumeration.
+				 *
+				 * @param[in] mode
+				 *   The transfer mode.
+				 *
+				 * @return The corresponding mode.
+				 *
+				 * @throw InvalidPacketException
+				 *   When mode is not a valid transfer mode.
+				 **/
+				static TransferMode getMode( const string &mode);
+
+				/**
+				 * @brief Returns the request filename.
+				 *
+				 * @return The filename
+				 **/
+				string getFilename( void) const;
+
+				/**
+				 * @brief sets the filename
+				 *
+				 * @param[in] filename
+				 *   The new filename.
+				 **/
+				void setFilename( const string &filename);
+
+				/**
+				 * @brief Returns the transfer mode.
+				 *
+				 * @return The transfer mode.
+				 **/
+				TransferMode getMode( void) const;
+
+				/**
+				 * @brief Sets the transfer mode.
+				 *
+				 * @param[in] mode
+				 *   The new transfer mode.
+				 *
+				 * @throw TftpPacketException
+				 *   When mode is not a valid transfer mode.
+				 **/
+				void setMode( const TransferMode mode);
+
+				/**
+				 * @brief Sets the transfer mode.
+				 *
+				 * @param[in] mode
+				 *   The new transfer mode.
+				 **/
+				void setMode( const string &mode);
+
+				/**
+				 * @brief Returns the set TFTP options.
+				 *
+				 * @return The TFTP options.
+				 **/
+				const OptionList& getOptions( void) const;
+
+				/**
+				 * @brief Returns the set TFTP options.
+				 *
+				 * @return The TFTP options.
+				 **/
+				OptionList& getOptions( void);
+
+				/**
+				 * @brief Sets the TFTP options.
+				 *
+				 * @param[in] options
+				 *   The TFTP options.
+				 **/
+				void setOptions( const OptionList &options);
+
+				/**
+				 * @brief Returns the option value with the given name.
+				 *
+				 * @param[in] name
+				 *   The option name.
+				 *
+				 * @return The option value.
+				 * @retval std::string()
+				 *   When the given option is not set.
+				 **/
+				const string getOption( const string &name) const;
+
+				/**
+				 * @brief set a option
+				 *
+				 * @param[in] name
+				 *   The option name.
+				 * @param[in] value
+				 *   The option value.
+				 **/
+				void setOption( const string &name, const string &value);
+
+				/**
+				 * @copydoc TftpPacket::encode()
+				 **/
+				virtual RawTftpPacketType encode( void) const override;
+
+				/**
+				 * @copydoc TftpPacket::toString()
+				 **/
+				virtual string toString( void) const override;
+
+			protected:
+				/**
+				 * @brief Creates a read/ write request packet with the given data.
+				 *
+				 * @param[in] packetType
+				 *   The packet type of the packet. Valid are RRQ and WRQ
+				 * @param[in] filename
+				 *   The filename, which will be requested
+				 * @param[in] mode
+				 *   The transfer mode
+				 * @param[in] options
+				 *   The options, which are set
+				 *
+				 * @throw InvalidPacketException
+				 *   When packetType is not valid.
+				 **/
+				ReadWriteRequestPacket(
+					const PacketType packetType,
+					const string &filename,
+					const TransferMode mode,
+					const OptionList &options);
+
+				/**
+				 * @brief Generates a TFTP Read/ Write Request packet from a data buffer
+				 *
+				 * @param[in] packetType
+				 *   The type of the packet. Only READ_REQUEST or
+				 *   WRITE_REQUEST is allowed.
+				 * @param[in] rawPacket
+				 *   Packet, which shall be decoded.
+				 *
+				 * @throw InvalidPacketException
+				 *   When rawPacket is not an valid packet.
+				 **/
+				ReadWriteRequestPacket(
+					const PacketType packetType,
+					const RawTftpPacketType &rawPacket);
+
+			private:
+				//! stored request filename
+				string filename;
+				//! stored transfer mode
+				string mode;
+				//! stored options
+				OptionList options;
+		};
+	}
+}
+
+#endif
