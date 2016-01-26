@@ -19,66 +19,65 @@
 
 #include <string>
 
-namespace Tftp
+namespace Tftp {
+namespace Options {
+
+using std::string;
+
+/**
+ * @brief TFTP option, which is interpreted as string.
+ **/
+class StringOption: public Option
 {
-	namespace Options
-	{
-		using std::string;
+	public:
+		/**
+		 * @brief Generates an option with the given name an value.
+		 *
+		 * @param[in] name
+		 *   The option name.
+		 * @param[in] value
+		 *   The option value.
+		 **/
+		StringOption( const string &name, const string &value);
+
+		//! @copybrief Option::getValueString()
+		virtual string getValueString( void) const override;
 
 		/**
-		 * @brief TFTP option, which is interpreted as string.
+		 * @brief Sets the option value.
+		 *
+		 * @param[in] value
+		 *   The option value.
 		 **/
-		class StringOption : public Option
-		{
-			public:
-				/**
-				 * @brief Generates an option with the given name an value.
-				 *
-				 * @param[in] name
-				 *   The option name.
-				 * @param[in] value
-				 *   The option value.
-				 **/
-				StringOption( const string &name, const string &value);
+		void setValue( const string &value);
 
-				//! @copybrief Option::getValueString()
-				virtual string getValueString( void) const override;
+		/**
+		 * @copydoc Option::negotiateServer()
+		 *
+		 * String options cannot be negotiated.
+		 * This operation always return an empty option pointer.
+		 *
+		 * @return Always an empty option pointer.
+		 **/
+		virtual OptionPointer negotiateServer(
+			const string &optionValue) const override;
 
-				/**
-				 * @brief Sets the option value.
-				 *
-				 * @param[in] value
-				 *   The option value.
-				 **/
-				void setValue( const string &value);
+		/**
+		 * @copydoc Option::negotiateClient()
+		 *
+		 * String options cannot be negotiated.
+		 * This operation always return an empty option pointer.
+		 *
+		 * @return Always an empty option pointer.
+		 **/
+		virtual OptionPointer negotiateClient(
+			const string &optionValue) const override;
 
-				/**
-				 * @copydoc Option::negotiateServer()
-				 *
-				 * String options cannot be negotiated. This operation always return an
-				 * empty option pointer.
-				 *
-				 * @return Always an empty option pointer.
-				 **/
-				virtual OptionPointer negotiateServer(
-					const string &optionValue) const override;
-
-				/**
-				 * @copydoc Option::negotiateClient()
-				 *
-				 * String options cannot be negotiated. This operation always return an
-				 * empty option pointer.
-				 *
-				 * @return Always an empty option pointer.
-				 **/
-				virtual OptionPointer negotiateClient(
-					const string &optionValue) const override;
-
-			private:
-				//! The option value.
-				string value;
-		};
-	}
+	private:
+		//! The option value.
+		string value;
+};
+}
 }
 
 #endif

@@ -49,167 +49,168 @@
 /**
  * @brief Basic definitions of the TFTP protocol
  **/
-namespace Tftp
+namespace Tftp {
+
+//! The packet type of raw data
+using RawTftpPacketType = std::vector< uint8_t>;
+
+//! The address type for TFTP operations
+//! shortened form of the IP address type (v4 + v6)
+using IpAddressType = boost::asio::ip::address;
+
+//! shortened form of the UDP address type (IP + UDP Port)
+using UdpAddressType = boost::asio::ip::udp::endpoint;
+
+/**
+ * @brief TFTP version information
+ **/
+enum class TftpVersion
 {
-	//! The packet type of raw data
-	using RawTftpPacketType = std::vector< uint8_t>;
+	//! TFTP Version 2 (RFC1350)
+	TFTP_VERSION_2,
+	//! TFTP Version 2 with Options Extension (RFC1350 + RFC2347)
+	TFTP_VERSION_2_WITH_OPTIONS_EXTENSION,
 
-	//! The address type for TFTP operations
-	//! shortened form of the IP address type (v4 + v6)
-	using IpAddressType = boost::asio::ip::address;
+	//! Invalid entry
+	TFTP_VERSION_LAST
+};
 
-	//! shortened form of the UDP address type (IP + UDP Port)
-	using UdpAddressType = boost::asio::ip::udp::endpoint;
+//! TFTP role enumeration
+enum class TftpRole
+{
+	TFTP_ROLE_CLIENT, //!< TFTP client role
+	TFTP_ROLE_SERVER, //!< TFTP server role
 
-	/**
-	 * @brief TFTP version information
-	 **/
-	enum class TftpVersion
-	{
-		//! TFTP Version 2 (RFC1350)
-		TFTP_VERSION_2,
-		//! TFTP Version 2 with Options Extension (RFC1350 + RFC2347)
-		TFTP_VERSION_2_WITH_OPTIONS_EXTENSION,
+	TFTP_ROLE_LAST    //!< invalid value
+};
 
-		//! Invalid entry
-		TFTP_VERSION_LAST
-	};
+//! TFTP request type
+enum class TftpRequestType
+{
+	ReadRequest,
+	WriteRequest,
+	Invalid
+};
+//! @brief Phases of TFTP transfer
+enum class TftpTransferPhase
+{
+	//! Initialisation phase before any request has been sent/ received.
+	TFTP_PHASE_INITIALIZATION,
+	//! TFTP request phase RRQ/WRQ and wait for ACK.
+	TFTP_PHASE_REQUEST,
+	//! TFTP option negotiation phase wait for OACK.
+	TFTP_PHASE_OPTION_NEGOTIATION,
+	//! TFTP data transfer phase.
+	TFTP_PHASE_DATA_TRANSFER,
+	//! TFTP transfer phase unknown.
+	TFTP_PHASE_UNKNOWN
+};
 
-	//! TFTP role enumeration
-	enum class TftpRole
-	{
-		TFTP_ROLE_CLIENT, //!< TFTP client role
-		TFTP_ROLE_SERVER, //!< TFTP server role
+//! Default TFTP port.
+constexpr uint16_t DEFAULT_TFTP_PORT = 69;
 
-		TFTP_ROLE_LAST    //!< invalid value
-	};
+//! The default TFTP receive timeout in seconds (2 seconds)
+constexpr unsigned int DEFAULT_TFTP_RECEIVE_TIMEOUT = 2;
 
-	//! TFTP request type
-	enum class TftpRequestType
-	{
-		ReadRequest,
-		WriteRequest,
-		Invalid
-	};
-	//! @brief Phases of TFTP transfer
-	enum class TftpTransferPhase
-	{
-		//! Initialisation phase before any request has been sent/ received.
-		TFTP_PHASE_INITIALIZATION,
-		//! TFTP request phase RRQ/WRQ and wait for ACK.
-		TFTP_PHASE_REQUEST,
-		//! TFTP option negotiation phase wait for OACK.
-		TFTP_PHASE_OPTION_NEGOTIATION,
-		//! TFTP data transfer phase.
-		TFTP_PHASE_DATA_TRANSFER,
-		//! TFTP transfer phase unknown.
-		TFTP_PHASE_UNKNOWN
-	};
+//! Number of retries performed, when no ACK has been received
+constexpr unsigned int DEFAULT_TFTP_RETRIES = 1;
 
-	//! Default TFTP port.
-	constexpr uint16_t DEFAULT_TFTP_PORT = 69;
+/**
+ * @brief TFTP Packet types.
+ *
+ * All packet types, except TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6), are
+ * defined within RFC 1350. The packet type
+ * TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6) is described within RFC 2347.
+ **/
+enum class PacketType : uint16_t
+{
+	READ_REQUEST            = 1, //!< Read request (RRQ)
+	WRITE_REQUEST           = 2, //!< Write request (WRQ)
+	DATA                    = 3, //!< Data (DATA)
+	ACKNOWLEDGEMENT         = 4, //!< Acknowledgement (ACK)
+	ERROR                   = 5, //!< Error (ERROR)
+	OPTIONS_ACKNOWLEDGEMENT = 6, //!< Options Acknowledgement (OACK)
 
-	//! The default TFTP receive timeout in seconds (2 seconds)
-	constexpr unsigned int DEFAULT_TFTP_RECEIVE_TIMEOUT = 2;
+	INVALID                    //!< Invalid value
+};
 
-	//! Number of retries performed, when no ACK has been received
-	constexpr unsigned int DEFAULT_TFTP_RETRIES = 1;
+//! Maximum size of data field in data package (without blksize option)
+constexpr unsigned int DEFAULT_DATA_SIZE = 512;
 
-	/**
-	 * @brief TFTP Packet types.
-	 *
-	 * All packet types, except TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6), are
-	 * defined within RFC 1350. The packet type
-	 * TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6) is described within RFC 2347.
-	 **/
-	enum class PacketType : uint16_t
-	{
-		READ_REQUEST            = 1, //!< Read request (RRQ)
-		WRITE_REQUEST           = 2, //!< Write request (WRQ)
-		DATA                    = 3, //!< Data (DATA)
-		ACKNOWLEDGEMENT         = 4, //!< Acknowledgement (ACK)
-		ERROR                   = 5, //!< Error (ERROR)
-		OPTIONS_ACKNOWLEDGEMENT = 6, //!< Options Acknowledgement (OACK)
+//! Size of TFTP header in data package
+constexpr unsigned int DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE = 4;
 
-		INVALID                    //!< Invalid value
-	};
+//! Maximum size of TFTP package (without blksize option)
+constexpr unsigned int DEFAULT_MAX_PACKET_SIZE =
+	DEFAULT_DATA_SIZE + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE;
 
-	//! Maximum size of data field in data package (without blksize option)
-	constexpr unsigned int DEFAULT_DATA_SIZE = 512;
+//! TFTP transfer modes.
+enum class TransferMode
+{
+	OCTET,    //!< OCTET transfer mode (binary)
+	NETASCII, //!< NETASCII transfer mode.
+	MAIL,     //!< MAIL transfer mode (deprecated).
 
-	//! Size of TFTP header in data package
-	constexpr unsigned int DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE = 4;
+	INVALID   //!< Invalid value
+};
 
-	//! Maximum size of TFTP package (without blksize option)
-	constexpr unsigned int DEFAULT_MAX_PACKET_SIZE =
-		DEFAULT_DATA_SIZE + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE;
+/**
+ * @brief The TFTP Error codes as defined within the RFCs.
+ *
+ * The error codes, except the ERROR_CODE_TFTP_OPTION_REFUSED (8) are
+ * described within RFC 1350.
+ * The error code ERROR_CODE_TFTP_OPTION_REFUSED (8) is described within
+ * RFC 2347.
+ **/
+enum class ErrorCode : uint16_t
+{
+	//! Not defined, see error message (if any).
+	NOT_DEFINED                     = 0,
+	//! File not found
+	FILE_NOT_FOUND                  = 1,
+	//! Access violation.
+	ACCESS_VIOLATION                = 2,
+	//! Disk full or allocation exceeded.
+	DISK_FULL_OR_ALLOCATION_EXCEEDS = 3,
+	//! Illegal TFTP operation.
+	ILLEGAL_TFTP_OPERATION          = 4,
+	//! Unknown transfer ID.
+	UNKNOWN_TRANSFER_ID             = 5,
+	//! File already exists.
+	FILE_ALLREADY_EXISTS            = 6,
+	//! No such user.
+	NO_SUCH_USER                    = 7,
+	//! TFTP options refused during option negotiation
+	TFTP_OPTION_REFUSED             = 8
+};
 
-	//! TFTP transfer modes.
-	enum class TransferMode
-	{
-		OCTET,    //!< OCTET transfer mode (binary)
-		NETASCII, //!< NETASCII transfer mode.
-		MAIL,     //!< MAIL transfer mode (deprecated).
+//! Enumeration of all known TFTP options
+enum class TftpOptions
+{
+	//! Block size option (RFC 2348)
+	BLOCKSIZE,
+	//! Timeout option (RFC 2349)
+	TIMEOUT,
+	//! Transfer size option (RFC 2349)
+	TRANSFER_SIZE
+};
 
-		INVALID   //!< Invalid value
-	};
+//! Minimum TFTP block size option as defined within RFC 2348
+constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MIN = 8;
+//! Maximum TFTP block size option as defined within RFC 2348
+constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MAX = 65464;
 
-	/**
-	 * @brief The TFTP Error codes as defined within the RFCs.
-	 *
-	 * The error codes, except the ERROR_CODE_TFTP_OPTION_REFUSED (8) are
-	 * described within RFC 1350.
-	 * The error code ERROR_CODE_TFTP_OPTION_REFUSED (8) is described within
-	 * RFC 2347.
-	 **/
-	enum class ErrorCode : uint16_t
-	{
-		//! Not defined, see error message (if any).
-		NOT_DEFINED                     = 0,
-		//! File not found
-		FILE_NOT_FOUND                  = 1,
-		//! Access violation.
-		ACCESS_VIOLATION                = 2,
-		//! Disk full or allocation exceeded.
-		DISK_FULL_OR_ALLOCATION_EXCEEDS = 3,
-		//! Illegal TFTP operation.
-		ILLEGAL_TFTP_OPERATION          = 4,
-		//! Unknown transfer ID.
-		UNKNOWN_TRANSFER_ID             = 5,
-		//! File already exists.
-		FILE_ALLREADY_EXISTS            = 6,
-		//! No such user.
-		NO_SUCH_USER                    = 7,
-		//! TFTP options refused during option negotiation
-		TFTP_OPTION_REFUSED             = 8
-	};
+//! Minimum TFTP timeout option as defined within RFC 2349
+constexpr unsigned int TFTP_OPTION_TIMEOUT_MIN = 1;
+//! maximum TFTP timeout option as defined within RFC 2349
+constexpr unsigned int TFTP_OPTION_TIMEOUT_MAX = 255;
 
-	//! Enumeration of all known TFTP options
-	enum class TftpOptions
-	{
-		//! Block size option (RFC 2348)
-		BLOCKSIZE,
-		//! Timeout option (RFC 2349)
-		TIMEOUT,
-		//! Transfer size option (RFC 2349)
-		TRANSFER_SIZE
-	};
+// Forward declarations
+class TftpConfiguration;
+class TftpReceiveDataOperationHandler;
+class TftpTransmitDataOperationHandler;
+class TftpPacketHandler;
 
-	//! Minimum TFTP block size option as defined within RFC 2348
-	constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MIN = 8;
-	//! Maximum TFTP block size option as defined within RFC 2348
-	constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MAX = 65464;
-
-	//! Minimum TFTP timeout option as defined within RFC 2349
-	constexpr unsigned int TFTP_OPTION_TIMEOUT_MIN = 1;
-	//! maximum TFTP timeout option as defined within RFC 2349
-	constexpr unsigned int TFTP_OPTION_TIMEOUT_MAX = 255;
-
-	// Forward declarations
-	class TftpConfiguration;
-	class TftpReceiveDataOperationHandler;
-	class TftpTransmitDataOperationHandler;
-	class TftpPacketHandler;
 }
 
 #endif

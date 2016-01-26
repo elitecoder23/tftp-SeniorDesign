@@ -9,12 +9,12 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpConfiguration.
+ * @brief Definition of class Tftp::TftpConfiguration.
  **/
 
 #include "TftpConfiguration.hpp"
 
-using namespace Tftp;
+namespace Tftp {
 
 TftpConfiguration::TftpConfiguration( void):
 	tftpTimeout( DEFAULT_TFTP_RECEIVE_TIMEOUT),
@@ -66,7 +66,7 @@ boost::property_tree::ptree TftpConfiguration::toProperties( void) const
 }
 
 OptionList TftpConfiguration::getClientOptions(
-	const OptionList &baseOptions) const
+  const OptionList &baseOptions) const
 {
 	OptionList options = baseOptions;
 
@@ -109,4 +109,6 @@ OptionList TftpConfiguration::getServerOptions(
 	}
 
 	return options;
+}
+
 }

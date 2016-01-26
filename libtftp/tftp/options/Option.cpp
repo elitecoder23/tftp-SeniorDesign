@@ -9,12 +9,13 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Option.
+ * @brief Definition of class Tftp::Options::Option.
  **/
 
 #include "Option.hpp"
 
-using namespace Tftp::Options;
+namespace Tftp {
+namespace Options {
 
 string Option::getOptionName( const TftpOptions option) noexcept
 {
@@ -54,4 +55,7 @@ void Option::setName( const std::string &name)
 string Option::toString( void) const
 {
 	return name + ":" + getValueString();
+}
+
+}
 }

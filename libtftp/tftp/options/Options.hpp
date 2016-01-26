@@ -19,20 +19,21 @@
 
 #include <memory>
 
-namespace Tftp
-{
-	/**
-	 * @brief Namespace defining classes for accessing TFTP options according to
-	 *   RFC 2348.
-	 **/
-	namespace Options
-	{
-		class Option;
-		class OptionList;
+namespace Tftp {
 
-		//! Shortened form of option pointer
-		typedef std::shared_ptr< Option> OptionPointer;
-	}
+/**
+ * @brief Namespace defining classes for accessing TFTP options according to
+ *   RFC 2348.
+ **/
+namespace Options {
+
+class Option;
+class OptionList;
+
+//! Shortened form of option pointer
+typedef std::shared_ptr< Option> OptionPointer;
+
+}
 }
 
 #endif

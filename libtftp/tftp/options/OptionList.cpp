@@ -225,7 +225,7 @@ uint16_t OptionList::getBlocksizeOption( void) const
 	OptionMap::const_iterator optionIt = options.find(
 		Option::getOptionName( TftpOptions::BLOCKSIZE));
 
-	//! option not set
+	// option not set
 	if (optionIt == options.end())
 		return 0;
 
@@ -233,7 +233,7 @@ uint16_t OptionList::getBlocksizeOption( void) const
 		dynamic_cast< const IntegerOption< uint16_t>*>(
 			optionIt->second.get());
 
-	//! invalid cast
+	// invalid cast
 	if (!integerOption)
 	{
 		return 0;
@@ -364,23 +364,23 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
 {
 	OptionList negotiatedOptions;
 
-	//! iterate over each received option
+	// iterate over each received option
 	for ( const auto & clientOption : clientOptions.getOptions())
 	{
 		OptionMap::const_iterator negotiationEntryIt = options.find(
 			clientOption.first);
 
-		//! not found -> ignore option
+		// not found -> ignore option
 		if (negotiationEntryIt == options.end())
 		{
 			continue;
 		}
 
-		//! negotiate option
+		// negotiate option
 		OptionPointer newOptionValue = negotiationEntryIt->second->negotiateServer(
 			clientOption.second->getValueString());
 
-		//! negotiation has returned a value -> copy option to output list
+		// negotiation has returned a value -> copy option to output list
 		if (newOptionValue)
 		{
 			negotiatedOptions.setOption( newOptionValue);
@@ -392,35 +392,36 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
 
 OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
 {
-	//! we make sure, that the received options are not empty
+	// we make sure, that the received options are not empty
 	assert( !serverOptions.getOptions().empty());
 
 	OptionList negotiatedOptions;
 
-	//! iterate over each received option
+	// iterate over each received option
 	for ( const auto & serverOption : serverOptions.getOptions())
 	{
-		//! find negotiation entry
-		OptionMap::const_iterator negotiationEntryIt = options.find( serverOption.first);
+		// find negotiation entry
+		OptionMap::const_iterator negotiationEntryIt = options.find(
+			serverOption.first);
 
-		//! not found -> server sent an option, which cannot come from us
+		// not found -> server sent an option, which cannot come from us
 		if (negotiationEntryIt == options.end())
 		{
 			return OptionList();
 		}
 
-		//! negotiate option, if failed also fail on top level
+		// negotiate option, if failed also fail on top level
 		OptionPointer newOptionValue = negotiationEntryIt->second->negotiateClient(
 			serverOption.second->getValueString());
 
-		//! check negotiation result
+		// check negotiation result
 		if (!newOptionValue)
 		{
-			//! negotiation failed -> return immediately
+			// negotiation failed -> return immediately
 			return OptionList();
 		}
 
-		//! negotiation has returned a value -> copy option to output list
+		// negotiation has returned a value -> copy option to output list
 		negotiatedOptions.setOption( newOptionValue);
 	}
 
