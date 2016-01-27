@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpServerBaseErrorOperation.
+ * @brief Definition of class Tftp::Server::TftpServerBaseErrorOperation.
  **/
 
 #include "TftpServerBaseErrorOperation.hpp"
@@ -18,12 +18,13 @@
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Server;
+namespace Tftp {
+namespace Server {
 
 TftpServerBaseErrorOperation::TftpServerBaseErrorOperation(
 	const AddressType &clientAddress)
 try:
-clientAddress( clientAddress),
+	clientAddress( clientAddress),
 	socket( ioService)
 {
 	try
@@ -53,7 +54,7 @@ TftpServerBaseErrorOperation::TftpServerBaseErrorOperation(
 	const AddressType &clientAddress,
 	const AddressType &from)
 try:
-clientAddress( clientAddress),
+	clientAddress( clientAddress),
 	socket( ioService)
 {
 	try
@@ -104,4 +105,7 @@ void TftpServerBaseErrorOperation::sendError( const BaseErrorPacket &error)
 		BOOST_THROW_EXCEPTION( CommunicationException() <<
 			AdditionalInfo( err.what()));
 	}
+}
+
+}
 }

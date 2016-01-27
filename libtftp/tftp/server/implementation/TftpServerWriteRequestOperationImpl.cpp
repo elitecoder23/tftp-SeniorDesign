@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpServerWriteRequestOperationImpl.
+ * @brief Definition of class Tftp::Server::TftpServerWriteRequestOperationImpl.
  **/
 
 #include "TftpServerWriteRequestOperationImpl.hpp"
@@ -24,7 +24,8 @@
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Server;
+namespace Tftp {
+namespace Server {
 
 using Tftp::Packet::AcknowledgementPacket;
 using Tftp::Packet::OptionsAcknowledgementPacket;
@@ -205,4 +206,7 @@ void TftpServerWriteRequestOperationImpl::handleAcknowledgementPacket(
 	//! @throw CommunicationException Always, because this packet is invalid.
 	BOOST_THROW_EXCEPTION( CommunicationException() <<
 		AdditionalInfo( "ACK not expected"));
+}
+
+}
 }

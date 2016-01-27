@@ -9,12 +9,13 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class BlockNumber.
+ * @brief Definition of Tftp::Packet::class BlockNumber.
  **/
 
 #include "BlockNumber.hpp"
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
 BlockNumber::BlockNumber( const uint16_t blockNumber) noexcept:
 	blockNumber( blockNumber)
@@ -101,4 +102,7 @@ bool BlockNumber::operator !=( const BlockNumber &rhs) const
 bool BlockNumber::operator !=( const uint16_t &rhs) const
 {
 	return blockNumber != rhs;
+}
+
+}
 }

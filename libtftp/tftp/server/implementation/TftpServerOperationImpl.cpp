@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpServerOperation.
+ * @brief Definition of class Tftp::Server::TftpServerOperation.
  **/
 
 #include "TftpServerOperationImpl.hpp"
@@ -27,8 +27,9 @@
 #include <helper/Logger.hpp>
 
 #include <boost/bind.hpp>
-using namespace Tftp::Server;
-using Tftp::ErrorCode;
+
+namespace Tftp {
+namespace Server {
 
 TftpServerOperationImpl::TftpServerOperationImpl(
 	const TftpServerInternal &tftpServerInternal,
@@ -48,13 +49,13 @@ try:
 {
 	try
 	{
-		//! Open the socket
+		// Open the socket
 		socket.open( clientAddress.protocol());
 
-		//! bind to local address
+		// bind to local address
 		socket.bind( serverAddress);
 
-		//! connect to client.
+		// connect to client.
 		socket.connect( clientAddress);
 	}
 	catch (boost::system::system_error &err)
@@ -93,10 +94,10 @@ try:
 {
 	try
 	{
-		//! Open socket
+		// Open socket
 		socket.open( clientAddress.protocol());
 
-		//! Connect to client
+		// Connect to client
 		socket.connect( clientAddress);
 	}
 	catch (boost::system::system_error &err)
@@ -124,7 +125,7 @@ TftpServerOperationImpl::~TftpServerOperationImpl( void) noexcept
 	{
 		finished();
 
-		//! - Close the socket.
+		// Close the socket.
 		socket.close();
 	}
 	catch (boost::system::system_error &err)
@@ -135,10 +136,10 @@ TftpServerOperationImpl::~TftpServerOperationImpl( void) noexcept
 
 void TftpServerOperationImpl::operator ()( void)
 {
-	//! start first receive operation
+	// start first receive operation
 	receive();
 
-	//! start the event loop
+	// start the event loop
 	ioService.run();
 }
 
@@ -151,13 +152,13 @@ void TftpServerOperationImpl::send( const TftpPacket &packet)
 {
 	BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
 
-	//! - Reset the transmit counter
+	// Reset the transmit counter
 	transmitCounter = 1;
 
-	//! Store packet type
+	// Store packet type
 	transmitPacketType = packet.getPacketType();
 
-	//! Encode raw packet
+	// Encode raw packet
 	transmitPacket = packet.encode();
 
 	try
@@ -229,7 +230,7 @@ void TftpServerOperationImpl::handleReadRequestPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"RRQ not expected"));
 
-	//! Operation completed
+	// Operation completed
 	finished();
 
 	//! @throw CommunicationException Always, because this packet is invalid.
@@ -247,7 +248,7 @@ void TftpServerOperationImpl::handleWriteRequestPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"WRQ not expected"));
 
-	//! Operation completed
+	// Operation completed
 	finished();
 
 	//! @throw CommunicationException Always, because this packet is invalid.
@@ -278,7 +279,7 @@ void TftpServerOperationImpl::handleOptionsAcknowledgementPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"OACK not expected"));
 
-	//! Operation completed
+	// Operation completed
 	finished();
 
 	//! @throw CommunicationException Always, because this packet is invalid.
@@ -305,13 +306,13 @@ void TftpServerOperationImpl::receiveHandler(
 	const boost::system::error_code& errorCode,
 	std::size_t bytesTransferred)
 {
-	//! handle abort
+	// handle abort
 	if (boost::asio::error::operation_aborted == errorCode)
 	{
 		return;
 	}
 
-	//! Check error
+	// Check error
 	if (errorCode)
 	{
 		BOOST_LOG_TRIVIAL( error) << "receive error: " << errorCode.message();
@@ -321,17 +322,17 @@ void TftpServerOperationImpl::receiveHandler(
 			AdditionalInfo( errorCode.message()));
 	}
 
-	//! resize the received packet
+	// resize the received packet
 	receivePacket.resize( bytesTransferred);
 
-	//! handle the received packet
+	// handle the received packet
 	handlePacket( clientAddress, receivePacket);
 }
 
 void TftpServerOperationImpl::timeoutHandler(
 	const boost::system::error_code& errorCode)
 {
-	//! handle abort
+	// handle abort
 	if (boost::asio::error::operation_aborted == errorCode)
 	{
 		return;
@@ -374,4 +375,7 @@ void TftpServerOperationImpl::timeoutHandler(
 		BOOST_THROW_EXCEPTION( CommunicationException() <<
 			AdditionalInfo( err.what()));
 	}
+}
+
+}
 }

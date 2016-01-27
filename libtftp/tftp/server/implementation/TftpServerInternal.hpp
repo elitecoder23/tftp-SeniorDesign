@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of interface class TftpServerInternal.
+ * @brief Declaration of interface class Tftp::Server::TftpServerInternal.
  **/
 
 #ifndef TFTP_SERVER_TFTPSERVERINTERNAL_HPP

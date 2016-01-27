@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpClientReadRequestOperationImpl.
+ * @brief Definition of class Tftp::Client::TftpClientReadRequestOperationImpl.
  **/
 
 #include "TftpClientReadRequestOperationImpl.hpp"
@@ -20,7 +20,9 @@
 #include <helper/Dump.hpp>
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Client;
+namespace Tftp {
+namespace Client {
+
 using Tftp::Options::OptionList;
 
 TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
@@ -246,4 +248,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
 	//! receive next packet
 	receive();
+}
+
+}
 }

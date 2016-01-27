@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpClientWriteRequestOperationImpl.
+ * @brief Definition of class Tftp::Client::TftpClientWriteRequestOperationImpl.
  **/
 
 #include "TftpClientWriteRequestOperationImpl.hpp"
@@ -21,7 +21,9 @@
 #include <helper/Dump.hpp>
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Client;
+namespace Tftp {
+namespace Client {
+
 using Tftp::Options::OptionList;
 
 TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
@@ -238,4 +240,7 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
 	//! wait for next packet
 	receive();
 
+}
+
+}
 }

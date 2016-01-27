@@ -9,14 +9,15 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpServer.
+ * @brief Definition of class Tftp::Server::TftpServer.
  **/
 
 #include "TftpServer.hpp"
 
 #include <tftp/server/implementation/TftpServerImpl.hpp>
 
-using namespace Tftp::Server;
+namespace Tftp {
+namespace Server {
 
 const Tftp::UdpAddressType TftpServer::DefaultLocalEndpoint = UdpAddressType(
 	boost::asio::ip::address_v4::any(),
@@ -32,4 +33,7 @@ TftpServerPtr TftpServer::createInstance(
 		configuration,
 		additionalOptions,
 		serverAddress);
+}
+
+}
 }

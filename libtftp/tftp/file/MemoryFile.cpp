@@ -9,14 +9,15 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class MemoryFile
+ * @brief Definition of class Tftp::File::MemoryFile
  **/
 
 #include "MemoryFile.hpp"
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp::File;
+namespace Tftp {
+namespace File {
 
 MemoryFile::MemoryFile( void):
 	dataPtr( data.begin())
@@ -73,7 +74,7 @@ MemoryFile::DataType MemoryFile::sendData( const unsigned int maxSize) noexcept
 	DataType::const_iterator endPtr;
 
 	if ( static_cast< unsigned int>(
-		std::distance< std::vector< uint8_t>::const_iterator>(
+		std::distance< DataType::const_iterator>(
 			startPtr,
 			data.end())) <= maxSize)
 	{
@@ -87,4 +88,7 @@ MemoryFile::DataType MemoryFile::sendData( const unsigned int maxSize) noexcept
 	dataPtr=endPtr;
 
 	return DataType( startPtr, endPtr);
+}
+
+}
 }

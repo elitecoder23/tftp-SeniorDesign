@@ -9,7 +9,7 @@
  * @version $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpServerImpl.
+ * @brief Definition of class Tftp::Server::TftpServerImpl.
  **/
 
 #include "TftpServerImpl.hpp"
@@ -27,7 +27,8 @@
 #include <vector>
 #include <cstdint>
 
-using namespace Tftp::Server;
+namespace Tftp {
+namespace Server {
 
 TftpServerImpl::TftpServerImpl(
 	const TftpConfiguration &configuration,
@@ -41,10 +42,10 @@ try:
 {
 	try
 	{
-		//! open the socket
+		// open the socket
 		socket.open( serverAddress.protocol());
 
-		//! bind to the local address
+		// bind to the local address
 		socket.bind( serverAddress);
 	}
 	catch (boost::system::system_error &err)
@@ -79,7 +80,7 @@ TftpServerImpl::~TftpServerImpl( void) noexcept
 	}
 	catch (boost::system::system_error &err)
 	{
-		//! do not throw an exception within the constructor
+		// do not throw an exception within the constructor
 		BOOST_LOG_TRIVIAL( error) << err.what();
 	}
 }
@@ -93,19 +94,19 @@ void TftpServerImpl::registerRequestHandler(
 
 void TftpServerImpl::start( void)
 {
-	//! start receive
+	// start receive
 	receive();
 
-	//! the server loop
+	// the server loop
 	ioService.run();
 }
 
 void TftpServerImpl::stop( void)
 {
-	//! cancel receive operation
+	// cancel receive operation
 	socket.cancel();
 
-	//! stop handler
+	// stop handler
 	ioService.stop();
 }
 
@@ -213,7 +214,7 @@ void TftpServerImpl::receive( void)
 	{
 		packet.resize( DEFAULT_MAX_PACKET_SIZE);
 
-		//! wait for incoming packet
+		// wait for incoming packet
 		socket.async_receive_from(
 			boost::asio::buffer( packet),
 			remoteEndpoint,
@@ -227,6 +228,7 @@ void TftpServerImpl::receive( void)
 	{
 		ioService.stop();
 
+		//! @throw CommunicationException on IO error.
 		BOOST_THROW_EXCEPTION( CommunicationException() <<
 			AdditionalInfo( err.what()));
 	}
@@ -236,13 +238,13 @@ void TftpServerImpl::receiveHandler(
 	const boost::system::error_code& errorCode,
 	std::size_t bytesTransferred)
 {
-	//! handle abort
+	// handle abort
 	if (boost::asio::error::operation_aborted == errorCode)
 	{
 		return;
 	}
 
-	//! Check error
+	// Check error
 	if (errorCode)
 	{
 		BOOST_LOG_TRIVIAL( error) << "receive error: " + errorCode.message();
@@ -254,10 +256,10 @@ void TftpServerImpl::receiveHandler(
 
 	try
 	{
-		//! resize buffer to actual size
+		// resize buffer to actual size
 		packet.resize( bytesTransferred);
 
-		//! handle the received packet (decode it and call the approbate handler)
+		// handle the received packet (decode it and call the approbate handler)
 		handlePacket( remoteEndpoint, packet);
 	}
 	catch ( TftpException &e)
@@ -274,6 +276,7 @@ void TftpServerImpl::handleReadRequestPacket(
 {
 	BOOST_LOG_TRIVIAL( info) << "RX: " << readRequestPacket.toString();
 
+	// find handler for RRQ
 	HandlerMap::iterator handler = handlerMap.find( TftpRequestType::ReadRequest);
 
 	if (handler == handlerMap.end())
@@ -286,10 +289,11 @@ void TftpServerImpl::handleReadRequestPacket(
 			ErrorCode::FILE_NOT_FOUND,
 			"RRQ not accepted");
 
+		// execute error operation
 		errOp();
 	}
 
-	//! call the handler, which handles the received request
+	// call the handler, which handles the received request
 	handler->second(
 		TftpRequestType::ReadRequest,
 		from,
@@ -304,6 +308,7 @@ void TftpServerImpl::handleWriteRequestPacket(
 {
 	BOOST_LOG_TRIVIAL( info) << "RX: " << writeRequestPacket.toString();
 
+	// find handler for RRQ
 	HandlerMap::iterator handler = handlerMap.find( TftpRequestType::WriteRequest);
 
 	if (handler == handlerMap.end())
@@ -315,10 +320,11 @@ void TftpServerImpl::handleWriteRequestPacket(
 			ErrorCode::FILE_NOT_FOUND,
 			"WRQ");
 
+		// execute error operation
 		errOp();
 	}
 
-	//! call the handler, which handles the received request
+	// call the handler, which handles the received request
 	handler->second(
 		TftpRequestType::WriteRequest,
 		from,
@@ -338,6 +344,7 @@ void TftpServerImpl::handleDataPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"DATA not expected");
 
+	// execute error operation
 	errOp();
 }
 
@@ -353,6 +360,7 @@ void TftpServerImpl::handleAcknowledgementPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"ACK not expected");
 
+	// execute error operation
 	errOp();
 }
 
@@ -368,6 +376,7 @@ void TftpServerImpl::handleErrorPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"ERROR not expected");
 
+	// execute error operation
 	errOp();
 }
 
@@ -383,6 +392,7 @@ void TftpServerImpl::handleOptionsAcknowledgementPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"OACK not expected");
 
+	// execute error operation
 	errOp();
 }
 
@@ -391,4 +401,7 @@ void TftpServerImpl::handleInvalidPacket(
 	const RawTftpPacketType &)
 {
 	BOOST_LOG_TRIVIAL( info) << "RX: UNKNOWN: *ERROR* - IGNORE";
+}
+
+}
 }

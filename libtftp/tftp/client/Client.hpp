@@ -20,24 +20,26 @@
 #include <memory>
 #include <functional>
 
-namespace Tftp
-{
-	/**
-	 * @brief Implementation of TFTP client functionality.
-	 *
-	 * The main entry point for users of this part of the TFTP library is the
-	 * class TftpClient. With an instance of this class the user can create
-	 * TFTP client read and write operations.
-	 **/
-	namespace Client
-	{
-		class TftpClient;
+namespace Tftp {
 
-		//! Declaration of TFTP client instance pointer
-		typedef std::shared_ptr< TftpClient> TftpClientPtr;
+/**
+ * @brief Implementation of TFTP client functionality.
+ *
+ * The main entry point for users of this part of the TFTP library is the
+ * class TftpClient. With an instance of this class the user can create
+ * TFTP client read and write operations.
+ **/
+namespace Client {
 
-		using TftpClientOperation = std::function< void( void)>;
-	}
+class TftpClient;
+
+//! Declaration of TFTP client instance pointer
+typedef std::shared_ptr< TftpClient> TftpClientPtr;
+
+//! Declaration of TFTP client operation
+using TftpClientOperation = std::function< void( void)>;
+
+}
 }
 
 #endif

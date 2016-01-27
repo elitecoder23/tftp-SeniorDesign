@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class TftpServerBaseErrorOperation.
+ * @brief Declaration of class Tftp::Server::TftpServerBaseErrorOperation.
  **/
 
 #ifndef TFTP_SERVER_TFTPSERVERBASEERROROPERATION_HPP
@@ -20,67 +20,67 @@
 
 #include <boost/asio.hpp>
 
-namespace Tftp
+namespace Tftp {
+namespace Server {
+
+// Forward declaration of BaseErrorPacket
+using Tftp::Packet::BaseErrorPacket;
+
+/**
+ * @brief Base class of TFTP error operation.
+ **/
+class TftpServerBaseErrorOperation
 {
-	namespace Server
-	{
-		// Forward declaration of BaseErrorPacket
-		using Tftp::Packet::BaseErrorPacket;
+	public:
+		typedef boost::asio::ip::udp::endpoint AddressType;
+
+	protected:
+		/**
+		 * @brief Constructor of error operation
+		 *
+		 * @param[in] clientAddress
+		 *   Where the error packet shall be transmitted to.
+		 *
+		 * @throw CommunicationException
+		 **/
+		TftpServerBaseErrorOperation( const AddressType &clientAddress);
 
 		/**
-		 * @brief Base class of TFTP error operation.
+		 * @brief Constructor of error operation
+		 *
+		 * @param[in] clientAddress
+		 *   Where the error packet shall be transmitted to.
+		 * @param[in] from
+		 *   The communication source.
+		 *
+		 * @throw CommunicationException
 		 **/
-		class TftpServerBaseErrorOperation
-		{
-			public:
-				typedef boost::asio::ip::udp::endpoint AddressType;
+		TftpServerBaseErrorOperation(
+			const AddressType &clientAddress,
+			const AddressType &from);
 
-			protected:
-				/**
-				 * @brief Constructor of error operation
-				 *
-				 * @param[in] clientAddress
-				 *   Where the error packet shall be transmitted to.
-				 *
-				 * @throw CommunicationException
-				 **/
-				TftpServerBaseErrorOperation( const AddressType &clientAddress);
+		/**
+		 * @brief Default destructor.
+		 **/
+		virtual ~TftpServerBaseErrorOperation( void) noexcept;
 
-				/**
-				 * @brief Constructor of error operation
-				 *
-				 * @param[in] clientAddress
-				 *   Where the error packet shall be transmitted to.
-				 * @param[in] from
-				 *   The communication source.
-				 *
-				 * @throw CommunicationException
-				 **/
-				TftpServerBaseErrorOperation(
-					const AddressType &clientAddress,
-					const AddressType &from);
+		/**
+		 * @brief Sends the given error packet.
+		 *
+		 * @param[in] error
+		 *   The error packet.
+		 *
+		 * @throw CommunicationException
+		 **/
+		void sendError( const BaseErrorPacket &error);
 
-				/**
-				 * @brief Default destructor.
-				 **/
-				virtual ~TftpServerBaseErrorOperation( void) noexcept;
+	private:
+		const AddressType clientAddress;
+		boost::asio::io_service ioService;
+		boost::asio::ip::udp::socket socket;
+};
 
-				/**
-				 * @brief Sends the given error packet.
-				 *
-				 * @param[in] error
-				 *   The error packet.
-				 *
-				 * @throw CommunicationException
-				 **/
-				void sendError( const BaseErrorPacket &error);
-
-			private:
-				const AddressType clientAddress;
-				boost::asio::io_service ioService;
-				boost::asio::ip::udp::socket socket;
-		};
-	}
+}
 }
 
 #endif

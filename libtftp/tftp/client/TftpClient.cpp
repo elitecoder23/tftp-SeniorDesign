@@ -9,18 +9,22 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpClient.
+ * @brief Definition of class Tftp::Client::TftpClient.
  **/
 
 #include "TftpClient.hpp"
 
 #include <tftp/client/implementation/TftpClientImpl.hpp>
 
-using namespace Tftp::Client;
+namespace Tftp {
+namespace Client {
 
 TftpClientPtr TftpClient::createInstance(
 	const TftpConfiguration &configuration,
 	const OptionList& additionalOptions)
 {
 	return std::make_shared< TftpClientImpl>( configuration, additionalOptions);
+}
+
+}
 }

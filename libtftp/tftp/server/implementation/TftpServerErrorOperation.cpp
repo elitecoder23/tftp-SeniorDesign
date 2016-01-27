@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpServerErrorOperation.
+ * @brief Definition of class Tftp::Server::TftpServerErrorOperation.
  **/
 
 #include "TftpServerErrorOperation.hpp"
@@ -18,7 +18,8 @@
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Server;
+namespace Tftp {
+namespace Server {
 
 using Tftp::Packet::ErrorPacket;
 
@@ -46,4 +47,7 @@ TftpServerErrorOperation::TftpServerErrorOperation(
 void TftpServerErrorOperation::operator ()( void)
 {
 	sendError( ErrorPacket( errorCode, errorMessage));
+}
+
+}
 }

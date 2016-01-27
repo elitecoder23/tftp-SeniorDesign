@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpServerReadRequestOperationImpl.
+ * @brief Definition of class Tftp::Server::TftpServerReadRequestOperationImpl.
  **/
 
 #include "TftpServerReadRequestOperationImpl.hpp"
@@ -23,7 +23,8 @@
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Server;
+namespace Tftp {
+namespace Server {
 
 using Tftp::Packet::AcknowledgementPacket;
 using Tftp::Packet::DataPacket;
@@ -65,30 +66,31 @@ void TftpServerReadRequestOperationImpl::operator ()( void)
 {
 	try
 	{
-		//! option negotiation leads to empty option list
+		// option negotiation leads to empty option list
 		if (getOptions().getOptions().empty())
 		{
 			sendData();
 		}
 		else
 		{
-			//! check blocksize option
+			// check blocksize option
 			if (0 != getOptions().getBlocksizeOption())
 			{
 				transmitDataSize = getOptions().getBlocksizeOption();
 			}
 
-			//! check timeout option
+			// check timeout option
 			if (0 != getOptions().getTimeoutOption())
 			{
 				setReceiveTimeout( getOptions().getTimeoutOption());
 			}
 
-			//! check transfer size option
+			// check transfer size option
 			if (getOptions().hasTransferSizeOption())
 			{
 				uint64_t transferSize;
 
+				// add transfer size to answer only, if handler supply it.
 				if (handler.requestedTransferSize( transferSize))
 				{
 					getOptions().addTransferSizeOption( transferSize);
@@ -99,11 +101,14 @@ void TftpServerReadRequestOperationImpl::operator ()( void)
 				}
 			}
 
-			//! Send OACK
+			//! @todo what happens, if transfer size option is the only option
+			//! requested, bt the handler does not supply it -> empty OACK is bad!
+
+			// Send OACK
 			send( OptionsAcknowledgementPacket( getOptions()));
 		}
 
-		//! start receive loop
+		// start receive loop
 		TftpServerOperationImpl::operator ()();
 	}
 	catch (...)
@@ -129,7 +134,7 @@ void TftpServerReadRequestOperationImpl::sendData( void)
 		lastDataPacketTransmitted = true;
 	}
 
-	//! send data
+	// send data
 	send( data);
 }
 
@@ -143,7 +148,7 @@ void TftpServerReadRequestOperationImpl::handleDataPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"DATA not expected"));
 
-	//! Operation completed
+	// Operation completed
 	finished();
 
 	//! @throw CommunicationException Always, because this packet is invalid.
@@ -167,7 +172,7 @@ void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
 		return;
 	}
 
-	//! check invalid block number
+	// check invalid block number
 	if (acknowledgementPacket.getBlockNumber() != lastTransmittedBlockNumber)
 	{
 		BOOST_LOG_TRIVIAL( error) << "Invalid block number received";
@@ -176,7 +181,7 @@ void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
 			ErrorCode::ILLEGAL_TFTP_OPERATION,
 			"Block number not expected"));
 
-		//! Operation completed
+		// Operation completed
 		finished();
 
 		//! @throw CommunicationException On invalid block number
@@ -185,7 +190,7 @@ void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
 
 	}
 
-	//! if it was the last ACK of the last data packet - we are finished.
+	// if it was the last ACK of the last data packet - we are finished.
 	if (lastDataPacketTransmitted)
 	{
 		finished();
@@ -193,9 +198,12 @@ void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
 		return;
 	}
 
-	//! send data
+	// send data
 	sendData();
 
-	//! receive next packet
+	// receive next packet
 	receive();
+}
+
+}
 }

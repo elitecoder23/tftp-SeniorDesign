@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class TftpFile.
+ * @brief Declaration of class Tftp::File::TftpFile.
  **/
 
 #ifndef TFTP_FILE_TFTPFILE_HPP
@@ -18,19 +18,19 @@
 #include <tftp/TftpReceiveDataOperationHandler.hpp>
 #include <tftp/TftpTransmitDataOperationHandler.hpp>
 
-namespace Tftp
+namespace Tftp {
+namespace File {
+
+/**
+ * @brief Base class for a TFTP file operation handler, which can be used to
+ * transfer files
+ **/
+class TftpFile:
+  public TftpReceiveDataOperationHandler,
+  public TftpTransmitDataOperationHandler
 {
-	namespace File
-	{
-		/**
-		 * @brief Base class for a TFTP file operation handler, which can be used to
-		 * transfer files
-		 **/
-		class TftpFile :
-			public TftpReceiveDataOperationHandler,
-			public TftpTransmitDataOperationHandler
-		{
-		};
-	}
+};
+
+}
 }
 #endif

@@ -22,125 +22,125 @@
 #include <vector>
 #include <cstdint>
 
-namespace Tftp
+namespace Tftp {
+namespace Packet {
+
+/**
+ * @brief TFTP Data packet (DATA).
+ *
+ * | DATA | Block # | Data 1 |
+ * |:----:|:-------:|:------:|
+ * |  2 B |   2 B   |  n B   |
+ **/
+class DataPacket: public TftpPacket
 {
-	namespace Packet
-	{
+	public:
+		//! Data type
+		typedef std::vector< uint8_t> DataType;
+
 		/**
-		 * @brief TFTP Data packet (DATA).
+		 * @brief Generates a TFTP Data Packet with the given block number and
+		 *   data.
 		 *
-		 * | DATA | Block # | Data 1 |
-		 * |:----:|:-------:|:------:|
-		 * |  2 B |   2 B   |  n B   |
+		 * If the data parameter is suppressed, no data is used.
+		 *
+		 * If the blockNumber parameter is suppressed, a default block number is
+		 * chosen.
+		 *
+		 * @param[in] blockNumber
+		 *   Block number of the packet
+		 * @param[in] data
+		 *   The data within the packet.
 		 **/
-		class DataPacket: public TftpPacket
-		{
-			public:
-				//! Data type
-				typedef std::vector< uint8_t> DataType;
+		DataPacket(
+		  const BlockNumber blockNumber = BlockNumber(),
+		  const DataType &data = DataType()) noexcept;
 
-				/**
-				 * @brief Generates a TFTP Data Packet with the given block number and
-				 *   data.
-				 *
-				 * If the data parameter is suppressed, no data is used.
-				 *
-				 * If the blockNumber parameter is suppressed, a default block number is
-				 * chosen.
-				 *
-				 * @param[in] blockNumber
-				 *   Block number of the packet
-				 * @param[in] data
-				 *   The data within the packet.
-				 **/
-				DataPacket(
-					const BlockNumber blockNumber = BlockNumber(),
-					const DataType &data = DataType()) noexcept;
+		/**
+		 * @brief Generates a TFTP Data packet from a data buffer.
+		 *
+		 * @param[in] rawPacket
+		 *   Packet, which shall be decoded.
+		 *
+		 * @throw InvalidPacketException
+		 *   When rawPacket is not an valid packet.
+		 **/
+		DataPacket( const RawTftpPacketType &rawPacket);
 
-				/**
-				 * @brief Generates a TFTP Data packet from a data buffer.
-				 *
-				 * @param[in] rawPacket
-				 *   Packet, which shall be decoded.
-				 *
-				 * @throw InvalidPacketException
-				 *   When rawPacket is not an valid packet.
-				 **/
-				DataPacket( const RawTftpPacketType &rawPacket);
+		/**
+		 * @brief Returns the set block number.
+		 *
+		 * @return The set block number
+		 **/
+		BlockNumber getBlockNumber( void) const;
 
-				/**
-				 * @brief Returns the set block number.
-				 *
-				 * @return The set block number
-				 **/
-				BlockNumber getBlockNumber( void) const;
+		/**
+		 * @brief Sets the block number of the packet.
+		 *
+		 * @param[in] blockBumber
+		 *   Block number of packet.
+		 **/
+		void setBlockNumber( const BlockNumber blockBumber);
 
-				/**
-				 * @brief Sets the block number of the packet.
-				 *
-				 * @param[in] blockBumber
-				 *   Block number of packet.
-				 **/
-				void setBlockNumber( const BlockNumber blockBumber);
+		/**
+		 * @brief Returns the data as const reference.
+		 *
+		 * It is not possible to modify the data.
+		 *
+		 * @return The data as const reference.
+		 **/
+		const DataType& getData( void) const;
 
-				/**
-				 * @brief Returns the data as const reference.
-				 *
-				 * It is not possible to modify the data.
-				 *
-				 * @return The data as const reference.
-				 **/
-				const DataType& getData( void) const;
+		/**
+		 * @brief Returns the data as reference.
+		 *
+		 * It is possible to modify the data.
+		 *
+		 * @return The data as reference.
+		 **/
+		DataType& getData( void);
 
-				/**
-				 * @brief Returns the data as reference.
-				 *
-				 * It is possible to modify the data.
-				 *
-				 * @return The data as reference.
-				 **/
-				DataType& getData( void);
+		/**
+		 * @brief Sets the data of the packet.
+		 *
+		 * The given data is copied to the local data.
+		 *
+		 * @param[in] data
+		 *   The data to set.
+		 **/
+		void setData( const DataType &data);
 
-				/**
-				 * @brief Sets the data of the packet.
-				 *
-				 * The given data is copied to the local data.
-				 *
-				 * @param[in] data
-				 *   The data to set.
-				 **/
-				void setData( const DataType &data);
+		/**
+		 * @brief Sets the data of the packet by moving the content of [data].
+		 *
+		 * The given data is moved to the local data.
+		 *
+		 * @param[in] data
+		 *   The data to set.
+		 **/
+		void setData( DataType &&data);
 
-				/**
-				 * @brief Sets the data of the packet by moving the content of [data].
-				 *
-				 * The given data is moved to the local data.
-				 *
-				 * @param[in] data
-				 *   The data to set.
-				 **/
-				void setData( DataType &&data);
+		/**
+		 * @brief Returns the data size.
+		 *
+		 * @return The data size in bytes.
+		 **/
+		unsigned int getDataSize( void) const;
 
-				/**
-				 * @brief Returns the data size.
-				 *
-				 * @return The data size in bytes.
-				 **/
-				unsigned int getDataSize( void) const;
+		//! @copydoc TftpPacket::encode()
+		virtual RawTftpPacketType encode( void) const override;
 
-				//! @copydoc TftpPacket::encode()
-				virtual RawTftpPacketType encode( void) const override;
+		//! @copydoc TftpPacket::toString()
+		virtual string toString( void) const override;
 
-				//! @copydoc TftpPacket::toString()
-				virtual string toString( void) const override;
+	private:
+		//! Block number of the packet.
+		BlockNumber blockNumber;
+		//! The data of the packet.
+		DataType data;
+};
 
-			private:
-				//! Block number of the packet.
-				BlockNumber blockNumber;
-				//! The data of the packet.
-				DataType data;
-		};
-	}
+}
 }
 
 #endif

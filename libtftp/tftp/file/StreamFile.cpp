@@ -9,14 +9,15 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class StreamFile
+ * @brief Definition of class Tftp::File::StreamFile.
  **/
 
 #include "StreamFile.hpp"
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp::File;
+namespace Tftp {
+namespace File {
 
 StreamFile::StreamFile( std::iostream &stream):
 	stream( stream),
@@ -39,18 +40,18 @@ void StreamFile::finishedOperation( void) noexcept
 
 bool StreamFile::receivedTransferSize( const uint64_t transferSize)
 {
-	//! If no size is provided
+	// If no size is provided
 	if (!hasSize)
 	{
-		//! Always accept file based on size
+		// Always accept file based on size
 		return true;
 	}
 
-	//! Accept file if size is matching the maximum allowed one.
+	// Accept file if size is matching the maximum allowed one.
 	return (transferSize <= size);
 }
 
-void StreamFile::receviedData( const std::vector< uint8_t> &data) noexcept
+void StreamFile::receviedData( const DataType &data) noexcept
 {
 	stream.write( reinterpret_cast< const char*>( &data[0]), data.size());
 }
@@ -70,4 +71,7 @@ StreamFile::DataType StreamFile::sendData( const unsigned int maxSize) noexcept
 	data.resize( stream.gcount());
 
 	return data;
+}
+
+}
 }

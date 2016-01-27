@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpClientOperation.
+ * @brief Definition of class Tftp::Client::TftpClientOperation.
  **/
 
 #include "TftpClientOperationImpl.hpp"
@@ -27,7 +27,8 @@
 
 #include <boost/bind.hpp>
 
-using namespace Tftp::Client;
+namespace Tftp {
+namespace Client {
 
 TftpClientOperationImpl::~TftpClientOperationImpl( void) noexcept
 {
@@ -640,4 +641,7 @@ void TftpClientOperationImpl::timeoutHandler(
 		BOOST_THROW_EXCEPTION( CommunicationException() <<
 			AdditionalInfo( err.what()));
 	}
+}
+
+}
 }

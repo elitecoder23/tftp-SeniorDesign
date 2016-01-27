@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpClientImpl.
+ * @brief Definition of class Tftp::Client::TftpClientImpl.
  **/
 
 #include "TftpClientImpl.hpp"
@@ -17,7 +17,8 @@
 #include <tftp/client/implementation/TftpClientReadRequestOperationImpl.hpp>
 #include <tftp/client/implementation/TftpClientWriteRequestOperationImpl.hpp>
 
-using namespace Tftp::Client;
+namespace Tftp {
+namespace Client {
 
 TftpClientImpl::TftpClientImpl(
 	const TftpConfiguration &configuration,
@@ -103,4 +104,7 @@ const Tftp::TftpConfiguration& TftpClientImpl::getConfiguration( void) const
 const OptionList& TftpClientImpl::getOptionList( void) const
 {
 	return options;
+}
+
+}
 }
