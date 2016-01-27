@@ -79,15 +79,15 @@ try:
 {
 	try
 	{
-		//! - Open the socket
+		// Open the socket
 		socket.open( serverAddress.protocol());
 
-		//! - Bind socket to source address (from)
+		// Bind socket to source address (from)
 		socket.bind( from);
 	}
 	catch (boost::system::system_error &err)
 	{
-		//! - On error and if socket is opened - close it.
+		// On error and if socket is opened - close it.
 		if (socket.is_open())
 		{
 			socket.close();
@@ -125,12 +125,12 @@ try:
 {
 	try
 	{
-		//! - Open the socket
+		// Open the socket
 		socket.open( serverAddress.protocol());
 	}
 	catch (boost::system::system_error &err)
 	{
-		//! - On error and if socket is opened - close it.
+		//! On error and if socket is opened - close it.
 		if (socket.is_open())
 		{
 			socket.close();
@@ -176,16 +176,16 @@ void TftpClientOperationImpl::sendFirst( const TftpPacket &packet)
 	{
 		BOOST_LOG_TRIVIAL( info) << "TX: " <<  packet.toString();
 
-		//! - Reset the transmit counter
+		// Reset the transmit counter
 		transmitCounter = 1;
 
-		//! Store packet type
+		// Store packet type
 		transmitPacketType = packet.getPacketType();
 
-		//! Encode raw packet
+		// Encode raw packet
 		transmitPacket = packet.encode();
 
-		//! - Send the packet to the remote server
+		// Send the packet to the remote server
 		socket.send_to(
 			boost::asio::buffer( transmitPacket),
 			remoteEndpoint);
@@ -208,16 +208,16 @@ void TftpClientOperationImpl::send( const TftpPacket &packet)
 	{
 		BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
 
-		//! - Reset the transmit counter
+		// Reset the transmit counter
 		transmitCounter = 1;
 
-		//! Store packet type
+		// Store packet type
 		transmitPacketType = packet.getPacketType();
 
-		//! Encode raw packet
+		// Encode raw packet
 		transmitPacket = packet.encode();
 
-		//! - Send the packet to the remote server
+		// Send the packet to the remote server
 		socket.send( boost::asio::buffer( transmitPacket));
 	}
 	catch (boost::system::system_error &err)
@@ -236,11 +236,11 @@ void TftpClientOperationImpl::receiveFirst( void)
 
 	try
 	{
-		//! - Resize the receive buffer to the allowed packet size
+		// Resize the receive buffer to the allowed packet size
 		receivePacket.resize( maxReceivePacketSize);
 
 		// the first time, we make receive_from (answer is not sent from destination)
-		//! - Start the receive operation
+		// Start the receive operation
 		socket.async_receive_from(
 			boost::asio::buffer( receivePacket),
 			receiveEndpoint,
@@ -250,10 +250,10 @@ void TftpClientOperationImpl::receiveFirst( void)
 				boost::asio::placeholders::error,
 				boost::asio::placeholders::bytes_transferred));
 
-		//! - Set receive timeout
+		// Set receive timeout
 		timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
 
-		//! start waiting for receive timeout
+		// start waiting for receive timeout
 		timer.async_wait( boost::bind(
 			&TftpClientOperationImpl::timeoutFirstHandler,
 			this,
@@ -279,7 +279,7 @@ void TftpClientOperationImpl::receive( void)
 
 		ioService.reset();
 
-		//! start receive operation
+		// start receive operation
 		socket.async_receive(
 			boost::asio::buffer( receivePacket),
 			boost::bind(
@@ -288,10 +288,10 @@ void TftpClientOperationImpl::receive( void)
 				boost::asio::placeholders::error,
 				boost::asio::placeholders::bytes_transferred));
 
-		//! set receive timeout
+		// set receive timeout
 		timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
 
-		//! start waiting for receive timeout
+		// start waiting for receive timeout
 		timer.async_wait( boost::bind(
 			&TftpClientOperationImpl::timeoutHandler,
 			this,
@@ -332,7 +332,7 @@ void TftpClientOperationImpl::handleReadRequestPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"RRQ not expected"));
 
-	//! Operation completed
+	// Operation completed
 	finished();
 
 	//! @throw CommunicationException Always, because this packet is invalid.
@@ -353,7 +353,7 @@ void TftpClientOperationImpl::handleWriteRequestPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"WRQ not expected"));
 
-	//! Operation completed
+	// Operation completed
 	finished();
 
 	//! @throw CommunicationException Always, because this packet is invalid.
@@ -370,7 +370,7 @@ void TftpClientOperationImpl::handleErrorPacket(
 	BOOST_LOG_TRIVIAL( info) <<
 		"RX ERROR: " <<  errorPacket.toString();
 
-	//! Operation completed
+	// Operation completed
 	finished();
 
 	//! @throw ErrorReceivedException Always, because this is an error.
@@ -391,6 +391,7 @@ void TftpClientOperationImpl::handleInvalidPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"Invalid packet not expected"));
 
+	// Operation completed
 	finished();
 
 	//! @throw InvalidPacketException Always.
@@ -404,13 +405,13 @@ void TftpClientOperationImpl::receiveFirstHandler(
 {
 	BOOST_LOG_FUNCTION();
 
-	//! operation has been aborted (maybe timeout)
+	// operation has been aborted (maybe timeout)
 	if (boost::asio::error::operation_aborted == errorCode)
 	{
 		return;
 	}
 
-	//! (internal) receive error occurred
+	// (internal) receive error occurred
 	if (errorCode)
 	{
 		BOOST_LOG_TRIVIAL( error) <<
@@ -431,7 +432,7 @@ void TftpClientOperationImpl::receiveFirstHandler(
 			"Received packed from wrong source: " <<
 			receiveEndpoint.address().to_string();
 
-		//! sent Error packet to unknown partner
+		// sent Error packet to unknown partner
 		try
 		{
 			ErrorPacket err(
@@ -446,7 +447,7 @@ void TftpClientOperationImpl::receiveFirstHandler(
 			BOOST_LOG_TRIVIAL( error) << "Error sending ERR packet: " << err.what();
 		}
 
-		//! restart receive operation
+		// restart receive operation
 		try
 		{
 			socket.async_receive_from(
@@ -470,7 +471,7 @@ void TftpClientOperationImpl::receiveFirstHandler(
 		}
 	}
 
-	//! store real end point
+	// store real end point
 	remoteEndpoint = receiveEndpoint;
 
 	try
@@ -588,13 +589,13 @@ void TftpClientOperationImpl::timeoutHandler(
 {
 	BOOST_LOG_FUNCTION();
 
-	//! operation aborted (packet received)
+	// operation aborted (packet received)
 	if (boost::asio::error::operation_aborted == errorCode)
 	{
 		return;
 	}
 
-	//! internal (timer) error occurred
+	// internal (timer) error occurred
 	if (errorCode)
 	{
 		BOOST_LOG_TRIVIAL( error) << "timer error: " << errorCode.message();

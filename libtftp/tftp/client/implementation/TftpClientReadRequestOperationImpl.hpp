@@ -51,7 +51,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
 		 * @param[in] mode
 		 *   The transfer mode
 		 * @param[in] from
-		 *   Optional parameter to define the communication source
+		 *   communication source
 		 **/
 		TftpClientReadRequestOperationImpl(
 			TftpReceiveDataOperationHandler &handler,
@@ -95,7 +95,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
 		 * @copydoc TftpPacketHandler::handleDataPacket()
 		 *
 		 * The TFTP DATA packet is decoded and checked.
-		 * If everything is find, handler is called with extracted data and
+		 * If everything is fine, handler is called with extracted data and
 		 * the receive operation is continued.
 		 **/
 		virtual void handleDataPacket(

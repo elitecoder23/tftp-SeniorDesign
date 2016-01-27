@@ -59,13 +59,13 @@ void TftpClientReadRequestOperationImpl::operator ()( void)
 		receiveDataSize = DEFAULT_DATA_SIZE;
 		lastReceivedBlockNumber = 0;
 
-		//! send read request packet
+		// send read request packet
 		sendFirst( ReadRequestPacket(
 			getFilename(),
 			getMode(),
 			getOptions()));
 
-		//! wait for answers
+		// wait for answers
 		TftpClientOperationImpl::operator ()();
 	}
 	catch (...)
@@ -84,26 +84,29 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
 {
 	BOOST_LOG_TRIVIAL( info) << "RX: " << dataPacket.toString();
 
-	//! check retransmission of last packet
+	// check retransmission of last packet
 	if (dataPacket.getBlockNumber() == lastReceivedBlockNumber)
 	{
 		BOOST_LOG_TRIVIAL( info) << "Received last data package again. Re-ACK them";
 
-		//! Retransmit last ACK packet
+		// Retransmit last ACK packet
 		send( AcknowledgementPacket( lastReceivedBlockNumber));
 
 		return;
 	}
 
-	//! check unexpected block number
+	// check unexpected block number
 	if (dataPacket.getBlockNumber() != lastReceivedBlockNumber.next())
 	{
 		BOOST_LOG_TRIVIAL( error) << "Wrong Data packet block number";
 
-		//! send error packet
+		// send error packet
 		send( ErrorPacket(
 			ErrorCode::ILLEGAL_TFTP_OPERATION,
 			"Block Number not expected"));
+
+		// Operation completed
+		finished();
 
 		//! @throw InvalidPacketException when the DATA packet has an invalid block
 		//! number
@@ -111,40 +114,42 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
 			AdditionalInfo( "Wrong Data packet block number"));
 	}
 
-	//! check for too much data
+	// check for too much data
 	if (dataPacket.getDataSize() > receiveDataSize)
 	{
 		BOOST_LOG_TRIVIAL( error) << "Too much data received";
 
-		//! send error packet
+		// send error packet
 		send( ErrorPacket(
 			ErrorCode::ILLEGAL_TFTP_OPERATION,
 			"Too much data"));
 
-		//! @throw InvalidPacketException When to much data has been received.
+		// Operation completed
+		finished();
 
+		//! @throw InvalidPacketException When to much data has been received.
 		BOOST_THROW_EXCEPTION( InvalidPacketException() <<
 			AdditionalInfo( "To much data received"));
 	}
 
-	//! call call-back
+	// call call-back
 	handler.receviedData( dataPacket.getData());
 
-	//! increment received block number
+	// increment received block number
 	lastReceivedBlockNumber++;
 
-	//! send ACK
+	// send ACK
 	send( AcknowledgementPacket( lastReceivedBlockNumber));
 
-	//! if received data size is smaller then the expected
+	// if received data size is smaller then the expected
 	if (dataPacket.getDataSize() < receiveDataSize)
 	{
-		//! last packet has been received and operation is finished
+		// last packet has been received and operation is finished
 		finished();
 	}
 	else
 	{
-		//! otherwise wait for next data package
+		// otherwise wait for next data package
 		receive();
 	}
 }
@@ -156,12 +161,12 @@ void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
 	BOOST_LOG_TRIVIAL( info) <<
 		"RX ERROR: " << acknowledgementPacket.toString();
 
-	//! send Error
+	// send Error
 	send( ErrorPacket(
 		ErrorCode::ILLEGAL_TFTP_OPERATION,
 		"ACK not expected"));
 
-	//! Operation completed
+	// Operation completed
 	finished();
 
 	//! @throw CommunicationException Always, because this packet is invalid.
@@ -178,7 +183,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
 	OptionList options = optionsAcknowledgementPacket.getOptions();
 
-	//! check empty options
+	// check empty options
 	if (options.getOptions().empty())
 	{
 		BOOST_LOG_TRIVIAL( error) << "Received option list is empty";
@@ -187,15 +192,18 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 			ErrorCode::ILLEGAL_TFTP_OPERATION,
 			"Empty OACK not allowed"));
 
+		// Operation completed
+		finished();
+
 		//! @throw CommunicationException When OACK response is empty.
 		BOOST_THROW_EXCEPTION( CommunicationException() <<
 			AdditionalInfo( "Received option list is empty"));
 	}
 
-	//! perform option negotiation
+	// perform option negotiation
 	OptionList negotiatedOptions = getOptions().negotiateClient( options);
 
-	//! Check empty options list
+	// Check empty options list
 	if (negotiatedOptions.getOptions().empty())
 	{
 		BOOST_LOG_TRIVIAL( error) << "Option negotiation failed";
@@ -204,17 +212,20 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 			ErrorCode::TFTP_OPTION_REFUSED,
 			"Option negotiation failed"));
 
+		// Operation completed
+		finished();
+
 		//! @throw OptionNegotiationException Option negotiation failed.
 		BOOST_THROW_EXCEPTION( OptionNegotiationException() <<
 			AdditionalInfo( "Option negotiation failed"));
 	}
 
-	//! check blocksize option
+	// check blocksize option
 	if (0 != negotiatedOptions.getBlocksizeOption())
 	{
 		receiveDataSize = negotiatedOptions.getBlocksizeOption();
 
-		//! set maximum receive data size if necessary
+		// set maximum receive data size if necessary
 		if (receiveDataSize > DEFAULT_DATA_SIZE)
 		{
 			setMaxReceivePacketSize(
@@ -222,13 +233,13 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 		}
 	}
 
-	//! check timeout option
+	// check timeout option
 	if (0 != negotiatedOptions.getTimeoutOption())
 	{
 		setReceiveTimeout( negotiatedOptions.getTimeoutOption());
 	}
 
-	//! check transfer size option
+	// check transfer size option
 	if (negotiatedOptions.hasTransferSizeOption())
 	{
 		if (!handler.receivedTransferSize( negotiatedOptions.getTransferSizeOption()))
@@ -237,16 +248,19 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 				ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS,
 				"FILE TO BIG"));
 
+			// Operation completed
+			finished();
+
 			//! @throw TftpException When file is to big.
 			BOOST_THROW_EXCEPTION( TftpException() <<
 				AdditionalInfo( "FILE TO BIG"));
 		}
 	}
 
-	//! send Acknowledgement with block number set to 0
+	// send Acknowledgement with block number set to 0
 	send( AcknowledgementPacket( 0));
 
-	//! receive next packet
+	// receive next packet
 	receive();
 }
 
