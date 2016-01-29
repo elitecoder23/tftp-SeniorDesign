@@ -72,12 +72,18 @@ TftpClientApplication::TftpClientApplication(
 		)
 		(
 			"blocksize-option",
-			boost::program_options::value< uint16_t>( &configuration.blockSizeOptionValue),
+			boost::program_options::value< uint16_t>( &configuration.blockSizeOptionValue)->notifier(
+				[this]( const uint16_t &){
+					this->configuration.handleBlockSizeOption = true;
+				}),
 			"blocksize of transfers to use"
 		)
 		(
 			"timeout-option",
-			boost::program_options::value< uint16_t>( &configuration.timoutOptionValue),
+			boost::program_options::value< uint16_t>( &configuration.timoutOptionValue)->notifier(
+				[this]( const uint16_t &){
+					this->configuration.handleTimeoutOption = true;
+				}),
 			"If set handles the timeout option negotiation"
 		)
 		(
@@ -98,7 +104,7 @@ int TftpClientApplication::operator()( void)
 			return EXIT_FAILURE;
 		}
 
-		//! Assemble TFTP configuration
+		// Assemble TFTP configuration
 
 		TftpClientPtr tftpClient = TftpClient::createInstance( configuration);
 		TftpClientOperation op;
@@ -135,7 +141,7 @@ int TftpClientApplication::operator()( void)
 				return EXIT_FAILURE;
 		}
 
-		//! execute operation
+		// execute operation
 		op();
 	}
 	catch ( Tftp::TftpException &e)
@@ -198,9 +204,9 @@ bool TftpClientApplication::handleCommandLine( void)
 			return false;
 		}
 
-		//! Activate blocksize option, if parameter is set
+		// Activate blocksize option, if parameter is set
 		configuration.handleBlockSizeOption = (0!=options.count( "blocksize-option"));
-		//! Activate timeout option, if parameter is set
+		// Activate timeout option, if parameter is set
 		configuration.handleTimeoutOption = (0!=options.count( "timeout-option"));
 	}
 	catch (boost::program_options::error &e)

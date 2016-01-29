@@ -173,9 +173,9 @@ bool TftpServerApplication::handleCommandLine( void)
 			return false;
 		}
 
-		//! Activate blocksize option, if parameter is set
+		// Activate blocksize option, if parameter is set
 		configuration.handleBlockSizeOption = (0!=options.count( "blocksize-option"));
-		//! Activate timeout option, if parameter is set
+		// Activate timeout option, if parameter is set
 		configuration.handleTimeoutOption = (0!=options.count( "timeout-option"));
 	}
 	catch (boost::program_options::error &e)
@@ -217,7 +217,7 @@ void TftpServerApplication::receivedReadRequest(
 	BOOST_LOG_TRIVIAL( info) <<
 		"RRQ: " << filename << " from: " << from.address().to_string();
 
-	//! Check transfer mode
+	// Check transfer mode
 	if (mode != TransferMode::OCTET)
 	{
 		BOOST_LOG_TRIVIAL( error) << "Wrong transfer mode";
@@ -252,10 +252,10 @@ void TftpServerApplication::receivedReadRequest(
 		return;
 	}
 
-	//! open requested file
+	// open requested file
 	std::fstream fileStream( filename.c_str(), std::fstream::in);
 
-	//! check that file was opened successfully
+	// check that file was opened successfully
 	if (!fileStream.good())
 	{
 		BOOST_LOG_TRIVIAL( error) << "Error opening file";
@@ -272,13 +272,13 @@ void TftpServerApplication::receivedReadRequest(
 
 	StreamFile file( fileStream, boost::filesystem::file_size( filename));
 
-	//! initiate TFTP operation
+	// initiate TFTP operation
 	TftpServerOperation operation = server->createReadRequestOperation(
 		file,
 		from,
 		options);
 
-	//! executes the TFTP operation
+	// executes the TFTP operation
 	operation();
 }
 
@@ -326,12 +326,12 @@ void TftpServerApplication::receivedWriteRequest(
 		return;
 	}
 
-	//! open requested file
+	// open requested file
 	std::fstream fileStream(
 		filename.c_str(),
 		std::fstream::out | std::fstream::trunc);
 
-	//! check that file was opened successfully
+	// check that file was opened successfully
 	if (!fileStream.good())
 	{
 		BOOST_LOG_TRIVIAL( error) << "Error opening file";
@@ -347,13 +347,13 @@ void TftpServerApplication::receivedWriteRequest(
 
 	StreamFile file( fileStream);
 
-	//! initiate TFTP operation
+	// initiate TFTP operation
 	TftpServerOperation operation = server->createWriteRequestOperation(
 		file,
 		from,
 		options);
 
-	//! executes the TFTP operation
+	// executes the TFTP operation
 	operation();
 }
 

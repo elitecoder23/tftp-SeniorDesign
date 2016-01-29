@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class BaseErrorPacket.
+ * @brief Declaration of class Tftp::Packet::BaseErrorPacket.
  **/
 
 #ifndef TFTP_PACKET_BASEERRORPACKET_HPP
@@ -20,107 +20,105 @@
 
 #include <string>
 
-namespace Tftp
+namespace Tftp {
+namespace Packet {
+// using declaration
+using std::string;
+
+/**
+ * @brief TFTP Error packet (ERR).
+ *
+ * A TFTP error code consists of an error code and a user readable error
+ * message.
+ *
+ * | ERR | ErrorCode | ErrMsg |  0  |
+ * |:---:|:---------:|:------:|:---:|
+ * | 2 B |    2 B    |  str   | 1 B |
+ *
+ **/
+class BaseErrorPacket: public TftpPacket
 {
-	namespace Packet
-	{
-		// using declaration
-		using std::string;
+	public:
+		/**
+		 * @brief Returns a string, which describes the error code.
+		 *
+		 * This operation is used for debugging and information purposes.
+		 *
+		 * @param[in] errorCode
+		 *   The error code.
+		 *
+		 * @return String describing the error code.
+		 **/
+		static string getErrorCodeString( const ErrorCode errorCode) noexcept;
 
 		/**
-		 * @brief TFTP Error packet (ERR).
+		 * @brief Generates a TFTP error packet with the given error code and error
+		 *   message.
 		 *
-		 * A TFTP error code consists of an error code and a user readable error
-		 * message.
-		 *
-		 * | ERR | ErrorCode | ErrMsg |  0  |
-		 * |:---:|:---------:|:------:|:---:|
-		 * | 2 B |    2 B    |  str   | 1 B |
-		 *
+		 * @param[in] errorCode
+		 *   Error code, which shall be set.
 		 **/
-		class BaseErrorPacket: public TftpPacket
-		{
-			public:
-				/**
-				 * @brief Returns a string, which describes the error code.
-				 *
-				 * This operation is used for debugging and information purposes.
-				 *
-				 * @param[in] errorCode
-				 *   The error code.
-				 *
-				 * @return String describing the error code.
-				 **/
-				static string getErrorCodeString( const ErrorCode errorCode) noexcept;
+		BaseErrorPacket( const ErrorCode errorCode) noexcept;
 
-				/**
-				 * @brief Generates a TFTP error packet with the given error code and
-				 *   error message.
-				 *
-				 * @param[in] errorCode
-				 *   Error code, which shall be set.
-				 **/
-				BaseErrorPacket( const ErrorCode errorCode) noexcept;
+		/**
+		 * @brief Generates a TFTP error packet from a data buffer.
+		 *
+		 * @param[in] rawPacket
+		 *   Packet, which shall be decoded.
+		 **/
+		BaseErrorPacket( const RawTftpPacketType &rawPacket);
 
-				/**
-				 * @brief Generates a TFTP error packet from a data buffer.
-				 *
-				 * @param[in] rawPacket
-				 *   Packet, which shall be decoded.
-				 **/
-				BaseErrorPacket( const RawTftpPacketType &rawPacket);
+		/**
+		 * @brief Returns the error code.
+		 *
+		 * @return The error code.
+		 **/
+		ErrorCode getErrorCode( void) const;
 
-				/**
-				 * @brief Returns the error code.
-				 *
-				 * @return The error code.
-				 **/
-				ErrorCode getErrorCode( void) const;
+		/**
+		 * @brief Sets the error code.
+		 *
+		 * @param[in] errorCode
+		 *   The error code to set
+		 **/
+		void setErrorCode( const ErrorCode errorCode);
 
-				/**
-				 * @brief Sets the error code.
-				 *
-				 * @param[in] errorCode
-				 *   The error code to set
-				 **/
-				void setErrorCode( const ErrorCode errorCode);
+		/**
+		 * @brief Returns the error message of this packet.
+		 *
+		 * @return The error message.
+		 **/
+		virtual string getErrorMessage( void) const = 0;
 
-				/**
-				 * @brief Returns the error message of this packet.
-				 *
-				 * @return The error message.
-				 **/
-				virtual string getErrorMessage( void) const = 0;
+		//! @copydoc TftpPacket::encode()
+		virtual RawTftpPacketType encode( void) const override;
 
-				//! @copydoc TftpPacket::encode()
-				virtual RawTftpPacketType encode( void) const override;
+		//! @copydoc TftpPacket::toString()
+		virtual string toString( void) const override;
 
-				//! @copydoc TftpPacket::toString()
-				virtual string toString( void) const override;
+	protected:
+		/**
+		 * @brief Extract the error message from a raw packet.
+		 *
+		 * This method is used to extract the error message string from the raw data
+		 * packet as received from somewhere.
+		 *
+		 * This method does not perform the tests, which are executed during
+		 * constructing the error packet by calling the BaseErrorPacket()
+		 * constructor.
+		 *
+		 * @param[in] rawPacket
+		 *   The raw error packet
+		 *
+		 * @return The decoded error message.
+		 **/
+		static string getErrorMessage( const RawTftpPacketType &rawPacket);
 
-			protected:
-				/**
-				 * @brief Extract the error message from a raw packet.
-				 *
-				 * This method is used to extract the error message string from the raw
-				 * data packet as received from somewhere.
-				 *
-				 * This method does not perform the tests, which are executed during
-				 * constructing the error packet by calling the BaseErrorPacket()
-				 * constructor.
-				 *
-				 * @param[in] rawPacket
-				 *   The raw error packet
-				 *
-				 * @return The decoded error message.
-				 **/
-				static string getErrorMessage(
-					const RawTftpPacketType &rawPacket);
+	private:
+		ErrorCode errorCode; //!< The error code
+};
 
-			private:
-				ErrorCode errorCode; //!< The error code
-		};
-	}
+}
 }
 
 #endif

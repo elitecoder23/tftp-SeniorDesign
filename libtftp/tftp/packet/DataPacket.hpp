@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class DataPacket.
+ * @brief Declaration of class Tftp::Packet::DataPacket.
  **/
 
 #ifndef TFTP_PACKET_DATAPACKET_HPP
@@ -39,8 +39,7 @@ class DataPacket: public TftpPacket
 		typedef std::vector< uint8_t> DataType;
 
 		/**
-		 * @brief Generates a TFTP Data Packet with the given block number and
-		 *   data.
+		 * @brief Generates a TFTP Data Packet with the given block number and data.
 		 *
 		 * If the data parameter is suppressed, no data is used.
 		 *

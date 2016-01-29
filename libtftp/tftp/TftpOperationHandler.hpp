@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class TftpOperationHandler.
+ * @brief Declaration of class Tftp::TftpOperationHandler.
  **/
 
 #ifndef TFTP_TFTPOPERATIONHANDLER_HPP
@@ -20,27 +20,28 @@
 #include <vector>
 #include <cstdint>
 
-namespace Tftp
+namespace Tftp {
+
+/**
+ * @brief Base class for TFTP operation handlers.
+ **/
+class TftpOperationHandler
 {
-	/**
-	 * @brief Base class for TFTP operation handlers.
-	 **/
-	class TftpOperationHandler
-	{
-		public:
-			//! The data type is used for the inherited classes.
-			typedef std::vector< uint8_t> DataType;
+	public:
+		//! The data type is used for the inherited classes.
+		typedef std::vector< uint8_t> DataType;
 
-			/**
-			 * @brief Default destructor.
-			 **/
-			virtual ~TftpOperationHandler( void) noexcept = default;
+		/**
+		 * @brief Default destructor.
+		 **/
+		virtual ~TftpOperationHandler( void) noexcept = default;
 
-			/**
-			 * @brief Called, when the operation has been finished
-			 **/
-			virtual void finishedOperation( void) noexcept = 0;
-	};
+		/**
+		 * @brief Called, when the operation has been finished
+		 **/
+		virtual void finishedOperation( void) noexcept = 0;
+};
+
 }
 
 #endif

@@ -17,30 +17,30 @@
 
 #include <tftp/Tftp.hpp>
 
-namespace Tftp
-{
-	/**
-	 * @brief Contains the implementation of all TFTP packets.
-	 *
-	 * The base for the packets is the class TftpPacket.
-	 * For raw-data to TFTP packet handling, the class PacketFactory with its
-	 * static methods can be used.
-	 **/
-	namespace Packet
-	{
-		class TftpPacket;
-		class ReadRequestPacket;
-		class WriteRequestPacket;
-		class DataPacket;
-		class AcknowledgementPacket;
-		class BaseErrorPacket;
-		class ErrorPacket;
-		class OptionsAcknowledgementPacket;
+namespace Tftp {
 
-		class BlockNumber;
+/**
+ * @brief Contains the implementation of all TFTP packets.
+ *
+ * The base for the packets is the class TftpPacket.
+ * For raw-data to TFTP packet handling, the class PacketFactory with its
+ * static methods can be used.
+ **/
+namespace Packet {
 
-		class PacketFactory;
-	}
+class TftpPacket;
+class ReadRequestPacket;
+class WriteRequestPacket;
+class DataPacket;
+class AcknowledgementPacket;
+class BaseErrorPacket;
+class ErrorPacket;
+class OptionsAcknowledgementPacket;
+
+class BlockNumber;
+
+class PacketFactory;
+}
 }
 
 #endif

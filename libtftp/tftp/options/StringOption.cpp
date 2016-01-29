@@ -16,7 +16,8 @@
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Options;
+namespace Tftp {
+namespace Options {
 
 StringOption::StringOption(const string &name, const string &value):
 	Option( name),
@@ -46,4 +47,7 @@ OptionPointer StringOption::negotiateClient( const string &) const
 	BOOST_LOG_TRIVIAL( error) <<
 		"Its not possible to use StringOption for negotiation";
 	return OptionPointer();
+}
+
+}
 }

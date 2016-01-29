@@ -20,7 +20,8 @@
 
 #include <algorithm>
 
-using namespace Tftp::Options;
+namespace Tftp {
+namespace Options {
 
 OptionList::OptionList( void)
 {
@@ -61,7 +62,7 @@ OptionList::OptionList(
 		std::string name( nameBegin, nameEnd);
 		std::string value( valueBegin, valueEnd);
 
-		//! insert option as string option
+		// insert option as string option
 		options.insert( std::make_pair(
 			name,
 			std::make_shared< StringOption>( name, value)));
@@ -84,7 +85,7 @@ OptionList::RawOptionsType OptionList::getRawOptions( void) const
 {
 	size_t optionsSize = 0;
 
-	//! Calculate size of parameter list
+	// Calculate size of parameter list
 	for ( const auto &option : options)
 	{
 		optionsSize +=
@@ -94,15 +95,15 @@ OptionList::RawOptionsType OptionList::getRawOptions( void) const
 	RawOptionsType rawOptions( optionsSize);
 	RawOptionsType::iterator rawIt = rawOptions.begin();
 
-	//! copy options
+	// copy options
 	for ( const auto &option : options)
 	{
-		//! option name
+		// option name
 		rawIt = std::copy( option.first.begin(), option.first.end(), rawIt);
 		*rawIt = 0;
 		++rawIt;
 
-		//! option value
+		// option value
 		std::string value = option.second->getValueString();
 		rawIt = std::copy( value.begin(), value.end(), rawIt);
 		*rawIt = 0;
@@ -143,13 +144,13 @@ const OptionList::OptionPointer OptionList::getOption( const string &name) const
 
 void OptionList::setOption( const string &name, const string &value)
 {
-	//! If option already exists remove it first
+	// If option already exists remove it first
 	if (hasOption( name))
 	{
 		removeOption( name);
 	}
 
-	//! Add option
+	// Add option
 	options.insert( std::make_pair(
 		name,
 		OptionPointer( new StringOption( name, value))));
@@ -157,13 +158,13 @@ void OptionList::setOption( const string &name, const string &value)
 
 void OptionList::setOption( const OptionPointer option)
 {
-	//! If option already exists remove it first
+	// If option already exists remove it first
 	if (hasOption( option->getName()))
 	{
 		removeOption( option->getName());
 	}
 
-	//! Add option
+	// Add option
 	options.insert( std::make_pair( option->getName(), option));
 }
 
@@ -341,7 +342,7 @@ uint64_t OptionList::getTransferSizeOption( void) const
 	OptionMap::const_iterator optionIt = options.find(
 		Option::getOptionName( TftpOptions::TRANSFER_SIZE));
 
-	//! option not set
+	// option not set
 	if (optionIt == options.end())
 	{
 		return 0;
@@ -351,7 +352,7 @@ uint64_t OptionList::getTransferSizeOption( void) const
 		dynamic_cast< const IntegerOption< uint64_t>*>(
 			optionIt->second.get());
 
-	//! invalid cast
+	// invalid cast
 	if (!integerOption)
 	{
 		return 0;
@@ -444,4 +445,7 @@ string OptionList::toString( void) const
 	}
 	
 	return result;
+}
+
+}
 }

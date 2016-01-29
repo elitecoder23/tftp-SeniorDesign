@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration/ definition of class TftpPacketException.
+ * @brief Declaration/ definition of class Tftp::Packet::TftpPacketException.
  **/
 
 #ifndef TFTP_PACKET_TFTPPACKETEXCEPTION_HPP
@@ -18,15 +18,10 @@
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpException.hpp>
 
-namespace Tftp
-{
-	/**
-	 * @brief The packet namespace contains the TFTP packet class hierarchy and
-	 *   support classes for block numbers.
-	 **/
-	namespace Packet
-	{
-	}
+namespace Tftp {
+
+namespace Packet {
+}
 }
 
 #endif

@@ -39,22 +39,22 @@ TftpClientOperationImpl::~TftpClientOperationImpl( void) noexcept
 	{
 		finished();
 
-		//! - Close the socket.
+		// Close the socket.
 		socket.close();
 	}
 	catch (boost::system::system_error &err)
 	{
-		//! On error, ignore it and continue.
+		// On error, ignore it and continue.
 		BOOST_LOG_TRIVIAL( error) << err.what();
 	}
 }
 
 void TftpClientOperationImpl::operator ()( void)
 {
-	//! start first receive operation
+	// start first receive operation
 	receiveFirst();
 
-	//! start the event loop
+	// start the event loop
 	ioService.run();
 }
 
@@ -130,7 +130,7 @@ try:
 	}
 	catch (boost::system::system_error &err)
 	{
-		//! On error and if socket is opened - close it.
+		// On error and if socket is opened - close it.
 		if (socket.is_open())
 		{
 			socket.close();
