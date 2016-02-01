@@ -64,6 +64,18 @@ class TftpPacket
 		 **/
 		virtual RawTftpPacketType encode( void) const = 0;
 
+		//! default copy constructor
+		TftpPacket( const TftpPacket &other) = default;
+
+		//! default move constructor
+		TftpPacket( TftpPacket &&other) = default;
+
+		//! default copy assignment operator
+		TftpPacket& operator=( const TftpPacket &other) = default;
+
+		//! default copy move operator
+		TftpPacket& operator=( TftpPacket &&other) = default;
+
 		//! Default destructor
 		virtual ~TftpPacket( void) noexcept = default;
 

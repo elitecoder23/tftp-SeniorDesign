@@ -50,6 +50,18 @@ class Option
 		 **/
 		Option( const string &name);
 
+		//! default copy constructor
+		Option( const Option &other) = default;
+
+		//! default move constructor
+		Option( Option &&other) = default;
+
+		//! default copy assignment operator
+		Option& operator=( const Option &other) = default;
+
+		//! default copy move operator
+		Option& operator=( Option &&other) = default;
+
 		//! Default destructor
 		virtual ~Option( void) noexcept = default;
 

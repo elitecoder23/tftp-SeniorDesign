@@ -263,6 +263,7 @@ void OptionList::addTimeoutOption(
 	const uint16_t minTimeout,
 	const uint16_t maxTimeout)
 {
+	//! @todo what happens, if client sent bigger timeout otion than server allows -> client negotiation would fail
 	assert(
 		(minTimeout >= TFTP_OPTION_TIMEOUT_MIN) &&
 		(minTimeout <= TFTP_OPTION_TIMEOUT_MAX));
