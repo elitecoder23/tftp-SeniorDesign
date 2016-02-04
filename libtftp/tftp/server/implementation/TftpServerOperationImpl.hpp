@@ -220,7 +220,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
 		//! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
 		uint8_t receiveTimeout;
 
-		//! The io service, which performs the asynchronous operations.
+		//! The I/O service, which performs the asynchronous operations.
 		boost::asio::io_service ioService;
 		//! The TFTP UDP socket
 		boost::asio::ip::udp::socket socket;

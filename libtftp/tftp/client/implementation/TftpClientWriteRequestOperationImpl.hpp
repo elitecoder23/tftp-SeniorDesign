@@ -31,8 +31,8 @@ using Tftp::Packet::BlockNumber;
  * @brief Class which handles a TFTP Write Request on client side.
  *
  * After executed, the class sends the TFTP WRQ packet to the destination
- * and waits for answer. Data is handled by the TftpWriteOperationHandler
- * given at construction time.
+ * and waits for answer.
+ * Data is handled by the TftpWriteOperationHandler given at construction time.
  **/
 class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
 {
@@ -83,10 +83,9 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
 			const TransferMode mode);
 
 		/**
-		 * @copybrief TftpClientOperationImpl::operator()
+		 * @copybrief TftpClientOperationImpl::operator()()
 		 *
-		 * Assembles and transmit TFTP WRQ packet and start parent receive
-		 * loop.
+		 * Assembles and transmit TFTP WRQ packet and start parent receive loop.
 		 **/
 		virtual void operator ()( void) override;
 
@@ -94,8 +93,8 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
 		/**
 		 * @brief Sends the data to the host.
 		 *
-		 * This operation requests the data from the handler, generates the
-		 * TFTP DATA packet and sends them to the host.
+		 * This operation requests the data from the handler, generates the TFTP
+		 * DATA packet and sends them to the host.
 		 **/
 		void sendData( void);
 

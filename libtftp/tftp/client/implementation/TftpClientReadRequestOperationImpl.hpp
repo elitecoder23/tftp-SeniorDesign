@@ -30,9 +30,10 @@ using Tftp::Packet::BlockNumber;
 /**
  * @brief Class which handles a TFTP Read Request on client side.
  *
- * After executed, the class sends the TFTP RRQ packet to the destination
- * and waits for answer. Received data is handled by the
- * TftpReadOperationHandler given at construction time.
+ * After executed, the class sends the TFTP RRQ packet to the destination and
+ * waits for answer.
+ * Received data is handled by the TftpReadOperationHandler given at
+ * construction time.
  **/
 class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
 {
@@ -83,10 +84,9 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
 			const TransferMode mode);
 
 		/**
-		 * @copybrief TftpClientOperationImpl::operator()
+		 * @copybrief TftpClientOperationImpl::operator()()
 		 *
-		 * Assembles and transmit TFTP RRQ packet and start parent receive
-		 * loop.
+		 * Assembles and transmit TFTP RRQ packet and start parent receive loop.
 		 **/
 		virtual void operator ()( void) override;
 
@@ -95,8 +95,8 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
 		 * @copydoc TftpPacketHandler::handleDataPacket()
 		 *
 		 * The TFTP DATA packet is decoded and checked.
-		 * If everything is fine, handler is called with extracted data and
-		 * the receive operation is continued.
+		 * If everything is fine, handler is called with extracted data and the
+		 * receive operation is continued.
 		 **/
 		virtual void handleDataPacket(
 			const UdpAddressType &from,

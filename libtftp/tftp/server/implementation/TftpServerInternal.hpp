@@ -18,27 +18,27 @@
 #include <tftp/server/Server.hpp>
 #include <tftp/options/Options.hpp>
 
-namespace Tftp
+namespace Tftp {
+namespace Server {
+
+/**
+ * @brief This interface class defines the methods used internally for TFTP
+ *   Server interrogation.
+ **/
+class TftpServerInternal
 {
-	namespace Server
-	{
-		using Options::OptionList;
+	public:
+		using OptionList = Options::OptionList;
 
-		/**
-		 * @brief This interface class defines the methods used internally for TFTP
-		 *   Server interrogation.
-		 **/
-		class TftpServerInternal
-		{
-			public:
-				//! Default destructor
-				virtual ~TftpServerInternal( void) = default;
+		//! Default destructor
+		virtual ~TftpServerInternal( void) = default;
 
-				virtual const TftpConfiguration& getConfiguration( void) const = 0;
+		virtual const TftpConfiguration& getConfiguration( void) const = 0;
 
-				virtual const OptionList& getOptionList( void) const = 0;
-		};
-	}
+		virtual const OptionList& getOptionList( void) const = 0;
+};
+
+}
 }
 
 #endif
