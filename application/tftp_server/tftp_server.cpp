@@ -32,25 +32,27 @@ int main( int argc, char ** argv);
 
 int main( int argc, char ** argv)
 {
-	initLogging();
+  initLogging();
 
-	//! The application context
-	boost::application::context context;
+  // The application context
+  boost::application::context context;
 
-	//! The application
-	TftpServerApplication app( context);
+  // The application
+  TftpServerApplication app( context);
 
-	//! Arguments
-	context.insert< boost::application::args>(
-		std::make_shared< boost::application::args>( argc, argv));
+  // Arguments
+  context.insert < boost::application::args>(
+    std::make_shared < boost::application::args > (argc, argv));
 
-	//! Termination Handler
-	context.insert< boost::application::termination_handler>(
-		std::make_shared< boost::application::termination_handler>(
-			boost::application::handler< bool>::make_callback(
-				app,
-				&TftpServerApplication::stop)));
+  // Termination Handler
+  context.insert < boost::application::termination_handler>(
+    std::make_shared < boost::application::termination_handler>(
+      boost::application::handler< bool>::make_callback(
+        app,
+        &TftpServerApplication::stop)));
 
-	//! start application
-  return boost::application::launch< boost::application::common>( app, context);
+  // start application
+  return boost::application::launch < boost::application::common>(
+    app,
+    context);
 }

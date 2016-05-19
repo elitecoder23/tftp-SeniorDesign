@@ -10,6 +10,7 @@ cmake_minimum_required( VERSION 3.3)
 
 project ( "TFTP Applications")
 
-add_subdirectory( tftp_test)
+add_subdirectory( tftp_unit_test)
+
 add_subdirectory( tftp_client)
 add_subdirectory( tftp_server)

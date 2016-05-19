@@ -11,28 +11,28 @@ cmake_minimum_required( VERSION 3.3)
 project( "TFTP Server")
 
 find_package( 
-	Boost
-	REQUIRED
-	COMPONENTS
-	program_options
-	system
-	log_setup
-	log
-	filesystem
-	thread
-	chrono)
+  Boost
+  REQUIRED
+  COMPONENTS
+  program_options
+  system
+  log_setup
+  log
+  filesystem
+  thread
+  chrono)
 
 add_executable(
-	tftp_server
-	
-	tftp_server.cpp
-	TftpServerApplication.cpp)
+  tftp_server
+  
+  tftp_server.cpp
+  TftpServerApplication.cpp)
 
 target_link_libraries( 
-	tftp_server 
-	
-	tftp 
-	helper 
-	
-	${Boost_LIBRARIES}
-	${BOOST_THREAD_LIBRARY})
+  tftp_server 
+  
+  tftp 
+  helper 
+  
+  ${Boost_LIBRARIES}
+  ${BOOST_THREAD_LIBRARY})

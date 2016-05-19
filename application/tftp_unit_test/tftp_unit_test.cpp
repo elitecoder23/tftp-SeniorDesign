@@ -25,10 +25,10 @@ void initTftpPacketTest( void);
 
 boost::unit_test::test_suite* init_unit_test_suite( int, char*[])
 {
-	initBlockNumberTest();
-	initIntegerOptionNegotiationEntryTest();
-	initOptionNegotiationEntryTest();
-	initTftpPacketTest();
+  initBlockNumberTest();
+  initIntegerOptionNegotiationEntryTest();
+  initOptionNegotiationEntryTest();
+  initTftpPacketTest();
 
-	return 0;
+  return 0;
 }

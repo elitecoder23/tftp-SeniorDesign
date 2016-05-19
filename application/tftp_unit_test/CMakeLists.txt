@@ -8,28 +8,15 @@
 
 cmake_minimum_required( VERSION 3.3)
 
-find_package( 
-	Boost
-	REQUIRED
-	COMPONENTS
-	unit_test_framework
-	system
-	log
-	log_setup
-	filesystem
-	thread
-	chrono)
+find_package( Boost REQUIRED COMPONENTS unit_test_framework)
 
-add_executable( 
-	tftp_test 
-
-	tftp_test.cpp)
+add_executable( tftp_unit_test tftp_unit_test.cpp)
 
 target_link_libraries( 
-	tftp_test 
-	
-	tftp 
-	helper
-
-	${Boost_LIBRARIES}
-	${BOOST_THREAD_LIBRARY})
+  tftp_unit_test 
+  
+  tftp 
+  helper
+  
+  ${Boost_LIBRARIES}
+  ${BOOST_THREAD_LIBRARY})

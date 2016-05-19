@@ -66,44 +66,44 @@ using UdpAddressType = boost::asio::ip::udp::endpoint;
  **/
 enum class TftpVersion
 {
-	//! TFTP Version 2 (RFC1350)
-	TFTP_VERSION_2,
-	//! TFTP Version 2 with Options Extension (RFC1350 + RFC2347)
-	TFTP_VERSION_2_WITH_OPTIONS_EXTENSION,
+  //! TFTP Version 2 (RFC1350)
+  TFTP_VERSION_2,
+  //! TFTP Version 2 with Options Extension (RFC1350 + RFC2347)
+  TFTP_VERSION_2_WITH_OPTIONS_EXTENSION,
 
-	//! Invalid entry
-	TFTP_VERSION_LAST
+  //! Invalid entry
+  TFTP_VERSION_LAST
 };
 
 //! TFTP role enumeration
 enum class TftpRole
 {
-	TFTP_ROLE_CLIENT, //!< TFTP client role
-	TFTP_ROLE_SERVER, //!< TFTP server role
+  TFTP_ROLE_CLIENT, //!< TFTP client role
+  TFTP_ROLE_SERVER, //!< TFTP server role
 
-	TFTP_ROLE_LAST    //!< invalid value
+  TFTP_ROLE_LAST    //!< invalid value
 };
 
 //! TFTP request type
 enum class TftpRequestType
 {
-	ReadRequest,
-	WriteRequest,
-	Invalid
+  ReadRequest,
+  WriteRequest,
+  Invalid
 };
 //! @brief Phases of TFTP transfer
 enum class TftpTransferPhase
 {
-	//! Initialisation phase before any request has been sent/ received.
-	TFTP_PHASE_INITIALIZATION,
-	//! TFTP request phase RRQ/WRQ and wait for ACK.
-	TFTP_PHASE_REQUEST,
-	//! TFTP option negotiation phase wait for OACK.
-	TFTP_PHASE_OPTION_NEGOTIATION,
-	//! TFTP data transfer phase.
-	TFTP_PHASE_DATA_TRANSFER,
-	//! TFTP transfer phase unknown.
-	TFTP_PHASE_UNKNOWN
+  //! Initialisation phase before any request has been sent/ received.
+  TFTP_PHASE_INITIALIZATION,
+  //! TFTP request phase RRQ/WRQ and wait for ACK.
+  TFTP_PHASE_REQUEST,
+  //! TFTP option negotiation phase wait for OACK.
+  TFTP_PHASE_OPTION_NEGOTIATION,
+  //! TFTP data transfer phase.
+  TFTP_PHASE_DATA_TRANSFER,
+  //! TFTP transfer phase unknown.
+  TFTP_PHASE_UNKNOWN
 };
 
 //! Default TFTP port.
@@ -124,14 +124,14 @@ constexpr unsigned int DEFAULT_TFTP_RETRIES = 1;
  **/
 enum class PacketType : uint16_t
 {
-	READ_REQUEST            = 1, //!< Read request (RRQ)
-	WRITE_REQUEST           = 2, //!< Write request (WRQ)
-	DATA                    = 3, //!< Data (DATA)
-	ACKNOWLEDGEMENT         = 4, //!< Acknowledgement (ACK)
-	ERROR                   = 5, //!< Error (ERROR)
-	OPTIONS_ACKNOWLEDGEMENT = 6, //!< Options Acknowledgement (OACK)
+  READ_REQUEST            = 1, //!< Read request (RRQ)
+  WRITE_REQUEST           = 2, //!< Write request (WRQ)
+  DATA                    = 3, //!< Data (DATA)
+  ACKNOWLEDGEMENT         = 4, //!< Acknowledgement (ACK)
+  ERROR                   = 5, //!< Error (ERROR)
+  OPTIONS_ACKNOWLEDGEMENT = 6, //!< Options Acknowledgement (OACK)
 
-	INVALID                    //!< Invalid value
+  INVALID                    //!< Invalid value
 };
 
 //! Maximum size of data field in data package (without blksize option)
@@ -147,11 +147,11 @@ constexpr unsigned int DEFAULT_MAX_PACKET_SIZE =
 //! TFTP transfer modes.
 enum class TransferMode
 {
-	OCTET,    //!< OCTET transfer mode (binary)
-	NETASCII, //!< NETASCII transfer mode.
-	MAIL,     //!< MAIL transfer mode (deprecated).
+  OCTET,    //!< OCTET transfer mode (binary)
+  NETASCII, //!< NETASCII transfer mode.
+  MAIL,     //!< MAIL transfer mode (deprecated).
 
-	INVALID   //!< Invalid value
+  INVALID   //!< Invalid value
 };
 
 /**
@@ -164,35 +164,35 @@ enum class TransferMode
  **/
 enum class ErrorCode : uint16_t
 {
-	//! Not defined, see error message (if any).
-	NOT_DEFINED                     = 0,
-	//! File not found
-	FILE_NOT_FOUND                  = 1,
-	//! Access violation.
-	ACCESS_VIOLATION                = 2,
-	//! Disk full or allocation exceeded.
-	DISK_FULL_OR_ALLOCATION_EXCEEDS = 3,
-	//! Illegal TFTP operation.
-	ILLEGAL_TFTP_OPERATION          = 4,
-	//! Unknown transfer ID.
-	UNKNOWN_TRANSFER_ID             = 5,
-	//! File already exists.
-	FILE_ALLREADY_EXISTS            = 6,
-	//! No such user.
-	NO_SUCH_USER                    = 7,
-	//! TFTP options refused during option negotiation
-	TFTP_OPTION_REFUSED             = 8
+  //! Not defined, see error message (if any).
+  NOT_DEFINED                     = 0,
+  //! File not found
+  FILE_NOT_FOUND                  = 1,
+  //! Access violation.
+  ACCESS_VIOLATION                = 2,
+  //! Disk full or allocation exceeded.
+  DISK_FULL_OR_ALLOCATION_EXCEEDS = 3,
+  //! Illegal TFTP operation.
+  ILLEGAL_TFTP_OPERATION          = 4,
+  //! Unknown transfer ID.
+  UNKNOWN_TRANSFER_ID             = 5,
+  //! File already exists.
+  FILE_ALLREADY_EXISTS            = 6,
+  //! No such user.
+  NO_SUCH_USER                    = 7,
+  //! TFTP options refused during option negotiation
+  TFTP_OPTION_REFUSED             = 8
 };
 
 //! Enumeration of all known TFTP options
 enum class TftpOptions
 {
-	//! Block size option (RFC 2348)
-	BLOCKSIZE,
-	//! Timeout option (RFC 2349)
-	TIMEOUT,
-	//! Transfer size option (RFC 2349)
-	TRANSFER_SIZE
+  //! Block size option (RFC 2348)
+  BLOCKSIZE,
+  //! Timeout option (RFC 2349)
+  TIMEOUT,
+  //! Transfer size option (RFC 2349)
+  TRANSFER_SIZE
 };
 
 //! Minimum TFTP block size option as defined within RFC 2348

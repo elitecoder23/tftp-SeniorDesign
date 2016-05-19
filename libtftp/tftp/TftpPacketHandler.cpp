@@ -19,103 +19,108 @@
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp;
 using Tftp::Packet::PacketFactory;
 
+namespace Tftp {
+
 void TftpPacketHandler::handlePacket(
-	const UdpAddressType &from,
-	const RawTftpPacketType &rawPacket)
+  const UdpAddressType &from,
+  const RawTftpPacketType &rawPacket)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	switch (PacketFactory::getPacketType( rawPacket))
-	{
-		case PacketType::READ_REQUEST:
-			try
-			{
-				handleReadRequestPacket(
-					from,
-					PacketFactory::getReadRequestPacket( rawPacket));
-			}
-			catch ( InvalidPacketException &e)
-			{
-				BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling RRQ packet: " << e.what();
-				handleInvalidPacket( from, rawPacket);
-			}
-			break;
+  switch ( PacketFactory::getPacketType( rawPacket))
+  {
+    case PacketType::READ_REQUEST:
+      try
+      {
+        handleReadRequestPacket(
+          from,
+          PacketFactory::getReadRequestPacket( rawPacket));
+      }
+      catch ( InvalidPacketException &e)
+      {
+        BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling RRQ packet: "
+          << e.what();
+        handleInvalidPacket( from, rawPacket);
+      }
+      break;
 
-		case PacketType::WRITE_REQUEST:
-			try
-			{
-				handleWriteRequestPacket(
-					from,
-					PacketFactory::getWriteRequestPacket(rawPacket));
-			}
-			catch ( InvalidPacketException &e)
-			{
-				BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling WRQ packet: " << e.what();
-				handleInvalidPacket( from, rawPacket);
-			}
-			break;
+    case PacketType::WRITE_REQUEST:
+      try
+      {
+        handleWriteRequestPacket(
+          from,
+          PacketFactory::getWriteRequestPacket( rawPacket));
+      }
+      catch ( InvalidPacketException &e)
+      {
+        BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling WRQ packet: "
+          << e.what();
+        handleInvalidPacket( from, rawPacket);
+      }
+      break;
 
-		case PacketType::DATA:
-			try
-			{
-				handleDataPacket(
-					from,
-					PacketFactory::getDataPacket( rawPacket));
-			}
-			catch ( InvalidPacketException &e)
-			{
-				BOOST_LOG_TRIVIAL( error) <<  "Error decoding/ handling DATA packet: " << e.what();
-				handleInvalidPacket( from, rawPacket);
-			}
-			break;
+    case PacketType::DATA:
+      try
+      {
+        handleDataPacket( from, PacketFactory::getDataPacket( rawPacket));
+      }
+      catch ( InvalidPacketException &e)
+      {
+        BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling DATA packet: "
+          << e.what();
+        handleInvalidPacket( from, rawPacket);
+      }
+      break;
 
-		case PacketType::ACKNOWLEDGEMENT:
-			try
-			{
-				handleAcknowledgementPacket(
-					from,
-					PacketFactory::getAcknowledgementPacket(rawPacket));
-			}
-			catch ( InvalidPacketException &e)
-			{
-				BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling ACK packet: " << e.what();
-				handleInvalidPacket( from, rawPacket);
-			}
-			break;
+    case PacketType::ACKNOWLEDGEMENT:
+      try
+      {
+        handleAcknowledgementPacket(
+          from,
+          PacketFactory::getAcknowledgementPacket( rawPacket));
+      }
+      catch ( InvalidPacketException &e)
+      {
+        BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling ACK packet: "
+          << e.what();
+        handleInvalidPacket( from, rawPacket);
+      }
+      break;
 
-		case PacketType::ERROR:
-			try
-			{
-				handleErrorPacket(
-					from,
-					PacketFactory::getErrorPacket( rawPacket));
-			}
-			catch ( InvalidPacketException &e)
-			{
-				BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling ERR packet: " << e.what();
-				handleInvalidPacket( from, rawPacket);
-			}
-			break;
+    case PacketType::ERROR:
+      try
+      {
+        handleErrorPacket( from, PacketFactory::getErrorPacket( rawPacket));
+      }
+      catch ( InvalidPacketException &e)
+      {
+        BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling ERR packet: "
+          << e.what();
+        handleInvalidPacket( from, rawPacket);
+      }
+      break;
 
-		case PacketType::OPTIONS_ACKNOWLEDGEMENT:
-			try
-			{
-				handleOptionsAcknowledgementPacket(
-					from,
-					PacketFactory::getOptionsAcknowledgementPacket( rawPacket));
-			}
-			catch ( InvalidPacketException &e)
-			{
-				BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling OACK packet: " << e.what();
-				handleInvalidPacket( from, rawPacket);
-			}
-			break;
+    case PacketType::OPTIONS_ACKNOWLEDGEMENT:
+      try
+      {
+        handleOptionsAcknowledgementPacket(
+          from,
+          PacketFactory::getOptionsAcknowledgementPacket( rawPacket));
+      }
+      catch ( InvalidPacketException &e)
+      {
+        BOOST_LOG_TRIVIAL( error) << "Error decoding/ handling OACK packet: "
+          << e.what();
+        handleInvalidPacket( from, rawPacket);
+      }
+      break;
 
-		default:
-			handleInvalidPacket( from, rawPacket);
-			break;
-	}
+    default:
+      handleInvalidPacket( from, rawPacket);
+      break;
+  }
+}
+
 }

@@ -35,14 +35,16 @@ int main( int argc, char ** argv);
 
 int main( int argc, char ** argv)
 {
-	initLogging();
+  initLogging();
 
-	boost::application::context context;
+  boost::application::context context;
 
-	TftpClientApplication app( context);
+  TftpClientApplication app( context);
 
-	context.insert< boost::application::args>(
-		std::make_shared< boost::application::args>( argc, argv));
+  context.insert < boost::application::args
+    > (std::make_shared < boost::application::args > (argc, argv));
 
-  return boost::application::launch< boost::application::common>( app, context);
+  return boost::application::launch < boost::application::common> (
+    app,
+    context);
 }
