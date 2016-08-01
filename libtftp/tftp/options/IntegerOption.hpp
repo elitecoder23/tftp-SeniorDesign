@@ -173,7 +173,7 @@ void IntegerOption< IntT>::setValue( const IntegerType value)
 }
 
 template< typename IntT>
-void IntegerOption< IntT>::setValue( const std::string &value)
+void IntegerOption< IntT>::setValue( const string &value)
 {
 	this->value = toInt( value);
 }

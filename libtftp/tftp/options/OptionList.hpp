@@ -44,11 +44,11 @@ class OptionList
 {
 	public:
 		//! short form of option pointer
-		typedef std::shared_ptr< Option> OptionPointer;
+		using OptionPointer = std::shared_ptr< Option>;
 		//! short form of option map
-		typedef std::map< string, OptionPointer> OptionMap;
+		using OptionMap = std::map< string, OptionPointer>;
 		//! short form of raw option
-		typedef std::vector< uint8_t> RawOptionsType;
+		using RawOptionsType = std::vector< uint8_t>;
 
 		/**
 		 * @brief Creates an empty option list

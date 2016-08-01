@@ -40,6 +40,8 @@ string Option::getOptionName( const TftpOptions option) noexcept
 Option::Option(const std::string &name):
 	name( name)
 {
+  // Validate option name
+  assert( !name.empty());
 }
 
 std::string Option::getName( void) const
@@ -49,7 +51,10 @@ std::string Option::getName( void) const
 
 void Option::setName( const std::string &name)
 {
-	this->name = name;
+  // Validate option name
+  assert( !name.empty());
+
+  this->name = name;
 }
 
 string Option::toString( void) const

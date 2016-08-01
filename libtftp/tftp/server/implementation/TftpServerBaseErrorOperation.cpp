@@ -40,12 +40,14 @@ try:
 			socket.close();
 		}
 
+		//! @throw CommunicationException on system_error
 		BOOST_THROW_EXCEPTION( CommunicationException() <<
 			AdditionalInfo( err.what()));
 	}
 }
 catch (boost::system::system_error &err)
 {
+  //! @throw CommunicationException on system_error
 	BOOST_THROW_EXCEPTION( CommunicationException() <<
 		AdditionalInfo( err.what()));
 }

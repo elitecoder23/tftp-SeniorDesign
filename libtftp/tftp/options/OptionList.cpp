@@ -13,8 +13,10 @@
  **/
 
 #include "OptionList.hpp"
-#include "IntegerOption.hpp"
-#include "StringOption.hpp"
+
+#include <tftp/options/IntegerOption.hpp>
+#include <tftp/options/StringOption.hpp>
+#include <tftp/TftpException.hpp>
 
 #include <helper/Logger.hpp>
 
@@ -39,28 +41,31 @@ OptionList::OptionList(
 
 		if (nameEnd==end)
 		{
-			BOOST_LOG_TRIVIAL( error) << "Unexpected end of input data";
-			return;
+		  //! @throw InvalidPacketException on Unexpected end of input data
+		  BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+		    AdditionalInfo( "Unexpected end of input data"));
 		}
 
 		RawOptionsType::const_iterator valueBegin = nameEnd + 1;
 
 		if (valueBegin == end)
 		{
-			BOOST_LOG_TRIVIAL( error) << "Unexpected end of input data";
-			return;
+      //! @throw InvalidPacketException on Unexpected end of input data
+      BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+        AdditionalInfo( "Unexpected end of input data"));
 		}
 
 		RawOptionsType::const_iterator valueEnd = std::find( valueBegin, end, 0);
 
 		if (valueEnd == end)
 		{
-			BOOST_LOG_TRIVIAL( error) << "Unexpected end of input data";
-			return;
+      //! @throw InvalidPacketException on Unexpected end of input data
+      BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+        AdditionalInfo( "Unexpected end of input data"));
 		}
 
-		std::string name( nameBegin, nameEnd);
-		std::string value( valueBegin, valueEnd);
+		string name( nameBegin, nameEnd);
+		string value( valueBegin, valueEnd);
 
 		// insert option as string option
 		options.insert( std::make_pair(
@@ -263,7 +268,7 @@ void OptionList::addTimeoutOption(
 	const uint16_t minTimeout,
 	const uint16_t maxTimeout)
 {
-	//! @todo what happens, if client sent bigger timeout otion than server allows -> client negotiation would fail
+	//! @todo what happens, if client sent bigger timeout option than server allows -> client negotiation would fail
 	assert(
 		(minTimeout >= TFTP_OPTION_TIMEOUT_MIN) &&
 		(minTimeout <= TFTP_OPTION_TIMEOUT_MAX));

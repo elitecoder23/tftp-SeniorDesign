@@ -43,6 +43,14 @@ class MemoryFile: public TftpFile
 		 **/
 		MemoryFile( const DataType &data);
 
+		/**
+		 * @brief Move constructor.
+		 *
+		 * Moves the given data to the file.
+		 *
+		 * @param[in] data
+		 *   Data of memory file.
+		 **/
 		MemoryFile( DataType &&data);
 
 		/**

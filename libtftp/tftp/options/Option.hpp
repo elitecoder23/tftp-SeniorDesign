@@ -46,7 +46,7 @@ class Option
 		 * @brief Generate TFTP option with the given name.
 		 *
 		 * @param[in] name
-		 *   The option name.
+		 *   The option name. Must be not empty.
 		 **/
 		Option( const string &name);
 
@@ -66,17 +66,17 @@ class Option
 		virtual ~Option( void) noexcept = default;
 
 		/**
-		 * @brief Returns the option name
+		 * @brief Returns the option name.
 		 *
 		 * @return The option name.
 		 **/
 		string getName( void) const;
 
 		/**
-		 * @brief Set the option name
+		 * @brief Set the option name.
 		 *
 		 * @param[in] name
-		 *   The new option name
+		 *   The new option name. Must be not empty.
 		 **/
 		void setName( const string &name);
 
