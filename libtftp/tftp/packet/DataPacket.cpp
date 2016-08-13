@@ -9,7 +9,7 @@
  * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class DataPacket.
+ * @brief Definition of class Tftp::Packet::DataPacket.
  **/
 
 #include "DataPacket.hpp"
@@ -34,7 +34,7 @@ DataPacket::DataPacket(
 	const RawTftpPacketType &rawPacket):
 	TftpPacket( PacketType::DATA, rawPacket)
 {
-	//! check size
+	// check size
 	if (rawPacket.size() < 4)
 	{
 		BOOST_THROW_EXCEPTION( InvalidPacketException() <<
@@ -43,10 +43,10 @@ DataPacket::DataPacket(
 
 	RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + 2;
 
-	//! decode block number
+	// decode block number
 	packetIt = getInt< uint16_t>( packetIt, blockNumber);
 
-	//! copy data
+	// copy data
 	data.assign( packetIt, rawPacket.end());
 }
 
@@ -93,10 +93,10 @@ Tftp::RawTftpPacketType DataPacket::encode( void) const
 
 	RawTftpPacketType::iterator packetIt = rawPacket.begin() + 2;
 
-	//! block number
+	// block number
 	packetIt = setInt( packetIt, static_cast< uint16_t>( getBlockNumber()));
 
-	//! data
+	// data
 	std::copy( data.begin(), data.end(), packetIt);
 
 	return rawPacket;

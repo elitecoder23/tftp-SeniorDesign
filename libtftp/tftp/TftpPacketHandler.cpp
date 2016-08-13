@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class TftpPacketHandler.
@@ -19,8 +21,6 @@
 
 #include <helper/Logger.hpp>
 
-using Tftp::Packet::PacketFactory;
-
 namespace Tftp {
 
 void TftpPacketHandler::handlePacket(
@@ -28,6 +28,8 @@ void TftpPacketHandler::handlePacket(
   const RawTftpPacketType &rawPacket)
 {
   BOOST_LOG_FUNCTION();
+
+  using Tftp::Packet::PacketFactory;
 
   switch ( PacketFactory::getPacketType( rawPacket))
   {

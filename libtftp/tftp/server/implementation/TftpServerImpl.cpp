@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @date $Date$
- * @version $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class Tftp::Server::TftpServerImpl.
@@ -32,375 +34,380 @@ namespace Server {
 
 TftpServerImpl::TftpServerImpl(
 	const TftpConfiguration &configuration,
-	const OptionList& additionalOptions,
-	const UdpAddressType &serverAddress)
-try:
-	configuration( configuration),
-	options( configuration.getServerOptions( additionalOptions)),
-	serverAddress( serverAddress),
-	socket( ioService)
+  const OptionList& additionalOptions,
+  const UdpAddressType &serverAddress)
+try :
+  configuration( configuration),
+  options( configuration.getServerOptions( additionalOptions)),
+  serverAddress( serverAddress),
+  socket( ioService)
 {
-	try
-	{
-		// open the socket
-		socket.open( serverAddress.protocol());
+  try
+  {
+    // open the socket
+    socket.open( serverAddress.protocol());
 
-		// bind to the local address
-		socket.bind( serverAddress);
-	}
-	catch (boost::system::system_error &err)
-	{
-		// close socket when opened
-		if (socket.is_open())
-		{
-			socket.close();
-		}
+    // bind to the local address
+    socket.bind( serverAddress);
+  }
+  catch ( boost::system::system_error &err)
+  {
+    // close socket when opened
+    if ( socket.is_open())
+    {
+      socket.close();
+    }
 
-		//! @throw CommunicationException When socket operation fails.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()) <<
-			TftpTransferPhaseInfo( TftpTransferPhase::TFTP_PHASE_INITIALIZATION));
-	}
+    //! @throw CommunicationException When socket operation fails.
+    BOOST_THROW_EXCEPTION(
+      CommunicationException() << AdditionalInfo( err.what())
+        << TftpTransferPhaseInfo(
+          TftpTransferPhase::TFTP_PHASE_INITIALIZATION));
+  }
 }
-catch (boost::system::system_error &err)
+catch ( boost::system::system_error &err)
 {
-	//! @throw CommunicationException When socket operation fails.
-	BOOST_THROW_EXCEPTION( CommunicationException() <<
-		AdditionalInfo( err.what()) <<
-		TftpTransferPhaseInfo( TftpTransferPhase::TFTP_PHASE_INITIALIZATION));
+  //! @throw CommunicationException When socket operation fails.
+  BOOST_THROW_EXCEPTION(
+    CommunicationException() << AdditionalInfo( err.what())
+      << TftpTransferPhaseInfo( TftpTransferPhase::TFTP_PHASE_INITIALIZATION));
 }
 
 TftpServerImpl::~TftpServerImpl( void) noexcept
 {
-	try
-	{
-		stop();
+  try
+  {
+    stop();
 
-		socket.close();
-	}
-	catch (boost::system::system_error &err)
-	{
-		// do not throw an exception within the constructor
-		BOOST_LOG_TRIVIAL( error) << err.what();
-	}
+    socket.close();
+  }
+  catch ( boost::system::system_error &err)
+  {
+    // do not throw an exception within the constructor
+    BOOST_LOG_TRIVIAL( error)<< err.what();
+  }
 }
 
 void TftpServerImpl::registerRequestHandler(
-	TftpRequestType requestType,
-	ReceivedTftpRequestHandler handler)
+  TftpRequestType requestType,
+  ReceivedTftpRequestHandler handler)
 {
-	handlerMap.insert( std::make_pair( requestType, handler));
+  handlerMap.insert( std::make_pair( requestType, handler));
 }
 
 void TftpServerImpl::start( void)
 {
-	// start receive
-	receive();
+  // start receive
+  receive();
 
-	// the server loop
-	ioService.run();
+  // the server loop
+  ioService.run();
 }
 
 void TftpServerImpl::stop( void)
 {
-	// cancel receive operation
-	socket.cancel();
+  // cancel receive operation
+  socket.cancel();
 
-	// stop handler
-	ioService.stop();
+  // stop handler
+  ioService.stop();
 }
 
 TftpServerOperation TftpServerImpl::createReadRequestOperation(
-	TftpTransmitDataOperationHandler &handler,
-	const UdpAddressType &clientAddress,
-	const OptionList &clientOptions,
-	const UdpAddressType &serverAddress)
+  TftpTransmitDataOperationHandler &handler,
+  const UdpAddressType &clientAddress,
+  const OptionList &clientOptions,
+  const UdpAddressType &serverAddress)
 {
-	auto operation = std::make_shared< TftpServerReadRequestOperationImpl>(
-		handler,
-		*this,
-		clientAddress,
-		clientOptions,
-		serverAddress);
+  auto operation = std::make_shared< TftpServerReadRequestOperationImpl>(
+    handler,
+    *this,
+    clientAddress,
+    clientOptions,
+    serverAddress);
 
-	return std::bind( &TftpServerReadRequestOperationImpl::operator (), operation);
+  return std::bind( &TftpServerReadRequestOperationImpl::operator (), operation);
 }
 
 TftpServerOperation TftpServerImpl::createReadRequestOperation(
-	TftpTransmitDataOperationHandler &handler,
-	const UdpAddressType &clientAddress,
-	const OptionList &clientOptions)
+  TftpTransmitDataOperationHandler &handler,
+  const UdpAddressType &clientAddress,
+  const OptionList &clientOptions)
 {
-	auto operation = std::make_shared< TftpServerReadRequestOperationImpl>(
-		handler,
-		*this,
-		clientAddress,
-		clientOptions);
+  auto operation = std::make_shared< TftpServerReadRequestOperationImpl>(
+    handler,
+    *this,
+    clientAddress,
+    clientOptions);
 
-	return std::bind( &TftpServerReadRequestOperationImpl::operator (), operation);
+  return std::bind( &TftpServerReadRequestOperationImpl::operator (), operation);
 }
 
 TftpServerOperation TftpServerImpl::createWriteRequestOperation(
-	TftpReceiveDataOperationHandler &handler,
-	const UdpAddressType &clientAddress,
-	const OptionList &clientOptions,
-	const UdpAddressType &serverAddress)
+  TftpReceiveDataOperationHandler &handler,
+  const UdpAddressType &clientAddress,
+  const OptionList &clientOptions,
+  const UdpAddressType &serverAddress)
 {
-	auto operation = std::make_shared< TftpServerWriteRequestOperationImpl>(
-		handler,
-		*this,
-		clientAddress,
-		clientOptions,
-		serverAddress);
+  auto operation = std::make_shared< TftpServerWriteRequestOperationImpl>(
+    handler,
+    *this,
+    clientAddress,
+    clientOptions,
+    serverAddress);
 
-	return std::bind( &TftpServerWriteRequestOperationImpl::operator (), operation);
+  return std::bind(
+    &TftpServerWriteRequestOperationImpl::operator (),
+    operation);
 }
 
 TftpServerOperation TftpServerImpl::createWriteRequestOperation(
-	TftpReceiveDataOperationHandler &handler,
-	const UdpAddressType &clientAddress,
-	const OptionList &clientOptions)
+  TftpReceiveDataOperationHandler &handler,
+  const UdpAddressType &clientAddress,
+  const OptionList &clientOptions)
 {
-	auto operation = std::make_shared< TftpServerWriteRequestOperationImpl>(
-		handler,
-		*this,
-		clientAddress,
-		clientOptions);
+  auto operation = std::make_shared< TftpServerWriteRequestOperationImpl>(
+    handler,
+    *this,
+    clientAddress,
+    clientOptions);
 
-	return std::bind( &TftpServerWriteRequestOperationImpl::operator (), operation);
+  return std::bind(
+    &TftpServerWriteRequestOperationImpl::operator (),
+    operation);
 }
 
 TftpServerOperation TftpServerImpl::createErrorOperation(
-	const UdpAddressType &clientAddress,
-	const UdpAddressType &from,
-	const ErrorCode errorCode,
-	const string &errorMessage)
+  const UdpAddressType &clientAddress,
+  const UdpAddressType &from,
+  const ErrorCode errorCode,
+  const string &errorMessage)
 {
-	auto operation = std::make_shared< TftpServerErrorOperation>(
-		clientAddress,
-		from,
-		errorCode,
-		errorMessage);
+  auto operation = std::make_shared< TftpServerErrorOperation>(
+    clientAddress,
+    from,
+    errorCode,
+    errorMessage);
 
-	return std::bind( &TftpServerErrorOperation::operator (), operation);
+  return std::bind( &TftpServerErrorOperation::operator (), operation);
 }
 
 TftpServerOperation TftpServerImpl::createErrorOperation(
-	const UdpAddressType &clientAddress,
-	const ErrorCode errorCode,
-	const string &errorMessage)
+  const UdpAddressType &clientAddress,
+  const ErrorCode errorCode,
+  const string &errorMessage)
 {
-	auto operation = std::make_shared< TftpServerErrorOperation>(
-		clientAddress,
-		errorCode,
-		errorMessage);
+  auto operation = std::make_shared< TftpServerErrorOperation>(
+    clientAddress,
+    errorCode,
+    errorMessage);
 
-	return std::bind( &TftpServerErrorOperation::operator (), operation);
+  return std::bind( &TftpServerErrorOperation::operator (), operation);
 }
 
 const Tftp::TftpConfiguration& TftpServerImpl::getConfiguration( void) const
 {
-	return configuration;
+  return configuration;
 }
 
 const OptionList& TftpServerImpl::getOptionList( void) const
 {
-	return options;
+  return options;
 }
 
 void TftpServerImpl::receive( void)
 {
-	try
-	{
-		packet.resize( DEFAULT_MAX_PACKET_SIZE);
+  try
+  {
+    packet.resize( DEFAULT_MAX_PACKET_SIZE);
 
-		// wait for incoming packet
-		socket.async_receive_from(
-			boost::asio::buffer( packet),
-			remoteEndpoint,
-			boost::bind(
-				&TftpServerImpl::receiveHandler,
-				this,
-				boost::asio::placeholders::error,
-				boost::asio::placeholders::bytes_transferred));
-	}
-	catch ( boost::system::system_error &err)
-	{
-		ioService.stop();
+    // wait for incoming packet
+    socket.async_receive_from(
+      boost::asio::buffer( packet),
+      remoteEndpoint,
+      boost::bind(
+        &TftpServerImpl::receiveHandler,
+        this,
+        boost::asio::placeholders::error,
+        boost::asio::placeholders::bytes_transferred));
+  }
+  catch ( boost::system::system_error &err)
+  {
+    ioService.stop();
 
-		//! @throw CommunicationException on IO error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException on IO error.
+    BOOST_THROW_EXCEPTION(
+      CommunicationException() << AdditionalInfo( err.what()));
+  }
 }
 
 void TftpServerImpl::receiveHandler(
-	const boost::system::error_code& errorCode,
-	std::size_t bytesTransferred)
+  const boost::system::error_code& errorCode,
+  std::size_t bytesTransferred)
 {
-	// handle abort
-	if (boost::asio::error::operation_aborted == errorCode)
-	{
-		return;
-	}
+  // handle abort
+  if ( boost::asio::error::operation_aborted == errorCode)
+  {
+    return;
+  }
 
-	// Check error
-	if (errorCode)
-	{
-		BOOST_LOG_TRIVIAL( error) << "receive error: " + errorCode.message();
+  // Check error
+  if ( errorCode)
+  {
+    BOOST_LOG_TRIVIAL( error)<< "receive error: " + errorCode.message();
 
-		//! @throw CommunicationException On communication failure.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( errorCode.message()));
-	}
+    //! @throw CommunicationException On communication failure.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( errorCode.message()));
+  }
 
-	try
-	{
-		// resize buffer to actual size
-		packet.resize( bytesTransferred);
+  try
+  {
+    // resize buffer to actual size
+    packet.resize( bytesTransferred);
 
-		// handle the received packet (decode it and call the approbate handler)
-		handlePacket( remoteEndpoint, packet);
-	}
-	catch ( TftpException &e)
-	{
-		BOOST_LOG_TRIVIAL( error) << "TFTP exception: " << e.what();
-	}
+    // handle the received packet (decode it and call the approbate handler)
+    handlePacket( remoteEndpoint, packet);
+  }
+  catch ( TftpException &e)
+  {
+    BOOST_LOG_TRIVIAL( error)<< "TFTP exception: " << e.what();
+  }
 
-	receive();
+  receive();
 }
 
 void TftpServerImpl::handleReadRequestPacket(
-	const UdpAddressType &from,
-	const ReadRequestPacket &readRequestPacket)
+  const UdpAddressType &from,
+  const ReadRequestPacket &readRequestPacket)
 {
-	BOOST_LOG_TRIVIAL( info) << "RX: " << readRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<< "RX: " << readRequestPacket.toString();
 
-	// find handler for RRQ
-	HandlerMap::iterator handler = handlerMap.find( TftpRequestType::ReadRequest);
+  // find handler for RRQ
+  HandlerMap::iterator handler = handlerMap.find( TftpRequestType::ReadRequest);
 
-	if (handler == handlerMap.end())
-	{
-		BOOST_LOG_TRIVIAL( info) <<
-			"No registered handler - reject";
+  if (handler == handlerMap.end())
+  {
+    BOOST_LOG_TRIVIAL( info) <<
+    "No registered handler - reject";
 
-		TftpServerOperation errOp = createErrorOperation(
-			from,
-			ErrorCode::FILE_NOT_FOUND,
-			"RRQ not accepted");
+    TftpServerOperation errOp = createErrorOperation(
+      from,
+      ErrorCode::FILE_NOT_FOUND,
+      "RRQ not accepted");
 
-		// execute error operation
-		errOp();
-	}
+    // execute error operation
+    errOp();
+  }
 
-	// call the handler, which handles the received request
-	handler->second(
-		TftpRequestType::ReadRequest,
-		from,
-		readRequestPacket.getFilename(),
-		readRequestPacket.getMode(),
-		readRequestPacket.getOptions());
+  // call the handler, which handles the received request
+  handler->second(
+    TftpRequestType::ReadRequest,
+    from,
+    readRequestPacket.getFilename(),
+    readRequestPacket.getMode(),
+    readRequestPacket.getOptions());
 }
 
 void TftpServerImpl::handleWriteRequestPacket(
-	const UdpAddressType &from,
-	const WriteRequestPacket &writeRequestPacket)
+  const UdpAddressType &from,
+  const WriteRequestPacket &writeRequestPacket)
 {
-	BOOST_LOG_TRIVIAL( info) << "RX: " << writeRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<< "RX: " << writeRequestPacket.toString();
 
-	// find handler for RRQ
-	HandlerMap::iterator handler = handlerMap.find( TftpRequestType::WriteRequest);
+  // find handler for RRQ
+  HandlerMap::iterator handler = handlerMap.find( TftpRequestType::WriteRequest);
 
-	if (handler == handlerMap.end())
-	{
-		BOOST_LOG_TRIVIAL( info) << "No registered handler - reject";
+  if (handler == handlerMap.end())
+  {
+    BOOST_LOG_TRIVIAL( info) << "No registered handler - reject";
 
-		TftpServerOperation errOp = createErrorOperation(
-			from,
-			ErrorCode::FILE_NOT_FOUND,
-			"WRQ");
+    TftpServerOperation errOp = createErrorOperation(
+      from,
+      ErrorCode::FILE_NOT_FOUND,
+      "WRQ");
 
-		// execute error operation
-		errOp();
-	}
+    // execute error operation
+    errOp();
+  }
 
-	// call the handler, which handles the received request
-	handler->second(
-		TftpRequestType::WriteRequest,
-		from,
-		writeRequestPacket.getFilename(),
-		writeRequestPacket.getMode(),
-		writeRequestPacket.getOptions());
+  // call the handler, which handles the received request
+  handler->second(
+    TftpRequestType::WriteRequest,
+    from,
+    writeRequestPacket.getFilename(),
+    writeRequestPacket.getMode(),
+    writeRequestPacket.getOptions());
 }
 
 void TftpServerImpl::handleDataPacket(
-	const UdpAddressType &from,
-	const DataPacket &dataPacket)
+  const UdpAddressType &from,
+  const DataPacket &dataPacket)
 {
-	BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << dataPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<< "RX ERROR: " << dataPacket.toString();
 
-	TftpServerOperation errOp = createErrorOperation(
-		from,
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"DATA not expected");
+  TftpServerOperation errOp = createErrorOperation(
+    from,
+    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    "DATA not expected");
 
-	// execute error operation
-	errOp();
+  // execute error operation
+  errOp();
 }
 
 void TftpServerImpl::handleAcknowledgementPacket(
-	const UdpAddressType &from,
-	const AcknowledgementPacket &acknowledgementPacket)
+  const UdpAddressType &from,
+  const AcknowledgementPacket &acknowledgementPacket)
 {
-	BOOST_LOG_TRIVIAL( info) <<
-		"RX ERROR: " << acknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<<
+  "RX ERROR: " << acknowledgementPacket.toString();
 
-	TftpServerOperation errOp = createErrorOperation(
-		from,
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"ACK not expected");
+  TftpServerOperation errOp = createErrorOperation(
+    from,
+    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    "ACK not expected");
 
-	// execute error operation
-	errOp();
+  // execute error operation
+  errOp();
 }
 
 void TftpServerImpl::handleErrorPacket(
-	const UdpAddressType &from,
-	const ErrorPacket &errorPacket)
+  const UdpAddressType &from,
+  const ErrorPacket &errorPacket)
 {
-	BOOST_LOG_TRIVIAL( info) <<
-		"RX ERROR: " <<  errorPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<<
+  "RX ERROR: " << errorPacket.toString();
 
-	TftpServerOperation errOp = createErrorOperation(
-		from,
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"ERROR not expected");
+  TftpServerOperation errOp = createErrorOperation(
+    from,
+    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    "ERROR not expected");
 
-	// execute error operation
-	errOp();
+  // execute error operation
+  errOp();
 }
 
 void TftpServerImpl::handleOptionsAcknowledgementPacket(
-	const UdpAddressType &from,
-	const OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const UdpAddressType &from,
+  const OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-	BOOST_LOG_TRIVIAL( info) <<
-		"RX ERROR: " << optionsAcknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<<
+  "RX ERROR: " << optionsAcknowledgementPacket.toString();
 
-	TftpServerOperation errOp = createErrorOperation(
-		from,
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"OACK not expected");
+  TftpServerOperation errOp = createErrorOperation(
+    from,
+    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    "OACK not expected");
 
-	// execute error operation
-	errOp();
+  // execute error operation
+  errOp();
 }
 
 void TftpServerImpl::handleInvalidPacket(
-	const UdpAddressType &,
-	const RawTftpPacketType &)
+  const UdpAddressType &,
+  const RawTftpPacketType &)
 {
-	BOOST_LOG_TRIVIAL( info) << "RX: UNKNOWN: *ERROR* - IGNORE";
+  BOOST_LOG_TRIVIAL( info)<<"RX: UNKNOWN: *ERROR* - IGNORE";
 }
 
 }

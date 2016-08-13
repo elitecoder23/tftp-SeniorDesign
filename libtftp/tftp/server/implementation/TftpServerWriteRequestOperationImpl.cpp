@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class Tftp::Server::TftpServerWriteRequestOperationImpl.
@@ -33,179 +35,187 @@ using Tftp::Packet::DataPacket;
 using Tftp::Packet::ErrorPacket;
 
 TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
-	TftpReceiveDataOperationHandler &handler,
-	const TftpServerInternal &tftpServerInternal,
-	const UdpAddressType &clientAddress,
-	const OptionList &clientOptions,
-	const UdpAddressType &serverAddress):
-	TftpServerOperationImpl( tftpServerInternal, clientAddress, clientOptions, serverAddress),
-	handler( handler),
-	receiveDataSize( DEFAULT_DATA_SIZE),
-	lastReceivedBlockNumber( 0)
+  TftpReceiveDataOperationHandler &handler,
+  const TftpServerInternal &tftpServerInternal,
+  const UdpAddressType &clientAddress,
+  const OptionList &clientOptions,
+  const UdpAddressType &serverAddress) :
+  TftpServerOperationImpl(
+    tftpServerInternal,
+    clientAddress,
+    clientOptions,
+    serverAddress),
+  handler( handler),
+  receiveDataSize( DEFAULT_DATA_SIZE),
+  lastReceivedBlockNumber( 0)
 {
 }
 
 TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
-	TftpReceiveDataOperationHandler &handler,
-	const TftpServerInternal &tftpServerInternal,
-	const UdpAddressType &clientAddress,
-	const OptionList &clientOptions):
-	TftpServerOperationImpl( tftpServerInternal, clientAddress, clientOptions),
-	handler( handler),
-	receiveDataSize( DEFAULT_DATA_SIZE),
-	lastReceivedBlockNumber( 0)
-{
-}
-
-TftpServerWriteRequestOperationImpl::~TftpServerWriteRequestOperationImpl( void) noexcept
+  TftpReceiveDataOperationHandler &handler,
+  const TftpServerInternal &tftpServerInternal,
+  const UdpAddressType &clientAddress,
+  const OptionList &clientOptions) :
+  TftpServerOperationImpl( tftpServerInternal, clientAddress, clientOptions),
+  handler( handler),
+  receiveDataSize( DEFAULT_DATA_SIZE),
+  lastReceivedBlockNumber( 0)
 {
 }
 
 void TftpServerWriteRequestOperationImpl::operator ()( void)
 {
-	try
-	{
-		//! option negotiation leads to empty option list
-		if (getOptions().getOptions().empty())
-		{
-			//! Then no NOACK is sent back - a simple ACK is sent.
-			send( AcknowledgementPacket( 0));
-		}
-		else
-		{
-			//! check blocksize option
-			if (0 != getOptions().getBlocksizeOption())
-			{
-				receiveDataSize = getOptions().getBlocksizeOption();
+  try
+  {
+    // option negotiation leads to empty option list
+    if ( getOptions().getOptions().empty())
+    {
+      // Then no NOACK is sent back - a simple ACK is sent.
+      send( AcknowledgementPacket( 0));
+    }
+    else
+    {
+      //validate received options
 
-				// set receive data size if necessary
-				if (receiveDataSize > DEFAULT_DATA_SIZE)
-				{
-					setMaxReceivePacketSize(
-						receiveDataSize + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE);
-				}
-			}
+      // check blocksize option
+      if ( 0 != getOptions().getBlocksizeOption())
+      {
+        receiveDataSize = getOptions().getBlocksizeOption();
 
-			//! check timeout option
-			if (0 != getOptions().getTimeoutOption())
-			{
-				setReceiveTimeout( getOptions().getTimeoutOption());
-			}
+        // set receive data size if necessary
+        if ( receiveDataSize > DEFAULT_DATA_SIZE)
+        {
+          setMaxReceivePacketSize(
+            receiveDataSize + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE);
+        }
+      }
 
-			//! check transfer size option
-			if (getOptions().hasTransferSizeOption())
-			{
-				if (!handler.receivedTransferSize( getOptions().getTransferSizeOption()))
-				{
-					send( ErrorPacket(
-						ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS,
-						"FILE TO BIG"));
+      // check timeout option
+      if ( 0 != getOptions().getTimeoutOption())
+      {
+        setReceiveTimeout( getOptions().getTimeoutOption());
+      }
 
-					BOOST_THROW_EXCEPTION( TftpException() <<
-						AdditionalInfo( "FILE TO BIG"));
-				}
-			}
+      // check transfer size option
+      if ( getOptions().hasTransferSizeOption())
+      {
+        if ( !handler.receivedTransferSize(
+          getOptions().getTransferSizeOption()))
+        {
+          send(
+            ErrorPacket(
+              ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS,
+              "FILE TO BIG"));
 
-			//! send OACK
-			send( OptionsAcknowledgementPacket( getOptions()));
-		}
+          BOOST_THROW_EXCEPTION(
+            TftpException() << AdditionalInfo( "FILE TO BIG"));
+        }
+      }
 
-		//! start receive loop
-		TftpServerOperationImpl::operator ()();
-	}
-	catch (...)
-	{
-		handler.finishedOperation();
+      // send OACK
+      send( OptionsAcknowledgementPacket( getOptions()));
+    }
 
-		throw;
-	}
+    // start receive loop
+    TftpServerOperationImpl::operator ()();
+  }
+  catch ( ...)
+  {
+    handler.finishedOperation();
 
-	handler.finishedOperation();
+    throw;
+  }
+
+  handler.finishedOperation();
 }
 
 void TftpServerWriteRequestOperationImpl::handleDataPacket(
-	const UdpAddressType &,
-	const DataPacket &dataPacket)
+  const UdpAddressType &,
+  const DataPacket &dataPacket)
 {
-	BOOST_LOG_TRIVIAL( info) << "RX: " << dataPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<< "RX: " << dataPacket.toString();
 
-	// Check retransmission
-	if (dataPacket.getBlockNumber() == lastReceivedBlockNumber)
-	{
-		BOOST_LOG_TRIVIAL( info) << "Retransmission of last packet - only send ACK";
+  // Check retransmission
+  if (dataPacket.getBlockNumber() == lastReceivedBlockNumber)
+  {
+    BOOST_LOG_TRIVIAL( info) << "Retransmission of last packet - only send ACK";
 
-		send( AcknowledgementPacket( lastReceivedBlockNumber));
+    send( AcknowledgementPacket( lastReceivedBlockNumber));
 
-		return;
-	}
+    return;
+  }
 
-	//! check not expected block
-	if (dataPacket.getBlockNumber() != lastReceivedBlockNumber.next())
-	{
-		BOOST_LOG_TRIVIAL( error) << "Unexpected packet";
+  // check not expected block
+  if (dataPacket.getBlockNumber() != lastReceivedBlockNumber.next())
+  {
+    BOOST_LOG_TRIVIAL( error) << "Unexpected packet";
 
-		send( ErrorPacket(
-			ErrorCode::ILLEGAL_TFTP_OPERATION,
-			"Wrong block number"));
+    send( ErrorPacket(
+      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      "Wrong block number"));
 
-		//! Operation completed
-		finished();
+    // Operation completed
+    finished();
 
-		//! @throw CommunicationException On wrong block number.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( "Wrong block number"));
-	}
+    //! @throw CommunicationException On wrong block number.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( "Wrong block number"));
+  }
 
-	//! check for too much data
-	if (dataPacket.getDataSize() > receiveDataSize)
-	{
-		BOOST_LOG_TRIVIAL( error) << "Too much data received";
+  // check for too much data
+  if (dataPacket.getDataSize() > receiveDataSize)
+  {
+    BOOST_LOG_TRIVIAL( error) << "Too much data received";
 
-		send( ErrorPacket(
-			ErrorCode::ILLEGAL_TFTP_OPERATION,
-			"Too much data"));
+    send( ErrorPacket(
+      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      "Too much data"));
 
-		BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-			AdditionalInfo( "Too much data received"));
-	}
+   // Operation completed
+   finished();
 
-	// call data handler
-	handler.receviedData( dataPacket.getData());
+   //! @throw CommunicationException Wenn to much data is received.
+   BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+     AdditionalInfo( "Too much data received"));
+  }
 
-	// increment block number
-	lastReceivedBlockNumber++;
+  // call data handler
+  handler.receviedData( dataPacket.getData());
 
-	send( AcknowledgementPacket( lastReceivedBlockNumber));
+  // increment block number
+  lastReceivedBlockNumber++;
 
-	// if received data size is smaller then the expected -> last packet has been
-	// received
-	if (dataPacket.getDataSize() < receiveDataSize)
-	{
-		finished();
-	}
-	else
-	{
-		//! receive next packet
-		receive();
-	}
+  send( AcknowledgementPacket( lastReceivedBlockNumber));
+
+  // if received data size is smaller then the expected -> last packet has been
+  // received
+  if (dataPacket.getDataSize() < receiveDataSize)
+  {
+    finished();
+  }
+  else
+  {
+    // receive next packet
+    receive();
+  }
 }
 
 void TftpServerWriteRequestOperationImpl::handleAcknowledgementPacket(
-	const UdpAddressType &,
-	const AcknowledgementPacket &acknowledgementPacket)
+  const UdpAddressType &,
+  const AcknowledgementPacket &acknowledgementPacket)
 {
-	BOOST_LOG_TRIVIAL( error) << "RX ERROR: " << acknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( error)<<"RX ERROR: " << acknowledgementPacket.toString();
 
-	send( ErrorPacket(
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"ACK not expected"));
+  send( ErrorPacket(
+    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    "ACK not expected"));
 
-	//! Operation completed
-	finished();
+  //! Operation completed
+  finished();
 
-	//! @throw CommunicationException Always, because this packet is invalid.
-	BOOST_THROW_EXCEPTION( CommunicationException() <<
-		AdditionalInfo( "ACK not expected"));
+  //! @throw CommunicationException Always, because this packet is invalid.
+  BOOST_THROW_EXCEPTION( CommunicationException() <<
+    AdditionalInfo( "ACK not expected"));
 }
 
 }

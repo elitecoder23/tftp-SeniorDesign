@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Server::TftpServerBaseErrorOperation.
@@ -31,53 +33,47 @@ using Tftp::Packet::BaseErrorPacket;
  **/
 class TftpServerBaseErrorOperation
 {
-	public:
-		typedef boost::asio::ip::udp::endpoint AddressType;
+  public:
+    using AddressType = boost::asio::ip::udp::endpoint;
 
-	protected:
-		/**
-		 * @brief Constructor of error operation
-		 *
-		 * @param[in] clientAddress
-		 *   Where the error packet shall be transmitted to.
-		 *
-		 * @throw CommunicationException
-		 **/
-		TftpServerBaseErrorOperation( const AddressType &clientAddress);
+  protected:
+    /**
+     * @brief Constructor of error operation
+     *
+     * @param[in] clientAddress
+     *   Where the error packet shall be transmitted to.
+     **/
+    TftpServerBaseErrorOperation( const AddressType &clientAddress);
 
-		/**
-		 * @brief Constructor of error operation
-		 *
-		 * @param[in] clientAddress
-		 *   Where the error packet shall be transmitted to.
-		 * @param[in] from
-		 *   The communication source.
-		 *
-		 * @throw CommunicationException
-		 **/
-		TftpServerBaseErrorOperation(
-			const AddressType &clientAddress,
-			const AddressType &from);
+    /**
+     * @brief Constructor of error operation
+     *
+     * @param[in] clientAddress
+     *   Where the error packet shall be transmitted to.
+     * @param[in] from
+     *   The communication source.
+     **/
+    TftpServerBaseErrorOperation(
+      const AddressType &clientAddress,
+      const AddressType &from);
 
-		/**
-		 * @brief Default destructor.
-		 **/
-		virtual ~TftpServerBaseErrorOperation( void) noexcept;
+    /**
+     * @brief Default destructor.
+     **/
+    virtual ~TftpServerBaseErrorOperation( void) noexcept;
 
-		/**
-		 * @brief Sends the given error packet.
-		 *
-		 * @param[in] error
-		 *   The error packet.
-		 *
-		 * @throw CommunicationException
-		 **/
-		void sendError( const BaseErrorPacket &error);
+    /**
+     * @brief Sends the given error packet.
+     *
+     * @param[in] error
+     *   The error packet.
+     **/
+    void sendError( const BaseErrorPacket &error);
 
-	private:
-		const AddressType clientAddress;
-		boost::asio::io_service ioService;
-		boost::asio::ip::udp::socket socket;
+  private:
+    const AddressType clientAddress;
+    boost::asio::io_service ioService;
+    boost::asio::ip::udp::socket socket;
 };
 
 }

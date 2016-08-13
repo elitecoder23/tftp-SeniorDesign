@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class interface Tftp::TftpPacketHandler.
@@ -20,13 +22,6 @@
 
 namespace Tftp {
 
-using Tftp::Packet::ReadRequestPacket;
-using Tftp::Packet::WriteRequestPacket;
-using Tftp::Packet::DataPacket;
-using Tftp::Packet::AcknowledgementPacket;
-using Tftp::Packet::ErrorPacket;
-using Tftp::Packet::OptionsAcknowledgementPacket;
-
 /**
  * @brief Interface, which must be implemented by an TFTP packet Handler.
  *
@@ -36,6 +31,14 @@ using Tftp::Packet::OptionsAcknowledgementPacket;
 class TftpPacketHandler
 {
   public:
+    using ReadRequestPacket = Tftp::Packet::ReadRequestPacket;
+    using WriteRequestPacket = Tftp::Packet::WriteRequestPacket;
+    using DataPacket = Tftp::Packet::DataPacket;
+    using AcknowledgementPacket = Tftp::Packet::AcknowledgementPacket;
+    using ErrorPacket = Tftp::Packet::ErrorPacket;
+    using OptionsAcknowledgementPacket =
+      Tftp::Packet::OptionsAcknowledgementPacket;
+
     //! Default virtual destructur
     virtual ~TftpPacketHandler( void) noexcept = default;
 

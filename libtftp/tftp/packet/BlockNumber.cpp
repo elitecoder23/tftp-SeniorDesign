@@ -18,90 +18,90 @@ namespace Tftp {
 namespace Packet {
 
 BlockNumber::BlockNumber( const uint16_t blockNumber) noexcept:
-	blockNumber( blockNumber)
+blockNumber( blockNumber)
 {
 }
 
 uint16_t BlockNumber::next( void) const
 {
-	if (blockNumber==0xFFFF)
-	{
-		return 1;
-	}
+  if ( blockNumber == 0xFFFF)
+  {
+    return 1;
+  }
 
-	return blockNumber + 1;
+  return blockNumber + 1;
 }
 
 uint16_t BlockNumber::previous( void) const
 {
-	if (blockNumber==1)
-	{
-		return 0xFFFF;
-	}
+  if ( blockNumber == 1)
+  {
+    return 0xFFFF;
+  }
 
-	return blockNumber-1;
+  return blockNumber - 1;
 }
 
 BlockNumber::operator uint16_t( void) const
 {
-	return blockNumber;
+  return blockNumber;
 }
 
 BlockNumber::operator uint16_t&( void)
 {
-	return blockNumber;
+  return blockNumber;
 }
 
 BlockNumber& BlockNumber::operator=( const uint16_t blockNumber)
 {
-	this->blockNumber = blockNumber;
-	return *this;
+  this->blockNumber = blockNumber;
+  return *this;
 }
 
 BlockNumber& BlockNumber::operator++( void)
 {
-	blockNumber = next();
-	return *this;
+  blockNumber = next();
+  return *this;
 }
 
 BlockNumber BlockNumber::operator++( int)
 {
-	BlockNumber old( blockNumber);
-	blockNumber = next();
-	return old;
+  BlockNumber old( blockNumber);
+  blockNumber = next();
+  return old;
 }
 
 BlockNumber& BlockNumber::operator--( void)
 {
-	blockNumber = previous();
-	return *this;
+  blockNumber = previous();
+  return *this;
 }
 
 BlockNumber BlockNumber::operator--( int)
 {
-	BlockNumber old( blockNumber);
-	blockNumber = previous();
-	return old;
+  BlockNumber old( blockNumber);
+  blockNumber = previous();
+  return old;
 }
 
 bool BlockNumber::operator ==( const BlockNumber &rhs) const
 {
-	return blockNumber == rhs.blockNumber;
+  return blockNumber == rhs.blockNumber;
 }
 
 bool BlockNumber::operator ==( const uint16_t &rhs) const
 {
-	return blockNumber == rhs;
+  return blockNumber == rhs;
 }
 
 bool BlockNumber::operator !=( const BlockNumber &rhs) const
 {
-	return blockNumber != rhs.blockNumber;
+  return blockNumber != rhs.blockNumber;
 }
 
 bool BlockNumber::operator !=( const uint16_t &rhs) const
 {
-	return blockNumber != rhs;
+  return blockNumber != rhs;
 }
 
 }

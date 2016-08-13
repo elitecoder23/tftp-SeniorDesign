@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Server::TftpServerErrorOperation.
@@ -31,54 +33,54 @@ using std::string;
  **/
 class TftpServerErrorOperation: public TftpServerBaseErrorOperation
 {
-	public:
-		/**
-		 * @brief Initialises the error operation.
-		 *
-		 * @param[in] clientAddress
-		 *   Where the error packet shall be transmitted to.
-		 * @param[in] errorCode
-		 *   The error code of the error packet.
-		 * @param[in] errorMessage
-		 *   The error message of the packet.
-		 * @param[in] from
-		 *   Optional parameter to define the communication source
-		 *
-		 * @throw CommunicationException
-		 **/
-		TftpServerErrorOperation(
-			const AddressType &clientAddress,
-			const AddressType &from,
-			const ErrorCode errorCode,
-			const string &errorMessage);
+  public:
+    /**
+     * @brief Initialises the error operation.
+     *
+     * @param[in] clientAddress
+     *   Where the error packet shall be transmitted to.
+     * @param[in] errorCode
+     *   The error code of the error packet.
+     * @param[in] errorMessage
+     *   The error message of the packet.
+     * @param[in] from
+     *   Optional parameter to define the communication source
+     *
+     * @throw CommunicationException
+     **/
+    TftpServerErrorOperation(
+      const AddressType &clientAddress,
+      const AddressType &from,
+      const ErrorCode errorCode,
+      const string &errorMessage);
 
-		/**
-		 * @brief Initialises the error operation.
-		 *
-		 * @param[in] clientAddress
-		 *   Where the error packet shall be transmitted to.
-		 * @param[in] errorCode
-		 *   The error code of the error packet.
-		 * @param[in] errorMessage
-		 *   The error message of the packet.
-		 *
-		 * @throw CommunicationException
-		 **/
-		TftpServerErrorOperation(
-			const AddressType &clientAddress,
-			const ErrorCode errorCode,
-			const string &errorMessage);
+    /**
+     * @brief Initialises the error operation.
+     *
+     * @param[in] clientAddress
+     *   Where the error packet shall be transmitted to.
+     * @param[in] errorCode
+     *   The error code of the error packet.
+     * @param[in] errorMessage
+     *   The error message of the packet.
+     *
+     * @throw CommunicationException
+     **/
+    TftpServerErrorOperation(
+      const AddressType &clientAddress,
+      const ErrorCode errorCode,
+      const string &errorMessage);
 
-		/**
-		 *
-		 **/
-		void operator ()( void);
+    /**
+     * @brief Executes the error operation
+     **/
+    void operator ()( void);
 
-	private:
-		//! The error code
-		const ErrorCode errorCode;
-		//! The error message
-		const string errorMessage;
+  private:
+    //! The error code
+    const ErrorCode errorCode;
+    //! The error message
+    const string errorMessage;
 };
 
 }

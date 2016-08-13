@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of namespace Tftp::Server.
@@ -44,7 +46,7 @@ class NewRequestHandler;
 class TftpServer;
 
 //! Declaration of TFTP server operation instance pointer
-typedef std::shared_ptr< TftpServer> TftpServerPtr;
+using TftpServerPtr = std::shared_ptr< TftpServer>;
 
 //! Declaration of TFTP server operation
 using TftpServerOperation = std::function< void( void)>;
