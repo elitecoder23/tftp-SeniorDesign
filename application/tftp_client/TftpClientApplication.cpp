@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class TftpClientApplication.
@@ -64,33 +66,9 @@ TftpClientApplication::TftpClientApplication(
     ("address",
       boost::program_options::value< boost::asio::ip::address>( &address)->required(),
       "remote address"
-    )
-    ("port",
-      boost::program_options::value< uint16_t>( &port)->default_value(
-        Tftp::DEFAULT_TFTP_PORT),
-      "UDP port, where the server is listen"
-    )
-    (
-      "blocksize-option",
-      boost::program_options::value< uint16_t>( &configuration.blockSizeOptionValue)->notifier(
-        [this]( const uint16_t &){
-          this->configuration.handleBlockSizeOption = true;
-        }),
-      "blocksize of transfers to use"
-    )
-    (
-      "timeout-option",
-      boost::program_options::value< uint16_t>( &configuration.timoutOptionValue)->notifier(
-        [this]( const uint16_t &){
-          this->configuration.handleTimeoutOption = true;
-        }),
-      "If set handles the timeout option negotiation"
-    )
-    (
-      "handle-transfer-size-option",
-      boost::program_options::bool_switch( &configuration.handleTransferSizeOption),
-      "If set handles the transfer size option negotiation"
     );
+
+  optionsDescription.add( configuration.getOptions());
 }
 
 int TftpClientApplication::operator()( void)
@@ -110,7 +88,7 @@ int TftpClientApplication::operator()( void)
     TftpClientOperation op;
     std::fstream fileStream;
     StreamFile file( fileStream);
-    boost::asio::ip::udp::endpoint serverAddress( address, port);
+    boost::asio::ip::udp::endpoint serverAddress( address, configuration.tftpServerPort);
 
     switch ( operation)
     {
@@ -204,11 +182,6 @@ bool TftpClientApplication::handleCommandLine( void)
       std::cout << optionsDescription << std::endl;
       return false;
     }
-
-    // Activate blocksize option, if parameter is set
-    configuration.handleBlockSizeOption = (0 != options.count( "blocksize-option"));
-    // Activate timeout option, if parameter is set
-    configuration.handleTimeoutOption = (0 != options.count( "timeout-option"));
   }
   catch ( boost::program_options::error &e)
   {

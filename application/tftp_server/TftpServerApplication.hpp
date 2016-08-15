@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class TftpServerApplication.
@@ -93,8 +95,6 @@ class TftpServerApplication
 
     //! base directory of TFTP server
     boost::filesystem::path baseDir;
-    //! server port
-    uint16_t port;
     //! The TFTP configuration
     TftpConfiguration configuration;
     //! The TFTP server instance

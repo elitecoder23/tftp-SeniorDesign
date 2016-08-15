@@ -74,7 +74,6 @@ class TftpClientApplication
     std::string localFile;
     std::string remoteFile;
     boost::asio::ip::address address;
-    uint16_t port;
     TftpConfiguration configuration;
 };
 

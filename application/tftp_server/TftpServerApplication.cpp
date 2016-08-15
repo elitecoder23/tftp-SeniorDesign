@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class TftpServerApplication.
@@ -47,28 +49,9 @@ TftpServerApplication::TftpServerApplication(
       "server-root",
       boost::program_options::value< boost::filesystem::path>( &baseDir)->default_value( boost::filesystem::current_path()),
       "Directory path, where the server shall have its root"
-    )
-    (
-      "server-port",
-      boost::program_options::value< uint16_t>( &port)->default_value(
-        Tftp::DEFAULT_TFTP_PORT),
-      "UDP port, where the server shall listen"
-    )
-    (
-      "blocksize-option",
-      boost::program_options::value< uint16_t>( &configuration.blockSizeOptionValue),
-      "blocksize of transfers to use"
-    )
-    (
-      "timeout-option",
-      boost::program_options::value< uint16_t>( &configuration.timoutOptionValue),
-      "If set handles the timeout option negotiation"
-    )
-    (
-      "handle-transfer-size-option",
-      boost::program_options::bool_switch( &configuration.handleTransferSizeOption),
-      "If set handles the transfer size option negotiation"
     );
+
+  optionsDescription.add( configuration.getOptions());
 }
 
 TftpServerApplication::~TftpServerApplication( void) noexcept
@@ -87,13 +70,13 @@ int TftpServerApplication::operator()( void)
     }
 
     BOOST_LOG_TRIVIAL( info) << "Starting TFTP server in " << baseDir.string()
-      << " on port " << port;
+      << " on port " << configuration.tftpServerPort;
 
     // The TFTP server instance
     server = TftpServer::createInstance(
       configuration,
       Tftp::Options::OptionList(),
-      UdpAddressType( boost::asio::ip::address_v4::any(), port));
+      UdpAddressType( boost::asio::ip::address_v4::any(), configuration.tftpServerPort));
 
     server->registerRequestHandler(
       Tftp::TftpRequestType::ReadRequest,
@@ -172,12 +155,6 @@ bool TftpServerApplication::handleCommandLine( void)
       std::cout << optionsDescription << std::endl;
       return false;
     }
-
-    // Activate blocksize option, if parameter is set
-    configuration.handleBlockSizeOption = (0
-      != options.count( "blocksize-option"));
-    // Activate timeout option, if parameter is set
-    configuration.handleTimeoutOption = (0 != options.count( "timeout-option"));
   }
   catch ( boost::program_options::error &e)
   {

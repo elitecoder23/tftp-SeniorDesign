@@ -22,11 +22,7 @@ TftpConfiguration::TftpConfiguration( void) :
   tftpTimeout( DEFAULT_TFTP_RECEIVE_TIMEOUT),
   tftpRetries( DEFAULT_TFTP_RETRIES),
   tftpServerPort( DEFAULT_TFTP_PORT),
-  handleTransferSizeOption( false),
-  handleBlockSizeOption( false),
-  blockSizeOptionValue( DEFAULT_DATA_SIZE),
-  handleTimeoutOption( false),
-  timoutOptionValue( DEFAULT_TFTP_RECEIVE_TIMEOUT)
+  handleTransferSizeOption( false)
 {
 }
 
@@ -38,13 +34,9 @@ TftpConfiguration::TftpConfiguration(
 
   handleTransferSizeOption( properties.get( "tftp.option.transferSize", false)),
 
-  handleBlockSizeOption( properties.get( "tftp.option.blockSize", false)),
-  blockSizeOptionValue(
-    properties.get( "tftp.option.blockSize.value", DEFAULT_DATA_SIZE)),
+  blockSizeOption( properties.get_optional< uint16_t>( "tftp.option.blockSize.value")),
 
-  handleTimeoutOption( properties.get( "tftp.option.tiemout", false)),
-  timoutOptionValue(
-    properties.get( "tftp.option.timeout.value", DEFAULT_TFTP_RECEIVE_TIMEOUT))
+  timoutOption( properties.get_optional< uint16_t>( "tftp.option.timeout.value"))
 {
 }
 
@@ -58,16 +50,60 @@ boost::property_tree::ptree TftpConfiguration::toProperties( void) const
 
   properties.add( "tftp.option.transferSize", handleTransferSizeOption);
 
-  properties.add( "tftp.option.blockSize", handleBlockSizeOption);
-  properties.add( "tftp.option.blockSize.value", blockSizeOptionValue);
+  if (blockSizeOption)
+  {
+    properties.add( "tftp.option.blockSize.value", blockSizeOption);
+  }
 
-  properties.add( "tftp.option.timeout", handleTimeoutOption);
-  properties.add( "tftp.option.timeout.value", timoutOptionValue);
+  if (timoutOption)
+  {
+    properties.add( "tftp.option.timeout.value", timoutOption);
+  }
 
   return properties;
 }
 
-OptionList TftpConfiguration::getClientOptions(
+TftpConfiguration::options_description TftpConfiguration::getOptions( void)
+{
+  //! @todo for boost::options: https://github.com/boostorg/program_options/pull/18
+
+  boost::program_options::options_description options(
+    "TFTP options");
+
+  options.add_options()
+  ("server-port",
+    boost::program_options::value( &tftpServerPort)->default_value(
+      Tftp::DEFAULT_TFTP_PORT),
+    "UDP port, where the server is listen"
+  )
+  (
+    "blocksize-option",
+    //boost::program_options::value( &blockSizeOption),
+    boost::program_options::value< uint16_t>()->notifier(
+      [this]( const uint16_t &value){
+        this->blockSizeOption = value;
+    }),
+    "blocksize of transfers to use"
+  )
+  (
+    "timeout-option",
+//    boost::program_options::value( &timoutOption),
+    boost::program_options::value< uint16_t>()->notifier(
+      [this]( const uint16_t &value){
+        this->timoutOption = value;
+    }),
+    "If set handles the timeout option negotiation"
+  )
+  (
+    "handle-transfer-size-option",
+    boost::program_options::bool_switch( &handleTransferSizeOption),
+    "If set handles the transfer size option negotiation"
+  );
+
+  return options;
+}
+
+TftpConfiguration::OptionList TftpConfiguration::getClientOptions(
   const OptionList &baseOptions) const
 {
   OptionList options = baseOptions;
@@ -77,20 +113,20 @@ OptionList TftpConfiguration::getClientOptions(
     options.addTransferSizeOption();
   }
 
-  if ( handleBlockSizeOption)
+  if ( blockSizeOption)
   {
-    options.addBlocksizeOption( blockSizeOptionValue);
+    options.addBlocksizeOption( blockSizeOption.get());
   }
 
-  if ( handleTimeoutOption)
+  if ( timoutOption)
   {
-    options.addTimeoutOption( timoutOptionValue);
+    options.addTimeoutOption( timoutOption.get());
   }
 
   return options;
 }
 
-OptionList TftpConfiguration::getServerOptions(
+TftpConfiguration::OptionList TftpConfiguration::getServerOptions(
   const OptionList &baseOptions) const
 {
   OptionList options = baseOptions;
@@ -100,14 +136,14 @@ OptionList TftpConfiguration::getServerOptions(
     options.addTransferSizeOption();
   }
 
-  if ( handleBlockSizeOption)
+  if ( blockSizeOption)
   {
-    options.addBlocksizeOption( blockSizeOptionValue);
+    options.addBlocksizeOption( blockSizeOption.get());
   }
 
-  if ( handleTimeoutOption)
+  if ( timoutOption)
   {
-    options.addTimeoutOption( TFTP_OPTION_TIMEOUT_MIN, timoutOptionValue);
+    options.addTimeoutOption( timoutOption.get());
   }
 
   return options;

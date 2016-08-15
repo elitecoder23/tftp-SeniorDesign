@@ -22,12 +22,12 @@
 #include <tftp/options/OptionList.hpp>
 
 #include <boost/property_tree/ptree.hpp>
+#include <boost/program_options.hpp>
+#include <boost/optional.hpp>
 
 #include <cstdint>
 
 namespace Tftp {
-
-using Tftp::Options::OptionList;
 
 /**
  * @brief Encapsulates common TFTP options, which can be loaded via a
@@ -36,6 +36,9 @@ using Tftp::Options::OptionList;
 class TftpConfiguration
 {
   public:
+    using OptionList = Tftp::Options::OptionList;
+    using options_description = boost::program_options::options_description;
+
     //! Loads the configuration with default values.
     TftpConfiguration( void);
 
@@ -56,6 +59,14 @@ class TftpConfiguration
     boost::property_tree::ptree toProperties( void) const;
 
     /**
+     * @brief Returns an option description, which can be used to parse a
+     *   command line.
+     *
+     * @return
+     **/
+    options_description getOptions( void);
+
+    /**
      * @brief Creates an option list (for TFTP clients) based on the actual
      *   configuration and the supplied base options.
      *
@@ -65,8 +76,8 @@ class TftpConfiguration
      * @return Option list (for TFTP clients) based on the actual
      *   configuration and the supplied base options.
      **/
-    OptionList getClientOptions( const OptionList &baseOptions =
-      OptionList()) const;
+    OptionList getClientOptions(
+      const OptionList &baseOptions = OptionList()) const;
 
     /**
      * @brief Creates an option list (for TFTP servers) based on the actual
@@ -78,8 +89,8 @@ class TftpConfiguration
      * @return Option list (for TFTP servers) based on the actual
      *   configuration and the supplied base options.
      **/
-    OptionList getServerOptions( const OptionList &baseOptions =
-      OptionList()) const;
+    OptionList getServerOptions(
+      const OptionList &baseOptions = OptionList()) const;
 
     //! The TFTP timeout
     uint16_t tftpTimeout;
@@ -92,15 +103,11 @@ class TftpConfiguration
     //! If set, the client/ server shall handle the "Transfer Size" option
     bool handleTransferSizeOption;
 
-    //! If set, the client/ server shall handle the "Block Size" option
-    bool handleBlockSizeOption;
     //! If handleBlockSizeOption is set, this value is used for option negotiation
-    uint16_t blockSizeOptionValue;
+    boost::optional< uint16_t> blockSizeOption;
 
-    //! If set, the client/ server shall handle the "Timeout" option
-    bool handleTimeoutOption;
     //! If handleTimeoutOption is set, this value is used for option negotiation
-    uint16_t timoutOptionValue;
+    boost::optional< uint16_t> timoutOption;
 };
 }
 
