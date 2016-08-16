@@ -27,23 +27,25 @@ namespace Client {
  **/
 class TftpClientInternal
 {
-	public:
-		//! Default destructor
-		virtual ~TftpClientInternal( void) = default;
+  public:
+    using OptionList = Options::OptionList;
 
-		/**
-		 * @brief Returns the used TFTP configuration.
-		 *
-		 * @return The TFTP configuration
-		 **/
-		virtual const TftpConfiguration& getConfiguration( void) const = 0;
+    //! Default destructor
+    virtual ~TftpClientInternal( void) = default;
 
-		/**
-		 * @brief Returns the own options list.
-		 *
-		 * @return The options list.
-		 **/
-		virtual const OptionList& getOptionList( void) const = 0;
+    /**
+     * @brief Returns the used TFTP configuration.
+     *
+     * @return The TFTP configuration
+     **/
+    virtual const TftpConfiguration& getConfiguration( void) const = 0;
+
+    /**
+     * @brief Returns the own options list.
+     *
+     * @return The options list.
+     **/
+    virtual const OptionList& getOptionList( void) const = 0;
 };
 
 }

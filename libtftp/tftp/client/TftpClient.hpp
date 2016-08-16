@@ -24,10 +24,6 @@
 namespace Tftp {
 namespace Client {
 
-using Tftp::Options::OptionList;
-
-using std::string;
-
 /**
  * @brief The main entry for implementors of a TFTP client.
  *
@@ -36,115 +32,119 @@ using std::string;
  **/
 class TftpClient
 {
-	public:
-		/**
-		 * @brief Creates an instance of TFTP client.
-		 *
-		 * With the instance you can create any client operation instances.
-		 *
-		 * @param[in] configuration
-		 *   The TFTP Configuration
-		 * @param[in] additionalOptions
-		 *   Additional Options, which shall be used as TFTP client option list.
-		 *
-		 * @return The created TFTP client instance.
-		 **/
-		static TftpClientPtr createInstance(
-			const TftpConfiguration &configuration = TftpConfiguration(),
-			const OptionList& additionalOptions = OptionList());
+  public:
+    using OptionList = Tftp::Options::OptionList;
 
-		//! Default destructor
-		virtual ~TftpClient( void) noexcept = default;
+    using string = std::string;
 
-		/**
-		 * @brief Creates an read request operation (TFTP RRQ).
-		 *
-		 * @param[in] handler
-		 *   Handler for received data.
-		 * @param[in] serverAddress
-		 *   Where the connection should be established to.
-		 * @param[in] filename
-		 *   Which file shall be requested
-		 * @param[in] mode
-		 *   The transfer mode
-		 * @param[in] from
-		 *   Optional parameter to define the communication source
-		 *
-		 * @return The client operation instance.
-		 **/
-		virtual TftpClientOperation createReadRequestOperation(
-			TftpReceiveDataOperationHandler &handler,
-			const UdpAddressType &serverAddress,
-			const string &filename,
-			const TransferMode mode,
-			const UdpAddressType &from) = 0;
+    /**
+     * @brief Creates an instance of TFTP client.
+     *
+     * With the instance you can create any client operation instances.
+     *
+     * @param[in] configuration
+     *   The TFTP Configuration
+     * @param[in] additionalOptions
+     *   Additional Options, which shall be used as TFTP client option list.
+     *
+     * @return The created TFTP client instance.
+     **/
+    static TftpClientPtr createInstance(
+      const TftpConfiguration &configuration = TftpConfiguration(),
+      const OptionList& additionalOptions = OptionList());
 
-		/**
-		 * @brief Creates an read request operation (TFTP RRQ).
-		 *
-		 * @param[in] handler
-		 *   Handler for received data.
-		 * @param[in] serverAddress
-		 *   Where the connection should be established to.
-		 * @param[in] filename
-		 *   Which file shall be requested
-		 * @param[in] mode
-		 *   The transfer mode
-		 *
-		 * @return The client operation instance.
-		 **/
-		virtual TftpClientOperation createReadRequestOperation(
-			TftpReceiveDataOperationHandler &handler,
-			const UdpAddressType &serverAddress,
-			const string &filename,
-			const TransferMode mode) = 0;
+    //! Default destructor
+    virtual ~TftpClient( void) noexcept = default;
 
-		/**
-		 * @brief Creates an write request operation (TFTP WRQ).
-		 *
-		 * @param[in] handler
-		 *   Handler for data.
-		 * @param[in] serverAddress
-		 *   Where the connection should be established to.
-		 * @param[in] filename
-		 *   Which file shall be requested
-		 * @param[in] mode
-		 *   The transfer mode
-		 * @param[in] from
-		 *   Optional parameter to define the communication source
-		 *
-		 * @return The client operation instance.
-		 **/
-		virtual TftpClientOperation createWriteRequestOperation(
-			TftpTransmitDataOperationHandler &handler,
-			const UdpAddressType &serverAddress,
-			const string &filename,
-			const TransferMode mode,
-			const UdpAddressType &from) = 0;
+    /**
+     * @brief Creates an read request operation (TFTP RRQ).
+     *
+     * @param[in] handler
+     *   Handler for received data.
+     * @param[in] serverAddress
+     *   Where the connection should be established to.
+     * @param[in] filename
+     *   Which file shall be requested
+     * @param[in] mode
+     *   The transfer mode
+     * @param[in] from
+     *   Optional parameter to define the communication source
+     *
+     * @return The client operation instance.
+     **/
+    virtual TftpClientOperation createReadRequestOperation(
+      TftpReceiveDataOperationHandler &handler,
+      const UdpAddressType &serverAddress,
+      const string &filename,
+      const TransferMode mode,
+      const UdpAddressType &from) = 0;
 
-		/**
-		 * @brief Creates an write request operation (TFTP WRQ).
-		 *
-		 * @param[in] handler
-		 *   Handler for data.
-		 * @param[in] serverAddress
-		 *   Where the connection should be established to.
-		 * @param[in] filename
-		 *   Which file shall be requested
-		 * @param[in] mode
-		 *   The transfer mode
-		 *
-		 * @return The client operation instance.
-		 **/
-		virtual TftpClientOperation createWriteRequestOperation(
-			TftpTransmitDataOperationHandler &handler,
-			const UdpAddressType &serverAddress,
-			const string &filename,
-			const TransferMode mode) = 0;
+    /**
+     * @brief Creates an read request operation (TFTP RRQ).
+     *
+     * @param[in] handler
+     *   Handler for received data.
+     * @param[in] serverAddress
+     *   Where the connection should be established to.
+     * @param[in] filename
+     *   Which file shall be requested
+     * @param[in] mode
+     *   The transfer mode
+     *
+     * @return The client operation instance.
+     **/
+    virtual TftpClientOperation createReadRequestOperation(
+      TftpReceiveDataOperationHandler &handler,
+      const UdpAddressType &serverAddress,
+      const string &filename,
+      const TransferMode mode) = 0;
 
-	protected:
-		//! Protected constructor.
-		TftpClient( void) = default;
+    /**
+     * @brief Creates an write request operation (TFTP WRQ).
+     *
+     * @param[in] handler
+     *   Handler for data.
+     * @param[in] serverAddress
+     *   Where the connection should be established to.
+     * @param[in] filename
+     *   Which file shall be requested
+     * @param[in] mode
+     *   The transfer mode
+     * @param[in] from
+     *   Optional parameter to define the communication source
+     *
+     * @return The client operation instance.
+     **/
+    virtual TftpClientOperation createWriteRequestOperation(
+      TftpTransmitDataOperationHandler &handler,
+      const UdpAddressType &serverAddress,
+      const string &filename,
+      const TransferMode mode,
+      const UdpAddressType &from) = 0;
+
+    /**
+     * @brief Creates an write request operation (TFTP WRQ).
+     *
+     * @param[in] handler
+     *   Handler for data.
+     * @param[in] serverAddress
+     *   Where the connection should be established to.
+     * @param[in] filename
+     *   Which file shall be requested
+     * @param[in] mode
+     *   The transfer mode
+     *
+     * @return The client operation instance.
+     **/
+    virtual TftpClientOperation createWriteRequestOperation(
+      TftpTransmitDataOperationHandler &handler,
+      const UdpAddressType &serverAddress,
+      const string &filename,
+      const TransferMode mode) = 0;
+
+  protected:
+    //! Protected constructor.
+    TftpClient( void) = default;
 };
 
 }
