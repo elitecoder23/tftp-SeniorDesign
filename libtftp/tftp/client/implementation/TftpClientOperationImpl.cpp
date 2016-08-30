@@ -32,172 +32,172 @@ namespace Client {
 
 TftpClientOperationImpl::~TftpClientOperationImpl( void) noexcept
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	//! @todo send err if operation is in progress...
-	try
-	{
-		finished();
+  //! @todo send err if operation is in progress...
+  try
+  {
+    finished();
 
-		// Close the socket.
-		socket.close();
-	}
-	catch (boost::system::system_error &err)
-	{
-		// On error, ignore it and continue.
-		BOOST_LOG_TRIVIAL( error) << err.what();
-	}
+    // Close the socket.
+    socket.close();
+  }
+  catch (boost::system::system_error &err)
+  {
+    // On error, ignore it and continue.
+    BOOST_LOG_TRIVIAL( error) << err.what();
+  }
 }
 
 void TftpClientOperationImpl::operator ()( void)
 {
-	// start first receive operation
-	receiveFirst();
+  // start first receive operation
+  receiveFirst();
 
-	// start the event loop
-	ioService.run();
+  // start the event loop
+  ioService.run();
 }
 
 TftpClientOperationImpl::TftpClientOperationImpl(
-	const TftpClientInternal &tftpClientInternal,
-	const UdpAddressType &serverAddress,
-	const string &filename,
-	const TransferMode mode,
-	const UdpAddressType &from)
-try:
-	tftpClientInternal( tftpClientInternal),
-	remoteEndpoint( serverAddress),
-	filename( filename),
-	mode( mode),
-	options( tftpClientInternal.getOptionList()),
-	maxReceivePacketSize( DEFAULT_MAX_PACKET_SIZE),
-	receiveTimeout( tftpClientInternal.getConfiguration().tftpTimeout),
-	socket( ioService),
-	timer( ioService),
-	transmitPacketType( PacketType::INVALID),
-	transmitCounter( 0)
+  const TftpClientInternal &tftpClientInternal,
+  const UdpAddressType &serverAddress,
+  const string &filename,
+  const TransferMode mode,
+  const UdpAddressType &from)
+try :
+  tftpClientInternal( tftpClientInternal),
+  remoteEndpoint( serverAddress),
+  filename( filename),
+  mode( mode),
+  options( tftpClientInternal.getOptionList()),
+  maxReceivePacketSize( DEFAULT_MAX_PACKET_SIZE),
+  receiveTimeout( tftpClientInternal.getConfiguration().tftpTimeout),
+  socket( ioService),
+  timer( ioService),
+  transmitPacketType( PacketType::INVALID),
+  transmitCounter( 0)
 {
-	try
-	{
-		// Open the socket
-		socket.open( serverAddress.protocol());
+  try
+  {
+    // Open the socket
+    socket.open( serverAddress.protocol());
 
-		// Bind socket to source address (from)
-		socket.bind( from);
-	}
-	catch (boost::system::system_error &err)
-	{
-		// On error and if socket is opened - close it.
-		if (socket.is_open())
-		{
-			socket.close();
-		}
+    // Bind socket to source address (from)
+    socket.bind( from);
+  }
+  catch ( boost::system::system_error &err)
+  {
+    // On error and if socket is opened - close it.
+    if ( socket.is_open())
+    {
+      socket.close();
+    }
 
-		//! @throw CommunicationException Socket cannot be created or binded.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException Socket cannot be created or binded.
+    BOOST_THROW_EXCEPTION(
+      CommunicationException() << AdditionalInfo( err.what()));
+  }
 }
-catch (boost::system::system_error &err)
+catch ( boost::system::system_error &err)
 {
-	//! @throw CommunicationException Error during initialisation of communication objects.
-	BOOST_THROW_EXCEPTION( CommunicationException() <<
-		AdditionalInfo( err.what()));
+  //! @throw CommunicationException Error during initialisation of communication objects.
+  BOOST_THROW_EXCEPTION(
+    CommunicationException() << AdditionalInfo( err.what()));
 }
 
 TftpClientOperationImpl::TftpClientOperationImpl(
-	const TftpClientInternal &tftpClientInternal,
-	const UdpAddressType &serverAddress,
-	const string &filename,
-	const TransferMode mode)
+  const TftpClientInternal &tftpClientInternal,
+  const UdpAddressType &serverAddress,
+  const string &filename,
+  const TransferMode mode)
 try:
-	tftpClientInternal( tftpClientInternal),
-	remoteEndpoint( serverAddress),
-	filename( filename),
-	mode( mode),
-	options( tftpClientInternal.getOptionList()),
-	maxReceivePacketSize( DEFAULT_MAX_PACKET_SIZE),
-	receiveTimeout( tftpClientInternal.getConfiguration().tftpTimeout),
-	socket( ioService),
-	timer( ioService),
-	transmitPacketType( PacketType::INVALID),
-	transmitCounter( 0)
+  tftpClientInternal( tftpClientInternal),
+  remoteEndpoint( serverAddress),
+  filename( filename),
+  mode( mode),
+  options( tftpClientInternal.getOptionList()),
+  maxReceivePacketSize( DEFAULT_MAX_PACKET_SIZE),
+  receiveTimeout( tftpClientInternal.getConfiguration().tftpTimeout),
+  socket( ioService),
+  timer( ioService),
+  transmitPacketType( PacketType::INVALID),
+  transmitCounter( 0)
 {
-	try
-	{
-		// Open the socket
-		socket.open( serverAddress.protocol());
-	}
-	catch (boost::system::system_error &err)
-	{
-		// On error and if socket is opened - close it.
-		if (socket.is_open())
-		{
-			socket.close();
-		}
+  try
+  {
+    // Open the socket
+    socket.open( serverAddress.protocol());
+  }
+  catch ( boost::system::system_error &err)
+  {
+    // On error and if socket is opened - close it.
+    if ( socket.is_open())
+    {
+      socket.close();
+    }
 
-		//! @throw CommunicationException Socket cannot be created.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException Socket cannot be created.
+    BOOST_THROW_EXCEPTION(
+      CommunicationException() << AdditionalInfo( err.what()));
+  }
 }
-catch (boost::system::system_error &err)
+catch ( boost::system::system_error &err)
 {
-	//! @throw CommunicationException Error during initialisation of communication objects.
-	BOOST_THROW_EXCEPTION( CommunicationException() <<
-		AdditionalInfo( err.what()));
+  //! @throw CommunicationException Error during initialisation of communication objects.
+  BOOST_THROW_EXCEPTION(
+    CommunicationException() << AdditionalInfo( err.what()));
 }
 
 string TftpClientOperationImpl::getFilename( void) const
 {
-	return filename;
+  return filename;
 }
 
 Tftp::TransferMode TftpClientOperationImpl::getMode( void) const
 {
-	return mode;
+  return mode;
 }
 
 OptionList& TftpClientOperationImpl::getOptions( void)
 {
-	return options;
+  return options;
 }
 
 void TftpClientOperationImpl::finished( void) noexcept
 {
-	ioService.stop();
+  ioService.stop();
 }
 
 void TftpClientOperationImpl::sendFirst( const TftpPacket &packet)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	try
-	{
-		BOOST_LOG_TRIVIAL( info) << "TX: " <<  packet.toString();
+  try
+  {
+    BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
 
-		// Reset the transmit counter
-		transmitCounter = 1;
+    // Reset the transmit counter
+    transmitCounter = 1;
 
-		// Store packet type
-		transmitPacketType = packet.getPacketType();
+    // Store packet type
+    transmitPacketType = packet.getPacketType();
 
-		// Encode raw packet
-		transmitPacket = packet.encode();
+    // Encode raw packet
+    transmitPacket = packet.encode();
 
-		// Send the packet to the remote server
-		socket.send_to(
-			boost::asio::buffer( transmitPacket),
-			remoteEndpoint);
-	}
-	catch (boost::system::system_error &err)
-	{
-		finished();
+    // Send the packet to the remote server
+    socket.send_to(
+      boost::asio::buffer( transmitPacket),
+      remoteEndpoint);
+  }
+  catch (boost::system::system_error &err)
+  {
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( err.what()));
+  }
 }
 
 void TftpClientOperationImpl::send( const TftpPacket &packet)
@@ -320,63 +320,63 @@ void TftpClientOperationImpl::setReceiveTimeout(
 }
 
 void TftpClientOperationImpl::handleReadRequestPacket(
-	const UdpAddressType &,
-	const ReadRequestPacket &readRequestPacket)
+  const UdpAddressType &,
+  const ReadRequestPacket &readRequestPacket)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	BOOST_LOG_TRIVIAL( info) <<
-		"RX ERROR: " << readRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info) <<
+    "RX ERROR: " << readRequestPacket.toString();
 
-	send( ErrorPacket(
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"RRQ not expected"));
+  send( ErrorPacket(
+      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      "RRQ not expected"));
 
-	// Operation completed
-	finished();
+  // Operation completed
+  finished();
 
-	//! @throw CommunicationException Always, because this packet is invalid.
-	BOOST_THROW_EXCEPTION( CommunicationException() <<
-		AdditionalInfo( "RRQ not expected"));
+  //! @throw CommunicationException Always, because this packet is invalid.
+  BOOST_THROW_EXCEPTION( CommunicationException() <<
+    AdditionalInfo( "RRQ not expected"));
 }
 
 void TftpClientOperationImpl::handleWriteRequestPacket(
-	const UdpAddressType &,
-	const WriteRequestPacket &writeRequestPacket)
+  const UdpAddressType &,
+  const WriteRequestPacket &writeRequestPacket)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	BOOST_LOG_TRIVIAL( info) <<
-		"RX ERROR: " <<  writeRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info) <<
+    "RX ERROR: " << writeRequestPacket.toString();
 
-	send( ErrorPacket(
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"WRQ not expected"));
+  send( ErrorPacket(
+    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    "WRQ not expected"));
 
-	// Operation completed
-	finished();
+  // Operation completed
+  finished();
 
-	//! @throw CommunicationException Always, because this packet is invalid.
-	BOOST_THROW_EXCEPTION( CommunicationException() <<
-		AdditionalInfo( "WRQ not expected"));
+  //! @throw CommunicationException Always, because this packet is invalid.
+  BOOST_THROW_EXCEPTION( CommunicationException() <<
+    AdditionalInfo( "WRQ not expected"));
 }
 
 void TftpClientOperationImpl::handleErrorPacket(
 	const UdpAddressType &,
 	const ErrorPacket &errorPacket)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	BOOST_LOG_TRIVIAL( info) <<
-		"RX ERROR: " <<  errorPacket.toString();
+  BOOST_LOG_TRIVIAL( info) <<
+    "RX ERROR: " << errorPacket.toString();
 
-	// Operation completed
-	finished();
+  // Operation completed
+  finished();
 
-	//! @throw ErrorReceivedException Always, because this is an error.
-	BOOST_THROW_EXCEPTION(
-		ErrorReceivedException( transmitPacketType, errorPacket) <<
-		AdditionalInfo( "ERR not expected"));
+  //! @throw ErrorReceivedException Always, because this is an error.
+  BOOST_THROW_EXCEPTION(
+    ErrorReceivedException( transmitPacketType, errorPacket) <<
+    AdditionalInfo( "ERR not expected"));
 }
 
 void TftpClientOperationImpl::handleInvalidPacket(

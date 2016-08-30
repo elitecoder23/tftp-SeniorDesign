@@ -26,56 +26,58 @@ namespace Client {
 using Tftp::Options::OptionList;
 
 TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
-	TftpReceiveDataOperationHandler &handler,
-	const TftpClientInternal &tftpClientInternal,
-	const UdpAddressType &serverAddress,
-	const string &filename,
-	const TransferMode mode,
-	const UdpAddressType &from):
-	TftpClientOperationImpl( tftpClientInternal, serverAddress, filename, mode, from),
-	handler( handler),
-	receiveDataSize( DEFAULT_DATA_SIZE),
-	lastReceivedBlockNumber( 0)
+  TftpReceiveDataOperationHandler &handler,
+  const TftpClientInternal &tftpClientInternal,
+  const UdpAddressType &serverAddress,
+  const string &filename,
+  const TransferMode mode,
+  const UdpAddressType &from) :
+  TftpClientOperationImpl(
+    tftpClientInternal,
+    serverAddress,
+    filename,
+    mode,
+    from),
+  handler( handler),
+  receiveDataSize( DEFAULT_DATA_SIZE),
+  lastReceivedBlockNumber( 0)
 {
 }
 
 TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
-	TftpReceiveDataOperationHandler &handler,
-	const TftpClientInternal &tftpClientInternal,
-	const UdpAddressType &serverAddress,
-	const string &filename,
-	const TransferMode mode):
-	TftpClientOperationImpl( tftpClientInternal, serverAddress, filename, mode),
-	handler( handler),
-	receiveDataSize( DEFAULT_DATA_SIZE),
-	lastReceivedBlockNumber( 0)
+  TftpReceiveDataOperationHandler &handler,
+  const TftpClientInternal &tftpClientInternal,
+  const UdpAddressType &serverAddress,
+  const string &filename,
+  const TransferMode mode) :
+  TftpClientOperationImpl( tftpClientInternal, serverAddress, filename, mode),
+  handler( handler),
+  receiveDataSize( DEFAULT_DATA_SIZE),
+  lastReceivedBlockNumber( 0)
 {
 }
 
 void TftpClientReadRequestOperationImpl::operator ()( void)
 {
-	try
-	{
-		receiveDataSize = DEFAULT_DATA_SIZE;
-		lastReceivedBlockNumber = 0;
+  try
+  {
+    receiveDataSize = DEFAULT_DATA_SIZE;
+    lastReceivedBlockNumber = 0;
 
-		// send read request packet
-		sendFirst( ReadRequestPacket(
-			getFilename(),
-			getMode(),
-			getOptions()));
+    // send read request packet
+    sendFirst( ReadRequestPacket( getFilename(), getMode(), getOptions()));
 
-		// wait for answers
-		TftpClientOperationImpl::operator ()();
-	}
-	catch (...)
-	{
-		handler.finishedOperation();
+    // wait for answers
+    TftpClientOperationImpl::operator ()();
+  }
+  catch ( ...)
+  {
+    handler.finishedOperation();
 
-		throw;
-	}
+    throw;
+  }
 
-	handler.finishedOperation();
+  handler.finishedOperation();
 }
 
 void TftpClientReadRequestOperationImpl::handleDataPacket(
