@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Packet::ErrorPacket.
@@ -22,6 +24,7 @@
 
 namespace Tftp {
 namespace Packet {
+
 /**
  * @brief TFTP Error packet (ERR).
  *
@@ -40,8 +43,9 @@ class ErrorPacket: public BaseErrorPacket
 		 * @param[in] errorMessage
 		 *   Error message, which shall be set. By default empty.
 		 **/
-		ErrorPacket( const ErrorCode errorCode, const string &errorMessage =
-		  string()) noexcept;
+		ErrorPacket(
+		  const ErrorCode errorCode,
+		  const string &errorMessage = string()) noexcept;
 
 		/**
 		 * @brief Generates a TFTP error packet from a data buffer
@@ -59,7 +63,7 @@ class ErrorPacket: public BaseErrorPacket
 		 *
 		 * @return The error message
 		 **/
-		virtual string getErrorMessage( void) const override;
+		virtual string getErrorMessage( ) const override;
 
 		/**
 		 * @brief Sets the error message of this packet.

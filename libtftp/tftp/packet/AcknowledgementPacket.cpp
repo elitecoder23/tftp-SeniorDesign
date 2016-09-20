@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,11 +9,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class AcknowledgmentPacket.
+ * @brief Definition of class Tftp::Packet::AcknowledgmentPacket.
  **/
 
 #include "AcknowledgementPacket.hpp"
@@ -19,7 +21,8 @@
 #include <helper/Endianess.hpp>
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
 AcknowledgementPacket::AcknowledgementPacket( const BlockNumber blockNumber) noexcept:
 	TftpPacket( PacketType::ACKNOWLEDGEMENT),
@@ -70,7 +73,10 @@ Tftp::RawTftpPacketType AcknowledgementPacket::encode( void) const
 	return rawPacket;
 }
 
-string AcknowledgementPacket::toString( void) const
+AcknowledgementPacket::string AcknowledgementPacket::toString( void) const
 {
 	return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
+}
+
+}
 }

@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,16 +9,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class ErrorPacket.
+ * @brief Definition of class Tftp::Packet::ErrorPacket.
  **/
 
 #include "ErrorPacket.hpp"
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
 ErrorPacket::ErrorPacket(
 	const ErrorCode errorCode,
@@ -30,7 +33,7 @@ ErrorPacket::ErrorPacket( const RawTftpPacketType &rawPacket):
 {
 }
 
-string ErrorPacket::getErrorMessage( void) const
+ErrorPacket::string ErrorPacket::getErrorMessage( ) const
 {
 	return errorMessage;
 }
@@ -38,4 +41,7 @@ string ErrorPacket::getErrorMessage( void) const
 void ErrorPacket::setErrorMessage( const string &errorMessage)
 {
 	this->errorMessage = errorMessage;
+}
+
+}
 }

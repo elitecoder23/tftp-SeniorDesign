@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Packet::BaseErrorPacket.
@@ -22,8 +24,6 @@
 
 namespace Tftp {
 namespace Packet {
-// using declaration
-using std::string;
 
 /**
  * @brief TFTP Error packet (ERR).
@@ -49,7 +49,7 @@ class BaseErrorPacket: public TftpPacket
 		 *
 		 * @return String describing the error code.
 		 **/
-		static string getErrorCodeString( const ErrorCode errorCode) noexcept;
+		static string getErrorCodeString( ErrorCode errorCode) noexcept;
 
 		/**
 		 * @brief Generates a TFTP error packet with the given error code and error
@@ -58,7 +58,7 @@ class BaseErrorPacket: public TftpPacket
 		 * @param[in] errorCode
 		 *   Error code, which shall be set.
 		 **/
-		BaseErrorPacket( const ErrorCode errorCode) noexcept;
+		BaseErrorPacket( ErrorCode errorCode) noexcept;
 
 		/**
 		 * @brief Generates a TFTP error packet from a data buffer.
@@ -73,7 +73,7 @@ class BaseErrorPacket: public TftpPacket
 		 *
 		 * @return The error code.
 		 **/
-		ErrorCode getErrorCode( void) const;
+		ErrorCode getErrorCode( ) const;
 
 		/**
 		 * @brief Sets the error code.
@@ -81,20 +81,20 @@ class BaseErrorPacket: public TftpPacket
 		 * @param[in] errorCode
 		 *   The error code to set
 		 **/
-		void setErrorCode( const ErrorCode errorCode);
+		void setErrorCode( ErrorCode errorCode);
 
 		/**
 		 * @brief Returns the error message of this packet.
 		 *
 		 * @return The error message.
 		 **/
-		virtual string getErrorMessage( void) const = 0;
+		virtual string getErrorMessage( ) const = 0;
 
 		//! @copydoc TftpPacket::encode()
-		virtual RawTftpPacketType encode( void) const override;
+		virtual RawTftpPacketType encode( ) const override;
 
 		//! @copydoc TftpPacket::toString()
-		virtual string toString( void) const override;
+		virtual string toString( ) const override;
 
 	protected:
 		/**

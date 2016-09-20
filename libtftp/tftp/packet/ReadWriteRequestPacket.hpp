@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Packet::ReadWriteRequestPacket.
@@ -25,9 +27,6 @@
 namespace Tftp {
 namespace Packet {
 
-using Tftp::Options::OptionList;
-using Tftp::TransferMode;
-
 /**
  * @brief Base class for TFTP Read-/ Write- Request packet.
  *
@@ -38,7 +37,9 @@ using Tftp::TransferMode;
 class ReadWriteRequestPacket: public TftpPacket
 {
 	public:
-		/**
+    using OptionList = Tftp::Options::OptionList;
+
+    /**
 		 * @brief Converts the mode enumeration to the corresponding packet
 		 *   string.
 		 *
@@ -50,7 +51,7 @@ class ReadWriteRequestPacket: public TftpPacket
 		 * @throw InvalidPacketException
 		 *   When mode is not a valid transfer mode.
 		 **/
-		static string getMode( const TransferMode mode);
+		static string getMode( TransferMode mode);
 
 		/**
 		 * @brief Converts the mode string to the corresponding enumeration.
@@ -70,7 +71,7 @@ class ReadWriteRequestPacket: public TftpPacket
 		 *
 		 * @return The filename
 		 **/
-		string getFilename( void) const;
+		string getFilename( ) const;
 
 		/**
 		 * @brief sets the filename
@@ -85,7 +86,7 @@ class ReadWriteRequestPacket: public TftpPacket
 		 *
 		 * @return The transfer mode.
 		 **/
-		TransferMode getMode( void) const;
+		TransferMode getMode( ) const;
 
 		/**
 		 * @brief Sets the transfer mode.
@@ -96,7 +97,7 @@ class ReadWriteRequestPacket: public TftpPacket
 		 * @throw TftpPacketException
 		 *   When mode is not a valid transfer mode.
 		 **/
-		void setMode( const TransferMode mode);
+		void setMode( TransferMode mode);
 
 		/**
 		 * @brief Sets the transfer mode.
@@ -111,14 +112,14 @@ class ReadWriteRequestPacket: public TftpPacket
 		 *
 		 * @return The TFTP options.
 		 **/
-		const OptionList& getOptions( void) const;
+		const OptionList& getOptions( ) const;
 
 		/**
 		 * @brief Returns the set TFTP options.
 		 *
 		 * @return The TFTP options.
 		 **/
-		OptionList& getOptions( void);
+		OptionList& getOptions( );
 
 		/**
 		 * @brief Sets the TFTP options.
@@ -153,12 +154,12 @@ class ReadWriteRequestPacket: public TftpPacket
 		/**
 		 * @copydoc TftpPacket::encode()
 		 **/
-		virtual RawTftpPacketType encode( void) const override;
+		virtual RawTftpPacketType encode( ) const override;
 
 		/**
 		 * @copydoc TftpPacket::toString()
 		 **/
-		virtual string toString( void) const override;
+		virtual string toString( ) const override;
 
 	protected:
 		/**

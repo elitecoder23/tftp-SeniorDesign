@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Packet::DataPacket.
@@ -71,7 +73,7 @@ class DataPacket: public TftpPacket
      *
      * @return The set block number
      **/
-    BlockNumber getBlockNumber( void) const;
+    BlockNumber getBlockNumber( ) const;
 
     /**
      * @brief Sets the block number of the packet.
@@ -88,7 +90,7 @@ class DataPacket: public TftpPacket
      *
      * @return The data as const reference.
      **/
-    const DataType& getData( void) const;
+    const DataType& getData( ) const;
 
     /**
      * @brief Returns the data as reference.
@@ -97,7 +99,7 @@ class DataPacket: public TftpPacket
      *
      * @return The data as reference.
      **/
-    DataType& getData( void);
+    DataType& getData( );
 
     /**
      * @brief Sets the data of the packet.
@@ -124,13 +126,13 @@ class DataPacket: public TftpPacket
      *
      * @return The data size in bytes.
      **/
-    unsigned int getDataSize( void) const;
+    unsigned int getDataSize( ) const;
 
     //! @copydoc TftpPacket::encode()
-    virtual RawTftpPacketType encode( void) const override;
+    virtual RawTftpPacketType encode( ) const override;
 
     //! @copydoc TftpPacket::toString()
-    virtual string toString( void) const override;
+    virtual string toString( ) const override;
 
   private:
     //! Block number of the packet.

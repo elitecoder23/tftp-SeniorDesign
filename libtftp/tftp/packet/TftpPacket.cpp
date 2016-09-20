@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class TftpPacket.
@@ -19,12 +21,13 @@
 #include <helper/Endianess.hpp>
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
-Tftp::PacketType TftpPacket::getPacketType(
+PacketType TftpPacket::getPacketType(
 	const RawTftpPacketType &rawPacket) noexcept
 {
-	//! check minimum data size.
+	// check minimum data size.
 	if (rawPacket.size() < TFTP_PACKET_HEADER_SIZE)
 	{
 		BOOST_LOG_TRIVIAL( error) << "Packet to small";
@@ -33,11 +36,11 @@ Tftp::PacketType TftpPacket::getPacketType(
 
 	RawTftpPacketType::const_iterator it = rawPacket.begin();
 
-	//! decode opcode value
+	// decode opcode value
 	uint16_t opcode;
 	getInt< uint16_t>( it, opcode);
 
-	//! check valid opcodes
+	// check valid opcodes
 	switch ( static_cast< PacketType>( opcode))
 	{
 		case PacketType::READ_REQUEST:
@@ -50,7 +53,7 @@ Tftp::PacketType TftpPacket::getPacketType(
 			break;
 
 		default:
-			//! return INVALID for invalid values
+			// return INVALID for invalid values
 			BOOST_LOG_TRIVIAL( error) << "Invalid opcode " << std::hex << opcode;
 			return PacketType::INVALID;
 	}
@@ -58,12 +61,12 @@ Tftp::PacketType TftpPacket::getPacketType(
 	return static_cast< PacketType>( opcode);
 }
 
-Tftp::PacketType TftpPacket::getPacketType( void) const
+PacketType TftpPacket::getPacketType( ) const
 {
 	return packetType;
 }
 
-string TftpPacket::toString( void) const
+TftpPacket::string TftpPacket::toString( ) const
 {
 	switch (packetType)
 	{
@@ -90,17 +93,17 @@ string TftpPacket::toString( void) const
 	}
 }
 
-TftpPacket::TftpPacket( const PacketType packetType) noexcept:
+TftpPacket::TftpPacket( PacketType packetType) noexcept:
 	packetType( packetType)
 {
 }
 
 TftpPacket::TftpPacket(
-	const PacketType expectedPacketType,
+	PacketType expectedPacketType,
 	const RawTftpPacketType &rawPacket):
 	packetType( expectedPacketType)
 {
-	//! check size
+	// check size
 	if (rawPacket.size() < TFTP_PACKET_HEADER_SIZE)
 	{
 		BOOST_THROW_EXCEPTION( InvalidPacketException() <<
@@ -109,7 +112,7 @@ TftpPacket::TftpPacket(
 
 	RawTftpPacketType::const_iterator packetIt = rawPacket.begin();
 
-	//! Check Opcode
+	// Check Opcode
 	uint16_t opcode;
 	getInt< uint16_t>( packetIt, opcode);
 
@@ -120,7 +123,7 @@ TftpPacket::TftpPacket(
 	}
 }
 
-void TftpPacket::setPacketType( const PacketType packetType)
+void TftpPacket::setPacketType( PacketType packetType)
 {
 	this->packetType = packetType;
 }
@@ -131,6 +134,9 @@ void TftpPacket::insertHeader( RawTftpPacketType &rawPacket) const
 
 	RawTftpPacketType::iterator packetIt = rawPacket.begin();
 
-	//! encode opcode
+	// encode opcode
 	setInt( packetIt, static_cast< uint16_t>( packetType));
+}
+
+}
 }

@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,11 +9,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class BaseErrorPacket.
+ * @brief Definition of class Tftp::Packet::BaseErrorPacket.
  **/
 
 #include "BaseErrorPacket.hpp"
@@ -21,9 +23,10 @@
 
 #include <map>
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
-string BaseErrorPacket::getErrorCodeString( const ErrorCode errorCode) noexcept
+BaseErrorPacket::string BaseErrorPacket::getErrorCodeString( ErrorCode errorCode) noexcept
 {
 	typedef std::map< ErrorCode, std::string> ErrorCodeMap;
 	static const ErrorCodeMap errorCodes =
@@ -44,7 +47,7 @@ string BaseErrorPacket::getErrorCodeString( const ErrorCode errorCode) noexcept
 	return (errorCodes.end() == it) ? "***UNKNOWN***" : it->second;
 }
 
-BaseErrorPacket::BaseErrorPacket( const ErrorCode errorCode) noexcept:
+BaseErrorPacket::BaseErrorPacket( ErrorCode errorCode) noexcept:
 	TftpPacket( PacketType::ERROR),
 	errorCode( errorCode)
 {
@@ -54,7 +57,7 @@ BaseErrorPacket::BaseErrorPacket(
 	const RawTftpPacketType &rawPacket):
 	TftpPacket( PacketType::ERROR, rawPacket)
 {
-	//! check size
+	// check size
 	if (rawPacket.size() < 5)
 	{
 		//! @throw InvalidPacketException When rawPacket is not an valid packet.
@@ -64,24 +67,24 @@ BaseErrorPacket::BaseErrorPacket(
 
 	RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
 
-	//! decode error code
+	// decode error code
 	uint16_t errorCodeInt;
 	getInt< uint16_t>( packetIt, errorCodeInt);
 	errorCode = static_cast< ErrorCode>( errorCodeInt);
 }
 
 
-Tftp::ErrorCode BaseErrorPacket::getErrorCode( void) const
+Tftp::ErrorCode BaseErrorPacket::getErrorCode( ) const
 {
 	return errorCode;
 }
 
-void BaseErrorPacket::setErrorCode( const ErrorCode errorCode)
+void BaseErrorPacket::setErrorCode( ErrorCode errorCode)
 {
 	this->errorCode = errorCode;
 }
 
-Tftp::RawTftpPacketType BaseErrorPacket::encode( void) const
+Tftp::RawTftpPacketType BaseErrorPacket::encode( ) const
 {
 	string errorMessage = getErrorMessage();
 
@@ -91,17 +94,17 @@ Tftp::RawTftpPacketType BaseErrorPacket::encode( void) const
 
 	RawTftpPacketType::iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
 
-	//! error code
+	// error code
 	packetIt = setInt( packetIt, static_cast< const uint16_t>( getErrorCode()));
 
-	//! error message
+	// error message
 	packetIt = std::copy( errorMessage.begin(), errorMessage.end(), packetIt);
 	*packetIt = 0;
 
 	return rawPacket;
 }
 
-string BaseErrorPacket::toString( void) const
+BaseErrorPacket::string BaseErrorPacket::toString( ) const
 {
 	return (boost::format( "ERR: EC: %s (%d) - DESC: \"%s\"") %
 		getErrorCodeString( getErrorCode()) %
@@ -109,9 +112,10 @@ string BaseErrorPacket::toString( void) const
 		getErrorMessage()).str();
 }
 
-string BaseErrorPacket::getErrorMessage( const RawTftpPacketType &rawPacket)
+BaseErrorPacket::string BaseErrorPacket::getErrorMessage(
+  const RawTftpPacketType &rawPacket)
 {
-	//! check size
+	// check size
 	if (rawPacket.size() < 5)
 	{
 		//! @throw InvalidPacketException When the packet size is to small.
@@ -130,4 +134,7 @@ string BaseErrorPacket::getErrorMessage( const RawTftpPacketType &rawPacket)
 	}
 
 	return string( packetIt, rawPacket.end()-1);
+}
+
+}
 }

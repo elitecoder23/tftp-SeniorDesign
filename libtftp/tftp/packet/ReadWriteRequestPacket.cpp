@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class ReadWriteRequestPacket.
@@ -21,9 +23,11 @@
 
 #include <algorithm>
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
-string ReadWriteRequestPacket::getMode( const TransferMode mode)
+ReadWriteRequestPacket::string ReadWriteRequestPacket::getMode(
+  TransferMode mode)
 {
 	switch (mode)
 	{
@@ -37,6 +41,7 @@ string ReadWriteRequestPacket::getMode( const TransferMode mode)
 			return "MAIL";
 
 		default:
+		  //! @throw InvalidPacketException if mode cannot be decoded
 			BOOST_THROW_EXCEPTION( InvalidPacketException() <<
 				AdditionalInfo( "Invalid mode"));
 
@@ -45,7 +50,7 @@ string ReadWriteRequestPacket::getMode( const TransferMode mode)
 	}
 }
 
-Tftp::TransferMode ReadWriteRequestPacket::getMode( const string &mode)
+TransferMode ReadWriteRequestPacket::getMode( const string &mode)
 {
 	//! @todo check implementation of transform
 	string upperMode = mode;
@@ -79,7 +84,7 @@ Tftp::TransferMode ReadWriteRequestPacket::getMode( const string &mode)
 	return TransferMode::INVALID;
 }
 
-string ReadWriteRequestPacket::getFilename( void) const
+ReadWriteRequestPacket::string ReadWriteRequestPacket::getFilename( ) const
 {
 	return filename;
 }
@@ -90,7 +95,7 @@ void ReadWriteRequestPacket::setFilename( const string &filename)
 }
 
 
-Tftp::TransferMode ReadWriteRequestPacket::getMode( void) const
+Tftp::TransferMode ReadWriteRequestPacket::getMode( ) const
 {
 	return getMode( mode);
 }
@@ -106,12 +111,12 @@ void ReadWriteRequestPacket::setMode( const string &mode)
 }
 
 
-const OptionList& ReadWriteRequestPacket::getOptions( void) const
+const ReadWriteRequestPacket::OptionList& ReadWriteRequestPacket::getOptions( ) const
 {
 	return options;
 }
 
-OptionList& ReadWriteRequestPacket::getOptions( void)
+ReadWriteRequestPacket::OptionList& ReadWriteRequestPacket::getOptions( )
 {
 	return options;
 }
@@ -121,7 +126,8 @@ void ReadWriteRequestPacket::setOptions( const OptionList &options)
 	this->options = options;
 }
 
-const string ReadWriteRequestPacket::getOption( const string &name) const
+const ReadWriteRequestPacket::string ReadWriteRequestPacket::getOption(
+  const string &name) const
 {
 	OptionList::OptionPointer option = options.getOption( name);
 	return (option) ? option->getValueString() : std::string();
@@ -132,7 +138,7 @@ void ReadWriteRequestPacket::setOption( const string &name, const string &value)
 	options.setOption( name, value);
 }
 
-Tftp::RawTftpPacketType ReadWriteRequestPacket::encode( void) const
+Tftp::RawTftpPacketType ReadWriteRequestPacket::encode( ) const
 {
 	OptionList::RawOptionsType rawOptions = options.getRawOptions();
 
@@ -146,23 +152,23 @@ Tftp::RawTftpPacketType ReadWriteRequestPacket::encode( void) const
 
 	RawTftpPacketType::iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
 
-	//! filename
+	// decode filename
 	packetIt = std::copy( filename.begin(), filename.end(), packetIt);
 	*packetIt = 0;
 	++packetIt;
 
-	//! mode
+	// decode mode
 	packetIt = std::copy( mode.begin(), mode.end(), packetIt);
 	*packetIt = 0;
 	++packetIt;
 
-	//! options
+	// decode options
 	std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
 
 	return rawPacket;
 }
 
-string ReadWriteRequestPacket::toString( void) const
+ReadWriteRequestPacket::string ReadWriteRequestPacket::toString( ) const
 {
 	return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
 		TftpPacket::toString() %
@@ -211,21 +217,21 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
 	RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
 
-	//! check size
+	// check size
 	if (rawPacket.size() <= 2)
 	{
 		BOOST_THROW_EXCEPTION( InvalidPacketException() <<
 			AdditionalInfo( "Invalid packet size of RRQ/WRQ packet"));
 	}
 
-	//! check terminating 0 character
+	// check terminating 0 character
 	if (rawPacket.back()!=0)
 	{
 		BOOST_THROW_EXCEPTION( InvalidPacketException() <<
 			AdditionalInfo( "RRQ/WRQ message not 0-terminated"));
 	}
 
-	//! filename
+	// filename
 	RawTftpPacketType::const_iterator filenameEnd =
 		std::find( packetIt, rawPacket.end(), 0);
 
@@ -237,7 +243,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 	filename.assign( packetIt, filenameEnd);
 	packetIt = filenameEnd + 1;
 
-	//! mode
+	// mode
 	RawTftpPacketType::const_iterator modeEnd =
 		std::find( packetIt, rawPacket.end(), 0);
 
@@ -249,6 +255,9 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 	mode.assign( packetIt, modeEnd);
 	packetIt = modeEnd + 1;
 
-	//! assign options
+	// assign options
 	options = OptionList( packetIt, rawPacket.end());
+}
+
+}
 }

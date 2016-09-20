@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Packet::TftpPacket.
@@ -22,16 +24,16 @@
 namespace Tftp {
 namespace Packet {
 
-using std::string;
-
 /**
  * @brief Base-class of all TFTP packets.
  **/
 class TftpPacket
 {
 	public:
+    using string = std::string;
+
 		//! The minimum size is the Opcode field.
-		static constexpr std::size_t TFTP_PACKET_HEADER_SIZE = sizeof(uint16_t);
+		static constexpr std::size_t TFTP_PACKET_HEADER_SIZE = sizeof( uint16_t);
 
 		/**
 		 * @brief Decodes the packet type of a raw buffer.
@@ -51,7 +53,7 @@ class TftpPacket
 		 *
 		 * @return The packet type.
 		 **/
-		PacketType getPacketType( void) const;
+		PacketType getPacketType( ) const;
 
 		// virtual void decode( const RawTftpPacketType &rawPacket);
 
@@ -62,7 +64,7 @@ class TftpPacket
 		 *
 		 * @return Binary packet data
 		 **/
-		virtual RawTftpPacketType encode( void) const = 0;
+		virtual RawTftpPacketType encode( ) const = 0;
 
 		//! default copy constructor
 		TftpPacket( const TftpPacket &other) = default;
@@ -86,7 +88,7 @@ class TftpPacket
 		 *
 		 * @return Packet description.
 		 **/
-		virtual string toString( void) const;
+		virtual string toString( ) const;
 
 	protected:
 		/**
@@ -95,7 +97,7 @@ class TftpPacket
 		 * @param[in] packetType
 		 *   The packet type of the packet.
 		 **/
-		TftpPacket( const PacketType packetType) noexcept;
+		TftpPacket( PacketType packetType) noexcept;
 
 		/**
 		 * @brief Generates a basic TFTP packet from a data buffer
@@ -111,7 +113,7 @@ class TftpPacket
 		 *   When rawPacket is not an valid packet.
 		 **/
 		TftpPacket(
-		  const PacketType expectedPacketType,
+		  PacketType expectedPacketType,
 		  const RawTftpPacketType &rawPacket);
 
 		/**
@@ -123,7 +125,7 @@ class TftpPacket
 		 * @param[in] packetType
 		 *   The new packet type
 		 **/
-		void setPacketType( const PacketType packetType);
+		void setPacketType( PacketType packetType);
 
 		/**
 		 * @brief Insert the header data to the raw packet.

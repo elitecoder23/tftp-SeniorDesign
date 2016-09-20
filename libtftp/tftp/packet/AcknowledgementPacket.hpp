@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,11 +9,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class AcknowledgementPacket.
+ * @brief Declaration of class Tftp::Packet::AcknowledgementPacket.
  **/
 
 #ifndef TFTP_PACKET_ACKNOWLEDGEMENTPACKET_HPP
@@ -45,8 +47,8 @@ class AcknowledgementPacket: public TftpPacket
 		 *   Block number of packet. Defaults to the BlockNumber default
 		 *   constructor.
 		 **/
-		AcknowledgementPacket( const BlockNumber blockNumber = BlockNumber())
-		  noexcept;
+		AcknowledgementPacket(
+		  const BlockNumber blockNumber = BlockNumber()) noexcept;
 
 		/**
 		 * @brief Generates a TFTP acknowledgement packet from a data buffer.

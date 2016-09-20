@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class Tftp::Packet::DataPacket.
@@ -19,7 +21,8 @@
 #include <helper/Endianess.hpp>
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
 DataPacket::DataPacket(
 	const BlockNumber blockNumber,
@@ -50,7 +53,7 @@ DataPacket::DataPacket(
 	data.assign( packetIt, rawPacket.end());
 }
 
-BlockNumber DataPacket::getBlockNumber( void) const
+BlockNumber DataPacket::getBlockNumber( ) const
 {
 	return blockNumber;
 }
@@ -60,12 +63,12 @@ void DataPacket::setBlockNumber( BlockNumber blockBumber)
 	this->blockNumber = blockBumber;
 }
 
-const std::vector<uint8_t>& DataPacket::getData( void) const
+const std::vector<uint8_t>& DataPacket::getData( ) const
 {
 	return data;
 }
 
-std::vector<uint8_t>& DataPacket::getData( void)
+std::vector<uint8_t>& DataPacket::getData( )
 {
 	return data;
 }
@@ -80,12 +83,12 @@ void DataPacket::setData( DataType &&data)
 	this->data = std::move( data);
 }
 
-unsigned int DataPacket::getDataSize( void) const
+unsigned int DataPacket::getDataSize( ) const
 {
 	return data.size();
 }
 
-Tftp::RawTftpPacketType DataPacket::encode( void) const
+Tftp::RawTftpPacketType DataPacket::encode( ) const
 {
 	RawTftpPacketType rawPacket( 4 + data.size());
 
@@ -102,9 +105,12 @@ Tftp::RawTftpPacketType DataPacket::encode( void) const
 	return rawPacket;
 }
 
-string DataPacket::toString( void) const
+DataPacket::string DataPacket::toString( ) const
 {
 	return (boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
 		getBlockNumber() %
 		getDataSize()).str();
+}
+
+}
 }
