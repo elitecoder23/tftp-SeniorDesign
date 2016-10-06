@@ -53,7 +53,7 @@ class TftpPacket
 		 *
 		 * @return The packet type.
 		 **/
-		PacketType getPacketType( ) const;
+		PacketType getPacketType() const;
 
 		// virtual void decode( const RawTftpPacketType &rawPacket);
 
@@ -64,7 +64,7 @@ class TftpPacket
 		 *
 		 * @return Binary packet data
 		 **/
-		virtual RawTftpPacketType encode( ) const = 0;
+    virtual RawTftpPacketType encode() const = 0;
 
 		//! default copy constructor
 		TftpPacket( const TftpPacket &other) = default;
@@ -81,14 +81,14 @@ class TftpPacket
 		//! Default destructor
 		virtual ~TftpPacket( void) noexcept = default;
 
-		/**
-		 * @brief Returns a string, which describes the packet.
-		 *
-		 * This operation is used for debugging and information purposes.
-		 *
-		 * @return Packet description.
-		 **/
-		virtual string toString( ) const;
+    /**
+     * @brief Returns a string, which describes the packet.
+     *
+     * This operation is used for debugging and information purposes.
+     *
+     * @return Packet description.
+     **/
+    virtual string toString() const;
 
 	protected:
 		/**
