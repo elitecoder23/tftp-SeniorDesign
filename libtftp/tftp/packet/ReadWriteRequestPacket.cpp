@@ -99,7 +99,7 @@ Tftp::TransferMode ReadWriteRequestPacket::getMode() const
   return getMode( mode);
 }
 
-void ReadWriteRequestPacket::setMode( const TransferMode mode)
+void ReadWriteRequestPacket::setMode( TransferMode mode)
 {
   this->mode = getMode( mode);
 }
@@ -136,7 +136,7 @@ void ReadWriteRequestPacket::setOption( const string &name, const string &value)
   options.setOption( name, value);
 }
 
-Tftp::RawTftpPacketType ReadWriteRequestPacket::encode( ) const
+Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
 {
   OptionList::RawOptionsType rawOptions = options.getRawOptions();
 
@@ -166,7 +166,7 @@ Tftp::RawTftpPacketType ReadWriteRequestPacket::encode( ) const
   return rawPacket;
 }
 
-ReadWriteRequestPacket::string ReadWriteRequestPacket::toString( ) const
+ReadWriteRequestPacket::string ReadWriteRequestPacket::toString() const
 {
   return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
     TftpPacket::toString() %
@@ -176,9 +176,9 @@ ReadWriteRequestPacket::string ReadWriteRequestPacket::toString( ) const
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
-  const PacketType packetType,
+  PacketType packetType,
   const string &filename,
-  const TransferMode mode,
+  TransferMode mode,
   const OptionList &options):
   TftpPacket( packetType),
   filename( filename),
@@ -194,11 +194,12 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException() <<
         AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
+      /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
-  const PacketType packetType,
+  PacketType packetType,
   const RawTftpPacketType &rawPacket) :
   TftpPacket( packetType, rawPacket)
 {
@@ -211,6 +212,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException() <<
         AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
+      /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 
   RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;

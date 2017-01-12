@@ -16,9 +16,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <tftp/packet/ReadRequestPacket.hpp>
 #include <tftp/packet/WriteRequestPacket.hpp>
-#include <tftp/packet/DataPacket.hpp>
 #include <tftp/packet/ErrorPacket.hpp>
 #include <tftp/packet/AcknowledgementPacket.hpp>
 #include <tftp/packet/OptionsAcknowledgementPacket.hpp>
@@ -30,27 +28,6 @@
 
 using namespace Tftp::Packet;
 using namespace Tftp;
-
-static void tftp_packet_rrq( void)
-{
-  Tftp::Options::OptionList options;
-
-  options.setOption( "blocksize", "4096");
-
-  ReadRequestPacket rrq( "testfile.bin", TransferMode::OCTET, options);
-
-  RawTftpPacketType raw = rrq.encode();
-
-  std::cout << Dump( &(*raw.begin()), raw.size());
-
-  ReadRequestPacket rrq2( raw);
-
-  BOOST_CHECK( rrq.getPacketType() == rrq2.getPacketType());
-  BOOST_CHECK( rrq.getFilename() == rrq2.getFilename());
-  BOOST_CHECK( rrq.getMode() == rrq2.getMode());
-  BOOST_CHECK( rrq.getOption( "blocksize") == rrq2.getOption( "blocksize"));
-  BOOST_CHECK( rrq.getOption( "XXX") == "");
-}
 
 static void tftp_packet_wrq( void)
 {
@@ -71,37 +48,6 @@ static void tftp_packet_wrq( void)
   BOOST_CHECK( wrq.getMode() == wrq2.getMode());
   BOOST_CHECK( wrq.getOption( "blocksize") == wrq2.getOption( "blocksize"));
   BOOST_CHECK( wrq.getOption( "XXX") == "");
-}
-
-static void tftp_packet_data( void)
-{
-  std::vector< uint8_t> bindata;
-
-  bindata.push_back( 'H');
-  bindata.push_back( 'E');
-  bindata.push_back( 'L');
-  bindata.push_back( 'L');
-  bindata.push_back( 'O');
-  bindata.push_back( ' ');
-  bindata.push_back( 'W');
-  bindata.push_back( 'O');
-  bindata.push_back( 'R');
-  bindata.push_back( 'L');
-  bindata.push_back( 'D');
-  bindata.push_back( '!');
-
-  DataPacket data( 10, bindata);
-
-  RawTftpPacketType raw = data.encode();
-
-  std::cout << Dump( &(*raw.begin()), raw.size());
-
-  DataPacket data2( raw);
-
-  BOOST_CHECK( data.getPacketType()  == data2.getPacketType());
-  BOOST_CHECK( data.getBlockNumber() == data2.getBlockNumber());
-  BOOST_CHECK( data.getDataSize()    == data2.getDataSize());
-  BOOST_CHECK( data.getData()        == data2.getData());
 }
 
 static void tftp_packet_error( void)
@@ -194,15 +140,4 @@ static void tftp_packet_oack( void)
   BOOST_CHECK( oack.getPacketType()         == oack2.getPacketType());
   BOOST_CHECK( oack.getOption( "blocksize") == oack2.getOption( "blocksize"));
   BOOST_CHECK( oack.getOption( "XXX")       == "");
-}
-
-void initTftpPacketTest( void)
-{
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &tftp_packet_rrq));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &tftp_packet_wrq));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &tftp_packet_data));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &tftp_packet_error));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &tftp_packet_error_str));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &tftp_packet_ack));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &tftp_packet_oack));
 }

@@ -178,9 +178,9 @@ class ReadWriteRequestPacket: public TftpPacket
      *   When packetType is not valid.
      **/
     ReadWriteRequestPacket(
-      const PacketType packetType,
+      PacketType packetType,
       const string &filename,
-      const TransferMode mode,
+      TransferMode mode,
       const OptionList &options);
 
     /**
@@ -196,7 +196,7 @@ class ReadWriteRequestPacket: public TftpPacket
      *   When rawPacket is not an valid packet.
      **/
     ReadWriteRequestPacket(
-      const PacketType packetType,
+      PacketType packetType,
       const RawTftpPacketType &rawPacket);
 
   private:

@@ -11,7 +11,7 @@ cmake_minimum_required( VERSION 3.7)
 
 project ( "TFTP library")
 
-find_package( Boost REQUIRED COMPONENTS unit_test_framework)
+find_package( Boost REQUIRED)
 
 add_library(
   tftp
@@ -24,14 +24,12 @@ add_library(
   tftp/packet/BlockNumber.cpp
   tftp/packet/DataPacket.hpp
   tftp/packet/DataPacket.cpp
-  tftp/packet/DataPacketTest.cpp
   tftp/packet/ErrorPacket.cpp
   tftp/packet/OptionsAcknowledgementPacket.cpp
   tftp/packet/PacketFactory.cpp
+  tftp/packet/ReadRequestPacket.hpp
   tftp/packet/ReadRequestPacket.cpp
   tftp/packet/ReadWriteRequestPacket.cpp
-  tftp/packet/test/BlockNumberTest.cpp
-  tftp/packet/test/PacketTest.cpp
   tftp/packet/TftpPacket.cpp
   tftp/packet/WriteRequestPacket.cpp
   
@@ -59,10 +57,20 @@ add_library(
   tftp/server/implementation/TftpServerWriteRequestOperationImpl.cpp
   )
 
-target_include_directories( tftp SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
 target_include_directories( tftp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries( tftp helper ${Boost_LIBRARIES})
+
+add_library( 
+  tftp_test 
+  OBJECT
+  
+  tftp/packet/BlockNumberTest.cpp
+  tftp/packet/DataPacketTest.cpp
+  tftp/packet/ReadRequestPacketTest.cpp
+  tftp/packet/test/PacketTest.cpp)
+
+target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
 set( 
   DOXYGEN_TAGFILES 

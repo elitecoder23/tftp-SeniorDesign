@@ -14,22 +14,23 @@
  * @brief Definition of unit tests of class TFTP::Packet::BlockNumber
  **/
 
-#include <tftp/packet/BlockNumber.hpp>
-
-#include <helper/Logger.hpp>
-
 #include <boost/test/unit_test.hpp>
 
-using namespace Tftp::Packet;
+#include <tftp/packet/BlockNumber.hpp>
 
-static void testCtor( void)
+namespace Tftp {
+namespace Packet {
+
+BOOST_AUTO_TEST_SUITE( TftpBlockNumber)
+
+BOOST_AUTO_TEST_CASE( constructor )
 {
   BOOST_CHECK( 0 == BlockNumber());
   BOOST_CHECK( 1 == BlockNumber( 1));
   BOOST_CHECK( 0xFFFF == BlockNumber( 0xFFFF));
 }
 
-static void testIncrement( void)
+BOOST_AUTO_TEST_CASE( increment )
 {
   BlockNumber blockNumber;
 
@@ -47,7 +48,7 @@ static void testIncrement( void)
   BOOST_CHECK( 1 == blockNumber.next());
 }
 
-static void testDecrement( void)
+BOOST_AUTO_TEST_CASE( decrement )
 {
   BlockNumber blockNumber( 10);
 
@@ -65,7 +66,7 @@ static void testDecrement( void)
   BOOST_CHECK( 0xFFFF == blockNumber.previous());
 }
 
-static void testCompare( void)
+BOOST_AUTO_TEST_CASE( compare )
 {
   BlockNumber blockNumber5a( 5);
   BlockNumber blockNumber5b( 5);
@@ -87,10 +88,8 @@ static void testCompare( void)
   BOOST_CHECK( !(blockNumber5a != int5));
 }
 
-void initBlockNumberTest( void)
-{
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &testCtor));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &testIncrement));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &testDecrement));
-  boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &testCompare));
+BOOST_AUTO_TEST_SUITE_END()
+
 }
+}
+
