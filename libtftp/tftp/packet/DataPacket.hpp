@@ -54,7 +54,7 @@ class DataPacket: public TftpPacket
      *   The data within the packet.
      **/
     DataPacket(
-      const BlockNumber blockNumber = BlockNumber(),
+      BlockNumber blockNumber = BlockNumber(),
       const DataType &data = DataType()) noexcept;
 
     /**
@@ -69,11 +69,18 @@ class DataPacket: public TftpPacket
     DataPacket( const RawTftpPacketType &rawPacket);
 
     /**
-     * @brief Returns the set block number.
+     * @brief Returns the block number.
      *
-     * @return The set block number
+     * @return The current block number.
      **/
-    BlockNumber getBlockNumber( ) const;
+    BlockNumber getBlockNumber() const;
+
+    /**
+     * @brief Returns the block number.
+     *
+     * @return The current block number (modifiable).
+     **/
+    BlockNumber& getBlockNumber();
 
     /**
      * @brief Sets the block number of the packet.

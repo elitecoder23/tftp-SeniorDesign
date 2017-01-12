@@ -14,6 +14,10 @@
 
 #include <helper/Logger.hpp>
 
+#define BOOST_TEST_MODULE test module name
+#include <boost/test/included/unit_test.hpp>
+
+#if 0
 #include <boost/test/unit_test.hpp>
 
 using namespace boost::unit_test;
@@ -32,3 +36,5 @@ boost::unit_test::test_suite* init_unit_test_suite( int, char*[])
 
   return 0;
 }
+
+#endif

@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,11 +9,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of Tftp::Packet::class BlockNumber.
+ * @brief Definition of class Tftp::Packet::BlockNumber.
  **/
 
 #include "BlockNumber.hpp"
@@ -17,12 +19,12 @@
 namespace Tftp {
 namespace Packet {
 
-BlockNumber::BlockNumber( const uint16_t blockNumber) noexcept:
-blockNumber( blockNumber)
+BlockNumber::BlockNumber( uint16_t blockNumber) noexcept:
+  blockNumber( blockNumber)
 {
 }
 
-uint16_t BlockNumber::next( void) const
+uint16_t BlockNumber::next() const
 {
   if ( blockNumber == 0xFFFF)
   {
@@ -32,7 +34,7 @@ uint16_t BlockNumber::next( void) const
   return blockNumber + 1;
 }
 
-uint16_t BlockNumber::previous( void) const
+uint16_t BlockNumber::previous() const
 {
   if ( blockNumber == 1)
   {
@@ -42,23 +44,23 @@ uint16_t BlockNumber::previous( void) const
   return blockNumber - 1;
 }
 
-BlockNumber::operator uint16_t( void) const
+BlockNumber::operator uint16_t() const
 {
   return blockNumber;
 }
 
-BlockNumber::operator uint16_t&( void)
+BlockNumber::operator uint16_t&()
 {
   return blockNumber;
 }
 
-BlockNumber& BlockNumber::operator=( const uint16_t blockNumber)
+BlockNumber& BlockNumber::operator=( uint16_t blockNumber)
 {
   this->blockNumber = blockNumber;
   return *this;
 }
 
-BlockNumber& BlockNumber::operator++( void)
+BlockNumber& BlockNumber::operator++()
 {
   blockNumber = next();
   return *this;
@@ -71,7 +73,7 @@ BlockNumber BlockNumber::operator++( int)
   return old;
 }
 
-BlockNumber& BlockNumber::operator--( void)
+BlockNumber& BlockNumber::operator--()
 {
   blockNumber = previous();
   return *this;
@@ -89,7 +91,7 @@ bool BlockNumber::operator ==( const BlockNumber &rhs) const
   return blockNumber == rhs.blockNumber;
 }
 
-bool BlockNumber::operator ==( const uint16_t &rhs) const
+bool BlockNumber::operator ==( uint16_t rhs) const
 {
   return blockNumber == rhs;
 }
@@ -99,7 +101,7 @@ bool BlockNumber::operator !=( const BlockNumber &rhs) const
   return blockNumber != rhs.blockNumber;
 }
 
-bool BlockNumber::operator !=( const uint16_t &rhs) const
+bool BlockNumber::operator !=( uint16_t rhs) const
 {
   return blockNumber != rhs;
 }

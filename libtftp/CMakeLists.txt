@@ -7,7 +7,7 @@
 # 
 # Thomas Vogt, Thomas@Thomas-Vogt.de
 
-cmake_minimum_required( VERSION 3.5)
+cmake_minimum_required( VERSION 3.7)
 
 project ( "TFTP library")
 
@@ -22,7 +22,9 @@ add_library(
   tftp/packet/AcknowledgementPacket.cpp
   tftp/packet/BaseErrorPacket.cpp
   tftp/packet/BlockNumber.cpp
+  tftp/packet/DataPacket.hpp
   tftp/packet/DataPacket.cpp
+  tftp/packet/DataPacketTest.cpp
   tftp/packet/ErrorPacket.cpp
   tftp/packet/OptionsAcknowledgementPacket.cpp
   tftp/packet/PacketFactory.cpp

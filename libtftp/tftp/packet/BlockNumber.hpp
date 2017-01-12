@@ -42,38 +42,38 @@ class BlockNumber
      * @param[in] blockNumber
      *   Base block number.
      **/
-    BlockNumber( const uint16_t blockNumber = 0) noexcept;
+    BlockNumber( uint16_t blockNumber = 0) noexcept;
 
     //! Default destructor
-    ~BlockNumber( void) noexcept = default;
+    ~BlockNumber() noexcept = default;
 
     /**
      * @brief Returns the next block number.
      *
      * @return The next block number.
      **/
-    uint16_t next( void) const;
+    uint16_t next() const;
 
     /**
      * @brief Returns the previous block number.
      *
      * @return The next block number.
      **/
-    uint16_t previous( void) const;
+    uint16_t previous() const;
 
     /**
      * @brief Cast operator of the block number class to an uint16_t.
      *
      * @return The block number as uint16_t.
      **/
-    operator uint16_t( void) const;
+    operator uint16_t() const;
 
     /**
      * @brief Cast operator of the block number class to an uint16_t&.
      *
      * @return The block number as uint16_t&.
      **/
-    operator uint16_t&( void);
+    operator uint16_t&();
 
     /**
      * @brief Assignment operator to the block number.
@@ -83,14 +83,14 @@ class BlockNumber
      *
      * @return The class itself.
      **/
-    BlockNumber& operator=( const uint16_t blockNumber);
+    BlockNumber& operator=( uint16_t blockNumber);
 
     /**
      * @brief Increment of the block number.
      *
      * @return The class itself
      **/
-    BlockNumber& operator++( void);
+    BlockNumber& operator++();
 
     /**
      * @brief Increment of the block number.
@@ -105,7 +105,7 @@ class BlockNumber
      *
      * @return The class itself
      **/
-    BlockNumber& operator--( void);
+    BlockNumber& operator--();
 
     /**
      * @brief Decrement of the block number.
@@ -132,7 +132,7 @@ class BlockNumber
      *
      * @return Equality of the block numbers.
      **/
-    bool operator ==( const uint16_t &rhs) const;
+    bool operator ==( uint16_t rhs) const;
 
     /**
      * @brief Comparison operator of block number class.
@@ -152,7 +152,7 @@ class BlockNumber
      *
      * @return In-Equality of the block numbers.
      **/
-    bool operator !=( const uint16_t &rhs) const;
+    bool operator !=( uint16_t rhs) const;
 
   private:
     //! The block number value
