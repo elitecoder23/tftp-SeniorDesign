@@ -17,18 +17,17 @@
 #include <boost/test/unit_test.hpp>
 
 #include <tftp/packet/BaseErrorPacket.hpp>
-#include <tftp/packet/AcknowledgementPacket.hpp>
-#include <tftp/packet/OptionsAcknowledgementPacket.hpp>
 
 #include <helper/Dump.hpp>
-#include <helper/Logger.hpp>
 
 #include <iostream>
 
-using namespace Tftp::Packet;
-using namespace Tftp;
+namespace Tftp {
+namespace Packet {
 
-static void tftp_packet_error_str( void)
+BOOST_AUTO_TEST_SUITE( TftpBaseErrorPacket)
+
+BOOST_AUTO_TEST_CASE( getErrorCodeString )
 {
   std::cout <<
     static_cast< int>( ErrorCode::NOT_DEFINED) << ": " <<
@@ -72,35 +71,7 @@ static void tftp_packet_error_str( void)
     std::endl;
 }
 
-static void tftp_packet_ack( void)
-{
-  AcknowledgementPacket ack( 10);
+BOOST_AUTO_TEST_SUITE_END()
 
-  RawTftpPacketType raw = ack.encode();
-
-  std::cout << Dump( &(*raw.begin()), raw.size());
-
-  AcknowledgementPacket ack2( raw);
-
-  BOOST_CHECK( ack.getPacketType()  == ack2.getPacketType());
-  BOOST_CHECK( ack.getBlockNumber() == ack2.getBlockNumber());
 }
-
-static void tftp_packet_oack( void)
-{
-  Tftp::Options::OptionList options;
-
-  options.setOption( "blocksize", "4096");
-
-  OptionsAcknowledgementPacket oack( options);
-
-  RawTftpPacketType raw = oack.encode();
-
-  std::cout << Dump( &(*raw.begin()), raw.size());
-
-  OptionsAcknowledgementPacket oack2( raw);
-
-  BOOST_CHECK( oack.getPacketType()         == oack2.getPacketType());
-  BOOST_CHECK( oack.getOption( "blocksize") == oack2.getOption( "blocksize"));
-  BOOST_CHECK( oack.getOption( "XXX")       == "");
 }

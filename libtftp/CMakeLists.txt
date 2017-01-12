@@ -74,12 +74,14 @@ add_library(
   tftp_test 
   OBJECT
   
+  tftp/packet/AcknowledgementPacketTest.cpp
+  tftp/packet/BaseErrorPacketTest.cpp
   tftp/packet/BlockNumberTest.cpp
   tftp/packet/DataPacketTest.cpp
   tftp/packet/ErrorPacketTest.cpp
+  tftp/packet/OptionsAcknowledgementPacketTest.cpp
   tftp/packet/ReadRequestPacketTest.cpp
-  tftp/packet/WriteRequestPacketTest.cpp
-  tftp/packet/test/PacketTest.cpp)
+  tftp/packet/WriteRequestPacketTest.cpp)
 
 target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
