@@ -16,8 +16,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <tftp/packet/WriteRequestPacket.hpp>
-#include <tftp/packet/ErrorPacket.hpp>
+#include <tftp/packet/BaseErrorPacket.hpp>
 #include <tftp/packet/AcknowledgementPacket.hpp>
 #include <tftp/packet/OptionsAcknowledgementPacket.hpp>
 
@@ -28,42 +27,6 @@
 
 using namespace Tftp::Packet;
 using namespace Tftp;
-
-static void tftp_packet_wrq( void)
-{
-  Tftp::Options::OptionList options;
-
-  options.setOption( "blocksize", "4096");
-
-  WriteRequestPacket wrq( "testfile.bin", TransferMode::OCTET, options);
-
-  RawTftpPacketType raw = wrq.encode();
-
-  std::cout << Dump( &(*raw.begin()), raw.size());
-
-  WriteRequestPacket wrq2( raw);
-
-  BOOST_CHECK( wrq.getPacketType() == wrq2.getPacketType());
-  BOOST_CHECK( wrq.getFilename() == wrq2.getFilename());
-  BOOST_CHECK( wrq.getMode() == wrq2.getMode());
-  BOOST_CHECK( wrq.getOption( "blocksize") == wrq2.getOption( "blocksize"));
-  BOOST_CHECK( wrq.getOption( "XXX") == "");
-}
-
-static void tftp_packet_error( void)
-{
-  ErrorPacket error( ErrorCode::NOT_DEFINED, "ERROR MESSAGE");
-
-  RawTftpPacketType raw = error.encode();
-
-  std::cout << Dump( &(*raw.begin()), raw.size());
-
-  ErrorPacket error2( raw);
-
-  BOOST_CHECK( error.getPacketType() == error2.getPacketType());
-  BOOST_CHECK( error.getErrorCode() == error2.getErrorCode());
-  BOOST_CHECK( error.getErrorMessage() == error2.getErrorMessage());
-}
 
 static void tftp_packet_error_str( void)
 {

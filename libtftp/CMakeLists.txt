@@ -19,18 +19,27 @@ add_library(
   tftp/TftpPacketHandler.cpp
   tftp/TftpConfiguration.cpp
   
+  tftp/packet/AcknowledgementPacket.hpp
   tftp/packet/AcknowledgementPacket.cpp
+  tftp/packet/BaseErrorPacket.hpp
   tftp/packet/BaseErrorPacket.cpp
+  tftp/packet/BlockNumber.hpp
   tftp/packet/BlockNumber.cpp
   tftp/packet/DataPacket.hpp
   tftp/packet/DataPacket.cpp
+  tftp/packet/ErrorPacket.hpp
   tftp/packet/ErrorPacket.cpp
+  tftp/packet/OptionsAcknowledgementPacket.hpp
   tftp/packet/OptionsAcknowledgementPacket.cpp
+  tftp/packet/PacketFactory.hpp
   tftp/packet/PacketFactory.cpp
   tftp/packet/ReadRequestPacket.hpp
   tftp/packet/ReadRequestPacket.cpp
+  tftp/packet/ReadWriteRequestPacket.hpp
   tftp/packet/ReadWriteRequestPacket.cpp
+  tftp/packet/TftpPacket.hpp
   tftp/packet/TftpPacket.cpp
+  tftp/packet/WriteRequestPacket.hpp
   tftp/packet/WriteRequestPacket.cpp
   
   tftp/options/Option.cpp
@@ -67,7 +76,9 @@ add_library(
   
   tftp/packet/BlockNumberTest.cpp
   tftp/packet/DataPacketTest.cpp
+  tftp/packet/ErrorPacketTest.cpp
   tftp/packet/ReadRequestPacketTest.cpp
+  tftp/packet/WriteRequestPacketTest.cpp
   tftp/packet/test/PacketTest.cpp)
 
 target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
