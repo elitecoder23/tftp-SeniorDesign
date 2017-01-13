@@ -25,3 +25,5 @@ target_link_libraries(
   
   ${Boost_LIBRARIES}
   ${BOOST_THREAD_LIBRARY})
+
+add_test( NAME tftp_unit_test COMMAND tftp_unit_test)
