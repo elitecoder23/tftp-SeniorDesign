@@ -72,7 +72,7 @@ class TftpServer
       const UdpAddressType &serverAddress = DefaultLocalEndpoint);
 
     //! Default destructor
-    virtual ~TftpServer( void) noexcept = default;
+    virtual ~TftpServer() noexcept = default;
 
     /**
      * @brief Registers a TFTP request handler.
@@ -95,12 +95,12 @@ class TftpServer
      * The start routine will be leaved, when an FATAL error occurred or
      * the server has been stopped by calling stop().
      **/
-    virtual void start( void) = 0;
+    virtual void start() = 0;
 
     /**
      * @brief Stops the TFTP Server.
      **/
-    virtual void stop( void) = 0;
+    virtual void stop() = 0;
 
     /**
      * @brief Creates a TFTP write operation (TFTP RRQ)

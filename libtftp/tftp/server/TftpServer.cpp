@@ -22,19 +22,19 @@ namespace Tftp {
 namespace Server {
 
 const Tftp::UdpAddressType TftpServer::DefaultLocalEndpoint = UdpAddressType(
-	boost::asio::ip::address_v4::any(),
-	DEFAULT_TFTP_PORT);
+  boost::asio::ip::address_v4::any(),
+  DEFAULT_TFTP_PORT);
 
 TftpServerPtr TftpServer::createInstance(
-	const TftpConfiguration &configuration,
-	const OptionList& additionalOptions,
-	const UdpAddressType &serverAddress)
+  const TftpConfiguration &configuration,
+  const OptionList& additionalOptions,
+  const UdpAddressType &serverAddress)
 {
-	//! create and return the real TFTP server
-	return std::make_shared< TftpServerImpl>(
-		configuration,
-		additionalOptions,
-		serverAddress);
+  // create and return the real TFTP server
+  return std::make_shared< TftpServerImpl>(
+    configuration,
+    additionalOptions,
+    serverAddress);
 }
 
 }
