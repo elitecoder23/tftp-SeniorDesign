@@ -51,27 +51,27 @@ class StreamFile: public TftpFile
 		/**
 		 * @copydoc TftpFile::finishedOperation()
 		 **/
-		virtual void finishedOperation( void) noexcept override;
+		virtual void finishedOperation() noexcept override final;
 
 		/**
 		 * @copydoc TftpFile::receivedTransferSize()
 		 **/
-		virtual bool receivedTransferSize( const uint64_t transferSize) override;
+		virtual bool receivedTransferSize( uint64_t transferSize) override final;
 
 		/**
 		 * @copydoc TftpFile::receviedData()
 		 **/
-		virtual void receviedData( const DataType &data) noexcept override;
+		virtual void receviedData( const DataType &data) noexcept override final;
 
 		/**
 		 * @copydoc TftpFile::requestedTransferSize()
 		 **/
-		virtual bool requestedTransferSize( uint64_t &transferSize) override;
+		virtual bool requestedTransferSize( uint64_t &transferSize) override final;
 
 		/**
 		 * @copydoc TftpFile::sendData()
 		 **/
-		virtual DataType sendData( const unsigned int maxSize) noexcept override;
+		virtual DataType sendData( unsigned int maxSize) noexcept override final;
 
 	private:
 		//! the data stream

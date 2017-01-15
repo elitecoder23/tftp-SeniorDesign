@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class Tftp::Client::TftpClientOperation.
@@ -30,7 +32,7 @@
 namespace Tftp {
 namespace Client {
 
-TftpClientOperationImpl::~TftpClientOperationImpl( void) noexcept
+TftpClientOperationImpl::~TftpClientOperationImpl() noexcept
 {
   BOOST_LOG_FUNCTION();
 
@@ -49,7 +51,7 @@ TftpClientOperationImpl::~TftpClientOperationImpl( void) noexcept
   }
 }
 
-void TftpClientOperationImpl::operator ()( void)
+void TftpClientOperationImpl::operator()()
 {
   // start first receive operation
   receiveFirst();
@@ -148,22 +150,22 @@ catch ( boost::system::system_error &err)
     CommunicationException() << AdditionalInfo( err.what()));
 }
 
-string TftpClientOperationImpl::getFilename( void) const
+TftpClientOperationImpl::string TftpClientOperationImpl::getFilename() const
 {
   return filename;
 }
 
-Tftp::TransferMode TftpClientOperationImpl::getMode( void) const
+Tftp::TransferMode TftpClientOperationImpl::getMode() const
 {
   return mode;
 }
 
-OptionList& TftpClientOperationImpl::getOptions( void)
+TftpClientOperationImpl::OptionList& TftpClientOperationImpl::getOptions()
 {
   return options;
 }
 
-void TftpClientOperationImpl::finished( void) noexcept
+void TftpClientOperationImpl::finished() noexcept
 {
   ioService.stop();
 }
@@ -202,121 +204,121 @@ void TftpClientOperationImpl::sendFirst( const TftpPacket &packet)
 
 void TftpClientOperationImpl::send( const TftpPacket &packet)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	try
-	{
-		BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
+  try
+  {
+    BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
 
-		// Reset the transmit counter
-		transmitCounter = 1;
+    // Reset the transmit counter
+    transmitCounter = 1;
 
-		// Store packet type
-		transmitPacketType = packet.getPacketType();
+    // Store packet type
+    transmitPacketType = packet.getPacketType();
 
-		// Encode raw packet
-		transmitPacket = packet.encode();
+    // Encode raw packet
+    transmitPacket = packet.encode();
 
-		// Send the packet to the remote server
-		socket.send( boost::asio::buffer( transmitPacket));
-	}
-	catch (boost::system::system_error &err)
-	{
-		finished();
+    // Send the packet to the remote server
+    socket.send( boost::asio::buffer( transmitPacket));
+  }
+  catch (boost::system::system_error &err)
+  {
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( err.what()));
+  }
 }
 
-void TftpClientOperationImpl::receiveFirst( void)
+void TftpClientOperationImpl::receiveFirst()
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	try
-	{
-		// Resize the receive buffer to the allowed packet size
-		receivePacket.resize( maxReceivePacketSize);
+  try
+  {
+    // Resize the receive buffer to the allowed packet size
+    receivePacket.resize( maxReceivePacketSize);
 
-		// the first time, we make receive_from (answer is not sent from destination)
-		// Start the receive operation
-		socket.async_receive_from(
-			boost::asio::buffer( receivePacket),
-			receiveEndpoint,
-			boost::bind(
-				&TftpClientOperationImpl::receiveFirstHandler,
-				this,
-				boost::asio::placeholders::error,
-				boost::asio::placeholders::bytes_transferred));
+    // the first time, we make receive_from (answer is not sent from destination)
+    // Start the receive operation
+    socket.async_receive_from(
+      boost::asio::buffer( receivePacket),
+      receiveEndpoint,
+      boost::bind(
+        &TftpClientOperationImpl::receiveFirstHandler,
+        this,
+        boost::asio::placeholders::error,
+        boost::asio::placeholders::bytes_transferred));
 
-		// Set receive timeout
-		timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
+    // Set receive timeout
+    timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
 
-		// start waiting for receive timeout
-		timer.async_wait( boost::bind(
-			&TftpClientOperationImpl::timeoutFirstHandler,
-			this,
-			boost::asio::placeholders::error));
-	}
-	catch (boost::system::system_error &err)
-	{
-		finished();
+    // start waiting for receive timeout
+    timer.async_wait( boost::bind(
+      &TftpClientOperationImpl::timeoutFirstHandler,
+      this,
+      boost::asio::placeholders::error));
+  }
+  catch (boost::system::system_error &err)
+  {
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( err.what()));
+  }
 }
 
-void TftpClientOperationImpl::receive( void)
+void TftpClientOperationImpl::receive()
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	try
-	{
-		receivePacket.resize( maxReceivePacketSize);
+  try
+  {
+    receivePacket.resize( maxReceivePacketSize);
 
-		ioService.reset();
+    ioService.reset();
 
-		// start receive operation
-		socket.async_receive(
-			boost::asio::buffer( receivePacket),
-			boost::bind(
-				&TftpClientOperationImpl::receiveHandler,
-				this,
-				boost::asio::placeholders::error,
-				boost::asio::placeholders::bytes_transferred));
+    // start receive operation
+    socket.async_receive(
+      boost::asio::buffer( receivePacket),
+      boost::bind(
+        &TftpClientOperationImpl::receiveHandler,
+        this,
+        boost::asio::placeholders::error,
+        boost::asio::placeholders::bytes_transferred));
 
-		// set receive timeout
-		timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
+    // set receive timeout
+    timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
 
-		// start waiting for receive timeout
-		timer.async_wait( boost::bind(
-			&TftpClientOperationImpl::timeoutHandler,
-			this,
-			boost::asio::placeholders::error));
-	}
-	catch (boost::system::system_error &err)
-	{
-		finished();
+    // start waiting for receive timeout
+    timer.async_wait( boost::bind(
+      &TftpClientOperationImpl::timeoutHandler,
+      this,
+      boost::asio::placeholders::error));
+  }
+  catch (boost::system::system_error &err)
+  {
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( err.what()));
+  }
 }
 
 void TftpClientOperationImpl::setMaxReceivePacketSize(
-	const uint16_t maxReceivePacketSize) noexcept
+  const uint16_t maxReceivePacketSize) noexcept
 {
-	this->maxReceivePacketSize = maxReceivePacketSize;
+  this->maxReceivePacketSize = maxReceivePacketSize;
 }
 
 void TftpClientOperationImpl::setReceiveTimeout(
-	const uint8_t receiveTimeout) noexcept
+  const uint8_t receiveTimeout) noexcept
 {
-	this->receiveTimeout = receiveTimeout;
+  this->receiveTimeout = receiveTimeout;
 }
 
 void TftpClientOperationImpl::handleReadRequestPacket(
@@ -375,273 +377,275 @@ void TftpClientOperationImpl::handleErrorPacket(
 
   //! @throw ErrorReceivedException Always, because this is an error.
   BOOST_THROW_EXCEPTION(
-    ErrorReceivedException( transmitPacketType, errorPacket) <<
-    AdditionalInfo( "ERR not expected"));
+    ErrorReceivedException() <<
+      AdditionalInfo( "ERR not expected") <<
+      TftpPacketTypeInfo( transmitPacketType) <<
+      TftpErrorPacketInfo( errorPacket));
 }
 
 void TftpClientOperationImpl::handleInvalidPacket(
 	const UdpAddressType &,
 	const RawTftpPacketType &)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	BOOST_LOG_TRIVIAL( error) << "RX ERROR: INVALID Packet";
+  BOOST_LOG_TRIVIAL( error) << "RX ERROR: INVALID Packet";
 
-	send( ErrorPacket(
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"Invalid packet not expected"));
+  send( ErrorPacket(
+    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    "Invalid packet not expected"));
 
-	// Operation completed
-	finished();
+  // Operation completed
+  finished();
 
-	//! @throw InvalidPacketException Always.
-	BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-		AdditionalInfo( "received invalid packet"));
+  //! @throw InvalidPacketException Always.
+  BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+    AdditionalInfo( "received invalid packet"));
 }
 
 void TftpClientOperationImpl::receiveFirstHandler(
-	const boost::system::error_code& errorCode,
-	std::size_t bytesTransferred)
+  const boost::system::error_code& errorCode,
+  std::size_t bytesTransferred)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	// operation has been aborted (maybe timeout)
-	if (boost::asio::error::operation_aborted == errorCode)
-	{
-		return;
-	}
+  // operation has been aborted (maybe timeout)
+  if (boost::asio::error::operation_aborted == errorCode)
+  {
+    return;
+  }
 
-	// (internal) receive error occurred
-	if (errorCode)
-	{
-		BOOST_LOG_TRIVIAL( error) <<
-			"Error when receiving message: " << errorCode.message();
+  // (internal) receive error occurred
+  if (errorCode)
+  {
+    BOOST_LOG_TRIVIAL( error) <<
+      "Error when receiving message: " << errorCode.message();
 
-		finished();
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( errorCode.message()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( errorCode.message()));
+  }
 
-	// check, if packet has been received from not expected source
-	// send error packet and ignore it.
-	if (remoteEndpoint.address() != receiveEndpoint.address())
-	{
-		BOOST_LOG_TRIVIAL( error) <<
-			"Received packed from wrong source: " <<
-			receiveEndpoint.address().to_string();
+  // check, if packet has been received from not expected source
+  // send error packet and ignore it.
+  if (remoteEndpoint.address() != receiveEndpoint.address())
+  {
+    BOOST_LOG_TRIVIAL( error) <<
+      "Received packed from wrong source: " <<
+      receiveEndpoint.address().to_string();
 
-		// sent Error packet to unknown partner
-		try
-		{
-			ErrorPacket err(
-				ErrorCode::UNKNOWN_TRANSFER_ID,
-				"Packet from wrong source");
+    // sent Error packet to unknown partner
+    try
+    {
+      ErrorPacket err(
+        ErrorCode::UNKNOWN_TRANSFER_ID,
+        "Packet from wrong source");
 
-			socket.send_to( boost::asio::buffer( err.encode()), receiveEndpoint);
-		}
-		catch ( boost::system::system_error &err)
-		{
-			// ignore send error to unknown partner
-			BOOST_LOG_TRIVIAL( error) << "Error sending ERR packet: " << err.what();
-		}
+      socket.send_to( boost::asio::buffer( err.encode()), receiveEndpoint);
+    }
+    catch ( boost::system::system_error &err)
+    {
+      // ignore send error to unknown partner
+      BOOST_LOG_TRIVIAL( error) << "Error sending ERR packet: " << err.what();
+    }
 
-		// restart receive operation
-		try
-		{
-			socket.async_receive_from(
-				boost::asio::buffer( receivePacket),
-				receiveEndpoint,
-				boost::bind(
-					&TftpClientOperationImpl::receiveFirstHandler,
-					this,
-					boost::asio::placeholders::error,
-					boost::asio::placeholders::bytes_transferred));
+    // restart receive operation
+    try
+    {
+      socket.async_receive_from(
+        boost::asio::buffer( receivePacket),
+        receiveEndpoint,
+        boost::bind(
+          &TftpClientOperationImpl::receiveFirstHandler,
+          this,
+          boost::asio::placeholders::error,
+          boost::asio::placeholders::bytes_transferred));
 
-			return;
-		}
-		catch ( boost::system::system_error &err)
-		{
-			finished();
+      return;
+    }
+    catch ( boost::system::system_error &err)
+    {
+      finished();
 
-			//! @throw CommunicationException On communication error.
-			BOOST_THROW_EXCEPTION( CommunicationException() <<
-				AdditionalInfo( err.what()));
-		}
-	}
+      //! @throw CommunicationException On communication error.
+      BOOST_THROW_EXCEPTION( CommunicationException() <<
+        AdditionalInfo( err.what()));
+    }
+  }
 
-	// store real end point
-	remoteEndpoint = receiveEndpoint;
+  // store real end point
+  remoteEndpoint = receiveEndpoint;
 
-	try
-	{
-		// connect to the server port
-		socket.connect( receiveEndpoint);
-	}
-	catch ( boost::system::system_error &err)
-	{
-		finished();
+  try
+  {
+    // connect to the server port
+    socket.connect( receiveEndpoint);
+  }
+  catch ( boost::system::system_error &err)
+  {
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( err.what()));
+  }
 
-	receivePacket.resize( bytesTransferred);
+  receivePacket.resize( bytesTransferred);
 
-	handlePacket( receiveEndpoint, receivePacket);
+  handlePacket( receiveEndpoint, receivePacket);
 }
 
 void TftpClientOperationImpl::receiveHandler(
-	const boost::system::error_code& errorCode,
-	std::size_t bytesTransferred)
+  const boost::system::error_code& errorCode,
+  const std::size_t bytesTransferred)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	// operation has been aborted (maybe timeout)
-	// error is not handled here.
-	if (boost::asio::error::operation_aborted == errorCode)
-	{
-		return;
-	}
+  // operation has been aborted (maybe timeout)
+  // error is not handled here.
+  if (boost::asio::error::operation_aborted == errorCode)
+  {
+    return;
+  }
 
-	// (internal) receive error occurred
-	if (errorCode)
-	{
-		BOOST_LOG_TRIVIAL( error) <<
-			"Error when receiving message: " << errorCode.message();
+  // (internal) receive error occurred
+  if (errorCode)
+  {
+    BOOST_LOG_TRIVIAL( error) <<
+      "Error when receiving message: " << errorCode.message();
 
-		finished();
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( errorCode.message()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( errorCode.message()));
+  }
 
-	receivePacket.resize( bytesTransferred);
+  receivePacket.resize( bytesTransferred);
 
-	handlePacket( remoteEndpoint, receivePacket);
+  handlePacket( remoteEndpoint, receivePacket);
 }
 
 void TftpClientOperationImpl::timeoutFirstHandler(
-	const boost::system::error_code& errorCode)
+  const boost::system::error_code& errorCode)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	//! operation aborted (packet received)
-	if (boost::asio::error::operation_aborted == errorCode)
-	{
-		return;
-	}
+  //! operation aborted (packet received)
+  if (boost::asio::error::operation_aborted == errorCode)
+  {
+    return;
+  }
 
-	// internal (timer) error occurred
-	if (errorCode)
-	{
-		BOOST_LOG_TRIVIAL( error) << "timer error: " + errorCode.message();
+  // internal (timer) error occurred
+  if (errorCode)
+  {
+    BOOST_LOG_TRIVIAL( error) << "timer error: " + errorCode.message();
 
-		finished();
+    finished();
 
-		//! @throw TftpException On internal Timer error.
-		BOOST_THROW_EXCEPTION( TftpException() <<
-			AdditionalInfo( "internal timer error"));
-	}
+    //! @throw TftpException On internal Timer error.
+    BOOST_THROW_EXCEPTION( TftpException() <<
+      AdditionalInfo( "internal timer error"));
+  }
 
-	// if maximum retries exceeded -> abort receive operation
-	if (transmitCounter > tftpClientInternal.getConfiguration().tftpRetries)
-	{
-		BOOST_LOG_TRIVIAL( error) << "Retry counter exceeded ABORT";
+  // if maximum retries exceeded -> abort receive operation
+  if (transmitCounter > tftpClientInternal.getConfiguration().tftpRetries)
+  {
+    BOOST_LOG_TRIVIAL( error) << "Retry counter exceeded ABORT";
 
-		finished();
+    finished();
 
-		//! @throw CommunicationException On receive timeout
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( "Timeout when waiting for response from server"));
-	}
+    //! @throw CommunicationException On receive timeout
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( "Timeout when waiting for response from server"));
+  }
 
-	BOOST_LOG_TRIVIAL( info) << "retransmit last packet";
+  BOOST_LOG_TRIVIAL( info) << "retransmit last packet";
 
-	try
-	{
-		socket.send_to( boost::asio::buffer( transmitPacket), remoteEndpoint);
+  try
+  {
+    socket.send_to( boost::asio::buffer( transmitPacket), remoteEndpoint);
 
-		++transmitCounter;
+    ++transmitCounter;
 
-		timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
+    timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
 
-		timer.async_wait( boost::bind(
-			&TftpClientOperationImpl::timeoutFirstHandler,
-			this,
-			boost::asio::placeholders::error));
-	}
-	catch (boost::system::system_error &err)
-	{
-		finished();
+    timer.async_wait( boost::bind(
+      &TftpClientOperationImpl::timeoutFirstHandler,
+      this,
+      boost::asio::placeholders::error));
+  }
+  catch (boost::system::system_error &err)
+  {
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( err.what()));
+  }
 }
 
 void TftpClientOperationImpl::timeoutHandler(
-	const boost::system::error_code& errorCode)
+  const boost::system::error_code& errorCode)
 {
-	BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION();
 
-	// operation aborted (packet received)
-	if (boost::asio::error::operation_aborted == errorCode)
-	{
-		return;
-	}
+  // operation aborted (packet received)
+  if (boost::asio::error::operation_aborted == errorCode)
+  {
+    return;
+  }
 
-	// internal (timer) error occurred
-	if (errorCode)
-	{
-		BOOST_LOG_TRIVIAL( error) << "timer error: " << errorCode.message();
+  // internal (timer) error occurred
+  if (errorCode)
+  {
+    BOOST_LOG_TRIVIAL( error) << "timer error: " << errorCode.message();
 
-		finished();
+    finished();
 
-		//! @throw TftpException On internal Timer error.
-		BOOST_THROW_EXCEPTION( TftpException() <<
-			AdditionalInfo( "internal timer error"));
-	}
+    //! @throw TftpException On internal Timer error.
+    BOOST_THROW_EXCEPTION( TftpException() <<
+      AdditionalInfo( "internal timer error"));
+  }
 
-	// if maximum retries exceeded -> abort receive operation
-	if (transmitCounter > tftpClientInternal.getConfiguration().tftpRetries)
-	{
-		BOOST_LOG_TRIVIAL( error) << "Retry counter exceeded ABORT";
+  // if maximum retries exceeded -> abort receive operation
+  if (transmitCounter > tftpClientInternal.getConfiguration().tftpRetries)
+  {
+    BOOST_LOG_TRIVIAL( error) << "Retry counter exceeded ABORT";
 
-		finished();
+    finished();
 
-		//! @throw CommunicationException On receive timeout
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( "timeout"));
-	}
+    //! @throw CommunicationException On receive timeout
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( "timeout"));
+  }
 
-	BOOST_LOG_TRIVIAL( info) << "retransmit last packet";
+  BOOST_LOG_TRIVIAL( info) << "retransmit last packet";
 
-	try
-	{
-		socket.send( boost::asio::buffer( transmitPacket));
+  try
+  {
+    socket.send( boost::asio::buffer( transmitPacket));
 
-		++transmitCounter;
+    ++transmitCounter;
 
-		timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
+    timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
 
-		timer.async_wait( boost::bind(
-			&TftpClientOperationImpl::timeoutHandler,
-			this,
-			boost::asio::placeholders::error));
-	}
-	catch (boost::system::system_error &err)
-	{
-		finished();
+    timer.async_wait( boost::bind(
+      &TftpClientOperationImpl::timeoutHandler,
+      this,
+      boost::asio::placeholders::error));
+  }
+  catch (boost::system::system_error &err)
+  {
+    finished();
 
-		//! @throw CommunicationException On communication error.
-		BOOST_THROW_EXCEPTION( CommunicationException() <<
-			AdditionalInfo( err.what()));
-	}
+    //! @throw CommunicationException On communication error.
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( err.what()));
+  }
 }
 
 }

@@ -37,7 +37,7 @@ class TftpClient;
 typedef std::shared_ptr< TftpClient> TftpClientPtr;
 
 //! Declaration of TFTP client operation
-using TftpClientOperation = std::function< void( void)>;
+using TftpClientOperation = std::function< void()>;
 
 }
 }

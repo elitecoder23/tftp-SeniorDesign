@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Client::TftpClientReadRequestOperationImpl.
@@ -22,11 +24,6 @@
 namespace Tftp {
 namespace Client {
 
-using Tftp::Packet::DataPacket;
-using Tftp::Packet::AcknowledgementPacket;
-using Tftp::Packet::OptionsAcknowledgementPacket;
-using Tftp::Packet::BlockNumber;
-
 /**
  * @brief Class which handles a TFTP Read Request on client side.
  *
@@ -37,96 +34,98 @@ using Tftp::Packet::BlockNumber;
  **/
 class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
 {
-	public:
-		/**
-		 * @brief Constructor of TftpClientReadOperation
-		 *
-		 * @param[in] handler
-		 *   Handler for received data.
-		 * @param[in] tftpClientInternal
-		 *   The TFTP internal client.
-		 * @param[in] serverAddress
-		 *   Where the connection should be established to.
-		 * @param[in] filename
-		 *   Which file shall be requested
-		 * @param[in] mode
-		 *   The transfer mode
-		 * @param[in] from
-		 *   communication source
-		 **/
-		TftpClientReadRequestOperationImpl(
-			TftpReceiveDataOperationHandler &handler,
-			const TftpClientInternal &tftpClientInternal,
-			const UdpAddressType &serverAddress,
-			const string &filename,
-			const TransferMode mode,
-			const UdpAddressType &from);
+  public:
+    /**
+     * @brief Constructor of TftpClientReadOperation
+     *
+     * @param[in] handler
+     *   Handler for received data.
+     * @param[in] tftpClientInternal
+     *   The TFTP internal client.
+     * @param[in] serverAddress
+     *   Where the connection should be established to.
+     * @param[in] filename
+     *   Which file shall be requested
+     * @param[in] mode
+     *   The transfer mode
+     * @param[in] from
+     *   communication source
+     **/
+    TftpClientReadRequestOperationImpl(
+      TftpReceiveDataOperationHandler &handler,
+      const TftpClientInternal &tftpClientInternal,
+      const UdpAddressType &serverAddress,
+      const string &filename,
+      TransferMode mode,
+      const UdpAddressType &from);
 
-		/**
-		 * @brief Constructor of TftpClientReadOperation
-		 *
-		 * @param[in] handler
-		 *   Handler for received data.
-		 * @param[in] tftpClientInternal
-		 *   The TFTP internal client.
-		 * @param[in] serverAddress
-		 *   Where the connection should be established to.
-		 * @param[in] filename
-		 *   Which file shall be requested
-		 * @param[in] mode
-		 *   The transfer mode
-		 **/
-		TftpClientReadRequestOperationImpl(
-			TftpReceiveDataOperationHandler &handler,
-			const TftpClientInternal &tftpClientInternal,
-			const UdpAddressType &serverAddress,
-			const string &filename,
-			const TransferMode mode);
+    /**
+     * @brief Constructor of TftpClientReadOperation
+     *
+     * @param[in] handler
+     *   Handler for received data.
+     * @param[in] tftpClientInternal
+     *   The TFTP internal client.
+     * @param[in] serverAddress
+     *   Where the connection should be established to.
+     * @param[in] filename
+     *   Which file shall be requested
+     * @param[in] mode
+     *   The transfer mode
+     **/
+    TftpClientReadRequestOperationImpl(
+      TftpReceiveDataOperationHandler &handler,
+      const TftpClientInternal &tftpClientInternal,
+      const UdpAddressType &serverAddress,
+      const string &filename,
+      TransferMode mode);
 
-		/**
-		 * @copybrief TftpClientOperationImpl::operator()()
-		 *
-		 * Assembles and transmit TFTP RRQ packet and start parent receive loop.
-		 **/
-		virtual void operator ()( void) override;
+    /**
+     * @copybrief TftpClientOperationImpl::operator()()
+     *
+     * Assembles and transmit TFTP RRQ packet and start parent receive loop.
+     **/
+    virtual void operator()() override final;
 
-	protected:
-		/**
-		 * @copydoc TftpPacketHandler::handleDataPacket()
-		 *
-		 * The TFTP DATA packet is decoded and checked.
-		 * If everything is fine, handler is called with extracted data and the
-		 * receive operation is continued.
-		 **/
-		virtual void handleDataPacket(
-			const UdpAddressType &from,
-			const DataPacket &dataPacket) override;
+  protected:
+    /**
+     * @copydoc TftpPacketHandler::handleDataPacket()
+     *
+     * The TFTP DATA packet is decoded and checked.
+     * If everything is fine, handler is called with extracted data and the
+     * receive operation is continued.
+     **/
+    virtual void handleDataPacket(
+      const UdpAddressType &from,
+      const DataPacket &dataPacket) override final;
 
-		/**
-		 * @copydoc TftpPacketHandler::handleAcknowledgementPacket()
-		 *
-		 * ACK packets are not expected for this operation.
-		 * They are rejected by error transmission
-		 **/
-		virtual void handleAcknowledgementPacket(
-			const UdpAddressType &from,
-			const AcknowledgementPacket &acknowledgementPacket) override;
+    /**
+     * @copydoc TftpPacketHandler::handleAcknowledgementPacket()
+     *
+     * ACK packets are not expected for this operation.
+     * They are rejected by error transmission
+     **/
+    virtual void handleAcknowledgementPacket(
+      const UdpAddressType &from,
+      const AcknowledgementPacket &acknowledgementPacket) override final;
 
-		/**
-		 * @copydoc TftpPacketHandler::handleOptionsAcknowledgementPacket()
-		 *
-		 **/
-		virtual void handleOptionsAcknowledgementPacket(
-			const UdpAddressType &from,
-			const OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override;
+    /**
+     * @copydoc TftpPacketHandler::handleOptionsAcknowledgementPacket()
+     *
+     **/
+    virtual void handleOptionsAcknowledgementPacket(
+      const UdpAddressType &from,
+      const OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
 
-	private:
-		//! Registered handler.
-		TftpReceiveDataOperationHandler &handler;
-		//! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
-		uint16_t receiveDataSize;
-		//! last received block number.
-		BlockNumber lastReceivedBlockNumber;
+  private:
+    using BlockNumber = Tftp::Packet::BlockNumber;
+
+    //! Registered handler.
+    TftpReceiveDataOperationHandler &handler;
+    //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
+    uint16_t receiveDataSize;
+    //! last received block number.
+    BlockNumber lastReceivedBlockNumber;
 };
 
 }

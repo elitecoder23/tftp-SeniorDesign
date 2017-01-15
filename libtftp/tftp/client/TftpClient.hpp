@@ -78,7 +78,7 @@ class TftpClient
       TftpReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      const TransferMode mode,
+      TransferMode mode,
       const UdpAddressType &from) = 0;
 
     /**
@@ -99,7 +99,7 @@ class TftpClient
       TftpReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      const TransferMode mode) = 0;
+      TransferMode mode) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
@@ -121,7 +121,7 @@ class TftpClient
       TftpTransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      const TransferMode mode,
+      TransferMode mode,
       const UdpAddressType &from) = 0;
 
     /**
@@ -142,11 +142,11 @@ class TftpClient
       TftpTransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      const TransferMode mode) = 0;
+      TransferMode mode) = 0;
 
   protected:
     //! Protected constructor.
-    TftpClient( void) = default;
+    TftpClient() = default;
 };
 
 }

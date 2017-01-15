@@ -25,71 +25,71 @@ namespace File {
  **/
 class MemoryFile: public TftpFile
 {
-	public:
-		/**
-		 * @brief Creates a memory file with no current data.
-		 *
-		 * This constructor is useful for receiving data.
-		 **/
-		MemoryFile( void);
+  public:
+    /**
+     * @brief Creates a memory file with no current data.
+     *
+     * This constructor is useful for receiving data.
+     **/
+    MemoryFile( void);
 
-		/**
-		 * @brief Creates a memory file with the given data.
-		 *
-		 * The data is copied to an internal data structure.
-		 *
-		 * @param[in] data
-		 *   The initial data.
-		 **/
-		MemoryFile( const DataType &data);
+    /**
+     * @brief Creates a memory file with the given data.
+     *
+     * The data is copied to an internal data structure.
+     *
+     * @param[in] data
+     *   The initial data.
+     **/
+    MemoryFile( const DataType &data);
 
-		/**
-		 * @brief Move constructor.
-		 *
-		 * Moves the given data to the file.
-		 *
-		 * @param[in] data
-		 *   Data of memory file.
-		 **/
-		MemoryFile( DataType &&data);
+    /**
+     * @brief Move constructor.
+     *
+     * Moves the given data to the file.
+     *
+     * @param[in] data
+     *   Data of memory file.
+     **/
+    MemoryFile( DataType &&data);
 
-		/**
-		 * @brief Returns a reference to the locally stored data.
-		 *
-		 * @return The locally stored data
-		 **/
-		const DataType& getData( void) const noexcept;
+    /**
+     * @brief Returns a reference to the locally stored data.
+     *
+     * @return The locally stored data
+     **/
+    const DataType& getData() const noexcept;
 
-		/**
-		 * @copydoc TftpFile::finishedOperation()
-		 **/
-		virtual void finishedOperation( void) noexcept override;
+    /**
+     * @copydoc TftpFile::finishedOperation()
+     **/
+    virtual void finishedOperation() noexcept override final;
 
-		/**
-		 * @copydoc TftpFile::receivedTransferSize()
-		 **/
-		virtual bool receivedTransferSize( const uint64_t transferSize) override;
+    /**
+     * @copydoc TftpFile::receivedTransferSize()
+     **/
+    virtual bool receivedTransferSize( uint64_t transferSize) override final;
 
-		/**
-		 * @copydoc TftpFile::receviedData()
-		 **/
-		virtual void receviedData( const DataType &data) noexcept override;
+    /**
+     * @copydoc TftpFile::receviedData()
+     **/
+    virtual void receviedData( const DataType &data) noexcept override final;
 
-		/**
-		 * @copydoc TftpFile::requestedTransferSize()
-		 **/
-		virtual bool requestedTransferSize( uint64_t &transferSize) override;
+    /**
+     * @copydoc TftpFile::requestedTransferSize()
+     **/
+    virtual bool requestedTransferSize( uint64_t &transferSize) override final;
 
-		/**
-		 * @copydoc TftpFile::sendData()
-		 **/
-		virtual DataType sendData( const unsigned int maxSize) noexcept override;
+    /**
+     * @copydoc TftpFile::sendData()
+     **/
+    virtual DataType sendData( unsigned int maxSize) noexcept override final;
 
-	private:
-		//! the data
-		DataType data;
-		//! the current read position
-		DataType::const_iterator dataPtr;
+  private:
+    //! the data
+    DataType data;
+    //! the current read position
+    DataType::const_iterator dataPtr;
 };
 
 }

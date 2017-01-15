@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Client::TftpClientImpl.
@@ -80,10 +82,10 @@ class TftpClientImpl :
       const TransferMode mode) override final;
 
     //! @copydoc TftpClientInternal::getConfiguration
-    virtual const TftpConfiguration& getConfiguration( void) const override final;
+    virtual const TftpConfiguration& getConfiguration() const override final;
 
     //! @copydoc TftpClientInternal::getOptionList
-    virtual const OptionList& getOptionList( void) const override final;
+    virtual const OptionList& getOptionList() const override final;
 
   private:
     const TftpConfiguration configuration;

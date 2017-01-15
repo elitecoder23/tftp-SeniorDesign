@@ -259,34 +259,36 @@ void TftpServerOperationImpl::handleWriteRequestPacket(
 }
 
 void TftpServerOperationImpl::handleErrorPacket(
-	const UdpAddressType &,
-	const ErrorPacket &errorPacket)
+  const UdpAddressType &,
+  const ErrorPacket &errorPacket)
 {
-	BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << errorPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << errorPacket.toString();
 
-	//! @throw ErrorReceivedException Always, because this is an error.
-	BOOST_THROW_EXCEPTION(
-		ErrorReceivedException( transmitPacketType, errorPacket) <<
-		AdditionalInfo( "ERR not expected"));
+  //! @throw ErrorReceivedException Always, because this is an error.
+  BOOST_THROW_EXCEPTION(
+    ErrorReceivedException() <<
+    AdditionalInfo( "ERR not expected") <<
+    TftpPacketTypeInfo( transmitPacketType) <<
+    TftpErrorPacketInfo( errorPacket));
 }
 
 void TftpServerOperationImpl::handleOptionsAcknowledgementPacket(
-	const UdpAddressType &,
-	const OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const UdpAddressType &,
+  const OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-	BOOST_LOG_TRIVIAL( info) << 
-		"RX ERROR: " << optionsAcknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info) <<
+    "RX ERROR: " << optionsAcknowledgementPacket.toString();
 
-	send( ErrorPacket(
-		ErrorCode::ILLEGAL_TFTP_OPERATION,
-		"OACK not expected"));
+  send( ErrorPacket(
+    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    "OACK not expected"));
 
-	// Operation completed
-	finished();
+  // Operation completed
+  finished();
 
-	//! @throw CommunicationException Always, because this packet is invalid.
-	BOOST_THROW_EXCEPTION( CommunicationException() <<
-		AdditionalInfo( "OACK not expected"));
+  //! @throw CommunicationException Always, because this packet is invalid.
+  BOOST_THROW_EXCEPTION( CommunicationException() <<
+    AdditionalInfo( "OACK not expected"));
 }
 
 void TftpServerOperationImpl::handleInvalidPacket(

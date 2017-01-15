@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of interface class Tftp::Client::TftpClientInternal.
@@ -31,21 +33,21 @@ class TftpClientInternal
     using OptionList = Options::OptionList;
 
     //! Default destructor
-    virtual ~TftpClientInternal( void) = default;
+    virtual ~TftpClientInternal() = default;
 
     /**
      * @brief Returns the used TFTP configuration.
      *
      * @return The TFTP configuration
      **/
-    virtual const TftpConfiguration& getConfiguration( void) const = 0;
+    virtual const TftpConfiguration& getConfiguration() const = 0;
 
     /**
      * @brief Returns the own options list.
      *
      * @return The options list.
      **/
-    virtual const OptionList& getOptionList( void) const = 0;
+    virtual const OptionList& getOptionList() const = 0;
 };
 
 }

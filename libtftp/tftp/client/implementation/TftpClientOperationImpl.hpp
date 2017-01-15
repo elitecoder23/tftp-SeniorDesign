@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Client::TftpClientOperationImpl.
@@ -27,13 +29,6 @@
 namespace Tftp {
 namespace Client {
 
-using Tftp::Packet::TftpPacket;
-using Tftp::Packet::ReadRequestPacket;
-using Tftp::Packet::WriteRequestPacket;
-using Tftp::Packet::ErrorPacket;
-using Tftp::Options::OptionList;
-
-using std::string;
 
 class TftpClientInternal;
 
@@ -45,265 +40,268 @@ class TftpClientInternal;
  **/
 class TftpClientOperationImpl : protected TftpPacketHandler
 {
-	public:
-		/**
-		 * @brief Destructor.
-		 *
-		 * Closes the socket.
-		 **/
-		virtual ~TftpClientOperationImpl( void) noexcept;
+  public:
+    using string = std::string;
 
-		/**
-		 * @brief Operation execution
-		 *
-		 * This operation executes the TFTP operation.
-		 *
-		 * The implementation on this level starts the receive operation.
-		 *
-		 * A child class inheriting from this class must override this operation,
-		 * sending the request package and then calling this method.
-		 **/
-		virtual void operator ()( void);
+    /**
+     * @brief Destructor.
+     *
+     * Closes the socket.
+     **/
+    virtual ~TftpClientOperationImpl() noexcept;
 
-	protected:
-		/**
-		 * @brief Constructor of TftpClientOperation
-		 *
-		 * @param[in] tftpClientInternal
-		 *   The TFTP internal client.
-		 * @param[in] serverAddress
-		 *   Where the connection should be established to.
-		 * @param[in] filename
-		 *   Which file shall be requested
-		 * @param[in] mode
-		 *   The transfer mode
-		 * @param[in] from
-		 *   Optional parameter to define the communication source
-		 **/
-		TftpClientOperationImpl(
-			const TftpClientInternal &tftpClientInternal,
-			const UdpAddressType &serverAddress,
-			const string &filename,
-			const TransferMode mode,
-			const UdpAddressType &from);
+    /**
+     * @brief Operation execution
+     *
+     * This operation executes the TFTP operation.
+     *
+     * The implementation on this level starts the receive operation.
+     *
+     * A child class inheriting from this class must override this operation,
+     * sending the request package and then calling this method.
+     **/
+    virtual void operator()();
 
-		/**
-		 * @brief Constructor of TftpClientOperation
-		 *
-		 * @param[in] tftpClientInternal
-		 *   The TFTP internal client.
-		 * @param[in] serverAddress
-		 *   Where the connection should be established to.
-		 * @param[in] filename
-		 *   Which file shall be requested
-		 * @param[in] mode
-		 *   The transfer mode
-		 **/
-		TftpClientOperationImpl(
-			const TftpClientInternal &tftpClientInternal,
-			const UdpAddressType &serverAddress,
-			const string &filename,
-			const TransferMode mode);
+  protected:
+    using OptionList = Options::OptionList;
+    using TftpPacket = Packet::TftpPacket;
 
-		/**
-		 * @brief Returns the request filename.
-		 *
-		 * @return The request filename.
-		 **/
-		string getFilename( void) const;
+    /**
+     * @brief Constructor of TftpClientOperation
+     *
+     * @param[in] tftpClientInternal
+     *   The TFTP internal client.
+     * @param[in] serverAddress
+     *   Where the connection should be established to.
+     * @param[in] filename
+     *   Which file shall be requested
+     * @param[in] mode
+     *   The transfer mode
+     * @param[in] from
+     *   Optional parameter to define the communication source
+     **/
+    TftpClientOperationImpl(
+      const TftpClientInternal &tftpClientInternal,
+      const UdpAddressType &serverAddress,
+      const string &filename,
+      TransferMode mode,
+      const UdpAddressType &from);
 
-		/**
-		 * @brief Returns the transfer mode.
-		 *
-		 * @return The transfer mode.
-		 **/
-		TransferMode getMode( void) const;
+    /**
+     * @brief Constructor of TftpClientOperation
+     *
+     * @param[in] tftpClientInternal
+     *   The TFTP internal client.
+     * @param[in] serverAddress
+     *   Where the connection should be established to.
+     * @param[in] filename
+     *   Which file shall be requested
+     * @param[in] mode
+     *   The transfer mode
+     **/
+    TftpClientOperationImpl(
+      const TftpClientInternal &tftpClientInternal,
+      const UdpAddressType &serverAddress,
+      const string &filename,
+      TransferMode mode);
 
-		/**
-		 * @brief Returns the TFTP option list.
-		 *
-		 * @return The TFTP option list.
-		 **/
-		OptionList & getOptions( void);
+    /**
+     * @brief Returns the request filename.
+     *
+     * @return The request filename.
+     **/
+    string getFilename() const;
 
-		/**
-		 * @brief Sets the finished flag.
-		 **/
-		void finished( void) noexcept;
+    /**
+     * @brief Returns the transfer mode.
+     *
+     * @return The transfer mode.
+     **/
+    TransferMode getMode() const;
 
-		/**
-		 * @brief Sends the packet to the TFTP server identified by its default
-		 *   endpoint.
-		 *
-		 * @param[in] packet
-		 *   The TFTP packet to send.
-		 **/
-		void sendFirst( const TftpPacket &packet);
+    /**
+     * @brief Returns the TFTP option list.
+     *
+     * @return The TFTP option list.
+     **/
+    OptionList & getOptions();
 
-		/**
-		 * @brief Sends the packet to the TFTp server.
-		 *
-		 * @param[in] packet
-		 *   The TFTP packet to send.
-		 **/
-		void send( const TftpPacket &packet);
+    /**
+     * @brief Sets the finished flag.
+     **/
+    void finished() noexcept;
 
-		/**
-		 * @brief Waits for an incoming response from the server.
-		 **/
-		void receiveFirst( void);
+    /**
+     * @brief Sends the packet to the TFTP server identified by its default
+     *   endpoint.
+     *
+     * @param[in] packet
+     *   The TFTP packet to send.
+     **/
+    void sendFirst( const TftpPacket &packet);
 
-		/**
-		 * @brief Waits for an incoming response from the server.
-		 **/
-		void receive( void);
+    /**
+     * @brief Sends the packet to the TFTp server.
+     *
+     * @param[in] packet
+     *   The TFTP packet to send.
+     **/
+    void send( const TftpPacket &packet);
 
-		/**
-		 * @brief Updates the maxReceivePacketSize value.
-		 *
-		 * This value is used to resize the packet buffer before starting a
-		 * receive operation. This value could be modified, e.g. during option
-		 * negotiation.
-		 *
-		 * @param[in] maxReceivePacketSize
-		 *   The new maxReceivePacketSize value.
-		 **/
-		void setMaxReceivePacketSize(
-			const uint16_t maxReceivePacketSize) noexcept;
+    /**
+     * @brief Waits for an incoming response from the server.
+     **/
+    void receiveFirst();
 
-		/**
-		 * @brief Update the receiveTimeout value.
-		 *
-		 * @param[in] receiveTimeout
-		 *   The new receive timeout.
-		 **/
-		void setReceiveTimeout( const uint8_t receiveTimeout) noexcept;
+    /**
+     * @brief Waits for an incoming response from the server.
+     **/
+    void receive();
 
-		/**
-		 * @copydoc TftpPacketHandler::handleReadRequestPacket()
-		 *
-		 * A read request packet is handled as failure. A error packet is sent
-		 * to the origin and the finished flag is set
-		 *
-		 * This operation always throws an CommunicationException.
-		 **/
-		virtual void handleReadRequestPacket(
-			const UdpAddressType &from,
-			const ReadRequestPacket &readRequestPacket) override final;
+    /**
+     * @brief Updates the maxReceivePacketSize value.
+     *
+     * This value is used to resize the packet buffer before starting a
+     * receive operation. This value could be modified, e.g. during option
+     * negotiation.
+     *
+     * @param[in] maxReceivePacketSize
+     *   The new maxReceivePacketSize value.
+     **/
+    void setMaxReceivePacketSize( uint16_t maxReceivePacketSize) noexcept;
 
-		/**
-		 * @copydoc TftpPacketHandler::handleWriteRequestPacket()
-		 *
-		 * A write request packet is handled as failure. A error packet is sent
-		 * to the origin and the finished flag is set
-		 **/
-		virtual void handleWriteRequestPacket(
-			const UdpAddressType &from,
-			const WriteRequestPacket &writeRequestPacket) override final;
+    /**
+     * @brief Update the receiveTimeout value.
+     *
+     * @param[in] receiveTimeout
+     *   The new receive timeout.
+     **/
+    void setReceiveTimeout( uint8_t receiveTimeout) noexcept;
 
-		/**
-		 * @copydoc TftpPacketHandler::handleErrorPacket()
-		 **/
-		virtual void handleErrorPacket(
-			const UdpAddressType &from,
-			const ErrorPacket &errorPacket) override final;
+    /**
+     * @copydoc TftpPacketHandler::handleReadRequestPacket()
+     *
+     * A read request packet is handled as failure. A error packet is sent
+     * to the origin and the finished flag is set
+     *
+     * This operation always throws an CommunicationException.
+     **/
+    virtual void handleReadRequestPacket(
+      const UdpAddressType &from,
+      const ReadRequestPacket &readRequestPacket) override final;
 
-		/**
-		 * @copydoc TftpPacketHandler::handleInvalidPacket()
-		 **/
-		virtual void handleInvalidPacket(
-			const UdpAddressType &from,
-			const RawTftpPacketType &rawPacket) override final;
+    /**
+     * @copydoc TftpPacketHandler::handleWriteRequestPacket()
+     *
+     * A write request packet is handled as failure. A error packet is sent
+     * to the origin and the finished flag is set
+     **/
+    virtual void handleWriteRequestPacket(
+      const UdpAddressType &from,
+      const WriteRequestPacket &writeRequestPacket) override final;
 
-	private:
-		/**
-		 * @brief Called, when data is received the first time.
-		 *
-		 * In case the first time a TFTP packet has been received, the source is
-		 * checked and the socket is connected to the final endpoint.
-		 *
-		 * @param[in] errorCode
-		 *   error status of operation.
-		 * @param[in] bytesTransferred
-		 *   Number of bytes transfered.
-		 **/
-		void receiveFirstHandler(
-			const boost::system::error_code& errorCode,
-			std::size_t bytesTransferred);
+    /**
+     * @copydoc TftpPacketHandler::handleErrorPacket()
+     **/
+    virtual void handleErrorPacket(
+      const UdpAddressType &from,
+      const ErrorPacket &errorPacket) override final;
 
-		/**
-		 * @brief Called, when data is received.
-		 *
-		 * @param[in] errorCode
-		 *   error status of operation.
-		 * @param[in] bytesTransferred
-		 *   Number of bytes transfered.
-		 **/
-		void receiveHandler(
-			const boost::system::error_code& errorCode,
-			std::size_t bytesTransferred);
+    /**
+     * @copydoc TftpPacketHandler::handleInvalidPacket()
+     **/
+    virtual void handleInvalidPacket(
+      const UdpAddressType &from,
+      const RawTftpPacketType &rawPacket) override final;
 
-		/**
-		 * @brief Called when no data is received for the first sent packet.
-		 *
-		 * If the retransmission counter has not exceeded, the last sent packet
-		 * is retransmitted.
-		 *
-		 * @param[in] errorCode
-		 *   error status of operation.
-		 **/
-		void timeoutFirstHandler( const boost::system::error_code& errorCode);
+  private:
+    /**
+     * @brief Called, when data is received the first time.
+     *
+     * In case the first time a TFTP packet has been received, the source is
+     * checked and the socket is connected to the final endpoint.
+     *
+     * @param[in] errorCode
+     *   error status of operation.
+     * @param[in] bytesTransferred
+     *   Number of bytes transfered.
+     **/
+    void receiveFirstHandler(
+      const boost::system::error_code& errorCode,
+      std::size_t bytesTransferred);
 
-		/**
-		 * @brief Called when no data is received for the sent packet.
-		 *
-		 * If the retransmission counter has not exceeded, the last sent packet
-		 * is retransmitted.
-		 *
-		 * @param[in] errorCode
-		 *   error status of operation.
-		 **/
-		void timeoutHandler(
-			const boost::system::error_code& errorCode);
+    /**
+     * @brief Called, when data is received.
+     *
+     * @param[in] errorCode
+     *   error status of operation.
+     * @param[in] bytesTransferred
+     *   Number of bytes transfered.
+     **/
+    void receiveHandler(
+      const boost::system::error_code& errorCode,
+      std::size_t bytesTransferred);
 
-		//! The internal TFTP client
-		const TftpClientInternal &tftpClientInternal;
-		//! The TFTP server endpoint
-		UdpAddressType remoteEndpoint;
-		//! The filename of the transfer
-		const string filename;
-		//! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
-		const TransferMode mode;
-		//! options for the transfer
-		OptionList options;
-		/**
-		 * The maximum size of a received TFTP packet. Defaults to
-		 * TftpPacket::DEFAULT_MAX_PACKET_SIZE.
-		 *
-		 * This value can be modified by calling setMaxReceivePacketSize(), e.g.
-		 * during option negotiation.
-		 **/
-		uint16_t maxReceivePacketSize;
-		//! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
-		uint8_t receiveTimeout;
+    /**
+     * @brief Called when no data is received for the first sent packet.
+     *
+     * If the retransmission counter has not exceeded, the last sent packet
+     * is retransmitted.
+     *
+     * @param[in] errorCode
+     *   error status of operation.
+     **/
+    void timeoutFirstHandler( const boost::system::error_code& errorCode);
 
-		//! The IO service, which handles the asynchronous receive operation
-		boost::asio::io_service ioService;
-		//! The TFTP socket
-		boost::asio::ip::udp::socket socket;
-		//! The receive timeout timer
-		boost::asio::deadline_timer timer;
+    /**
+     * @brief Called when no data is received for the sent packet.
+     *
+     * If the retransmission counter has not exceeded, the last sent packet
+     * is retransmitted.
+     *
+     * @param[in] errorCode
+     *   error status of operation.
+     **/
+    void timeoutHandler( const boost::system::error_code& errorCode);
 
-		//! The received packet data
-		RawTftpPacketType receivePacket;
-		//! The remote address
-		UdpAddressType receiveEndpoint;
-		//! The last transmitted packet
-		RawTftpPacketType transmitPacket;
-		//! Packet Type of last transmitted packet
-		PacketType transmitPacketType;
-		//! the retransmission counter
-		unsigned int transmitCounter;
+    //! The internal TFTP client
+    const TftpClientInternal &tftpClientInternal;
+    //! The TFTP server endpoint
+    UdpAddressType remoteEndpoint;
+    //! The filename of the transfer
+    const string filename;
+    //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
+    const TransferMode mode;
+    //! options for the transfer
+    OptionList options;
+    /**
+     * The maximum size of a received TFTP packet. Defaults to
+     * TftpPacket::DEFAULT_MAX_PACKET_SIZE.
+     *
+     * This value can be modified by calling setMaxReceivePacketSize(), e.g.
+     * during option negotiation.
+     **/
+    uint16_t maxReceivePacketSize;
+    //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
+    uint8_t receiveTimeout;
+
+    //! The IO service, which handles the asynchronous receive operation
+    boost::asio::io_service ioService;
+    //! The TFTP socket
+    boost::asio::ip::udp::socket socket;
+    //! The receive timeout timer
+    boost::asio::deadline_timer timer;
+
+    //! The received packet data
+    RawTftpPacketType receivePacket;
+    //! The remote address
+    UdpAddressType receiveEndpoint;
+    //! The last transmitted packet
+    RawTftpPacketType transmitPacket;
+    //! Packet Type of last transmitted packet
+    PacketType transmitPacketType;
+    //! the retransmission counter
+    unsigned int transmitCounter;
 };
 
 }

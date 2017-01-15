@@ -133,7 +133,7 @@ enum class PacketType : uint16_t
   ERROR                   = 5, //!< Error (ERROR)
   OPTIONS_ACKNOWLEDGEMENT = 6, //!< Options Acknowledgement (OACK)
 
-  INVALID                    //!< Invalid value
+  INVALID                      //!< Invalid value
 };
 
 //! Maximum size of data field in data package (without blksize option)
