@@ -36,7 +36,7 @@ namespace Client {
 class TftpClient;
 
 //! Declaration of TFTP client instance pointer
-typedef std::shared_ptr< TftpClient> TftpClientPtr;
+using TftpClientPtr = std::shared_ptr< TftpClient>;
 
 //! Declaration of TFTP client operation
 using TftpClientOperation = std::function< void()>;
