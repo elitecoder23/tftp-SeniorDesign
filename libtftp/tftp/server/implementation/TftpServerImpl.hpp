@@ -72,11 +72,10 @@ class TftpServerImpl:
     /**
      * @brief Destructor
      **/
-    virtual ~TftpServerImpl( void) noexcept;
+    virtual ~TftpServerImpl() noexcept;
 
     virtual void registerRequestHandler(
-      TftpRequestType requestType,
-      ReceivedTftpRequestHandler handler) override;
+      ReceivedTftpRequestHandler handler) override final;
 
     /**
      * @brief Starts the TFTP Server.
@@ -87,63 +86,63 @@ class TftpServerImpl:
      * The start routine will be leaved, when an FATAL error occurred or
      * the server has been stopped by calling stop().
      **/
-    virtual void start( void) override;
+    virtual void start() override;
 
     /**
      * @brief Stops the TFTP Server.
      **/
-    virtual void stop( void) override;
+    virtual void stop() override;
 
     //! @copydoc TftpServer::createReadRequestOperation(TftpTransmitDataOperationHandler&,const UdpAddressType&,const OptionList&,const UdpAddressType&)
     virtual TftpServerOperation createReadRequestOperation(
       TftpTransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions,
-      const UdpAddressType &serverAddress) override;
+      const UdpAddressType &serverAddress) override final;
 
     //! @copydoc TftpServer::createReadRequestOperation(TftpTransmitDataOperationHandler&,const UdpAddressType&,const OptionList&)
     virtual TftpServerOperation createReadRequestOperation(
       TftpTransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions) override;
+      const OptionList &clientOptions) override final;
 
     //! @copydoc TftpServer::createWriteRequestOperation(TftpReceiveDataOperationHandler&,const UdpAddressType&,const OptionList&,const UdpAddressType&)
     virtual TftpServerOperation createWriteRequestOperation(
       TftpReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions,
-      const UdpAddressType &serverAddress) override;
+      const UdpAddressType &serverAddress) override final;
 
     //! @copydoc TftpServer::createWriteRequestOperation(TftpReceiveDataOperationHandler&,const UdpAddressType&,const OptionList&)
     virtual TftpServerOperation createWriteRequestOperation(
       TftpReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions) override;
+      const OptionList &clientOptions) override final;
 
     //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,const UdpAddressType&,const ErrorCode,const string&)
     virtual TftpServerOperation createErrorOperation(
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
       const ErrorCode errorCode,
-      const string &errorMessage = string()) override;
+      const string &errorMessage = string()) override final;
 
     //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,const ErrorCode,const string&)
     virtual TftpServerOperation createErrorOperation(
       const UdpAddressType &clientAddress,
       const ErrorCode errorCode,
-      const string &errorMessage = string()) override;
+      const string &errorMessage = string()) override final;
 
     //! @copydoc TftpServerInternal::getConfiguration
-    virtual const TftpConfiguration& getConfiguration( void) const override final;
+    virtual const TftpConfiguration& getConfiguration() const override final;
 
     //! @copydoc TftpServerInternal::getOptionList
-    virtual const OptionList& getOptionList( void) const override final;
+    virtual const OptionList& getOptionList() const override final;
 
   private:
     /**
      * @brief Waits for an incoming response from the server.
      **/
-    void receive( void);
+    void receive();
 
     /**
      * @brief Called, when data is received.
@@ -230,10 +229,8 @@ class TftpServerImpl:
       const RawTftpPacketType &rawPacket) override final;
 
   private:
-    using HandlerMap = std::map< TftpRequestType, ReceivedTftpRequestHandler>;
-
     //! The registered handler
-    HandlerMap handlerMap;
+    ReceivedTftpRequestHandler handler;
     //! The TFTP configuration
     const TftpConfiguration configuration;
     //! The Server option list.

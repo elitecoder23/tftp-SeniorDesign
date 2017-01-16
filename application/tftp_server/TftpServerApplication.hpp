@@ -23,16 +23,6 @@
 #include <boost/application.hpp>
 #include <boost/program_options.hpp>
 
-using Tftp::TransferMode;
-using Tftp::TftpConfiguration;
-using Tftp::UdpAddressType;
-using Tftp::Server::NewRequestHandler;
-using Tftp::Server::TftpServer;
-using Tftp::Server::TftpServerPtr;
-using Tftp::Options::OptionList;
-
-using std::string;
-
 /**
  * @brief The TFTP server application.
  **/
@@ -52,16 +42,18 @@ class TftpServerApplication
     /**
      * @brief Destructor of the TFTP server application.
      **/
-    virtual ~TftpServerApplication( void) noexcept;
+    virtual ~TftpServerApplication() noexcept;
 
-    int operator()( void);
+    int operator()();
 
-    bool stop( void);
+    bool stop();
 
   private:
-    bool handleCommandLine( void);
+    using string = std::string;
 
-    void shutdown( void);
+    bool handleCommandLine();
+
+    void shutdown();
 
     /**
      * @brief
@@ -75,20 +67,12 @@ class TftpServerApplication
     /**
      *
      **/
-    void receivedReadRequest(
-      const UdpAddressType &from,
+    void receivedRequest(
+      Tftp::TftpRequestType requestType,
+      const Tftp::UdpAddressType &from,
       const string &filename,
-      TransferMode mode,
-      const OptionList &options);
-
-    /**
-     *
-     **/
-    void receivedWriteRequest(
-      const UdpAddressType &from,
-      const string &filename,
-      TransferMode mode,
-      const OptionList &options);
+      Tftp::TransferMode mode,
+      const Tftp::Options::OptionList &options);
 
     boost::application::context &context;
     boost::program_options::options_description optionsDescription;
@@ -96,9 +80,9 @@ class TftpServerApplication
     //! base directory of TFTP server
     boost::filesystem::path baseDir;
     //! The TFTP configuration
-    TftpConfiguration configuration;
+    Tftp::TftpConfiguration configuration;
     //! The TFTP server instance
-    TftpServerPtr server;
+    Tftp::Server::TftpServerPtr server;
 };
 
 #endif

@@ -29,9 +29,7 @@
 #include <iostream>
 #include <memory>
 
-using Tftp::File::StreamFile;
 using Tftp::TftpException;
-using Tftp::UdpAddressType;
 using Tftp::Server::TftpServerOperation;
 
 TftpServerApplication::TftpServerApplication(
@@ -54,11 +52,11 @@ TftpServerApplication::TftpServerApplication(
   optionsDescription.add( configuration.getOptions());
 }
 
-TftpServerApplication::~TftpServerApplication( void) noexcept
+TftpServerApplication::~TftpServerApplication() noexcept
 {
 }
 
-int TftpServerApplication::operator()( void)
+int TftpServerApplication::operator()()
 {
   try
   {
@@ -73,26 +71,18 @@ int TftpServerApplication::operator()( void)
       << " on port " << configuration.tftpServerPort;
 
     // The TFTP server instance
-    server = TftpServer::createInstance(
+    server = Tftp::Server::TftpServer::createInstance(
       configuration,
       Tftp::Options::OptionList(),
-      UdpAddressType( boost::asio::ip::address_v4::any(), configuration.tftpServerPort));
+      Tftp::UdpAddressType(
+        boost::asio::ip::address_v4::any(),
+        configuration.tftpServerPort));
 
     server->registerRequestHandler(
-      Tftp::TftpRequestType::ReadRequest,
       std::bind(
-        &TftpServerApplication::receivedReadRequest,
+        &TftpServerApplication::receivedRequest,
         this,
-        std::placeholders::_2,
-        std::placeholders::_3,
-        std::placeholders::_4,
-        std::placeholders::_5));
-
-    server->registerRequestHandler(
-      Tftp::TftpRequestType::WriteRequest,
-      std::bind(
-        &TftpServerApplication::receivedWriteRequest,
-        this,
+        std::placeholders::_1,
         std::placeholders::_2,
         std::placeholders::_3,
         std::placeholders::_4,
@@ -125,7 +115,7 @@ int TftpServerApplication::operator()( void)
 
 }
 
-bool TftpServerApplication::stop( void)
+bool TftpServerApplication::stop()
 {
   std::cout << "Termination request" << std::endl;
 
@@ -134,7 +124,7 @@ bool TftpServerApplication::stop( void)
   return true;
 }
 
-bool TftpServerApplication::handleCommandLine( void)
+bool TftpServerApplication::handleCommandLine()
 {
   try
   {
@@ -185,17 +175,18 @@ void TftpServerApplication::checkFilename( const boost::filesystem::path &filena
   }
 }
 
-void TftpServerApplication::receivedReadRequest(
-  const UdpAddressType &from,
+void TftpServerApplication::receivedRequest(
+  const Tftp::TftpRequestType requestType,
+  const Tftp::UdpAddressType &from,
   const string &filename,
-  TransferMode mode,
-  const OptionList &options)
+  const Tftp::TransferMode mode,
+  const Tftp::Options::OptionList &options)
 {
   BOOST_LOG_TRIVIAL( info) << "RRQ: " << filename << " from: "
     << from.address().to_string();
 
   // Check transfer mode
-  if ( mode != TransferMode::OCTET)
+  if ( mode != Tftp::TransferMode::OCTET)
   {
     BOOST_LOG_TRIVIAL( error) << "Wrong transfer mode";
 
@@ -230,113 +221,76 @@ void TftpServerApplication::receivedReadRequest(
     return;
   }
 
-  // open requested file
-  std::fstream fileStream( filename.c_str(), std::fstream::in);
+  std::fstream fileStream;
+  Tftp::File::StreamFile file( fileStream);
+  TftpServerOperation operation;
 
-  // check that file was opened successfully
-  if ( !fileStream.good())
+  switch (requestType)
   {
-    BOOST_LOG_TRIVIAL( error) << "Error opening file";
+    case Tftp::TftpRequestType::ReadRequest:
+      // open requested file
+      fileStream.open( filename.c_str(), std::fstream::in);
 
-    TftpServerOperation operation = server->createErrorOperation(
-      from,
-      Tftp::ErrorCode::FILE_NOT_FOUND,
-      "file not found");
+      // check that file was opened successfully
+      if ( !fileStream.good())
+      {
+        BOOST_LOG_TRIVIAL( error) << "Error opening file";
 
-    operation();
+        TftpServerOperation operation = server->createErrorOperation(
+          from,
+          Tftp::ErrorCode::FILE_NOT_FOUND,
+          "file not found");
 
-    return;
+        operation();
+
+        return;
+      }
+
+      file.setSize( boost::filesystem::file_size( filename));
+
+      // initiate TFTP operation
+      operation = server->createReadRequestOperation(
+        file,
+        from,
+        options);
+      break;
+
+    case Tftp::TftpRequestType::WriteRequest:
+      // open requested file
+      fileStream.open(
+        filename.c_str(),
+        std::fstream::out | std::fstream::trunc);
+
+      // check that file was opened successfully
+      if ( !fileStream.good())
+      {
+        BOOST_LOG_TRIVIAL( error) << "Error opening file";
+
+        TftpServerOperation operation = server->createErrorOperation(
+          from,
+          Tftp::ErrorCode::ACCESS_VIOLATION);
+
+        operation();
+
+        return;
+      }
+
+      // initiate TFTP operation
+      operation = server->createWriteRequestOperation(
+        file,
+        from,
+        options);
+      break;
+
+    default:
+      return;
   }
-
-  StreamFile file( fileStream, boost::filesystem::file_size( filename));
-
-  // initiate TFTP operation
-  TftpServerOperation operation = server->createReadRequestOperation(
-    file,
-    from,
-    options);
 
   // executes the TFTP operation
   operation();
 }
 
-void TftpServerApplication::receivedWriteRequest(
-  const UdpAddressType &from,
-  const string &filename,
-  TransferMode mode,
-  const OptionList &options)
-{
-  BOOST_LOG_TRIVIAL( info) << "RRQ: " << filename << " from: "
-    << from.address().to_string();
-
-  //! Check transfer mode
-  if ( mode != TransferMode::OCTET)
-  {
-    BOOST_LOG_TRIVIAL( error) << "Wrong transfer mode";
-
-    TftpServerOperation operation = server->createErrorOperation(
-      from,
-      Tftp::ErrorCode::ILLEGAL_TFTP_OPERATION,
-      "wrong transfer mode");
-
-    operation();
-
-    return;
-  }
-
-  try
-  {
-    checkFilename( baseDir / filename);
-  }
-  catch ( TftpException &e)
-  {
-    std::string const * info = boost::get_error_info < AdditionalInfo > (e);
-
-    BOOST_LOG_TRIVIAL( error) << "Error filename check: "
-      << ((0 == info) ? "Unknown" : *info);
-
-    TftpServerOperation operation = server->createErrorOperation(
-      from,
-      Tftp::ErrorCode::ACCESS_VIOLATION,
-      e.what());
-
-    operation();
-
-    return;
-  }
-
-  // open requested file
-  std::fstream fileStream(
-    filename.c_str(),
-    std::fstream::out | std::fstream::trunc);
-
-  // check that file was opened successfully
-  if ( !fileStream.good())
-  {
-    BOOST_LOG_TRIVIAL( error) << "Error opening file";
-
-    TftpServerOperation operation = server->createErrorOperation(
-      from,
-      Tftp::ErrorCode::ACCESS_VIOLATION);
-
-    operation();
-
-    return;
-  }
-
-  StreamFile file( fileStream);
-
-  // initiate TFTP operation
-  TftpServerOperation operation = server->createWriteRequestOperation(
-    file,
-    from,
-    options);
-
-  // executes the TFTP operation
-  operation();
-}
-
-void TftpServerApplication::shutdown( void)
+void TftpServerApplication::shutdown()
 {
   server->stop();
 }

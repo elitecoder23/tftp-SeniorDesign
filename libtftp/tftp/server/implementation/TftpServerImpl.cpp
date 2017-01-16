@@ -88,11 +88,9 @@ TftpServerImpl::~TftpServerImpl() noexcept
   }
 }
 
-void TftpServerImpl::registerRequestHandler(
-  TftpRequestType requestType,
-  ReceivedTftpRequestHandler handler)
+void TftpServerImpl::registerRequestHandler( ReceivedTftpRequestHandler handler)
 {
-  handlerMap.insert( std::make_pair( requestType, handler));
+  this->handler = handler;
 }
 
 void TftpServerImpl::start()
@@ -293,10 +291,8 @@ void TftpServerImpl::handleReadRequestPacket(
 {
   BOOST_LOG_TRIVIAL( info)<< "RX: " << readRequestPacket.toString();
 
-  // find handler for RRQ
-  HandlerMap::iterator handler = handlerMap.find( TftpRequestType::ReadRequest);
-
-  if (handler == handlerMap.end())
+  // check handler
+  if (!handler)
   {
     BOOST_LOG_TRIVIAL( info) <<
     "No registered handler - reject";
@@ -311,7 +307,7 @@ void TftpServerImpl::handleReadRequestPacket(
   }
 
   // call the handler, which handles the received request
-  handler->second(
+  handler(
     TftpRequestType::ReadRequest,
     from,
     readRequestPacket.getFilename(),
@@ -325,10 +321,8 @@ void TftpServerImpl::handleWriteRequestPacket(
 {
   BOOST_LOG_TRIVIAL( info)<< "RX: " << writeRequestPacket.toString();
 
-  // find handler for RRQ
-  HandlerMap::iterator handler = handlerMap.find( TftpRequestType::WriteRequest);
-
-  if (handler == handlerMap.end())
+  // check handler
+  if (!handler)
   {
     BOOST_LOG_TRIVIAL( info) << "No registered handler - reject";
 
@@ -342,7 +336,7 @@ void TftpServerImpl::handleWriteRequestPacket(
   }
 
   // call the handler, which handles the received request
-  handler->second(
+  handler(
     TftpRequestType::WriteRequest,
     from,
     writeRequestPacket.getFilename(),

@@ -77,17 +77,11 @@ class TftpServer
     /**
      * @brief Registers a TFTP request handler.
      *
-     * @param[in] requestType
-     *   The request type for which the handler shall be registered.
      * @param[in] handler
      *   The request handler.
-     *
-     * @todo Why differentiate between RRQ/WRQ -> this could be handled by client
-     * @todo Set handler defaulted to 0 -> automatically de-registers.
      **/
     virtual void registerRequestHandler(
-      TftpRequestType requestType,
-      ReceivedTftpRequestHandler handler) = 0;
+      ReceivedTftpRequestHandler handler = ReceivedTftpRequestHandler()) = 0;
 
     /**
      * @brief Starts the TFTP Server.
