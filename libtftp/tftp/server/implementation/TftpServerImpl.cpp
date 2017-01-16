@@ -73,7 +73,7 @@ catch ( boost::system::system_error &err)
       << TftpTransferPhaseInfo( TftpTransferPhase::TFTP_PHASE_INITIALIZATION));
 }
 
-TftpServerImpl::~TftpServerImpl( void) noexcept
+TftpServerImpl::~TftpServerImpl() noexcept
 {
   try
   {
@@ -95,16 +95,26 @@ void TftpServerImpl::registerRequestHandler(
   handlerMap.insert( std::make_pair( requestType, handler));
 }
 
-void TftpServerImpl::start( void)
+void TftpServerImpl::start()
 {
-  // start receive
-  receive();
+  try
+  {
+    // start receive
+    receive();
 
-  // the server loop
-  ioService.run();
+    // the server loop
+    ioService.run();
+  }
+  catch (boost::system::system_error &err)
+  {
+    // only internal error are handled by this exception
+    BOOST_THROW_EXCEPTION( TftpException() <<
+      AdditionalInfo( err.what()));
+  }
+
 }
 
-void TftpServerImpl::stop( void)
+void TftpServerImpl::stop()
 {
   // cancel receive operation
   socket.cancel();
@@ -126,7 +136,7 @@ TftpServerOperation TftpServerImpl::createReadRequestOperation(
     clientOptions,
     serverAddress);
 
-  return std::bind( &TftpServerReadRequestOperationImpl::operator (), operation);
+  return std::bind( &TftpServerReadRequestOperationImpl::operator(), operation);
 }
 
 TftpServerOperation TftpServerImpl::createReadRequestOperation(
@@ -140,7 +150,7 @@ TftpServerOperation TftpServerImpl::createReadRequestOperation(
     clientAddress,
     clientOptions);
 
-  return std::bind( &TftpServerReadRequestOperationImpl::operator (), operation);
+  return std::bind( &TftpServerReadRequestOperationImpl::operator(), operation);
 }
 
 TftpServerOperation TftpServerImpl::createWriteRequestOperation(
@@ -157,7 +167,7 @@ TftpServerOperation TftpServerImpl::createWriteRequestOperation(
     serverAddress);
 
   return std::bind(
-    &TftpServerWriteRequestOperationImpl::operator (),
+    &TftpServerWriteRequestOperationImpl::operator(),
     operation);
 }
 
@@ -173,7 +183,7 @@ TftpServerOperation TftpServerImpl::createWriteRequestOperation(
     clientOptions);
 
   return std::bind(
-    &TftpServerWriteRequestOperationImpl::operator (),
+    &TftpServerWriteRequestOperationImpl::operator(),
     operation);
 }
 
@@ -189,7 +199,7 @@ TftpServerOperation TftpServerImpl::createErrorOperation(
     errorCode,
     errorMessage);
 
-  return std::bind( &TftpServerErrorOperation::operator (), operation);
+  return std::bind( &TftpServerErrorOperation::operator(), operation);
 }
 
 TftpServerOperation TftpServerImpl::createErrorOperation(
@@ -202,20 +212,20 @@ TftpServerOperation TftpServerImpl::createErrorOperation(
     errorCode,
     errorMessage);
 
-  return std::bind( &TftpServerErrorOperation::operator (), operation);
+  return std::bind( &TftpServerErrorOperation::operator(), operation);
 }
 
-const Tftp::TftpConfiguration& TftpServerImpl::getConfiguration( void) const
+const Tftp::TftpConfiguration& TftpServerImpl::getConfiguration() const
 {
   return configuration;
 }
 
-const OptionList& TftpServerImpl::getOptionList( void) const
+const OptionList& TftpServerImpl::getOptionList() const
 {
   return options;
 }
 
-void TftpServerImpl::receive( void)
+void TftpServerImpl::receive()
 {
   try
   {

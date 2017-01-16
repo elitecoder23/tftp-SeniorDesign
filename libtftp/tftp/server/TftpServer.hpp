@@ -81,6 +81,9 @@ class TftpServer
      *   The request type for which the handler shall be registered.
      * @param[in] handler
      *   The request handler.
+     *
+     * @todo Why differentiate between RRQ/WRQ -> this could be handled by client
+     * @todo Set handler defaulted to 0 -> automatically de-registers.
      **/
     virtual void registerRequestHandler(
       TftpRequestType requestType,
@@ -210,7 +213,7 @@ class TftpServer
       const string &errorMessage = string()) = 0;
 
   protected:
-    TftpServer( void) = default;
+    TftpServer() = default;
 };
 
 }
