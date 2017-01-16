@@ -11,7 +11,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @briefDefinition of unit tests of class Tftp::Packet::ReadRequestPacket.
+ * @brief Definition of unit tests of class Tftp::Packet::ReadRequestPacket.
  **/
 
 #include <boost/test/unit_test.hpp>

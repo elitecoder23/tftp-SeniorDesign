@@ -11,7 +11,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of uint tests of TFTP packet classes
+ * @brief Definition of unit tests of TFTP packet classes
  **/
 
 #include <tftp/packet/AcknowledgementPacket.hpp>
@@ -30,6 +30,8 @@ BOOST_AUTO_TEST_SUITE( TftpAcknowledgementPacket)
 BOOST_AUTO_TEST_CASE( constructor )
 {
   AcknowledgementPacket ack( 10);
+  BOOST_CHECK( PacketType::ACKNOWLEDGEMENT == ack.getPacketType());
+  BOOST_CHECK( 10 == ack.getBlockNumber());
 
   RawTftpPacketType raw = ack.encode();
 
