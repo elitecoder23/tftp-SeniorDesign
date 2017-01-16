@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class Tftp::File::MemoryFile
@@ -36,30 +38,30 @@ MemoryFile::MemoryFile( DataType &&data):
 {
 }
 
-const MemoryFile::DataType& MemoryFile::getData( void) const noexcept
+const MemoryFile::DataType& MemoryFile::getData() const noexcept
 {
 	return data;
 }
 
-void MemoryFile::finishedOperation( void) noexcept
+void MemoryFile::finishedOperation() noexcept
 {
 	dataPtr = data.begin();
 }
 
 bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
 {
-	BOOST_LOG_TRIVIAL( info) << "Received transfer size: " << transferSize;
-	return true;
+  BOOST_LOG_TRIVIAL( info) << "Received transfer size: " << transferSize;
+  return true;
 }
 
 void MemoryFile::receviedData( const DataType &data) noexcept
 {
-	this->data.insert(
-		this->data.end(),
-		data.begin(),
-		data.end());
+  this->data.insert(
+    this->data.end(),
+    data.begin(),
+    data.end());
 
-	dataPtr = this->data.begin();
+  dataPtr = this->data.begin();
 }
 
 bool MemoryFile::requestedTransferSize( uint64_t &transferSize)
@@ -68,26 +70,26 @@ bool MemoryFile::requestedTransferSize( uint64_t &transferSize)
 	return true;
 }
 
-MemoryFile::DataType MemoryFile::sendData( const unsigned int maxSize) noexcept
+MemoryFile::DataType MemoryFile::sendData( const size_t maxSize) noexcept
 {
-	DataType::const_iterator startPtr = dataPtr;
-	DataType::const_iterator endPtr;
+  DataType::const_iterator startPtr = dataPtr;
+  DataType::const_iterator endPtr;
 
-	if ( static_cast< unsigned int>(
-		std::distance< DataType::const_iterator>(
-			startPtr,
-			data.end())) <= maxSize)
-	{
-		endPtr = data.end();
-	}
-	else
-	{
-		endPtr = dataPtr+maxSize;
-	}
+  if ( static_cast< unsigned int>(
+    std::distance< DataType::const_iterator>(
+      startPtr,
+      data.end())) <= maxSize)
+  {
+    endPtr = data.end();
+  }
+  else
+  {
+    endPtr = dataPtr+maxSize;
+  }
 
-	dataPtr=endPtr;
+  dataPtr=endPtr;
 
-	return DataType( startPtr, endPtr);
+  return DataType( startPtr, endPtr);
 }
 
 }

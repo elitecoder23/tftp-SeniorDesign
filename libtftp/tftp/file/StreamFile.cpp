@@ -22,28 +22,19 @@ namespace Tftp {
 namespace File {
 
 StreamFile::StreamFile( std::iostream &stream) :
-  stream( stream),
-  hasSize( false),
-  size( 0)
+  stream( stream)
 {
 }
 
 StreamFile::StreamFile( std::iostream &stream, const size_t size) :
   stream( stream),
-  hasSize( true),
   size( size)
 {
 }
 
-size_t StreamFile::getSize() const
-{
-  return size;
-}
-
-void StreamFile::setSize( const size_t size)
+void StreamFile::setSize( const size_t size) noexcept
 {
   this->size = size;
-  this->hasSize = true;
 }
 
 void StreamFile::finishedOperation() noexcept
@@ -54,7 +45,7 @@ void StreamFile::finishedOperation() noexcept
 bool StreamFile::receivedTransferSize( const uint64_t transferSize)
 {
   // If no size is provided
-  if ( !hasSize)
+  if ( !size)
   {
     // Always accept file based on size
     return true;
@@ -71,11 +62,11 @@ void StreamFile::receviedData( const DataType &data) noexcept
 
 bool StreamFile::requestedTransferSize( uint64_t &transferSize)
 {
-  transferSize = size;
-  return hasSize;
+  transferSize = size.value_or( 0);
+  return size.is_initialized();
 }
 
-StreamFile::DataType StreamFile::sendData( const unsigned int maxSize) noexcept
+StreamFile::DataType StreamFile::sendData( const size_t maxSize) noexcept
 {
   DataType data( maxSize);
 

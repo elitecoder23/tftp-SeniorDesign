@@ -18,6 +18,9 @@
 #define TFTP_FILE_STREAMFILE_HPP
 
 #include <tftp/file/TftpFile.hpp>
+
+#include <boost/optional.hpp>
+
 #include <iostream>
 
 namespace Tftp {
@@ -50,9 +53,13 @@ class StreamFile: public TftpFile
      **/
     StreamFile( std::iostream &stream, size_t size);
 
-    size_t getSize() const;
-
-    void setSize( size_t size);
+    /**
+     * @brief updates the file size info.
+     *
+     * @param[in] size
+     *   The new size information
+     **/
+    void setSize( size_t size) noexcept;
 
     /**
      * @copydoc TftpFile::finishedOperation()
@@ -77,14 +84,13 @@ class StreamFile: public TftpFile
     /**
      * @copydoc TftpFile::sendData()
      **/
-    virtual DataType sendData( unsigned int maxSize) noexcept override final;
+    virtual DataType sendData( size_t maxSize) noexcept override final;
 
   private:
     //! the data stream
     std::iostream &stream;
-    //! @todo make this boost::optional
-    bool hasSize;
-    size_t size;
+    //! file size
+    boost::optional< size_t> size;
 };
 
 }

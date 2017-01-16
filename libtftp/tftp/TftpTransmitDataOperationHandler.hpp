@@ -61,7 +61,7 @@ class TftpTransmitDataOperationHandler: public TftpOperationHandler
      *
      * @return The data, which will be transmitted.
      **/
-    virtual DataType sendData( const unsigned int maxSize) noexcept = 0;
+    virtual DataType sendData( size_t maxSize) noexcept = 0;
 };
 
 }

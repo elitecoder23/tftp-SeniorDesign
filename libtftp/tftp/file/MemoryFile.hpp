@@ -31,7 +31,7 @@ class MemoryFile: public TftpFile
      *
      * This constructor is useful for receiving data.
      **/
-    MemoryFile( void);
+    MemoryFile();
 
     /**
      * @brief Creates a memory file with the given data.
@@ -83,7 +83,7 @@ class MemoryFile: public TftpFile
     /**
      * @copydoc TftpFile::sendData()
      **/
-    virtual DataType sendData( unsigned int maxSize) noexcept override final;
+    virtual DataType sendData( size_t maxSize) noexcept override final;
 
   private:
     //! the data
