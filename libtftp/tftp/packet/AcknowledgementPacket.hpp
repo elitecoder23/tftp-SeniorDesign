@@ -66,7 +66,7 @@ class AcknowledgementPacket: public TftpPacket
 		 *
 		 * @return The block number.
 		 **/
-		BlockNumber getBlockNumber( void) const;
+		BlockNumber getBlockNumber() const;
 
 		/**
 		 * @brief Sets the block number of the packet.
@@ -77,10 +77,10 @@ class AcknowledgementPacket: public TftpPacket
 		void setBlockNumber( const BlockNumber blockBumber);
 
 		//! @copydoc TftpPacket::encode()
-		virtual RawTftpPacketType encode( void) const override;
+		virtual RawTftpPacketType encode() const override;
 
 		//! @copydoc TftpPacket::toString()
-		virtual string toString( void) const override;
+		virtual string toString() const override;
 
 	private:
 		//! Block number of the packet

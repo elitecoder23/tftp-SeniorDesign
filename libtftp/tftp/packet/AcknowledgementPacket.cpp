@@ -34,7 +34,7 @@ AcknowledgementPacket::AcknowledgementPacket(
 	const RawTftpPacketType &rawPacket):
 	TftpPacket( PacketType::ACKNOWLEDGEMENT, rawPacket)
 {
-	//! check size
+	// check size
 	if (rawPacket.size() != 4)
 	{
 		//! @throw InvalidPacketException When packet size is invalid
@@ -44,11 +44,11 @@ AcknowledgementPacket::AcknowledgementPacket(
 
 	RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
 
-	//! decode block number
+	// decode block number
 	getInt< uint16_t>( packetIt, blockNumber);
 }
 
-BlockNumber AcknowledgementPacket::getBlockNumber( void) const
+BlockNumber AcknowledgementPacket::getBlockNumber() const
 {
 	return blockNumber;
 }
@@ -58,22 +58,22 @@ void AcknowledgementPacket::setBlockNumber( const BlockNumber blockBumber)
 	this->blockNumber = blockBumber;
 }
 
-Tftp::RawTftpPacketType AcknowledgementPacket::encode( void) const
+Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
 {
 	RawTftpPacketType rawPacket( 4);
 
-	//! insert header data
+	// insert header data
 	insertHeader( rawPacket);
 
 	RawTftpPacketType::iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
 
-	//! Add block number
+	// Add block number
 	setInt( packetIt, static_cast< const uint16_t>( blockNumber));
 
 	return rawPacket;
 }
 
-AcknowledgementPacket::string AcknowledgementPacket::toString( void) const
+AcknowledgementPacket::string AcknowledgementPacket::toString() const
 {
 	return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
 }
