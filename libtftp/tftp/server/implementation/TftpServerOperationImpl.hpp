@@ -32,8 +32,6 @@
 namespace Tftp {
 namespace Server {
 
-using Tftp::Options::OptionList;
-
 class TftpServerInternal;
 
 /**
@@ -45,7 +43,8 @@ class TftpServerInternal;
 class TftpServerOperationImpl: protected TftpPacketHandler
 {
   protected:
-    using TftpPacket = Tftp::Packet::TftpPacket;
+    using OptionList = Options::OptionList;
+    using TftpPacket = Packet::TftpPacket;
 
     /**
      * @brief Initialises the TFTP server operation.
@@ -83,9 +82,9 @@ class TftpServerOperationImpl: protected TftpPacketHandler
     /**
      * @brief default destructor.
      **/
-    virtual ~TftpServerOperationImpl( void) noexcept;
+    virtual ~TftpServerOperationImpl() noexcept;
 
-    virtual void operator ()( void);
+    virtual void operator ()();
 
     /**
      * @brief Sets the Finished flag.
@@ -93,7 +92,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      * This operation is called, when the last packet has been received or
      * transmitted to stop the receive loop.
      **/
-    void finished( void) noexcept;
+    void finished() noexcept;
 
     /**
      * @brief Sends the given packet to the client.
@@ -108,14 +107,14 @@ class TftpServerOperationImpl: protected TftpPacketHandler
     /**
      * @brief receives a packet and calls the packet handlers
      **/
-    void receive( void);
+    void receive();
 
     /**
      * @brief Returns the stored TFTP option list.
      *
      * @return The stored TFTP option list.
      **/
-    OptionList& getOptions( void);
+    OptionList& getOptions();
 
     /**
      * @brief Updates the limit of maximum packet size for the receive
@@ -130,7 +129,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      * @param[in] maxReceivePacketSize
      *   The new maximum packet size for receive operation.
      **/
-    void setMaxReceivePacketSize( const uint16_t maxReceivePacketSize);
+    void setMaxReceivePacketSize( uint16_t maxReceivePacketSize);
 
     /**
      * @brief Update the receiveTimeout value.
@@ -138,7 +137,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      * @param[in] receiveTimeout
      *   The new receive timeout.
      **/
-    void setReceiveTimeout( const uint8_t receiveTimeout);
+    void setReceiveTimeout( uint8_t receiveTimeout);
 
     /**
      * @copydoc TftpPacketHandler::handleReadRequestPacket

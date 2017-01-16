@@ -30,92 +30,97 @@ OptionList::OptionList( void)
 }
 
 OptionList::OptionList(
-	RawOptionsType::const_iterator begin,
-	RawOptionsType::const_iterator end)
+  RawOptionsType::const_iterator begin,
+  RawOptionsType::const_iterator end)
 {
-	while (begin != end)
-	{
-		//! @todo add throw of exception
-		RawOptionsType::const_iterator nameBegin = begin;
-		RawOptionsType::const_iterator nameEnd = std::find( nameBegin, end, 0);
+  while (begin != end)
+  {
+    //! @todo add throw of exception
+    RawOptionsType::const_iterator nameBegin = begin;
+    RawOptionsType::const_iterator nameEnd = std::find( nameBegin, end, 0);
 
-		if (nameEnd==end)
-		{
-		  //! @throw InvalidPacketException on Unexpected end of input data
-		  BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-		    AdditionalInfo( "Unexpected end of input data"));
-		}
-
-		RawOptionsType::const_iterator valueBegin = nameEnd + 1;
-
-		if (valueBegin == end)
-		{
+    if (nameEnd==end)
+    {
       //! @throw InvalidPacketException on Unexpected end of input data
       BOOST_THROW_EXCEPTION( InvalidPacketException() <<
         AdditionalInfo( "Unexpected end of input data"));
-		}
+    }
 
-		RawOptionsType::const_iterator valueEnd = std::find( valueBegin, end, 0);
+    RawOptionsType::const_iterator valueBegin = nameEnd + 1;
 
-		if (valueEnd == end)
-		{
+    if (valueBegin == end)
+    {
       //! @throw InvalidPacketException on Unexpected end of input data
       BOOST_THROW_EXCEPTION( InvalidPacketException() <<
         AdditionalInfo( "Unexpected end of input data"));
-		}
+    }
 
-		string name( nameBegin, nameEnd);
-		string value( valueBegin, valueEnd);
+    RawOptionsType::const_iterator valueEnd = std::find( valueBegin, end, 0);
 
-		// insert option as string option
-		options.insert( std::make_pair(
-			name,
-			std::make_shared< StringOption>( name, value)));
+    if (valueEnd == end)
+    {
+      //! @throw InvalidPacketException on Unexpected end of input data
+      BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+        AdditionalInfo( "Unexpected end of input data"));
+    }
 
-		begin = valueEnd + 1;
-	}
+    string name( nameBegin, nameEnd);
+    string value( valueBegin, valueEnd);
+
+    // insert option as string option
+    options.insert( std::make_pair(
+      name,
+      std::make_shared< StringOption>( name, value)));
+
+    begin = valueEnd + 1;
+  }
 }
 
-const OptionList::OptionMap& OptionList::getOptions( void) const
+bool OptionList::hasOptions() const
 {
-	return options;
+  return !options.empty();
 }
 
-OptionList::OptionMap& OptionList::getOptions( void)
+const OptionList::OptionMap& OptionList::getOptions() const
 {
-	return options;
+  return options;
 }
 
-OptionList::RawOptionsType OptionList::getRawOptions( void) const
+OptionList::OptionMap& OptionList::getOptions()
 {
-	size_t optionsSize = 0;
+  return options;
+}
 
-	// Calculate size of parameter list
-	for ( const auto &option : options)
-	{
-		optionsSize +=
-			option.first.length() + 1 + option.second->getValueString().length() + 1;
-	}
+OptionList::RawOptionsType OptionList::getRawOptions() const
+{
+  size_t optionsSize = 0;
 
-	RawOptionsType rawOptions( optionsSize);
-	RawOptionsType::iterator rawIt = rawOptions.begin();
+  // Calculate size of parameter list
+  for ( const auto &option : options)
+  {
+    optionsSize +=
+      option.first.length() + 1 + option.second->getValueString().length() + 1;
+  }
 
-	// copy options
-	for ( const auto &option : options)
-	{
-		// option name
-		rawIt = std::copy( option.first.begin(), option.first.end(), rawIt);
-		*rawIt = 0;
-		++rawIt;
+  RawOptionsType rawOptions( optionsSize);
+  RawOptionsType::iterator rawIt = rawOptions.begin();
 
-		// option value
-		std::string value = option.second->getValueString();
-		rawIt = std::copy( value.begin(), value.end(), rawIt);
-		*rawIt = 0;
-		++rawIt;
-	}
+  // copy options
+  for ( const auto &option : options)
+  {
+    // option name
+    rawIt = std::copy( option.first.begin(), option.first.end(), rawIt);
+    *rawIt = 0;
+    ++rawIt;
 
-	return rawOptions;
+    // option value
+    const std::string value( option.second->getValueString());
+    rawIt = std::copy( value.begin(), value.end(), rawIt);
+    *rawIt = 0;
+    ++rawIt;
+  }
+
+  return rawOptions;
 }
 
 void OptionList::setOptions( const OptionMap &options)
@@ -125,17 +130,19 @@ void OptionList::setOptions( const OptionMap &options)
 
 bool OptionList::hasOption( const string &name) const
 {
-	return options.count( name) >= 1;
+  return options.count( name) >= 1;
 }
 
 bool OptionList::hasOption( const TftpOptions option) const
 {
-	string optionName = Option::getOptionName( option);
+  string optionName = Option::getOptionName( option);
 
-	if (optionName.empty())
-		return false;
+  if ( optionName.empty())
+  {
+    return false;
+  }
 
-	return hasOption( optionName);
+  return hasOption( optionName);
 }
 
 const OptionList::OptionPointer OptionList::getOption( const string &name) const
@@ -291,110 +298,110 @@ void OptionList::addTimeoutOption(
 
 uint16_t OptionList::getTimeoutOption( void) const
 {
-	OptionMap::const_iterator optionIt = options.find(
-		Option::getOptionName( TftpOptions::TIMEOUT));
+  OptionMap::const_iterator optionIt = options.find(
+    Option::getOptionName( TftpOptions::TIMEOUT));
 
-	// option not set
-	if (optionIt == options.end())
-		return 0;
+  // option not set
+  if (optionIt == options.end())
+    return 0;
 
-	const IntegerOption< uint16_t>* integerOption =
-		dynamic_cast< const IntegerOption< uint16_t>*>(
-			optionIt->second.get());
+  const IntegerOption< uint16_t>* integerOption =
+    dynamic_cast< const IntegerOption< uint16_t>*>(
+      optionIt->second.get());
 
-	// invalid cast
-	if (!integerOption)
-		return 0;
+  // invalid cast
+  if (!integerOption)
+    return 0;
 
-	return integerOption->getValue();
+  return integerOption->getValue();
 }
 
 void OptionList::addTransferSizeOption( const uint64_t transferSize)
 {
-	OptionPointer entry = OptionPointer(
-		new IntegerOption< uint64_t>(
-			Option::getOptionName( TftpOptions::TRANSFER_SIZE),
-			0,
-			std::numeric_limits< uint64_t>::max(),
-			transferSize));
+  OptionPointer entry = OptionPointer(
+    new IntegerOption< uint64_t>(
+      Option::getOptionName( TftpOptions::TRANSFER_SIZE),
+      0,
+      std::numeric_limits< uint64_t>::max(),
+      transferSize));
 
-	setOption( entry);
+  setOption( entry);
 }
 
-void OptionList::addTransferSizeOption( void)
+void OptionList::addTransferSizeOption()
 {
-	OptionPointer entry = OptionPointer(
-		new IntegerOption< uint64_t>(
-			Option::getOptionName( TftpOptions::TRANSFER_SIZE),
-			0,
-			std::numeric_limits< uint64_t>::max(),
-			0));
+  OptionPointer entry = OptionPointer(
+    new IntegerOption< uint64_t>(
+      Option::getOptionName( TftpOptions::TRANSFER_SIZE),
+      0,
+      std::numeric_limits< uint64_t>::max(),
+      0));
 
-	setOption( entry);
+  setOption( entry);
 }
 
-void OptionList::removeTransferSizeOption( void)
+void OptionList::removeTransferSizeOption()
 {
-	removeOption( Option::getOptionName( TftpOptions::TRANSFER_SIZE));
+  removeOption( Option::getOptionName( TftpOptions::TRANSFER_SIZE));
 }
 
-bool OptionList::hasTransferSizeOption( void) const
+bool OptionList::hasTransferSizeOption() const
 {
-	return hasOption( Option::getOptionName( TftpOptions::TRANSFER_SIZE));
+  return hasOption( Option::getOptionName( TftpOptions::TRANSFER_SIZE));
 }
 
 uint64_t OptionList::getTransferSizeOption( void) const
 {
-	OptionMap::const_iterator optionIt = options.find(
-		Option::getOptionName( TftpOptions::TRANSFER_SIZE));
+  OptionMap::const_iterator optionIt = options.find(
+    Option::getOptionName( TftpOptions::TRANSFER_SIZE));
 
-	// option not set
-	if (optionIt == options.end())
-	{
-		return 0;
-	}
+  // option not set
+  if (optionIt == options.end())
+  {
+    return 0;
+  }
 
-	const IntegerOption< uint64_t>* integerOption =
-		dynamic_cast< const IntegerOption< uint64_t>*>(
-			optionIt->second.get());
+  const IntegerOption< uint64_t>* integerOption =
+    dynamic_cast< const IntegerOption< uint64_t>*>(
+      optionIt->second.get());
 
-	// invalid cast
-	if (!integerOption)
-	{
-		return 0;
-	}
+  // invalid cast
+  if (!integerOption)
+  {
+    return 0;
+  }
 
-	return integerOption->getValue();
+  return integerOption->getValue();
 }
 
 OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
 {
-	OptionList negotiatedOptions;
+  OptionList negotiatedOptions;
 
-	// iterate over each received option
-	for ( const auto & clientOption : clientOptions.getOptions())
-	{
-		OptionMap::const_iterator negotiationEntryIt = options.find(
-			clientOption.first);
+  // iterate over each received option
+  for ( const auto & clientOption : clientOptions.getOptions())
+  {
+    OptionMap::const_iterator negotiationEntryIt = options.find(
+      clientOption.first);
 
-		// not found -> ignore option
-		if (negotiationEntryIt == options.end())
-		{
-			continue;
-		}
+    // not found -> ignore option
+    if (negotiationEntryIt == options.end())
+    {
+      continue;
+    }
 
-		// negotiate option
-		OptionPointer newOptionValue = negotiationEntryIt->second->negotiateServer(
-			clientOption.second->getValueString());
+    // negotiate option
+    OptionPointer newOptionValue = negotiationEntryIt->second->negotiateServer(
+      clientOption.second->getValueString());
 
-		// negotiation has returned a value -> copy option to output list
-		if (newOptionValue)
-		{
-			negotiatedOptions.setOption( newOptionValue);
-		}
-	}
+    // negotiation has returned a value -> copy option to output list
+    if (newOptionValue)
+    {
+      negotiatedOptions.setOption( newOptionValue);
+    }
+  }
 
-	return negotiatedOptions;
+  return negotiatedOptions;
 }
 
 OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
@@ -435,22 +442,22 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
 	return negotiatedOptions;
 }
 
-string OptionList::toString( void) const
+string OptionList::toString() const
 {
-	if (options.empty())
-	{
-		return "(NONE)";
-	}
+  if ( options.empty())
+  {
+    return "(NONE)";
+  }
 
-	string result;
+  string result;
 
-	//! iterate over all options
-	for ( const auto option : options)
-	{
-		result += option.second->toString() + ";";
-	}
-	
-	return result;
+  // iterate over all options
+  for ( const auto option : options)
+  {
+    result += option.second->toString() + ";";
+  }
+
+  return result;
 }
 
 }

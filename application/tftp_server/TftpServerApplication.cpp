@@ -87,7 +87,7 @@ int TftpServerApplication::operator()()
         std::placeholders::_4,
         std::placeholders::_5));
 
-    server->entry();
+    (*server)();
   }
   catch ( Tftp::TftpException &e)
   {

@@ -63,12 +63,12 @@ TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
 {
 }
 
-void TftpServerWriteRequestOperationImpl::operator ()( void)
+void TftpServerWriteRequestOperationImpl::operator()()
 {
   try
   {
     // option negotiation leads to empty option list
-    if ( getOptions().getOptions().empty())
+    if (!getOptions().hasOptions())
     {
       // Then no NOACK is sent back - a simple ACK is sent.
       send( AcknowledgementPacket( 0));
@@ -117,7 +117,7 @@ void TftpServerWriteRequestOperationImpl::operator ()( void)
     }
 
     // start receive loop
-    TftpServerOperationImpl::operator ()();
+    TftpServerOperationImpl::operator()();
   }
   catch ( ...)
   {
@@ -210,7 +210,7 @@ void TftpServerWriteRequestOperationImpl::handleAcknowledgementPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "ACK not expected"));
 
-  //! Operation completed
+  // Operation completed
   finished();
 
   //! @throw CommunicationException Always, because this packet is invalid.

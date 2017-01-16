@@ -36,55 +36,55 @@ namespace Packet {
  **/
 class AcknowledgementPacket: public TftpPacket
 {
-	public:
-		/**
-		 * @brief Creates the packet with the given block number.
-		 *
-		 * If the blockNumber parameter is suppressed, a default block number is
-		 * chosen.
-		 *
-		 * @param[in] blockNumber
-		 *   Block number of packet. Defaults to the BlockNumber default
-		 *   constructor.
-		 **/
-		AcknowledgementPacket(
-		  const BlockNumber blockNumber = BlockNumber()) noexcept;
+  public:
+    /**
+     * @brief Creates the packet with the given block number.
+     *
+     * If the blockNumber parameter is suppressed, a default block number is
+     * chosen.
+     *
+     * @param[in] blockNumber
+     *   Block number of packet. Defaults to the BlockNumber default
+     *   constructor.
+     **/
+    AcknowledgementPacket(
+      const BlockNumber blockNumber = BlockNumber()) noexcept;
 
-		/**
-		 * @brief Generates a TFTP acknowledgement packet from a data buffer.
-		 *
-		 * @param[in] rawPacket
-		 *   Packet, which shall be decoded.
-		 *
-		 * @throw InvalidPacketException
-		 *   When rawPacket is not an valid packet.
-		 **/
-		AcknowledgementPacket( const RawTftpPacketType &rawPacket);
+    /**
+     * @brief Generates a TFTP acknowledgement packet from a data buffer.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @throw InvalidPacketException
+     *   When rawPacket is not an valid packet.
+     **/
+    AcknowledgementPacket( const RawTftpPacketType &rawPacket);
 
-		/**
-		 * @brief Returns the block number.
-		 *
-		 * @return The block number.
-		 **/
-		BlockNumber getBlockNumber() const;
+    /**
+     * @brief Returns the block number.
+     *
+     * @return The block number.
+     **/
+    BlockNumber getBlockNumber() const;
 
-		/**
-		 * @brief Sets the block number of the packet.
-		 *
-		 * @param[in] blockBumber
-		 *   Block number of packet.
-		 **/
-		void setBlockNumber( const BlockNumber blockBumber);
+    /**
+     * @brief Sets the block number of the packet.
+     *
+     * @param[in] blockBumber
+     *   Block number of packet.
+     **/
+    void setBlockNumber( const BlockNumber blockBumber);
 
-		//! @copydoc TftpPacket::encode()
-		virtual RawTftpPacketType encode() const override;
+    //! @copydoc TftpPacket::encode()
+    virtual RawTftpPacketType encode() const override final;
 
-		//! @copydoc TftpPacket::toString()
-		virtual string toString() const override;
+    //! @copydoc TftpPacket::toString()
+    virtual string toString() const override final;
 
-	private:
-		//! Block number of the packet
-		BlockNumber blockNumber;
+  private:
+    //! Block number of the packet
+    BlockNumber blockNumber;
 };
 
 }

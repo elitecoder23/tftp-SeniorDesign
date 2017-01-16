@@ -87,12 +87,12 @@ class TftpServer
      * @brief Starts the TFTP Server.
      *
      * This routines starts the server loop, which waits for incoming
-     * requests and handles them.
+     * requests and calls the handler to handles them.
      *
      * The start routine will be leaved, when an FATAL error occurred or
      * the server has been stopped by calling stop().
      **/
-    virtual void entry() = 0;
+    virtual void operator()() = 0;
 
     /**
      * @brief Stops the TFTP Server.

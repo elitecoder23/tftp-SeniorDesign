@@ -77,8 +77,8 @@ class TftpServerImpl:
     virtual void registerRequestHandler(
       ReceivedTftpRequestHandler handler) override final;
 
-    //! @copydoc TftpServer::entry
-    virtual void entry() override final;
+    //! @copydoc TftpServer::operator()()
+    virtual void operator()() override final;
 
     //! @copydoc TftpServer::stop
     virtual void stop() override final;

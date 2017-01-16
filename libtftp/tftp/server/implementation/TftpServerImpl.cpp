@@ -93,7 +93,7 @@ void TftpServerImpl::registerRequestHandler( ReceivedTftpRequestHandler handler)
   this->handler = handler;
 }
 
-void TftpServerImpl::entry()
+void TftpServerImpl::operator()()
 {
   try
   {
@@ -218,7 +218,7 @@ const Tftp::TftpConfiguration& TftpServerImpl::getConfiguration() const
   return configuration;
 }
 
-const OptionList& TftpServerImpl::getOptionList() const
+const TftpServerImpl::OptionList& TftpServerImpl::getOptionList() const
 {
   return options;
 }

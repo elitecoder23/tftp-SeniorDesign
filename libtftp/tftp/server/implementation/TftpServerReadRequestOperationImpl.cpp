@@ -64,12 +64,12 @@ TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
 {
 }
 
-void TftpServerReadRequestOperationImpl::operator ()( void)
+void TftpServerReadRequestOperationImpl::operator()()
 {
   try
   {
     // option negotiation leads to empty option list
-    if ( getOptions().getOptions().empty())
+    if ( !getOptions().hasOptions())
     {
       sendData();
     }
@@ -103,15 +103,22 @@ void TftpServerReadRequestOperationImpl::operator ()( void)
         }
       }
 
-      //! @todo what happens, if transfer size option is the only option
-      //! requested, bt the handler does not supply it -> empty OACK is bad!
-
-      // Send OACK
-      send( OptionsAcknowledgementPacket( getOptions()));
+      // if transfer size option is the only option requested, but the handler
+      // does not supply it -> empty OACK is not sent biut data directly
+      if ( getOptions().hasOptions())
+      {
+        // Send OACK
+        send( OptionsAcknowledgementPacket( getOptions()));
+      }
+      else
+      {
+        // directly send data
+        sendData();
+      }
     }
 
     // start receive loop
-    TftpServerOperationImpl::operator ()();
+    TftpServerOperationImpl::operator()();
   }
   catch ( ...)
   {
@@ -123,7 +130,7 @@ void TftpServerReadRequestOperationImpl::operator ()( void)
   handler.finishedOperation();
 }
 
-void TftpServerReadRequestOperationImpl::sendData( void)
+void TftpServerReadRequestOperationImpl::sendData()
 {
   lastTransmittedBlockNumber++;
 

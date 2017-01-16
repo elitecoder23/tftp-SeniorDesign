@@ -80,12 +80,12 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
       const OptionList &clientOptions);
 
     //! Desctructor
-    virtual ~TftpServerReadRequestOperationImpl( void) noexcept = default;
+    virtual ~TftpServerReadRequestOperationImpl() noexcept = default;
 
     /**
      * @brief executes the operation.
      **/
-    virtual void operator ()( void) override;
+    virtual void operator()() override;
 
   private:
     /**
@@ -96,7 +96,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      * If the last data packet will be sent, the internal flag will be set
      * approbate.
      **/
-    void sendData( void);
+    void sendData();
 
     /**
      * @copydoc TftpPacketHandler::handleDataPacket
