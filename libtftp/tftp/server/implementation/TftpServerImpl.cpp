@@ -93,7 +93,7 @@ void TftpServerImpl::registerRequestHandler( ReceivedTftpRequestHandler handler)
   this->handler = handler;
 }
 
-void TftpServerImpl::start()
+void TftpServerImpl::entry()
 {
   try
   {

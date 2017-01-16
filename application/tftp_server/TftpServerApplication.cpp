@@ -30,7 +30,6 @@
 #include <memory>
 
 using Tftp::TftpException;
-using Tftp::Server::TftpServerOperation;
 
 TftpServerApplication::TftpServerApplication(
   boost::application::context &context) :
@@ -88,7 +87,7 @@ int TftpServerApplication::operator()()
         std::placeholders::_4,
         std::placeholders::_5));
 
-    server->start();
+    server->entry();
   }
   catch ( Tftp::TftpException &e)
   {
@@ -190,7 +189,7 @@ void TftpServerApplication::receivedRequest(
   {
     BOOST_LOG_TRIVIAL( error) << "Wrong transfer mode";
 
-    TftpServerOperation operation = server->createErrorOperation(
+    auto operation = server->createErrorOperation(
       from,
       Tftp::ErrorCode::ILLEGAL_TFTP_OPERATION,
       "wrong transfer mode");
@@ -211,7 +210,7 @@ void TftpServerApplication::receivedRequest(
     BOOST_LOG_TRIVIAL( error) << "Error filename check: "
       << ((0 == info) ? "Unknown" : *info);
 
-    TftpServerOperation operation = server->createErrorOperation(
+    auto operation = server->createErrorOperation(
       from,
       Tftp::ErrorCode::ACCESS_VIOLATION,
       e.what());
@@ -223,7 +222,7 @@ void TftpServerApplication::receivedRequest(
 
   std::fstream fileStream;
   Tftp::File::StreamFile file( fileStream);
-  TftpServerOperation operation;
+  Tftp::Server::TftpServerOperation operation;
 
   switch (requestType)
   {
@@ -236,7 +235,7 @@ void TftpServerApplication::receivedRequest(
       {
         BOOST_LOG_TRIVIAL( error) << "Error opening file";
 
-        TftpServerOperation operation = server->createErrorOperation(
+        auto operation = server->createErrorOperation(
           from,
           Tftp::ErrorCode::FILE_NOT_FOUND,
           "file not found");
@@ -266,7 +265,7 @@ void TftpServerApplication::receivedRequest(
       {
         BOOST_LOG_TRIVIAL( error) << "Error opening file";
 
-        TftpServerOperation operation = server->createErrorOperation(
+        auto operation = server->createErrorOperation(
           from,
           Tftp::ErrorCode::ACCESS_VIOLATION);
 

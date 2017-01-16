@@ -92,7 +92,7 @@ class TftpServer
      * The start routine will be leaved, when an FATAL error occurred or
      * the server has been stopped by calling stop().
      **/
-    virtual void start() = 0;
+    virtual void entry() = 0;
 
     /**
      * @brief Stops the TFTP Server.

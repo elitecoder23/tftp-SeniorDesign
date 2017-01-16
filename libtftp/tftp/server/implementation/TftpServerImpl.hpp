@@ -77,21 +77,11 @@ class TftpServerImpl:
     virtual void registerRequestHandler(
       ReceivedTftpRequestHandler handler) override final;
 
-    /**
-     * @brief Starts the TFTP Server.
-     *
-     * This routines starts the server loop, which waits for incoming
-     * requests and handles them.
-     *
-     * The start routine will be leaved, when an FATAL error occurred or
-     * the server has been stopped by calling stop().
-     **/
-    virtual void start() override;
+    //! @copydoc TftpServer::entry
+    virtual void entry() override final;
 
-    /**
-     * @brief Stops the TFTP Server.
-     **/
-    virtual void stop() override;
+    //! @copydoc TftpServer::stop
+    virtual void stop() override final;
 
     //! @copydoc TftpServer::createReadRequestOperation(TftpTransmitDataOperationHandler&,const UdpAddressType&,const OptionList&,const UdpAddressType&)
     virtual TftpServerOperation createReadRequestOperation(
