@@ -11,7 +11,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Implementation of unit tests of class Tftp::Options::OptionNegotiation.
+ * @brief Implementation of unit tests of class Tftp::Options::OptionList.
  **/
 
 #include <tftp/options/OptionList.hpp>
@@ -20,6 +20,7 @@
 #include <helper/Logger.hpp>
 
 #include <boost/test/unit_test.hpp>
+
 #include <cstdint>
 
 namespace Tftp {

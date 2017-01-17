@@ -72,8 +72,8 @@ add_library(
   tftp_test 
   OBJECT
   
-  tftp/options/IntegerOptionNegotiationEntryTest.cpp
-  tftp/options/OptionNegotiationTest.cpp
+  tftp/options/IntegerOptionTest.cpp
+  tftp/options/OptionListTest.cpp
 
   tftp/packet/AcknowledgementPacketTest.cpp
   tftp/packet/BaseErrorPacketTest.cpp
