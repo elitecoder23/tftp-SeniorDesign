@@ -30,8 +30,6 @@
 namespace Tftp {
 namespace Options {
 
-using std::string;
-
 /**
  * @brief Representation of TFTP option list.
  *
@@ -45,6 +43,7 @@ using std::string;
 class OptionList
 {
   public:
+    using string = std::string;
     //! short form of option pointer
     using OptionPointer = std::shared_ptr< Option>;
     //! short form of option map

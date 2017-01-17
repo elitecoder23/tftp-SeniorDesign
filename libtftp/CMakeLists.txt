@@ -74,7 +74,8 @@ add_library(
   
   tftp/options/IntegerOptionTest.cpp
   tftp/options/OptionListTest.cpp
-
+  tftp/options/StringOptionTest.cpp
+  
   tftp/packet/AcknowledgementPacketTest.cpp
   tftp/packet/BaseErrorPacketTest.cpp
   tftp/packet/BlockNumberTest.cpp

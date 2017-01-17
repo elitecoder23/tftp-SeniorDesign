@@ -170,13 +170,14 @@ IntegerOption< IntT>::getValueString() const
 template< typename IntT>
 void IntegerOption< IntT>::setValue( const IntegerType value)
 {
+  //! @todo check min/max
   this->value = value;
 }
 
 template< typename IntT>
 void IntegerOption< IntT>::setValue( const string &value)
 {
-  this->value = toInt( value);
+  setValue( toInt( value));
 }
 
 template< typename IntT>
@@ -209,10 +210,14 @@ OptionPtr IntegerOption< IntT>::negotiateClient(
   IntegerType value = toInt( optionValue);
 
   if (value < minValue)
+  {
     return OptionPtr();
+  }
 
   if (value > maxValue)
+  {
     return OptionPtr();
+  }
 
   return std::make_shared< IntegerOption< IntT> >(
     getName(),

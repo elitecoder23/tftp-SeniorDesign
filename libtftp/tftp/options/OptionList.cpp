@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class OptionList.
@@ -25,7 +27,7 @@
 namespace Tftp {
 namespace Options {
 
-OptionList::OptionList( void)
+OptionList::OptionList()
 {
 }
 
@@ -147,163 +149,104 @@ bool OptionList::hasOption( const TftpOptions option) const
 
 const OptionList::OptionPointer OptionList::getOption( const string &name) const
 {
-	OptionMap::const_iterator it =
-		options.find( name);
+  OptionMap::const_iterator it =
+    options.find( name);
 
-	return (it != options.end()) ?
-		it->second : OptionPointer();
+  return (it != options.end()) ?
+    it->second : OptionPointer();
 }
 
 void OptionList::setOption( const string &name, const string &value)
 {
-	// If option already exists remove it first
-	if (hasOption( name))
-	{
-		removeOption( name);
-	}
+  // If option already exists remove it first
+  if (hasOption( name))
+  {
+    removeOption( name);
+  }
 
-	// Add option
-	options.insert( std::make_pair(
-		name,
-		OptionPointer( new StringOption( name, value))));
+  // Add option
+  options.insert( std::make_pair(
+    name,
+    OptionPointer( new StringOption( name, value))));
 }
 
 void OptionList::setOption( const OptionPointer option)
 {
-	// If option already exists remove it first
-	if (hasOption( option->getName()))
-	{
-		removeOption( option->getName());
-	}
+  // If option already exists remove it first
+  if (hasOption( option->getName()))
+  {
+    removeOption( option->getName());
+  }
 
-	// Add option
-	options.insert( std::make_pair( option->getName(), option));
+  // Add option
+  options.insert( std::make_pair( option->getName(), option));
 }
 
 void OptionList::removeOption( const std::string &name)
 {
-	options.erase( name);
+  options.erase( name);
 }
 
 void OptionList::removeOption( const TftpOptions option)
 {
-	string optionName = Option::getOptionName( option);
+  string optionName = Option::getOptionName( option);
 
-	if (!optionName.empty())
-		options.erase( optionName);
+  if (!optionName.empty())
+  {
+    options.erase( optionName);
+  }
 }
 
 void OptionList::addBlocksizeOption( const uint16_t blocksize)
 {
-	assert(
-		(blocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
-		(blocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+  assert(
+    (blocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
+    (blocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
 
-	OptionPointer entry = OptionPointer(
-		new IntegerOption< uint16_t>(
-			Option::getOptionName( TftpOptions::BLOCKSIZE),
-			TFTP_OPTION_BLOCKSIZE_MIN,
-			blocksize,
-			blocksize));
+  OptionPointer entry = OptionPointer(
+    new IntegerOption< uint16_t>(
+      Option::getOptionName( TftpOptions::BLOCKSIZE),
+      TFTP_OPTION_BLOCKSIZE_MIN,
+      blocksize,
+      blocksize));
 
-	setOption( entry);
+  setOption( entry);
 }
 
 void OptionList::addBlocksizeOption(
-	const uint16_t minBlocksize,
-	const uint16_t maxBlocksize)
+  const uint16_t minBlocksize,
+  const uint16_t maxBlocksize)
 {
-	assert(
-		(minBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
-		(minBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+  assert(
+    (minBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
+    (minBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
 
-	assert(
-		(maxBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
-		(maxBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+  assert(
+    (maxBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
+    (maxBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
 
-	assert( minBlocksize <= maxBlocksize);
+  assert( minBlocksize <= maxBlocksize);
 
-	OptionPointer entry = OptionPointer(
-		new IntegerOption< uint16_t>(
-			Option::getOptionName( TftpOptions::BLOCKSIZE),
-			minBlocksize,
-			maxBlocksize,
-			maxBlocksize));
+  OptionPointer entry = OptionPointer(
+    new IntegerOption< uint16_t>(
+      Option::getOptionName( TftpOptions::BLOCKSIZE),
+      minBlocksize,
+      maxBlocksize,
+      maxBlocksize));
 
-	setOption( entry);
+  setOption( entry);
 }
 
-uint16_t OptionList::getBlocksizeOption( void) const
-{
-	OptionMap::const_iterator optionIt = options.find(
-		Option::getOptionName( TftpOptions::BLOCKSIZE));
-
-	// option not set
-	if (optionIt == options.end())
-		return 0;
-
-	const IntegerOption< uint16_t>* integerOption =
-		dynamic_cast< const IntegerOption< uint16_t>*>(
-			optionIt->second.get());
-
-	// invalid cast
-	if (!integerOption)
-	{
-		return 0;
-	}
-
-	return integerOption->getValue();
-}
-
-void OptionList::addTimeoutOption( const uint16_t timeout)
-{
-	assert(
-		(timeout >= TFTP_OPTION_TIMEOUT_MIN) &&
-		(timeout <= TFTP_OPTION_TIMEOUT_MAX));
-
-	OptionPointer entry = OptionPointer(
-		new IntegerOption< uint16_t>(
-			Option::getOptionName( TftpOptions::TIMEOUT),
-			timeout,
-			timeout,
-			timeout));
-
-	setOption( entry);
-}
-
-void OptionList::addTimeoutOption(
-	const uint16_t minTimeout,
-	const uint16_t maxTimeout)
-{
-	//! @todo what happens, if client sent bigger timeout option than server allows -> client negotiation would fail
-	assert(
-		(minTimeout >= TFTP_OPTION_TIMEOUT_MIN) &&
-		(minTimeout <= TFTP_OPTION_TIMEOUT_MAX));
-
-	assert(
-		(maxTimeout >= TFTP_OPTION_TIMEOUT_MIN) &&
-		(maxTimeout <= TFTP_OPTION_TIMEOUT_MAX));
-
-	assert( (minTimeout <= maxTimeout));
-
-	OptionPointer entry = OptionPointer(
-		new IntegerOption< uint16_t>(
-			Option::getOptionName( TftpOptions::TIMEOUT),
-			minTimeout,
-			maxTimeout,
-			maxTimeout));
-
-	setOption( entry);
-}
-
-uint16_t OptionList::getTimeoutOption( void) const
+uint16_t OptionList::getBlocksizeOption() const
 {
   OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( TftpOptions::TIMEOUT));
+    Option::getOptionName( TftpOptions::BLOCKSIZE));
 
   // option not set
   if (optionIt == options.end())
+  {
     return 0;
+  }
 
   const IntegerOption< uint16_t>* integerOption =
     dynamic_cast< const IntegerOption< uint16_t>*>(
@@ -311,7 +254,74 @@ uint16_t OptionList::getTimeoutOption( void) const
 
   // invalid cast
   if (!integerOption)
+  {
     return 0;
+  }
+
+  return integerOption->getValue();
+}
+
+void OptionList::addTimeoutOption( const uint16_t timeout)
+{
+  assert(
+    (timeout >= TFTP_OPTION_TIMEOUT_MIN) &&
+    (timeout <= TFTP_OPTION_TIMEOUT_MAX));
+
+  OptionPointer entry = OptionPointer(
+    new IntegerOption< uint16_t>(
+      Option::getOptionName( TftpOptions::TIMEOUT),
+      timeout,
+      timeout,
+      timeout));
+
+  setOption( entry);
+}
+
+void OptionList::addTimeoutOption(
+  const uint16_t minTimeout,
+  const uint16_t maxTimeout)
+{
+  //! @todo what happens, if client sent bigger timeout option than server allows -> client negotiation would fail
+  assert(
+    (minTimeout >= TFTP_OPTION_TIMEOUT_MIN) &&
+    (minTimeout <= TFTP_OPTION_TIMEOUT_MAX));
+
+  assert(
+    (maxTimeout >= TFTP_OPTION_TIMEOUT_MIN) &&
+    (maxTimeout <= TFTP_OPTION_TIMEOUT_MAX));
+
+  assert( (minTimeout <= maxTimeout));
+
+  OptionPointer entry = OptionPointer(
+    new IntegerOption< uint16_t>(
+      Option::getOptionName( TftpOptions::TIMEOUT),
+      minTimeout,
+      maxTimeout,
+      maxTimeout));
+
+  setOption( entry);
+}
+
+uint16_t OptionList::getTimeoutOption() const
+{
+  OptionMap::const_iterator optionIt = options.find(
+    Option::getOptionName( TftpOptions::TIMEOUT));
+
+  // option not set
+  if (optionIt == options.end())
+  {
+    return 0;
+  }
+
+  const IntegerOption< uint16_t>* integerOption =
+    dynamic_cast< const IntegerOption< uint16_t>*>(
+      optionIt->second.get());
+
+  // invalid cast
+  if (!integerOption)
+  {
+    return 0;
+  }
 
   return integerOption->getValue();
 }
@@ -406,43 +416,43 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
 
 OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
 {
-	// we make sure, that the received options are not empty
-	assert( !serverOptions.getOptions().empty());
+  // we make sure, that the received options are not empty
+  assert( !serverOptions.getOptions().empty());
 
-	OptionList negotiatedOptions;
+  OptionList negotiatedOptions;
 
-	// iterate over each received option
-	for ( const auto & serverOption : serverOptions.getOptions())
-	{
-		// find negotiation entry
-		OptionMap::const_iterator negotiationEntryIt = options.find(
-			serverOption.first);
+  // iterate over each received option
+  for ( const auto & serverOption : serverOptions.getOptions())
+  {
+    // find negotiation entry
+    OptionMap::const_iterator negotiationEntryIt = options.find(
+      serverOption.first);
 
-		// not found -> server sent an option, which cannot come from us
-		if (negotiationEntryIt == options.end())
-		{
-			return OptionList();
-		}
+    // not found -> server sent an option, which cannot come from us
+    if (negotiationEntryIt == options.end())
+    {
+      return OptionList();
+    }
 
-		// negotiate option, if failed also fail on top level
-		OptionPointer newOptionValue = negotiationEntryIt->second->negotiateClient(
-			serverOption.second->getValueString());
+    // negotiate option, if failed also fail on top level
+    OptionPointer newOptionValue = negotiationEntryIt->second->negotiateClient(
+      serverOption.second->getValueString());
 
-		// check negotiation result
-		if (!newOptionValue)
-		{
-			// negotiation failed -> return immediately
-			return OptionList();
-		}
+    // check negotiation result
+    if (!newOptionValue)
+    {
+      // negotiation failed -> return immediately
+      return OptionList();
+    }
 
-		// negotiation has returned a value -> copy option to output list
-		negotiatedOptions.setOption( newOptionValue);
-	}
+    // negotiation has returned a value -> copy option to output list
+    negotiatedOptions.setOption( newOptionValue);
+  }
 
-	return negotiatedOptions;
+  return negotiatedOptions;
 }
 
-string OptionList::toString() const
+OptionList::string OptionList::toString() const
 {
   if ( options.empty())
   {

@@ -27,7 +27,7 @@ StringOption::StringOption(const string &name, const string &value):
 {
 }
 
-StringOption::string StringOption::getValueString( void) const
+StringOption::string StringOption::getValueString() const
 {
   return value;
 }
