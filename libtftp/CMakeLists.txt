@@ -45,8 +45,6 @@ add_library(
   tftp/options/Option.cpp
   tftp/options/OptionList.cpp
   tftp/options/StringOption.cpp
-  tftp/options/test/IntegerOptionNegotiationEntryTest.cpp
-  tftp/options/test/OptionNegotiationTest.cpp
   
   tftp/file/MemoryFile.cpp
   tftp/file/StreamFile.cpp
@@ -74,6 +72,9 @@ add_library(
   tftp_test 
   OBJECT
   
+  tftp/options/IntegerOptionNegotiationEntryTest.cpp
+  tftp/options/OptionNegotiationTest.cpp
+
   tftp/packet/AcknowledgementPacketTest.cpp
   tftp/packet/BaseErrorPacketTest.cpp
   tftp/packet/BlockNumberTest.cpp

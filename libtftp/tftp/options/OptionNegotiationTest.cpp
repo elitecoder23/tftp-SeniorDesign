@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,11 +9,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Implementation of unit tests of the OptionNegotiation class
+ * @brief Implementation of unit tests of class Tftp::Options::OptionNegotiation.
  **/
 
 #include <tftp/options/OptionList.hpp>
@@ -20,16 +22,26 @@
 #include <boost/test/unit_test.hpp>
 #include <cstdint>
 
-using namespace Tftp::Options;
+namespace Tftp {
+namespace Options {
 
-#if 0
-static void testCtor( void)
+BOOST_AUTO_TEST_SUITE( OptionNegotiationTest)
+
+BOOST_AUTO_TEST_CASE( constructor)
 {
-	OptionNegotiation optionNegotiation;
+  OptionList optionList;
 
-	BOOST_CHECK( optionNegotiation.getDefaultOptions().getOptions().empty());
+  BOOST_CHECK( !optionList.hasOptions());
+  BOOST_CHECK( optionList.getOptions().empty());
+  BOOST_CHECK( optionList.getBlocksizeOption() == 0);
+  BOOST_CHECK( optionList.getTimeoutOption() == 0);
+  BOOST_CHECK( !optionList.hasTransferSizeOption());
 }
 
+BOOST_AUTO_TEST_SUITE_END()
+
+
+#if 0
 static void testClientNegotiation( void)
 {
 	OptionNegotiation optionNegotiation;
@@ -93,16 +105,7 @@ static void testClientNegotiation( void)
 	BOOST_CHECK( !optionNegotiation.negotiateClient( optionList));
 }
 
-static void testServerNegotiation( void)
-{
+#endif
 
 }
-#endif
-void initOptionNegotiationEntryTest( void)
-{
-#if 0
-	boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &testCtor));
-	boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &testClientNegotiation));
-	boost::unit_test::framework::master_test_suite().add( BOOST_TEST_CASE( &testServerNegotiation));
-#endif
 }
