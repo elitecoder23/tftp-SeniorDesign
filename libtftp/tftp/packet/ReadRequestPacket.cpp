@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,30 +9,32 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class ReadRequestPacket.
+ * @brief Definition of class Tftp::Packet::ReadRequestPacket.
  **/
 
 #include "ReadRequestPacket.hpp"
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
 ReadRequestPacket::ReadRequestPacket(
-	const string &filename,
-	const TransferMode mode,
-	const OptionList &options) noexcept:
-	ReadWriteRequestPacket(
-		PacketType::READ_REQUEST,
-		filename,
-		mode,
-		options)
+  const string &filename,
+  const TransferMode mode,
+  const OptionList &options) noexcept:
+  ReadWriteRequestPacket(
+    PacketType::READ_REQUEST,
+    filename,
+    mode,
+    options)
 {
 }
 
 ReadRequestPacket::ReadRequestPacket( const RawTftpPacketType &rawPacket):
-	ReadWriteRequestPacket( PacketType::READ_REQUEST, rawPacket)
+  ReadWriteRequestPacket( PacketType::READ_REQUEST, rawPacket)
 {
+}
+
+}
 }

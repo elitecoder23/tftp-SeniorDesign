@@ -11,7 +11,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class ReadWriteRequestPacket.
+ * @brief Definition of class Tftp::Packet::ReadWriteRequestPacket.
  **/
 
 #include "ReadWriteRequestPacket.hpp"
@@ -27,7 +27,7 @@ namespace Tftp {
 namespace Packet {
 
 ReadWriteRequestPacket::string ReadWriteRequestPacket::getMode(
-  TransferMode mode)
+  const TransferMode mode)
 {
   switch (mode)
   {
@@ -99,7 +99,7 @@ Tftp::TransferMode ReadWriteRequestPacket::getMode() const
   return getMode( mode);
 }
 
-void ReadWriteRequestPacket::setMode( TransferMode mode)
+void ReadWriteRequestPacket::setMode( const TransferMode mode)
 {
   this->mode = getMode( mode);
 }
@@ -176,9 +176,9 @@ ReadWriteRequestPacket::string ReadWriteRequestPacket::toString() const
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
-  PacketType packetType,
+  const PacketType packetType,
   const string &filename,
-  TransferMode mode,
+  const TransferMode mode,
   const OptionList &options):
   TftpPacket( packetType),
   filename( filename),
@@ -199,8 +199,8 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
-  PacketType packetType,
-  const RawTftpPacketType &rawPacket) :
+  const PacketType packetType,
+  const RawTftpPacketType &rawPacket):
   TftpPacket( packetType, rawPacket)
 {
   switch (packetType)

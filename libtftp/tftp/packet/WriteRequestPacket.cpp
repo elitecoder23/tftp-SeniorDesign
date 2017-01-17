@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,30 +9,32 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class WriteRequestPacket.
+ * @brief Definition of class Tftp::Packet::WriteRequestPacket.
  **/
 
 #include "WriteRequestPacket.hpp"
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
 WriteRequestPacket::WriteRequestPacket(
-	const string &filename,
-	const TransferMode mode,
-	const OptionList &options) noexcept:
-	ReadWriteRequestPacket(
-		PacketType::WRITE_REQUEST,
-		filename,
-		mode,
-		options)
+  const string &filename,
+  const TransferMode mode,
+  const OptionList &options) noexcept:
+  ReadWriteRequestPacket(
+    PacketType::WRITE_REQUEST,
+    filename,
+    mode,
+    options)
 {
 }
 
 WriteRequestPacket::WriteRequestPacket( const RawTftpPacketType &rawPacket):
 	ReadWriteRequestPacket( PacketType::WRITE_REQUEST, rawPacket)
 {
+}
+
+}
 }

@@ -33,7 +33,7 @@ class TftpPacket
     using string = std::string;
 
     //! The minimum size is the Opcode field.
-    static constexpr std::size_t TFTP_PACKET_HEADER_SIZE = sizeof(uint16_t);
+    static constexpr std::size_t TFTP_PACKET_HEADER_SIZE = sizeof( uint16_t);
 
     /**
      * @brief Decodes the packet type of a raw buffer.
