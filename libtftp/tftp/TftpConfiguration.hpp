@@ -37,6 +37,7 @@ class TftpConfiguration
 {
   public:
     using OptionList = Tftp::Options::OptionList;
+    using ptree = boost::property_tree::ptree;
     using options_description = boost::program_options::options_description;
 
     //! Loads the configuration with default values.
@@ -48,7 +49,7 @@ class TftpConfiguration
      * @param[in] properties
      *   The stored properties.
      **/
-    TftpConfiguration( const boost::property_tree::ptree &properties);
+    TftpConfiguration( const ptree &properties);
 
     /**
      * @brief Converts the configuration values to a
@@ -56,7 +57,7 @@ class TftpConfiguration
      *
      * @return The boost::property_tree::ptree.
      **/
-    boost::property_tree::ptree toProperties() const;
+    ptree toProperties() const;
 
     /**
      * @brief Returns an option description, which can be used to parse a
