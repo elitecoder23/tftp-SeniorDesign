@@ -18,7 +18,7 @@
 
 namespace Tftp {
 
-TftpConfiguration::TftpConfiguration( void) :
+TftpConfiguration::TftpConfiguration() :
   tftpTimeout( DEFAULT_TFTP_RECEIVE_TIMEOUT),
   tftpRetries( DEFAULT_TFTP_RETRIES),
   tftpServerPort( DEFAULT_TFTP_PORT),
@@ -40,7 +40,7 @@ TftpConfiguration::TftpConfiguration(
 {
 }
 
-boost::property_tree::ptree TftpConfiguration::toProperties( void) const
+boost::property_tree::ptree TftpConfiguration::toProperties() const
 {
   boost::property_tree::ptree properties;
 
@@ -63,10 +63,8 @@ boost::property_tree::ptree TftpConfiguration::toProperties( void) const
   return properties;
 }
 
-TftpConfiguration::options_description TftpConfiguration::getOptions( void)
+TftpConfiguration::options_description TftpConfiguration::getOptions()
 {
-  //! @todo for boost::options: https://github.com/boostorg/program_options/pull/18
-
   boost::program_options::options_description options(
     "TFTP options");
 
@@ -78,20 +76,12 @@ TftpConfiguration::options_description TftpConfiguration::getOptions( void)
   )
   (
     "blocksize-option",
-    //boost::program_options::value( &blockSizeOption),
-    boost::program_options::value< uint16_t>()->notifier(
-      [this]( const uint16_t &value){
-        this->blockSizeOption = value;
-    }),
+    boost::program_options::value( &blockSizeOption),
     "blocksize of transfers to use"
   )
   (
     "timeout-option",
-//    boost::program_options::value( &timoutOption),
-    boost::program_options::value< uint16_t>()->notifier(
-      [this]( const uint16_t &value){
-        this->timoutOption = value;
-    }),
+    boost::program_options::value( &timoutOption),
     "If set handles the timeout option negotiation"
   )
   (
