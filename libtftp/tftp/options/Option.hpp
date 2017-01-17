@@ -22,8 +22,6 @@
 namespace Tftp {
 namespace Options {
 
-using std::string;
-
 /**
  * @brief Base class of a TFTP option.
  *
@@ -31,106 +29,108 @@ using std::string;
  **/
 class Option
 {
-	public:
-		/**
-		 * @brief Returns the option string for the given option.
-		 *
-		 * @param[in] option
-		 *   The TFTP option.
-		 *
-		 * @return Returns the option name.
-		 **/
-		static string getOptionName( const TftpOptions option) noexcept;
+  public:
+    using string = std::string;
 
-		/**
-		 * @brief Generate TFTP option with the given name.
-		 *
-		 * @param[in] name
-		 *   The option name. Must be not empty.
-		 **/
-		Option( const string &name);
+    /**
+     * @brief Returns the option string for the given option.
+     *
+     * @param[in] option
+     *   The TFTP option.
+     *
+     * @return Returns the option name.
+     **/
+    static string getOptionName( const TftpOptions option) noexcept;
 
-		//! default copy constructor
-		Option( const Option &other) = default;
+    /**
+     * @brief Generate TFTP option with the given name.
+     *
+     * @param[in] name
+     *   The option name. Must be not empty.
+     **/
+    Option( const string &name);
 
-		//! default move constructor
-		Option( Option &&other) = default;
+    //! default copy constructor
+    Option( const Option &other) = default;
 
-		//! default copy assignment operator
-		Option& operator=( const Option &other) = default;
+    //! default move constructor
+    Option( Option &&other) = default;
 
-		//! default copy move operator
-		Option& operator=( Option &&other) = default;
+    //! default copy assignment operator
+    Option& operator=( const Option &other) = default;
 
-		//! Default destructor
-		virtual ~Option( void) noexcept = default;
+    //! default copy move operator
+    Option& operator=( Option &&other) = default;
 
-		/**
-		 * @brief Returns the option name.
-		 *
-		 * @return The option name.
-		 **/
-		string getName( void) const;
+    //! Default destructor
+    virtual ~Option() noexcept = default;
 
-		/**
-		 * @brief Set the option name.
-		 *
-		 * @param[in] name
-		 *   The new option name. Must be not empty.
-		 **/
-		void setName( const string &name);
+    /**
+     * @brief Returns the option name.
+     *
+     * @return The option name.
+     **/
+    string getName() const;
 
-		/**
-		 * @brief Returns the option value as string.
-		 *
-		 * @return The option value as string.
-		 **/
-		virtual string getValueString( void) const = 0;
+    /**
+     * @brief Set the option name.
+     *
+     * @param[in] name
+     *   The new option name. Must be not empty.
+     **/
+    void setName( const string &name);
 
-		/**
-		 * @brief Option negotiation on server side.
-		 *
-		 * This function is called, when the TFTP server receives options within
-		 * RRQ/ WRQ packets.
-		 * The Server is allowed to modify the option value to a value, which is
-		 * accepted by the client.
-		 *
-		 * @param[in] optionValue
-		 *   The input option
-		 *
-		 * @return Option negotiation result
-		 **/
-		virtual OptionPointer negotiateServer( const string &optionValue) const = 0;
+    /**
+     * @brief Returns the option value as string.
+     *
+     * @return The option value as string.
+     **/
+    virtual string getValueString() const = 0;
 
-		/**
-		 * @brief Option negotiation on client side.
-		 *
-		 * This function is called, when the TFTP client receives options within
-		 * a OACK packet.
-		 * The client will or will not accept the received option value.
-		 *
-		 * @param[in] optionValue
-		 *   The input option
-		 *
-		 * @return Option negotiation result
-		 * @retval OptionPointer()
-		 *   Option negotiation failed on client side.
-		 *   Error packet will be sent.
-		 **/
-		virtual OptionPointer negotiateClient( const string &optionValue) const = 0;
+    /**
+     * @brief Option negotiation on server side.
+     *
+     * This function is called, when the TFTP server receives options within
+     * RRQ/ WRQ packets.
+     * The Server is allowed to modify the option value to a value, which is
+     * accepted by the client.
+     *
+     * @param[in] optionValue
+     *   The input option
+     *
+     * @return Option negotiation result
+     **/
+    virtual OptionPtr negotiateServer( const string &optionValue) const = 0;
 
-		/**
-		 * @brief Returns a string, which describes the option.
-		 *
-		 * This operation is used for debugging and information purposes.
-		 *
-		 * @return Option list description.
-		 **/
-		virtual string toString( void) const;
+    /**
+     * @brief Option negotiation on client side.
+     *
+     * This function is called, when the TFTP client receives options within
+     * a OACK packet.
+     * The client will or will not accept the received option value.
+     *
+     * @param[in] optionValue
+     *   The input option
+     *
+     * @return Option negotiation result
+     * @retval OptionPointer()
+     *   Option negotiation failed on client side.
+     *   Error packet will be sent.
+     **/
+    virtual OptionPtr negotiateClient( const string &optionValue) const = 0;
 
-	private:
-		//! The option name
-		string name;
+    /**
+     * @brief Returns a string, which describes the option.
+     *
+     * This operation is used for debugging and information purposes.
+     *
+     * @return Option list description.
+     **/
+    virtual string toString() const;
+
+  private:
+    //! The option name
+    string name;
 };
 
 }

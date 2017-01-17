@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Definition of class Tftp::Options::Option.
@@ -17,36 +19,36 @@
 namespace Tftp {
 namespace Options {
 
-string Option::getOptionName( const TftpOptions option) noexcept
+Option::string Option::getOptionName( const TftpOptions option) noexcept
 {
-	switch (option)
-	{
-		case TftpOptions::BLOCKSIZE:
-			return "blksize";
+  switch (option)
+  {
+    case TftpOptions::BLOCKSIZE:
+      return "blksize";
 
-		case TftpOptions::TIMEOUT:
-			return "timeout";
+    case TftpOptions::TIMEOUT:
+      return "timeout";
 
-		case TftpOptions::TRANSFER_SIZE:
-			return "tsize";
+    case TftpOptions::TRANSFER_SIZE:
+      return "tsize";
 
-		default:
-			break;
-	}
+    default:
+      break;
+  }
 
-	return string();
+  return string();
 }
 
-Option::Option(const std::string &name):
-	name( name)
+Option::Option( const string &name):
+  name( name)
 {
   // Validate option name
   assert( !name.empty());
 }
 
-std::string Option::getName( void) const
+Option::string Option::getName() const
 {
-	return name;
+  return name;
 }
 
 void Option::setName( const std::string &name)
@@ -57,9 +59,9 @@ void Option::setName( const std::string &name)
   this->name = name;
 }
 
-string Option::toString( void) const
+Option::string Option::toString() const
 {
-	return name + ":" + getValueString();
+  return name + ":" + getValueString();
 }
 
 }

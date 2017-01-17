@@ -226,7 +226,7 @@ void TftpServerApplication::receivedRequest(
 
   switch (requestType)
   {
-    case Tftp::TftpRequestType::ReadRequest:
+    case Tftp::TftpRequestType::Read:
       // open requested file
       fileStream.open( filename.c_str(), std::fstream::in);
 
@@ -254,7 +254,7 @@ void TftpServerApplication::receivedRequest(
         options);
       break;
 
-    case Tftp::TftpRequestType::WriteRequest:
+    case Tftp::TftpRequestType::Write:
       // open requested file
       fileStream.open(
         filename.c_str(),

@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,11 +9,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class StringOption.
+ * @brief Definition of class Tftp::Options::StringOption.
  **/
 
 #include "StringOption.hpp"
@@ -20,33 +22,33 @@ namespace Tftp {
 namespace Options {
 
 StringOption::StringOption(const string &name, const string &value):
-	Option( name),
-	value( value)
+  Option( name),
+  value( value)
 {
 }
 
-string StringOption::getValueString( void) const
+StringOption::string StringOption::getValueString( void) const
 {
-	return value;
+  return value;
 }
 
 void StringOption::setValue( const string &value)
 {
-	this->value = value;
+  this->value = value;
 }
 
-OptionPointer StringOption::negotiateServer( const string &) const
+OptionPtr StringOption::negotiateServer( const string &) const
 {
-	BOOST_LOG_TRIVIAL( error) <<
-		"Its not possible to use StringOption for negotiation";
-	return OptionPointer();
+  BOOST_LOG_TRIVIAL( error) <<
+    "Its not possible to use StringOption for negotiation";
+  return OptionPtr();
 }
 
-OptionPointer StringOption::negotiateClient( const string &) const
+OptionPtr StringOption::negotiateClient( const string &) const
 {
-	BOOST_LOG_TRIVIAL( error) <<
-		"Its not possible to use StringOption for negotiation";
-	return OptionPointer();
+  BOOST_LOG_TRIVIAL( error) <<
+    "Its not possible to use StringOption for negotiation";
+  return OptionPtr();
 }
 
 }

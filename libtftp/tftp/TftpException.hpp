@@ -11,7 +11,9 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration/ definition of class Tftp::TftpException.
+ * @brief Declaration/ definition of classes Tftp::TftpException,
+ *   Tftp::InvalidPacketException, Tftp::CommunicationException,
+ *   Tftp::OptionNegotiationException, and Tftp::ErrorReceivedException.
  **/
 
 #ifndef TFTP_TFTPEXCEPTION_HPP
@@ -80,9 +82,16 @@ class ErrorReceivedException: public virtual TftpException
 };
 
 //! Definition of the TFTP transfer phase.
-using TftpTransferPhaseInfo = boost::error_info< struct TftpTransferPhaseInfoTag, TftpTransferPhase>;
-using TftpPacketTypeInfo = boost::error_info< struct TftpPacketTypeInfoTag, PacketType>;
-using TftpErrorPacketInfo = boost::error_info< struct TftpErrorPacketInfoTag, Packet::ErrorPacket>;
+using TftpTransferPhaseInfo =
+  boost::error_info< struct TftpTransferPhaseInfoTag, TftpTransferPhase>;
+
+//! TFTP packet type information
+using TftpPacketTypeInfo =
+  boost::error_info< struct TftpPacketTypeInfoTag, PacketType>;
+
+//! TFTP error packet information
+using TftpErrorPacketInfo =
+  boost::error_info< struct TftpErrorPacketInfoTag, Packet::ErrorPacket>;
 
 }
 

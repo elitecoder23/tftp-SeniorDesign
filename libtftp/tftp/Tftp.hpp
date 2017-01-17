@@ -11,7 +11,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Basis definition for TFTP implementation.
+ * @brief Declaration of namespace Tftp.
  **/
 
 #ifndef TFTP_TFTP_HPP
@@ -63,49 +63,49 @@ using IpAddressType = boost::asio::ip::address;
 //! shortened form of the UDP address type (IP + UDP Port)
 using UdpAddressType = boost::asio::ip::udp::endpoint;
 
-/**
- * @brief TFTP version information
- **/
+//!  TFTP version information
 enum class TftpVersion
 {
   //! TFTP Version 2 (RFC1350)
-  TFTP_VERSION_2,
+  Version2,
   //! TFTP Version 2 with Options Extension (RFC1350 + RFC2347)
-  TFTP_VERSION_2_WITH_OPTIONS_EXTENSION,
+  Version2WithOptionsExtension,
 
   //! Invalid entry
-  TFTP_VERSION_LAST
+  Invalid
 };
 
 //! TFTP role enumeration
 enum class TftpRole
 {
-  TFTP_ROLE_CLIENT, //!< TFTP client role
-  TFTP_ROLE_SERVER, //!< TFTP server role
+  Client, //!< TFTP client role
+  Server, //!< TFTP server role
 
-  TFTP_ROLE_LAST    //!< invalid value
+  Invalid //!< invalid value
 };
 
 //! TFTP request type
 enum class TftpRequestType
 {
-  ReadRequest,
-  WriteRequest,
+  Read,
+  Write,
+
   Invalid
 };
 //! @brief Phases of TFTP transfer
 enum class TftpTransferPhase
 {
   //! Initialisation phase before any request has been sent/ received.
-  TFTP_PHASE_INITIALIZATION,
+  Initialisation,
   //! TFTP request phase RRQ/WRQ and wait for ACK.
-  TFTP_PHASE_REQUEST,
+  Request,
   //! TFTP option negotiation phase wait for OACK.
-  TFTP_PHASE_OPTION_NEGOTIATION,
+  OoptionNegotiation,
   //! TFTP data transfer phase.
-  TFTP_PHASE_DATA_TRANSFER,
+  DataTransfer,
+
   //! TFTP transfer phase unknown.
-  TFTP_PHASE_UNKNOWN
+  Unknown
 };
 
 //! Default TFTP port.

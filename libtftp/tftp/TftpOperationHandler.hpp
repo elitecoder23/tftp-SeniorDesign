@@ -31,17 +31,17 @@ class TftpOperationHandler
 {
   public:
     //! The data type is used for the inherited classes.
-    typedef std::vector< uint8_t> DataType;
+    using DataType = std::vector< uint8_t>;
 
     /**
      * @brief Default destructor.
      **/
-    virtual ~TftpOperationHandler( void) noexcept = default;
+    virtual ~TftpOperationHandler() noexcept = default;
 
     /**
      * @brief Called, when the operation has been finished
      **/
-    virtual void finishedOperation( void) noexcept = 0;
+    virtual void finishedOperation() noexcept = 0;
 };
 
 }
