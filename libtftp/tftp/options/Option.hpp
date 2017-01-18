@@ -40,7 +40,7 @@ class Option
      *
      * @return Returns the option name.
      **/
-    static string getOptionName( const TftpOptions option) noexcept;
+    static string getOptionName( const KnownOptions option) noexcept;
 
     /**
      * @brief Generate TFTP option with the given name.

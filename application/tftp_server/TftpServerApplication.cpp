@@ -175,7 +175,7 @@ void TftpServerApplication::checkFilename( const boost::filesystem::path &filena
 }
 
 void TftpServerApplication::receivedRequest(
-  const Tftp::TftpRequestType requestType,
+  const Tftp::RequestType requestType,
   const Tftp::UdpAddressType &from,
   const string &filename,
   const Tftp::TransferMode mode,
@@ -226,7 +226,7 @@ void TftpServerApplication::receivedRequest(
 
   switch (requestType)
   {
-    case Tftp::TftpRequestType::Read:
+    case Tftp::RequestType::Read:
       // open requested file
       fileStream.open( filename.c_str(), std::fstream::in);
 
@@ -254,7 +254,7 @@ void TftpServerApplication::receivedRequest(
         options);
       break;
 
-    case Tftp::TftpRequestType::Write:
+    case Tftp::RequestType::Write:
       // open requested file
       fileStream.open(
         filename.c_str(),

@@ -268,8 +268,8 @@ void TftpServerOperationImpl::handleErrorPacket(
   BOOST_THROW_EXCEPTION(
     ErrorReceivedException() <<
     AdditionalInfo( "ERR not expected") <<
-    TftpPacketTypeInfo( transmitPacketType) <<
-    TftpErrorPacketInfo( errorPacket));
+    PacketTypeInfo( transmitPacketType) <<
+    ErrorPacketInfo( errorPacket));
 }
 
 void TftpServerOperationImpl::handleOptionsAcknowledgementPacket(

@@ -66,7 +66,7 @@ using TftpServerOperation = std::function< void( void)>;
  *   List of received TFTP options.
  **/
 typedef void (ReceivedTftpRequestHandlerType)(
-  TftpRequestType requestType,
+  RequestType requestType,
   const UdpAddressType &from,
   const std::string &filename,
   TransferMode mode,

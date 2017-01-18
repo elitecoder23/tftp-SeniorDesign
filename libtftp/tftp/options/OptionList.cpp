@@ -135,7 +135,7 @@ bool OptionList::hasOption( const string &name) const
   return options.count( name) >= 1;
 }
 
-bool OptionList::hasOption( const TftpOptions option) const
+bool OptionList::hasOption( const KnownOptions option) const
 {
   string optionName = Option::getOptionName( option);
 
@@ -187,7 +187,7 @@ void OptionList::removeOption( const std::string &name)
   options.erase( name);
 }
 
-void OptionList::removeOption( const TftpOptions option)
+void OptionList::removeOption( const KnownOptions option)
 {
   string optionName = Option::getOptionName( option);
 
@@ -205,7 +205,7 @@ void OptionList::addBlocksizeOption( const uint16_t blocksize)
 
   OptionPointer entry = OptionPointer(
     new IntegerOption< uint16_t>(
-      Option::getOptionName( TftpOptions::BLOCKSIZE),
+      Option::getOptionName( KnownOptions::BLOCKSIZE),
       TFTP_OPTION_BLOCKSIZE_MIN,
       blocksize,
       blocksize));
@@ -229,7 +229,7 @@ void OptionList::addBlocksizeOption(
 
   OptionPointer entry = OptionPointer(
     new IntegerOption< uint16_t>(
-      Option::getOptionName( TftpOptions::BLOCKSIZE),
+      Option::getOptionName( KnownOptions::BLOCKSIZE),
       minBlocksize,
       maxBlocksize,
       maxBlocksize));
@@ -240,7 +240,7 @@ void OptionList::addBlocksizeOption(
 uint16_t OptionList::getBlocksizeOption() const
 {
   OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( TftpOptions::BLOCKSIZE));
+    Option::getOptionName( KnownOptions::BLOCKSIZE));
 
   // option not set
   if (optionIt == options.end())
@@ -269,7 +269,7 @@ void OptionList::addTimeoutOption( const uint16_t timeout)
 
   OptionPointer entry = OptionPointer(
     new IntegerOption< uint16_t>(
-      Option::getOptionName( TftpOptions::TIMEOUT),
+      Option::getOptionName( KnownOptions::TIMEOUT),
       timeout,
       timeout,
       timeout));
@@ -294,7 +294,7 @@ void OptionList::addTimeoutOption(
 
   OptionPointer entry = OptionPointer(
     new IntegerOption< uint16_t>(
-      Option::getOptionName( TftpOptions::TIMEOUT),
+      Option::getOptionName( KnownOptions::TIMEOUT),
       minTimeout,
       maxTimeout,
       maxTimeout));
@@ -305,7 +305,7 @@ void OptionList::addTimeoutOption(
 uint16_t OptionList::getTimeoutOption() const
 {
   OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( TftpOptions::TIMEOUT));
+    Option::getOptionName( KnownOptions::TIMEOUT));
 
   // option not set
   if (optionIt == options.end())
@@ -330,7 +330,7 @@ void OptionList::addTransferSizeOption( const uint64_t transferSize)
 {
   OptionPointer entry = OptionPointer(
     new IntegerOption< uint64_t>(
-      Option::getOptionName( TftpOptions::TRANSFER_SIZE),
+      Option::getOptionName( KnownOptions::TRANSFER_SIZE),
       0,
       std::numeric_limits< uint64_t>::max(),
       transferSize));
@@ -342,7 +342,7 @@ void OptionList::addTransferSizeOption()
 {
   OptionPointer entry = OptionPointer(
     new IntegerOption< uint64_t>(
-      Option::getOptionName( TftpOptions::TRANSFER_SIZE),
+      Option::getOptionName( KnownOptions::TRANSFER_SIZE),
       0,
       std::numeric_limits< uint64_t>::max(),
       0));
@@ -352,18 +352,18 @@ void OptionList::addTransferSizeOption()
 
 void OptionList::removeTransferSizeOption()
 {
-  removeOption( Option::getOptionName( TftpOptions::TRANSFER_SIZE));
+  removeOption( Option::getOptionName( KnownOptions::TRANSFER_SIZE));
 }
 
 bool OptionList::hasTransferSizeOption() const
 {
-  return hasOption( Option::getOptionName( TftpOptions::TRANSFER_SIZE));
+  return hasOption( Option::getOptionName( KnownOptions::TRANSFER_SIZE));
 }
 
 uint64_t OptionList::getTransferSizeOption( void) const
 {
   OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( TftpOptions::TRANSFER_SIZE));
+    Option::getOptionName( KnownOptions::TRANSFER_SIZE));
 
   // option not set
   if (optionIt == options.end())

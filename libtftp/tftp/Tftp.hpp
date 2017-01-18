@@ -64,7 +64,7 @@ using IpAddressType = boost::asio::ip::address;
 using UdpAddressType = boost::asio::ip::udp::endpoint;
 
 //!  TFTP version information
-enum class TftpVersion
+enum class Version
 {
   //! TFTP Version 2 (RFC1350)
   Version2,
@@ -76,7 +76,7 @@ enum class TftpVersion
 };
 
 //! TFTP role enumeration
-enum class TftpRole
+enum class Role
 {
   Client, //!< TFTP client role
   Server, //!< TFTP server role
@@ -85,7 +85,7 @@ enum class TftpRole
 };
 
 //! TFTP request type
-enum class TftpRequestType
+enum class RequestType
 {
   Read,
   Write,
@@ -93,7 +93,7 @@ enum class TftpRequestType
   Invalid
 };
 //! @brief Phases of TFTP transfer
-enum class TftpTransferPhase
+enum class TransferPhase
 {
   //! Initialisation phase before any request has been sent/ received.
   Initialisation,
@@ -187,7 +187,7 @@ enum class ErrorCode : uint16_t
 };
 
 //! Enumeration of all known TFTP options
-enum class TftpOptions
+enum class KnownOptions
 {
   //! Block size option (RFC 2348)
   BLOCKSIZE,

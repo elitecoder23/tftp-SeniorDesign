@@ -19,17 +19,17 @@
 namespace Tftp {
 namespace Options {
 
-Option::string Option::getOptionName( const TftpOptions option) noexcept
+Option::string Option::getOptionName( const KnownOptions option) noexcept
 {
   switch (option)
   {
-    case TftpOptions::BLOCKSIZE:
+    case KnownOptions::BLOCKSIZE:
       return "blksize";
 
-    case TftpOptions::TIMEOUT:
+    case KnownOptions::TIMEOUT:
       return "timeout";
 
-    case TftpOptions::TRANSFER_SIZE:
+    case KnownOptions::TRANSFER_SIZE:
       return "tsize";
 
     default:

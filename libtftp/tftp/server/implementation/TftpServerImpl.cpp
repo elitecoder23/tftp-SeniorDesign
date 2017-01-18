@@ -61,8 +61,8 @@ try :
     //! @throw CommunicationException When socket operation fails.
     BOOST_THROW_EXCEPTION(
       CommunicationException() << AdditionalInfo( err.what())
-        << TftpTransferPhaseInfo(
-          TftpTransferPhase::Initialisation));
+        << TransferPhaseInfo(
+          TransferPhase::Initialisation));
   }
 }
 catch ( boost::system::system_error &err)
@@ -70,7 +70,7 @@ catch ( boost::system::system_error &err)
   //! @throw CommunicationException When socket operation fails.
   BOOST_THROW_EXCEPTION(
     CommunicationException() << AdditionalInfo( err.what())
-      << TftpTransferPhaseInfo( TftpTransferPhase::Initialisation));
+      << TransferPhaseInfo( TransferPhase::Initialisation));
 }
 
 TftpServerImpl::~TftpServerImpl() noexcept
@@ -308,7 +308,7 @@ void TftpServerImpl::handleReadRequestPacket(
 
   // call the handler, which handles the received request
   handler(
-    TftpRequestType::Read,
+    RequestType::Read,
     from,
     readRequestPacket.getFilename(),
     readRequestPacket.getMode(),
@@ -337,7 +337,7 @@ void TftpServerImpl::handleWriteRequestPacket(
 
   // call the handler, which handles the received request
   handler(
-    TftpRequestType::Write,
+    RequestType::Write,
     from,
     writeRequestPacket.getFilename(),
     writeRequestPacket.getMode(),

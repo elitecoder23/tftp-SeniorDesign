@@ -82,16 +82,16 @@ class ErrorReceivedException: public virtual TftpException
 };
 
 //! Definition of the TFTP transfer phase.
-using TftpTransferPhaseInfo =
-  boost::error_info< struct TftpTransferPhaseInfoTag, TftpTransferPhase>;
+using TransferPhaseInfo =
+  boost::error_info< struct TransferPhaseInfoTag, TransferPhase>;
 
 //! TFTP packet type information
-using TftpPacketTypeInfo =
-  boost::error_info< struct TftpPacketTypeInfoTag, PacketType>;
+using PacketTypeInfo =
+  boost::error_info< struct PacketTypeInfoTag, PacketType>;
 
 //! TFTP error packet information
-using TftpErrorPacketInfo =
-  boost::error_info< struct TftpErrorPacketInfoTag, Packet::ErrorPacket>;
+using ErrorPacketInfo =
+  boost::error_info< struct ErrorPacketInfoTag, Packet::ErrorPacket>;
 
 }
 

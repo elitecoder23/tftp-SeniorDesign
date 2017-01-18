@@ -133,7 +133,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    bool hasOption( TftpOptions option) const;
+    bool hasOption( KnownOptions option) const;
 
     /**
      * @brief Obtain for option with the given name
@@ -184,7 +184,7 @@ class OptionList
      * @param[in] option
      *   The option
      **/
-    void removeOption( TftpOptions option);
+    void removeOption( KnownOptions option);
 
     /**
      * @brief Adds the Blocksize option to the option list.

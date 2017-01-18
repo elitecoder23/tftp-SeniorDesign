@@ -68,7 +68,7 @@ class TftpServerApplication
      *
      **/
     void receivedRequest(
-      Tftp::TftpRequestType requestType,
+      Tftp::RequestType requestType,
       const Tftp::UdpAddressType &from,
       const string &filename,
       Tftp::TransferMode mode,
