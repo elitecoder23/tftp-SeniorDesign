@@ -33,49 +33,49 @@ namespace Packet {
  **/
 class ErrorPacket: public BaseErrorPacket
 {
-	public:
-		/**
-		 * @brief Generates a TFTP error packet with the given error code and
-		 *   error message.
-		 *
-		 * @param[in] errorCode
-		 *   Error code, which shall be set.
-		 * @param[in] errorMessage
-		 *   Error message, which shall be set. By default empty.
-		 **/
-		ErrorPacket(
-		  const ErrorCode errorCode,
-		  const string &errorMessage = string()) noexcept;
+  public:
+    /**
+     * @brief Generates a TFTP error packet with the given error code and
+     *   error message.
+     *
+     * @param[in] errorCode
+     *   Error code, which shall be set.
+     * @param[in] errorMessage
+     *   Error message, which shall be set. By default empty.
+     **/
+    ErrorPacket(
+      ErrorCode errorCode,
+      const string &errorMessage = string()) noexcept;
 
-		/**
-		 * @brief Generates a TFTP error packet from a data buffer
-		 *
-		 * @param[in] rawPacket
-		 *   Packet, which shall be decoded.
-		 *
-		 * @throw InvalidPacketException
-		 *   When rawPacket is not an valid packet.
-		 **/
-		ErrorPacket( const RawTftpPacketType &rawPacket);
+    /**
+     * @brief Generates a TFTP error packet from a data buffer
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @throw InvalidPacketException
+     *   When rawPacket is not an valid packet.
+     **/
+    ErrorPacket( const RawTftpPacketType &rawPacket);
 
-		/**
-		 * @brief Returns the error message of this packet.
-		 *
-		 * @return The error message
-		 **/
-		virtual string getErrorMessage( ) const override;
+    /**
+     * @brief Returns the error message of this packet.
+     *
+     * @return The error message
+     **/
+    virtual string getErrorMessage() const override;
 
-		/**
-		 * @brief Sets the error message of this packet.
-		 *
-		 * @param[in] errorMessage
-		 *   The error message to set. By default empty.
-		 **/
-		void setErrorMessage( const string &errorMessage = string());
+    /**
+     * @brief Sets the error message of this packet.
+     *
+     * @param[in] errorMessage
+     *   The error message to set. By default empty.
+     **/
+    void setErrorMessage( const string &errorMessage = string());
 
-	private:
-		//! The error message.
-		string errorMessage;
+  private:
+    //! The error message.
+    string errorMessage;
 };
 
 }
