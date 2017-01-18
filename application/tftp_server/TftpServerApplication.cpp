@@ -71,13 +71,6 @@ int TftpServerApplication::operator()()
 
     // The TFTP server instance
     server = Tftp::Server::TftpServer::createInstance(
-      configuration,
-      Tftp::Options::OptionList(),
-      Tftp::UdpAddressType(
-        boost::asio::ip::address_v4::any(),
-        configuration.tftpServerPort));
-
-    server->registerRequestHandler(
       std::bind(
         &TftpServerApplication::receivedRequest,
         this,
@@ -85,7 +78,12 @@ int TftpServerApplication::operator()()
         std::placeholders::_2,
         std::placeholders::_3,
         std::placeholders::_4,
-        std::placeholders::_5));
+        std::placeholders::_5),
+      configuration,
+      Tftp::Options::OptionList(),
+      Tftp::UdpAddressType(
+        boost::asio::ip::address_v4::any(),
+        configuration.tftpServerPort));
 
     (*server)();
   }

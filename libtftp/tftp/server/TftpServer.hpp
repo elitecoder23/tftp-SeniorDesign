@@ -56,6 +56,8 @@ class TftpServer
     /**
      * @brief Creates an instance of the TFTP server.
      *
+     * @param[in] handler
+     *   The request handler.
      * @param[in] configuration
      *   The TFTP Configuration
      * @param[in] additionalOptions
@@ -67,21 +69,13 @@ class TftpServer
      *   When a error occurs during socket initialisation.
      **/
     static TftpServerPtr createInstance(
+      ReceivedTftpRequestHandler handler,
       const TftpConfiguration &configuration = TftpConfiguration(),
       const OptionList& additionalOptions = OptionList(),
       const UdpAddressType &serverAddress = DefaultLocalEndpoint);
 
     //! Default destructor
     virtual ~TftpServer() noexcept = default;
-
-    /**
-     * @brief Registers a TFTP request handler.
-     *
-     * @param[in] handler
-     *   The request handler.
-     **/
-    virtual void registerRequestHandler(
-      ReceivedTftpRequestHandler handler = ReceivedTftpRequestHandler()) = 0;
 
     /**
      * @brief Starts the TFTP Server.

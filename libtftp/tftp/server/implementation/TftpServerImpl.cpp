@@ -33,10 +33,12 @@ namespace Tftp {
 namespace Server {
 
 TftpServerImpl::TftpServerImpl(
-	const TftpConfiguration &configuration,
+  ReceivedTftpRequestHandler handler,
+  const TftpConfiguration &configuration,
   const OptionList& additionalOptions,
   const UdpAddressType &serverAddress)
 try :
+  handler( handler),
   configuration( configuration),
   options( configuration.getServerOptions( additionalOptions)),
   serverAddress( serverAddress),
@@ -86,11 +88,6 @@ TftpServerImpl::~TftpServerImpl() noexcept
     // do not throw an exception within the constructor
     BOOST_LOG_TRIVIAL( error)<< err.what();
   }
-}
-
-void TftpServerImpl::registerRequestHandler( ReceivedTftpRequestHandler handler)
-{
-  this->handler = handler;
 }
 
 void TftpServerImpl::operator()()

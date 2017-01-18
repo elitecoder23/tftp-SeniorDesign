@@ -26,12 +26,14 @@ const Tftp::UdpAddressType TftpServer::DefaultLocalEndpoint = UdpAddressType(
   DEFAULT_TFTP_PORT);
 
 TftpServerPtr TftpServer::createInstance(
+  ReceivedTftpRequestHandler handler,
   const TftpConfiguration &configuration,
   const OptionList& additionalOptions,
   const UdpAddressType &serverAddress)
 {
   // create and return the real TFTP server
   return std::make_shared< TftpServerImpl>(
+    handler,
     configuration,
     additionalOptions,
     serverAddress);

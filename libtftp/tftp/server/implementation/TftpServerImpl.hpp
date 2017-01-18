@@ -65,6 +65,7 @@ class TftpServerImpl:
      *   When a error occurs during socket initialisation.
      **/
     TftpServerImpl(
+      ReceivedTftpRequestHandler handler,
       const TftpConfiguration &configuration,
       const OptionList& additionalOptions,
       const UdpAddressType &serverAddress);
@@ -73,9 +74,6 @@ class TftpServerImpl:
      * @brief Destructor
      **/
     virtual ~TftpServerImpl() noexcept;
-
-    virtual void registerRequestHandler(
-      ReceivedTftpRequestHandler handler) override final;
 
     //! @copydoc TftpServer::operator()()
     virtual void operator()() override final;

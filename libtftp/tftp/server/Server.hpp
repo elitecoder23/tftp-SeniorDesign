@@ -73,7 +73,8 @@ typedef void (ReceivedTftpRequestHandlerType)(
   const Options::OptionList &options);
 
 //! Function handler definition.
-using ReceivedTftpRequestHandler = std::function< ReceivedTftpRequestHandlerType>;
+using ReceivedTftpRequestHandler =
+  std::function< ReceivedTftpRequestHandlerType>;
 
 }
 }
