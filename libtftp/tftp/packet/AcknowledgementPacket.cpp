@@ -24,58 +24,59 @@
 namespace Tftp {
 namespace Packet {
 
-AcknowledgementPacket::AcknowledgementPacket( const BlockNumber blockNumber) noexcept:
-	TftpPacket( PacketType::ACKNOWLEDGEMENT),
-	blockNumber( blockNumber)
+AcknowledgementPacket::AcknowledgementPacket(
+  const BlockNumber blockNumber) noexcept:
+  TftpPacket( PacketType::ACKNOWLEDGEMENT),
+  blockNumber( blockNumber)
 {
 }
 
 AcknowledgementPacket::AcknowledgementPacket(
-	const RawTftpPacketType &rawPacket):
-	TftpPacket( PacketType::ACKNOWLEDGEMENT, rawPacket)
+  const RawTftpPacketType &rawPacket):
+  TftpPacket( PacketType::ACKNOWLEDGEMENT, rawPacket)
 {
-	// check size
-	if (rawPacket.size() != 4)
-	{
-		//! @throw InvalidPacketException When packet size is invalid
-		BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-			AdditionalInfo( "Invalid packet size of ACK packet"));
-	}
+  // check size
+  if (rawPacket.size() != 4)
+  {
+    //! @throw InvalidPacketException When packet size is invalid
+    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+      AdditionalInfo( "Invalid packet size of ACK packet"));
+  }
 
-	RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
+  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
 
-	// decode block number
-	getInt< uint16_t>( packetIt, blockNumber);
+  // decode block number
+  getInt< uint16_t>( packetIt, blockNumber);
 }
 
 BlockNumber AcknowledgementPacket::getBlockNumber() const
 {
-	return blockNumber;
+  return blockNumber;
 }
 
 void AcknowledgementPacket::setBlockNumber( const BlockNumber blockBumber)
 {
-	this->blockNumber = blockBumber;
+  this->blockNumber = blockBumber;
 }
 
 Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
 {
-	RawTftpPacketType rawPacket( 4);
+  RawTftpPacketType rawPacket( 4);
 
-	// insert header data
-	insertHeader( rawPacket);
+  // insert header data
+  insertHeader( rawPacket);
 
-	RawTftpPacketType::iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
+  RawTftpPacketType::iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
 
-	// Add block number
-	setInt( packetIt, static_cast< const uint16_t>( blockNumber));
+  // Add block number
+  setInt( packetIt, static_cast< const uint16_t>( blockNumber));
 
-	return rawPacket;
+  return rawPacket;
 }
 
 AcknowledgementPacket::string AcknowledgementPacket::toString() const
 {
-	return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
+  return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
 }
 
 }
