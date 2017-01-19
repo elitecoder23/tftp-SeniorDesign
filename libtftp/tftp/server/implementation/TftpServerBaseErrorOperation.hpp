@@ -60,7 +60,7 @@ class TftpServerBaseErrorOperation
     /**
      * @brief Default destructor.
      **/
-    virtual ~TftpServerBaseErrorOperation( void) noexcept;
+    virtual ~TftpServerBaseErrorOperation() noexcept;
 
     /**
      * @brief Sends the given error packet.

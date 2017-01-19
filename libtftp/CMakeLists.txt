@@ -46,8 +46,14 @@ add_library(
   tftp/options/OptionList.cpp
   tftp/options/StringOption.cpp
   
+  tftp/file/File.hpp
+  tftp/file/TftpFile.hpp
+  tftp/file/MemoryFile.hpp
   tftp/file/MemoryFile.cpp
+  tftp/file/StreamFile.hpp
   tftp/file/StreamFile.cpp
+  tftp/file/NullSinkFile.hpp
+  tftp/file/NullSinkFile.hpp
   
   tftp/client/Client.hpp
   tftp/client/TftpClient.hpp

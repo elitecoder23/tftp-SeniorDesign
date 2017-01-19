@@ -11,7 +11,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::File::MemoryFile
+ * @brief Definition of class Tftp::File::MemoryFile.
  **/
 
 #include "MemoryFile.hpp"
@@ -22,30 +22,30 @@ namespace Tftp {
 namespace File {
 
 MemoryFile::MemoryFile( void):
-	dataPtr( data.begin())
+  dataPtr( data.begin())
 {
 }
 
 MemoryFile::MemoryFile( const DataType &data):
-	data( data),
-	dataPtr( this->data.begin())
+  data( data),
+  dataPtr( this->data.begin())
 {
 }
 
 MemoryFile::MemoryFile( DataType &&data):
-	data( data),
-	dataPtr( this->data.begin())
+  data( data),
+  dataPtr( this->data.begin())
 {
 }
 
 const MemoryFile::DataType& MemoryFile::getData() const noexcept
 {
-	return data;
+  return data;
 }
 
 void MemoryFile::finishedOperation() noexcept
 {
-	dataPtr = data.begin();
+  dataPtr = data.begin();
 }
 
 bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
@@ -66,8 +66,8 @@ void MemoryFile::receviedData( const DataType &data) noexcept
 
 bool MemoryFile::requestedTransferSize( uint64_t &transferSize)
 {
-	transferSize = data.size();
-	return true;
+  transferSize = data.size();
+  return true;
 }
 
 MemoryFile::DataType MemoryFile::sendData( const size_t maxSize) noexcept

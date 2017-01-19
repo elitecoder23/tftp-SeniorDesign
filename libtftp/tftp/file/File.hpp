@@ -39,6 +39,7 @@ namespace File {
 class TftpFile;
 class MemoryFile;
 class StreamFile;
+class NullSinkFile;
 
 }
 }
