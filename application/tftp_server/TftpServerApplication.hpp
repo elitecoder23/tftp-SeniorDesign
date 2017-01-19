@@ -74,6 +74,17 @@ class TftpServerApplication
       Tftp::TransferMode mode,
       const Tftp::Options::OptionList &options);
 
+    void transmitFile(
+      const Tftp::UdpAddressType &from,
+      const string &filename,
+      const Tftp::Options::OptionList &options);
+
+    void receiveFile(
+      const Tftp::UdpAddressType &from,
+      const string &filename,
+      const Tftp::Options::OptionList &options);
+
+
     boost::application::context &context;
     boost::program_options::options_description optionsDescription;
 

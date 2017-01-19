@@ -11,7 +11,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpPacketHandler.
+ * @brief Definition of class Tftp::TftpPacketHandler.
  **/
 
 #include "TftpPacketHandler.hpp"

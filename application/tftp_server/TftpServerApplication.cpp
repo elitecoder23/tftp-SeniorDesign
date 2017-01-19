@@ -179,7 +179,7 @@ void TftpServerApplication::receivedRequest(
   const Tftp::TransferMode mode,
   const Tftp::Options::OptionList &options)
 {
-  BOOST_LOG_TRIVIAL( info) << "RRQ: " << filename << " from: "
+  BOOST_LOG_TRIVIAL( info) << "RQ: " << filename << " from: "
     << from.address().to_string();
 
   // Check transfer mode
@@ -218,70 +218,96 @@ void TftpServerApplication::receivedRequest(
     return;
   }
 
-  std::fstream fileStream;
-  Tftp::File::StreamFile file( fileStream);
-  Tftp::Server::TftpServerOperation operation;
-
   switch (requestType)
   {
     case Tftp::RequestType::Read:
-      // open requested file
-      fileStream.open( filename.c_str(), std::fstream::in);
-
-      // check that file was opened successfully
-      if ( !fileStream.good())
-      {
-        BOOST_LOG_TRIVIAL( error) << "Error opening file";
-
-        auto operation = server->createErrorOperation(
-          from,
-          Tftp::ErrorCode::FILE_NOT_FOUND,
-          "file not found");
-
-        operation();
-
-        return;
-      }
-
-      file.setSize( boost::filesystem::file_size( filename));
-
-      // initiate TFTP operation
-      operation = server->createReadRequestOperation(
-        file,
-        from,
-        options);
+      // we are on server side and transmit the data on RRQ
+      transmitFile( from, filename, options);
       break;
 
     case Tftp::RequestType::Write:
-      // open requested file
-      fileStream.open(
-        filename.c_str(),
-        std::fstream::out | std::fstream::trunc);
-
-      // check that file was opened successfully
-      if ( !fileStream.good())
-      {
-        BOOST_LOG_TRIVIAL( error) << "Error opening file";
-
-        auto operation = server->createErrorOperation(
-          from,
-          Tftp::ErrorCode::ACCESS_VIOLATION);
-
-        operation();
-
-        return;
-      }
-
-      // initiate TFTP operation
-      operation = server->createWriteRequestOperation(
-        file,
-        from,
-        options);
+      // we are on server side and receive the data on RRQ
+      receiveFile( from, filename, options);
       break;
 
     default:
       return;
   }
+
+}
+
+void TftpServerApplication::transmitFile(
+  const Tftp::UdpAddressType &from,
+  const string &filename,
+  const Tftp::Options::OptionList &options)
+{
+  // open requested file
+  std::fstream fileStream( filename.c_str(), std::fstream::in);
+
+  // check that file was opened successfully
+  if ( !fileStream.good())
+  {
+    BOOST_LOG_TRIVIAL( error) << "Error opening file";
+
+    auto operation = server->createErrorOperation(
+      from,
+      Tftp::ErrorCode::FILE_NOT_FOUND,
+      "file not found");
+
+    operation();
+
+    return;
+  }
+
+  Tftp::File::StreamFile file(
+    fileStream,
+    boost::filesystem::file_size( filename));
+
+  // initiate TFTP operation
+  Tftp::Server::TftpServerOperation operation(
+    server->createReadRequestOperation(
+      file,
+      from,
+      options));
+
+  // executes the TFTP operation
+  operation();
+}
+
+void TftpServerApplication::receiveFile(
+  const Tftp::UdpAddressType &from,
+  const string &filename,
+  const Tftp::Options::OptionList &options)
+{
+  // open requested file
+  std::fstream fileStream(
+    filename.c_str(),
+    std::fstream::out | std::fstream::trunc);
+
+  // check that file was opened successfully
+  if ( !fileStream.good())
+  {
+    BOOST_LOG_TRIVIAL( error) << "Error opening file";
+
+    auto operation = server->createErrorOperation(
+      from,
+      Tftp::ErrorCode::ACCESS_VIOLATION);
+
+    operation();
+
+    return;
+  }
+
+  Tftp::File::StreamFile file(
+    fileStream,
+    boost::filesystem::file_size( filename));
+
+  // initiate TFTP operation
+  Tftp::Server::TftpServerOperation operation(
+    server->createWriteRequestOperation(
+      file,
+      from,
+      options));
 
   // executes the TFTP operation
   operation();
