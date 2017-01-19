@@ -56,7 +56,7 @@ class TftpClient
       const OptionList& additionalOptions = OptionList());
 
     //! Default destructor
-    virtual ~TftpClient( void) noexcept = default;
+    virtual ~TftpClient() noexcept = default;
 
     /**
      * @brief Creates an read request operation (TFTP RRQ).

@@ -42,14 +42,13 @@ namespace Tftp {
 namespace Server {
 
 // Forward declarations
-class NewRequestHandler;
 class TftpServer;
 
 //! Declaration of TFTP server operation instance pointer
 using TftpServerPtr = std::shared_ptr< TftpServer>;
 
 //! Declaration of TFTP server operation
-using TftpServerOperation = std::function< void( void)>;
+using TftpServerOperation = std::function< void()>;
 
 /**
  * @brief Prototype for new TFTP requests handler.
