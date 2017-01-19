@@ -42,7 +42,7 @@ namespace Server {
 class TftpServer
 {
   public:
-    using OptionList = Tftp::Options::OptionList;
+    using OptionList = Options::OptionList;
 
     using string = std::string;
     /**

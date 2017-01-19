@@ -18,7 +18,6 @@
 #define TFTP_SERVER_TFTPSERVERIMPL_HPP
 
 #include <tftp/server/Server.hpp>
-#include <tftp/server/TftpServer.hpp>
 #include <tftp/server/implementation/TftpServerInternal.hpp>
 
 #include <tftp/options/OptionList.hpp>
@@ -44,13 +43,9 @@ namespace Server {
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
-class TftpServerImpl:
-  public TftpServer,
-  public TftpServerInternal,
-  private TftpPacketHandler
+class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
 {
   public:
-  using TftpServer::OptionList;
     /**
      * @brief Creates an instance of the TFTP server.
      *

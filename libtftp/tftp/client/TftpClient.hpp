@@ -35,7 +35,7 @@ namespace Client {
 class TftpClient
 {
   public:
-    using OptionList = Tftp::Options::OptionList;
+    using OptionList = Options::OptionList;
 
     using string = std::string;
 

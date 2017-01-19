@@ -18,6 +18,7 @@
 #define TFTP_CLIENT_TFTPCLIENTINTERNAL_HPP
 
 #include <tftp/server/Server.hpp>
+#include <tftp/client/TftpClient.hpp>
 #include <tftp/options/Options.hpp>
 
 namespace Tftp {
@@ -27,7 +28,7 @@ namespace Client {
  * @brief This interface class defines the methods used internally for TFTP
  *   client interrogation.
  **/
-class TftpClientInternal
+class TftpClientInternal : public TftpClient
 {
   public:
     using OptionList = Options::OptionList;

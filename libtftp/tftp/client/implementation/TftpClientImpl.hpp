@@ -18,7 +18,6 @@
 #define TFTP_CLIENT_TFTPCLIENTIMPL_HPP
 
 #include <tftp/client/Client.hpp>
-#include <tftp/client/TftpClient.hpp>
 #include <tftp/client/implementation/TftpClientInternal.hpp>
 
 #include <tftp/options/OptionList.hpp>
@@ -33,12 +32,9 @@ namespace Client {
  *
  * This factory class creates on request the concrete client operations.
  **/
-class TftpClientImpl :
-  public TftpClient,
-  public TftpClientInternal
+class TftpClientImpl : public TftpClientInternal
   {
   public:
-    using TftpClient::OptionList;
     /**
      * @brief Creates the concrete TFTP client.
      *

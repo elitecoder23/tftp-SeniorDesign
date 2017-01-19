@@ -18,6 +18,7 @@
 #define TFTP_SERVER_TFTPSERVERINTERNAL_HPP
 
 #include <tftp/server/Server.hpp>
+#include <tftp/server/TftpServer.hpp>
 #include <tftp/options/Options.hpp>
 
 namespace Tftp {
@@ -27,11 +28,9 @@ namespace Server {
  * @brief This interface class defines the methods used internally for TFTP
  *   Server interrogation.
  **/
-class TftpServerInternal
+class TftpServerInternal : public TftpServer
 {
   public:
-    using OptionList = Options::OptionList;
-
     //! Default destructor
     virtual ~TftpServerInternal() = default;
 
