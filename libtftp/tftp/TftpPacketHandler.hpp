@@ -31,16 +31,15 @@ namespace Tftp {
 class TftpPacketHandler
 {
   public:
-    using ReadRequestPacket = Tftp::Packet::ReadRequestPacket;
-    using WriteRequestPacket = Tftp::Packet::WriteRequestPacket;
+    using ReadRequestPacket = Packet::ReadRequestPacket;
+    using WriteRequestPacket = Packet::WriteRequestPacket;
     using DataPacket = Tftp::Packet::DataPacket;
-    using AcknowledgementPacket = Tftp::Packet::AcknowledgementPacket;
-    using ErrorPacket = Tftp::Packet::ErrorPacket;
-    using OptionsAcknowledgementPacket =
-      Tftp::Packet::OptionsAcknowledgementPacket;
+    using AcknowledgementPacket = Packet::AcknowledgementPacket;
+    using ErrorPacket = Packet::ErrorPacket;
+    using OptionsAcknowledgementPacket = Packet::OptionsAcknowledgementPacket;
 
     //! Default virtual destructur
-    virtual ~TftpPacketHandler( void) noexcept = default;
+    virtual ~TftpPacketHandler() noexcept = default;
 
     /**
      * @brief The handler of all received packets.

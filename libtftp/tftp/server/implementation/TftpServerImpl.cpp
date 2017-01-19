@@ -248,7 +248,7 @@ void TftpServerImpl::receive()
 
 void TftpServerImpl::receiveHandler(
   const boost::system::error_code& errorCode,
-  std::size_t bytesTransferred)
+  const std::size_t bytesTransferred)
 {
   // handle abort
   if ( boost::asio::error::operation_aborted == errorCode)

@@ -33,11 +33,11 @@ class TftpServerInternal
     using OptionList = Options::OptionList;
 
     //! Default destructor
-    virtual ~TftpServerInternal( void) = default;
+    virtual ~TftpServerInternal() = default;
 
-    virtual const TftpConfiguration& getConfiguration( void) const = 0;
+    virtual const TftpConfiguration& getConfiguration() const = 0;
 
-    virtual const OptionList& getOptionList( void) const = 0;
+    virtual const OptionList& getOptionList() const = 0;
 };
 
 }

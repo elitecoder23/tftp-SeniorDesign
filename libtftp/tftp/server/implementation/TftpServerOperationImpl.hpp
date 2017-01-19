@@ -84,7 +84,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      **/
     virtual ~TftpServerOperationImpl() noexcept;
 
-    virtual void operator ()();
+    virtual void operator()();
 
     /**
      * @brief Sets the Finished flag.

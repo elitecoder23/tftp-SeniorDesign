@@ -71,7 +71,7 @@ TftpClientApplication::TftpClientApplication(
   optionsDescription.add( configuration.getOptions());
 }
 
-int TftpClientApplication::operator()( void)
+int TftpClientApplication::operator()()
 {
   try
   {
