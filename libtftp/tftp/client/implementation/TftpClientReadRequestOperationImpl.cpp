@@ -33,6 +33,7 @@ TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
   const TransferMode mode,
   const UdpAddressType &from) :
   TftpClientOperationImpl(
+    RequestType::Read,
     tftpClientInternal,
     serverAddress,
     filename,
@@ -50,7 +51,12 @@ TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode) :
-  TftpClientOperationImpl( tftpClientInternal, serverAddress, filename, mode),
+  TftpClientOperationImpl(
+    RequestType::Read,
+    tftpClientInternal,
+    serverAddress,
+    filename,
+    mode),
   handler( handler),
   receiveDataSize( DEFAULT_DATA_SIZE),
   lastReceivedBlockNumber( 0)

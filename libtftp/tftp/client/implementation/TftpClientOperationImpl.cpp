@@ -36,13 +36,9 @@ TftpClientOperationImpl::~TftpClientOperationImpl() noexcept
 {
   BOOST_LOG_FUNCTION();
 
-  //! @todo send err if operation is in progress...
   try
   {
-    finished();
-
-    // Close the socket.
-    socket.close();
+    abort();
   }
   catch (boost::system::system_error &err)
   {
@@ -60,13 +56,49 @@ void TftpClientOperationImpl::operator()()
   ioService.run();
 }
 
+void TftpClientOperationImpl::gracefulAbort(
+  const ErrorCode errorCode,
+  const string &errorMessage)
+{
+  //! @todo not implemented
+}
+
+void TftpClientOperationImpl::abort()
+{
+  ioService.reset();
+
+  ioService.stop();
+}
+
+RequestType TftpClientOperationImpl::getRequestType() const
+{
+  return requestType;
+}
+
+const UdpAddressType& TftpClientOperationImpl::getServerAddress() const
+{
+  return remoteEndpoint;
+}
+
+const TftpClientOperationImpl::string& TftpClientOperationImpl::getFilename() const
+{
+  return filename;
+}
+
+TransferMode TftpClientOperationImpl::getMode() const
+{
+  return mode;
+}
+
 TftpClientOperationImpl::TftpClientOperationImpl(
+  const RequestType requestType,
   const TftpClientInternal &tftpClientInternal,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from)
 try :
+  requestType( requestType),
   tftpClientInternal( tftpClientInternal),
   remoteEndpoint( serverAddress),
   filename( filename),
@@ -108,11 +140,13 @@ catch ( boost::system::system_error &err)
 }
 
 TftpClientOperationImpl::TftpClientOperationImpl(
+  const RequestType requestType,
   const TftpClientInternal &tftpClientInternal,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode)
 try:
+  requestType( requestType),
   tftpClientInternal( tftpClientInternal),
   remoteEndpoint( serverAddress),
   filename( filename),
@@ -148,16 +182,6 @@ catch ( boost::system::system_error &err)
   //! @throw CommunicationException Error during initialisation of communication objects.
   BOOST_THROW_EXCEPTION(
     CommunicationException() << AdditionalInfo( err.what()));
-}
-
-TftpClientOperationImpl::string TftpClientOperationImpl::getFilename() const
-{
-  return filename;
-}
-
-Tftp::TransferMode TftpClientOperationImpl::getMode() const
-{
-  return mode;
 }
 
 TftpClientOperationImpl::OptionList& TftpClientOperationImpl::getOptions()

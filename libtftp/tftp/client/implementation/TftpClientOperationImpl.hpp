@@ -19,6 +19,7 @@
 
 #include <tftp/TftpPacketHandler.hpp>
 #include <tftp/client/Client.hpp>
+#include <tftp/client/TftpClientOperation.hpp>
 #include <tftp/packet/Packet.hpp>
 #include <tftp/options/OptionList.hpp>
 
@@ -38,7 +39,9 @@ class TftpClientInternal;
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class TftpClientOperationImpl : protected TftpPacketHandler
+class TftpClientOperationImpl :
+  public TftpClientOperation,
+  protected TftpPacketHandler
 {
   public:
     using string = std::string;
@@ -60,7 +63,27 @@ class TftpClientOperationImpl : protected TftpPacketHandler
      * A child class inheriting from this class must override this operation,
      * sending the request package and then calling this method.
      **/
-    virtual void operator()();
+    virtual void operator()() override;
+
+    //! @copydoc TftpClientOperation::gracefulAbort
+    virtual void gracefulAbort(
+      ErrorCode errorCode,
+      const string &errorMessage = string()) override final;
+
+    //! @copydoc TftpClientOperation::abort
+    virtual void abort() override final;
+
+    //! @copydoc TftpClientOperation::getRequestType
+    virtual RequestType getRequestType() const override final;
+
+    //! @copydoc TftpClientOperation::getServerAddress
+    virtual const UdpAddressType& getServerAddress() const override final;
+
+    //! @copydoc TftpClientOperation::getFilename
+    virtual const string& getFilename() const override final;
+
+    //! @copydoc TftpClientOperation::getMode
+    virtual TransferMode getMode() const override final;
 
   protected:
     using OptionList = Options::OptionList;
@@ -81,6 +104,7 @@ class TftpClientOperationImpl : protected TftpPacketHandler
      *   Optional parameter to define the communication source
      **/
     TftpClientOperationImpl(
+      RequestType requestType,
       const TftpClientInternal &tftpClientInternal,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -100,24 +124,11 @@ class TftpClientOperationImpl : protected TftpPacketHandler
      *   The transfer mode
      **/
     TftpClientOperationImpl(
+      RequestType requestType,
       const TftpClientInternal &tftpClientInternal,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode);
-
-    /**
-     * @brief Returns the request filename.
-     *
-     * @return The request filename.
-     **/
-    string getFilename() const;
-
-    /**
-     * @brief Returns the transfer mode.
-     *
-     * @return The transfer mode.
-     **/
-    TransferMode getMode() const;
 
     /**
      * @brief Returns the TFTP option list.
@@ -264,6 +275,8 @@ class TftpClientOperationImpl : protected TftpPacketHandler
      **/
     void timeoutHandler( const boost::system::error_code& errorCode);
 
+    //! The request type
+    const RequestType requestType;
     //! The internal TFTP client
     const TftpClientInternal &tftpClientInternal;
     //! The TFTP server endpoint

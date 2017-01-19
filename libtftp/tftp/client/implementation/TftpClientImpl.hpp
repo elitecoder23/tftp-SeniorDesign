@@ -48,7 +48,7 @@ class TftpClientImpl : public TftpClientInternal
       const OptionList& additionalOptions);
 
     //!@copydoc TftpClient::createReadRequestOperation(TftpReceiveDataOperationHandler &,const UdpAddressType &,const string &,const TransferMode,const UdpAddressType &)
-    virtual TftpClientOperation createReadRequestOperation(
+    virtual TftpClientOperationPtr createReadRequestOperation(
       TftpReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -56,14 +56,14 @@ class TftpClientImpl : public TftpClientInternal
       const UdpAddressType &from) override final;
 
     //!@copydoc TftpClient::createReadRequestOperation(TftpReceiveDataOperationHandler &,const UdpAddressType &,const string &,const TransferMode)
-    virtual TftpClientOperation createReadRequestOperation(
+    virtual TftpClientOperationPtr createReadRequestOperation(
       TftpReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
       const TransferMode mode) override final;
 
     //!@copydoc TftpClient::createWriteRequestOperation(TftpTransmitDataOperationHandler &,const UdpAddressType &,const string &,const TransferMode,const UdpAddressType &)
-    virtual TftpClientOperation createWriteRequestOperation(
+    virtual TftpClientOperationPtr createWriteRequestOperation(
       TftpTransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -71,7 +71,7 @@ class TftpClientImpl : public TftpClientInternal
       const UdpAddressType &from) override final;
 
     //!@copydoc TftpClient::createWriteRequestOperation(TftpTransmitDataOperationHandler &,const UdpAddressType &,const string &,const TransferMode)
-    virtual TftpClientOperation createWriteRequestOperation(
+    virtual TftpClientOperationPtr createWriteRequestOperation(
       TftpTransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,

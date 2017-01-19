@@ -33,7 +33,13 @@ TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from):
-  TftpClientOperationImpl( tftpClientInternal, serverAddress, filename, mode, from),
+  TftpClientOperationImpl(
+    RequestType::Write,
+    tftpClientInternal,
+    serverAddress,
+    filename,
+    mode,
+    from),
   handler( handler),
   transmitDataSize( DEFAULT_DATA_SIZE),
   lastDataPacketTransmitted( false),
@@ -47,7 +53,12 @@ TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode):
-  TftpClientOperationImpl( tftpClientInternal, serverAddress, filename, mode),
+  TftpClientOperationImpl(
+    RequestType::Write,
+    tftpClientInternal,
+    serverAddress,
+    filename,
+    mode),
   handler( handler),
   transmitDataSize( DEFAULT_DATA_SIZE),
   lastDataPacketTransmitted( false),

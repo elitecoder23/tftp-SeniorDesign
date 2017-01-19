@@ -21,6 +21,7 @@
 #include <tftp/TftpConfiguration.hpp>
 #include <tftp/options/OptionList.hpp>
 #include <tftp/client/TftpClient.hpp>
+#include <tftp/client/TftpClientOperation.hpp>
 #include <tftp/file/StreamFile.hpp>
 
 #include <helper/Logger.hpp>
@@ -34,12 +35,10 @@
 #include <cstdlib>
 #include <memory>
 
-using Tftp::TransferMode;
 using Tftp::Options::OptionList;
 using Tftp::File::StreamFile;
 using Tftp::Client::TftpClient;
 using Tftp::Client::TftpClientPtr;
-using Tftp::Client::TftpClientOperation;
 
 TftpClientApplication::TftpClientApplication(
   boost::application::context &context) :
@@ -85,7 +84,8 @@ int TftpClientApplication::operator()()
     // Assemble TFTP configuration
 
     TftpClientPtr tftpClient = TftpClient::createInstance( configuration);
-    TftpClientOperation op;
+    Tftp::Client::TftpClientOperationPtr op;
+
     std::fstream fileStream;
     StreamFile file( fileStream);
     boost::asio::ip::udp::endpoint serverAddress( address, configuration.tftpServerPort);
@@ -118,17 +118,17 @@ int TftpClientApplication::operator()()
     }
 
     // execute operation
-    op();
+    (*op)();
   }
   catch ( Tftp::TftpException &e)
   {
     std::string const * info = boost::get_error_info< AdditionalInfo>( e);
 
     std::cerr <<
-    	"TFTP transfer failed: " <<
+      "TFTP transfer failed: " <<
 //    	typeid( e).name() << " - " <<
-    	((nullptr==info) ? "Unknown" : *info) <<
-    	std::endl;
+      ((nullptr==info) ? "Unknown" : *info) <<
+      std::endl;
 
     return EXIT_FAILURE;
   }
@@ -147,7 +147,7 @@ int TftpClientApplication::operator()()
   return EXIT_SUCCESS;
 }
 
-bool TftpClientApplication::handleCommandLine( void)
+bool TftpClientApplication::handleCommandLine()
 {
   try
   {

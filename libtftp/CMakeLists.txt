@@ -49,18 +49,36 @@ add_library(
   tftp/file/MemoryFile.cpp
   tftp/file/StreamFile.cpp
   
+  tftp/client/Client.hpp
+  tftp/client/TftpClient.hpp
   tftp/client/TftpClient.cpp
+  tftp/client/TftpClientOperation.hpp  
+  tftp/client/implementation/TftpClientImpl.hpp
   tftp/client/implementation/TftpClientImpl.cpp
+  tftp/client/implementation/TftpClientInternal.hpp
+  tftp/client/implementation/TftpClientOperationImpl.hpp
   tftp/client/implementation/TftpClientOperationImpl.cpp
+  tftp/client/implementation/TftpClientReadRequestOperationImpl.hpp
   tftp/client/implementation/TftpClientReadRequestOperationImpl.cpp
+  tftp/client/implementation/TftpClientWriteRequestOperationImpl.hpp
   tftp/client/implementation/TftpClientWriteRequestOperationImpl.cpp
-  
+
+  tftp/server/Server.hpp
+  tftp/server/TftpServer.hpp
   tftp/server/TftpServer.cpp
+  tftp/server/TftpServerOperation.hpp
+  tftp/server/implementation/TftpServerImpl.hpp
   tftp/server/implementation/TftpServerImpl.cpp
+  tftp/server/implementation/TftpServerBaseErrorOperation.hpp
   tftp/server/implementation/TftpServerBaseErrorOperation.cpp
+  tftp/server/implementation/TftpServerErrorOperation.hpp
   tftp/server/implementation/TftpServerErrorOperation.cpp
+  tftp/server/implementation/TftpServerInternal.hpp
+  tftp/server/implementation/TftpServerOperationImpl.hpp
   tftp/server/implementation/TftpServerOperationImpl.cpp
+  tftp/server/implementation/TftpServerReadRequestOperationImpl.hpp
   tftp/server/implementation/TftpServerReadRequestOperationImpl.cpp
+  tftp/server/implementation/TftpServerWriteRequestOperationImpl.hpp
   tftp/server/implementation/TftpServerWriteRequestOperationImpl.cpp
   )
 

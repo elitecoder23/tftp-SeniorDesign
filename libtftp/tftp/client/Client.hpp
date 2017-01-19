@@ -20,7 +20,6 @@
 #include <tftp/Tftp.hpp>
 
 #include <memory>
-#include <functional>
 
 namespace Tftp {
 
@@ -34,12 +33,13 @@ namespace Tftp {
 namespace Client {
 
 class TftpClient;
+class TftpClientOperation;
 
 //! Declaration of TFTP client instance pointer
 using TftpClientPtr = std::shared_ptr< TftpClient>;
 
-//! Declaration of TFTP client operation
-using TftpClientOperation = std::function< void()>;
+//! Declaration of TFTP client operation instance pointer
+using TftpClientOperationPtr = std::shared_ptr< TftpClientOperation>;
 
 }
 }

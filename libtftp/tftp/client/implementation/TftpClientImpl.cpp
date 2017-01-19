@@ -30,72 +30,64 @@ TftpClientImpl::TftpClientImpl(
 {
 }
 
-Tftp::Client::TftpClientOperation TftpClientImpl::createReadRequestOperation(
+TftpClientOperationPtr TftpClientImpl::createReadRequestOperation(
   TftpReceiveDataOperationHandler &handler,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from)
 {
-  auto operation = std::make_shared< TftpClientReadRequestOperationImpl>(
+  return std::make_shared< TftpClientReadRequestOperationImpl>(
     handler,
     *this,
     serverAddress,
     filename,
     mode,
     from);
-
-  return std::bind( &TftpClientReadRequestOperationImpl::operator(), operation);
 }
 
-Tftp::Client::TftpClientOperation TftpClientImpl::createReadRequestOperation(
+TftpClientOperationPtr TftpClientImpl::createReadRequestOperation(
   TftpReceiveDataOperationHandler &handler,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode)
 {
-  auto operation = std::make_shared< TftpClientReadRequestOperationImpl>(
+  return std::make_shared< TftpClientReadRequestOperationImpl>(
     handler,
     *this,
     serverAddress,
     filename,
     mode);
-
-  return std::bind( &TftpClientReadRequestOperationImpl::operator(), operation);
 }
 
-Tftp::Client::TftpClientOperation TftpClientImpl::createWriteRequestOperation(
+TftpClientOperationPtr TftpClientImpl::createWriteRequestOperation(
   TftpTransmitDataOperationHandler &handler,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from)
 {
-  auto operation = std::make_shared< TftpClientWriteRequestOperationImpl>(
+  return std::make_shared< TftpClientWriteRequestOperationImpl>(
     handler,
     *this,
     serverAddress,
     filename,
     mode,
     from);
-
-  return std::bind( &TftpClientWriteRequestOperationImpl::operator(), operation);
 }
 
-Tftp::Client::TftpClientOperation TftpClientImpl::createWriteRequestOperation(
+TftpClientOperationPtr TftpClientImpl::createWriteRequestOperation(
   TftpTransmitDataOperationHandler &handler,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode)
 {
-  auto operation = std::make_shared< TftpClientWriteRequestOperationImpl>(
+  return std::make_shared< TftpClientWriteRequestOperationImpl>(
     handler,
     *this,
     serverAddress,
     filename,
     mode);
-
-  return std::bind( &TftpClientWriteRequestOperationImpl::operator(), operation);
 }
 
 const Tftp::TftpConfiguration& TftpClientImpl::getConfiguration() const
