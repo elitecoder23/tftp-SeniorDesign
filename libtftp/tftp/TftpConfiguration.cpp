@@ -27,15 +27,15 @@ TftpConfiguration::TftpConfiguration() :
 }
 
 TftpConfiguration::TftpConfiguration( const ptree &properties) :
-  tftpTimeout( properties.get( "tftp.timeout", DEFAULT_TFTP_RECEIVE_TIMEOUT)),
-  tftpRetries( properties.get( "tftp.retries", DEFAULT_TFTP_RETRIES)),
-  tftpServerPort( properties.get( "tftp.port", DEFAULT_TFTP_PORT)),
+  tftpTimeout( properties.get( "timeout", DEFAULT_TFTP_RECEIVE_TIMEOUT)),
+  tftpRetries( properties.get( "retries", DEFAULT_TFTP_RETRIES)),
+  tftpServerPort( properties.get( "port", DEFAULT_TFTP_PORT)),
 
-  handleTransferSizeOption( properties.get( "tftp.option.transferSize", false)),
+  handleTransferSizeOption( properties.get( "option.transferSize", false)),
 
-  blockSizeOption( properties.get_optional< uint16_t>( "tftp.option.blockSize.value")),
+  blockSizeOption( properties.get_optional< uint16_t>( "option.blockSize.value")),
 
-  timoutOption( properties.get_optional< uint16_t>( "tftp.option.timeout.value"))
+  timoutOption( properties.get_optional< uint16_t>( "option.timeout.value"))
 {
 }
 
@@ -43,20 +43,20 @@ TftpConfiguration::ptree TftpConfiguration::toProperties() const
 {
   ptree properties;
 
-  properties.add( "tftp.timeout", tftpTimeout);
-  properties.add( "tftp.retries", tftpRetries);
-  properties.add( "tftp.port", tftpServerPort);
+  properties.add( "timeout", tftpTimeout);
+  properties.add( "retries", tftpRetries);
+  properties.add( "port", tftpServerPort);
 
-  properties.add( "tftp.option.transferSize", handleTransferSizeOption);
+  properties.add( "option.transferSize", handleTransferSizeOption);
 
   if (blockSizeOption)
   {
-    properties.add( "tftp.option.blockSize.value", blockSizeOption);
+    properties.add( "option.blockSize.value", blockSizeOption);
   }
 
   if (timoutOption)
   {
-    properties.add( "tftp.option.timeout.value", timoutOption);
+    properties.add( "option.timeout.value", timoutOption);
   }
 
   return properties;
