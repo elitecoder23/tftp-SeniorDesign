@@ -62,7 +62,7 @@ class TftpServerApplication
      *
      * @throw
      **/
-    void checkFilename( const boost::filesystem::path &filename) const;
+    bool checkFilename( const boost::filesystem::path &filename) const;
 
     /**
      *

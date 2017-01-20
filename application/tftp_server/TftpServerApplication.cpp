@@ -158,38 +158,30 @@ bool TftpServerApplication::handleCommandLine()
   return true;
 }
 
-void TftpServerApplication::checkFilename( const boost::filesystem::path &filename) const
+bool TftpServerApplication::checkFilename( const boost::filesystem::path &filename) const
 {
   if ( filename.is_relative())
   {
-    BOOST_THROW_EXCEPTION(
-      TftpException() << AdditionalInfo( "Illegal filename: is relative"));
+    return false;
   }
 
   if ( boost::filesystem::is_directory( filename))
   {
-    BOOST_THROW_EXCEPTION(
-      TftpException() << AdditionalInfo( "Illegal filename: is a directory"));
+    return false;
   }
 
   boost::filesystem::path::iterator fileIt( filename.begin());
-
-  BOOST_LOG_TRIVIAL( info) << "compare" << filename << " against " << baseDir;
-
 
   for (const auto& pathItem : baseDir)
   {
     if ( fileIt == filename.end())
     {
-      BOOST_THROW_EXCEPTION(
-        TftpException() << AdditionalInfo( "Illegal filename: filename too short"));
-      return;
+      return false;
     }
 
     if ( *fileIt != pathItem)
     {
-      BOOST_THROW_EXCEPTION(
-        TftpException() << AdditionalInfo( "Illegal filename: filename attack"));
+      return false;
     }
 
     ++fileIt;
@@ -221,21 +213,14 @@ void TftpServerApplication::receivedRequest(
     return;
   }
 
-  try
+  if (!checkFilename( (baseDir / filename).lexically_normal()))
   {
-    checkFilename( (baseDir / filename).lexically_normal());
-  }
-  catch ( TftpException &e)
-  {
-    std::string const * info = boost::get_error_info < AdditionalInfo > (e);
-
-    BOOST_LOG_TRIVIAL( error) << "Error filename check: "
-      << ((0 == info) ? "Unknown" : *info);
+    BOOST_LOG_TRIVIAL( error) << "Error filename check";
 
     auto operation = server->createErrorOperation(
       from,
       Tftp::ErrorCode::ACCESS_VIOLATION,
-      e.what());
+      "Illegal filename");
 
     operation();
 
