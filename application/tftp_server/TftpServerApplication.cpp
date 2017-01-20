@@ -186,6 +186,8 @@ bool TftpServerApplication::checkFilename( const boost::filesystem::path &filena
 
     ++fileIt;
   }
+
+  return true;
 }
 
 void TftpServerApplication::receivedRequest(
