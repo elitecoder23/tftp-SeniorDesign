@@ -31,12 +31,12 @@ class NullSinkFile : public TftpReceiveDataOperationHandler
 
     NullSinkFile( uint64_t transferSize);
 
-    virtual bool receivedTransferSize( const uint64_t transferSize) override final;
+    virtual bool receivedTransferSize( const uint64_t size) override final;
 
     virtual void receviedData( const DataType &data) noexcept override final;
 
   private:
-    boost::optional< uint64_t> transferSize;
+    boost::optional< uint64_t> size;
 };
 
 }

@@ -23,19 +23,22 @@ NullSinkFile::NullSinkFile()
 {
 }
 
-NullSinkFile::NullSinkFile( uint64_t transferSize):
-  transferSize( transferSize)
+NullSinkFile::NullSinkFile( uint64_t size):
+  size( size)
 {
 }
 
 bool NullSinkFile::receivedTransferSize( const uint64_t transferSize)
 {
-  if (this->transferSize.is_initialized())
+  // If no size is provided
+  if ( !size)
   {
-    return (this->transferSize >= transferSize);
+    // Always accept file based on size
+    return true;
   }
 
-  return true;
+  // Accept file if size is matching the maximum allowed one.
+  return (transferSize <= size);
 }
 
 void NullSinkFile::receviedData( const DataType &data) noexcept
