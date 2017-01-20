@@ -66,8 +66,14 @@ int TftpServerApplication::operator()()
       return EXIT_FAILURE;
     }
 
-    BOOST_LOG_TRIVIAL( info) << "Starting TFTP server in " << baseDir.string()
-      << " on port " << configuration.tftpServerPort;
+    // make a absolute path
+    baseDir = boost::filesystem::canonical( baseDir);
+
+    BOOST_LOG_TRIVIAL( info) <<
+      "Starting TFTP server in " <<
+      baseDir.string() <<
+      " on port " <<
+      configuration.tftpServerPort;
 
     // The TFTP server instance
     server = Tftp::Server::TftpServer::createInstance(
@@ -166,9 +172,27 @@ void TftpServerApplication::checkFilename( const boost::filesystem::path &filena
       TftpException() << AdditionalInfo( "Illegal filename: is a directory"));
   }
 
-  if ( !(filename <= baseDir))
+  boost::filesystem::path::iterator fileIt( filename.begin());
+
+  BOOST_LOG_TRIVIAL( info) << "compare" << filename << " against " << baseDir;
+
+
+  for (const auto& pathItem : baseDir)
   {
-    BOOST_LOG_TRIVIAL( info) << "potentially filename attack" << filename;
+    if ( fileIt == filename.end())
+    {
+      BOOST_THROW_EXCEPTION(
+        TftpException() << AdditionalInfo( "Illegal filename: filename too short"));
+      return;
+    }
+
+    if ( *fileIt != pathItem)
+    {
+      BOOST_THROW_EXCEPTION(
+        TftpException() << AdditionalInfo( "Illegal filename: filename attack"));
+    }
+
+    ++fileIt;
   }
 }
 
@@ -199,7 +223,7 @@ void TftpServerApplication::receivedRequest(
 
   try
   {
-    checkFilename( baseDir / filename);
+    checkFilename( (baseDir / filename).lexically_normal());
   }
   catch ( TftpException &e)
   {
