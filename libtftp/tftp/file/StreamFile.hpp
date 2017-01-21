@@ -39,7 +39,7 @@ class StreamFile: public TftpFile
      *   The data stream - A reference to this stream is stored. The stream
      *   must be valid until this instance has been destroyed.
      **/
-    StreamFile( std::iostream &stream);
+    explicit StreamFile( std::iostream &stream);
 
     /**
      * @brief Creates the StreamFile with the given stream as in/ output and

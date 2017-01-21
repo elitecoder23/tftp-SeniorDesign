@@ -19,10 +19,6 @@
 namespace Tftp {
 namespace File {
 
-NullSinkFile::NullSinkFile()
-{
-}
-
 NullSinkFile::NullSinkFile( uint64_t size):
   size( size)
 {

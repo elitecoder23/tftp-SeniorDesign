@@ -30,6 +30,7 @@ namespace Tftp {
  * Currently there are two implementations:
  * @li MemoryFile, which handles the data within a local std::vector, and
  * @li StreamFile, which handles the data through a std::iostream
+ * @li NullSinkFile, which drops every received data.
  *
  * The two implementations do not handle the data in the manner of encoding
  * handling, i.e. only the TFTP OCTET transfer mode is supported.

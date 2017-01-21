@@ -24,15 +24,43 @@
 namespace Tftp {
 namespace File {
 
+/**
+ * @brief NULL sink file.
+ *
+ * This class provides an receive data operation handler, which drops every
+ * received data package.
+ * This handler can be used for testing purposes.
+ *
+ * If a size is given, this size is checked against the value given when calling
+ * receivedTransferSize().
+ **/
 class NullSinkFile : public TftpReceiveDataOperationHandler
 {
   public:
-    NullSinkFile();
+    //! default constructor
+    NullSinkFile() = default;
 
-    NullSinkFile( uint64_t transferSize);
+    /**
+     * @brief Constructs file with maximum file size.
+     *
+     * @param[in] size
+     *   The maximum allowed size.
+     **/
+    explicit NullSinkFile( uint64_t size);
 
-    virtual bool receivedTransferSize( const uint64_t size) override final;
+    /**
+     * @copydoc TftpReceiveDataOperationHandler::receivedTransferSize
+     *
+     * If size is given on constructing this file, handle it.
+     * Otherwise return true.
+     **/
+    virtual bool receivedTransferSize( const uint64_t transferSize) override final;
 
+    /**
+     * @copydoc TftpReceiveDataOperationHandler::receviedData
+     *
+     * Drops the data immediately.
+     **/
     virtual void receviedData( const DataType &data) noexcept override final;
 
   private:

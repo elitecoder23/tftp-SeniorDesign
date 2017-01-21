@@ -21,7 +21,7 @@
 namespace Tftp {
 namespace File {
 
-MemoryFile::MemoryFile( void):
+MemoryFile::MemoryFile():
   dataPtr( data.begin())
 {
 }
