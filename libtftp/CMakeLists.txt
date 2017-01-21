@@ -11,13 +11,22 @@ cmake_minimum_required( VERSION 3.7)
 
 project ( "TFTP library")
 
-find_package( Boost REQUIRED)
+find_package( Boost REQUIRED COMPONENTS program_options)
 
 add_library(
   tftp
   
-  tftp/TftpPacketHandler.cpp
+  tftp/RequestTypeDescription.cpp
+  tftp/RequestTypeDescription.hpp
+  tftp/Tftp.hpp
   tftp/TftpConfiguration.cpp
+  tftp/TftpConfiguration.hpp
+  tftp/TftpException.hpp
+  tftp/TftpOperationHandler.hpp
+  tftp/TftpPacketHandler.cpp
+  tftp/TftpPacketHandler.hpp
+  tftp/TftpReceiveDataOperationHandler.hpp
+  tftp/TftpTransmitDataOperationHandler.hpp
   
   tftp/packet/AcknowledgementPacket.hpp
   tftp/packet/AcknowledgementPacket.cpp
@@ -91,6 +100,11 @@ add_library(
 target_include_directories( tftp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries( tftp helper ${Boost_LIBRARIES})
+
+# Add winsock for windows targets
+if(WIN32)
+  target_link_libraries( tftp wsock32 ws2_32)
+endif()
 
 add_library( 
   tftp_test 
