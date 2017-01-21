@@ -94,7 +94,7 @@ class TftpConfiguration
       const OptionList &baseOptions = OptionList()) const;
 
     //! The TFTP timeout
-    uint16_t tftpTimeout;
+    uint8_t tftpTimeout;
     //! Number of retries.
     uint16_t tftpRetries;
 
@@ -108,7 +108,7 @@ class TftpConfiguration
     boost::optional< uint16_t> blockSizeOption;
 
     //! If handleTimeoutOption is set, this value is used for option negotiation
-    boost::optional< uint16_t> timoutOption;
+    boost::optional< uint8_t> timoutOption;
 };
 }
 

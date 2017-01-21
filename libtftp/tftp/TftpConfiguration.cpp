@@ -64,22 +64,33 @@ TftpConfiguration::ptree TftpConfiguration::toProperties() const
 
 TftpConfiguration::options_description TftpConfiguration::getOptions()
 {
+  //! @todo for boost::options: https://github.com/boostorg/program_options/pull/18
+  //! should be in source on boost 1.64
+
   options_description options( "TFTP options");
 
   options.add_options()
   ("server-port",
     boost::program_options::value( &tftpServerPort)->default_value(
-      Tftp::DEFAULT_TFTP_PORT),
+      tftpServerPort),
     "UDP port, where the server is listen"
   )
   (
     "blocksize-option",
-    boost::program_options::value( &blockSizeOption),
+    //boost::program_options::value( &blockSizeOption),
+    boost::program_options::value< uint16_t>()->notifier(
+      [this]( const uint16_t &value){
+        this->blockSizeOption = value;
+    }),
     "blocksize of transfers to use"
   )
   (
     "timeout-option",
-    boost::program_options::value( &timoutOption),
+    //boost::program_options::value( &timoutOption),
+    boost::program_options::value< uint16_t>()->notifier(
+      [this]( const uint16_t &value){
+        this->timoutOption = value;
+    }),
     "If set handles the timeout option negotiation"
   )
   (
