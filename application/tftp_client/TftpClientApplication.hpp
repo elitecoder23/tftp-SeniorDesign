@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class TftpClientApplication.
@@ -23,8 +25,6 @@
 #include <boost/asio.hpp>
 
 #include <string>
-
-using Tftp::TftpConfiguration;
 
 class TftpClientApplication
 {
@@ -46,23 +46,15 @@ class TftpClientApplication
      * @retval EXIT_FAILURE
      *   If an error has occurred.
      **/
-    int operator()( void);
+    int operator()();
 
   private:
-    enum class Operation
-    {
-      READ,
-      WRITE,
-
-      INVALID
-    };
-
     /**
      * @brief Parsed the command line and assigns parameter.
      *
      * @return If parsing was successful
      **/
-    bool handleCommandLine( void);
+    bool handleCommandLine();
 
     //! The application context
     boost::application::context& context;
@@ -70,11 +62,11 @@ class TftpClientApplication
     boost::program_options::options_description optionsDescription;
 
     std::string operationStr;
-    Operation operation;
+    Tftp::RequestType requestType;
     std::string localFile;
     std::string remoteFile;
     boost::asio::ip::address address;
-    TftpConfiguration configuration;
+    Tftp::TftpConfiguration configuration;
 };
 
 #endif

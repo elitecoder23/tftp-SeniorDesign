@@ -19,6 +19,7 @@
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
+#include <tftp/RequestTypeDescription.hpp>
 #include <tftp/options/OptionList.hpp>
 #include <tftp/client/TftpClient.hpp>
 #include <tftp/client/TftpClientOperation.hpp>
@@ -35,24 +36,19 @@
 #include <cstdlib>
 #include <memory>
 
-using Tftp::Options::OptionList;
-using Tftp::File::StreamFile;
-using Tftp::Client::TftpClient;
-using Tftp::Client::TftpClientPtr;
-
 TftpClientApplication::TftpClientApplication(
   boost::application::context &context) :
   context( context),
   optionsDescription( "TFTP Client Options"),
-  operation( Operation::INVALID)
+  requestType( Tftp::RequestType::Invalid)
 {
   optionsDescription.add_options()
     ("help",
       "print this help screen")
 
-    ("operation",
-      boost::program_options::value< std::string>( &operationStr)->required(),
-      "the desired operation (\"READ\"|\"WRITE\")"
+    ("request-type",
+      boost::program_options::value( &requestType)->required(),
+      "the desired operation (\"Read\"|\"Write\")"
     )
     ("local-file",
       boost::program_options::value< std::string>( &localFile),
@@ -67,6 +63,7 @@ TftpClientApplication::TftpClientApplication(
       "remote address"
     );
 
+  // Add common TFTP options
   optionsDescription.add( configuration.getOptions());
 }
 
@@ -83,16 +80,17 @@ int TftpClientApplication::operator()()
 
     // Assemble TFTP configuration
 
-    TftpClientPtr tftpClient = TftpClient::createInstance( configuration);
+    auto tftpClient = Tftp::Client::TftpClient::createInstance(
+      configuration);
     Tftp::Client::TftpClientOperationPtr op;
 
     std::fstream fileStream;
-    StreamFile file( fileStream);
+    Tftp::File::StreamFile file( fileStream);
     boost::asio::ip::udp::endpoint serverAddress( address, configuration.tftpServerPort);
 
-    switch ( operation)
+    switch ( requestType)
     {
-      case Operation::READ:
+      case Tftp::RequestType::Read:
         fileStream.open( localFile, std::fstream::out | std::fstream::trunc);
 
         op = tftpClient->createReadRequestOperation(
@@ -102,7 +100,7 @@ int TftpClientApplication::operator()()
           Tftp::TransferMode::OCTET);
         break;
 
-      case Operation::WRITE:
+      case Tftp::RequestType::Write:
         fileStream.open( localFile, std::fstream::in);
 
         op = tftpClient->createWriteRequestOperation(
@@ -152,7 +150,7 @@ bool TftpClientApplication::handleCommandLine()
   try
   {
     std::shared_ptr< boost::application::args> args =
-    	context.find< boost::application::args>();
+      context.find< boost::application::args>();
 
     boost::program_options::variables_map options;
     boost::program_options::store(
@@ -164,20 +162,6 @@ bool TftpClientApplication::handleCommandLine()
     boost::program_options::notify( options);
 
     if ( options.count( "help") != 0)
-    {
-      std::cout << optionsDescription << std::endl;
-      return false;
-    }
-
-    if ( 0 == operationStr.compare( "READ"))
-    {
-      operation = Operation::READ;
-    }
-    else if ( 0 == operationStr.compare( "WRITE"))
-    {
-      operation = Operation::WRITE;
-    }
-    else
     {
       std::cout << optionsDescription << std::endl;
       return false;
