@@ -20,27 +20,27 @@ namespace Tftp {
 namespace Packet {
 
 ErrorPacket::ErrorPacket(
-	const ErrorCode errorCode,
-	const string &errorMessage) noexcept:
-	BaseErrorPacket( errorCode),
-	errorMessage( errorMessage)
+  const ErrorCode errorCode,
+  const string &errorMessage) noexcept:
+  BaseErrorPacket( errorCode),
+  errorMessage( errorMessage)
 {
 }
 
 ErrorPacket::ErrorPacket( const RawTftpPacketType &rawPacket):
-	BaseErrorPacket( rawPacket),
-	errorMessage( BaseErrorPacket::getErrorMessage( rawPacket))
+  BaseErrorPacket( rawPacket),
+  errorMessage( BaseErrorPacket::getErrorMessage( rawPacket))
 {
 }
 
-ErrorPacket::string ErrorPacket::getErrorMessage( ) const
+ErrorPacket::string ErrorPacket::getErrorMessage() const
 {
-	return errorMessage;
+  return errorMessage;
 }
 
 void ErrorPacket::setErrorMessage( const string &errorMessage)
 {
-	this->errorMessage = errorMessage;
+  this->errorMessage = errorMessage;
 }
 
 }

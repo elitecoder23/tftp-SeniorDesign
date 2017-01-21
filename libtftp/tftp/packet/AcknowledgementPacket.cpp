@@ -26,14 +26,14 @@ namespace Packet {
 
 AcknowledgementPacket::AcknowledgementPacket(
   const BlockNumber blockNumber) noexcept:
-  TftpPacket( PacketType::ACKNOWLEDGEMENT),
+  TftpPacket( PacketType::Acknowledgement),
   blockNumber( blockNumber)
 {
 }
 
 AcknowledgementPacket::AcknowledgementPacket(
   const RawTftpPacketType &rawPacket):
-  TftpPacket( PacketType::ACKNOWLEDGEMENT, rawPacket)
+  TftpPacket( PacketType::Acknowledgement, rawPacket)
 {
   // check size
   if (rawPacket.size() != 4)

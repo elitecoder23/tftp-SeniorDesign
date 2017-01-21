@@ -33,7 +33,7 @@ void TftpPacketHandler::handlePacket(
 
   switch ( PacketFactory::getPacketType( rawPacket))
   {
-    case PacketType::READ_REQUEST:
+    case PacketType::ReadRequest:
       try
       {
         handleReadRequestPacket(
@@ -48,7 +48,7 @@ void TftpPacketHandler::handlePacket(
       }
       break;
 
-    case PacketType::WRITE_REQUEST:
+    case PacketType::WriteRequest:
       try
       {
         handleWriteRequestPacket(
@@ -63,7 +63,7 @@ void TftpPacketHandler::handlePacket(
       }
       break;
 
-    case PacketType::DATA:
+    case PacketType::Data:
       try
       {
         handleDataPacket( from, PacketFactory::getDataPacket( rawPacket));
@@ -76,7 +76,7 @@ void TftpPacketHandler::handlePacket(
       }
       break;
 
-    case PacketType::ACKNOWLEDGEMENT:
+    case PacketType::Acknowledgement:
       try
       {
         handleAcknowledgementPacket(
@@ -91,7 +91,7 @@ void TftpPacketHandler::handlePacket(
       }
       break;
 
-    case PacketType::ERROR:
+    case PacketType::Error:
       try
       {
         handleErrorPacket( from, PacketFactory::getErrorPacket( rawPacket));
@@ -104,7 +104,7 @@ void TftpPacketHandler::handlePacket(
       }
       break;
 
-    case PacketType::OPTIONS_ACKNOWLEDGEMENT:
+    case PacketType::OptionsAcknowledgement:
       try
       {
         handleOptionsAcknowledgementPacket(

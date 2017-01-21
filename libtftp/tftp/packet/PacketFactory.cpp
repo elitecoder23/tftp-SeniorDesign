@@ -18,7 +18,8 @@
 
 #include <helper/Logger.hpp>
 
-using namespace Tftp::Packet;
+namespace Tftp {
+namespace Packet {
 
 Tftp::PacketType PacketFactory::getPacketType(
   const RawTftpPacketType &rawPacket) noexcept
@@ -60,4 +61,7 @@ OptionsAcknowledgementPacket PacketFactory::getOptionsAcknowledgementPacket(
   const RawTftpPacketType &rawPacket)
 {
   return OptionsAcknowledgementPacket( rawPacket);
+}
+
+}
 }

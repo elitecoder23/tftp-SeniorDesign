@@ -48,6 +48,7 @@ TftpServerApplication::TftpServerApplication(
       "Directory path, where the server shall have its root"
     );
 
+  // Add TFTP options
   optionsDescription.add( configuration.getOptions());
 }
 

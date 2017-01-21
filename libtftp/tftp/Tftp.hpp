@@ -126,14 +126,14 @@ constexpr unsigned int DEFAULT_TFTP_RETRIES = 1;
  **/
 enum class PacketType : uint16_t
 {
-  READ_REQUEST            = 1, //!< Read request (RRQ)
-  WRITE_REQUEST           = 2, //!< Write request (WRQ)
-  DATA                    = 3, //!< Data (DATA)
-  ACKNOWLEDGEMENT         = 4, //!< Acknowledgement (ACK)
-  ERROR                   = 5, //!< Error (ERROR)
-  OPTIONS_ACKNOWLEDGEMENT = 6, //!< Options Acknowledgement (OACK)
+  ReadRequest            = 1, //!< Read request (RRQ)
+  WriteRequest           = 2, //!< Write request (WRQ)
+  Data                   = 3, //!< Data (DATA)
+  Acknowledgement        = 4, //!< Acknowledgement (ACK)
+  Error                  = 5, //!< Error (ERROR)
+  OptionsAcknowledgement = 6, //!< Options Acknowledgement (OACK)
 
-  INVALID                      //!< Invalid value
+  Invalid                     //!< Invalid value
 };
 
 //! Maximum size of data field in data package (without blksize option)
@@ -144,7 +144,7 @@ constexpr unsigned int DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE = 4;
 
 //! Maximum size of TFTP package (without blksize option)
 constexpr unsigned int DEFAULT_MAX_PACKET_SIZE =
-	DEFAULT_DATA_SIZE + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE;
+  DEFAULT_DATA_SIZE + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE;
 
 //! TFTP transfer modes.
 enum class TransferMode
@@ -198,14 +198,14 @@ enum class KnownOptions
 };
 
 //! Minimum TFTP block size option as defined within RFC 2348
-constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MIN = 8;
+constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MIN = 8U;
 //! Maximum TFTP block size option as defined within RFC 2348
-constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MAX = 65464;
+constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MAX = 65464U;
 
 //! Minimum TFTP timeout option as defined within RFC 2349
-constexpr unsigned int TFTP_OPTION_TIMEOUT_MIN = 1;
+constexpr unsigned int TFTP_OPTION_TIMEOUT_MIN = 1U;
 //! maximum TFTP timeout option as defined within RFC 2349
-constexpr unsigned int TFTP_OPTION_TIMEOUT_MAX = 255;
+constexpr unsigned int TFTP_OPTION_TIMEOUT_MAX = 255U;
 
 // Forward declarations
 class TftpConfiguration;

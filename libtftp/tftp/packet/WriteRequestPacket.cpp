@@ -24,7 +24,7 @@ WriteRequestPacket::WriteRequestPacket(
   const TransferMode mode,
   const OptionList &options) noexcept:
   ReadWriteRequestPacket(
-    PacketType::WRITE_REQUEST,
+    PacketType::WriteRequest,
     filename,
     mode,
     options)
@@ -32,7 +32,7 @@ WriteRequestPacket::WriteRequestPacket(
 }
 
 WriteRequestPacket::WriteRequestPacket( const RawTftpPacketType &rawPacket):
-	ReadWriteRequestPacket( PacketType::WRITE_REQUEST, rawPacket)
+	ReadWriteRequestPacket( PacketType::WriteRequest, rawPacket)
 {
 }
 

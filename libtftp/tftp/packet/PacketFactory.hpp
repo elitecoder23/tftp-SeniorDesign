@@ -38,7 +38,7 @@ namespace Packet {
  **/
 class PacketFactory
 {
-	public:
+  public:
     /**
      * @brief Determines the packet type for the given raw data packet.
      *

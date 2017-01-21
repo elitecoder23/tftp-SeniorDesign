@@ -31,7 +31,7 @@ PacketType TftpPacket::getPacketType(
   if (rawPacket.size() < TFTP_PACKET_HEADER_SIZE)
   {
     BOOST_LOG_TRIVIAL( error) << "Packet to small";
-    return PacketType::INVALID;
+    return PacketType::Invalid;
   }
 
   RawTftpPacketType::const_iterator it = rawPacket.begin();
@@ -43,19 +43,19 @@ PacketType TftpPacket::getPacketType(
   // check valid opcodes
   switch ( static_cast< PacketType>( opcode))
   {
-    case PacketType::READ_REQUEST:
-    case PacketType::WRITE_REQUEST:
-    case PacketType::DATA:
-    case PacketType::ACKNOWLEDGEMENT:
-    case PacketType::ERROR:
-    case PacketType::OPTIONS_ACKNOWLEDGEMENT:
+    case PacketType::ReadRequest:
+    case PacketType::WriteRequest:
+    case PacketType::Data:
+    case PacketType::Acknowledgement:
+    case PacketType::Error:
+    case PacketType::OptionsAcknowledgement:
       // this are valid opcodes.
       break;
 
     default:
       // return INVALID for invalid values
       BOOST_LOG_TRIVIAL( error) << "Invalid opcode " << std::hex << opcode;
-      return PacketType::INVALID;
+      return PacketType::Invalid;
   }
 
   return static_cast< PacketType>( opcode);
@@ -70,22 +70,22 @@ TftpPacket::string TftpPacket::toString() const
 {
   switch (packetType)
   {
-    case PacketType::READ_REQUEST:
+    case PacketType::ReadRequest:
       return "RRQ";
 
-    case PacketType::WRITE_REQUEST:
+    case PacketType::WriteRequest:
       return "WRQ";
 
-    case PacketType::DATA:
+    case PacketType::Data:
       return "DATA";
 
-    case PacketType::ACKNOWLEDGEMENT:
+    case PacketType::Acknowledgement:
       return "ACK";
 
-    case PacketType::ERROR:
+    case PacketType::Error:
       return "ERR";
 
-    case PacketType::OPTIONS_ACKNOWLEDGEMENT:
+    case PacketType::OptionsAcknowledgement:
       return "OACK";
 
     default:

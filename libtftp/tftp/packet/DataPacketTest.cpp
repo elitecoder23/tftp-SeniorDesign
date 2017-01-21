@@ -32,19 +32,19 @@ BOOST_AUTO_TEST_CASE( constructor )
 {
   DataPacket dp1;
 
-  BOOST_CHECK( dp1.getPacketType() == PacketType::DATA);
+  BOOST_CHECK( dp1.getPacketType() == PacketType::Data);
   BOOST_CHECK( dp1.getBlockNumber() == BlockNumber());
   BOOST_CHECK( dp1.getDataSize() == 0);
   BOOST_CHECK( dp1.getData().empty());
 
   DataPacket dp2( BlockNumber(), {'H', 'E', 'L', 'L', 'O' });
-  BOOST_CHECK( dp2.getPacketType() == PacketType::DATA);
+  BOOST_CHECK( dp2.getPacketType() == PacketType::Data);
   BOOST_CHECK( dp2.getBlockNumber() == BlockNumber());
   BOOST_CHECK( dp2.getDataSize() == 5);
   BOOST_CHECK( !dp2.getData().empty());
 
   DataPacket dp3( 55, {'H', 'E', 'L', 'L', 'O' });
-  BOOST_CHECK( dp3.getPacketType() == PacketType::DATA);
+  BOOST_CHECK( dp3.getPacketType() == PacketType::Data);
   BOOST_CHECK( dp3.getBlockNumber() == BlockNumber(55));
   BOOST_CHECK( dp3.getDataSize() == 5);
   BOOST_CHECK( !dp3.getData().empty());

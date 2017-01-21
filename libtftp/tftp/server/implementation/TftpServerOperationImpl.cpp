@@ -46,7 +46,7 @@ try:
   receiveTimeout( tftpServerInternal.getConfiguration().tftpTimeout),
   socket( ioService),
   timer( ioService),
-  transmitPacketType( PacketType::INVALID),
+  transmitPacketType( PacketType::Invalid),
   transmitCounter( 0)
 {
   try
@@ -91,7 +91,7 @@ try:
   receiveTimeout( tftpServerInternal.getConfiguration().tftpTimeout),
   socket( ioService),
   timer( ioService),
-  transmitPacketType( PacketType::INVALID),
+  transmitPacketType( PacketType::Invalid),
   transmitCounter( 0)
 {
   try

@@ -232,7 +232,7 @@ class OptionList
      * @param[in] timeout
      *   The requested timeout.
      **/
-    void addTimeoutOption( uint16_t timeout);
+    void addTimeoutOption( uint8_t timeout);
 
     /**
      * @brief Adds the timeout option to the option list.
@@ -249,8 +249,8 @@ class OptionList
      *   The maximum acceptable timeout
      **/
     void addTimeoutOption(
-      uint16_t minTimeout,
-      uint16_t maxTimeout);
+      uint8_t minTimeout,
+      uint8_t maxTimeout);
 
     /**
      * @brief Returns the value of the timeout option.
@@ -259,7 +259,7 @@ class OptionList
      * @retval 0
      *   If timeout option has not been added to this option list.
      **/
-    uint16_t getTimeoutOption() const;
+    uint8_t getTimeoutOption() const;
 
     /**
      * @brief Add the transfer size option with the given transfer size.

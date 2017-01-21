@@ -133,13 +133,13 @@ class DataPacket: public TftpPacket
      *
      * @return The data size in bytes.
      **/
-    unsigned int getDataSize( ) const;
+    size_t getDataSize() const;
 
     //! @copydoc TftpPacket::encode()
-    virtual RawTftpPacketType encode( ) const override;
+    virtual RawTftpPacketType encode() const override;
 
     //! @copydoc TftpPacket::toString()
-    virtual string toString( ) const override;
+    virtual string toString() const override;
 
   private:
     //! Block number of the packet.

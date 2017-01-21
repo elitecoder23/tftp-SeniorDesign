@@ -187,8 +187,8 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 {
   switch (packetType)
   {
-    case PacketType::READ_REQUEST:
-    case PacketType::WRITE_REQUEST:
+    case PacketType::ReadRequest:
+    case PacketType::WriteRequest:
       break;
 
     default:
@@ -205,8 +205,8 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 {
   switch (packetType)
   {
-    case PacketType::READ_REQUEST:
-    case PacketType::WRITE_REQUEST:
+    case PacketType::ReadRequest:
+    case PacketType::WriteRequest:
       break;
 
     default:

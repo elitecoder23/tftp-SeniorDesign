@@ -47,7 +47,7 @@ class TftpReceiveDataOperationHandler: public TftpOperationHandler
      *   The received amount of data cannot be handled - the operation should
      *   be aborted.
      **/
-    virtual bool receivedTransferSize( const uint64_t transferSize) = 0;
+    virtual bool receivedTransferSize( uint64_t transferSize) = 0;
 
     /**
      * @brief Data has been received and must be processed.

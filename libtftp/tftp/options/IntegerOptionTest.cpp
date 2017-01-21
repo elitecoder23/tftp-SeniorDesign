@@ -26,7 +26,15 @@ namespace Options {
 
 BOOST_AUTO_TEST_SUITE( IntegerOptionTest)
 
-BOOST_AUTO_TEST_CASE( constructor)
+BOOST_AUTO_TEST_CASE( constructor8u)
+{
+  IntegerOption< uint8_t> entry( "test", 10, 100, 50);
+
+  BOOST_CHECK( "50" == entry.getValueString());
+  BOOST_CHECK( "test" == entry.getName());
+}
+
+BOOST_AUTO_TEST_CASE( constructor16u)
 {
   IntegerOption<uint16_t> entry( "test", 10, 100, 50);
 

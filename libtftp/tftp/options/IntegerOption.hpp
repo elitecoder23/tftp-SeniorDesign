@@ -21,6 +21,8 @@
 
 #include <boost/lexical_cast.hpp>
 
+#include <stdexcept>
+
 namespace Tftp {
 namespace Options {
 
@@ -35,6 +37,8 @@ template< typename IntT>
 class IntegerOption: public Option
 {
   public:
+    static_assert( std::is_integral< IntT>::value, "IntT must be integral type");
+
     //! The used integer type
     typedef IntT IntegerType;
 
@@ -170,7 +174,13 @@ IntegerOption< IntT>::getValueString() const
 template< typename IntT>
 void IntegerOption< IntT>::setValue( const IntegerType value)
 {
-  //! @todo check min/max
+  // Check value
+  if ((value < minValue) || (value>maxValue))
+  {
+    //! @Throw std::invalid_argument when value is out of range
+    BOOST_THROW_EXCEPTION( std::invalid_argument());
+  }
+
   this->value = value;
 }
 
@@ -184,8 +194,9 @@ template< typename IntT>
 OptionPtr IntegerOption< IntT>::negotiateServer(
   const string &optionValue) const
 {
-  IntT value = toInt( optionValue);
+  IntegerType value = toInt( optionValue);
 
+  // If value is smaller then min -> option negotiation fails
   if (value < minValue)
   {
     return OptionPtr();
@@ -209,12 +220,7 @@ OptionPtr IntegerOption< IntT>::negotiateClient(
 {
   IntegerType value = toInt( optionValue);
 
-  if (value < minValue)
-  {
-    return OptionPtr();
-  }
-
-  if (value > maxValue)
+  if ((value < minValue) || (value > maxValue))
   {
     return OptionPtr();
   }
@@ -233,10 +239,25 @@ typename IntegerOption< IntT>::string IntegerOption< IntT>::toString(
   return boost::lexical_cast< string>( value);
 }
 
+template<>
+inline typename IntegerOption< uint8_t>::string IntegerOption< uint8_t>::toString(
+  const IntegerType value)
+{
+  return boost::lexical_cast< string>( (uint16_t)value);
+}
+
 template< typename IntT>
-IntT IntegerOption< IntT>::toInt( const string &value)
+typename IntegerOption< IntT>::IntegerType IntegerOption< IntT>::toInt(
+  const string &value)
 {
   return boost::lexical_cast< IntT>( value);
+}
+
+template<>
+inline typename IntegerOption< uint8_t>::IntegerType
+IntegerOption< uint8_t>::toInt( const string &value)
+{
+  return (uint8_t)boost::lexical_cast< uint16_t>( value);
 }
 
 }

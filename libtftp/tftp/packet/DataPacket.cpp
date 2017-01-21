@@ -27,7 +27,7 @@ namespace Packet {
 DataPacket::DataPacket(
   BlockNumber blockNumber,
   const std::vector<uint8_t> &data) noexcept:
-  TftpPacket( PacketType::DATA),
+  TftpPacket( PacketType::Data),
   blockNumber( blockNumber),
   data( data)
 {
@@ -35,7 +35,7 @@ DataPacket::DataPacket(
 
 DataPacket::DataPacket(
   const RawTftpPacketType &rawPacket):
-  TftpPacket( PacketType::DATA, rawPacket)
+  TftpPacket( PacketType::Data, rawPacket)
 {
   // check size
   if (rawPacket.size() < 4)
@@ -88,7 +88,7 @@ void DataPacket::setData( DataType &&data)
   this->data = std::move( data);
 }
 
-unsigned int DataPacket::getDataSize() const
+size_t DataPacket::getDataSize() const
 {
   return data.size();
 }

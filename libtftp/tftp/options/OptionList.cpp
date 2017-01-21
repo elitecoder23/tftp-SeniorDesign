@@ -261,14 +261,14 @@ uint16_t OptionList::getBlocksizeOption() const
   return integerOption->getValue();
 }
 
-void OptionList::addTimeoutOption( const uint16_t timeout)
+void OptionList::addTimeoutOption( const uint8_t timeout)
 {
   assert(
     (timeout >= TFTP_OPTION_TIMEOUT_MIN) &&
     (timeout <= TFTP_OPTION_TIMEOUT_MAX));
 
   OptionPointer entry = OptionPointer(
-    new IntegerOption< uint16_t>(
+    new IntegerOption< uint8_t>(
       Option::getOptionName( KnownOptions::TIMEOUT),
       timeout,
       timeout,
@@ -278,8 +278,8 @@ void OptionList::addTimeoutOption( const uint16_t timeout)
 }
 
 void OptionList::addTimeoutOption(
-  const uint16_t minTimeout,
-  const uint16_t maxTimeout)
+  const uint8_t minTimeout,
+  const uint8_t maxTimeout)
 {
   //! @todo what happens, if client sent bigger timeout option than server allows -> client negotiation would fail
   assert(
@@ -302,7 +302,7 @@ void OptionList::addTimeoutOption(
   setOption( entry);
 }
 
-uint16_t OptionList::getTimeoutOption() const
+uint8_t OptionList::getTimeoutOption() const
 {
   OptionMap::const_iterator optionIt = options.find(
     Option::getOptionName( KnownOptions::TIMEOUT));
@@ -313,8 +313,8 @@ uint16_t OptionList::getTimeoutOption() const
     return 0;
   }
 
-  const IntegerOption< uint16_t>* integerOption =
-    dynamic_cast< const IntegerOption< uint16_t>*>(
+  const IntegerOption< uint8_t>* integerOption =
+    dynamic_cast< const IntegerOption< uint8_t>*>(
       optionIt->second.get());
 
   // invalid cast
@@ -360,7 +360,7 @@ bool OptionList::hasTransferSizeOption() const
   return hasOption( Option::getOptionName( KnownOptions::TRANSFER_SIZE));
 }
 
-uint64_t OptionList::getTransferSizeOption( void) const
+uint64_t OptionList::getTransferSizeOption() const
 {
   OptionMap::const_iterator optionIt = options.find(
     Option::getOptionName( KnownOptions::TRANSFER_SIZE));

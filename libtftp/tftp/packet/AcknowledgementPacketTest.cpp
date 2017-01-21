@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_SUITE( TftpAcknowledgementPacket)
 BOOST_AUTO_TEST_CASE( constructor )
 {
   AcknowledgementPacket ack( 10);
-  BOOST_CHECK( PacketType::ACKNOWLEDGEMENT == ack.getPacketType());
+  BOOST_CHECK( PacketType::Acknowledgement == ack.getPacketType());
   BOOST_CHECK( 10 == ack.getBlockNumber());
 
   RawTftpPacketType raw = ack.encode();
