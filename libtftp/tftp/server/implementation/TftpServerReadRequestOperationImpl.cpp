@@ -45,7 +45,7 @@ TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
     clientOptions,
     serverAddress),
   handler( handler),
-  transmitDataSize( DEFAULT_DATA_SIZE),
+  transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
   lastTransmittedBlockNumber( 0)
 {
@@ -58,7 +58,7 @@ TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
   const OptionList &clientOptions) :
   TftpServerOperationImpl( tftpServerInternal, clientAddress, clientOptions),
   handler( handler),
-  transmitDataSize( DEFAULT_DATA_SIZE),
+  transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
   lastTransmittedBlockNumber( 0)
 {

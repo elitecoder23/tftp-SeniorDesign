@@ -22,7 +22,7 @@
 #include <tftp/options/OptionList.hpp>
 
 #include <boost/property_tree/ptree.hpp>
-#include <boost/program_options.hpp>
+#include <boost/program_options/options_description.hpp>
 #include <boost/optional.hpp>
 
 #include <cstdint>
@@ -93,7 +93,7 @@ class TftpConfiguration
     OptionList getServerOptions(
       const OptionList &baseOptions = OptionList()) const;
 
-    //! The TFTP timeout
+    //! The TFTP timeout - The standard when no timeout option is negotiated in seconds.
     uint8_t tftpTimeout;
     //! Number of retries.
     uint16_t tftpRetries;

@@ -17,7 +17,8 @@
 #ifndef TFTP_TFTP_HPP
 #define TFTP_TFTP_HPP
 
-#include <boost/asio.hpp>
+#include <boost/asio/ip/address.hpp>
+#include <boost/asio/ip/udp.hpp>
 
 #include <string>
 #include <vector>
@@ -137,14 +138,14 @@ enum class PacketType : uint16_t
 };
 
 //! Maximum size of data field in data package (without blksize option)
-constexpr unsigned int DEFAULT_DATA_SIZE = 512;
+constexpr size_t DefaultDataSize = 512U;
 
-//! Size of TFTP header in data package
-constexpr unsigned int DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE = 4;
+//! Size of TFTP header in data package (Opcode + Blocknumber)
+constexpr size_t DefaultTftpDataPacketHeaderSize = 4U;
 
 //! Maximum size of TFTP package (without blksize option)
-constexpr unsigned int DEFAULT_MAX_PACKET_SIZE =
-  DEFAULT_DATA_SIZE + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE;
+constexpr size_t DefaultMaxPacketSize =
+  DefaultDataSize + DefaultTftpDataPacketHeaderSize;
 
 //! TFTP transfer modes.
 enum class TransferMode

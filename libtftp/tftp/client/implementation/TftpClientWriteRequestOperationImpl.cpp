@@ -41,7 +41,7 @@ TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
     mode,
     from),
   handler( handler),
-  transmitDataSize( DEFAULT_DATA_SIZE),
+  transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
   lastTransmittedBlockNumber( 0)
 {
@@ -60,7 +60,7 @@ TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
     filename,
     mode),
   handler( handler),
-  transmitDataSize( DEFAULT_DATA_SIZE),
+  transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
   lastTransmittedBlockNumber( 0)
 {
@@ -70,7 +70,7 @@ void TftpClientWriteRequestOperationImpl::operator()()
 {
   try
   {
-    transmitDataSize = DEFAULT_DATA_SIZE;
+    transmitDataSize = DefaultDataSize;
     lastDataPacketTransmitted = false;
     lastTransmittedBlockNumber = 0;
 
@@ -202,7 +202,7 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
   OptionList options = optionsAcknowledgementPacket.getOptions();
 
-  //! check empty options
+  // check empty options
   if (options.getOptions().empty())
   {
     BOOST_LOG_TRIVIAL( error) << "Received option list is empty";
@@ -216,7 +216,7 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
       AdditionalInfo( "Received option list is empty"));
   }
 
-  //! perform option negotiation
+  // perform option negotiation
   OptionList negotiatedOptions = getOptions().negotiateClient( options);
   if (negotiatedOptions.getOptions().empty())
   {
@@ -231,13 +231,13 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
       AdditionalInfo( "Option negotiation failed"));
   }
 
-  //! check blocksize option
+  // check blocksize option
   if (0 != negotiatedOptions.getBlocksizeOption())
   {
     transmitDataSize = negotiatedOptions.getBlocksizeOption();
   }
 
-  //! check timeout option
+  // check timeout option
   if (0 != negotiatedOptions.getTimeoutOption())
   {
     setReceiveTimeout( negotiatedOptions.getTimeoutOption());

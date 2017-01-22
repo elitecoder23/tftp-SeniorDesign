@@ -224,7 +224,7 @@ void TftpServerImpl::receive()
 {
   try
   {
-    packet.resize( DEFAULT_MAX_PACKET_SIZE);
+    packet.resize( DefaultMaxPacketSize);
 
     // wait for incoming packet
     socket.async_receive_from(

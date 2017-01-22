@@ -40,7 +40,7 @@ TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
     mode,
     from),
   handler( handler),
-  receiveDataSize( DEFAULT_DATA_SIZE),
+  receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
 }
@@ -58,7 +58,7 @@ TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
     filename,
     mode),
   handler( handler),
-  receiveDataSize( DEFAULT_DATA_SIZE),
+  receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
 }
@@ -67,7 +67,7 @@ void TftpClientReadRequestOperationImpl::operator ()( void)
 {
   try
   {
-    receiveDataSize = DEFAULT_DATA_SIZE;
+    receiveDataSize = DefaultDataSize;
     lastReceivedBlockNumber = 0;
 
     // send read request packet
@@ -234,10 +234,10 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
     receiveDataSize = negotiatedOptions.getBlocksizeOption();
 
     // set maximum receive data size if necessary
-    if (receiveDataSize > DEFAULT_DATA_SIZE)
+    if (receiveDataSize > DefaultDataSize)
     {
       setMaxReceivePacketSize(
-        receiveDataSize + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE);
+        receiveDataSize + DefaultTftpDataPacketHeaderSize);
     }
   }
 

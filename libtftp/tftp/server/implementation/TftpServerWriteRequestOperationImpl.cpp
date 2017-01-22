@@ -46,7 +46,7 @@ TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
     clientOptions,
     serverAddress),
   handler( handler),
-  receiveDataSize( DEFAULT_DATA_SIZE),
+  receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
 }
@@ -58,7 +58,7 @@ TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
   const OptionList &clientOptions) :
   TftpServerOperationImpl( tftpServerInternal, clientAddress, clientOptions),
   handler( handler),
-  receiveDataSize( DEFAULT_DATA_SIZE),
+  receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
 }
@@ -83,10 +83,10 @@ void TftpServerWriteRequestOperationImpl::operator()()
         receiveDataSize = getOptions().getBlocksizeOption();
 
         // set receive data size if necessary
-        if ( receiveDataSize > DEFAULT_DATA_SIZE)
+        if ( receiveDataSize > DefaultDataSize)
         {
           setMaxReceivePacketSize(
-            receiveDataSize + DEFAULT_TFTP_DATA_PACKET_HEADER_SIZE);
+            receiveDataSize + DefaultTftpDataPacketHeaderSize);
         }
       }
 
