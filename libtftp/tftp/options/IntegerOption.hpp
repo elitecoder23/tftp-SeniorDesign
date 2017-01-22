@@ -178,7 +178,7 @@ void IntegerOption< IntT>::setValue( const IntegerType value)
   if ((value < minValue) || (value>maxValue))
   {
     //! @Throw std::invalid_argument when value is out of range
-    BOOST_THROW_EXCEPTION( std::invalid_argument());
+    BOOST_THROW_EXCEPTION( std::invalid_argument( "value out of range"));
   }
 
   this->value = value;
