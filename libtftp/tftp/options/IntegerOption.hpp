@@ -11,7 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration/ definition of template class Tftp::Options::IntegerOption.
+ * @brief Declaration/ definition of template class
+ *   Tftp::Options::BaserIntegerOption and Tftp::Options::IntegerOption.
+ *
+ * Additional named types are generated for the well-known TFTP options.
  **/
 
 #ifndef TFTP_OPTIONS_INTEGEROPTION_HPP
@@ -28,6 +31,17 @@
 namespace Tftp {
 namespace Options {
 
+/**
+ * @brief Base Integer Option template.
+ *
+ * Converts the option string to an integer and delegates the option negotiation
+ * to child classes.
+ *
+ * @note
+ * This template also provides specialisation for uint8_t (unsigned char) and
+ * int8_t (char).
+ * If not, this would fail because C++ internally handles strings as this type.
+ **/
 template< typename IntT>
 class BaseIntegerOption: public Option
 {
@@ -68,7 +82,9 @@ class BaseIntegerOption: public Option
     void setValue( const string &value);
 
     /**
-     * @copybrief Option::negotiateServer()
+     * @copybrief Option::negotiate()
+     *
+     * Calls @ref negotiate(IntegerType) for concrete option negotiation.
      *
      * @param[in] optionValue
      *   The option value received from the client.
@@ -77,21 +93,8 @@ class BaseIntegerOption: public Option
      * @retval OptionPointer()
      *   If option negotiation failed.
      **/
-    virtual OptionPtr negotiateServer(
-      const string &optionValue) const override final;
-
-    /**
-     * @copybrief Option::negotiateClient()
-     *
-     * @param[in] optionValue
-     *   The option value received from the server.
-     *
-     * @return The negotiated Option.
-     * @retval OptionPointer()
-     *   if option negotiation failed.
-     **/
-    virtual OptionPtr negotiateClient(
-      const string &optionValue) const override final;
+    virtual OptionPtr negotiate(
+      const string &optionValue) const noexcept override final;
 
   protected:
     /**
@@ -99,22 +102,26 @@ class BaseIntegerOption: public Option
      *
      * @param[in] name
      *   Option name
-     * @param[in] minValue
-     *   minimum allowed value
-     * @param[in] maxValue
-     *   maximum allowed value
      * @param[in] value
-     *   Current value
+     *   Current value.
+     *   Should be compliant to option negotiation ranges.
      **/
     BaseIntegerOption(
       const string &name,
       IntegerType value);
 
-    virtual OptionPtr negotiateServer(
-      IntegerType optionValue) const = 0;
-
-    virtual OptionPtr negotiateClient(
-      IntegerType optionValue) const = 0;
+    /**
+     * @copybrief Option::negotiate()
+     *
+     * @param[in] optionValue
+     *   The value to negotiate.
+     *
+     * @return The negotiated option
+     * @retval OptionPtr()
+     *   If negotiation failed for this option.
+     **/
+    virtual OptionPtr negotiate(
+      IntegerType optionValue) const noexcept = 0;
 
   private:
     /**
@@ -176,21 +183,18 @@ BaseIntegerOption< IntT>::BaseIntegerOption(
 }
 
 template< typename IntT>
-OptionPtr BaseIntegerOption< IntT>::negotiateServer(
-  const string &optionValue) const
+OptionPtr BaseIntegerOption< IntT>::negotiate(
+  const string &optionValue) const noexcept
 {
-  IntegerType value = toInt( optionValue);
-
-  return negotiateServer( value);
-}
-
-template< typename IntT>
-OptionPtr BaseIntegerOption< IntT>::negotiateClient(
-  const string &optionValue) const
-{
-  IntegerType value = toInt( optionValue);
-
-  return negotiateClient( value);
+  try
+  {
+    return negotiate( toInt( optionValue));
+  }
+  catch (...)
+  {
+    // error during integer conversion -> handle this as nogitation fail.
+    return OptionPtr();
+  }
 }
 
 template< typename IntT>
@@ -225,41 +229,38 @@ BaseIntegerOption< uint8_t>::toInt( const string &value)
 
 /**
  * @brief TFTP option, which is interpreted as integer.
- *
- * @note
- * Do not specialise this class to uint8_t (unsigned char) or int8_t (char)!
- * This would fail because C++ internally handles strings as this type.
  **/
-template< typename IntT, typename NegotiateServerT, typename NegotiateClientT>
+template< typename IntT, typename NegotiateT>
 class IntegerOption: public BaseIntegerOption< IntT>
 {
   public:
-    using NegotiateServerType = NegotiateServerT;
-    using NegotiateClientType = NegotiateClientT;
+    using NegotiateType = NegotiateT;
+
+    //! Optional integer value
+    using OptionalIntegerType = boost::optional< IntT>;
 
     /**
      * @brief Generates a option with the given parameters.
      *
      * @param[in] name
      *   Option name
-     * @param[in] minValue
-     *   minimum allowed value
-     * @param[in] maxValue
-     *   maximum allowed value
      * @param[in] value
      *   Current value
+     * @param[in] negotiateOperation
+     *   The negotiation operation to use.
      **/
     IntegerOption(
       const typename BaseIntegerOption< IntT>::string &name,
       typename BaseIntegerOption< IntT>::IntegerType value,
-      NegotiateServerType negotiateServer = NegotiateServerType(),
-      NegotiateClientType negotiateClient = NegotiateClientType());
+      NegotiateType negotiateOperation = NegotiateType());
 
-    using BaseIntegerOption< IntT>::negotiateServer;
-    using BaseIntegerOption< IntT>::negotiateClient;
+    //! Default destructor
+    virtual ~IntegerOption() noexcept = default;
+
+    using BaseIntegerOption< IntT>::negotiate;
 
     /**
-     * @copybrief Option::negotiateServer()
+     * @copybrief Option::negotiate()
      *
      * @param[in] optionValue
      *   The option value received from the client.
@@ -268,122 +269,104 @@ class IntegerOption: public BaseIntegerOption< IntT>
      * @retval OptionPointer()
      *   If option negotiation failed.
      **/
-    virtual OptionPtr negotiateServer(
-      typename BaseIntegerOption< IntT>::IntegerType optionValue) const override final;
-
-    /**
-     * @copybrief Option::negotiateClient()
-     *
-     * @param[in] optionValue
-     *   The option value received from the server.
-     *
-     * @return The negotiated Option.
-     * @retval OptionPointer()
-     *   if option negotiation failed.
-     **/
-    virtual OptionPtr negotiateClient(
-      typename BaseIntegerOption< IntT>::IntegerType optionValue) const override final;
+    virtual OptionPtr negotiate(
+      typename BaseIntegerOption< IntT>::IntegerType optionValue) const noexcept override final;
 
   private:
-    NegotiateServerType negServer;
-    NegotiateClientType negClient;
+    NegotiateType negotiateOperation;
 };
 
-template< typename IntT, typename NegotiateServerT, typename NegotiateClientT>
-IntegerOption< IntT, NegotiateServerT, NegotiateClientT>::IntegerOption(
+template< typename IntT, typename NegotiateT>
+IntegerOption< IntT, NegotiateT>::IntegerOption(
   const typename BaseIntegerOption< IntT>::string &name,
   const typename BaseIntegerOption< IntT>::IntegerType value,
-  NegotiateServerType negotiateServer,
-  NegotiateClientType negotiateClient):
+  NegotiateType negotiateOperation):
   BaseIntegerOption< IntT>( name, value),
-  negServer( negotiateServer),
-  negClient( negotiateClient)
+  negotiateOperation( negotiateOperation)
 {
 }
 
-template< typename IntT, typename NegotiateServerT, typename NegotiateClientT>
-OptionPtr IntegerOption< IntT, NegotiateServerT, NegotiateClientT>::negotiateServer(
-  typename BaseIntegerOption< IntT>::IntegerType optionValue) const
+template< typename IntT, typename NegotiateT>
+OptionPtr IntegerOption< IntT, NegotiateT>::negotiate(
+  const typename BaseIntegerOption< IntT>::IntegerType optionValue) const noexcept
 {
-  const boost::optional< IntT> negotiateValue( negServer( optionValue));
+  // negotiate the value
+  const OptionalIntegerType negotiateValue(
+    negotiateOperation( optionValue));
 
-  // If value is smaller then min -> option negotiation fails
+  // If value is not present -> option negotiation fails
   if (!negotiateValue)
   {
     return OptionPtr();
   }
 
-  return std::make_shared< IntegerOption< IntT, NegotiateServerT, NegotiateClientT> >(
+  // return the negotiated option
+  return std::make_shared< IntegerOption< IntT, NegotiateT>>(
     BaseIntegerOption< IntT>::getName(),
     *negotiateValue,
-    negServer,
-    negClient);
+    negotiateOperation);
 }
 
-template< typename IntT, typename NegotiateServerT, typename NegotiateClientT>
-OptionPtr IntegerOption< IntT, NegotiateServerT, NegotiateClientT>::negotiateClient(
-  typename BaseIntegerOption< IntT>::IntegerType optionValue) const
-{
-  const boost::optional< IntT> negotiateValue( negClient( optionValue));
-
-  // If value is smaller then min -> option negotiation fails
-  if (!negotiateValue)
-  {
-    return OptionPtr();
-  }
-
-  return std::make_shared< IntegerOption< IntT, NegotiateServerT, NegotiateClientT> >(
-    BaseIntegerOption< IntT>::getName(),
-    *negotiateValue,
-    negServer,
-    negClient);
-}
-
+/**
+ * @brief Negotiation Handler which checks the value against a range and performs
+ *   upper-cut down.
+ *
+ * If the negotiation value is bigger then max, max is returned.
+ * If the negotiation value is in range the value itself is returned.
+ * Otherwise the negotiation fails.
+ **/
 template< typename IntT>
 class NegotiateMinMaxSmaller
 {
   public:
-    NegotiateMinMaxSmaller( IntT min, IntT max):
-      min( min),
-      max( max)
+    NegotiateMinMaxSmaller( const IntT minValue, const IntT maxValue):
+      minValue( minValue),
+      maxValue( maxValue)
     {
     }
 
-    boost::optional< IntT> operator()( IntT value) const
+    boost::optional< IntT> operator()( const IntT value) const
     {
       // If value is smaller then min -> option negotiation fails
-      if (value < min)
+      if (value < minValue)
       {
         return boost::optional< IntT>();
       }
 
-      if (value > max)
+      // if value is bigger than maximum-> cut down to max.
+      if (value > maxValue)
       {
-        return max;
+        return maxValue;
       }
 
       return value;
     }
 
   private:
-    const IntT min;
-    const IntT max;
+    const IntT minValue;
+    const IntT maxValue;
 };
 
+/**
+ * @brief Negotiation Handler which checks the value against a range.
+ *
+ * If the negotiation value is in range the value itself is returned.
+ * Otherwise the negotiation fails.
+ **/
 template< typename IntT>
 class NegotiateMinMaxRange
 {
   public:
-    NegotiateMinMaxRange( IntT min, IntT max):
-      min( min),
-      max( max)
+    NegotiateMinMaxRange( const IntT minValue, const IntT maxValue):
+      minValue( minValue),
+      maxValue( maxValue)
     {
     }
 
-    boost::optional< IntT> operator()( IntT value) const
+    boost::optional< IntT> operator()( const IntT value) const
     {
       // If value is out of range -> option negotiation fails
-      if ((value < min) || (value > max))
+      if ((value < minValue) || (value > maxValue))
       {
         return boost::optional< IntT>();
       }
@@ -392,59 +375,85 @@ class NegotiateMinMaxRange
     }
 
   private:
-    const IntT min;
-    const IntT max;
+    const IntT minValue;
+    const IntT maxValue;
 };
 
+/**
+ * @brief Negotiation Handler which checks the value against a expected value.
+ *
+ * If the negotiation value is not the expected value the negotiation fails.
+ **/
+template< typename IntT>
+class NegotiateExactValue
+{
+  public:
+    NegotiateExactValue( const IntT expectedValue):
+      expectedValue( expectedValue)
+    {
+    }
+
+    boost::optional< IntT> operator()( const IntT value) const
+    {
+      if (expectedValue != value)
+      {
+        return boost::optional< IntT>();
+      }
+
+      return value;
+    }
+
+  private:
+    //! the expected value
+    const IntT expectedValue;
+};
+
+/**
+ * @brief Negotiation Handler which does nothing.
+ *
+ * The value itself is returned always.
+ **/
 template< typename IntT>
 class NegotiateAlwaysPass
 {
   public:
     NegotiateAlwaysPass() = default;
 
-    boost::optional< IntT> operator()( IntT value) const
+    boost::optional< IntT> operator()( const IntT value) const
     {
       return value;
     }
 };
 
-template< typename IntT>
-class NegotiateExactValue
-{
-  public:
-    NegotiateExactValue( IntT value):
-      value( value)
-    {
-    }
 
-    boost::optional< IntT> operator()( IntT value) const
-    {
-      if (this->value != value)
-      {
-        boost::optional< IntT>();
-      }
+//! Blocksize Option base class
+using BlockSizeOptionBase = BaseIntegerOption< uint16_t>;
 
-      return value;
-    }
+//! Blocksize option on server side - Negotiates in range with cut down to max
+using BlockSizeOptionServer =
+  IntegerOption< uint16_t, NegotiateMinMaxSmaller< uint16_t>>;
 
-  private:
-    const IntT value;
-};
+//! Blocksize option on client side - Negotiates in range.
+using BlockSizeOptionClient =
+  IntegerOption< uint16_t, NegotiateMinMaxRange< uint16_t>>;
 
-using BlockSizeOption =
-  IntegerOption<
-    uint16_t,
-    NegotiateMinMaxSmaller< uint16_t>,
-    NegotiateMinMaxRange< uint16_t>>;
+//! Timeout Option base class
+using TimeoutOptionBase = BaseIntegerOption< uint8_t>;
 
-using TimeoutOption =
-  IntegerOption<
-    uint8_t,
-    NegotiateMinMaxRange< uint8_t>,
-    NegotiateExactValue< uint8_t>>;
+//! Timeout option on server side - Negotiates in range.
+using TimeoutOptionServer =
+  IntegerOption< uint8_t, NegotiateMinMaxRange< uint8_t>>;
 
-using TransferSizeOption =
-  IntegerOption< uint64_t, NegotiateAlwaysPass< uint64_t>, NegotiateAlwaysPass< uint64_t>>;
+//! Timeout option on server side - Negotiates exact value.
+using TimeoutOptionClient =
+  IntegerOption< uint8_t, NegotiateExactValue< uint8_t>>;
+
+//! Transfer size option base class
+using TransferSizeOptionBase = BaseIntegerOption< uint64_t>;
+
+//! Timeout option on client and server side - accepts every value.
+using TransferSizeOptionServerClient =
+  IntegerOption< uint64_t, NegotiateAlwaysPass< uint64_t>>;
 
 }
 }

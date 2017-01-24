@@ -57,8 +57,8 @@ void TftpClientOperationImpl::operator()()
 }
 
 void TftpClientOperationImpl::gracefulAbort(
-  const ErrorCode errorCode,
-  const string &errorMessage)
+  const ErrorCode errorCode [[gnu::unused]],
+  const string &errorMessage [[gnu::unused]])
 {
   //! @todo not implemented
 }

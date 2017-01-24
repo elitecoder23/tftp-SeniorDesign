@@ -114,12 +114,12 @@ TftpConfiguration::OptionList TftpConfiguration::getClientOptions(
 
   if ( blockSizeOption)
   {
-    options.addBlocksizeOption( blockSizeOption.get());
+    options.addBlocksizeOptionClient( blockSizeOption.get());
   }
 
   if ( timoutOption)
   {
-    options.addTimeoutOption( timoutOption.get());
+    options.addTimeoutOptionClient( timoutOption.get());
   }
 
   return options;
@@ -137,12 +137,16 @@ TftpConfiguration::OptionList TftpConfiguration::getServerOptions(
 
   if ( blockSizeOption)
   {
-    options.addBlocksizeOption( blockSizeOption.get());
+    options.addBlocksizeOptionServer(
+      TFTP_OPTION_BLOCKSIZE_MIN,
+      blockSizeOption.get());
   }
 
   if ( timoutOption)
   {
-    options.addTimeoutOption( timoutOption.get());
+    options.addTimeoutOptionServer(
+      TFTP_OPTION_TIMEOUT_MIN,
+      timoutOption.get());
   }
 
   return options;

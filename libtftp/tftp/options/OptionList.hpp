@@ -189,12 +189,18 @@ class OptionList
     /**
      * @brief Adds the Blocksize option to the option list.
      *
-     * The acceptable range is set to [TFTP_OPTION_BLOCKSIZE_MIN, blocksize].
+     * This operation is used on client side to request a specific block size.
+     * Additionally the client defines the minimal allowed reduced blocksize.
      *
-     * @param[in] blocksize
-     *   The desired blocksize option value.
+     * @param[in] requestedBlocksize
+     *   The requested blocksize option value.
+     * @param[in] minBlocksize
+     *   The minimal accepted blocksize option value.
      **/
-    void addBlocksizeOption( uint16_t blocksize);
+    void addBlocksizeOptionClient(
+      uint16_t requestedBlocksize,
+      uint16_t minBlocksize = TFTP_OPTION_BLOCKSIZE_MIN);
+
 
     /**
      * @brief Adds the Blocksize option to the option list.
@@ -210,9 +216,9 @@ class OptionList
      * @param[in] maxBlocksize
      *    The minimum blocksize option value.
      **/
-    void addBlocksizeOption(
-      uint16_t minBlocksize,
-      uint16_t maxBlocksize);
+    void addBlocksizeOptionServer(
+      uint16_t minBlocksize = TFTP_OPTION_BLOCKSIZE_MIN,
+      uint16_t maxBlocksize = TFTP_OPTION_BLOCKSIZE_MAX);
 
     /**
      * @brief Returns the set blocksize option value.
@@ -226,13 +232,12 @@ class OptionList
     /**
      * @brief Adds the timeout option to the option list.
      *
-     * The specified timeout value must match the value specified by the
-     * client.
+     * This operation is used to set the intended timeout value on client side.
      *
      * @param[in] timeout
      *   The requested timeout.
      **/
-    void addTimeoutOption( uint8_t timeout);
+    void addTimeoutOptionClient( uint8_t timeout);
 
     /**
      * @brief Adds the timeout option to the option list.
@@ -248,9 +253,9 @@ class OptionList
      * @param[in] maxTimeout
      *   The maximum acceptable timeout
      **/
-    void addTimeoutOption(
-      uint8_t minTimeout,
-      uint8_t maxTimeout);
+    void addTimeoutOptionServer(
+      uint8_t minTimeout = TFTP_OPTION_TIMEOUT_MIN,
+      uint8_t maxTimeout = TFTP_OPTION_TIMEOUT_MAX);
 
     /**
      * @brief Returns the value of the timeout option.
@@ -276,14 +281,7 @@ class OptionList
      * @param[in] transferSize
      *   The transfer size option value.
      **/
-    void addTransferSizeOption( uint64_t transferSize);
-
-    /**
-     * @brief Add the transfer size option request.
-     *
-     * The current value is to 0
-     **/
-    void addTransferSizeOption();
+    void addTransferSizeOption( uint64_t transferSize = 0ULL);
 
     /**
      * @brief Removes the transfer size option.

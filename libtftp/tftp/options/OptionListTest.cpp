@@ -43,8 +43,8 @@ BOOST_AUTO_TEST_CASE( serverNegotiation)
 {
   OptionList serverOptions;
 
-  serverOptions.addBlocksizeOption( TFTP_OPTION_BLOCKSIZE_MIN, TFTP_OPTION_BLOCKSIZE_MAX);
-  serverOptions.addTimeoutOption( TFTP_OPTION_TIMEOUT_MIN, TFTP_OPTION_TIMEOUT_MAX);
+  serverOptions.addBlocksizeOptionServer( TFTP_OPTION_BLOCKSIZE_MIN, TFTP_OPTION_BLOCKSIZE_MAX);
+  serverOptions.addTimeoutOptionServer( TFTP_OPTION_TIMEOUT_MIN, TFTP_OPTION_TIMEOUT_MAX);
   serverOptions.addTransferSizeOption();
 
   BOOST_CHECK( serverOptions.hasOptions());
@@ -62,8 +62,8 @@ BOOST_AUTO_TEST_CASE( serverNegotiation)
   BOOST_CHECK( negotiatedOptions.getTimeoutOption() == 0);
   BOOST_CHECK( !negotiatedOptions.hasTransferSizeOption());
 
-  clientOptions.addBlocksizeOption( TFTP_OPTION_BLOCKSIZE_MIN+10);
-  clientOptions.addTimeoutOption( TFTP_OPTION_TIMEOUT_MIN+10);
+  clientOptions.addBlocksizeOptionClient( TFTP_OPTION_BLOCKSIZE_MIN+10);
+  clientOptions.addTimeoutOptionClient( TFTP_OPTION_TIMEOUT_MIN+10);
   clientOptions.addTransferSizeOption( 15);
   BOOST_CHECK( clientOptions.getBlocksizeOption() == TFTP_OPTION_BLOCKSIZE_MIN+10);
   BOOST_CHECK( clientOptions.getTimeoutOption() == TFTP_OPTION_TIMEOUT_MIN+10);

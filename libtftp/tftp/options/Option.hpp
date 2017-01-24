@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Options::Option.
@@ -95,16 +97,6 @@ class Option
      * The Server is allowed to modify the option value to a value, which is
      * accepted by the client.
      *
-     * @param[in] optionValue
-     *   The input option
-     *
-     * @return Option negotiation result
-     **/
-    virtual OptionPtr negotiateServer( const string &optionValue) const = 0;
-
-    /**
-     * @brief Option negotiation on client side.
-     *
      * This function is called, when the TFTP client receives options within
      * a OACK packet.
      * The client will or will not accept the received option value.
@@ -113,11 +105,8 @@ class Option
      *   The input option
      *
      * @return Option negotiation result
-     * @retval OptionPointer()
-     *   Option negotiation failed on client side.
-     *   Error packet will be sent.
      **/
-    virtual OptionPtr negotiateClient( const string &optionValue) const = 0;
+    virtual OptionPtr negotiate( const string &optionValue) const noexcept = 0;
 
     /**
      * @brief Returns a string, which describes the option.

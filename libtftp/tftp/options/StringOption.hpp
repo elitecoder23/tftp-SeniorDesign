@@ -52,26 +52,15 @@ class StringOption: public Option
     void setValue( const string &value);
 
     /**
-     * @copydoc Option::negotiateServer()
+     * @copydoc Option::negotiate()
      *
      * String options cannot be negotiated.
      * This operation always return an empty option pointer.
      *
      * @return Always an empty option pointer.
      **/
-    virtual OptionPtr negotiateServer(
-      const string &optionValue) const override;
-
-    /**
-     * @copydoc Option::negotiateClient()
-     *
-     * String options cannot be negotiated.
-     * This operation always return an empty option pointer.
-     *
-     * @return Always an empty option pointer.
-     **/
-    virtual OptionPtr negotiateClient(
-      const string &optionValue) const override;
+    virtual OptionPtr negotiate(
+      const string &optionValue) const noexcept override;
 
   private:
     //! The option value.

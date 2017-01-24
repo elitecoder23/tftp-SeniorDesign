@@ -197,23 +197,30 @@ void OptionList::removeOption( const KnownOptions option)
   }
 }
 
-void OptionList::addBlocksizeOption( const uint16_t blocksize)
+void OptionList::addBlocksizeOptionClient(
+  uint16_t requestedBlocksize,
+  uint16_t minBlocksize)
 {
   assert(
-    (blocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
-    (blocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+    (requestedBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
+    (requestedBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+
+  assert(
+    (minBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
+    (minBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+
+  assert( minBlocksize <= requestedBlocksize);
 
   OptionPointer entry = OptionPointer(
-    new BlockSizeOption(
+    new BlockSizeOptionClient(
       Option::getOptionName( KnownOptions::BLOCKSIZE),
-      blocksize,
-      NegotiateMinMaxSmaller< uint16_t>( TFTP_OPTION_BLOCKSIZE_MIN, blocksize),
-      NegotiateMinMaxRange< uint16_t>( TFTP_OPTION_BLOCKSIZE_MIN, blocksize)));
+      requestedBlocksize,
+      NegotiateMinMaxRange< uint16_t>( minBlocksize, requestedBlocksize)));
 
   setOption( entry);
 }
 
-void OptionList::addBlocksizeOption(
+void OptionList::addBlocksizeOptionServer(
   const uint16_t minBlocksize,
   const uint16_t maxBlocksize)
 {
@@ -228,11 +235,10 @@ void OptionList::addBlocksizeOption(
   assert( minBlocksize <= maxBlocksize);
 
   OptionPointer entry = OptionPointer(
-    new BlockSizeOption(
+    new BlockSizeOptionServer(
       Option::getOptionName( KnownOptions::BLOCKSIZE),
       maxBlocksize,
-      NegotiateMinMaxSmaller< uint16_t>( minBlocksize, maxBlocksize),
-      NegotiateMinMaxRange< uint16_t>( minBlocksize, maxBlocksize)));
+      NegotiateMinMaxSmaller< uint16_t>( minBlocksize, maxBlocksize)));
 
   setOption( entry);
 }
@@ -248,8 +254,8 @@ uint16_t OptionList::getBlocksizeOption() const
     return 0;
   }
 
-  const BlockSizeOption* integerOption =
-    dynamic_cast< const BlockSizeOption*>(
+  const BlockSizeOptionBase* integerOption =
+    dynamic_cast< const BlockSizeOptionBase*>(
       optionIt->second.get());
 
   // invalid cast
@@ -261,43 +267,36 @@ uint16_t OptionList::getBlocksizeOption() const
   return integerOption->getValue();
 }
 
-void OptionList::addTimeoutOption( const uint8_t timeout)
+void OptionList::addTimeoutOptionClient( const uint8_t timeout)
 {
-  assert(
-    (timeout >= TFTP_OPTION_TIMEOUT_MIN) &&
-    (timeout <= TFTP_OPTION_TIMEOUT_MAX));
+  // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
+  assert( timeout >= TFTP_OPTION_TIMEOUT_MIN);
 
   OptionPointer entry = OptionPointer(
-    new TimeoutOption(
+    new TimeoutOptionClient(
       Option::getOptionName( KnownOptions::TIMEOUT),
       timeout,
-      NegotiateMinMaxRange< uint8_t>( TFTP_OPTION_TIMEOUT_MIN, TFTP_OPTION_TIMEOUT_MAX),
       NegotiateExactValue< uint8_t>( timeout)));
 
   setOption( entry);
 }
 
-void OptionList::addTimeoutOption(
+void OptionList::addTimeoutOptionServer(
   const uint8_t minTimeout,
   const uint8_t maxTimeout)
 {
-  //! @todo what happens, if client sent bigger timeout option than server allows -> client negotiation would fail
-  assert(
-    (minTimeout >= TFTP_OPTION_TIMEOUT_MIN) &&
-    (minTimeout <= TFTP_OPTION_TIMEOUT_MAX));
+  // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
+  assert( minTimeout >= TFTP_OPTION_TIMEOUT_MIN);
 
-  assert(
-    (maxTimeout >= TFTP_OPTION_TIMEOUT_MIN) &&
-    (maxTimeout <= TFTP_OPTION_TIMEOUT_MAX));
+  assert( maxTimeout >= TFTP_OPTION_TIMEOUT_MIN);
 
   assert( (minTimeout <= maxTimeout));
 
   OptionPointer entry = OptionPointer(
-    new TimeoutOption(
+    new TimeoutOptionServer(
       Option::getOptionName( KnownOptions::TIMEOUT),
       maxTimeout,
-      NegotiateMinMaxRange< uint8_t>( minTimeout, maxTimeout),
-      NegotiateExactValue< uint8_t>( maxTimeout)));
+      NegotiateMinMaxRange< uint8_t>( minTimeout, maxTimeout)));
 
   setOption( entry);
 }
@@ -313,8 +312,8 @@ uint8_t OptionList::getTimeoutOption() const
     return 0;
   }
 
-  const TimeoutOption* integerOption =
-    dynamic_cast< const TimeoutOption*>(
+  const TimeoutOptionBase* integerOption =
+    dynamic_cast< const TimeoutOptionBase*>(
       optionIt->second.get());
 
   // invalid cast
@@ -329,22 +328,9 @@ uint8_t OptionList::getTimeoutOption() const
 void OptionList::addTransferSizeOption( const uint64_t transferSize)
 {
   OptionPointer entry = OptionPointer(
-    new TransferSizeOption(
+    new TransferSizeOptionServerClient(
       Option::getOptionName( KnownOptions::TRANSFER_SIZE),
       transferSize,
-      NegotiateAlwaysPass< uint64_t>(),
-      NegotiateAlwaysPass< uint64_t>()));
-
-  setOption( entry);
-}
-
-void OptionList::addTransferSizeOption()
-{
-  OptionPointer entry = OptionPointer(
-    new TransferSizeOption(
-      Option::getOptionName( KnownOptions::TRANSFER_SIZE),
-      0,
-      NegotiateAlwaysPass< uint64_t>(),
       NegotiateAlwaysPass< uint64_t>()));
 
   setOption( entry);
@@ -371,8 +357,8 @@ uint64_t OptionList::getTransferSizeOption() const
     return 0;
   }
 
-  const TransferSizeOption* integerOption =
-    dynamic_cast< const TransferSizeOption*>(
+  const TransferSizeOptionBase* integerOption =
+    dynamic_cast< const TransferSizeOptionBase*>(
       optionIt->second.get());
 
   // invalid cast
@@ -401,7 +387,7 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
     }
 
     // negotiate option
-    OptionPointer newOptionValue = negotiationEntryIt->second->negotiateServer(
+    OptionPointer newOptionValue = negotiationEntryIt->second->negotiate(
       clientOption.second->getValueString());
 
     // negotiation has returned a value -> copy option to output list
@@ -435,7 +421,7 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
     }
 
     // negotiate option, if failed also fail on top level
-    OptionPointer newOptionValue = negotiationEntryIt->second->negotiateClient(
+    OptionPointer newOptionValue = negotiationEntryIt->second->negotiate(
       serverOption.second->getValueString());
 
     // check negotiation result

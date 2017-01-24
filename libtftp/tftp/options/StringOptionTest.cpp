@@ -34,18 +34,11 @@ BOOST_AUTO_TEST_CASE( constructor)
   BOOST_CHECK( "value" == entry.getValueString());
 }
 
-BOOST_AUTO_TEST_CASE( negotiateClient)
+BOOST_AUTO_TEST_CASE( negotiate)
 {
   StringOption entry( "test", "value");
 
-  BOOST_CHECK( !entry.negotiateClient( "AAAAA"));
-}
-
-BOOST_AUTO_TEST_CASE( negotiateServer)
-{
-  StringOption entry( "test", "value");
-
-  BOOST_CHECK( !entry.negotiateServer( "AAAAA"));
+  BOOST_CHECK( !entry.negotiate( "AAAAA"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

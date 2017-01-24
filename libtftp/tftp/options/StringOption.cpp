@@ -37,17 +37,11 @@ void StringOption::setValue( const string &value)
   this->value = value;
 }
 
-OptionPtr StringOption::negotiateServer( const string &) const
+OptionPtr StringOption::negotiate( const string &) const noexcept
 {
   BOOST_LOG_TRIVIAL( error) <<
     "Its not possible to use StringOption for negotiation";
-  return OptionPtr();
-}
 
-OptionPtr StringOption::negotiateClient( const string &) const
-{
-  BOOST_LOG_TRIVIAL( error) <<
-    "Its not possible to use StringOption for negotiation";
   return OptionPtr();
 }
 
