@@ -204,11 +204,11 @@ void OptionList::addBlocksizeOption( const uint16_t blocksize)
     (blocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
 
   OptionPointer entry = OptionPointer(
-    new IntegerOption< uint16_t>(
+    new BlockSizeOption(
       Option::getOptionName( KnownOptions::BLOCKSIZE),
-      TFTP_OPTION_BLOCKSIZE_MIN,
       blocksize,
-      blocksize));
+      NegotiateMinMaxSmaller< uint16_t>( TFTP_OPTION_BLOCKSIZE_MIN, blocksize),
+      NegotiateMinMaxRange< uint16_t>( TFTP_OPTION_BLOCKSIZE_MIN, blocksize)));
 
   setOption( entry);
 }
@@ -228,11 +228,11 @@ void OptionList::addBlocksizeOption(
   assert( minBlocksize <= maxBlocksize);
 
   OptionPointer entry = OptionPointer(
-    new IntegerOption< uint16_t>(
+    new BlockSizeOption(
       Option::getOptionName( KnownOptions::BLOCKSIZE),
-      minBlocksize,
       maxBlocksize,
-      maxBlocksize));
+      NegotiateMinMaxSmaller< uint16_t>( minBlocksize, maxBlocksize),
+      NegotiateMinMaxRange< uint16_t>( minBlocksize, maxBlocksize)));
 
   setOption( entry);
 }
@@ -248,8 +248,8 @@ uint16_t OptionList::getBlocksizeOption() const
     return 0;
   }
 
-  const IntegerOption< uint16_t>* integerOption =
-    dynamic_cast< const IntegerOption< uint16_t>*>(
+  const BlockSizeOption* integerOption =
+    dynamic_cast< const BlockSizeOption*>(
       optionIt->second.get());
 
   // invalid cast
@@ -268,11 +268,11 @@ void OptionList::addTimeoutOption( const uint8_t timeout)
     (timeout <= TFTP_OPTION_TIMEOUT_MAX));
 
   OptionPointer entry = OptionPointer(
-    new IntegerOption< uint8_t>(
+    new TimeoutOption(
       Option::getOptionName( KnownOptions::TIMEOUT),
       timeout,
-      timeout,
-      timeout));
+      NegotiateMinMaxRange< uint8_t>( TFTP_OPTION_TIMEOUT_MIN, TFTP_OPTION_TIMEOUT_MAX),
+      NegotiateExactValue< uint8_t>( timeout)));
 
   setOption( entry);
 }
@@ -293,11 +293,11 @@ void OptionList::addTimeoutOption(
   assert( (minTimeout <= maxTimeout));
 
   OptionPointer entry = OptionPointer(
-    new IntegerOption< uint16_t>(
+    new TimeoutOption(
       Option::getOptionName( KnownOptions::TIMEOUT),
-      minTimeout,
       maxTimeout,
-      maxTimeout));
+      NegotiateMinMaxRange< uint8_t>( minTimeout, maxTimeout),
+      NegotiateExactValue< uint8_t>( maxTimeout)));
 
   setOption( entry);
 }
@@ -313,8 +313,8 @@ uint8_t OptionList::getTimeoutOption() const
     return 0;
   }
 
-  const IntegerOption< uint8_t>* integerOption =
-    dynamic_cast< const IntegerOption< uint8_t>*>(
+  const TimeoutOption* integerOption =
+    dynamic_cast< const TimeoutOption*>(
       optionIt->second.get());
 
   // invalid cast
@@ -329,11 +329,11 @@ uint8_t OptionList::getTimeoutOption() const
 void OptionList::addTransferSizeOption( const uint64_t transferSize)
 {
   OptionPointer entry = OptionPointer(
-    new IntegerOption< uint64_t>(
+    new TransferSizeOption(
       Option::getOptionName( KnownOptions::TRANSFER_SIZE),
-      0,
-      std::numeric_limits< uint64_t>::max(),
-      transferSize));
+      transferSize,
+      NegotiateAlwaysPass< uint64_t>(),
+      NegotiateAlwaysPass< uint64_t>()));
 
   setOption( entry);
 }
@@ -341,11 +341,11 @@ void OptionList::addTransferSizeOption( const uint64_t transferSize)
 void OptionList::addTransferSizeOption()
 {
   OptionPointer entry = OptionPointer(
-    new IntegerOption< uint64_t>(
+    new TransferSizeOption(
       Option::getOptionName( KnownOptions::TRANSFER_SIZE),
       0,
-      std::numeric_limits< uint64_t>::max(),
-      0));
+      NegotiateAlwaysPass< uint64_t>(),
+      NegotiateAlwaysPass< uint64_t>()));
 
   setOption( entry);
 }
@@ -371,8 +371,8 @@ uint64_t OptionList::getTransferSizeOption() const
     return 0;
   }
 
-  const IntegerOption< uint64_t>* integerOption =
-    dynamic_cast< const IntegerOption< uint64_t>*>(
+  const TransferSizeOption* integerOption =
+    dynamic_cast< const TransferSizeOption*>(
       optionIt->second.get());
 
   // invalid cast

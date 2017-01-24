@@ -39,8 +39,44 @@ BOOST_AUTO_TEST_CASE( constructor)
   BOOST_CHECK( !optionList.hasTransferSizeOption());
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+BOOST_AUTO_TEST_CASE( serverNegotiation)
+{
+  OptionList serverOptions;
 
+  serverOptions.addBlocksizeOption( TFTP_OPTION_BLOCKSIZE_MIN, TFTP_OPTION_BLOCKSIZE_MAX);
+  serverOptions.addTimeoutOption( TFTP_OPTION_TIMEOUT_MIN, TFTP_OPTION_TIMEOUT_MAX);
+  serverOptions.addTransferSizeOption();
+
+  BOOST_CHECK( serverOptions.hasOptions());
+  BOOST_CHECK( !serverOptions.getOptions().empty());
+  BOOST_CHECK( serverOptions.getBlocksizeOption() == TFTP_OPTION_BLOCKSIZE_MAX);
+  BOOST_CHECK( serverOptions.getTimeoutOption() == TFTP_OPTION_TIMEOUT_MAX);
+  BOOST_CHECK( serverOptions.hasTransferSizeOption());
+
+  OptionList clientOptions;
+
+  OptionList negotiatedOptions( serverOptions.negotiateServer( clientOptions));
+  BOOST_CHECK( !negotiatedOptions.hasOptions());
+  BOOST_CHECK( negotiatedOptions.getOptions().empty());
+  BOOST_CHECK( negotiatedOptions.getBlocksizeOption() == 0);
+  BOOST_CHECK( negotiatedOptions.getTimeoutOption() == 0);
+  BOOST_CHECK( !negotiatedOptions.hasTransferSizeOption());
+
+  clientOptions.addBlocksizeOption( TFTP_OPTION_BLOCKSIZE_MIN+10);
+  clientOptions.addTimeoutOption( TFTP_OPTION_TIMEOUT_MIN+10);
+  clientOptions.addTransferSizeOption( 15);
+  BOOST_CHECK( clientOptions.getBlocksizeOption() == TFTP_OPTION_BLOCKSIZE_MIN+10);
+  BOOST_CHECK( clientOptions.getTimeoutOption() == TFTP_OPTION_TIMEOUT_MIN+10);
+  BOOST_CHECK( clientOptions.getTransferSizeOption() == 15);
+
+  negotiatedOptions= serverOptions.negotiateServer( clientOptions);
+  BOOST_CHECK( negotiatedOptions.hasOptions());
+  BOOST_CHECK( !negotiatedOptions.getOptions().empty());
+  BOOST_CHECK( negotiatedOptions.getBlocksizeOption() == TFTP_OPTION_BLOCKSIZE_MIN+10);
+  BOOST_CHECK( negotiatedOptions.getTimeoutOption() == TFTP_OPTION_TIMEOUT_MIN+10);
+  BOOST_CHECK( negotiatedOptions.getTransferSizeOption() == 15);
+
+}
 
 #if 0
 static void testClientNegotiation( void)
@@ -107,6 +143,8 @@ static void testClientNegotiation( void)
 }
 
 #endif
+
+BOOST_AUTO_TEST_SUITE_END()
 
 }
 }
