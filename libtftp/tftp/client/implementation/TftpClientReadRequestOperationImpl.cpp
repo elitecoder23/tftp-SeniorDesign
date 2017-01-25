@@ -116,10 +116,11 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
     // Operation completed
     finished();
 
-    //! @throw InvalidPacketException when the DATA packet has an invalid block
+    //! @throw CommunicationException when the DATA packet has an invalid block
     //! number
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Wrong Data packet block number"));
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( "Wrong Data packet block number") <<
+      PacketTypeInfo( PacketType::Data));
   }
 
   // check for too much data
@@ -136,8 +137,9 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
     finished();
 
     //! @throw InvalidPacketException When to much data has been received.
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "To much data received"));
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( "To much data received") <<
+      PacketTypeInfo( PacketType::Data));
   }
 
   // call call-back
@@ -179,7 +181,8 @@ void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "ACK not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+    PacketTypeInfo( PacketType::Acknowledgement));
 }
 
 void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(

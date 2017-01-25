@@ -19,6 +19,7 @@
 
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpConfiguration.hpp>
+#include <tftp/client/Client.hpp>
 
 #include <boost/program_options.hpp>
 #include <boost/application.hpp>
@@ -29,6 +30,8 @@
 class TftpClientApplication
 {
   public:
+    using TftpClientPtr = Tftp::Client::TftpClientPtr;
+
     /**
      * @brief Constructs the TFTP client application.
      *
@@ -49,6 +52,10 @@ class TftpClientApplication
     int operator()();
 
   private:
+    void read( TftpClientPtr client);
+
+    void write( TftpClientPtr client);
+
     /**
      * @brief Parsed the command line and assigns parameter.
      *

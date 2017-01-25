@@ -60,7 +60,7 @@ add_library(
   tftp/file/MemoryFile.hpp
   tftp/file/MemoryFile.cpp
   tftp/file/StreamFile.hpp
-  tftp/file/StreamFile.cpp
+  tftp/file/StreamFile.ipp
   tftp/file/NullSinkFile.hpp
   tftp/file/NullSinkFile.hpp
   

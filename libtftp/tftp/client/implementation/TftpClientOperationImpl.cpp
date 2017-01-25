@@ -363,7 +363,8 @@ void TftpClientOperationImpl::handleReadRequestPacket(
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "RRQ not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+    PacketTypeInfo( PacketType::ReadRequest));
 }
 
 void TftpClientOperationImpl::handleWriteRequestPacket(
@@ -384,12 +385,13 @@ void TftpClientOperationImpl::handleWriteRequestPacket(
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "WRQ not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+    PacketTypeInfo( PacketType::WriteRequest));
 }
 
 void TftpClientOperationImpl::handleErrorPacket(
-	const UdpAddressType &,
-	const ErrorPacket &errorPacket)
+  const UdpAddressType &,
+  const ErrorPacket &errorPacket)
 {
   BOOST_LOG_FUNCTION();
 
@@ -408,8 +410,8 @@ void TftpClientOperationImpl::handleErrorPacket(
 }
 
 void TftpClientOperationImpl::handleInvalidPacket(
-	const UdpAddressType &,
-	const RawTftpPacketType &)
+  const UdpAddressType &,
+  const RawTftpPacketType &)
 {
   BOOST_LOG_FUNCTION();
 
@@ -422,9 +424,10 @@ void TftpClientOperationImpl::handleInvalidPacket(
   // Operation completed
   finished();
 
-  //! @throw InvalidPacketException Always.
-  BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-    AdditionalInfo( "received invalid packet"));
+  //! @throw CommunicationException Always.
+  BOOST_THROW_EXCEPTION( CommunicationException() <<
+    AdditionalInfo( "Invalid packet received") <<
+    PacketTypeInfo( PacketType::Invalid));
 }
 
 void TftpClientOperationImpl::receiveFirstHandler(

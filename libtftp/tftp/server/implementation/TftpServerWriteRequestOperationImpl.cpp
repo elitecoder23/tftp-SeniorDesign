@@ -29,11 +29,6 @@
 namespace Tftp {
 namespace Server {
 
-using Tftp::Packet::AcknowledgementPacket;
-using Tftp::Packet::OptionsAcknowledgementPacket;
-using Tftp::Packet::DataPacket;
-using Tftp::Packet::ErrorPacket;
-
 TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
   TftpReceiveDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
@@ -174,8 +169,8 @@ void TftpServerWriteRequestOperationImpl::handleDataPacket(
    // Operation completed
    finished();
 
-   //! @throw CommunicationException Wenn to much data is received.
-   BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+   //! @throw CommunicationException When to much data is received.
+   BOOST_THROW_EXCEPTION( CommunicationException() <<
      AdditionalInfo( "Too much data received"));
   }
 
@@ -204,7 +199,7 @@ void TftpServerWriteRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( error)<<"RX ERROR: " << acknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( error) << "RX ERROR: " << acknowledgementPacket.toString();
 
   send( ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
@@ -215,7 +210,8 @@ void TftpServerWriteRequestOperationImpl::handleAcknowledgementPacket(
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "ACK not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+   PacketTypeInfo( PacketType::Acknowledgement));
 }
 
 }

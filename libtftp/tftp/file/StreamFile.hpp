@@ -11,7 +11,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::File::StreamFile.
+ * @brief Declaration of template class Tftp::File::StreamFile.
  **/
 
 #ifndef TFTP_FILE_STREAMFILE_HPP
@@ -25,33 +25,61 @@
 
 namespace Tftp {
 namespace File {
+
 /**
  * @brief File implementation, which uses an std::iostream for file I/O
  *   handling.
  **/
+template< typename StreamT>
 class StreamFile: public TftpFile
 {
   public:
+    using StreamType = StreamT;
+
+    StreamFile() = default;
+
     /**
      * @brief Creates the StreamFile with the given stream as in/ output.
      *
      * @param[in] stream
-     *   The data stream - A reference to this stream is stored. The stream
-     *   must be valid until this instance has been destroyed.
+     *   The data stream - The stream is moved.
      **/
-    explicit StreamFile( std::iostream &stream);
+    explicit StreamFile( StreamType &&stream);
 
     /**
      * @brief Creates the StreamFile with the given stream as in/ output and
      *  the size information provided.
      *
      * @param[in] stream
-     *   The data stream - A reference to this stream is stored. The stream
-     *   must be valid until this instance has been destroyed.
+     *   The data stream - The stream is moved.
      * @param[in] size
      *   The size of the stream (e.g. file stream)
      **/
-    StreamFile( std::iostream &stream, size_t size);
+    StreamFile( StreamType &&stream, size_t size);
+
+    /**
+     * @brief Assigns a new stream to the file.
+     *
+     * @param[in] stream
+     *   The data stream - The stream is moved.
+     *
+     * @return *this
+     **/
+    StreamFile& operator=( StreamType &&stream);
+
+    /**
+     * @brief Returns the stream object.
+     *
+     * @return The stream object
+     **/
+    const StreamType& getStream() const;
+
+    /**
+     * @brief Returns the stream object.
+     *
+     * @return The stream object
+     **/
+    StreamType& getStream();
 
     /**
      * @brief updates the file size info.
@@ -88,12 +116,14 @@ class StreamFile: public TftpFile
 
   private:
     //! the data stream
-    std::iostream &stream;
+    StreamType stream;
     //! file size
     boost::optional< size_t> size;
 };
 
 }
 }
+
+#include "StreamFile.ipp"
 
 #endif

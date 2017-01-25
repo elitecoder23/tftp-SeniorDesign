@@ -271,8 +271,8 @@ void TftpServerApplication::transmitFile(
     return;
   }
 
-  Tftp::File::StreamFile file(
-    fileStream,
+  Tftp::File::StreamFile< std::fstream> file(
+    std::move( fileStream),
     boost::filesystem::file_size( filename));
 
   // initiate TFTP operation
@@ -310,8 +310,8 @@ void TftpServerApplication::receiveFile(
     return;
   }
 
-  Tftp::File::StreamFile file(
-    fileStream,
+  Tftp::File::StreamFile< std::fstream> file(
+    std::move( fileStream),
     boost::filesystem::file_size( filename));
 
   // initiate TFTP operation

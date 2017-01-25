@@ -82,41 +82,21 @@ int TftpClientApplication::operator()()
 
     auto tftpClient = Tftp::Client::TftpClient::createInstance(
       configuration);
-    Tftp::Client::TftpClientOperationPtr op;
-
-    std::fstream fileStream;
-    Tftp::File::StreamFile file( fileStream);
-    boost::asio::ip::udp::endpoint serverAddress( address, configuration.tftpServerPort);
 
     switch ( requestType)
     {
       case Tftp::RequestType::Read:
-        fileStream.open( localFile, std::fstream::out | std::fstream::trunc);
-
-        op = tftpClient->createReadRequestOperation(
-          file,
-          serverAddress,
-          remoteFile,
-          Tftp::TransferMode::OCTET);
+        read( tftpClient);
         break;
 
       case Tftp::RequestType::Write:
-        fileStream.open( localFile, std::fstream::in);
-
-        op = tftpClient->createWriteRequestOperation(
-          file,
-          serverAddress,
-          remoteFile,
-          Tftp::TransferMode::OCTET);
+        write( tftpClient);
         break;
 
       default:
         std::cerr << "Internal invalid operation" << std::endl;
         return EXIT_FAILURE;
     }
-
-    // execute operation
-    (*op)();
   }
   catch ( Tftp::TftpException &e)
   {
@@ -124,7 +104,7 @@ int TftpClientApplication::operator()()
 
     std::cerr <<
       "TFTP transfer failed: " <<
-//    	typeid( e).name() << " - " <<
+//      typeid( e).name() << " - " <<
       ((nullptr==info) ? "Unknown" : *info) <<
       std::endl;
 
@@ -143,6 +123,36 @@ int TftpClientApplication::operator()()
   }
 
   return EXIT_SUCCESS;
+}
+
+void TftpClientApplication::read( TftpClientPtr client)
+{
+  Tftp::File::StreamFile< std::fstream> file(
+    std::fstream( localFile, std::fstream::out | std::fstream::trunc));
+
+  auto op( client->createReadRequestOperation(
+    file,
+    Tftp::UdpAddressType( address, configuration.tftpServerPort),
+    remoteFile,
+    Tftp::TransferMode::OCTET));
+
+  // execute operation
+  (*op)();
+}
+
+void TftpClientApplication::write( TftpClientPtr client)
+{
+  Tftp::File::StreamFile< std::fstream> file(
+    std::fstream( localFile, std::fstream::in));
+
+  auto op( client->createWriteRequestOperation(
+    file,
+    Tftp::UdpAddressType( address, configuration.tftpServerPort),
+    remoteFile,
+    Tftp::TransferMode::OCTET));
+
+  // execute operation
+  (*op)();
 }
 
 bool TftpClientApplication::handleCommandLine()

@@ -237,7 +237,8 @@ void TftpServerOperationImpl::handleReadRequestPacket(
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "RRQ not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+   PacketTypeInfo( PacketType::ReadRequest));
 }
 
 void TftpServerOperationImpl::handleWriteRequestPacket(
@@ -255,7 +256,8 @@ void TftpServerOperationImpl::handleWriteRequestPacket(
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "WRQ not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+   PacketTypeInfo( PacketType::WriteRequest));
 }
 
 void TftpServerOperationImpl::handleErrorPacket(
@@ -288,7 +290,8 @@ void TftpServerOperationImpl::handleOptionsAcknowledgementPacket(
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "OACK not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+   PacketTypeInfo( PacketType::OptionsAcknowledgement));
 }
 
 void TftpServerOperationImpl::handleInvalidPacket(
@@ -301,8 +304,8 @@ void TftpServerOperationImpl::handleInvalidPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "Invalid packet not expected"));
 
-  //! @throw InvalidPacketException Always, because this packet is invalid.
-  BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+  //! @throw CommunicationException Always, because this packet is invalid.
+  BOOST_THROW_EXCEPTION( CommunicationException() <<
     AdditionalInfo( "Invalid TFTP packet received"));
 }
 

@@ -28,11 +28,6 @@
 namespace Tftp {
 namespace Server {
 
-using Tftp::Packet::AcknowledgementPacket;
-using Tftp::Packet::DataPacket;
-using Tftp::Packet::ErrorPacket;
-using Tftp::Packet::OptionsAcknowledgementPacket;
-
 TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
   TftpTransmitDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
@@ -162,7 +157,8 @@ void TftpServerReadRequestOperationImpl::handleDataPacket(
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "DATA not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+   PacketTypeInfo( PacketType::Data));
 }
 
 void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(

@@ -139,12 +139,13 @@ void TftpClientWriteRequestOperationImpl::handleDataPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "DATA not expected"));
 
-  //! Operation completed
+  // Operation completed
   finished();
 
   //! @throw CommunicationException Always, because this packet is invalid.
   BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "DATA not expected"));
+    AdditionalInfo( "Unexpected packet received") <<
+    PacketTypeInfo( PacketType::Data));
 }
 
 void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
@@ -153,7 +154,7 @@ void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
 {
   BOOST_LOG_TRIVIAL( info) << "RX: " << acknowledgementPacket.toString();
 
-  //! check retransmission
+  // check retransmission
   if (acknowledgementPacket.getBlockNumber() == lastTransmittedBlockNumber.previous())
   {
     BOOST_LOG_TRIVIAL( info) <<
@@ -176,7 +177,8 @@ void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
 
     //! @throw CommunicationException When invalid block number has been received.
     BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "Invalid block number received"));
+      AdditionalInfo( "Invalid block number received") <<
+      PacketTypeInfo( PacketType::Acknowledgement));
   }
 
   // if ACK for last data packet - QUIT
@@ -213,7 +215,8 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
     //! @throw CommunicationException When Option list is empty.
     BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "Received option list is empty"));
+      AdditionalInfo( "Received option list is empty") <<
+      PacketTypeInfo( PacketType::OptionsAcknowledgement));
   }
 
   // perform option negotiation
@@ -228,7 +231,8 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
     //! @throw OptionNegotiationException When option negotiation failed.
     BOOST_THROW_EXCEPTION( OptionNegotiationException() <<
-      AdditionalInfo( "Option negotiation failed"));
+      AdditionalInfo( "Option negotiation failed") <<
+      PacketTypeInfo( PacketType::OptionsAcknowledgement));
   }
 
   // check blocksize option

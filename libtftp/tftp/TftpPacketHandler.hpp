@@ -49,6 +49,10 @@ class TftpPacketHandler
      *
      * If the packet cannot be decoded handleInvalidPacket() is called.
      *
+     * If during handling (including packet conversion) a InvalidPacketException
+     * exception is thrown, handleInvalidPacket is called automatically.
+     * This exception is not re-thrown.
+     *
      * @param[in] from
      *   The source of the packet.
      * @param[in] rawPacket
