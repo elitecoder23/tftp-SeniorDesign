@@ -22,6 +22,7 @@
 #include <boost/optional.hpp>
 
 #include <iostream>
+#include <type_traits>
 
 namespace Tftp {
 namespace File {
@@ -34,6 +35,8 @@ template< typename StreamT>
 class StreamFile: public TftpFile
 {
   public:
+    static_assert( std::is_base_of< std::iostream, StreamT>::value, "StreamT must be a std::iostream");
+
     using StreamType = StreamT;
 
     StreamFile() = default;
