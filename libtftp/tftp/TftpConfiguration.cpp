@@ -35,7 +35,7 @@ TftpConfiguration::TftpConfiguration( const ptree &properties) :
 
   blockSizeOption( properties.get_optional< uint16_t>( "option.blockSize.value")),
 
-  timoutOption( properties.get_optional< uint16_t>( "option.timeout.value"))
+  timeoutOption( properties.get_optional< uint16_t>( "option.timeout.value"))
 {
 }
 
@@ -54,9 +54,9 @@ TftpConfiguration::ptree TftpConfiguration::toProperties() const
     properties.add( "option.blockSize.value", blockSizeOption);
   }
 
-  if (timoutOption)
+  if (timeoutOption)
   {
-    properties.add( "option.timeout.value", timoutOption);
+    properties.add( "option.timeout.value", timeoutOption);
   }
 
   return properties;
@@ -89,7 +89,7 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
     //boost::program_options::value( &timoutOption),
     boost::program_options::value< uint16_t>()->notifier(
       [this]( const uint16_t &value){
-        this->timoutOption = value;
+        this->timeoutOption = value;
     }),
     "If set handles the timeout option negotiation"
   )
@@ -117,9 +117,9 @@ TftpConfiguration::OptionList TftpConfiguration::getClientOptions(
     options.addBlocksizeOptionClient( blockSizeOption.get());
   }
 
-  if ( timoutOption)
+  if ( timeoutOption)
   {
-    options.addTimeoutOptionClient( timoutOption.get());
+    options.addTimeoutOptionClient( timeoutOption.get());
   }
 
   return options;
@@ -142,11 +142,11 @@ TftpConfiguration::OptionList TftpConfiguration::getServerOptions(
       blockSizeOption.get());
   }
 
-  if ( timoutOption)
+  if ( timeoutOption)
   {
     options.addTimeoutOptionServer(
       TFTP_OPTION_TIMEOUT_MIN,
-      timoutOption.get());
+      timeoutOption.get());
   }
 
   return options;

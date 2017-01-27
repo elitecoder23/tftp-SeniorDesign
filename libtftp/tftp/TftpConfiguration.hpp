@@ -108,7 +108,7 @@ class TftpConfiguration
     boost::optional< uint16_t> blockSizeOption;
 
     //! If handleTimeoutOption is set, this value is used for option negotiation
-    boost::optional< uint8_t> timoutOption;
+    boost::optional< uint8_t> timeoutOption;
 };
 }
 
