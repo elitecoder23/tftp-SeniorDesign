@@ -92,8 +92,10 @@ class TftpClientOperationImpl :
     /**
      * @brief Constructor of TftpClientOperation
      *
-     * @param[in] tftpClientInternal
-     *   The TFTP internal client.
+     * @param[in] requestType
+     *   The TFTP request type.
+     * @param[in] tftpClient
+     *   The TFTP client.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -105,7 +107,7 @@ class TftpClientOperationImpl :
      **/
     TftpClientOperationImpl(
       RequestType requestType,
-      const TftpClientInternal &tftpClientInternal,
+      const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
@@ -114,8 +116,10 @@ class TftpClientOperationImpl :
     /**
      * @brief Constructor of TftpClientOperation
      *
-     * @param[in] tftpClientInternal
-     *   The TFTP internal client.
+     * @param[in] requestType
+     *   The TFTP request type.
+     * @param[in] tftpClient
+     *   The TFTP client.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -125,7 +129,7 @@ class TftpClientOperationImpl :
      **/
     TftpClientOperationImpl(
       RequestType requestType,
-      const TftpClientInternal &tftpClientInternal,
+      const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode);
@@ -278,7 +282,7 @@ class TftpClientOperationImpl :
     //! The request type
     const RequestType requestType;
     //! The internal TFTP client
-    const TftpClientInternal &tftpClientInternal;
+    const TftpClientInternal &tftpClient;
     //! The TFTP server endpoint
     UdpAddressType remoteEndpoint;
     //! The filename of the transfer

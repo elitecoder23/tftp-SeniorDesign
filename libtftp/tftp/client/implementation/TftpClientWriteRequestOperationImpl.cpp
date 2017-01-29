@@ -28,14 +28,14 @@ namespace Client {
 
 TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
   TftpTransmitDataOperationHandler &handler,
-  const TftpClientInternal &tftpClientInternal,
+  const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from):
   TftpClientOperationImpl(
     RequestType::Write,
-    tftpClientInternal,
+    tftpClient,
     serverAddress,
     filename,
     mode,
@@ -49,13 +49,13 @@ TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
 
 TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
   TftpTransmitDataOperationHandler &handler,
-  const TftpClientInternal &tftpClientInternal,
+  const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode):
   TftpClientOperationImpl(
     RequestType::Write,
-    tftpClientInternal,
+    tftpClient,
     serverAddress,
     filename,
     mode),

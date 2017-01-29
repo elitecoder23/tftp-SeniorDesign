@@ -40,8 +40,8 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      *
      * @param[in] handler
      *   Handler for received data.
-     * @param[in] tftpClientInternal
-     *   The TFTP internal client.
+     * @param[in] tftpClient
+     *   The TFTP client.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -53,7 +53,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      **/
     TftpClientReadRequestOperationImpl(
       TftpReceiveDataOperationHandler &handler,
-      const TftpClientInternal &tftpClientInternal,
+      const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
@@ -64,8 +64,8 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      *
      * @param[in] handler
      *   Handler for received data.
-     * @param[in] tftpClientInternal
-     *   The TFTP internal client.
+     * @param[in] tftpClient
+     *   The TFTP client.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -75,7 +75,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      **/
     TftpClientReadRequestOperationImpl(
       TftpReceiveDataOperationHandler &handler,
-      const TftpClientInternal &tftpClientInternal,
+      const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode);

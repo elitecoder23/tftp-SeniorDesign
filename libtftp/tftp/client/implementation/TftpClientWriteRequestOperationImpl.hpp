@@ -37,8 +37,8 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      *
      * @param[in] handler
      *   Handler for data.
-     * @param[in] tftpClientInternal
-     *   The TFTP internal client.
+     * @param[in] tftpClient
+     *   The TFTP client.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -50,7 +50,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      **/
     TftpClientWriteRequestOperationImpl(
       TftpTransmitDataOperationHandler &handler,
-      const TftpClientInternal &tftpClientInternal,
+      const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
@@ -61,8 +61,8 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      *
      * @param[in] handler
      *   Handler for data.
-     * @param[in] tftpClientInternal
-     *   The TFTP internal client.
+     * @param[in] tftpClient
+     *   The TFTP client.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -72,7 +72,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      **/
     TftpClientWriteRequestOperationImpl(
       TftpTransmitDataOperationHandler &handler,
-      const TftpClientInternal &tftpClientInternal,
+      const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode);
@@ -91,7 +91,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      * This operation requests the data from the handler, generates the TFTP
      * DATA packet and sends them to the host.
      **/
-    void sendData( void);
+    void sendData();
 
     /**
      * @copydoc TftpPacketHandler::handleDataPacket()

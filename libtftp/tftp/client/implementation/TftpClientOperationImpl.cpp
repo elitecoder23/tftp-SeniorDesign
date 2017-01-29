@@ -92,20 +92,20 @@ TransferMode TftpClientOperationImpl::getMode() const
 
 TftpClientOperationImpl::TftpClientOperationImpl(
   const RequestType requestType,
-  const TftpClientInternal &tftpClientInternal,
+  const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from)
 try :
   requestType( requestType),
-  tftpClientInternal( tftpClientInternal),
+  tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
   mode( mode),
-  options( tftpClientInternal.getOptionList()),
+  options( tftpClient.getOptionList()),
   maxReceivePacketSize( DefaultMaxPacketSize),
-  receiveTimeout( tftpClientInternal.getConfiguration().tftpTimeout),
+  receiveTimeout( tftpClient.getConfiguration().tftpTimeout),
   socket( ioService),
   timer( ioService),
   transmitPacketType( PacketType::Invalid),
@@ -141,19 +141,19 @@ catch ( boost::system::system_error &err)
 
 TftpClientOperationImpl::TftpClientOperationImpl(
   const RequestType requestType,
-  const TftpClientInternal &tftpClientInternal,
+  const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode)
 try:
   requestType( requestType),
-  tftpClientInternal( tftpClientInternal),
+  tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
   mode( mode),
-  options( tftpClientInternal.getOptionList()),
+  options( tftpClient.getOptionList()),
   maxReceivePacketSize( DefaultMaxPacketSize),
-  receiveTimeout( tftpClientInternal.getConfiguration().tftpTimeout),
+  receiveTimeout( tftpClient.getConfiguration().tftpTimeout),
   socket( ioService),
   timer( ioService),
   transmitPacketType( PacketType::Invalid),
@@ -579,7 +579,7 @@ void TftpClientOperationImpl::timeoutFirstHandler(
   }
 
   // if maximum retries exceeded -> abort receive operation
-  if (transmitCounter > tftpClientInternal.getConfiguration().tftpRetries)
+  if (transmitCounter > tftpClient.getConfiguration().tftpRetries)
   {
     BOOST_LOG_TRIVIAL( error) << "Retry counter exceeded ABORT";
 
@@ -639,7 +639,7 @@ void TftpClientOperationImpl::timeoutHandler(
   }
 
   // if maximum retries exceeded -> abort receive operation
-  if (transmitCounter > tftpClientInternal.getConfiguration().tftpRetries)
+  if (transmitCounter > tftpClient.getConfiguration().tftpRetries)
   {
     BOOST_LOG_TRIVIAL( error) << "Retry counter exceeded ABORT";
 
