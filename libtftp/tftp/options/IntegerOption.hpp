@@ -84,7 +84,8 @@ class BaseIntegerOption: public Option
     /**
      * @copybrief Option::negotiate()
      *
-     * Calls @ref negotiate(IntegerType) for concrete option negotiation.
+     * Calls #negotiate(IntegerType) const for concrete option
+     * negotiation.
      *
      * @param[in] optionValue
      *   The option value received from the client.

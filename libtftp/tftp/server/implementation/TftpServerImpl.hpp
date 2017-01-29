@@ -49,6 +49,8 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
     /**
      * @brief Creates an instance of the TFTP server.
      *
+     * @param[in] handler
+     *   The TFTP request received handler.
      * @param[in] configuration
      *   The TFTP Configuration
      * @param[in] additionalOptions
