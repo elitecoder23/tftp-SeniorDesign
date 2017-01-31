@@ -94,8 +94,7 @@ class BaseIntegerOption: public Option
      * @retval OptionPointer()
      *   If option negotiation failed.
      **/
-    virtual OptionPtr negotiate(
-      const string &optionValue) const noexcept override final;
+    virtual OptionPtr negotiate( const string &optionValue) const noexcept final;
 
   protected:
     /**
@@ -107,9 +106,7 @@ class BaseIntegerOption: public Option
      *   Current value.
      *   Should be compliant to option negotiation ranges.
      **/
-    BaseIntegerOption(
-      const string &name,
-      IntegerType value);
+    BaseIntegerOption( const string &name, IntegerType value);
 
     /**
      * @copybrief Option::negotiate()
@@ -237,6 +234,8 @@ class IntegerOption: public BaseIntegerOption< IntT>
   public:
     using NegotiateType = NegotiateT;
 
+    using typename BaseIntegerOption< IntT>::IntegerType;
+
     //! Optional integer value
     using OptionalIntegerType = boost::optional< IntT>;
 
@@ -270,8 +269,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
      * @retval OptionPointer()
      *   If option negotiation failed.
      **/
-    virtual OptionPtr negotiate(
-      typename BaseIntegerOption< IntT>::IntegerType optionValue) const noexcept override final;
+    virtual OptionPtr negotiate( IntegerType optionValue) const noexcept final;
 
   private:
     NegotiateType negotiateOperation;
@@ -289,7 +287,7 @@ IntegerOption< IntT, NegotiateT>::IntegerOption(
 
 template< typename IntT, typename NegotiateT>
 OptionPtr IntegerOption< IntT, NegotiateT>::negotiate(
-  const typename BaseIntegerOption< IntT>::IntegerType optionValue) const noexcept
+  const IntegerType optionValue) const noexcept
 {
   // negotiate the value
   const OptionalIntegerType negotiateValue(
