@@ -55,21 +55,21 @@ using TftpServerOperation = std::function< void()>;
  *
  * @param[in] requestType
  *   The kind of request.
- * @param[in] from
- *   Where the request comes from (the TFTP client).
  * @param[in] filename
  *   Filename of file to read.
  * @param[in] mode
  *   Transfer mode.
  * @param[in] options
  *   List of received TFTP options.
+ * @param[in] from
+ *   Where the request comes from (the TFTP client).
  **/
 typedef void (ReceivedTftpRequestHandlerType)(
   RequestType requestType,
-  const UdpAddressType &from,
   const std::string &filename,
   TransferMode mode,
-  const Options::OptionList &options);
+  const Options::OptionList &options,
+  const UdpAddressType &from);
 
 //! Function handler definition.
 using ReceivedTftpRequestHandler =

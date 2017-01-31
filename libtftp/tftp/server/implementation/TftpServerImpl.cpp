@@ -306,10 +306,10 @@ void TftpServerImpl::handleReadRequestPacket(
   // call the handler, which handles the received request
   handler(
     RequestType::Read,
-    from,
     readRequestPacket.getFilename(),
     readRequestPacket.getMode(),
-    readRequestPacket.getOptions());
+    readRequestPacket.getOptions(),
+    from);
 }
 
 void TftpServerImpl::handleWriteRequestPacket(
@@ -335,10 +335,10 @@ void TftpServerImpl::handleWriteRequestPacket(
   // call the handler, which handles the received request
   handler(
     RequestType::Write,
-    from,
     writeRequestPacket.getFilename(),
     writeRequestPacket.getMode(),
-    writeRequestPacket.getOptions());
+    writeRequestPacket.getOptions(),
+    from);
 }
 
 void TftpServerImpl::handleDataPacket(

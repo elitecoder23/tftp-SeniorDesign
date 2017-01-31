@@ -193,10 +193,10 @@ bool TftpServerApplication::checkFilename( const boost::filesystem::path &filena
 
 void TftpServerApplication::receivedRequest(
   const Tftp::RequestType requestType,
-  const Tftp::UdpAddressType &from,
   const string &filename,
   const Tftp::TransferMode mode,
-  const Tftp::Options::OptionList &options)
+  const Tftp::Options::OptionList &options,
+  const Tftp::UdpAddressType &from)
 {
   BOOST_LOG_TRIVIAL( info) << "RQ: " << filename << " from: "
     << from.address().to_string();
@@ -234,12 +234,12 @@ void TftpServerApplication::receivedRequest(
   {
     case Tftp::RequestType::Read:
       // we are on server side and transmit the data on RRQ
-      transmitFile( from, filename, options);
+      transmitFile( filename, options, from);
       break;
 
     case Tftp::RequestType::Write:
       // we are on server side and receive the data on RRQ
-      receiveFile( from, filename, options);
+      receiveFile( filename, options, from);
       break;
 
     default:
@@ -249,9 +249,9 @@ void TftpServerApplication::receivedRequest(
 }
 
 void TftpServerApplication::transmitFile(
-  const Tftp::UdpAddressType &from,
   const string &filename,
-  const Tftp::Options::OptionList &options)
+  const Tftp::Options::OptionList &options,
+  const Tftp::UdpAddressType &from)
 {
   // open requested file
   std::fstream fileStream( filename.c_str(), std::fstream::in);
@@ -287,9 +287,9 @@ void TftpServerApplication::transmitFile(
 }
 
 void TftpServerApplication::receiveFile(
-  const Tftp::UdpAddressType &from,
   const string &filename,
-  const Tftp::Options::OptionList &options)
+  const Tftp::Options::OptionList &options,
+  const Tftp::UdpAddressType &from)
 {
   // open requested file
   std::fstream fileStream(

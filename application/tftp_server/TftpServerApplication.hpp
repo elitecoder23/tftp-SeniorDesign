@@ -69,20 +69,20 @@ class TftpServerApplication
      **/
     void receivedRequest(
       Tftp::RequestType requestType,
-      const Tftp::UdpAddressType &from,
       const string &filename,
       Tftp::TransferMode mode,
-      const Tftp::Options::OptionList &options);
+      const Tftp::Options::OptionList &options,
+      const Tftp::UdpAddressType &from);
 
     void transmitFile(
-      const Tftp::UdpAddressType &from,
       const string &filename,
-      const Tftp::Options::OptionList &options);
+      const Tftp::Options::OptionList &options,
+      const Tftp::UdpAddressType &from);
 
     void receiveFile(
-      const Tftp::UdpAddressType &from,
       const string &filename,
-      const Tftp::Options::OptionList &options);
+      const Tftp::Options::OptionList &options,
+      const Tftp::UdpAddressType &from);
 
 
     boost::application::context &context;
