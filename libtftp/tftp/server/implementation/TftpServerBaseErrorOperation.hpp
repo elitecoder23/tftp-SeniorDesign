@@ -25,9 +25,6 @@
 namespace Tftp {
 namespace Server {
 
-// Forward declaration of BaseErrorPacket
-using Tftp::Packet::BaseErrorPacket;
-
 /**
  * @brief Base class of TFTP error operation.
  **/
@@ -35,6 +32,7 @@ class TftpServerBaseErrorOperation
 {
   public:
     using AddressType = boost::asio::ip::udp::endpoint;
+    using BaseErrorPacket = Packet::BaseErrorPacket;
 
   protected:
     /**

@@ -44,11 +44,9 @@ TftpServerErrorOperation::TftpServerErrorOperation(
 {
 }
 
-void TftpServerErrorOperation::operator ()( void)
+void TftpServerErrorOperation::operator()()
 {
-  using Tftp::Packet::ErrorPacket;
-
-  sendError( ErrorPacket( errorCode, errorMessage));
+  sendError( Tftp::Packet::ErrorPacket( errorCode, errorMessage));
 }
 
 }

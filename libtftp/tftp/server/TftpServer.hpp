@@ -64,9 +64,6 @@ class TftpServer
      *   Additional Options, which shall be used as TFTP server option list.
      * @param[in] serverAddress
      *   Address where the FTP server should listen on.
-     *
-     * @throw TftpException
-     *   When a error occurs during socket initialisation.
      **/
     static TftpServerPtr createInstance(
       ReceivedTftpRequestHandler handler,

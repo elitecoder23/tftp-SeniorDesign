@@ -89,7 +89,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
     /**
      * @brief Executes the operation.
      **/
-    virtual void operator ()( void) override;
+    virtual void operator()() override;
 
   private:
     /**

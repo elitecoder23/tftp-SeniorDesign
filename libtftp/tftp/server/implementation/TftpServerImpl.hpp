@@ -104,18 +104,18 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions) override final;
 
-    //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,const UdpAddressType&,const ErrorCode,const string&)
+    //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&)
     virtual TftpServerOperation createErrorOperation(
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
-      const ErrorCode errorCode,
-      const string &errorMessage = string()) override final;
+      ErrorCode errorCode,
+      const string &errorMessage) override final;
 
-    //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,const ErrorCode,const string&)
+    //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,ErrorCode,const string&)
     virtual TftpServerOperation createErrorOperation(
       const UdpAddressType &clientAddress,
-      const ErrorCode errorCode,
-      const string &errorMessage = string()) override final;
+      ErrorCode errorCode,
+      const string &errorMessage) override final;
 
     //! @copydoc TftpServerInternal::getConfiguration
     virtual const TftpConfiguration& getConfiguration() const override final;

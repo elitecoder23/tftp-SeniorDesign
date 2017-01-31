@@ -25,8 +25,6 @@
 namespace Tftp {
 namespace Server {
 
-using std::string;
-
 /**
  * @brief This operation can be used to transfer an error message back to
  *  the initiator of an TFTP request.
@@ -34,6 +32,8 @@ using std::string;
 class TftpServerErrorOperation: public TftpServerBaseErrorOperation
 {
   public:
+    using string = std::string;
+
     /**
      * @brief Initialises the error operation.
      *
@@ -51,7 +51,7 @@ class TftpServerErrorOperation: public TftpServerBaseErrorOperation
     TftpServerErrorOperation(
       const AddressType &clientAddress,
       const AddressType &from,
-      const ErrorCode errorCode,
+      ErrorCode errorCode,
       const string &errorMessage);
 
     /**
@@ -68,13 +68,13 @@ class TftpServerErrorOperation: public TftpServerBaseErrorOperation
      **/
     TftpServerErrorOperation(
       const AddressType &clientAddress,
-      const ErrorCode errorCode,
+      ErrorCode errorCode,
       const string &errorMessage);
 
     /**
      * @brief Executes the error operation
      **/
-    void operator ()( void);
+    void operator()();
 
   private:
     //! The error code
