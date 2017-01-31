@@ -61,7 +61,7 @@ void Option::setName( const std::string &name)
 
 Option::string Option::toString() const
 {
-  return name + ":" + getValueString();
+  return name + ":" + static_cast< std::string>( *this);
 }
 
 }

@@ -29,8 +29,8 @@ BOOST_AUTO_TEST_CASE( constructor8u)
 {
   IntegerOption< uint8_t, NegotiateAlwaysPass< uint8_t>> entry( "test", 50, NegotiateAlwaysPass< uint8_t>());
 
-  BOOST_CHECK( "50" == entry.getValueString());
-  BOOST_CHECK( 50 == entry.getValue());
+  BOOST_CHECK( "50" == static_cast< std::string>( entry));
+  BOOST_CHECK( 50 == entry);
   BOOST_CHECK( "test" == entry.getName());
 }
 
@@ -38,9 +38,18 @@ BOOST_AUTO_TEST_CASE( constructor16u)
 {
   IntegerOption< uint16_t, NegotiateAlwaysPass< uint16_t>> entry( "test", 50, NegotiateAlwaysPass< uint16_t>());
 
-  BOOST_CHECK( "50" == entry.getValueString());
-  BOOST_CHECK( 50 == entry.getValue());
+  BOOST_CHECK( "50" == static_cast< std::string>( entry));
+  BOOST_CHECK( 50 == entry);
   BOOST_CHECK( "test" == entry.getName());
+}
+
+BOOST_AUTO_TEST_CASE( assign)
+{
+  IntegerOption< uint8_t, NegotiateAlwaysPass< uint8_t>> entry( "test", 50, NegotiateAlwaysPass< uint8_t>());
+
+  BOOST_CHECK( 50 == entry);
+  entry = uint8_t( 100);
+  BOOST_CHECK( 100 == entry);
 }
 
 BOOST_AUTO_TEST_CASE( negotiateNegotiateMinMaxRange)
@@ -63,24 +72,24 @@ BOOST_AUTO_TEST_CASE( negotiateNegotiateMinMaxRange)
 
   negEntry = entry.negotiate( "50");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "50" == negEntry->getValueString());
-  BOOST_CHECK( 50 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "50" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 50 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "49");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "49" == negEntry->getValueString());
-  BOOST_CHECK( 49 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "49" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 49 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
 
   negEntry = entry.negotiate( "11");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "11" == negEntry->getValueString());
-  BOOST_CHECK( 11 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "11" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 11 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "10");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "10" == negEntry->getValueString());
-  BOOST_CHECK( 10 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "10" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 10 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "9");
   BOOST_CHECK( !negEntry);
@@ -89,51 +98,51 @@ BOOST_AUTO_TEST_CASE( negotiateNegotiateMinMaxRange)
 BOOST_AUTO_TEST_CASE( negotiateMinMaxSmaller)
 {
   BlockSizeOptionServer entry( "test", 50, NegotiateMinMaxSmaller< uint16_t>(10, 100));
-  BOOST_CHECK( 50 == entry.getValue());
+  BOOST_CHECK( 50 == entry);
 
   OptionPtr negEntry;
 
   negEntry = entry.negotiate( "101");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "100" == negEntry->getValueString());
-  BOOST_CHECK( 100 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "100" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 100 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "100");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "100" == negEntry->getValueString());
-  BOOST_CHECK( 100 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "100" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 100 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "99");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "99" == negEntry->getValueString());
-  BOOST_CHECK( 99 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "99" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 99 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
 
   negEntry = entry.negotiate( "51");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "51" == negEntry->getValueString());
-  BOOST_CHECK( 51 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "51" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 51 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "50");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "50" == negEntry->getValueString());
-  BOOST_CHECK( 50 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "50" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 50 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "49");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "49" == negEntry->getValueString());
-  BOOST_CHECK( 49 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "49" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 49 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
 
   negEntry = entry.negotiate( "11");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "11" == negEntry->getValueString());
-  BOOST_CHECK( 11 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "11" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 11 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "10");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "10" == negEntry->getValueString());
-  BOOST_CHECK( 10 == std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "10" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 10 == *std::dynamic_pointer_cast< BlockSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "9");
   BOOST_CHECK( !negEntry);
@@ -142,7 +151,7 @@ BOOST_AUTO_TEST_CASE( negotiateMinMaxSmaller)
 BOOST_AUTO_TEST_CASE( negotiateExactValue)
 {
   TimeoutOptionClient entry( "test", 50, NegotiateExactValue< uint8_t>(50));
-  BOOST_CHECK( 50 == entry.getValue());
+  BOOST_CHECK( 50 == entry);
 
   OptionPtr negEntry;
 
@@ -157,8 +166,8 @@ BOOST_AUTO_TEST_CASE( negotiateExactValue)
 
   negEntry = entry.negotiate( "50");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "50" == negEntry->getValueString());
-  BOOST_CHECK( 50 == std::dynamic_pointer_cast< TimeoutOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "50" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 50 == *std::dynamic_pointer_cast< TimeoutOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "51");
   BOOST_CHECK( !negEntry);
@@ -167,34 +176,34 @@ BOOST_AUTO_TEST_CASE( negotiateExactValue)
 BOOST_AUTO_TEST_CASE( negotiateAlwaysPass)
 {
   TransferSizeOptionServerClient entry( "test", 50);
-  BOOST_CHECK( 50 == entry.getValue());
+  BOOST_CHECK( 50 == entry);
 
   OptionPtr negEntry;
 
   negEntry = entry.negotiate( "0");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "0" == negEntry->getValueString());
-  BOOST_CHECK( 0 == std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "0" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 0 == *std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "1");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "1" == negEntry->getValueString());
-  BOOST_CHECK( 1 == std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "1" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 1 == *std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "49");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "49" == negEntry->getValueString());
-  BOOST_CHECK( 49 == std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "49" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 49 == *std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "50");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "50" == negEntry->getValueString());
-  BOOST_CHECK( 50 == std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "50" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 50 == *std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry));
 
   negEntry = entry.negotiate( "51");
   BOOST_CHECK( negEntry);
-  BOOST_CHECK( "51" == negEntry->getValueString());
-  BOOST_CHECK( 51 == std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry)->getValue());
+  BOOST_CHECK( "51" == static_cast< std::string>( *negEntry));
+  BOOST_CHECK( 51 == *std::dynamic_pointer_cast< TransferSizeOptionBase >( negEntry));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

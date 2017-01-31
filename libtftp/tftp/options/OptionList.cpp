@@ -95,31 +95,23 @@ OptionList::OptionMap& OptionList::getOptions()
 
 OptionList::RawOptionsType OptionList::getRawOptions() const
 {
-  size_t optionsSize = 0;
-
-  // Calculate size of parameter list
-  for ( const auto &option : options)
-  {
-    optionsSize +=
-      option.first.length() + 1 + option.second->getValueString().length() + 1;
-  }
-
-  RawOptionsType rawOptions( optionsSize);
-  RawOptionsType::iterator rawIt = rawOptions.begin();
+  RawOptionsType rawOptions;
 
   // copy options
   for ( const auto &option : options)
   {
     // option name
-    rawIt = std::copy( option.first.begin(), option.first.end(), rawIt);
-    *rawIt = 0;
-    ++rawIt;
+    rawOptions.insert( rawOptions.end(), option.first.begin(), option.first.end());
+
+    // name value divider
+    rawOptions.push_back( 0);
 
     // option value
-    const std::string value( option.second->getValueString());
-    rawIt = std::copy( value.begin(), value.end(), rawIt);
-    *rawIt = 0;
-    ++rawIt;
+    const string value( *(option.second));
+    rawOptions.insert( rawOptions.end(), value.begin(), value.end());
+
+    // option terminator
+    rawOptions.push_back( 0);
   }
 
   return rawOptions;
@@ -264,7 +256,7 @@ uint16_t OptionList::getBlocksizeOption() const
     return 0;
   }
 
-  return integerOption->getValue();
+  return *integerOption;
 }
 
 void OptionList::addTimeoutOptionClient( const uint8_t timeout)
@@ -322,7 +314,7 @@ uint8_t OptionList::getTimeoutOption() const
     return 0;
   }
 
-  return integerOption->getValue();
+  return *integerOption;
 }
 
 void OptionList::addTransferSizeOption( const uint64_t transferSize)
@@ -367,7 +359,7 @@ uint64_t OptionList::getTransferSizeOption() const
     return 0;
   }
 
-  return integerOption->getValue();
+  return *integerOption;
 }
 
 OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
@@ -388,7 +380,7 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
 
     // negotiate option
     OptionPointer newOptionValue = negotiationEntryIt->second->negotiate(
-      clientOption.second->getValueString());
+      *(clientOption.second));
 
     // negotiation has returned a value -> copy option to output list
     if (newOptionValue)
@@ -422,7 +414,7 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
 
     // negotiate option, if failed also fail on top level
     OptionPointer newOptionValue = negotiationEntryIt->second->negotiate(
-      serverOption.second->getValueString());
+      (*serverOption.second));
 
     // check negotiation result
     if (!newOptionValue)

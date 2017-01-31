@@ -38,10 +38,10 @@ class StringOption: public Option
      * @param[in] value
      *   The option value.
      **/
-    StringOption( const string &name, const string &value);
+    StringOption( const string &name, const string &value = string());
 
-    //! @copybrief Option::getValueString()
-    virtual string getValueString() const override;
+    //! @copybrief Option::operator string()
+    virtual operator string() const final;
 
     /**
      * @brief Sets the option value.
@@ -49,7 +49,7 @@ class StringOption: public Option
      * @param[in] value
      *   The option value.
      **/
-    void setValue( const string &value);
+    StringOption& operator=( const string &value);
 
     /**
      * @copydoc Option::negotiate()
@@ -60,7 +60,7 @@ class StringOption: public Option
      * @return Always an empty option pointer.
      **/
     virtual OptionPtr negotiate(
-      const string &optionValue) const noexcept override;
+      const string &optionValue) const noexcept final;
 
   private:
     //! The option value.

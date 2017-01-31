@@ -27,14 +27,15 @@ StringOption::StringOption(const string &name, const string &value):
 {
 }
 
-StringOption::string StringOption::getValueString() const
+StringOption::operator StringOption::string() const
 {
   return value;
 }
 
-void StringOption::setValue( const string &value)
+StringOption& StringOption::operator=( const string &value)
 {
   this->value = value;
+  return *this;
 }
 
 OptionPtr StringOption::negotiate( const string &) const noexcept

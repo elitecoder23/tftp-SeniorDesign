@@ -49,12 +49,14 @@ OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   options = OptionList( packetIt, rawPacket.end());
 }
 
-const OptionList& OptionsAcknowledgementPacket::getOptions() const
+const OptionsAcknowledgementPacket::OptionList&
+OptionsAcknowledgementPacket::getOptions() const
 {
   return options;
 }
 
-OptionList& OptionsAcknowledgementPacket::getOptions()
+OptionsAcknowledgementPacket::OptionList&
+OptionsAcknowledgementPacket::getOptions()
 {
   return options;
 }
@@ -64,11 +66,11 @@ void OptionsAcknowledgementPacket::setOptions( const OptionList &options)
   this->options = options;
 }
 
-const std::string OptionsAcknowledgementPacket::getOption(
-  const std::string &name) const
+const OptionsAcknowledgementPacket::string OptionsAcknowledgementPacket::getOption(
+  const string &name) const
 {
   OptionList::OptionPointer option = options.getOption( name);
-  return (option) ? option->getValueString() : std::string();
+  return (option) ? static_cast< string>( *option) : string();
 }
 
 void OptionsAcknowledgementPacket::setOption(
@@ -88,13 +90,14 @@ Tftp::RawTftpPacketType OptionsAcknowledgementPacket::encode() const
 
   RawTftpPacketType::iterator packetIt = rawPacket.begin() + 2;
 
-  //! options
+  // options
   std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
 
   return rawPacket;
 }
 
-string OptionsAcknowledgementPacket::toString() const
+OptionsAcknowledgementPacket::string
+OptionsAcknowledgementPacket::toString() const
 {
   return (boost::format( "OACK: OPT: \"%s\"") % options.toString()).str();
 }

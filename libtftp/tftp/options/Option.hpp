@@ -87,7 +87,7 @@ class Option
      *
      * @return The option value as string.
      **/
-    virtual string getValueString() const = 0;
+    virtual operator string() const = 0;
 
     /**
      * @brief Option negotiation on server side.

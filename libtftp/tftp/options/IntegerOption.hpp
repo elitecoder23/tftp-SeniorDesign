@@ -51,19 +51,15 @@ class BaseIntegerOption: public Option
     //! The used integer type
     using IntegerType = IntT;
 
-    /**
-     * @brief returns the current value.
-     *
-     * @return The current option value
-     **/
-    IntegerType getValue() const;
+    //! @copybrief Option::operator string()
+    virtual operator string() const final;
 
     /**
-     * @brief Returns the option value as string.
+     * @brief Returns the option value.
      *
-     * @return The option value as string.
+     * @return The option value.
      **/
-    virtual string getValueString() const override;
+    operator IntegerType() const;
 
     /**
      * @brief Sets the value of the option.
@@ -71,7 +67,7 @@ class BaseIntegerOption: public Option
      * @param[in] value
      *   Option value
      **/
-    void setValue( IntegerType value);
+    BaseIntegerOption& operator=( IntegerType value);
 
     /**
      * @brief Interprets the string as option value and sets them to it.
@@ -79,7 +75,7 @@ class BaseIntegerOption: public Option
      * @param[in] value
      *   Value string
      **/
-    void setValue( const string &value);
+    BaseIntegerOption& operator=( const string &value);
 
     /**
      * @copybrief Option::negotiate()
@@ -147,28 +143,29 @@ class BaseIntegerOption: public Option
 };
 
 template< typename IntT>
-IntT BaseIntegerOption< IntT>::getValue() const
-{
-  return value;
-}
-
-template< typename IntT>
-typename BaseIntegerOption< IntT>::string
-BaseIntegerOption< IntT>::getValueString() const
+BaseIntegerOption< IntT>::operator BaseIntegerOption< IntT>::string() const
 {
   return toString( value);
 }
 
 template< typename IntT>
-void BaseIntegerOption< IntT>::setValue( const IntegerType value)
+BaseIntegerOption< IntT>::operator BaseIntegerOption< IntT>::IntegerType() const
 {
-  this->value = value;
+  return value;
 }
 
 template< typename IntT>
-void BaseIntegerOption< IntT>::setValue( const string &value)
+BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=( const IntegerType value)
+{
+  this->value = value;
+  return *this;
+}
+
+template< typename IntT>
+BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=( const string &value)
 {
   setValue( toInt( value));
+  return *this;
 }
 
 template< typename IntT>
@@ -235,6 +232,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
     using NegotiateType = NegotiateT;
 
     using typename BaseIntegerOption< IntT>::IntegerType;
+    using typename BaseIntegerOption< IntT>::string;
 
     //! Optional integer value
     using OptionalIntegerType = boost::optional< IntT>;
@@ -256,6 +254,22 @@ class IntegerOption: public BaseIntegerOption< IntT>
 
     //! Default destructor
     virtual ~IntegerOption() noexcept = default;
+
+    /**
+     * @brief Sets the value of the option.
+     *
+     * @param[in] value
+     *   Option value
+     **/
+    IntegerOption& operator=( IntegerType value);
+
+    /**
+     * @brief Interprets the string as option value and sets them to it.
+     *
+     * @param[in] value
+     *   Value string
+     **/
+    IntegerOption& operator=( const string &value);
 
     using BaseIntegerOption< IntT>::negotiate;
 
@@ -283,6 +297,21 @@ IntegerOption< IntT, NegotiateT>::IntegerOption(
   BaseIntegerOption< IntT>( name, value),
   negotiateOperation( negotiateOperation)
 {
+}
+
+template< typename IntT, typename NegotiateT>
+IntegerOption< IntT, NegotiateT>& IntegerOption< IntT, NegotiateT>::operator=( IntegerType value)
+{
+  BaseIntegerOption< IntT>::operator=( value);
+  return *this;
+}
+
+template< typename IntT, typename NegotiateT>
+IntegerOption< IntT, NegotiateT>& IntegerOption< IntT, NegotiateT>::operator=(
+  const string &value)
+{
+  BaseIntegerOption< IntT>::operator=( value);
+  return *this;
 }
 
 template< typename IntT, typename NegotiateT>

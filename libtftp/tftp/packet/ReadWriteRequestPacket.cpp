@@ -128,7 +128,7 @@ const ReadWriteRequestPacket::string ReadWriteRequestPacket::getOption(
   const string &name) const
 {
   OptionList::OptionPointer option = options.getOption( name);
-  return (option) ? option->getValueString() : std::string();
+  return (option) ? static_cast< string>( *option) : string();
 }
 
 void ReadWriteRequestPacket::setOption( const string &name, const string &value)
