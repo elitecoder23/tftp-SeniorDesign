@@ -187,7 +187,7 @@ OptionPtr BaseIntegerOption< IntT>::negotiate(
   }
   catch (...)
   {
-    // error during integer conversion -> handle this as nogitation fail.
+    // error during integer conversion -> handle this as negotiation fail.
     return OptionPtr();
   }
 }
