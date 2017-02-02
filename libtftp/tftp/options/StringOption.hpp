@@ -40,7 +40,9 @@ class StringOption: public Option
      **/
     StringOption( const string &name, const string &value = string());
 
-    //! @copybrief Option::operator string()
+    /**
+     * Returns the value directly.
+     **/
     virtual operator string() const final;
 
     /**

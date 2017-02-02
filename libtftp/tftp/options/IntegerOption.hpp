@@ -37,6 +37,9 @@ namespace Options {
  * Converts the option string to an integer and delegates the option negotiation
  * to child classes.
  *
+ * @tparam IntT
+ *   The integer type.
+ *
  * @note
  * This template also provides specialisation for uint8_t (unsigned char) and
  * int8_t (char).
@@ -46,12 +49,15 @@ template< typename IntT>
 class BaseIntegerOption: public Option
 {
   public:
+    // static check for integral type
     static_assert( std::is_integral< IntT>::value, "IntT must be integral type");
 
     //! The used integer type
     using IntegerType = IntT;
 
-    //! @copybrief Option::operator string()
+    /**
+     * Converts value to string and returns the result.
+     **/
     virtual operator string() const final;
 
     /**
