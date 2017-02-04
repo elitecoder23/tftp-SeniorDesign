@@ -17,15 +17,15 @@ add_library(
   tftp
   
   tftp/OperationHandler.hpp
+  tftp/PacketHandler.hpp
+  tftp/PacketHandler.cpp
   tftp/ReceiveDataOperationHandler.hpp
-  tftp/RequestTypeDescription.cpp
   tftp/RequestTypeDescription.hpp
+  tftp/RequestTypeDescription.cpp
   tftp/Tftp.hpp
-  tftp/TftpConfiguration.cpp
   tftp/TftpConfiguration.hpp
+  tftp/TftpConfiguration.cpp
   tftp/TftpException.hpp
-  tftp/TftpPacketHandler.cpp
-  tftp/TftpPacketHandler.hpp
   tftp/TransmitDataOperationHandler.hpp
   
   tftp/packet/AcknowledgementPacket.hpp

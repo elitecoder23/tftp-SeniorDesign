@@ -11,10 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::TftpPacketHandler.
+ * @brief Definition of class Tftp::PacketHandler.
  **/
 
-#include "TftpPacketHandler.hpp"
+#include "PacketHandler.hpp"
 
 #include <tftp/packet/PacketFactory.hpp>
 #include <tftp/TftpException.hpp>
@@ -23,7 +23,7 @@
 
 namespace Tftp {
 
-void TftpPacketHandler::handlePacket(
+void PacketHandler::handlePacket(
   const UdpAddressType &from,
   const RawTftpPacketType &rawPacket)
 {

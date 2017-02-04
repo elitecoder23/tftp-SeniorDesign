@@ -23,7 +23,7 @@
 
 #include <tftp/options/OptionList.hpp>
 
-#include <tftp/TftpPacketHandler.hpp>
+#include <tftp/PacketHandler.hpp>
 
 #include <boost/asio.hpp>
 
@@ -40,7 +40,7 @@ class TftpServerInternal;
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class TftpServerOperationImpl: protected TftpPacketHandler
+class TftpServerOperationImpl: protected PacketHandler
 {
   protected:
     using OptionList = Options::OptionList;
@@ -147,7 +147,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      **/
     virtual void handleReadRequestPacket(
       const UdpAddressType &from,
-      const ReadRequestPacket &readRequestPacket) override final;
+      const Packet::ReadRequestPacket &readRequestPacket) final;
 
     /**
      * @copydoc TftpPacketHandler::handleWriteRequestPacket
@@ -157,7 +157,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      **/
     virtual void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const WriteRequestPacket &writeRequestPacket) override final;
+      const Packet::WriteRequestPacket &writeRequestPacket) final;
 
     /**
      * @copydoc TftpPacketHandler::handleErrorPacket()
@@ -166,7 +166,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
-      const ErrorPacket &errorPacket) override final;
+      const Packet::ErrorPacket &errorPacket) final;
 
     /**
      * @copydoc TftpPacketHandler::handleOptionsAcknowledgementPacket()
@@ -176,8 +176,8 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      **/
     virtual void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
-        override final;
+      const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+        final;
 
     /**
      * @copydoc TftpPacketHandler::handleInvalidPacket()
@@ -186,7 +186,7 @@ class TftpServerOperationImpl: protected TftpPacketHandler
      **/
     virtual void handleInvalidPacket(
       const UdpAddressType &from,
-      const RawTftpPacketType &rawPacket) override final;
+      const RawTftpPacketType &rawPacket) final;
 
   private:
     /**

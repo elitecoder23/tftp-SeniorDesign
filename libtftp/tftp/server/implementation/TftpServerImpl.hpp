@@ -22,7 +22,7 @@
 
 #include <tftp/options/OptionList.hpp>
 
-#include <tftp/TftpPacketHandler.hpp>
+#include <tftp/PacketHandler.hpp>
 
 #include <boost/asio.hpp>
 
@@ -43,7 +43,7 @@ namespace Server {
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
-class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
+class TftpServerImpl: public TftpServerInternal, private PacketHandler
 {
   public:
     /**
@@ -150,7 +150,7 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
      **/
     virtual void handleReadRequestPacket(
       const UdpAddressType &from,
-      const ReadRequestPacket &readRequestPacket) override final;
+      const Packet::ReadRequestPacket &readRequestPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleWriteRequestPacket
@@ -161,7 +161,7 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
      **/
     virtual void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const WriteRequestPacket &writeRequestPacket) override final;
+      const Packet::WriteRequestPacket &writeRequestPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleDataPacket
@@ -171,7 +171,7 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const DataPacket &dataPacket) override final;
+      const Packet::DataPacket &dataPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleAcknowledgementPacket
@@ -181,7 +181,7 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const AcknowledgementPacket &acknowledgementPacket) override final;
+      const Packet::AcknowledgementPacket &acknowledgementPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleErrorPacket
@@ -191,7 +191,7 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
-      const ErrorPacket &errorPacket) override final;
+      const Packet::ErrorPacket &errorPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleOptionsAcknowledgementPacket
@@ -201,7 +201,7 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
      **/
     virtual void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
+      const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleInvalidPacket

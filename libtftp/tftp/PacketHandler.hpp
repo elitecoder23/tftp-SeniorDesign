@@ -11,11 +11,11 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class interface Tftp::TftpPacketHandler.
+ * @brief Declaration of class interface Tftp::PacketHandler.
  **/
 
-#ifndef TFTP_TFTPPACKETHANDLER_HPP
-#define TFTP_TFTPPACKETHANDLER_HPP
+#ifndef TFTP_PACKETHANDLER_HPP
+#define TFTP_PACKETHANDLER_HPP
 
 #include <tftp/Tftp.hpp>
 #include <tftp/packet/Packet.hpp>
@@ -28,18 +28,11 @@ namespace Tftp {
  * The packet handlers are used internally.
  * A user of the TFTP library doesn't need to derive from this class.
  **/
-class TftpPacketHandler
+class PacketHandler
 {
   public:
-    using ReadRequestPacket = Packet::ReadRequestPacket;
-    using WriteRequestPacket = Packet::WriteRequestPacket;
-    using DataPacket = Tftp::Packet::DataPacket;
-    using AcknowledgementPacket = Packet::AcknowledgementPacket;
-    using ErrorPacket = Packet::ErrorPacket;
-    using OptionsAcknowledgementPacket = Packet::OptionsAcknowledgementPacket;
-
     //! Default virtual destructur
-    virtual ~TftpPacketHandler() noexcept = default;
+    virtual ~PacketHandler() noexcept = default;
 
     /**
      * @brief The handler of all received packets.
@@ -73,7 +66,7 @@ class TftpPacketHandler
      **/
     virtual void handleReadRequestPacket(
       const UdpAddressType &from,
-      const ReadRequestPacket &readRequestPacket) = 0;
+      const Packet::ReadRequestPacket &readRequestPacket) = 0;
 
     /**
      * @brief Handler for TFTP write request packets (WRQ).
@@ -85,7 +78,7 @@ class TftpPacketHandler
      **/
     virtual void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const WriteRequestPacket &writeRequestPacket) = 0;
+      const Packet::WriteRequestPacket &writeRequestPacket) = 0;
 
     /**
      * @brief Handler for TFTP data packets (DATA).
@@ -97,7 +90,7 @@ class TftpPacketHandler
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const DataPacket &dataPacket) = 0;
+      const Packet::DataPacket &dataPacket) = 0;
 
     /**
      * @brief Handler for TFTP acknowledgement packets (ACK).
@@ -109,7 +102,7 @@ class TftpPacketHandler
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const AcknowledgementPacket &acknowledgementPacket) = 0;
+      const Packet::AcknowledgementPacket &acknowledgementPacket) = 0;
 
     /**
      * @brief Handler for TFTP error packets (ERR).
@@ -121,7 +114,7 @@ class TftpPacketHandler
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
-      const ErrorPacket &errorPacket) = 0;
+      const Packet::ErrorPacket &errorPacket) = 0;
 
     /**
      * @brief Handler for TFTP option acknowledgement packets (RRQ).
@@ -133,7 +126,7 @@ class TftpPacketHandler
      **/
     virtual void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const OptionsAcknowledgementPacket &optionsAcknowledgementPacket) = 0;
+      const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) = 0;
 
     /**
      * @brief Handler for invalid TFTP packets.

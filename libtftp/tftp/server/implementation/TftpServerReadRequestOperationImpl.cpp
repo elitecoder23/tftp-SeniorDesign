@@ -103,7 +103,7 @@ void TftpServerReadRequestOperationImpl::operator()()
       if ( getOptions().hasOptions())
       {
         // Send OACK
-        send( OptionsAcknowledgementPacket( getOptions()));
+        send( Packet::OptionsAcknowledgementPacket( getOptions()));
       }
       else
       {
@@ -129,7 +129,7 @@ void TftpServerReadRequestOperationImpl::sendData()
 {
   lastTransmittedBlockNumber++;
 
-  DataPacket data(
+  Packet::DataPacket data(
     lastTransmittedBlockNumber,
     handler.sendData( transmitDataSize));
 
@@ -144,11 +144,11 @@ void TftpServerReadRequestOperationImpl::sendData()
 
 void TftpServerReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
-  const DataPacket &dataPacket)
+  const Packet::DataPacket &dataPacket)
 {
   BOOST_LOG_TRIVIAL( error)<< "RX ERROR: " << dataPacket.toString();
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "DATA not expected"));
 
@@ -163,7 +163,7 @@ void TftpServerReadRequestOperationImpl::handleDataPacket(
 
 void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
-  const AcknowledgementPacket &acknowledgementPacket)
+  const Packet::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info)<<"RX: " << acknowledgementPacket.toString();
 
@@ -182,7 +182,7 @@ void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Invalid block number received";
 
-    send( ErrorPacket(
+    send( Packet::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Block number not expected"));
 

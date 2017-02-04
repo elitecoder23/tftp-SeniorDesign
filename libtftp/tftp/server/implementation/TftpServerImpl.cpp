@@ -284,7 +284,7 @@ void TftpServerImpl::receiveHandler(
 
 void TftpServerImpl::handleReadRequestPacket(
   const UdpAddressType &from,
-  const ReadRequestPacket &readRequestPacket)
+  const Packet::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_TRIVIAL( info)<< "RX: " << readRequestPacket.toString();
 
@@ -314,7 +314,7 @@ void TftpServerImpl::handleReadRequestPacket(
 
 void TftpServerImpl::handleWriteRequestPacket(
   const UdpAddressType &from,
-  const WriteRequestPacket &writeRequestPacket)
+  const Packet::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_TRIVIAL( info)<< "RX: " << writeRequestPacket.toString();
 
@@ -343,7 +343,7 @@ void TftpServerImpl::handleWriteRequestPacket(
 
 void TftpServerImpl::handleDataPacket(
   const UdpAddressType &from,
-  const DataPacket &dataPacket)
+  const Packet::DataPacket &dataPacket)
 {
   BOOST_LOG_TRIVIAL( info)<< "RX ERROR: " << dataPacket.toString();
 
@@ -358,7 +358,7 @@ void TftpServerImpl::handleDataPacket(
 
 void TftpServerImpl::handleAcknowledgementPacket(
   const UdpAddressType &from,
-  const AcknowledgementPacket &acknowledgementPacket)
+  const Packet::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info)<<
   "RX ERROR: " << acknowledgementPacket.toString();
@@ -374,7 +374,7 @@ void TftpServerImpl::handleAcknowledgementPacket(
 
 void TftpServerImpl::handleErrorPacket(
   const UdpAddressType &from,
-  const ErrorPacket &errorPacket)
+  const Packet::ErrorPacket &errorPacket)
 {
   BOOST_LOG_TRIVIAL( info)<<
   "RX ERROR: " << errorPacket.toString();
@@ -390,7 +390,7 @@ void TftpServerImpl::handleErrorPacket(
 
 void TftpServerImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &from,
-  const OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info)<<
   "RX ERROR: " << optionsAcknowledgementPacket.toString();

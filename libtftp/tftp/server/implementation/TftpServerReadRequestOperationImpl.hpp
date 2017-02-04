@@ -106,7 +106,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const DataPacket &dataPacket) override;
+      const Packet::DataPacket &dataPacket) override;
 
     /**
      * @copydoc TftpPacketHandler::handleAcknowledgementPacket
@@ -116,7 +116,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const AcknowledgementPacket &acknowledgementPacket) override;
+      const Packet::AcknowledgementPacket &acknowledgementPacket) override;
 
   private:
     using BlockNumber = Packet::BlockNumber;

@@ -66,7 +66,7 @@ void TftpServerWriteRequestOperationImpl::operator()()
     if (!getOptions().hasOptions())
     {
       // Then no NOACK is sent back - a simple ACK is sent.
-      send( AcknowledgementPacket( 0));
+      send( Packet::AcknowledgementPacket( 0));
     }
     else
     {
@@ -98,7 +98,7 @@ void TftpServerWriteRequestOperationImpl::operator()()
           getOptions().getTransferSizeOption()))
         {
           send(
-            ErrorPacket(
+            Packet::ErrorPacket(
               ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS,
               "FILE TO BIG"));
 
@@ -108,7 +108,7 @@ void TftpServerWriteRequestOperationImpl::operator()()
       }
 
       // send OACK
-      send( OptionsAcknowledgementPacket( getOptions()));
+      send( Packet::OptionsAcknowledgementPacket( getOptions()));
     }
 
     // start receive loop
@@ -126,7 +126,7 @@ void TftpServerWriteRequestOperationImpl::operator()()
 
 void TftpServerWriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
-  const DataPacket &dataPacket)
+  const Packet::DataPacket &dataPacket)
 {
   BOOST_LOG_TRIVIAL( info)<< "RX: " << dataPacket.toString();
 
@@ -135,7 +135,7 @@ void TftpServerWriteRequestOperationImpl::handleDataPacket(
   {
     BOOST_LOG_TRIVIAL( info) << "Retransmission of last packet - only send ACK";
 
-    send( AcknowledgementPacket( lastReceivedBlockNumber));
+    send( Packet::AcknowledgementPacket( lastReceivedBlockNumber));
 
     return;
   }
@@ -145,7 +145,7 @@ void TftpServerWriteRequestOperationImpl::handleDataPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Unexpected packet";
 
-    send( ErrorPacket(
+    send( Packet::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Wrong block number"));
 
@@ -162,7 +162,7 @@ void TftpServerWriteRequestOperationImpl::handleDataPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Too much data received";
 
-    send( ErrorPacket(
+    send( Packet::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Too much data"));
 
@@ -180,7 +180,7 @@ void TftpServerWriteRequestOperationImpl::handleDataPacket(
   // increment block number
   lastReceivedBlockNumber++;
 
-  send( AcknowledgementPacket( lastReceivedBlockNumber));
+  send( Packet::AcknowledgementPacket( lastReceivedBlockNumber));
 
   // if received data size is smaller then the expected -> last packet has been
   // received
@@ -197,11 +197,11 @@ void TftpServerWriteRequestOperationImpl::handleDataPacket(
 
 void TftpServerWriteRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
-  const AcknowledgementPacket &acknowledgementPacket)
+  const Packet::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( error) << "RX ERROR: " << acknowledgementPacket.toString();
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "ACK not expected"));
 

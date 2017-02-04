@@ -347,14 +347,14 @@ void TftpClientOperationImpl::setReceiveTimeout(
 
 void TftpClientOperationImpl::handleReadRequestPacket(
   const UdpAddressType &,
-  const ReadRequestPacket &readRequestPacket)
+  const Packet::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_FUNCTION();
 
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << readRequestPacket.toString();
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "RRQ not expected"));
 
@@ -369,14 +369,14 @@ void TftpClientOperationImpl::handleReadRequestPacket(
 
 void TftpClientOperationImpl::handleWriteRequestPacket(
   const UdpAddressType &,
-  const WriteRequestPacket &writeRequestPacket)
+  const Packet::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_FUNCTION();
 
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << writeRequestPacket.toString();
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "WRQ not expected"));
 
@@ -391,7 +391,7 @@ void TftpClientOperationImpl::handleWriteRequestPacket(
 
 void TftpClientOperationImpl::handleErrorPacket(
   const UdpAddressType &,
-  const ErrorPacket &errorPacket)
+  const Packet::ErrorPacket &errorPacket)
 {
   BOOST_LOG_FUNCTION();
 
@@ -417,7 +417,7 @@ void TftpClientOperationImpl::handleInvalidPacket(
 
   BOOST_LOG_TRIVIAL( error) << "RX ERROR: INVALID Packet";
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "Invalid packet not expected"));
 
@@ -466,7 +466,7 @@ void TftpClientOperationImpl::receiveFirstHandler(
     // sent Error packet to unknown partner
     try
     {
-      ErrorPacket err(
+      Packet::ErrorPacket err(
         ErrorCode::UNKNOWN_TRANSFER_ID,
         "Packet from wrong source");
 

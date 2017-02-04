@@ -224,11 +224,11 @@ void TftpServerOperationImpl::setReceiveTimeout( const uint8_t receiveTimeout)
 
 void TftpServerOperationImpl::handleReadRequestPacket(
   const UdpAddressType &,
-  const ReadRequestPacket &readRequestPacket)
+  const Packet::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << readRequestPacket.toString();
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "RRQ not expected"));
 
@@ -243,11 +243,11 @@ void TftpServerOperationImpl::handleReadRequestPacket(
 
 void TftpServerOperationImpl::handleWriteRequestPacket(
   const UdpAddressType &,
-  const WriteRequestPacket &writeRequestPacket)
+  const Packet::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << writeRequestPacket.toString();
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "WRQ not expected"));
 
@@ -262,7 +262,7 @@ void TftpServerOperationImpl::handleWriteRequestPacket(
 
 void TftpServerOperationImpl::handleErrorPacket(
   const UdpAddressType &,
-  const ErrorPacket &errorPacket)
+  const Packet::ErrorPacket &errorPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << errorPacket.toString();
 
@@ -276,12 +276,12 @@ void TftpServerOperationImpl::handleErrorPacket(
 
 void TftpServerOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
-  const OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << optionsAcknowledgementPacket.toString();
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "OACK not expected"));
 
@@ -300,7 +300,7 @@ void TftpServerOperationImpl::handleInvalidPacket(
 {
   BOOST_LOG_TRIVIAL( info) << "RX: UNKNOWN";
 
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "Invalid packet not expected"));
 

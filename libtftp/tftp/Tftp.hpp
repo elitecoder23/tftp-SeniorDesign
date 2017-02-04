@@ -220,7 +220,7 @@ using ReceiveDataOperationHandlerPtr =
 using TransmitDataOperationHandlerPtr =
   std::shared_ptr< TransmitDataOperationHandler>;
 
-class TftpPacketHandler;
+class PacketHandler;
 
 }
 

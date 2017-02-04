@@ -17,7 +17,7 @@
 #ifndef TFTP_CLIENT_TFTPCLIENTOPERATIONIMPL_HPP
 #define TFTP_CLIENT_TFTPCLIENTOPERATIONIMPL_HPP
 
-#include <tftp/TftpPacketHandler.hpp>
+#include <tftp/PacketHandler.hpp>
 #include <tftp/client/Client.hpp>
 #include <tftp/client/TftpClientOperation.hpp>
 #include <tftp/packet/Packet.hpp>
@@ -41,7 +41,7 @@ class TftpClientInternal;
  **/
 class TftpClientOperationImpl :
   public TftpClientOperation,
-  protected TftpPacketHandler
+  protected PacketHandler
 {
   public:
     using string = std::string;
@@ -203,7 +203,7 @@ class TftpClientOperationImpl :
      **/
     virtual void handleReadRequestPacket(
       const UdpAddressType &from,
-      const ReadRequestPacket &readRequestPacket) override final;
+      const Packet::ReadRequestPacket &readRequestPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleWriteRequestPacket()
@@ -213,14 +213,14 @@ class TftpClientOperationImpl :
      **/
     virtual void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const WriteRequestPacket &writeRequestPacket) override final;
+      const Packet::WriteRequestPacket &writeRequestPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleErrorPacket()
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
-      const ErrorPacket &errorPacket) override final;
+      const Packet::ErrorPacket &errorPacket) override final;
 
     /**
      * @copydoc TftpPacketHandler::handleInvalidPacket()

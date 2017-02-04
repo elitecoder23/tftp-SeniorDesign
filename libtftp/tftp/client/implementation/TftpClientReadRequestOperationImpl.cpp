@@ -71,7 +71,8 @@ void TftpClientReadRequestOperationImpl::operator ()( void)
     lastReceivedBlockNumber = 0;
 
     // send read request packet
-    sendFirst( ReadRequestPacket( getFilename(), getMode(), getOptions()));
+    sendFirst(
+      Packet::ReadRequestPacket( getFilename(), getMode(), getOptions()));
 
     // wait for answers
     TftpClientOperationImpl::operator ()();
@@ -88,7 +89,7 @@ void TftpClientReadRequestOperationImpl::operator ()( void)
 
 void TftpClientReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
-  const DataPacket &dataPacket)
+  const Packet::DataPacket &dataPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX: " << dataPacket.toString();
 
@@ -98,7 +99,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
     BOOST_LOG_TRIVIAL( info) << "Received last data package again. Re-ACK them";
 
     // Retransmit last ACK packet
-    send( AcknowledgementPacket( lastReceivedBlockNumber));
+    send( Packet::AcknowledgementPacket( lastReceivedBlockNumber));
 
     return;
   }
@@ -109,7 +110,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
     BOOST_LOG_TRIVIAL( error) << "Wrong Data packet block number";
 
     // send error packet
-    send( ErrorPacket(
+    send( Packet::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Block Number not expected"));
 
@@ -129,7 +130,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
     BOOST_LOG_TRIVIAL( error) << "Too much data received";
 
     // send error packet
-    send( ErrorPacket(
+    send( Packet::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Too much data"));
 
@@ -149,7 +150,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
   lastReceivedBlockNumber++;
 
   // send ACK
-  send( AcknowledgementPacket( lastReceivedBlockNumber));
+  send( Packet::AcknowledgementPacket( lastReceivedBlockNumber));
 
   // if received data size is smaller then the expected
   if (dataPacket.getDataSize() < receiveDataSize)
@@ -166,13 +167,13 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
 
 void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
-  const AcknowledgementPacket &acknowledgementPacket)
+  const Packet::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << acknowledgementPacket.toString();
 
   // send Error
-  send( ErrorPacket(
+  send( Packet::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "ACK not expected"));
 
@@ -187,7 +188,7 @@ void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
 
 void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
-  const OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << optionsAcknowledgementPacket.toString();
@@ -199,7 +200,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Received option list is empty";
 
-    send( ErrorPacket(
+    send( Packet::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Empty OACK not allowed"));
 
@@ -219,7 +220,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Option negotiation failed";
 
-    send( ErrorPacket(
+    send( Packet::ErrorPacket(
       ErrorCode::TFTP_OPTION_REFUSED,
       "Option negotiation failed"));
 
@@ -255,7 +256,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     if (!handler.receivedTransferSize( negotiatedOptions.getTransferSizeOption()))
     {
-      send( ErrorPacket(
+      send( Packet::ErrorPacket(
         ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS,
         "FILE TO BIG"));
 
@@ -269,7 +270,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // send Acknowledgement with block number set to 0
-  send( AcknowledgementPacket( 0));
+  send( Packet::AcknowledgementPacket( 0));
 
   // receive next packet
   receive();
