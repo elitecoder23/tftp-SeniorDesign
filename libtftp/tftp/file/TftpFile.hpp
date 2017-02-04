@@ -17,8 +17,8 @@
 #ifndef TFTP_FILE_TFTPFILE_HPP
 #define TFTP_FILE_TFTPFILE_HPP
 
-#include <tftp/TftpReceiveDataOperationHandler.hpp>
-#include <tftp/TftpTransmitDataOperationHandler.hpp>
+#include <tftp/ReceiveDataOperationHandler.hpp>
+#include <tftp/TransmitDataOperationHandler.hpp>
 
 namespace Tftp {
 namespace File {
@@ -28,8 +28,8 @@ namespace File {
  * transfer files
  **/
 class TftpFile:
-  public TftpReceiveDataOperationHandler,
-  public TftpTransmitDataOperationHandler
+  public ReceiveDataOperationHandler,
+  public TransmitDataOperationHandler
 {
 };
 

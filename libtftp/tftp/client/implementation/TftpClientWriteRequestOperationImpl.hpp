@@ -49,7 +49,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      *   Optional parameter to define the communication source
      **/
     TftpClientWriteRequestOperationImpl(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -71,7 +71,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      *   The transfer mode
      **/
     TftpClientWriteRequestOperationImpl(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -129,7 +129,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
     using BlockNumber = Packet::BlockNumber;
 
     //! The handler, which is called
-    TftpTransmitDataOperationHandler &handler;
+    TransmitDataOperationHandler &handler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t transmitDataSize;
     //! Is set, when the last data packet has been transmitted

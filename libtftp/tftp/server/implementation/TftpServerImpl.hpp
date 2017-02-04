@@ -78,29 +78,29 @@ class TftpServerImpl: public TftpServerInternal, private TftpPacketHandler
     //! @copydoc TftpServer::stop
     virtual void stop() override final;
 
-    //! @copydoc TftpServer::createReadRequestOperation(TftpTransmitDataOperationHandler&,const UdpAddressType&,const OptionList&,const UdpAddressType&)
+    //! @copydoc TftpServer::createReadRequestOperation(TransmitDataOperationHandler&,const UdpAddressType&,const OptionList&,const UdpAddressType&)
     virtual TftpServerOperation createReadRequestOperation(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions,
       const UdpAddressType &serverAddress) override final;
 
-    //! @copydoc TftpServer::createReadRequestOperation(TftpTransmitDataOperationHandler&,const UdpAddressType&,const OptionList&)
+    //! @copydoc TftpServer::createReadRequestOperation(TransmitDataOperationHandler&,const UdpAddressType&,const OptionList&)
     virtual TftpServerOperation createReadRequestOperation(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions) override final;
 
-    //! @copydoc TftpServer::createWriteRequestOperation(TftpReceiveDataOperationHandler&,const UdpAddressType&,const OptionList&,const UdpAddressType&)
+    //! @copydoc TftpServer::createWriteRequestOperation(ReceiveDataOperationHandler&,const UdpAddressType&,const OptionList&,const UdpAddressType&)
     virtual TftpServerOperation createWriteRequestOperation(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions,
       const UdpAddressType &serverAddress) override final;
 
-    //! @copydoc TftpServer::createWriteRequestOperation(TftpReceiveDataOperationHandler&,const UdpAddressType&,const OptionList&)
+    //! @copydoc TftpServer::createWriteRequestOperation(ReceiveDataOperationHandler&,const UdpAddressType&,const OptionList&)
     virtual TftpServerOperation createWriteRequestOperation(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions) override final;
 

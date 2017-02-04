@@ -52,7 +52,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      *   communication source
      **/
     TftpClientReadRequestOperationImpl(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -74,7 +74,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      *   The transfer mode
      **/
     TftpClientReadRequestOperationImpl(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -121,7 +121,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
     using BlockNumber = Tftp::Packet::BlockNumber;
 
     //! Registered handler.
-    TftpReceiveDataOperationHandler &handler;
+    ReceiveDataOperationHandler &handler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! last received block number.

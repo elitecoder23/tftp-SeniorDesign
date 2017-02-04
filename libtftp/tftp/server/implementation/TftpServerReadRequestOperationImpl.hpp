@@ -55,7 +55,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      *   local endpoint, where the server handles the request from.
      **/
     TftpServerReadRequestOperationImpl(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions,
@@ -74,7 +74,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      *   Received option list from client.
      **/
     TftpServerReadRequestOperationImpl(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions);
@@ -122,7 +122,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
     using BlockNumber = Packet::BlockNumber;
 
     //! The handler which is called during operation.
-    TftpTransmitDataOperationHandler &handler;
+    TransmitDataOperationHandler &handler;
     //! contains the negotiated blocksize option.
     uint16_t transmitDataSize;
     //! indicates, if the last data packet has been transmitted (closing).

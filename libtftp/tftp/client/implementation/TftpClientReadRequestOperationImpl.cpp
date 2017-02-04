@@ -16,7 +16,7 @@
 
 #include "TftpClientReadRequestOperationImpl.hpp"
 #include <tftp/TftpException.hpp>
-#include <tftp/TftpReceiveDataOperationHandler.hpp>
+#include <tftp/ReceiveDataOperationHandler.hpp>
 #include <tftp/packet/PacketFactory.hpp>
 
 #include <helper/Dump.hpp>
@@ -26,7 +26,7 @@ namespace Tftp {
 namespace Client {
 
 TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
-  TftpReceiveDataOperationHandler &handler,
+  ReceiveDataOperationHandler &handler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
@@ -46,7 +46,7 @@ TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
 }
 
 TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
-  TftpReceiveDataOperationHandler &handler,
+  ReceiveDataOperationHandler &handler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,

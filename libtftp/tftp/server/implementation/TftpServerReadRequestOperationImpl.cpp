@@ -17,7 +17,7 @@
 #include "TftpServerReadRequestOperationImpl.hpp"
 
 #include <tftp/TftpException.hpp>
-#include <tftp/TftpTransmitDataOperationHandler.hpp>
+#include <tftp/TransmitDataOperationHandler.hpp>
 #include <tftp/packet/AcknowledgementPacket.hpp>
 #include <tftp/packet/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packet/DataPacket.hpp>
@@ -29,7 +29,7 @@ namespace Tftp {
 namespace Server {
 
 TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
-  TftpTransmitDataOperationHandler &handler,
+  TransmitDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const OptionList &clientOptions,
@@ -47,7 +47,7 @@ TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
 }
 
 TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
-  TftpTransmitDataOperationHandler &handler,
+  TransmitDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const OptionList &clientOptions) :

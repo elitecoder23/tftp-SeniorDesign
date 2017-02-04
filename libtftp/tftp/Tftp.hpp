@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <cstdint>
 
 /**
@@ -210,8 +211,15 @@ constexpr unsigned int TFTP_OPTION_TIMEOUT_MAX = 255U;
 
 // Forward declarations
 class TftpConfiguration;
-class TftpReceiveDataOperationHandler;
-class TftpTransmitDataOperationHandler;
+
+class ReceiveDataOperationHandler;
+class TransmitDataOperationHandler;
+
+using ReceiveDataOperationHandlerPtr =
+  std::shared_ptr< ReceiveDataOperationHandler>;
+using TransmitDataOperationHandlerPtr =
+  std::shared_ptr< TransmitDataOperationHandler>;
+
 class TftpPacketHandler;
 
 }

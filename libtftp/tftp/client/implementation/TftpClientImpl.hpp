@@ -47,32 +47,32 @@ class TftpClientImpl : public TftpClientInternal
       const TftpConfiguration &configuration,
       const OptionList& additionalOptions);
 
-    //!@copydoc TftpClient::createReadRequestOperation(TftpReceiveDataOperationHandler &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
+    //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataOperationHandler &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
     virtual TftpClientOperationPtr createReadRequestOperation(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
       const UdpAddressType &from) override final;
 
-    //!@copydoc TftpClient::createReadRequestOperation(TftpReceiveDataOperationHandler &,const UdpAddressType &,const string &, TransferMode)
+    //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataOperationHandler &,const UdpAddressType &,const string &, TransferMode)
     virtual TftpClientOperationPtr createReadRequestOperation(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode) override final;
 
-    //!@copydoc TftpClient::createWriteRequestOperation(TftpTransmitDataOperationHandler &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
+    //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataOperationHandler &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
     virtual TftpClientOperationPtr createWriteRequestOperation(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
       const UdpAddressType &from) override final;
 
-    //!@copydoc TftpClient::createWriteRequestOperation(TftpTransmitDataOperationHandler &,const UdpAddressType &,const string &, TransferMode)
+    //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataOperationHandler &,const UdpAddressType &,const string &, TransferMode)
     virtual TftpClientOperationPtr createWriteRequestOperation(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode) override final;

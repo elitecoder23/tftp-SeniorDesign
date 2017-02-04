@@ -16,17 +16,17 @@ find_package( Boost REQUIRED COMPONENTS program_options)
 add_library(
   tftp
   
+  tftp/OperationHandler.hpp
+  tftp/ReceiveDataOperationHandler.hpp
   tftp/RequestTypeDescription.cpp
   tftp/RequestTypeDescription.hpp
   tftp/Tftp.hpp
   tftp/TftpConfiguration.cpp
   tftp/TftpConfiguration.hpp
   tftp/TftpException.hpp
-  tftp/TftpOperationHandler.hpp
   tftp/TftpPacketHandler.cpp
   tftp/TftpPacketHandler.hpp
-  tftp/TftpReceiveDataOperationHandler.hpp
-  tftp/TftpTransmitDataOperationHandler.hpp
+  tftp/TransmitDataOperationHandler.hpp
   
   tftp/packet/AcknowledgementPacket.hpp
   tftp/packet/AcknowledgementPacket.cpp

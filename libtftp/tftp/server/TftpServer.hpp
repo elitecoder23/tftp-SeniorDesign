@@ -105,7 +105,7 @@ class TftpServer
      * @return The TFTP server write operation.
      **/
     virtual TftpServerOperation createReadRequestOperation(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions,
       const UdpAddressType &serverAddress) = 0;
@@ -123,7 +123,7 @@ class TftpServer
      * @return The TFTP server write operation.
      **/
     virtual TftpServerOperation createReadRequestOperation(
-      TftpTransmitDataOperationHandler &handler,
+      TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions) = 0;
 
@@ -142,7 +142,7 @@ class TftpServer
      * @return The TFTP server read operation.
      **/
     virtual TftpServerOperation createWriteRequestOperation(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions,
       const UdpAddressType &serverAddress) = 0;
@@ -160,7 +160,7 @@ class TftpServer
      * @return The TFTP server read operation.
      **/
     virtual TftpServerOperation createWriteRequestOperation(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions) = 0;
 

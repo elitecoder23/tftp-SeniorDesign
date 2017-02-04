@@ -31,7 +31,7 @@ TftpClientImpl::TftpClientImpl(
 }
 
 TftpClientOperationPtr TftpClientImpl::createReadRequestOperation(
-  TftpReceiveDataOperationHandler &handler,
+  ReceiveDataOperationHandler &handler,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
@@ -47,7 +47,7 @@ TftpClientOperationPtr TftpClientImpl::createReadRequestOperation(
 }
 
 TftpClientOperationPtr TftpClientImpl::createReadRequestOperation(
-  TftpReceiveDataOperationHandler &handler,
+  ReceiveDataOperationHandler &handler,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode)
@@ -61,7 +61,7 @@ TftpClientOperationPtr TftpClientImpl::createReadRequestOperation(
 }
 
 TftpClientOperationPtr TftpClientImpl::createWriteRequestOperation(
-  TftpTransmitDataOperationHandler &handler,
+  TransmitDataOperationHandler &handler,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
@@ -77,7 +77,7 @@ TftpClientOperationPtr TftpClientImpl::createWriteRequestOperation(
 }
 
 TftpClientOperationPtr TftpClientImpl::createWriteRequestOperation(
-  TftpTransmitDataOperationHandler &handler,
+  TransmitDataOperationHandler &handler,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode)

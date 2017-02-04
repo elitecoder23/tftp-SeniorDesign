@@ -57,7 +57,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
      *   local endpoint, where the server handles the request from.
      **/
     TftpServerWriteRequestOperationImpl(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions,
@@ -76,7 +76,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
      *   Received option list from client.
      **/
     TftpServerWriteRequestOperationImpl(
-      TftpReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const OptionList &clientOptions);
@@ -117,7 +117,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
     using BlockNumber = Tftp::Packet::BlockNumber;
 
     //! Handler which will be called on various events.
-    TftpReceiveDataOperationHandler &handler;
+    ReceiveDataOperationHandler &handler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! Holds the last received block number.
