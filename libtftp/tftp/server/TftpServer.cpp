@@ -28,7 +28,7 @@ const Tftp::UdpAddressType TftpServer::DefaultLocalEndpoint = UdpAddressType(
 TftpServerPtr TftpServer::createInstance(
   ReceivedTftpRequestHandler handler,
   const TftpConfiguration &configuration,
-  const OptionList& additionalOptions,
+  const Options::OptionList& additionalOptions,
   const UdpAddressType &serverAddress)
 {
   // create and return the real TFTP server

@@ -17,7 +17,7 @@
 #ifndef TFTP_OPTIONS_OPTIONLIST_HPP
 #define TFTP_OPTIONS_OPTIONLIST_HPP
 
-#include <tftp/Tftp.hpp>
+#include <tftp/options/Options.hpp>
 #include <tftp/options/Option.hpp>
 
 #include <string>
@@ -44,10 +44,8 @@ class OptionList
 {
   public:
     using string = std::string;
-    //! short form of option pointer
-    using OptionPointer = std::shared_ptr< Option>;
     //! short form of option map
-    using OptionMap = std::map< string, OptionPointer>;
+    using OptionMap = std::map< string, OptionPtr>;
     //! short form of raw option
     using RawOptionsType = std::vector< uint8_t>;
 
@@ -144,7 +142,7 @@ class OptionList
      * @return The value of the option.
      *   If the option is not set, an empty OptionPointer is returned.
      **/
-    const OptionPointer getOption( const string &name) const;
+    const OptionPtr getOption( const string &name) const;
 
     /**
      * @brief Sets the given option to the given value.
@@ -168,7 +166,7 @@ class OptionList
      * @param[in] option
      *   The option
      **/
-    void setOption( const OptionPointer option);
+    void setOption( const OptionPtr option);
 
     /**
      * @brief Remove the option with the given name from the option list.

@@ -42,8 +42,6 @@ namespace Server {
 class TftpServer
 {
   public:
-    using OptionList = Options::OptionList;
-
     using string = std::string;
     /**
      * @brief The default address, where the server listens.
@@ -68,7 +66,7 @@ class TftpServer
     static TftpServerPtr createInstance(
       ReceivedTftpRequestHandler handler,
       const TftpConfiguration &configuration = TftpConfiguration(),
-      const OptionList& additionalOptions = OptionList(),
+      const Options::OptionList& additionalOptions = Options::OptionList(),
       const UdpAddressType &serverAddress = DefaultLocalEndpoint);
 
     //! Default destructor
@@ -107,7 +105,7 @@ class TftpServer
     virtual TftpServerOperation createReadRequestOperation(
       TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions,
+      const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress) = 0;
 
     /**
@@ -125,7 +123,7 @@ class TftpServer
     virtual TftpServerOperation createReadRequestOperation(
       TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions) = 0;
+      const Options::OptionList &clientOptions) = 0;
 
     /**
      * @brief Creates a TFTP read operation (TFTP WRQ)
@@ -144,7 +142,7 @@ class TftpServer
     virtual TftpServerOperation createWriteRequestOperation(
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions,
+      const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress) = 0;
 
     /**
@@ -162,7 +160,7 @@ class TftpServer
     virtual TftpServerOperation createWriteRequestOperation(
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions) = 0;
+      const Options::OptionList &clientOptions) = 0;
 
     /**
      * @brief Creates a TFTP error operation.

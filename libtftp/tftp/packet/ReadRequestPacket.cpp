@@ -22,7 +22,7 @@ namespace Packet {
 ReadRequestPacket::ReadRequestPacket(
   const string &filename,
   const TransferMode mode,
-  const OptionList &options) noexcept:
+  const Options::OptionList &options) noexcept:
   ReadWriteRequestPacket(
     PacketType::ReadRequest,
     filename,

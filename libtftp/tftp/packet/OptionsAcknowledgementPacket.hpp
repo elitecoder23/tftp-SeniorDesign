@@ -40,9 +40,7 @@ namespace Packet {
 class OptionsAcknowledgementPacket: public TftpPacket
 {
   public:
-    using OptionList = Tftp::Options::OptionList;
-
-    OptionsAcknowledgementPacket( const OptionList &options) noexcept;
+    OptionsAcknowledgementPacket( const Options::OptionList &options) noexcept;
 
     /**
      * @brief Generates a TFTP Options Acknowledgement packet from a data buffer
@@ -60,14 +58,14 @@ class OptionsAcknowledgementPacket: public TftpPacket
      *
      * @return Option list (as const reference)
      **/
-    const OptionList& getOptions() const;
+    const Options::OptionList& getOptions() const;
 
     /**
      * @brief Returns the options within the packet (as reference)
      *
      * @return Option list (as reference)
      **/
-    OptionList& getOptions();
+    Options::OptionList& getOptions();
 
     /**
      * @brief Overwrite the options of this packet with the new one.
@@ -75,7 +73,7 @@ class OptionsAcknowledgementPacket: public TftpPacket
      * @param[in] options
      *   New option list, which shall be used.
      **/
-    void setOptions( const OptionList &options);
+    void setOptions( const Options::OptionList &options);
 
     /**
      * @brief Get a option value for a given name.
@@ -110,8 +108,8 @@ class OptionsAcknowledgementPacket: public TftpPacket
     virtual string toString() const override;
 
   private:
-    //! The set options.
-    OptionList options;
+    //! The stored options.
+    Options::OptionList options;
 };
 
 }

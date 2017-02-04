@@ -102,10 +102,10 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
   return options;
 }
 
-TftpConfiguration::OptionList TftpConfiguration::getClientOptions(
-  const OptionList &baseOptions) const
+Options::OptionList TftpConfiguration::getClientOptions(
+  const Options::OptionList &baseOptions) const
 {
-  OptionList options = baseOptions;
+  Options::OptionList options = baseOptions;
 
   if ( handleTransferSizeOption)
   {
@@ -125,10 +125,10 @@ TftpConfiguration::OptionList TftpConfiguration::getClientOptions(
   return options;
 }
 
-TftpConfiguration::OptionList TftpConfiguration::getServerOptions(
-  const OptionList &baseOptions) const
+Options::OptionList TftpConfiguration::getServerOptions(
+  const Options::OptionList &baseOptions) const
 {
-  OptionList options = baseOptions;
+  Options::OptionList options = baseOptions;
 
   if ( handleTransferSizeOption)
   {

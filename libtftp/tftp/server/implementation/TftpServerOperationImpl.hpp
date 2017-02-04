@@ -43,9 +43,6 @@ class TftpServerInternal;
 class TftpServerOperationImpl: protected PacketHandler
 {
   protected:
-    using OptionList = Options::OptionList;
-    using TftpPacket = Packet::TftpPacket;
-
     /**
      * @brief Initialises the TFTP server operation.
      *
@@ -61,7 +58,7 @@ class TftpServerOperationImpl: protected PacketHandler
     TftpServerOperationImpl(
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions,
+      const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress);
 
     /**
@@ -77,7 +74,7 @@ class TftpServerOperationImpl: protected PacketHandler
     TftpServerOperationImpl(
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions);
+      const Options::OptionList &clientOptions);
 
     /**
      * @brief default destructor.
@@ -102,7 +99,7 @@ class TftpServerOperationImpl: protected PacketHandler
      *
      * @throw CommunicationException
      **/
-    void send( const TftpPacket &packet);
+    void send( const Packet::TftpPacket &packet);
 
     /**
      * @brief receives a packet and calls the packet handlers
@@ -114,7 +111,7 @@ class TftpServerOperationImpl: protected PacketHandler
      *
      * @return The stored TFTP option list.
      **/
-    OptionList& getOptions();
+    Options::OptionList& getOptions();
 
     /**
      * @brief Updates the limit of maximum packet size for the receive
@@ -215,7 +212,7 @@ class TftpServerOperationImpl: protected PacketHandler
     //! The remote (client) endpoint
     const UdpAddressType clientAddress;
     //! The stored negotiated options
-    OptionList options;
+    Options::OptionList options;
     //! The maximum packet size, which can be received
     uint16_t maxReceivePacketSize;
     //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT

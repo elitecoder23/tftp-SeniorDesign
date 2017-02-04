@@ -36,7 +36,7 @@ class TftpServerInternal : public TftpServer
 
     virtual const TftpConfiguration& getConfiguration() const = 0;
 
-    virtual const OptionList& getOptionList() const = 0;
+    virtual const Options::OptionList& getOptionList() const = 0;
 };
 
 }

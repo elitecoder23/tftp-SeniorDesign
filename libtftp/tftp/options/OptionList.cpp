@@ -139,13 +139,13 @@ bool OptionList::hasOption( const KnownOptions option) const
   return hasOption( optionName);
 }
 
-const OptionList::OptionPointer OptionList::getOption( const string &name) const
+const OptionPtr OptionList::getOption( const string &name) const
 {
   OptionMap::const_iterator it =
     options.find( name);
 
   return (it != options.end()) ?
-    it->second : OptionPointer();
+    it->second : OptionPtr();
 }
 
 void OptionList::setOption( const string &name, const string &value)
@@ -159,10 +159,10 @@ void OptionList::setOption( const string &name, const string &value)
   // Add option
   options.insert( std::make_pair(
     name,
-    OptionPointer( new StringOption( name, value))));
+    std::make_shared< StringOption>( name, value)));
 }
 
-void OptionList::setOption( const OptionPointer option)
+void OptionList::setOption( const OptionPtr option)
 {
   // If option already exists remove it first
   if (hasOption( option->getName()))
@@ -203,8 +203,7 @@ void OptionList::addBlocksizeOptionClient(
 
   assert( minBlocksize <= requestedBlocksize);
 
-  OptionPointer entry = OptionPointer(
-    new BlockSizeOptionClient(
+  OptionPtr entry( std::make_shared< BlockSizeOptionClient>(
       Option::getOptionName( KnownOptions::BLOCKSIZE),
       requestedBlocksize,
       NegotiateMinMaxRange< uint16_t>( minBlocksize, requestedBlocksize)));
@@ -226,8 +225,7 @@ void OptionList::addBlocksizeOptionServer(
 
   assert( minBlocksize <= maxBlocksize);
 
-  OptionPointer entry = OptionPointer(
-    new BlockSizeOptionServer(
+  OptionPtr entry( std::make_shared< BlockSizeOptionServer>(
       Option::getOptionName( KnownOptions::BLOCKSIZE),
       maxBlocksize,
       NegotiateMinMaxSmaller< uint16_t>( minBlocksize, maxBlocksize)));
@@ -264,8 +262,7 @@ void OptionList::addTimeoutOptionClient( const uint8_t timeout)
   // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
   assert( timeout >= TFTP_OPTION_TIMEOUT_MIN);
 
-  OptionPointer entry = OptionPointer(
-    new TimeoutOptionClient(
+  OptionPtr entry( std::make_shared< TimeoutOptionClient>(
       Option::getOptionName( KnownOptions::TIMEOUT),
       timeout,
       NegotiateExactValue< uint8_t>( timeout)));
@@ -284,8 +281,7 @@ void OptionList::addTimeoutOptionServer(
 
   assert( (minTimeout <= maxTimeout));
 
-  OptionPointer entry = OptionPointer(
-    new TimeoutOptionServer(
+  OptionPtr entry( std::make_shared< TimeoutOptionServer>(
       Option::getOptionName( KnownOptions::TIMEOUT),
       maxTimeout,
       NegotiateMinMaxRange< uint8_t>( minTimeout, maxTimeout)));
@@ -319,8 +315,7 @@ uint8_t OptionList::getTimeoutOption() const
 
 void OptionList::addTransferSizeOption( const uint64_t transferSize)
 {
-  OptionPointer entry = OptionPointer(
-    new TransferSizeOptionServerClient(
+  OptionPtr entry( std::make_shared< TransferSizeOptionServerClient>(
       Option::getOptionName( KnownOptions::TRANSFER_SIZE),
       transferSize,
       NegotiateAlwaysPass< uint64_t>()));
@@ -379,8 +374,8 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
     }
 
     // negotiate option
-    OptionPointer newOptionValue = negotiationEntryIt->second->negotiate(
-      *(clientOption.second));
+    OptionPtr newOptionValue( negotiationEntryIt->second->negotiate(
+      *(clientOption.second)));
 
     // negotiation has returned a value -> copy option to output list
     if (newOptionValue)
@@ -413,8 +408,8 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
     }
 
     // negotiate option, if failed also fail on top level
-    OptionPointer newOptionValue = negotiationEntryIt->second->negotiate(
-      (*serverOption.second));
+    OptionPtr newOptionValue( negotiationEntryIt->second->negotiate(
+      (*serverOption.second)));
 
     // check negotiation result
     if (!newOptionValue)

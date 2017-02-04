@@ -45,7 +45,7 @@ class TftpClientImpl : public TftpClientInternal
      **/
     TftpClientImpl(
       const TftpConfiguration &configuration,
-      const OptionList& additionalOptions);
+      const Options::OptionList& additionalOptions);
 
     //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataOperationHandler &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
     virtual TftpClientOperationPtr createReadRequestOperation(
@@ -81,11 +81,11 @@ class TftpClientImpl : public TftpClientInternal
     virtual const TftpConfiguration& getConfiguration() const override final;
 
     //! @copydoc TftpClientInternal::getOptionList
-    virtual const OptionList& getOptionList() const override final;
+    virtual const Options::OptionList& getOptionList() const override final;
 
   private:
     const TftpConfiguration configuration;
-    const OptionList options;
+    const Options::OptionList options;
 };
 
 }

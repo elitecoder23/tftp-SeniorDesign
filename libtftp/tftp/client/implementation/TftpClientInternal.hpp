@@ -31,8 +31,6 @@ namespace Client {
 class TftpClientInternal : public TftpClient
 {
   public:
-    using OptionList = Options::OptionList;
-
     //! Default destructor
     virtual ~TftpClientInternal() = default;
 
@@ -48,7 +46,7 @@ class TftpClientInternal : public TftpClient
      *
      * @return The options list.
      **/
-    virtual const OptionList& getOptionList() const = 0;
+    virtual const Options::OptionList& getOptionList() const = 0;
 };
 
 }

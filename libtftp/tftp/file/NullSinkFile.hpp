@@ -34,7 +34,7 @@ namespace File {
  * If a size is given, this size is checked against the value given when calling
  * receivedTransferSize().
  **/
-class NullSinkFile : public TftpReceiveDataOperationHandler
+class NullSinkFile : public ReceiveDataOperationHandler
 {
   public:
     //! default constructor

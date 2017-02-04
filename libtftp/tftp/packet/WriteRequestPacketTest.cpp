@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_SUITE( TftpWriteRequestPacket)
 
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Tftp::Options::OptionList options;
+  Options::OptionList options;
 
   options.setOption( "blocksize", "4096");
 

@@ -37,8 +37,6 @@ namespace Packet {
 class ReadWriteRequestPacket: public TftpPacket
 {
   public:
-    using OptionList = Tftp::Options::OptionList;
-
     /**
      * @brief Converts the mode enumeration to the corresponding packet
      *   string.
@@ -112,14 +110,14 @@ class ReadWriteRequestPacket: public TftpPacket
      *
      * @return The TFTP options.
      **/
-    const OptionList& getOptions() const;
+    const Options::OptionList& getOptions() const;
 
     /**
      * @brief Returns the set TFTP options.
      *
      * @return The TFTP options.
      **/
-    OptionList& getOptions();
+    Options::OptionList& getOptions();
 
     /**
      * @brief Sets the TFTP options.
@@ -127,7 +125,7 @@ class ReadWriteRequestPacket: public TftpPacket
      * @param[in] options
      *   The TFTP options.
      **/
-    void setOptions( const OptionList &options);
+    void setOptions( const Options::OptionList &options);
 
     /**
      * @brief Returns the option value with the given name.
@@ -181,7 +179,7 @@ class ReadWriteRequestPacket: public TftpPacket
       PacketType packetType,
       const string &filename,
       TransferMode mode,
-      const OptionList &options);
+      const Options::OptionList &options);
 
     /**
      * @brief Generates a TFTP Read/ Write Request packet from a data buffer
@@ -205,7 +203,7 @@ class ReadWriteRequestPacket: public TftpPacket
     //! stored transfer mode
     string mode;
     //! stored options
-    OptionList options;
+    Options::OptionList options;
 };
 
 }

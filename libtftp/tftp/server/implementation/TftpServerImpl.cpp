@@ -35,7 +35,7 @@ namespace Server {
 TftpServerImpl::TftpServerImpl(
   ReceivedTftpRequestHandler handler,
   const TftpConfiguration &configuration,
-  const OptionList& additionalOptions,
+  const Options::OptionList& additionalOptions,
   const UdpAddressType &serverAddress)
 try :
   handler( handler),
@@ -121,7 +121,7 @@ void TftpServerImpl::stop()
 TftpServerOperation TftpServerImpl::createReadRequestOperation(
   TransmitDataOperationHandler &handler,
   const UdpAddressType &clientAddress,
-  const OptionList &clientOptions,
+  const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress)
 {
   auto operation = std::make_shared< TftpServerReadRequestOperationImpl>(
@@ -137,7 +137,7 @@ TftpServerOperation TftpServerImpl::createReadRequestOperation(
 TftpServerOperation TftpServerImpl::createReadRequestOperation(
   TransmitDataOperationHandler &handler,
   const UdpAddressType &clientAddress,
-  const OptionList &clientOptions)
+  const Options::OptionList &clientOptions)
 {
   auto operation = std::make_shared< TftpServerReadRequestOperationImpl>(
     handler,
@@ -151,7 +151,7 @@ TftpServerOperation TftpServerImpl::createReadRequestOperation(
 TftpServerOperation TftpServerImpl::createWriteRequestOperation(
   ReceiveDataOperationHandler &handler,
   const UdpAddressType &clientAddress,
-  const OptionList &clientOptions,
+  const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress)
 {
   auto operation = std::make_shared< TftpServerWriteRequestOperationImpl>(
@@ -169,7 +169,7 @@ TftpServerOperation TftpServerImpl::createWriteRequestOperation(
 TftpServerOperation TftpServerImpl::createWriteRequestOperation(
   ReceiveDataOperationHandler &handler,
   const UdpAddressType &clientAddress,
-  const OptionList &clientOptions)
+  const Options::OptionList &clientOptions)
 {
   auto operation = std::make_shared< TftpServerWriteRequestOperationImpl>(
     handler,
@@ -215,7 +215,7 @@ const Tftp::TftpConfiguration& TftpServerImpl::getConfiguration() const
   return configuration;
 }
 
-const TftpServerImpl::OptionList& TftpServerImpl::getOptionList() const
+const Options::OptionList& TftpServerImpl::getOptionList() const
 {
   return options;
 }

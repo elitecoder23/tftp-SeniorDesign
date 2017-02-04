@@ -39,7 +39,7 @@ class ReadRequestPacket: public ReadWriteRequestPacket
     ReadRequestPacket(
       const string &filename,
       TransferMode mode,
-      const OptionList &options) noexcept;
+      const Options::OptionList &options) noexcept;
 
     /**
      * @brief Generates a TFTP Read Request packet from a data buffer

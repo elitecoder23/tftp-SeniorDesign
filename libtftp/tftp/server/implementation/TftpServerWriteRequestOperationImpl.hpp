@@ -60,7 +60,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
       ReceiveDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions,
+      const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress);
 
     /**
@@ -79,7 +79,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
       ReceiveDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions);
+      const Options::OptionList &clientOptions);
 
     /**
      * @brief Standard destructor.

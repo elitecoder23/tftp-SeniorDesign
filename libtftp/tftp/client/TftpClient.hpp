@@ -35,8 +35,6 @@ namespace Client {
 class TftpClient
 {
   public:
-    using OptionList = Options::OptionList;
-
     using string = std::string;
 
     /**
@@ -53,7 +51,7 @@ class TftpClient
      **/
     static TftpClientPtr createInstance(
       const TftpConfiguration &configuration = TftpConfiguration(),
-      const OptionList& additionalOptions = OptionList());
+      const Options::OptionList& additionalOptions = Options::OptionList());
 
     //! Default destructor
     virtual ~TftpClient() noexcept = default;

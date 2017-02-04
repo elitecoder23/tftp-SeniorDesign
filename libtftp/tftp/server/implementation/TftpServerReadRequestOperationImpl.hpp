@@ -58,7 +58,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
       TransmitDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions,
+      const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress);
 
     /**
@@ -77,7 +77,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
       TransmitDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const OptionList &clientOptions);
+      const Options::OptionList &clientOptions);
 
     //! Desctructor
     virtual ~TftpServerReadRequestOperationImpl() noexcept = default;

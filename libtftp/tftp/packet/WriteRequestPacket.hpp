@@ -42,7 +42,7 @@ class WriteRequestPacket: public ReadWriteRequestPacket
     WriteRequestPacket(
       const string &filename,
       TransferMode mode,
-      const OptionList &options) noexcept;
+      const Options::OptionList &options) noexcept;
 
     /**
      * @brief Generates a TFTP Write Request packet from a data buffer

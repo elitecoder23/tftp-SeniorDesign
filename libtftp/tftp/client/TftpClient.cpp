@@ -23,7 +23,7 @@ namespace Client {
 
 TftpClientPtr TftpClient::createInstance(
   const TftpConfiguration &configuration,
-  const OptionList& additionalOptions)
+  const Options::OptionList& additionalOptions)
 {
   return std::make_shared< TftpClientImpl>( configuration, additionalOptions);
 }

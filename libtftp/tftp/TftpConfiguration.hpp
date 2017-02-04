@@ -36,7 +36,6 @@ namespace Tftp {
 class TftpConfiguration
 {
   public:
-    using OptionList = Tftp::Options::OptionList;
     using ptree = boost::property_tree::ptree;
     using options_description = boost::program_options::options_description;
 
@@ -77,8 +76,8 @@ class TftpConfiguration
      * @return Option list (for TFTP clients) based on the actual
      *   configuration and the supplied base options.
      **/
-    OptionList getClientOptions(
-      const OptionList &baseOptions = OptionList()) const;
+    Options::OptionList getClientOptions(
+      const Options::OptionList &baseOptions = Options::OptionList()) const;
 
     /**
      * @brief Creates an option list (for TFTP servers) based on the actual
@@ -90,8 +89,8 @@ class TftpConfiguration
      * @return Option list (for TFTP servers) based on the actual
      *   configuration and the supplied base options.
      **/
-    OptionList getServerOptions(
-      const OptionList &baseOptions = OptionList()) const;
+    Options::OptionList getServerOptions(
+      const Options::OptionList &baseOptions = Options::OptionList()) const;
 
     //! The TFTP timeout - The standard when no timeout option is negotiated in seconds.
     uint8_t tftpTimeout;

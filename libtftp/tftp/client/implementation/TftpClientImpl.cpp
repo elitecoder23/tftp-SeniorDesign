@@ -24,7 +24,7 @@ namespace Client {
 
 TftpClientImpl::TftpClientImpl(
   const TftpConfiguration &configuration,
-  const OptionList& additionalOptions):
+  const Options::OptionList& additionalOptions):
   configuration( configuration),
   options( configuration.getClientOptions( additionalOptions))
 {
@@ -95,7 +95,7 @@ const Tftp::TftpConfiguration& TftpClientImpl::getConfiguration() const
   return configuration;
 }
 
-const TftpClientImpl::OptionList& TftpClientImpl::getOptionList() const
+const Options::OptionList& TftpClientImpl::getOptionList() const
 {
   return options;
 }

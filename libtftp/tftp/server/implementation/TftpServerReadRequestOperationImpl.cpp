@@ -32,7 +32,7 @@ TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
   TransmitDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const OptionList &clientOptions,
+  const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress) :
   TftpServerOperationImpl(
     tftpServerInternal,
@@ -50,7 +50,7 @@ TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
   TransmitDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const OptionList &clientOptions) :
+  const Options::OptionList &clientOptions) :
   TftpServerOperationImpl( tftpServerInternal, clientAddress, clientOptions),
   handler( handler),
   transmitDataSize( DefaultDataSize),

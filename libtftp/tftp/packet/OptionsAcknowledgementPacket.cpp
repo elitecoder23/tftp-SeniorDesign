@@ -26,7 +26,7 @@ namespace Tftp {
 namespace Packet {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  const OptionList &options) noexcept:
+  const Options::OptionList &options) noexcept:
   TftpPacket( PacketType::OptionsAcknowledgement),
   options( options)
 {
@@ -46,30 +46,31 @@ OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + 2;
 
   // assign options
-  options = OptionList( packetIt, rawPacket.end());
+  options = Options::OptionList( packetIt, rawPacket.end());
 }
 
-const OptionsAcknowledgementPacket::OptionList&
-OptionsAcknowledgementPacket::getOptions() const
+const Options::OptionList& OptionsAcknowledgementPacket::getOptions() const
 {
   return options;
 }
 
-OptionsAcknowledgementPacket::OptionList&
-OptionsAcknowledgementPacket::getOptions()
+Options::OptionList& OptionsAcknowledgementPacket::getOptions()
 {
   return options;
 }
 
-void OptionsAcknowledgementPacket::setOptions( const OptionList &options)
+void OptionsAcknowledgementPacket::setOptions(
+  const Options::OptionList &options)
 {
   this->options = options;
 }
 
-const OptionsAcknowledgementPacket::string OptionsAcknowledgementPacket::getOption(
+const OptionsAcknowledgementPacket::string
+OptionsAcknowledgementPacket::getOption(
   const string &name) const
 {
-  OptionList::OptionPointer option = options.getOption( name);
+  Options::OptionPtr option( options.getOption( name));
+
   return (option) ? static_cast< string>( *option) : string();
 }
 
@@ -82,7 +83,7 @@ void OptionsAcknowledgementPacket::setOption(
 
 Tftp::RawTftpPacketType OptionsAcknowledgementPacket::encode() const
 {
-  OptionList::RawOptionsType rawOptions = options.getRawOptions();
+  Options::OptionList::RawOptionsType rawOptions = options.getRawOptions();
 
   RawTftpPacketType rawPacket( 2 + rawOptions.size());
 

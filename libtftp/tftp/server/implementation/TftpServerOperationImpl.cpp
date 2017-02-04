@@ -36,7 +36,7 @@ namespace Server {
 TftpServerOperationImpl::TftpServerOperationImpl(
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const OptionList &clientOptions,
+  const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress)
 try:
   tftpServerInternal( tftpServerInternal),
@@ -82,7 +82,7 @@ catch (boost::system::system_error &err)
 TftpServerOperationImpl::TftpServerOperationImpl(
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const OptionList &clientOptions)
+  const Options::OptionList &clientOptions)
 try:
   tftpServerInternal( tftpServerInternal),
   clientAddress( clientAddress),
@@ -150,7 +150,7 @@ void TftpServerOperationImpl::finished() noexcept
   ioService.stop();
 }
 
-void TftpServerOperationImpl::send( const TftpPacket &packet)
+void TftpServerOperationImpl::send( const Packet::TftpPacket &packet)
 {
   BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
 
@@ -206,7 +206,7 @@ void TftpServerOperationImpl::receive()
 }
 
 
-TftpServerOperationImpl::OptionList& TftpServerOperationImpl::getOptions()
+Options::OptionList& TftpServerOperationImpl::getOptions()
 {
   return options;
 }

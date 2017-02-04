@@ -109,17 +109,17 @@ void ReadWriteRequestPacket::setMode( const string &mode)
   this->mode = mode;
 }
 
-const ReadWriteRequestPacket::OptionList& ReadWriteRequestPacket::getOptions() const
+const Options::OptionList& ReadWriteRequestPacket::getOptions() const
 {
   return options;
 }
 
-ReadWriteRequestPacket::OptionList& ReadWriteRequestPacket::getOptions()
+Options::OptionList& ReadWriteRequestPacket::getOptions()
 {
   return options;
 }
 
-void ReadWriteRequestPacket::setOptions( const OptionList &options)
+void ReadWriteRequestPacket::setOptions( const Options::OptionList &options)
 {
   this->options = options;
 }
@@ -127,7 +127,8 @@ void ReadWriteRequestPacket::setOptions( const OptionList &options)
 const ReadWriteRequestPacket::string ReadWriteRequestPacket::getOption(
   const string &name) const
 {
-  OptionList::OptionPointer option = options.getOption( name);
+  Options::OptionPtr option( options.getOption( name));
+
   return (option) ? static_cast< string>( *option) : string();
 }
 
@@ -138,7 +139,7 @@ void ReadWriteRequestPacket::setOption( const string &name, const string &value)
 
 Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
 {
-  OptionList::RawOptionsType rawOptions = options.getRawOptions();
+  Options::OptionList::RawOptionsType rawOptions = options.getRawOptions();
 
   RawTftpPacketType rawPacket(
     TFTP_PACKET_HEADER_SIZE +
@@ -179,7 +180,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
   const string &filename,
   const TransferMode mode,
-  const OptionList &options):
+  const Options::OptionList &options):
   TftpPacket( packetType),
   filename( filename),
   mode( getMode( mode)),
@@ -256,7 +257,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   packetIt = modeEnd + 1;
 
   // assign options
-  options = OptionList( packetIt, rawPacket.end());
+  options = Options::OptionList( packetIt, rawPacket.end());
 }
 
 }
