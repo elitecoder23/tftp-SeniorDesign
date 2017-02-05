@@ -30,10 +30,6 @@ namespace Server {
  **/
 class TftpServerBaseErrorOperation
 {
-  public:
-    using AddressType = boost::asio::ip::udp::endpoint;
-    using BaseErrorPacket = Packet::BaseErrorPacket;
-
   protected:
     /**
      * @brief Constructor of error operation
@@ -41,7 +37,7 @@ class TftpServerBaseErrorOperation
      * @param[in] clientAddress
      *   Where the error packet shall be transmitted to.
      **/
-    TftpServerBaseErrorOperation( const AddressType &clientAddress);
+    TftpServerBaseErrorOperation( const UdpAddressType &clientAddress);
 
     /**
      * @brief Constructor of error operation
@@ -52,8 +48,8 @@ class TftpServerBaseErrorOperation
      *   The communication source.
      **/
     TftpServerBaseErrorOperation(
-      const AddressType &clientAddress,
-      const AddressType &from);
+      const UdpAddressType &clientAddress,
+      const UdpAddressType &from);
 
     /**
      * @brief Default destructor.
@@ -66,10 +62,10 @@ class TftpServerBaseErrorOperation
      * @param[in] error
      *   The error packet.
      **/
-    void sendError( const BaseErrorPacket &error);
+    void sendError( const Packet::BaseErrorPacket &error);
 
   private:
-    const AddressType clientAddress;
+    const UdpAddressType clientAddress;
     boost::asio::io_service ioService;
     boost::asio::ip::udp::socket socket;
 };

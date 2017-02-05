@@ -24,7 +24,7 @@ namespace Tftp {
 namespace Server {
 
 TftpServerBaseErrorOperation::TftpServerBaseErrorOperation(
-  const AddressType &clientAddress)
+  const UdpAddressType &clientAddress)
 try :
   clientAddress( clientAddress),
   socket( ioService)
@@ -55,8 +55,8 @@ catch ( boost::system::system_error &err)
 }
 
 TftpServerBaseErrorOperation::TftpServerBaseErrorOperation(
-  const AddressType &clientAddress,
-  const AddressType &from)
+  const UdpAddressType &clientAddress,
+  const UdpAddressType &from)
 try :
   clientAddress( clientAddress),
   socket( ioService)
@@ -97,7 +97,8 @@ TftpServerBaseErrorOperation::~TftpServerBaseErrorOperation( void) noexcept
   }
 }
 
-void TftpServerBaseErrorOperation::sendError( const BaseErrorPacket &error)
+void TftpServerBaseErrorOperation::sendError(
+  const Packet::BaseErrorPacket &error)
 {
   try
   {

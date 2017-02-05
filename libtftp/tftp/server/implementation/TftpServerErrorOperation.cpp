@@ -24,8 +24,8 @@ namespace Tftp {
 namespace Server {
 
 TftpServerErrorOperation::TftpServerErrorOperation(
-  const AddressType &clientAddress,
-  const AddressType &from,
+  const UdpAddressType &clientAddress,
+  const UdpAddressType &from,
   const ErrorCode errorCode,
   const string &errorMessage) :
   TftpServerBaseErrorOperation( clientAddress, from),
@@ -35,7 +35,7 @@ TftpServerErrorOperation::TftpServerErrorOperation(
 }
 
 TftpServerErrorOperation::TftpServerErrorOperation(
-  const AddressType &clientAddress,
+  const UdpAddressType &clientAddress,
   const ErrorCode errorCode,
   const string &errorMessage) :
   TftpServerBaseErrorOperation( clientAddress),

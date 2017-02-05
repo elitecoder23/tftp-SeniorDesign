@@ -118,14 +118,12 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
       const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
 
   private:
-    using BlockNumber = Tftp::Packet::BlockNumber;
-
     //! Registered handler.
     ReceiveDataOperationHandler &handler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! last received block number.
-    BlockNumber lastReceivedBlockNumber;
+    Packet::BlockNumber lastReceivedBlockNumber;
 };
 
 }

@@ -49,8 +49,8 @@ class TftpServerErrorOperation: public TftpServerBaseErrorOperation
      * @throw CommunicationException
      **/
     TftpServerErrorOperation(
-      const AddressType &clientAddress,
-      const AddressType &from,
+      const UdpAddressType &clientAddress,
+      const UdpAddressType &from,
       ErrorCode errorCode,
       const string &errorMessage);
 
@@ -67,7 +67,7 @@ class TftpServerErrorOperation: public TftpServerBaseErrorOperation
      * @throw CommunicationException
      **/
     TftpServerErrorOperation(
-      const AddressType &clientAddress,
+      const UdpAddressType &clientAddress,
       ErrorCode errorCode,
       const string &errorMessage);
 
