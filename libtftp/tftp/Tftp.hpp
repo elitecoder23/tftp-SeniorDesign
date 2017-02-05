@@ -111,13 +111,13 @@ enum class TransferPhase
 };
 
 //! Default TFTP port.
-constexpr uint16_t DEFAULT_TFTP_PORT = 69;
+constexpr uint16_t DefaultTftpPort = 69;
 
 //! The default TFTP receive timeout in seconds (2 seconds)
-constexpr unsigned int DEFAULT_TFTP_RECEIVE_TIMEOUT = 2;
+constexpr unsigned int DefaultTftpReceiveTimeout = 2;
 
 //! Number of retries performed, when no ACK has been received
-constexpr unsigned int DEFAULT_TFTP_RETRIES = 1;
+constexpr unsigned int DefaultTftpRetries = 1;
 
 /**
  * @brief TFTP Packet types.

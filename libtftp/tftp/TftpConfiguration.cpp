@@ -19,17 +19,17 @@
 namespace Tftp {
 
 TftpConfiguration::TftpConfiguration() :
-  tftpTimeout( DEFAULT_TFTP_RECEIVE_TIMEOUT),
-  tftpRetries( DEFAULT_TFTP_RETRIES),
-  tftpServerPort( DEFAULT_TFTP_PORT),
+  tftpTimeout( DefaultTftpReceiveTimeout),
+  tftpRetries( DefaultTftpRetries),
+  tftpServerPort( DefaultTftpPort),
   handleTransferSizeOption( false)
 {
 }
 
 TftpConfiguration::TftpConfiguration( const ptree &properties) :
-  tftpTimeout( properties.get( "timeout", DEFAULT_TFTP_RECEIVE_TIMEOUT)),
-  tftpRetries( properties.get( "retries", DEFAULT_TFTP_RETRIES)),
-  tftpServerPort( properties.get( "port", DEFAULT_TFTP_PORT)),
+  tftpTimeout( properties.get( "timeout", DefaultTftpReceiveTimeout)),
+  tftpRetries( properties.get( "retries", DefaultTftpRetries)),
+  tftpServerPort( properties.get( "port", DefaultTftpPort)),
 
   handleTransferSizeOption( properties.get( "option.transferSize", false)),
 
@@ -73,7 +73,7 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
   ("server-port",
     boost::program_options::value( &tftpServerPort)->default_value(
       tftpServerPort),
-    "UDP port, where the server is listen"
+    "UDP port, where the server is listen."
   )
   (
     "blocksize-option",
@@ -82,21 +82,22 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
       [this]( const uint16_t &value){
         this->blockSizeOption = value;
     }),
-    "blocksize of transfers to use"
+    "blocksize of transfers to use."
   )
   (
     "timeout-option",
     //boost::program_options::value( &timoutOption),
-    boost::program_options::value< uint16_t>()->notifier(
+    boost::program_options::value< uint16_t>()->implicit_value(
+      DefaultTftpReceiveTimeout)->notifier(
       [this]( const uint16_t &value){
         this->timeoutOption = value;
     }),
-    "If set handles the timeout option negotiation"
+    "If set handles the timeout option negotiation."
   )
   (
     "handle-transfer-size-option",
     boost::program_options::bool_switch( &handleTransferSizeOption),
-    "If set handles the transfer size option negotiation"
+    "If set handles the transfer size option negotiation."
   );
 
   return options;

@@ -23,7 +23,7 @@ namespace Server {
 
 const Tftp::UdpAddressType TftpServer::DefaultLocalEndpoint = UdpAddressType(
   boost::asio::ip::address_v4::any(),
-  DEFAULT_TFTP_PORT);
+  DefaultTftpPort);
 
 TftpServerPtr TftpServer::createInstance(
   ReceivedTftpRequestHandler handler,
