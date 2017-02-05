@@ -99,7 +99,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
     void sendData();
 
     /**
-     * @copydoc TftpPacketHandler::handleDataPacket
+     * @copydoc PacketHandler::handleDataPacket
      *
      * Data packets are not expected and handled as invalid.
      * An error is sent back and the operation is cancelled.
@@ -109,7 +109,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
       const Packet::DataPacket &dataPacket) override;
 
     /**
-     * @copydoc TftpPacketHandler::handleAcknowledgementPacket
+     * @copydoc PacketHandler::handleAcknowledgementPacket
      *
      * The acknowledgement packet is checked and the next data sequence is
      * handled.

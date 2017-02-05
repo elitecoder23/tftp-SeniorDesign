@@ -194,7 +194,7 @@ class TftpClientOperationImpl :
     void setReceiveTimeout( uint8_t receiveTimeout) noexcept;
 
     /**
-     * @copydoc TftpPacketHandler::handleReadRequestPacket()
+     * @copydoc PacketHandler::handleReadRequestPacket()
      *
      * A read request packet is handled as failure. A error packet is sent
      * to the origin and the finished flag is set
@@ -206,7 +206,7 @@ class TftpClientOperationImpl :
       const Packet::ReadRequestPacket &readRequestPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleWriteRequestPacket()
+     * @copydoc PacketHandler::handleWriteRequestPacket()
      *
      * A write request packet is handled as failure. A error packet is sent
      * to the origin and the finished flag is set
@@ -216,14 +216,14 @@ class TftpClientOperationImpl :
       const Packet::WriteRequestPacket &writeRequestPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleErrorPacket()
+     * @copydoc PacketHandler::handleErrorPacket()
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
       const Packet::ErrorPacket &errorPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleInvalidPacket()
+     * @copydoc PacketHandler::handleInvalidPacket()
      **/
     virtual void handleInvalidPacket(
       const UdpAddressType &from,

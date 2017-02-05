@@ -93,7 +93,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
 
   private:
     /**
-     * @copydoc TftpPacketHandler::handleDataPacket
+     * @copydoc PacketHandler::handleDataPacket
      *
      * The received data packet is checked and the
      * TftpReadOperationHandler::receviedData() operation of the registered
@@ -104,7 +104,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
       const Packet::DataPacket &dataPacket) override;
 
     /**
-     * @copydoc TftpPacketHandler::handleAcknowledgementPacket
+     * @copydoc PacketHandler::handleAcknowledgementPacket
      *
      * Acknowledgement packets are not expected and handled as invalid.
      * An error is sent back and the operation is cancelled.

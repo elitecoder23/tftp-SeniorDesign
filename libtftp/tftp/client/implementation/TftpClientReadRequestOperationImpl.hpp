@@ -89,7 +89,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
 
   protected:
     /**
-     * @copydoc TftpPacketHandler::handleDataPacket()
+     * @copydoc PacketHandler::handleDataPacket()
      *
      * The TFTP DATA packet is decoded and checked.
      * If everything is fine, handler is called with extracted data and the
@@ -100,7 +100,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
       const Packet::DataPacket &dataPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleAcknowledgementPacket()
+     * @copydoc PacketHandler::handleAcknowledgementPacket()
      *
      * ACK packets are not expected for this operation.
      * They are rejected by error transmission
@@ -110,7 +110,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
       const Packet::AcknowledgementPacket &acknowledgementPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleOptionsAcknowledgementPacket()
+     * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
      *
      **/
     virtual void handleOptionsAcknowledgementPacket(

@@ -49,7 +49,7 @@ class NullSinkFile : public ReceiveDataOperationHandler
     explicit NullSinkFile( uint64_t size);
 
     /**
-     * @copydoc TftpReceiveDataOperationHandler::receivedTransferSize
+     * @copydoc ReceiveDataOperationHandler::receivedTransferSize
      *
      * If size is given on constructing this file, handle it.
      * Otherwise return true.
@@ -57,7 +57,7 @@ class NullSinkFile : public ReceiveDataOperationHandler
     virtual bool receivedTransferSize( const uint64_t transferSize) override final;
 
     /**
-     * @copydoc TftpReceiveDataOperationHandler::receviedData
+     * @copydoc ReceiveDataOperationHandler::receviedData
      *
      * Drops the data immediately.
      **/

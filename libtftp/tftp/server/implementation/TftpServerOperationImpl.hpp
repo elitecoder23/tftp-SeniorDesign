@@ -137,7 +137,7 @@ class TftpServerOperationImpl: protected PacketHandler
     void setReceiveTimeout( uint8_t receiveTimeout);
 
     /**
-     * @copydoc TftpPacketHandler::handleReadRequestPacket
+     * @copydoc PacketHandler::handleReadRequestPacket
      *
      * A RRQ packet is not expected - therefore send an error packet an
      * terminate connection.
@@ -147,7 +147,7 @@ class TftpServerOperationImpl: protected PacketHandler
       const Packet::ReadRequestPacket &readRequestPacket) final;
 
     /**
-     * @copydoc TftpPacketHandler::handleWriteRequestPacket
+     * @copydoc PacketHandler::handleWriteRequestPacket
      *
      * A WRQ packet is not expected - therefore send an error packet an
      * terminate connection.
@@ -157,7 +157,7 @@ class TftpServerOperationImpl: protected PacketHandler
       const Packet::WriteRequestPacket &writeRequestPacket) final;
 
     /**
-     * @copydoc TftpPacketHandler::handleErrorPacket()
+     * @copydoc PacketHandler::handleErrorPacket()
      *
      * Terminate connection.
      **/
@@ -166,7 +166,7 @@ class TftpServerOperationImpl: protected PacketHandler
       const Packet::ErrorPacket &errorPacket) final;
 
     /**
-     * @copydoc TftpPacketHandler::handleOptionsAcknowledgementPacket()
+     * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
      *
      * A OACK packet is not expected - therefore send an error packet an
      * terminate connection.
@@ -177,7 +177,7 @@ class TftpServerOperationImpl: protected PacketHandler
         final;
 
     /**
-     * @copydoc TftpPacketHandler::handleInvalidPacket()
+     * @copydoc PacketHandler::handleInvalidPacket()
      *
      * Send error packet and terminate connection.
      **/

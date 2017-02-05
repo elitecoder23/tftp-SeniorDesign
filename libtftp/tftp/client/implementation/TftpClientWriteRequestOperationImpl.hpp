@@ -94,7 +94,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
     void sendData();
 
     /**
-     * @copydoc TftpPacketHandler::handleDataPacket()
+     * @copydoc PacketHandler::handleDataPacket()
      *
      * @throw InvalidPacketException
      *   Always, because an this packet is invalid.
@@ -104,7 +104,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
       const Packet::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc TftpPacketHandler::handleAcknowledgementPacket()
+     * @copydoc PacketHandler::handleAcknowledgementPacket()
      *
      * @throw InvalidPacketException
      *   Invalid block number
@@ -114,7 +114,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
       const Packet::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
-     * @copydoc TftpPacketHandler::handleOptionsAcknowledgementPacket()
+     * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
      *
      * @throw InvalidPacketException
      *   Empty option list

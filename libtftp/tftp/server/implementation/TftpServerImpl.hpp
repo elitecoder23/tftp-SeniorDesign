@@ -142,7 +142,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
       std::size_t bytesTransferred);
 
     /**
-     * @copydoc TftpPacketHandler::handleReadRequestPacket
+     * @copydoc PacketHandler::handleReadRequestPacket
      *
      * The packet is decoded, and when valid the handler
      * NewRequestHandler::receviedReadRequest() is called, which actually
@@ -153,7 +153,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
       const Packet::ReadRequestPacket &readRequestPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleWriteRequestPacket
+     * @copydoc PacketHandler::handleWriteRequestPacket
      *
      * The packet is decoded, and when valid the handler
      * NewRequestHandler::receviedWriteRequest() is called, which actually
@@ -164,7 +164,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
       const Packet::WriteRequestPacket &writeRequestPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleDataPacket
+     * @copydoc PacketHandler::handleDataPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
@@ -174,7 +174,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
       const Packet::DataPacket &dataPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleAcknowledgementPacket
+     * @copydoc PacketHandler::handleAcknowledgementPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
@@ -184,7 +184,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
       const Packet::AcknowledgementPacket &acknowledgementPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleErrorPacket
+     * @copydoc PacketHandler::handleErrorPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
@@ -194,7 +194,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
       const Packet::ErrorPacket &errorPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleOptionsAcknowledgementPacket
+     * @copydoc PacketHandler::handleOptionsAcknowledgementPacket
      *
      * The TFTP server does not expect this packet. This packet is responded
      * with an TFTP Error Packet.
@@ -204,7 +204,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
       const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
 
     /**
-     * @copydoc TftpPacketHandler::handleInvalidPacket
+     * @copydoc PacketHandler::handleInvalidPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is ignored.
