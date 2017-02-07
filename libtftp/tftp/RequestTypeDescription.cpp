@@ -23,13 +23,12 @@
 namespace Tftp {
 
 RequestTypeDescription::RequestTypeDescription():
-  Description(
-  {
-    {RequestType::Read,    {"Read",    RequestType::Read}},
-    {RequestType::Write,   {"Write",   RequestType::Write}},
+  Description{
+    {"Read",    RequestType::Read},
+    {"Write",   RequestType::Write},
 
-    {RequestType::Invalid, {"Invalid", RequestType::Invalid}}
-  })
+    {"Invalid", RequestType::Invalid}
+  }
 {
 }
 
