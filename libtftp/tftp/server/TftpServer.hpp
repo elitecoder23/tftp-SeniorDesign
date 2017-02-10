@@ -43,6 +43,7 @@ class TftpServer
 {
   public:
     using string = std::string;
+
     /**
      * @brief The default address, where the server listens.
      *
@@ -196,6 +197,7 @@ class TftpServer
       const string &errorMessage = string()) = 0;
 
   protected:
+    //! Protected constructor
     TftpServer() = default;
 };
 

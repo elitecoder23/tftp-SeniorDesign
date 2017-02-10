@@ -48,13 +48,20 @@ class TftpServerOperation
     /**
      * @brief Aborts the operation gracefully.
      *
-     * @param errorCode
+     * @param[in] errorCode
+     *   Abort error code.
      * @param errorMessage
+     *   Abort error message.
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
       const string &errorMessage = string()) = 0;
 
+    /**
+     * @brief Aborts the operation immediately.
+     *
+     * No error message is sent.
+     **/
     virtual void abort() = 0;
 
 };

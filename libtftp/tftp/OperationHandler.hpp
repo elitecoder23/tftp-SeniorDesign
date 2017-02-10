@@ -40,6 +40,8 @@ class OperationHandler
 
     /**
      * @brief Called, when the operation has been finished
+     *
+     * @todo rename to finished.
      **/
     virtual void finishedOperation() noexcept = 0;
 };
