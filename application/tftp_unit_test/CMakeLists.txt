@@ -9,7 +9,7 @@
 
 cmake_minimum_required( VERSION 3.7)
 
-find_package( Boost REQUIRED COMPONENTS unit_test_framework)
+find_package( Boost REQUIRED)
 
 add_executable(
   tftp_unit_test
@@ -17,13 +17,6 @@ add_executable(
   $<TARGET_OBJECTS:tftp_test>
   tftp_unit_test.cpp)
 
-target_link_libraries( 
-  tftp_unit_test 
-  
-  tftp 
-  helper
-  
-  ${Boost_LIBRARIES}
-  ${BOOST_THREAD_LIBRARY})
+target_link_libraries( tftp_unit_test tftp)
 
 add_test( NAME tftp_unit_test COMMAND tftp_unit_test)
