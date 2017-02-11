@@ -17,8 +17,8 @@ find_package(
   COMPONENTS
   program_options
   system
-  log_setup
   log
+  log_setup
   filesystem
   thread
   chrono)
