@@ -34,6 +34,7 @@ target_link_libraries(
   
   tftp 
   helper 
+  boost_application
   
   ${Boost_LIBRARIES}
   ${BOOST_THREAD_LIBRARY})
