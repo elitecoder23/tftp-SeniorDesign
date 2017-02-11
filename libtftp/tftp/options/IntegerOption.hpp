@@ -149,13 +149,13 @@ class BaseIntegerOption: public Option
 };
 
 template< typename IntT>
-BaseIntegerOption< IntT>::operator BaseIntegerOption< IntT>::string() const
+BaseIntegerOption< IntT>::operator string() const
 {
   return toString( value);
 }
 
 template< typename IntT>
-BaseIntegerOption< IntT>::operator BaseIntegerOption< IntT>::IntegerType() const
+BaseIntegerOption< IntT>::operator IntegerType() const
 {
   return value;
 }
