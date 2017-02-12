@@ -11,11 +11,11 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Server::TftpServerOperation.
+ * @brief Declaration of class Tftp::Server::Operation.
  **/
 
-#ifndef TFTP_SERVER_TFTPSERVEROPERATION_HPP
-#define TFTP_SERVER_TFTPSERVEROPERATION_HPP
+#ifndef TFTP_SERVER_OPERATION_HPP
+#define TFTP_SERVER_OPERATION_HPP
 
 #include <tftp/server/Server.hpp>
 
@@ -30,13 +30,13 @@ namespace Server {
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class TftpServerOperation
+class Operation
 {
   public:
     using string = std::string;
 
     //! Default Constructor
-    virtual ~TftpServerOperation() noexcept = default;
+    virtual ~Operation() noexcept = default;
 
     /**
      * @brief Executes the TFTP client operation.

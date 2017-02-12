@@ -103,7 +103,7 @@ class TftpServer
      *
      * @return The TFTP server write operation.
      **/
-    virtual TftpServerOperation createReadRequestOperation(
+    virtual OperationPtr createReadRequestOperation(
       TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
@@ -121,7 +121,7 @@ class TftpServer
      *
      * @return The TFTP server write operation.
      **/
-    virtual TftpServerOperation createReadRequestOperation(
+    virtual OperationPtr createReadRequestOperation(
       TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions) = 0;
@@ -140,7 +140,7 @@ class TftpServer
      *
      * @return The TFTP server read operation.
      **/
-    virtual TftpServerOperation createWriteRequestOperation(
+    virtual OperationPtr createWriteRequestOperation(
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
@@ -158,7 +158,7 @@ class TftpServer
      *
      * @return The TFTP server read operation.
      **/
-    virtual TftpServerOperation createWriteRequestOperation(
+    virtual OperationPtr createWriteRequestOperation(
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions) = 0;
@@ -175,7 +175,7 @@ class TftpServer
      * @param[in] errorMessage
      *   The error message of the packet.
      **/
-    virtual TftpServerOperation createErrorOperation(
+    virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
       ErrorCode errorCode,
@@ -191,7 +191,7 @@ class TftpServer
      * @param[in] errorMessage
      *   The error message of the packet.
      **/
-    virtual TftpServerOperation createErrorOperation(
+    virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,
       ErrorCode errorCode,
       const string &errorMessage = string()) = 0;

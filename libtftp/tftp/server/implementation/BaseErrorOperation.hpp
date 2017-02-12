@@ -11,13 +11,14 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Server::TftpServerBaseErrorOperation.
+ * @brief Declaration of class Tftp::Server::BaseErrorOperation.
  **/
 
-#ifndef TFTP_SERVER_TFTPSERVERBASEERROROPERATION_HPP
-#define TFTP_SERVER_TFTPSERVERBASEERROROPERATION_HPP
+#ifndef TFTP_SERVER_BASEERROROPERATION_HPP
+#define TFTP_SERVER_BASEERROROPERATION_HPP
 
 #include <tftp/server/Server.hpp>
+#include <tftp/server/Operation.hpp>
 #include <tftp/packets/Packets.hpp>
 
 #include <boost/asio.hpp>
@@ -28,8 +29,22 @@ namespace Server {
 /**
  * @brief Base class of TFTP error operation.
  **/
-class TftpServerBaseErrorOperation
+class BaseErrorOperation : public Operation
 {
+  public:
+    //! @copydoc Operation::gracefulAbort
+    virtual void gracefulAbort(
+      ErrorCode errorCode,
+      const string &errorMessage = string()) override final;
+
+    //! @copydoc Operation::abort
+    virtual void abort() override final;
+
+    /**
+     * @brief Default destructor.
+     **/
+    virtual ~BaseErrorOperation() noexcept;
+
   protected:
     /**
      * @brief Constructor of error operation
@@ -37,7 +52,9 @@ class TftpServerBaseErrorOperation
      * @param[in] clientAddress
      *   Where the error packet shall be transmitted to.
      **/
-    TftpServerBaseErrorOperation( const UdpAddressType &clientAddress);
+    BaseErrorOperation( const UdpAddressType &clientAddress);
+
+    BaseErrorOperation( UdpAddressType &&clientAddress);
 
     /**
      * @brief Constructor of error operation
@@ -47,14 +64,13 @@ class TftpServerBaseErrorOperation
      * @param[in] from
      *   The communication source.
      **/
-    TftpServerBaseErrorOperation(
+    BaseErrorOperation(
       const UdpAddressType &clientAddress,
       const UdpAddressType &from);
 
-    /**
-     * @brief Default destructor.
-     **/
-    virtual ~TftpServerBaseErrorOperation() noexcept;
+    BaseErrorOperation(
+      UdpAddressType &&clientAddress,
+      UdpAddressType &&from);
 
     /**
      * @brief Sends the given error packet.

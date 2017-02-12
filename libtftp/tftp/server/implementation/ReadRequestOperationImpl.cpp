@@ -11,10 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::Server::TftpServerReadRequestOperationImpl.
+ * @brief Definition of class Tftp::Server::ReadRequestOperationImpl.
  **/
 
-#include "TftpServerReadRequestOperationImpl.hpp"
+#include "ReadRequestOperationImpl.hpp"
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataOperationHandler.hpp>
@@ -28,13 +28,13 @@
 namespace Tftp {
 namespace Server {
 
-TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
+ReadRequestOperationImpl::ReadRequestOperationImpl(
   TransmitDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress) :
-  TftpServerOperationImpl(
+  OperationImpl(
     tftpServerInternal,
     clientAddress,
     clientOptions,
@@ -46,12 +46,12 @@ TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
 {
 }
 
-TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
+ReadRequestOperationImpl::ReadRequestOperationImpl(
   TransmitDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions) :
-  TftpServerOperationImpl( tftpServerInternal, clientAddress, clientOptions),
+  OperationImpl( tftpServerInternal, clientAddress, clientOptions),
   handler( handler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
@@ -59,7 +59,7 @@ TftpServerReadRequestOperationImpl::TftpServerReadRequestOperationImpl(
 {
 }
 
-void TftpServerReadRequestOperationImpl::operator()()
+void ReadRequestOperationImpl::operator()()
 {
   try
   {
@@ -113,7 +113,7 @@ void TftpServerReadRequestOperationImpl::operator()()
     }
 
     // start receive loop
-    TftpServerOperationImpl::operator()();
+    OperationImpl::operator()();
   }
   catch ( ...)
   {
@@ -125,7 +125,7 @@ void TftpServerReadRequestOperationImpl::operator()()
   handler.finishedOperation();
 }
 
-void TftpServerReadRequestOperationImpl::sendData()
+void ReadRequestOperationImpl::sendData()
 {
   lastTransmittedBlockNumber++;
 
@@ -142,7 +142,7 @@ void TftpServerReadRequestOperationImpl::sendData()
   send( data);
 }
 
-void TftpServerReadRequestOperationImpl::handleDataPacket(
+void ReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
@@ -162,7 +162,7 @@ void TftpServerReadRequestOperationImpl::handleDataPacket(
    PacketTypeInfo( PacketType::Data));
 }
 
-void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
+void ReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {

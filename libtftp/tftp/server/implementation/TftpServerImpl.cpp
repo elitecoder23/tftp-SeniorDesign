@@ -18,9 +18,9 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/packets/PacketFactory.hpp>
-#include <tftp/server/implementation/TftpServerReadRequestOperationImpl.hpp>
-#include <tftp/server/implementation/TftpServerWriteRequestOperationImpl.hpp>
-#include <tftp/server/implementation/TftpServerErrorOperation.hpp>
+#include <tftp/server/implementation/ReadRequestOperationImpl.hpp>
+#include <tftp/server/implementation/WriteRequestOperationImpl.hpp>
+#include <tftp/server/implementation/ErrorOperation.hpp>
 
 #include <helper/Logger.hpp>
 
@@ -118,96 +118,92 @@ void TftpServerImpl::stop()
   ioService.stop();
 }
 
-TftpServerOperation TftpServerImpl::createReadRequestOperation(
+OperationPtr TftpServerImpl::createReadRequestOperation(
   TransmitDataOperationHandler &handler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress)
 {
-  auto operation = std::make_shared< TftpServerReadRequestOperationImpl>(
+  auto operation = std::make_shared< ReadRequestOperationImpl>(
     handler,
     *this,
     clientAddress,
     clientOptions,
     serverAddress);
 
-  return std::bind( &TftpServerReadRequestOperationImpl::operator(), operation);
+  return operation;
 }
 
-TftpServerOperation TftpServerImpl::createReadRequestOperation(
+OperationPtr TftpServerImpl::createReadRequestOperation(
   TransmitDataOperationHandler &handler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions)
 {
-  auto operation = std::make_shared< TftpServerReadRequestOperationImpl>(
+  auto operation = std::make_shared< ReadRequestOperationImpl>(
     handler,
     *this,
     clientAddress,
     clientOptions);
 
-  return std::bind( &TftpServerReadRequestOperationImpl::operator(), operation);
+  return operation;
 }
 
-TftpServerOperation TftpServerImpl::createWriteRequestOperation(
+OperationPtr TftpServerImpl::createWriteRequestOperation(
   ReceiveDataOperationHandler &handler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress)
 {
-  auto operation = std::make_shared< TftpServerWriteRequestOperationImpl>(
+  auto operation = std::make_shared< WriteRequestOperationImpl>(
     handler,
     *this,
     clientAddress,
     clientOptions,
     serverAddress);
 
-  return std::bind(
-    &TftpServerWriteRequestOperationImpl::operator(),
-    operation);
+  return operation;
 }
 
-TftpServerOperation TftpServerImpl::createWriteRequestOperation(
+OperationPtr TftpServerImpl::createWriteRequestOperation(
   ReceiveDataOperationHandler &handler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions)
 {
-  auto operation = std::make_shared< TftpServerWriteRequestOperationImpl>(
+  auto operation = std::make_shared< WriteRequestOperationImpl>(
     handler,
     *this,
     clientAddress,
     clientOptions);
 
-  return std::bind(
-    &TftpServerWriteRequestOperationImpl::operator(),
-    operation);
+  return operation;
 }
 
-TftpServerOperation TftpServerImpl::createErrorOperation(
+OperationPtr TftpServerImpl::createErrorOperation(
   const UdpAddressType &clientAddress,
   const UdpAddressType &from,
   const ErrorCode errorCode,
   const string &errorMessage)
 {
-  auto operation = std::make_shared< TftpServerErrorOperation>(
+  auto operation = std::make_shared< ErrorOperation>(
     clientAddress,
     from,
     errorCode,
     errorMessage);
 
-  return std::bind( &TftpServerErrorOperation::operator(), operation);
+  return operation;
 }
 
-TftpServerOperation TftpServerImpl::createErrorOperation(
+OperationPtr TftpServerImpl::createErrorOperation(
   const UdpAddressType &clientAddress,
   const ErrorCode errorCode,
   const string &errorMessage)
 {
-  auto operation = std::make_shared< TftpServerErrorOperation>(
+  auto operation = std::make_shared< ErrorOperation>(
     clientAddress,
     errorCode,
     errorMessage);
 
-  return std::bind( &TftpServerErrorOperation::operator(), operation);
+  return operation;
 }
 
 const Tftp::TftpConfiguration& TftpServerImpl::getConfiguration() const
@@ -295,13 +291,13 @@ void TftpServerImpl::handleReadRequestPacket(
     BOOST_LOG_TRIVIAL( info) <<
     "No registered handler - reject";
 
-    TftpServerOperation errOp = createErrorOperation(
+    auto operation( createErrorOperation(
       from,
       ErrorCode::FILE_NOT_FOUND,
-      "RRQ not accepted");
+      "RRQ not accepted"));
 
     // execute error operation
-    errOp();
+    (*operation)();
   }
 
   // call the handler, which handles the received request
@@ -325,13 +321,13 @@ void TftpServerImpl::handleWriteRequestPacket(
   {
     BOOST_LOG_TRIVIAL( info) << "No registered handler - reject";
 
-    TftpServerOperation errOp = createErrorOperation(
+    auto operation( createErrorOperation(
       from,
       ErrorCode::FILE_NOT_FOUND,
-      "WRQ");
+      "WRQ"));
 
     // execute error operation
-    errOp();
+    (*operation)();
   }
 
   // call the handler, which handles the received request
@@ -350,13 +346,13 @@ void TftpServerImpl::handleDataPacket(
   BOOST_LOG_TRIVIAL( info)<< "RX ERROR: " <<
     static_cast< std::string>( dataPacket);
 
-  TftpServerOperation errOp = createErrorOperation(
+  auto operation( createErrorOperation(
     from,
     ErrorCode::ILLEGAL_TFTP_OPERATION,
-    "DATA not expected");
+    "DATA not expected"));
 
   // execute error operation
-  errOp();
+  (*operation)();
 }
 
 void TftpServerImpl::handleAcknowledgementPacket(
@@ -366,13 +362,13 @@ void TftpServerImpl::handleAcknowledgementPacket(
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
     static_cast< std::string>( acknowledgementPacket);
 
-  TftpServerOperation errOp = createErrorOperation(
+  auto operation( createErrorOperation(
     from,
     ErrorCode::ILLEGAL_TFTP_OPERATION,
-    "ACK not expected");
+    "ACK not expected"));
 
   // execute error operation
-  errOp();
+  (*operation)();
 }
 
 void TftpServerImpl::handleErrorPacket(
@@ -382,13 +378,13 @@ void TftpServerImpl::handleErrorPacket(
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
     static_cast< std::string>( errorPacket);
 
-  TftpServerOperation errOp = createErrorOperation(
+  auto operation( createErrorOperation(
     from,
     ErrorCode::ILLEGAL_TFTP_OPERATION,
-    "ERROR not expected");
+    "ERROR not expected"));
 
   // execute error operation
-  errOp();
+  (*operation)();
 }
 
 void TftpServerImpl::handleOptionsAcknowledgementPacket(
@@ -398,13 +394,13 @@ void TftpServerImpl::handleOptionsAcknowledgementPacket(
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
-  TftpServerOperation errOp = createErrorOperation(
+  auto operation( createErrorOperation(
     from,
     ErrorCode::ILLEGAL_TFTP_OPERATION,
-    "OACK not expected");
+    "OACK not expected"));
 
   // execute error operation
-  errOp();
+  (*operation)();
 }
 
 void TftpServerImpl::handleInvalidPacket(

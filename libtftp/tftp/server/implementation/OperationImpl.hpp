@@ -11,13 +11,14 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Server::TftpServerOperationImpl.
+ * @brief Declaration of class Tftp::Server::OperationImpl.
  **/
 
-#ifndef TFTP_SERVER_TFTPSERVEROPERATIONIMPL_HPP
-#define TFTP_SERVER_TFTPSERVEROPERATIONIMPL_HPP
+#ifndef TFTP_SERVER_OPERATIONIMPL_HPP
+#define TFTP_SERVER_OPERATIONIMPL_HPP
 
 #include <tftp/server/Server.hpp>
+#include <tftp/server/Operation.hpp>
 
 #include <tftp/packets/Packets.hpp>
 
@@ -40,8 +41,20 @@ class TftpServerInternal;
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class TftpServerOperationImpl: protected PacketHandler
+class OperationImpl: public Operation, protected PacketHandler
 {
+  public:
+    //! @copydoc Operation::operator()()
+    virtual void operator()() override;
+
+    //! @copydoc Operation::gracefulAbort
+    virtual void gracefulAbort(
+      ErrorCode errorCode,
+      const string &errorMessage = string()) override;
+
+    //! @copydoc Operation::abort
+    virtual void abort() override;
+
   protected:
     /**
      * @brief Initialises the TFTP server operation.
@@ -55,7 +68,7 @@ class TftpServerOperationImpl: protected PacketHandler
      * @param[in] serverAddress
      *   local endpoint, where the server handles the request from.
      **/
-    TftpServerOperationImpl(
+    OperationImpl(
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
@@ -71,7 +84,7 @@ class TftpServerOperationImpl: protected PacketHandler
      * @param[in] clientOptions
      *   Received option list from client.
      **/
-    TftpServerOperationImpl(
+    OperationImpl(
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions);
@@ -79,9 +92,7 @@ class TftpServerOperationImpl: protected PacketHandler
     /**
      * @brief default destructor.
      **/
-    virtual ~TftpServerOperationImpl() noexcept;
-
-    virtual void operator()();
+    virtual ~OperationImpl() noexcept;
 
     /**
      * @brief Sets the Finished flag.

@@ -80,23 +80,23 @@ add_library(
   tftp/client/implementation/TftpClientWriteRequestOperationImpl.hpp
   tftp/client/implementation/TftpClientWriteRequestOperationImpl.cpp
 
+  tftp/server/Operation.hpp
   tftp/server/Server.hpp
   tftp/server/TftpServer.hpp
   tftp/server/TftpServer.cpp
-  tftp/server/TftpServerOperation.hpp
+  tftp/server/implementation/BaseErrorOperation.hpp
+  tftp/server/implementation/BaseErrorOperation.cpp
+  tftp/server/implementation/ErrorOperation.hpp
+  tftp/server/implementation/ErrorOperation.cpp
+  tftp/server/implementation/OperationImpl.hpp
+  tftp/server/implementation/OperationImpl.cpp
+  tftp/server/implementation/ReadRequestOperationImpl.hpp
+  tftp/server/implementation/ReadRequestOperationImpl.cpp
   tftp/server/implementation/TftpServerImpl.hpp
   tftp/server/implementation/TftpServerImpl.cpp
-  tftp/server/implementation/TftpServerBaseErrorOperation.hpp
-  tftp/server/implementation/TftpServerBaseErrorOperation.cpp
-  tftp/server/implementation/TftpServerErrorOperation.hpp
-  tftp/server/implementation/TftpServerErrorOperation.cpp
   tftp/server/implementation/TftpServerInternal.hpp
-  tftp/server/implementation/TftpServerOperationImpl.hpp
-  tftp/server/implementation/TftpServerOperationImpl.cpp
-  tftp/server/implementation/TftpServerReadRequestOperationImpl.hpp
-  tftp/server/implementation/TftpServerReadRequestOperationImpl.cpp
-  tftp/server/implementation/TftpServerWriteRequestOperationImpl.hpp
-  tftp/server/implementation/TftpServerWriteRequestOperationImpl.cpp
+  tftp/server/implementation/WriteRequestOperationImpl.hpp
+  tftp/server/implementation/WriteRequestOperationImpl.cpp
   )
 
 target_include_directories( tftp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -11,14 +11,14 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Server::TftpServerReadRequestOperationImpl.
+ * @brief Declaration of class Tftp::Server::ReadRequestOperationImpl.
  **/
 
-#ifndef TFTP_SERVER_TFTPSERVERWRITEOPERATION_HPP
-#define TFTP_SERVER_TFTPSERVERWRITEOPERATION_HPP
+#ifndef TFTP_SERVER_READREQUESTOPERATIONIMPL_HPP
+#define TFTP_SERVER_READREQUESTOPERATIONIMPL_HPP
 
 #include <tftp/Tftp.hpp>
-#include <tftp/server/implementation/TftpServerOperationImpl.hpp>
+#include <tftp/server/implementation/OperationImpl.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
 #include <boost/asio.hpp>
@@ -37,7 +37,7 @@ namespace Server {
  *
  * This operation is initiated by a client TFTP read request (RRQ)
  **/
-class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
+class ReadRequestOperationImpl: public OperationImpl
 {
   public:
     /**
@@ -54,7 +54,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      * @param[in] serverAddress
      *   local endpoint, where the server handles the request from.
      **/
-    TftpServerReadRequestOperationImpl(
+    ReadRequestOperationImpl(
       TransmitDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
@@ -73,19 +73,19 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      * @param[in] clientOptions
      *   Received option list from client.
      **/
-    TftpServerReadRequestOperationImpl(
+    ReadRequestOperationImpl(
       TransmitDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions);
 
     //! Desctructor
-    virtual ~TftpServerReadRequestOperationImpl() noexcept = default;
+    virtual ~ReadRequestOperationImpl() noexcept = default;
 
     /**
      * @brief executes the operation.
      **/
-    virtual void operator()() override;
+    virtual void operator()() override final;
 
   private:
     /**

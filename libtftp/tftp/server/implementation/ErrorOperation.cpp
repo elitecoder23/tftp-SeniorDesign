@@ -11,10 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::Server::TftpServerErrorOperation.
+ * @brief Definition of class Tftp::Server::ErrorOperation.
  **/
 
-#include "TftpServerErrorOperation.hpp"
+#include "ErrorOperation.hpp"
 
 #include <tftp/packets/ErrorPacket.hpp>
 
@@ -23,28 +23,49 @@
 namespace Tftp {
 namespace Server {
 
-TftpServerErrorOperation::TftpServerErrorOperation(
+ErrorOperation::ErrorOperation(
   const UdpAddressType &clientAddress,
   const UdpAddressType &from,
   const ErrorCode errorCode,
   const string &errorMessage) :
-  TftpServerBaseErrorOperation( clientAddress, from),
+  BaseErrorOperation( clientAddress, from),
   errorCode( errorCode),
   errorMessage( errorMessage)
 {
 }
 
-TftpServerErrorOperation::TftpServerErrorOperation(
+ErrorOperation::ErrorOperation(
+  UdpAddressType &&clientAddress,
+  UdpAddressType &&from,
+  ErrorCode errorCode,
+  string &&errorMessage) :
+  BaseErrorOperation( clientAddress, from),
+  errorCode( errorCode),
+  errorMessage( errorMessage)
+{
+}
+
+ErrorOperation::ErrorOperation(
   const UdpAddressType &clientAddress,
   const ErrorCode errorCode,
   const string &errorMessage) :
-  TftpServerBaseErrorOperation( clientAddress),
+  BaseErrorOperation( clientAddress),
   errorCode( errorCode),
   errorMessage( errorMessage)
 {
 }
 
-void TftpServerErrorOperation::operator()()
+ErrorOperation::ErrorOperation(
+  UdpAddressType &&clientAddress,
+  const ErrorCode errorCode,
+  string &&errorMessage) :
+  BaseErrorOperation( clientAddress),
+  errorCode( errorCode),
+  errorMessage( errorMessage)
+{
+}
+
+void ErrorOperation::operator()()
 {
   sendError( Packets::ErrorPacket( errorCode, errorMessage));
 }

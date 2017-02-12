@@ -47,8 +47,8 @@ class TftpServer;
 //! Declaration of TFTP server operation instance pointer
 using TftpServerPtr = std::shared_ptr< TftpServer>;
 
-//! Declaration of TFTP server operation
-using TftpServerOperation = std::function< void()>;
+class Operation;
+using OperationPtr = std::shared_ptr< Operation>;
 
 /**
  * @brief Prototype for new TFTP requests handler.

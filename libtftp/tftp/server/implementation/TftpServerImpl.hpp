@@ -79,40 +79,40 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
     virtual void stop() override final;
 
     //! @copydoc TftpServer::createReadRequestOperation(TransmitDataOperationHandler&,const UdpAddressType&,const Options::OptionList&,const UdpAddressType&)
-    virtual TftpServerOperation createReadRequestOperation(
+    virtual OperationPtr createReadRequestOperation(
       TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress) override final;
 
     //! @copydoc TftpServer::createReadRequestOperation(TransmitDataOperationHandler&,const UdpAddressType&,const Options::OptionList&)
-    virtual TftpServerOperation createReadRequestOperation(
+    virtual OperationPtr createReadRequestOperation(
       TransmitDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions) override final;
 
     //! @copydoc TftpServer::createWriteRequestOperation(ReceiveDataOperationHandler&,const UdpAddressType&,const Options::OptionList&,const UdpAddressType&)
-    virtual TftpServerOperation createWriteRequestOperation(
+    virtual OperationPtr createWriteRequestOperation(
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress) override final;
 
     //! @copydoc TftpServer::createWriteRequestOperation(ReceiveDataOperationHandler&,const UdpAddressType&,const Options::OptionList&)
-    virtual TftpServerOperation createWriteRequestOperation(
+    virtual OperationPtr createWriteRequestOperation(
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions) override final;
 
     //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&)
-    virtual TftpServerOperation createErrorOperation(
+    virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
       ErrorCode errorCode,
       const string &errorMessage) override final;
 
     //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,ErrorCode,const string&)
-    virtual TftpServerOperation createErrorOperation(
+    virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,
       ErrorCode errorCode,
       const string &errorMessage) override final;

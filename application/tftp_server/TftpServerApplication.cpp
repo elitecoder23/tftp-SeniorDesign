@@ -19,6 +19,7 @@
 #include <tftp/file/StreamFile.hpp>
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
+#include <tftp/server/Operation.hpp>
 
 #include <helper/Logger.hpp>
 
@@ -211,7 +212,7 @@ void TftpServerApplication::receivedRequest(
       Tftp::ErrorCode::ILLEGAL_TFTP_OPERATION,
       "wrong transfer mode");
 
-    operation();
+    (*operation)();
 
     return;
   }
@@ -225,7 +226,7 @@ void TftpServerApplication::receivedRequest(
       Tftp::ErrorCode::ACCESS_VIOLATION,
       "Illegal filename");
 
-    operation();
+    (*operation)();
 
     return;
   }
@@ -266,7 +267,7 @@ void TftpServerApplication::transmitFile(
       Tftp::ErrorCode::FILE_NOT_FOUND,
       "file not found");
 
-    operation();
+    (*operation)();
 
     return;
   }
@@ -276,14 +277,14 @@ void TftpServerApplication::transmitFile(
     boost::filesystem::file_size( filename));
 
   // initiate TFTP operation
-  Tftp::Server::TftpServerOperation operation(
+  auto operation(
     server->createReadRequestOperation(
       file,
       from,
       options));
 
   // executes the TFTP operation
-  operation();
+  (*operation)();
 }
 
 void TftpServerApplication::receiveFile(
@@ -305,7 +306,7 @@ void TftpServerApplication::receiveFile(
       from,
       Tftp::ErrorCode::ACCESS_VIOLATION);
 
-    operation();
+    (*operation)();
 
     return;
   }
@@ -315,14 +316,14 @@ void TftpServerApplication::receiveFile(
     boost::filesystem::file_size( filename));
 
   // initiate TFTP operation
-  Tftp::Server::TftpServerOperation operation(
+  auto operation(
     server->createWriteRequestOperation(
       file,
       from,
       options));
 
   // executes the TFTP operation
-  operation();
+  (*operation)();
 }
 
 void TftpServerApplication::shutdown()

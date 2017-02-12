@@ -11,15 +11,15 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Server::TftpServerWriteRequestOperationImpl.
+ * @brief Declaration of class Tftp::Server::WriteRequestOperationImpl.
  **/
 
-#ifndef TFTP_SERVER_TFTPSERVERREADOPERATION_HPP
-#define TFTP_SERVER_TFTPSERVERREADOPERATION_HPP
+#ifndef TFTP_SERVER_WRITEREQUESTOPERATIONIMPL_HPP
+#define TFTP_SERVER_WRITEREQUESTOPERATIONIMPL_HPP
 
 #include <tftp/server/Server.hpp>
 
-#include <tftp/server/implementation/TftpServerOperationImpl.hpp>
+#include <tftp/server/implementation/OperationImpl.hpp>
 
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/BlockNumber.hpp>
@@ -39,7 +39,7 @@ namespace Server {
  *
  * This operation is initiated by a client TFTP write request (WRQ)
  **/
-class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
+class WriteRequestOperationImpl: public OperationImpl
 {
   public:
     /**
@@ -56,7 +56,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
      * @param[in] serverAddress
      *   local endpoint, where the server handles the request from.
      **/
-    TftpServerWriteRequestOperationImpl(
+    WriteRequestOperationImpl(
       ReceiveDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
@@ -75,7 +75,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
      * @param[in] clientOptions
      *   Received option list from client.
      **/
-    TftpServerWriteRequestOperationImpl(
+    WriteRequestOperationImpl(
       ReceiveDataOperationHandler &handler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
@@ -84,12 +84,12 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
     /**
      * @brief Standard destructor.
      **/
-    virtual ~TftpServerWriteRequestOperationImpl( void) noexcept = default;
+    virtual ~WriteRequestOperationImpl() noexcept = default;
 
     /**
      * @brief Executes the operation.
      **/
-    virtual void operator()() override;
+    virtual void operator()() override final;
 
   private:
     /**

@@ -11,14 +11,14 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Server::TftpServerErrorOperation.
+ * @brief Declaration of class Tftp::Server::ErrorOperation.
  **/
 
-#ifndef TFTP_SERVER_TFTPSERVERERROROPERATION_HPP
-#define TFTP_SERVER_TFTPSERVERERROROPERATION_HPP
+#ifndef TFTP_SERVER_ERROROPERATION_HPP
+#define TFTP_SERVER_ERROROPERATION_HPP
 
 #include <tftp/Tftp.hpp>
-#include <tftp/server/implementation/TftpServerBaseErrorOperation.hpp>
+#include <tftp/server/implementation/BaseErrorOperation.hpp>
 
 #include <string>
 
@@ -29,7 +29,7 @@ namespace Server {
  * @brief This operation can be used to transfer an error message back to
  *  the initiator of an TFTP request.
  **/
-class TftpServerErrorOperation: public TftpServerBaseErrorOperation
+class ErrorOperation: public BaseErrorOperation
 {
   public:
     using string = std::string;
@@ -45,14 +45,18 @@ class TftpServerErrorOperation: public TftpServerBaseErrorOperation
      *   The error message of the packet.
      * @param[in] from
      *   Optional parameter to define the communication source
-     *
-     * @throw CommunicationException
      **/
-    TftpServerErrorOperation(
+    ErrorOperation(
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
       ErrorCode errorCode,
       const string &errorMessage);
+
+    ErrorOperation(
+      UdpAddressType &&clientAddress,
+      UdpAddressType &&from,
+      ErrorCode errorCode,
+      string &&errorMessage);
 
     /**
      * @brief Initialises the error operation.
@@ -66,15 +70,22 @@ class TftpServerErrorOperation: public TftpServerBaseErrorOperation
      *
      * @throw CommunicationException
      **/
-    TftpServerErrorOperation(
+    ErrorOperation(
       const UdpAddressType &clientAddress,
       ErrorCode errorCode,
       const string &errorMessage);
 
+    ErrorOperation(
+      UdpAddressType &&clientAddress,
+      ErrorCode errorCode,
+      string &&errorMessage);
+
     /**
-     * @brief Executes the error operation
+     * @copydoc Operation::operator()()
+     *
+     * Executes the error operation
      **/
-    void operator()();
+    virtual void operator()() override final;
 
   private:
     //! The error code

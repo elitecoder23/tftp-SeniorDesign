@@ -11,10 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::Server::TftpServerWriteRequestOperationImpl.
+ * @brief Definition of class Tftp::Server::WriteRequestOperationImpl.
  **/
 
-#include "TftpServerWriteRequestOperationImpl.hpp"
+#include "WriteRequestOperationImpl.hpp"
 
 #include <tftp/TftpException.hpp>
 #include <tftp/ReceiveDataOperationHandler.hpp>
@@ -29,13 +29,13 @@
 namespace Tftp {
 namespace Server {
 
-TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
+WriteRequestOperationImpl::WriteRequestOperationImpl(
   ReceiveDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress) :
-  TftpServerOperationImpl(
+  OperationImpl(
     tftpServerInternal,
     clientAddress,
     clientOptions,
@@ -46,19 +46,19 @@ TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
 {
 }
 
-TftpServerWriteRequestOperationImpl::TftpServerWriteRequestOperationImpl(
+WriteRequestOperationImpl::WriteRequestOperationImpl(
   ReceiveDataOperationHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions) :
-  TftpServerOperationImpl( tftpServerInternal, clientAddress, clientOptions),
+  OperationImpl( tftpServerInternal, clientAddress, clientOptions),
   handler( handler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
 }
 
-void TftpServerWriteRequestOperationImpl::operator()()
+void WriteRequestOperationImpl::operator()()
 {
   try
   {
@@ -112,7 +112,7 @@ void TftpServerWriteRequestOperationImpl::operator()()
     }
 
     // start receive loop
-    TftpServerOperationImpl::operator()();
+    OperationImpl::operator()();
   }
   catch ( ...)
   {
@@ -124,7 +124,7 @@ void TftpServerWriteRequestOperationImpl::operator()()
   handler.finishedOperation();
 }
 
-void TftpServerWriteRequestOperationImpl::handleDataPacket(
+void WriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
@@ -195,7 +195,7 @@ void TftpServerWriteRequestOperationImpl::handleDataPacket(
   }
 }
 
-void TftpServerWriteRequestOperationImpl::handleAcknowledgementPacket(
+void WriteRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
