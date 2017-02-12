@@ -141,14 +141,14 @@ Options::OptionList TftpConfiguration::getServerOptions(
   if ( blockSizeOption)
   {
     options.addBlocksizeOptionServer(
-      TFTP_OPTION_BLOCKSIZE_MIN,
+      BlocksizeOptionMin,
       blockSizeOption.get());
   }
 
   if ( timeoutOption)
   {
     options.addTimeoutOptionServer(
-      TFTP_OPTION_TIMEOUT_MIN,
+      BlocksizeOptionMin,
       timeoutOption.get());
   }
 

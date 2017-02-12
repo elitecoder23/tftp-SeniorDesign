@@ -102,7 +102,7 @@ enum class TransferPhase
   //! TFTP request phase RRQ/WRQ and wait for ACK.
   Request,
   //! TFTP option negotiation phase wait for OACK.
-  OoptionNegotiation,
+  OptionNegotiation,
   //! TFTP data transfer phase.
   DataTransfer,
 
@@ -194,22 +194,22 @@ enum class ErrorCode : uint16_t
 enum class KnownOptions
 {
   //! Block size option (RFC 2348)
-  BLOCKSIZE,
+  BlockSize,
   //! Timeout option (RFC 2349)
-  TIMEOUT,
+  Timeout,
   //! Transfer size option (RFC 2349)
-  TRANSFER_SIZE
+  TransferSize
 };
 
 //! Minimum TFTP block size option as defined within RFC 2348
-constexpr uint16_t TFTP_OPTION_BLOCKSIZE_MIN = 8U;
+constexpr uint16_t BlocksizeOptionMin = 8U;
 //! Maximum TFTP block size option as defined within RFC 2348
-constexpr uint16_t TFTP_OPTION_BLOCKSIZE_MAX = 65464U;
+constexpr uint16_t BlocksizeOptionMax = 65464U;
 
 //! Minimum TFTP timeout option as defined within RFC 2349
-constexpr uint8_t TFTP_OPTION_TIMEOUT_MIN = 1U;
+constexpr uint8_t TimeoutOptionMin = 1U;
 //! maximum TFTP timeout option as defined within RFC 2349
-constexpr uint8_t TFTP_OPTION_TIMEOUT_MAX = 255U;
+constexpr uint8_t TimeoutOptionMax = 255U;
 
 // Forward declarations
 class TftpConfiguration;

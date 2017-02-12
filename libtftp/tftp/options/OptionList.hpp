@@ -197,7 +197,7 @@ class OptionList
      **/
     void addBlocksizeOptionClient(
       uint16_t requestedBlocksize,
-      uint16_t minBlocksize = TFTP_OPTION_BLOCKSIZE_MIN);
+      uint16_t minBlocksize = BlocksizeOptionMin);
 
 
     /**
@@ -215,8 +215,8 @@ class OptionList
      *    The minimum blocksize option value.
      **/
     void addBlocksizeOptionServer(
-      uint16_t minBlocksize = TFTP_OPTION_BLOCKSIZE_MIN,
-      uint16_t maxBlocksize = TFTP_OPTION_BLOCKSIZE_MAX);
+      uint16_t minBlocksize = BlocksizeOptionMin,
+      uint16_t maxBlocksize = BlocksizeOptionMax);
 
     /**
      * @brief Returns the set blocksize option value.
@@ -252,8 +252,8 @@ class OptionList
      *   The maximum acceptable timeout
      **/
     void addTimeoutOptionServer(
-      uint8_t minTimeout = TFTP_OPTION_TIMEOUT_MIN,
-      uint8_t maxTimeout = TFTP_OPTION_TIMEOUT_MAX);
+      uint8_t minTimeout = TimeoutOptionMin,
+      uint8_t maxTimeout = TimeoutOptionMax);
 
     /**
      * @brief Returns the value of the timeout option.

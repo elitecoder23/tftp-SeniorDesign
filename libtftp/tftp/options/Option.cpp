@@ -23,13 +23,13 @@ Option::string Option::getOptionName( const KnownOptions option) noexcept
 {
   switch (option)
   {
-    case KnownOptions::BLOCKSIZE:
+    case KnownOptions::BlockSize:
       return "blksize";
 
-    case KnownOptions::TIMEOUT:
+    case KnownOptions::Timeout:
       return "timeout";
 
-    case KnownOptions::TRANSFER_SIZE:
+    case KnownOptions::TransferSize:
       return "tsize";
 
     default:

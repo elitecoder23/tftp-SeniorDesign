@@ -194,17 +194,17 @@ void OptionList::addBlocksizeOptionClient(
   uint16_t minBlocksize)
 {
   assert(
-    (requestedBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
-    (requestedBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+    (requestedBlocksize >= BlocksizeOptionMin) &&
+    (requestedBlocksize <= BlocksizeOptionMax));
 
   assert(
-    (minBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
-    (minBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+    (minBlocksize >= BlocksizeOptionMin) &&
+    (minBlocksize <= BlocksizeOptionMax));
 
   assert( minBlocksize <= requestedBlocksize);
 
   OptionPtr entry( std::make_shared< BlockSizeOptionClient>(
-      Option::getOptionName( KnownOptions::BLOCKSIZE),
+      Option::getOptionName( KnownOptions::BlockSize),
       requestedBlocksize,
       NegotiateMinMaxRange< uint16_t>( minBlocksize, requestedBlocksize)));
 
@@ -216,17 +216,17 @@ void OptionList::addBlocksizeOptionServer(
   const uint16_t maxBlocksize)
 {
   assert(
-    (minBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
-    (minBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+    (minBlocksize >= BlocksizeOptionMin) &&
+    (minBlocksize <= BlocksizeOptionMax));
 
   assert(
-    (maxBlocksize >= TFTP_OPTION_BLOCKSIZE_MIN) &&
-    (maxBlocksize <= TFTP_OPTION_BLOCKSIZE_MAX));
+    (maxBlocksize >= BlocksizeOptionMin) &&
+    (maxBlocksize <= BlocksizeOptionMax));
 
   assert( minBlocksize <= maxBlocksize);
 
   OptionPtr entry( std::make_shared< BlockSizeOptionServer>(
-      Option::getOptionName( KnownOptions::BLOCKSIZE),
+      Option::getOptionName( KnownOptions::BlockSize),
       maxBlocksize,
       NegotiateMinMaxSmaller< uint16_t>( minBlocksize, maxBlocksize)));
 
@@ -236,7 +236,7 @@ void OptionList::addBlocksizeOptionServer(
 uint16_t OptionList::getBlocksizeOption() const
 {
   OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( KnownOptions::BLOCKSIZE));
+    Option::getOptionName( KnownOptions::BlockSize));
 
   // option not set
   if (optionIt == options.end())
@@ -260,10 +260,10 @@ uint16_t OptionList::getBlocksizeOption() const
 void OptionList::addTimeoutOptionClient( const uint8_t timeout)
 {
   // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
-  assert( timeout >= TFTP_OPTION_TIMEOUT_MIN);
+  assert( timeout >= TimeoutOptionMin);
 
   OptionPtr entry( std::make_shared< TimeoutOptionClient>(
-      Option::getOptionName( KnownOptions::TIMEOUT),
+      Option::getOptionName( KnownOptions::Timeout),
       timeout,
       NegotiateExactValue< uint8_t>( timeout)));
 
@@ -275,14 +275,14 @@ void OptionList::addTimeoutOptionServer(
   const uint8_t maxTimeout)
 {
   // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
-  assert( minTimeout >= TFTP_OPTION_TIMEOUT_MIN);
+  assert( minTimeout >= TimeoutOptionMin);
 
-  assert( maxTimeout >= TFTP_OPTION_TIMEOUT_MIN);
+  assert( maxTimeout >= TimeoutOptionMin);
 
   assert( (minTimeout <= maxTimeout));
 
   OptionPtr entry( std::make_shared< TimeoutOptionServer>(
-      Option::getOptionName( KnownOptions::TIMEOUT),
+      Option::getOptionName( KnownOptions::Timeout),
       maxTimeout,
       NegotiateMinMaxRange< uint8_t>( minTimeout, maxTimeout)));
 
@@ -292,7 +292,7 @@ void OptionList::addTimeoutOptionServer(
 uint8_t OptionList::getTimeoutOption() const
 {
   OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( KnownOptions::TIMEOUT));
+    Option::getOptionName( KnownOptions::Timeout));
 
   // option not set
   if (optionIt == options.end())
@@ -316,7 +316,7 @@ uint8_t OptionList::getTimeoutOption() const
 void OptionList::addTransferSizeOption( const uint64_t transferSize)
 {
   OptionPtr entry( std::make_shared< TransferSizeOptionServerClient>(
-      Option::getOptionName( KnownOptions::TRANSFER_SIZE),
+      Option::getOptionName( KnownOptions::TransferSize),
       transferSize,
       NegotiateAlwaysPass< uint64_t>()));
 
@@ -325,18 +325,18 @@ void OptionList::addTransferSizeOption( const uint64_t transferSize)
 
 void OptionList::removeTransferSizeOption()
 {
-  removeOption( Option::getOptionName( KnownOptions::TRANSFER_SIZE));
+  removeOption( Option::getOptionName( KnownOptions::TransferSize));
 }
 
 bool OptionList::hasTransferSizeOption() const
 {
-  return hasOption( Option::getOptionName( KnownOptions::TRANSFER_SIZE));
+  return hasOption( Option::getOptionName( KnownOptions::TransferSize));
 }
 
 uint64_t OptionList::getTransferSizeOption() const
 {
   OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( KnownOptions::TRANSFER_SIZE));
+    Option::getOptionName( KnownOptions::TransferSize));
 
   // option not set
   if (optionIt == options.end())
