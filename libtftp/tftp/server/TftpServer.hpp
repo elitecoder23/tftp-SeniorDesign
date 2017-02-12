@@ -178,7 +178,7 @@ class TftpServer
     virtual TftpServerOperation createErrorOperation(
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
-      const ErrorCode errorCode,
+      ErrorCode errorCode,
       const string &errorMessage = string()) = 0;
 
     /**
@@ -193,7 +193,7 @@ class TftpServer
      **/
     virtual TftpServerOperation createErrorOperation(
       const UdpAddressType &clientAddress,
-      const ErrorCode errorCode,
+      ErrorCode errorCode,
       const string &errorMessage = string()) = 0;
 
   protected:
