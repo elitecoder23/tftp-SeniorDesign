@@ -355,7 +355,7 @@ void OperationImpl::handleReadRequestPacket(
     static_cast< std::string>( readRequestPacket);
 
   send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "RRQ not expected"));
 
   // Operation completed
@@ -377,7 +377,7 @@ void OperationImpl::handleWriteRequestPacket(
     static_cast< std::string>( writeRequestPacket);
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "WRQ not expected"));
 
   // Operation completed
@@ -418,7 +418,7 @@ void OperationImpl::handleInvalidPacket(
   BOOST_LOG_TRIVIAL( error) << "RX ERROR: INVALID Packet";
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "Invalid packet not expected"));
 
   // Operation completed
@@ -467,7 +467,7 @@ void OperationImpl::receiveFirstHandler(
     try
     {
       Packets::ErrorPacket err(
-        ErrorCode::UNKNOWN_TRANSFER_ID,
+        ErrorCode::UnknownTransferId,
         "Packet from wrong source");
 
       socket.send_to( boost::asio::buffer( err.encode()), receiveEndpoint);

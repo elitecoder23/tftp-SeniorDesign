@@ -112,7 +112,7 @@ void ReadRequestOperationImpl::handleDataPacket(
 
     // send error packet
     send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "Block Number not expected"));
 
     // Operation completed
@@ -132,7 +132,7 @@ void ReadRequestOperationImpl::handleDataPacket(
 
     // send error packet
     send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "Too much data"));
 
     // Operation completed
@@ -175,7 +175,7 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
 
   // send Error
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "ACK not expected"));
 
   // Operation completed
@@ -202,7 +202,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
     BOOST_LOG_TRIVIAL( error) << "Received option list is empty";
 
     send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "Empty OACK not allowed"));
 
     // Operation completed
@@ -222,7 +222,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
     BOOST_LOG_TRIVIAL( error) << "Option negotiation failed";
 
     send( Packets::ErrorPacket(
-      ErrorCode::TFTP_OPTION_REFUSED,
+      ErrorCode::TftpOptionRefused,
       "Option negotiation failed"));
 
     // Operation completed
@@ -258,7 +258,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
     if (!handler.receivedTransferSize( negotiatedOptions.getTransferSizeOption()))
     {
       send( Packets::ErrorPacket(
-        ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS,
+        ErrorCode::DiskFullOrAllocationExceeds,
         "FILE TO BIG"));
 
       // Operation completed

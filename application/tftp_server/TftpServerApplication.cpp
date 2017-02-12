@@ -209,7 +209,7 @@ void TftpServerApplication::receivedRequest(
 
     auto operation = server->createErrorOperation(
       from,
-      Tftp::ErrorCode::ILLEGAL_TFTP_OPERATION,
+      Tftp::ErrorCode::IllegalTftpOperation,
       "wrong transfer mode");
 
     (*operation)();
@@ -223,7 +223,7 @@ void TftpServerApplication::receivedRequest(
 
     auto operation = server->createErrorOperation(
       from,
-      Tftp::ErrorCode::ACCESS_VIOLATION,
+      Tftp::ErrorCode::AccessViolation,
       "Illegal filename");
 
     (*operation)();
@@ -264,7 +264,7 @@ void TftpServerApplication::transmitFile(
 
     auto operation = server->createErrorOperation(
       from,
-      Tftp::ErrorCode::FILE_NOT_FOUND,
+      Tftp::ErrorCode::FileNotFound,
       "file not found");
 
     (*operation)();
@@ -304,7 +304,7 @@ void TftpServerApplication::receiveFile(
 
     auto operation = server->createErrorOperation(
       from,
-      Tftp::ErrorCode::ACCESS_VIOLATION);
+      Tftp::ErrorCode::AccessViolation);
 
     (*operation)();
 

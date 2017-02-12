@@ -69,7 +69,7 @@ class ReadWriteRequestPacket: public Packet
      *
      * @return The filename
      **/
-    string getFilename() const;
+    const string& getFilename() const;
 
     /**
      * @brief sets the filename

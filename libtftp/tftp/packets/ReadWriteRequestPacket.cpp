@@ -84,7 +84,7 @@ TransferMode ReadWriteRequestPacket::getMode( const string &mode)
   return TransferMode::INVALID;
 }
 
-ReadWriteRequestPacket::string ReadWriteRequestPacket::getFilename() const
+const ReadWriteRequestPacket::string& ReadWriteRequestPacket::getFilename() const
 {
   return filename;
 }
@@ -142,14 +142,14 @@ Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
   Options::OptionList::RawOptionsType rawOptions = options.getRawOptions();
 
   RawTftpPacketType rawPacket(
-    TFTP_PACKET_HEADER_SIZE +
+    HeaderSize +
     filename.size() + 1 +
     mode.size() + 1 +
     rawOptions.size());
 
   insertHeader( rawPacket);
 
-  RawTftpPacketType::iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
+  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // decode filename
   packetIt = std::copy( filename.begin(), filename.end(), packetIt);
@@ -216,7 +216,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 
-  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
+  RawTftpPacketType::const_iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // check size
   if (rawPacket.size() <= 2)

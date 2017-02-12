@@ -150,7 +150,7 @@ void ReadRequestOperationImpl::handleDataPacket(
     static_cast< std::string>( dataPacket);
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "DATA not expected"));
 
   // Operation completed
@@ -185,7 +185,7 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
     BOOST_LOG_TRIVIAL( error) << "Invalid block number received";
 
     send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "Block number not expected"));
 
     // Operation completed

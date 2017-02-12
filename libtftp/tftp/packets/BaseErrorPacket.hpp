@@ -40,18 +40,6 @@ class BaseErrorPacket: public Packet
 {
   public:
     /**
-     * @brief Returns a string, which describes the error code.
-     *
-     * This operation is used for debugging and information purposes.
-     *
-     * @param[in] errorCode
-     *   The error code.
-     *
-     * @return String describing the error code.
-     **/
-    static string getErrorCodeString( ErrorCode errorCode) noexcept;
-
-    /**
      * @brief Generates a TFTP error packet with the given error code and error
      *   message.
      *

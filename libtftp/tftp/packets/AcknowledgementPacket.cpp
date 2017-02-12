@@ -43,7 +43,7 @@ AcknowledgementPacket::AcknowledgementPacket(
       AdditionalInfo( "Invalid packet size of ACK packet"));
   }
 
-  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
+  RawTftpPacketType::const_iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // decode block number
   getInt< uint16_t>( packetIt, blockNumber);
@@ -66,7 +66,7 @@ Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
   // insert header data
   insertHeader( rawPacket);
 
-  RawTftpPacketType::iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
+  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // Add block number
   setInt( packetIt, static_cast< const uint16_t>( blockNumber));

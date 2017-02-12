@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_SUITE( TftpErrorPacket)
 
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  ErrorPacket error( ErrorCode::NOT_DEFINED, "ERROR MESSAGE");
+  ErrorPacket error( ErrorCode::NotDefined, "ERROR MESSAGE");
 
   RawTftpPacketType raw = error.encode();
 

@@ -99,7 +99,7 @@ void WriteRequestOperationImpl::operator()()
         {
           send(
             Packets::ErrorPacket(
-              ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS,
+              ErrorCode::DiskFullOrAllocationExceeds,
               "FILE TO BIG"));
 
           BOOST_THROW_EXCEPTION(
@@ -146,7 +146,7 @@ void WriteRequestOperationImpl::handleDataPacket(
     BOOST_LOG_TRIVIAL( error) << "Unexpected packet";
 
     send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "Wrong block number"));
 
     // Operation completed
@@ -163,7 +163,7 @@ void WriteRequestOperationImpl::handleDataPacket(
     BOOST_LOG_TRIVIAL( error) << "Too much data received";
 
     send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "Too much data"));
 
    // Operation completed
@@ -203,7 +203,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
     static_cast< std::string>( acknowledgementPacket);
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "ACK not expected"));
 
   // Operation completed

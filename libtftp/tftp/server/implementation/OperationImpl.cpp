@@ -242,7 +242,7 @@ void OperationImpl::handleReadRequestPacket(
     static_cast< std::string>( readRequestPacket);
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "RRQ not expected"));
 
   // Operation completed
@@ -262,7 +262,7 @@ void OperationImpl::handleWriteRequestPacket(
     static_cast< std::string>( writeRequestPacket);
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "WRQ not expected"));
 
   // Operation completed
@@ -297,7 +297,7 @@ void OperationImpl::handleOptionsAcknowledgementPacket(
     static_cast< std::string>( optionsAcknowledgementPacket);
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "OACK not expected"));
 
   // Operation completed
@@ -316,7 +316,7 @@ void OperationImpl::handleInvalidPacket(
   BOOST_LOG_TRIVIAL( info) << "RX: UNKNOWN";
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "Invalid packet not expected"));
 
   //! @throw CommunicationException Always, because this packet is invalid.

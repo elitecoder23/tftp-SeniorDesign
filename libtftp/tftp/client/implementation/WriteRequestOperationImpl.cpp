@@ -136,7 +136,7 @@ void WriteRequestOperationImpl::handleDataPacket(
     static_cast< std::string>( dataPacket);
 
   send( Packets::ErrorPacket(
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "DATA not expected"));
 
   // Operation completed
@@ -171,7 +171,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
     BOOST_LOG_TRIVIAL( error) << "Invalid block number received";
 
     send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "Wrong block number"));
 
     finished();
@@ -212,7 +212,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
     BOOST_LOG_TRIVIAL( error) << "Received option list is empty";
 
     send( Packets::ErrorPacket(
-      ErrorCode::ILLEGAL_TFTP_OPERATION,
+      ErrorCode::IllegalTftpOperation,
       "Empty OACK not allowed"));
 
     //! @throw CommunicationException When Option list is empty.
@@ -228,7 +228,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
     BOOST_LOG_TRIVIAL( error) << "Option negotiation failed";
 
     send( Packets::ErrorPacket(
-      ErrorCode::TFTP_OPTION_REFUSED,
+      ErrorCode::TftpOptionRefused,
       "Option negotiation failed"));
 
     //! @throw OptionNegotiationException When option negotiation failed.

@@ -293,7 +293,7 @@ void TftpServerImpl::handleReadRequestPacket(
 
     auto operation( createErrorOperation(
       from,
-      ErrorCode::FILE_NOT_FOUND,
+      ErrorCode::FileNotFound,
       "RRQ not accepted"));
 
     // execute error operation
@@ -323,7 +323,7 @@ void TftpServerImpl::handleWriteRequestPacket(
 
     auto operation( createErrorOperation(
       from,
-      ErrorCode::FILE_NOT_FOUND,
+      ErrorCode::FileNotFound,
       "WRQ"));
 
     // execute error operation
@@ -348,7 +348,7 @@ void TftpServerImpl::handleDataPacket(
 
   auto operation( createErrorOperation(
     from,
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "DATA not expected"));
 
   // execute error operation
@@ -364,7 +364,7 @@ void TftpServerImpl::handleAcknowledgementPacket(
 
   auto operation( createErrorOperation(
     from,
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "ACK not expected"));
 
   // execute error operation
@@ -380,7 +380,7 @@ void TftpServerImpl::handleErrorPacket(
 
   auto operation( createErrorOperation(
     from,
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "ERROR not expected"));
 
   // execute error operation
@@ -396,7 +396,7 @@ void TftpServerImpl::handleOptionsAcknowledgementPacket(
 
   auto operation( createErrorOperation(
     from,
-    ErrorCode::ILLEGAL_TFTP_OPERATION,
+    ErrorCode::IllegalTftpOperation,
     "OACK not expected"));
 
   // execute error operation

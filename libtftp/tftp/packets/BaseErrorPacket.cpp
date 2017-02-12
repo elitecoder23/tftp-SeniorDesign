@@ -17,6 +17,7 @@
 #include "BaseErrorPacket.hpp"
 
 #include <tftp/TftpException.hpp>
+#include <tftp/ErrorCodeDescription.hpp>
 
 #include <helper/Endianess.hpp>
 #include <helper/Logger.hpp>
@@ -25,27 +26,6 @@
 
 namespace Tftp {
 namespace Packets {
-
-BaseErrorPacket::string BaseErrorPacket::getErrorCodeString( ErrorCode errorCode) noexcept
-{
-  typedef std::map< ErrorCode, std::string> ErrorCodeMap;
-  static const ErrorCodeMap errorCodes =
-  {
-    std::make_pair( ErrorCode::NOT_DEFINED,                     "NOT_DEFINED"),
-    std::make_pair( ErrorCode::FILE_NOT_FOUND,                  "FILE_NOT_FOUND"),
-    std::make_pair( ErrorCode::ACCESS_VIOLATION,                "ACCESS_VIOLATION"),
-    std::make_pair( ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS, "DISK_FULL_OR_ALLOCATION_EXCEEDS"),
-    std::make_pair( ErrorCode::ILLEGAL_TFTP_OPERATION,          "ILLEGAL_TFTP_OPERATION"),
-    std::make_pair( ErrorCode::UNKNOWN_TRANSFER_ID,             "UNKNOWN_TRANSFER_ID"),
-    std::make_pair( ErrorCode::FILE_ALLREADY_EXISTS,            "FILE_ALLREADY_EXISTS"),
-    std::make_pair( ErrorCode::NO_SUCH_USER,                    "NO_SUCH_USER"),
-    std::make_pair( ErrorCode::TFTP_OPTION_REFUSED,             "TFTP_OPTION_REFUSED"),
-  };
-
-  ErrorCodeMap::const_iterator it = errorCodes.find( errorCode);
-
-  return (errorCodes.end() == it) ? "***UNKNOWN***" : it->second;
-}
 
 BaseErrorPacket::BaseErrorPacket( const ErrorCode errorCode) noexcept:
   Packet( PacketType::Error),
@@ -65,7 +45,7 @@ BaseErrorPacket::BaseErrorPacket(
       AdditionalInfo( "Invalid packet size of ERROR packet"));
   }
 
-  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
+  RawTftpPacketType::const_iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // decode error code
   uint16_t errorCodeInt;
@@ -92,7 +72,7 @@ Tftp::RawTftpPacketType BaseErrorPacket::encode() const
 
   insertHeader( rawPacket);
 
-  RawTftpPacketType::iterator packetIt = rawPacket.begin() + TFTP_PACKET_HEADER_SIZE;
+  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // error code
   packetIt = setInt( packetIt, static_cast< const uint16_t>( getErrorCode()));
@@ -107,7 +87,7 @@ Tftp::RawTftpPacketType BaseErrorPacket::encode() const
 BaseErrorPacket::operator string() const
 {
   return (boost::format( "ERR: EC: %s (%d) - DESC: \"%s\"") %
-    getErrorCodeString( getErrorCode()) %
+    ErrorCodeDescription::getInstance().getDescription( getErrorCode()).name %
     static_cast< uint16_t>( getErrorCode()) %
     getErrorMessage()).str();
 }

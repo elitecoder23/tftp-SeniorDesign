@@ -16,6 +16,8 @@ find_package( Boost REQUIRED COMPONENTS program_options)
 add_library(
   tftp
   
+  tftp/ErrorCodeDescription.hpp
+  tftp/ErrorCodeDescription.cpp
   tftp/OperationHandler.hpp
   tftp/PacketHandler.hpp
   tftp/PacketHandler.cpp

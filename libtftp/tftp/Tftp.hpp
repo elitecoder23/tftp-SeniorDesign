@@ -169,23 +169,25 @@ enum class TransferMode
 enum class ErrorCode : uint16_t
 {
   //! Not defined, see error message (if any).
-  NOT_DEFINED                     = 0,
+  NotDefined                  = 0U,
   //! File not found
-  FILE_NOT_FOUND                  = 1,
+  FileNotFound                = 1U,
   //! Access violation.
-  ACCESS_VIOLATION                = 2,
+  AccessViolation             = 2U,
   //! Disk full or allocation exceeded.
-  DISK_FULL_OR_ALLOCATION_EXCEEDS = 3,
+  DiskFullOrAllocationExceeds = 3U,
   //! Illegal TFTP operation.
-  ILLEGAL_TFTP_OPERATION          = 4,
+  IllegalTftpOperation        = 4U,
   //! Unknown transfer ID.
-  UNKNOWN_TRANSFER_ID             = 5,
+  UnknownTransferId           = 5U,
   //! File already exists.
-  FILE_ALLREADY_EXISTS            = 6,
+  FileAllreadyExists          = 6U,
   //! No such user.
-  NO_SUCH_USER                    = 7,
+  NoSuchUser                  = 7U,
   //! TFTP options refused during option negotiation
-  TFTP_OPTION_REFUSED             = 8
+  TftpOptionRefused           = 8U,
+
+  Invalid                     = 0xFFFFU
 };
 
 //! Enumeration of all known TFTP options
@@ -200,14 +202,14 @@ enum class KnownOptions
 };
 
 //! Minimum TFTP block size option as defined within RFC 2348
-constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MIN = 8U;
+constexpr uint16_t TFTP_OPTION_BLOCKSIZE_MIN = 8U;
 //! Maximum TFTP block size option as defined within RFC 2348
-constexpr unsigned int TFTP_OPTION_BLOCKSIZE_MAX = 65464U;
+constexpr uint16_t TFTP_OPTION_BLOCKSIZE_MAX = 65464U;
 
 //! Minimum TFTP timeout option as defined within RFC 2349
-constexpr unsigned int TFTP_OPTION_TIMEOUT_MIN = 1U;
+constexpr uint8_t TFTP_OPTION_TIMEOUT_MIN = 1U;
 //! maximum TFTP timeout option as defined within RFC 2349
-constexpr unsigned int TFTP_OPTION_TIMEOUT_MAX = 255U;
+constexpr uint8_t TFTP_OPTION_TIMEOUT_MAX = 255U;
 
 // Forward declarations
 class TftpConfiguration;

@@ -28,7 +28,7 @@ PacketType Packet::getPacketType(
 	const RawTftpPacketType &rawPacket) noexcept
 {
   // check minimum data size.
-  if (rawPacket.size() < TFTP_PACKET_HEADER_SIZE)
+  if (rawPacket.size() < HeaderSize)
   {
     BOOST_LOG_TRIVIAL( error) << "Packet to small";
     return PacketType::Invalid;
@@ -104,7 +104,7 @@ Packet::Packet(
   packetType( expectedPacketType)
 {
   // check size
-  if (rawPacket.size() < TFTP_PACKET_HEADER_SIZE)
+  if (rawPacket.size() < HeaderSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "Invalid packet size (<TFTP_PACKETS_HEADER_SIZE)"));
@@ -130,7 +130,7 @@ void Packet::setPacketType( const PacketType packetType)
 
 void Packet::insertHeader( RawTftpPacketType &rawPacket) const
 {
-  assert( rawPacket.size() >= TFTP_PACKET_HEADER_SIZE);
+  assert( rawPacket.size() >= HeaderSize);
 
   RawTftpPacketType::iterator packetIt = rawPacket.begin();
 
