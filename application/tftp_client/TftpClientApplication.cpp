@@ -20,9 +20,12 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
 #include <tftp/RequestTypeDescription.hpp>
+
 #include <tftp/options/OptionList.hpp>
+
 #include <tftp/client/TftpClient.hpp>
-#include <tftp/client/TftpClientOperation.hpp>
+#include <tftp/client/Operation.hpp>
+
 #include <tftp/file/StreamFile.hpp>
 
 #include <helper/Logger.hpp>

@@ -11,11 +11,11 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Client::TftpClientOperation.
+ * @brief Declaration of class Tftp::Client::Operation.
  **/
 
-#ifndef TFTP_CLIENT_TFTPCLIENTOPERATION_HPP
-#define TFTP_CLIENT_TFTPCLIENTOPERATION_HPP
+#ifndef TFTP_CLIENT_OPERATION_HPP
+#define TFTP_CLIENT_OPERATION_HPP
 
 #include <tftp/client/Client.hpp>
 
@@ -30,13 +30,13 @@ namespace Client {
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class TftpClientOperation
+class Operation
 {
   public:
     using string = std::string;
 
     //! Default destructor.
-    virtual ~TftpClientOperation() noexcept = default;
+    virtual ~Operation() noexcept = default;
 
     /**
      * @brief Executes the TFTP client operation.

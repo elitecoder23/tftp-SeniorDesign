@@ -33,13 +33,13 @@ namespace Tftp {
 namespace Client {
 
 class TftpClient;
-class TftpClientOperation;
+class Operation;
 
 //! Declaration of TFTP client instance pointer
 using TftpClientPtr = std::shared_ptr< TftpClient>;
 
 //! Declaration of TFTP client operation instance pointer
-using TftpClientOperationPtr = std::shared_ptr< TftpClientOperation>;
+using OperationPtr = std::shared_ptr< Operation>;
 
 }
 }

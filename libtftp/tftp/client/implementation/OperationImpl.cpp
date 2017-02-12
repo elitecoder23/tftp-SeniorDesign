@@ -11,10 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::Client::TftpClientOperation.
+ * @brief Definition of class Tftp::Client::OperationImpl.
  **/
 
-#include "TftpClientOperationImpl.hpp"
+#include "OperationImpl.hpp"
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
@@ -32,7 +32,7 @@
 namespace Tftp {
 namespace Client {
 
-TftpClientOperationImpl::~TftpClientOperationImpl() noexcept
+OperationImpl::~OperationImpl() noexcept
 {
   BOOST_LOG_FUNCTION();
 
@@ -47,7 +47,7 @@ TftpClientOperationImpl::~TftpClientOperationImpl() noexcept
   }
 }
 
-void TftpClientOperationImpl::operator()()
+void OperationImpl::operator()()
 {
   // start first receive operation
   receiveFirst();
@@ -56,41 +56,41 @@ void TftpClientOperationImpl::operator()()
   ioService.run();
 }
 
-void TftpClientOperationImpl::gracefulAbort(
+void OperationImpl::gracefulAbort(
   const ErrorCode errorCode [[gnu::unused]],
   const string &errorMessage [[gnu::unused]])
 {
   //! @todo not implemented
 }
 
-void TftpClientOperationImpl::abort()
+void OperationImpl::abort()
 {
   ioService.reset();
 
   ioService.stop();
 }
 
-RequestType TftpClientOperationImpl::getRequestType() const
+RequestType OperationImpl::getRequestType() const
 {
   return requestType;
 }
 
-const UdpAddressType& TftpClientOperationImpl::getServerAddress() const
+const UdpAddressType& OperationImpl::getServerAddress() const
 {
   return remoteEndpoint;
 }
 
-const TftpClientOperationImpl::string& TftpClientOperationImpl::getFilename() const
+const OperationImpl::string& OperationImpl::getFilename() const
 {
   return filename;
 }
 
-TransferMode TftpClientOperationImpl::getMode() const
+TransferMode OperationImpl::getMode() const
 {
   return mode;
 }
 
-TftpClientOperationImpl::TftpClientOperationImpl(
+OperationImpl::OperationImpl(
   const RequestType requestType,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
@@ -139,7 +139,7 @@ catch ( boost::system::system_error &err)
     CommunicationException() << AdditionalInfo( err.what()));
 }
 
-TftpClientOperationImpl::TftpClientOperationImpl(
+OperationImpl::OperationImpl(
   const RequestType requestType,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
@@ -184,17 +184,17 @@ catch ( boost::system::system_error &err)
     CommunicationException() << AdditionalInfo( err.what()));
 }
 
-TftpClientOperationImpl::OptionList& TftpClientOperationImpl::getOptions()
+OperationImpl::OptionList& OperationImpl::getOptions()
 {
   return options;
 }
 
-void TftpClientOperationImpl::finished() noexcept
+void OperationImpl::finished() noexcept
 {
   ioService.stop();
 }
 
-void TftpClientOperationImpl::sendFirst( const Packets::Packet &packet)
+void OperationImpl::sendFirst( const Packets::Packet &packet)
 {
   BOOST_LOG_FUNCTION();
 
@@ -226,7 +226,7 @@ void TftpClientOperationImpl::sendFirst( const Packets::Packet &packet)
   }
 }
 
-void TftpClientOperationImpl::send( const Packets::Packet &packet)
+void OperationImpl::send( const Packets::Packet &packet)
 {
   BOOST_LOG_FUNCTION();
 
@@ -256,7 +256,7 @@ void TftpClientOperationImpl::send( const Packets::Packet &packet)
   }
 }
 
-void TftpClientOperationImpl::receiveFirst()
+void OperationImpl::receiveFirst()
 {
   BOOST_LOG_FUNCTION();
 
@@ -271,7 +271,7 @@ void TftpClientOperationImpl::receiveFirst()
       boost::asio::buffer( receivePacket),
       receiveEndpoint,
       boost::bind(
-        &TftpClientOperationImpl::receiveFirstHandler,
+        &OperationImpl::receiveFirstHandler,
         this,
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
@@ -281,7 +281,7 @@ void TftpClientOperationImpl::receiveFirst()
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
-      &TftpClientOperationImpl::timeoutFirstHandler,
+      &OperationImpl::timeoutFirstHandler,
       this,
       boost::asio::placeholders::error));
   }
@@ -295,7 +295,7 @@ void TftpClientOperationImpl::receiveFirst()
   }
 }
 
-void TftpClientOperationImpl::receive()
+void OperationImpl::receive()
 {
   BOOST_LOG_FUNCTION();
 
@@ -309,7 +309,7 @@ void TftpClientOperationImpl::receive()
     socket.async_receive(
       boost::asio::buffer( receivePacket),
       boost::bind(
-        &TftpClientOperationImpl::receiveHandler,
+        &OperationImpl::receiveHandler,
         this,
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
@@ -319,7 +319,7 @@ void TftpClientOperationImpl::receive()
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
-      &TftpClientOperationImpl::timeoutHandler,
+      &OperationImpl::timeoutHandler,
       this,
       boost::asio::placeholders::error));
   }
@@ -333,19 +333,19 @@ void TftpClientOperationImpl::receive()
   }
 }
 
-void TftpClientOperationImpl::setMaxReceivePacketSize(
+void OperationImpl::setMaxReceivePacketSize(
   const uint16_t maxReceivePacketSize) noexcept
 {
   this->maxReceivePacketSize = maxReceivePacketSize;
 }
 
-void TftpClientOperationImpl::setReceiveTimeout(
+void OperationImpl::setReceiveTimeout(
   const uint8_t receiveTimeout) noexcept
 {
   this->receiveTimeout = receiveTimeout;
 }
 
-void TftpClientOperationImpl::handleReadRequestPacket(
+void OperationImpl::handleReadRequestPacket(
   const UdpAddressType &,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
@@ -367,7 +367,7 @@ void TftpClientOperationImpl::handleReadRequestPacket(
     PacketTypeInfo( PacketType::ReadRequest));
 }
 
-void TftpClientOperationImpl::handleWriteRequestPacket(
+void OperationImpl::handleWriteRequestPacket(
   const UdpAddressType &,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
@@ -389,7 +389,7 @@ void TftpClientOperationImpl::handleWriteRequestPacket(
     PacketTypeInfo( PacketType::WriteRequest));
 }
 
-void TftpClientOperationImpl::handleErrorPacket(
+void OperationImpl::handleErrorPacket(
   const UdpAddressType &,
   const Packets::ErrorPacket &errorPacket)
 {
@@ -409,7 +409,7 @@ void TftpClientOperationImpl::handleErrorPacket(
       ErrorPacketInfo( errorPacket));
 }
 
-void TftpClientOperationImpl::handleInvalidPacket(
+void OperationImpl::handleInvalidPacket(
   const UdpAddressType &,
   const RawTftpPacketType &)
 {
@@ -430,7 +430,7 @@ void TftpClientOperationImpl::handleInvalidPacket(
     PacketTypeInfo( PacketType::Invalid));
 }
 
-void TftpClientOperationImpl::receiveFirstHandler(
+void OperationImpl::receiveFirstHandler(
   const boost::system::error_code& errorCode,
   std::size_t bytesTransferred)
 {
@@ -485,7 +485,7 @@ void TftpClientOperationImpl::receiveFirstHandler(
         boost::asio::buffer( receivePacket),
         receiveEndpoint,
         boost::bind(
-          &TftpClientOperationImpl::receiveFirstHandler,
+          &OperationImpl::receiveFirstHandler,
           this,
           boost::asio::placeholders::error,
           boost::asio::placeholders::bytes_transferred));
@@ -524,7 +524,7 @@ void TftpClientOperationImpl::receiveFirstHandler(
   handlePacket( receiveEndpoint, receivePacket);
 }
 
-void TftpClientOperationImpl::receiveHandler(
+void OperationImpl::receiveHandler(
   const boost::system::error_code& errorCode,
   const std::size_t bytesTransferred)
 {
@@ -555,7 +555,7 @@ void TftpClientOperationImpl::receiveHandler(
   handlePacket( remoteEndpoint, receivePacket);
 }
 
-void TftpClientOperationImpl::timeoutFirstHandler(
+void OperationImpl::timeoutFirstHandler(
   const boost::system::error_code& errorCode)
 {
   BOOST_LOG_FUNCTION();
@@ -601,7 +601,7 @@ void TftpClientOperationImpl::timeoutFirstHandler(
     timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
 
     timer.async_wait( boost::bind(
-      &TftpClientOperationImpl::timeoutFirstHandler,
+      &OperationImpl::timeoutFirstHandler,
       this,
       boost::asio::placeholders::error));
   }
@@ -615,7 +615,7 @@ void TftpClientOperationImpl::timeoutFirstHandler(
   }
 }
 
-void TftpClientOperationImpl::timeoutHandler(
+void OperationImpl::timeoutHandler(
   const boost::system::error_code& errorCode)
 {
   BOOST_LOG_FUNCTION();
@@ -661,7 +661,7 @@ void TftpClientOperationImpl::timeoutHandler(
     timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
 
     timer.async_wait( boost::bind(
-      &TftpClientOperationImpl::timeoutHandler,
+      &OperationImpl::timeoutHandler,
       this,
       boost::asio::placeholders::error));
   }

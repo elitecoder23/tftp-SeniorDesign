@@ -11,15 +11,15 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Client::TftpClientOperationImpl.
+ * @brief Declaration of class Tftp::Client::OperationImpl.
  **/
 
-#ifndef TFTP_CLIENT_TFTPCLIENTOPERATIONIMPL_HPP
-#define TFTP_CLIENT_TFTPCLIENTOPERATIONIMPL_HPP
+#ifndef TFTP_CLIENT_OPERATIONIMPL_HPP
+#define TFTP_CLIENT_OPERATIONIMPL_HPP
 
 #include <tftp/PacketHandler.hpp>
 #include <tftp/client/Client.hpp>
-#include <tftp/client/TftpClientOperation.hpp>
+#include <tftp/client/Operation.hpp>
 #include <tftp/packets/Packets.hpp>
 #include <tftp/options/OptionList.hpp>
 
@@ -39,8 +39,8 @@ class TftpClientInternal;
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class TftpClientOperationImpl :
-  public TftpClientOperation,
+class OperationImpl :
+  public Operation,
   protected PacketHandler
 {
   public:
@@ -51,7 +51,7 @@ class TftpClientOperationImpl :
      *
      * Closes the socket.
      **/
-    virtual ~TftpClientOperationImpl() noexcept;
+    virtual ~OperationImpl() noexcept;
 
     /**
      * @brief Operation execution
@@ -104,7 +104,7 @@ class TftpClientOperationImpl :
      * @param[in] from
      *   Optional parameter to define the communication source
      **/
-    TftpClientOperationImpl(
+    OperationImpl(
       RequestType requestType,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
@@ -126,7 +126,7 @@ class TftpClientOperationImpl :
      * @param[in] mode
      *   The transfer mode
      **/
-    TftpClientOperationImpl(
+    OperationImpl(
       RequestType requestType,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,

@@ -67,18 +67,18 @@ add_library(
   tftp/file/NullSinkFile.hpp
   
   tftp/client/Client.hpp
+  tftp/client/Operation.hpp  
   tftp/client/TftpClient.hpp
   tftp/client/TftpClient.cpp
-  tftp/client/TftpClientOperation.hpp  
+  tftp/client/implementation/OperationImpl.hpp
+  tftp/client/implementation/OperationImpl.cpp
+  tftp/client/implementation/ReadRequestOperationImpl.hpp
+  tftp/client/implementation/ReadRequestOperationImpl.cpp
   tftp/client/implementation/TftpClientImpl.hpp
   tftp/client/implementation/TftpClientImpl.cpp
   tftp/client/implementation/TftpClientInternal.hpp
-  tftp/client/implementation/TftpClientOperationImpl.hpp
-  tftp/client/implementation/TftpClientOperationImpl.cpp
-  tftp/client/implementation/TftpClientReadRequestOperationImpl.hpp
-  tftp/client/implementation/TftpClientReadRequestOperationImpl.cpp
-  tftp/client/implementation/TftpClientWriteRequestOperationImpl.hpp
-  tftp/client/implementation/TftpClientWriteRequestOperationImpl.cpp
+  tftp/client/implementation/WriteRequestOperationImpl.hpp
+  tftp/client/implementation/WriteRequestOperationImpl.cpp
 
   tftp/server/Operation.hpp
   tftp/server/Server.hpp

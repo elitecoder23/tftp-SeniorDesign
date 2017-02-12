@@ -48,7 +48,7 @@ class TftpClientImpl : public TftpClientInternal
       const Options::OptionList& additionalOptions);
 
     //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataOperationHandler &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
-    virtual TftpClientOperationPtr createReadRequestOperation(
+    virtual OperationPtr createReadRequestOperation(
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -56,14 +56,14 @@ class TftpClientImpl : public TftpClientInternal
       const UdpAddressType &from) override final;
 
     //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataOperationHandler &,const UdpAddressType &,const string &, TransferMode)
-    virtual TftpClientOperationPtr createReadRequestOperation(
+    virtual OperationPtr createReadRequestOperation(
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode) override final;
 
     //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataOperationHandler &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
-    virtual TftpClientOperationPtr createWriteRequestOperation(
+    virtual OperationPtr createWriteRequestOperation(
       TransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -71,7 +71,7 @@ class TftpClientImpl : public TftpClientInternal
       const UdpAddressType &from) override final;
 
     //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataOperationHandler &,const UdpAddressType &,const string &, TransferMode)
-    virtual TftpClientOperationPtr createWriteRequestOperation(
+    virtual OperationPtr createWriteRequestOperation(
       TransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -84,7 +84,9 @@ class TftpClientImpl : public TftpClientInternal
     virtual const Options::OptionList& getOptionList() const override final;
 
   private:
+    //! The stored TFTP client configuration
     const TftpConfiguration configuration;
+    //! The stored TFTP options
     const Options::OptionList options;
 };
 

@@ -11,10 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::Client::TftpClientWriteRequestOperationImpl.
+ * @brief Definition of class Tftp::Client::WriteRequestOperationImpl.
  **/
 
-#include "TftpClientWriteRequestOperationImpl.hpp"
+#include "WriteRequestOperationImpl.hpp"
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataOperationHandler.hpp>
@@ -26,14 +26,14 @@
 namespace Tftp {
 namespace Client {
 
-TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
+WriteRequestOperationImpl::WriteRequestOperationImpl(
   TransmitDataOperationHandler &handler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from):
-  TftpClientOperationImpl(
+  OperationImpl(
     RequestType::Write,
     tftpClient,
     serverAddress,
@@ -47,13 +47,13 @@ TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
 {
 }
 
-TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
+WriteRequestOperationImpl::WriteRequestOperationImpl(
   TransmitDataOperationHandler &handler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode):
-  TftpClientOperationImpl(
+  OperationImpl(
     RequestType::Write,
     tftpClient,
     serverAddress,
@@ -66,7 +66,7 @@ TftpClientWriteRequestOperationImpl::TftpClientWriteRequestOperationImpl(
 {
 }
 
-void TftpClientWriteRequestOperationImpl::operator()()
+void WriteRequestOperationImpl::operator()()
 {
   try
   {
@@ -99,7 +99,7 @@ void TftpClientWriteRequestOperationImpl::operator()()
       getOptions()));
 
     // wait for answers
-    TftpClientOperationImpl::operator()();
+    OperationImpl::operator()();
   }
   catch (...)
   {
@@ -111,7 +111,7 @@ void TftpClientWriteRequestOperationImpl::operator()()
   handler.finishedOperation();
 }
 
-void TftpClientWriteRequestOperationImpl::sendData()
+void WriteRequestOperationImpl::sendData()
 {
   lastTransmittedBlockNumber++;
 
@@ -128,7 +128,7 @@ void TftpClientWriteRequestOperationImpl::sendData()
   send( data);
 }
 
-void TftpClientWriteRequestOperationImpl::handleDataPacket(
+void WriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
@@ -148,7 +148,7 @@ void TftpClientWriteRequestOperationImpl::handleDataPacket(
     PacketTypeInfo( PacketType::Data));
 }
 
-void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
+void WriteRequestOperationImpl::handleAcknowledgementPacket(
 	const UdpAddressType &,
 	const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
@@ -197,7 +197,7 @@ void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
   receive();
 }
 
-void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
+void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {

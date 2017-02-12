@@ -11,10 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::Client::TftpClientReadRequestOperationImpl.
+ * @brief Definition of class Tftp::Client::ReadRequestOperationImpl.
  **/
 
-#include "TftpClientReadRequestOperationImpl.hpp"
+#include "ReadRequestOperationImpl.hpp"
 #include <tftp/TftpException.hpp>
 #include <tftp/ReceiveDataOperationHandler.hpp>
 #include <tftp/packets/PacketFactory.hpp>
@@ -25,14 +25,14 @@
 namespace Tftp {
 namespace Client {
 
-TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
+ReadRequestOperationImpl::ReadRequestOperationImpl(
   ReceiveDataOperationHandler &handler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from) :
-  TftpClientOperationImpl(
+  OperationImpl(
     RequestType::Read,
     tftpClient,
     serverAddress,
@@ -45,13 +45,13 @@ TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
 {
 }
 
-TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
+ReadRequestOperationImpl::ReadRequestOperationImpl(
   ReceiveDataOperationHandler &handler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode) :
-  TftpClientOperationImpl(
+  OperationImpl(
     RequestType::Read,
     tftpClient,
     serverAddress,
@@ -63,7 +63,7 @@ TftpClientReadRequestOperationImpl::TftpClientReadRequestOperationImpl(
 {
 }
 
-void TftpClientReadRequestOperationImpl::operator ()( void)
+void ReadRequestOperationImpl::operator ()( void)
 {
   try
   {
@@ -75,7 +75,7 @@ void TftpClientReadRequestOperationImpl::operator ()( void)
       Packets::ReadRequestPacket( getFilename(), getMode(), getOptions()));
 
     // wait for answers
-    TftpClientOperationImpl::operator ()();
+    OperationImpl::operator ()();
   }
   catch ( ...)
   {
@@ -87,7 +87,7 @@ void TftpClientReadRequestOperationImpl::operator ()( void)
   handler.finishedOperation();
 }
 
-void TftpClientReadRequestOperationImpl::handleDataPacket(
+void ReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
@@ -166,7 +166,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
   }
 }
 
-void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
+void ReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
@@ -187,7 +187,7 @@ void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
     PacketTypeInfo( PacketType::Acknowledgement));
 }
 
-void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
+void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
