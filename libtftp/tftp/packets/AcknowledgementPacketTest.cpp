@@ -25,7 +25,7 @@
 namespace Tftp {
 namespace Packets {
 
-BOOST_AUTO_TEST_SUITE( TftpAcknowledgementPacket)
+BOOST_AUTO_TEST_SUITE( AcknowledgementPacketTest)
 
 BOOST_AUTO_TEST_CASE( constructor )
 {

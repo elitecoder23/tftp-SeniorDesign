@@ -21,7 +21,7 @@
 
 #include <tftp/options/OptionList.hpp>
 
-#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 #include <boost/program_options/options_description.hpp>
 #include <boost/optional.hpp>
 

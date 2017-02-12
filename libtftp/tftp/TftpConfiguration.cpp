@@ -16,6 +16,8 @@
 
 #include "TftpConfiguration.hpp"
 
+#include <boost/property_tree/ptree.hpp>
+
 namespace Tftp {
 
 TftpConfiguration::TftpConfiguration() :
