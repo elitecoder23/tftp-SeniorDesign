@@ -286,7 +286,8 @@ void TftpServerImpl::handleReadRequestPacket(
   const UdpAddressType &from,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<< "RX: " << readRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<< "RX: " <<
+    static_cast< std::string>( readRequestPacket);
 
   // check handler
   if (!handler)
@@ -316,7 +317,8 @@ void TftpServerImpl::handleWriteRequestPacket(
   const UdpAddressType &from,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<< "RX: " << writeRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<< "RX: " <<
+    static_cast< std::string>( writeRequestPacket);
 
   // check handler
   if (!handler)
@@ -345,7 +347,8 @@ void TftpServerImpl::handleDataPacket(
   const UdpAddressType &from,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<< "RX ERROR: " << dataPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<< "RX ERROR: " <<
+    static_cast< std::string>( dataPacket);
 
   TftpServerOperation errOp = createErrorOperation(
     from,
@@ -360,8 +363,8 @@ void TftpServerImpl::handleAcknowledgementPacket(
   const UdpAddressType &from,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<<
-  "RX ERROR: " << acknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( acknowledgementPacket);
 
   TftpServerOperation errOp = createErrorOperation(
     from,
@@ -376,8 +379,8 @@ void TftpServerImpl::handleErrorPacket(
   const UdpAddressType &from,
   const Packets::ErrorPacket &errorPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<<
-  "RX ERROR: " << errorPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( errorPacket);
 
   TftpServerOperation errOp = createErrorOperation(
     from,
@@ -392,8 +395,8 @@ void TftpServerImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &from,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<<
-  "RX ERROR: " << optionsAcknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( optionsAcknowledgementPacket);
 
   TftpServerOperation errOp = createErrorOperation(
     from,

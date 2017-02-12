@@ -66,7 +66,7 @@ PacketType Packet::getPacketType() const
   return packetType;
 }
 
-Packet::string Packet::toString() const
+Packet::operator string() const
 {
   switch (packetType)
   {

@@ -97,8 +97,7 @@ Tftp::RawTftpPacketType OptionsAcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-OptionsAcknowledgementPacket::string
-OptionsAcknowledgementPacket::toString() const
+OptionsAcknowledgementPacket::operator string() const
 {
   return (boost::format( "OACK: OPT: \"%s\"") % options.toString()).str();
 }

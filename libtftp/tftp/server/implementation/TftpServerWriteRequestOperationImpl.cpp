@@ -128,7 +128,7 @@ void TftpServerWriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<< "RX: " << dataPacket.toString();
+  BOOST_LOG_TRIVIAL( info)<< "RX: " << static_cast< std::string>( dataPacket);
 
   // Check retransmission
   if (dataPacket.getBlockNumber() == lastReceivedBlockNumber)
@@ -199,7 +199,8 @@ void TftpServerWriteRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( error) << "RX ERROR: " << acknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( error) << "RX ERROR: " <<
+    static_cast< std::string>( acknowledgementPacket);
 
   send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,

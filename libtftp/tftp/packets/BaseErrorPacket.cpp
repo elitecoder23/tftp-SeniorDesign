@@ -104,7 +104,7 @@ Tftp::RawTftpPacketType BaseErrorPacket::encode() const
   return rawPacket;
 }
 
-BaseErrorPacket::string BaseErrorPacket::toString() const
+BaseErrorPacket::operator string() const
 {
   return (boost::format( "ERR: EC: %s (%d) - DESC: \"%s\"") %
     getErrorCodeString( getErrorCode()) %

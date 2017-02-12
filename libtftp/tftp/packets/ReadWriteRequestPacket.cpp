@@ -167,10 +167,10 @@ Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
   return rawPacket;
 }
 
-ReadWriteRequestPacket::string ReadWriteRequestPacket::toString() const
+ReadWriteRequestPacket::operator string() const
 {
   return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
-    Packet::toString() %
+    Packet::operator string() %
     getFilename() %
     getMode( getMode()) %
     getOptions().toString()).str();

@@ -88,7 +88,7 @@ class Packet
      *
      * @return Packet description.
      **/
-    virtual string toString() const;
+    virtual operator string() const;
 
   protected:
     /**

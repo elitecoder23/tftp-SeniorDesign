@@ -105,7 +105,7 @@ class OptionsAcknowledgementPacket: public Packet
     /**
      * @copydoc Packet::toString()
      **/
-    virtual string toString() const override;
+    virtual operator string() const override;
 
   private:
     //! The stored options.

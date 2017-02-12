@@ -110,7 +110,7 @@ Tftp::RawTftpPacketType DataPacket::encode() const
   return rawPacket;
 }
 
-DataPacket::string DataPacket::toString() const
+DataPacket::operator string() const
 {
   return (boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
     getBlockNumber() %

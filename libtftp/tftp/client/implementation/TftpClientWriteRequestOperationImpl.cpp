@@ -132,8 +132,8 @@ void TftpClientWriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_TRIVIAL( info) <<
-    "RX ERROR: " << dataPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( dataPacket);
 
   send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
@@ -152,7 +152,8 @@ void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
 	const UdpAddressType &,
 	const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX: " << acknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX: " <<
+    static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
   if (acknowledgementPacket.getBlockNumber() == lastTransmittedBlockNumber.previous())
@@ -200,9 +201,10 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX: " << optionsAcknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX: " <<
+    static_cast< std::string>( optionsAcknowledgementPacket);
 
-  OptionList options = optionsAcknowledgementPacket.getOptions();
+  OptionList options( optionsAcknowledgementPacket.getOptions());
 
   // check empty options
   if (options.getOptions().empty())

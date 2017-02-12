@@ -74,7 +74,7 @@ Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-AcknowledgementPacket::string AcknowledgementPacket::toString() const
+AcknowledgementPacket::operator string() const
 {
   return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
 }

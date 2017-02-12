@@ -91,7 +91,8 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX: " << dataPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX: " <<
+    static_cast< std::string>( dataPacket);
 
   // check retransmission of last packet
   if (dataPacket.getBlockNumber() == lastReceivedBlockNumber)
@@ -169,8 +170,8 @@ void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) <<
-    "RX ERROR: " << acknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( acknowledgementPacket);
 
   // send Error
   send( Packets::ErrorPacket(
@@ -190,8 +191,8 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) <<
-    "RX ERROR: " << optionsAcknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( optionsAcknowledgementPacket);
 
   OptionList options = optionsAcknowledgementPacket.getOptions();
 

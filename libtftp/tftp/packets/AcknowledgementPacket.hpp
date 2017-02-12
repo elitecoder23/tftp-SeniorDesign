@@ -80,7 +80,7 @@ class AcknowledgementPacket: public Packet
     virtual RawTftpPacketType encode() const override final;
 
     //! @copydoc Packet::toString()
-    virtual string toString() const override final;
+    virtual operator string() const override final;
 
   private:
     //! Block number of the packet

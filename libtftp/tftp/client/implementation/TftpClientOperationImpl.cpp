@@ -200,7 +200,7 @@ void TftpClientOperationImpl::sendFirst( const Packets::Packet &packet)
 
   try
   {
-    BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
+    BOOST_LOG_TRIVIAL( info) << "TX: " << static_cast< std::string>( packet);
 
     // Reset the transmit counter
     transmitCounter = 1;
@@ -232,7 +232,7 @@ void TftpClientOperationImpl::send( const Packets::Packet &packet)
 
   try
   {
-    BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
+    BOOST_LOG_TRIVIAL( info) << "TX: " << static_cast< std::string>( packet);
 
     // Reset the transmit counter
     transmitCounter = 1;
@@ -351,8 +351,8 @@ void TftpClientOperationImpl::handleReadRequestPacket(
 {
   BOOST_LOG_FUNCTION();
 
-  BOOST_LOG_TRIVIAL( info) <<
-    "RX ERROR: " << readRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( readRequestPacket);
 
   send( Packets::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
@@ -373,8 +373,8 @@ void TftpClientOperationImpl::handleWriteRequestPacket(
 {
   BOOST_LOG_FUNCTION();
 
-  BOOST_LOG_TRIVIAL( info) <<
-    "RX ERROR: " << writeRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( writeRequestPacket);
 
   send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
@@ -395,8 +395,8 @@ void TftpClientOperationImpl::handleErrorPacket(
 {
   BOOST_LOG_FUNCTION();
 
-  BOOST_LOG_TRIVIAL( info) <<
-    "RX ERROR: " << errorPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( errorPacket);
 
   // Operation completed
   finished();

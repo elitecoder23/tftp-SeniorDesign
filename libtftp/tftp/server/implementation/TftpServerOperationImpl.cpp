@@ -152,7 +152,7 @@ void TftpServerOperationImpl::finished() noexcept
 
 void TftpServerOperationImpl::send( const Packets::Packet &packet)
 {
-  BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
+  BOOST_LOG_TRIVIAL( info) << "TX: " << static_cast< std::string>( packet);
 
   // Reset the transmit counter
   transmitCounter = 1;
@@ -226,7 +226,8 @@ void TftpServerOperationImpl::handleReadRequestPacket(
   const UdpAddressType &,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << readRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( readRequestPacket);
 
   send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
@@ -245,7 +246,8 @@ void TftpServerOperationImpl::handleWriteRequestPacket(
   const UdpAddressType &,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << writeRequestPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( writeRequestPacket);
 
   send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
@@ -264,7 +266,8 @@ void TftpServerOperationImpl::handleErrorPacket(
   const UdpAddressType &,
   const Packets::ErrorPacket &errorPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << errorPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( errorPacket);
 
   //! @throw ErrorReceivedException Always, because this is an error.
   BOOST_THROW_EXCEPTION(
@@ -278,8 +281,8 @@ void TftpServerOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) <<
-    "RX ERROR: " << optionsAcknowledgementPacket.toString();
+  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+    static_cast< std::string>( optionsAcknowledgementPacket);
 
   send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
