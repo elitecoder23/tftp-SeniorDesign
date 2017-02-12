@@ -20,8 +20,8 @@
 #define TFTP_TFTPEXCEPTION_HPP
 
 #include <tftp/Tftp.hpp>
-#include <tftp/packet/Packet.hpp>
-#include <tftp/packet/ErrorPacket.hpp>
+#include <tftp/packets/Packets.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
 
 #include <helper/Exception.hpp>
 
@@ -91,7 +91,7 @@ using PacketTypeInfo =
 
 //! TFTP error packet information
 using ErrorPacketInfo =
-  boost::error_info< struct ErrorPacketInfoTag, Packet::ErrorPacket>;
+  boost::error_info< struct ErrorPacketInfoTag, Packets::ErrorPacket>;
 
 }
 

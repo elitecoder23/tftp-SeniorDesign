@@ -19,7 +19,7 @@
 
 #include <tftp/client/Client.hpp>
 #include <tftp/client/implementation/TftpClientOperationImpl.hpp>
-#include <tftp/packet/BlockNumber.hpp>
+#include <tftp/packets/BlockNumber.hpp>
 
 namespace Tftp {
 namespace Client {
@@ -97,7 +97,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const Packet::DataPacket &dataPacket) override final;
+      const Packets::DataPacket &dataPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket()
@@ -107,7 +107,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::AcknowledgementPacket &acknowledgementPacket) override final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
@@ -115,7 +115,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
      **/
     virtual void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
 
   private:
     //! Registered handler.
@@ -123,7 +123,7 @@ class TftpClientReadRequestOperationImpl : public TftpClientOperationImpl
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! last received block number.
-    Packet::BlockNumber lastReceivedBlockNumber;
+    Packets::BlockNumber lastReceivedBlockNumber;
 };
 
 }

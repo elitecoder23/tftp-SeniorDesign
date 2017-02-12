@@ -17,7 +17,7 @@
 
 #include <tftp/client/Client.hpp>
 #include <tftp/client/implementation/TftpClientOperationImpl.hpp>
-#include <tftp/packet/BlockNumber.hpp>
+#include <tftp/packets/BlockNumber.hpp>
 
 namespace Tftp {
 namespace Client {
@@ -101,7 +101,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const Packet::DataPacket &dataPacket) final;
+      const Packets::DataPacket &dataPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket()
@@ -111,7 +111,7 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::AcknowledgementPacket &acknowledgementPacket) final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
@@ -123,10 +123,10 @@ class TftpClientWriteRequestOperationImpl : public TftpClientOperationImpl
      **/
     virtual void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
 
   private:
-    using BlockNumber = Packet::BlockNumber;
+    using BlockNumber = Packets::BlockNumber;
 
     //! The handler, which is called
     TransmitDataOperationHandler &handler;

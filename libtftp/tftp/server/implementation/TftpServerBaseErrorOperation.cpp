@@ -15,7 +15,7 @@
  **/
 
 #include "TftpServerBaseErrorOperation.hpp"
-#include <tftp/packet/BaseErrorPacket.hpp>
+#include <tftp/packets/BaseErrorPacket.hpp>
 #include <tftp/TftpException.hpp>
 
 #include <helper/Logger.hpp>
@@ -98,7 +98,7 @@ TftpServerBaseErrorOperation::~TftpServerBaseErrorOperation( void) noexcept
 }
 
 void TftpServerBaseErrorOperation::sendError(
-  const Packet::BaseErrorPacket &error)
+  const Packets::BaseErrorPacket &error)
 {
   try
   {

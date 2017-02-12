@@ -18,7 +18,7 @@
 #define TFTP_PACKETHANDLER_HPP
 
 #include <tftp/Tftp.hpp>
-#include <tftp/packet/Packet.hpp>
+#include <tftp/packets/Packets.hpp>
 
 namespace Tftp {
 
@@ -66,7 +66,7 @@ class PacketHandler
      **/
     virtual void handleReadRequestPacket(
       const UdpAddressType &from,
-      const Packet::ReadRequestPacket &readRequestPacket) = 0;
+      const Packets::ReadRequestPacket &readRequestPacket) = 0;
 
     /**
      * @brief Handler for TFTP write request packets (WRQ).
@@ -78,7 +78,7 @@ class PacketHandler
      **/
     virtual void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const Packet::WriteRequestPacket &writeRequestPacket) = 0;
+      const Packets::WriteRequestPacket &writeRequestPacket) = 0;
 
     /**
      * @brief Handler for TFTP data packets (DATA).
@@ -90,7 +90,7 @@ class PacketHandler
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const Packet::DataPacket &dataPacket) = 0;
+      const Packets::DataPacket &dataPacket) = 0;
 
     /**
      * @brief Handler for TFTP acknowledgement packets (ACK).
@@ -102,7 +102,7 @@ class PacketHandler
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::AcknowledgementPacket &acknowledgementPacket) = 0;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) = 0;
 
     /**
      * @brief Handler for TFTP error packets (ERR).
@@ -114,7 +114,7 @@ class PacketHandler
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
-      const Packet::ErrorPacket &errorPacket) = 0;
+      const Packets::ErrorPacket &errorPacket) = 0;
 
     /**
      * @brief Handler for TFTP option acknowledgement packets (RRQ).
@@ -126,7 +126,7 @@ class PacketHandler
      **/
     virtual void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) = 0;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) = 0;
 
     /**
      * @brief Handler for invalid TFTP packets.

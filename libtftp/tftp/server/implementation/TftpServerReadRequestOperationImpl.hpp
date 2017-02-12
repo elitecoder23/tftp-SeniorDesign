@@ -19,7 +19,7 @@
 
 #include <tftp/Tftp.hpp>
 #include <tftp/server/implementation/TftpServerOperationImpl.hpp>
-#include <tftp/packet/BlockNumber.hpp>
+#include <tftp/packets/BlockNumber.hpp>
 
 #include <boost/asio.hpp>
 
@@ -106,7 +106,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const Packet::DataPacket &dataPacket) override;
+      const Packets::DataPacket &dataPacket) override;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket
@@ -116,11 +116,9 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::AcknowledgementPacket &acknowledgementPacket) override;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) override;
 
   private:
-    using BlockNumber = Packet::BlockNumber;
-
     //! The handler which is called during operation.
     TransmitDataOperationHandler &handler;
     //! contains the negotiated blocksize option.
@@ -128,7 +126,7 @@ class TftpServerReadRequestOperationImpl: public TftpServerOperationImpl
     //! indicates, if the last data packet has been transmitted (closing).
     bool lastDataPacketTransmitted;
     //! The stored last transmitted block number.
-    BlockNumber lastTransmittedBlockNumber;
+    Packets::BlockNumber lastTransmittedBlockNumber;
 };
 
 }

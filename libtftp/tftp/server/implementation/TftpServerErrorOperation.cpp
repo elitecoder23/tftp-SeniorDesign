@@ -16,7 +16,7 @@
 
 #include "TftpServerErrorOperation.hpp"
 
-#include <tftp/packet/ErrorPacket.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
 
 #include <helper/Logger.hpp>
 
@@ -46,7 +46,7 @@ TftpServerErrorOperation::TftpServerErrorOperation(
 
 void TftpServerErrorOperation::operator()()
 {
-  sendError( Tftp::Packet::ErrorPacket( errorCode, errorMessage));
+  sendError( Packets::ErrorPacket( errorCode, errorMessage));
 }
 
 }

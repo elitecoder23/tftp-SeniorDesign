@@ -21,8 +21,8 @@
 
 #include <tftp/server/implementation/TftpServerOperationImpl.hpp>
 
-#include <tftp/packet/Packet.hpp>
-#include <tftp/packet/BlockNumber.hpp>
+#include <tftp/packets/Packets.hpp>
+#include <tftp/packets/BlockNumber.hpp>
 
 #include <boost/asio.hpp>
 
@@ -101,7 +101,7 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const Packet::DataPacket &dataPacket) override;
+      const Packets::DataPacket &dataPacket) override;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket
@@ -111,17 +111,15 @@ class TftpServerWriteRequestOperationImpl: public TftpServerOperationImpl
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::AcknowledgementPacket &acknowledgementPacket) override;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) override;
 
   private:
-    using BlockNumber = Tftp::Packet::BlockNumber;
-
     //! Handler which will be called on various events.
     ReceiveDataOperationHandler &handler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! Holds the last received block number.
-    BlockNumber lastReceivedBlockNumber;
+    Packets::BlockNumber lastReceivedBlockNumber;
 };
 
 }

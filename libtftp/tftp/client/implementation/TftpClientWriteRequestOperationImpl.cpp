@@ -18,7 +18,7 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataOperationHandler.hpp>
-#include <tftp/packet/PacketFactory.hpp>
+#include <tftp/packets/PacketFactory.hpp>
 
 #include <helper/Dump.hpp>
 #include <helper/Logger.hpp>
@@ -93,7 +93,7 @@ void TftpClientWriteRequestOperationImpl::operator()()
     }
 
     // send write request packet
-    sendFirst( Packet::WriteRequestPacket(
+    sendFirst( Packets::WriteRequestPacket(
       getFilename(),
       getMode(),
       getOptions()));
@@ -115,7 +115,7 @@ void TftpClientWriteRequestOperationImpl::sendData()
 {
   lastTransmittedBlockNumber++;
 
-  Packet::DataPacket data(
+  Packets::DataPacket data(
     lastTransmittedBlockNumber,
     handler.sendData( transmitDataSize));
 
@@ -130,12 +130,12 @@ void TftpClientWriteRequestOperationImpl::sendData()
 
 void TftpClientWriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
-  const Packet::DataPacket &dataPacket)
+  const Packets::DataPacket &dataPacket)
 {
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << dataPacket.toString();
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "DATA not expected"));
 
@@ -150,7 +150,7 @@ void TftpClientWriteRequestOperationImpl::handleDataPacket(
 
 void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
 	const UdpAddressType &,
-	const Packet::AcknowledgementPacket &acknowledgementPacket)
+	const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX: " << acknowledgementPacket.toString();
 
@@ -169,7 +169,7 @@ void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Invalid block number received";
 
-    send( Packet::ErrorPacket(
+    send( Packets::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Wrong block number"));
 
@@ -198,7 +198,7 @@ void TftpClientWriteRequestOperationImpl::handleAcknowledgementPacket(
 
 void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
-  const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX: " << optionsAcknowledgementPacket.toString();
 
@@ -209,7 +209,7 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Received option list is empty";
 
-    send( Packet::ErrorPacket(
+    send( Packets::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Empty OACK not allowed"));
 
@@ -225,7 +225,7 @@ void TftpClientWriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Option negotiation failed";
 
-    send( Packet::ErrorPacket(
+    send( Packets::ErrorPacket(
       ErrorCode::TFTP_OPTION_REFUSED,
       "Option negotiation failed"));
 

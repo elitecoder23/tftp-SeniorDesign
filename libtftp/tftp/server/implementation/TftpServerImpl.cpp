@@ -17,7 +17,7 @@
 #include "TftpServerImpl.hpp"
 
 #include <tftp/TftpException.hpp>
-#include <tftp/packet/PacketFactory.hpp>
+#include <tftp/packets/PacketFactory.hpp>
 #include <tftp/server/implementation/TftpServerReadRequestOperationImpl.hpp>
 #include <tftp/server/implementation/TftpServerWriteRequestOperationImpl.hpp>
 #include <tftp/server/implementation/TftpServerErrorOperation.hpp>
@@ -284,7 +284,7 @@ void TftpServerImpl::receiveHandler(
 
 void TftpServerImpl::handleReadRequestPacket(
   const UdpAddressType &from,
-  const Packet::ReadRequestPacket &readRequestPacket)
+  const Packets::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_TRIVIAL( info)<< "RX: " << readRequestPacket.toString();
 
@@ -314,7 +314,7 @@ void TftpServerImpl::handleReadRequestPacket(
 
 void TftpServerImpl::handleWriteRequestPacket(
   const UdpAddressType &from,
-  const Packet::WriteRequestPacket &writeRequestPacket)
+  const Packets::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_TRIVIAL( info)<< "RX: " << writeRequestPacket.toString();
 
@@ -343,7 +343,7 @@ void TftpServerImpl::handleWriteRequestPacket(
 
 void TftpServerImpl::handleDataPacket(
   const UdpAddressType &from,
-  const Packet::DataPacket &dataPacket)
+  const Packets::DataPacket &dataPacket)
 {
   BOOST_LOG_TRIVIAL( info)<< "RX ERROR: " << dataPacket.toString();
 
@@ -358,7 +358,7 @@ void TftpServerImpl::handleDataPacket(
 
 void TftpServerImpl::handleAcknowledgementPacket(
   const UdpAddressType &from,
-  const Packet::AcknowledgementPacket &acknowledgementPacket)
+  const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info)<<
   "RX ERROR: " << acknowledgementPacket.toString();
@@ -374,7 +374,7 @@ void TftpServerImpl::handleAcknowledgementPacket(
 
 void TftpServerImpl::handleErrorPacket(
   const UdpAddressType &from,
-  const Packet::ErrorPacket &errorPacket)
+  const Packets::ErrorPacket &errorPacket)
 {
   BOOST_LOG_TRIVIAL( info)<<
   "RX ERROR: " << errorPacket.toString();
@@ -390,7 +390,7 @@ void TftpServerImpl::handleErrorPacket(
 
 void TftpServerImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &from,
-  const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info)<<
   "RX ERROR: " << optionsAcknowledgementPacket.toString();

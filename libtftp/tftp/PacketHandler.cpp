@@ -16,7 +16,7 @@
 
 #include "PacketHandler.hpp"
 
-#include <tftp/packet/PacketFactory.hpp>
+#include <tftp/packets/PacketFactory.hpp>
 #include <tftp/TftpException.hpp>
 
 #include <helper/Logger.hpp>
@@ -29,7 +29,7 @@ void PacketHandler::handlePacket(
 {
   BOOST_LOG_FUNCTION();
 
-  using Tftp::Packet::PacketFactory;
+  using Packets::PacketFactory;
 
   switch ( PacketFactory::getPacketType( rawPacket))
   {

@@ -150,7 +150,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
      **/
     virtual void handleReadRequestPacket(
       const UdpAddressType &from,
-      const Packet::ReadRequestPacket &readRequestPacket) override final;
+      const Packets::ReadRequestPacket &readRequestPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleWriteRequestPacket
@@ -161,7 +161,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
      **/
     virtual void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const Packet::WriteRequestPacket &writeRequestPacket) override final;
+      const Packets::WriteRequestPacket &writeRequestPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleDataPacket
@@ -171,7 +171,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
      **/
     virtual void handleDataPacket(
       const UdpAddressType &from,
-      const Packet::DataPacket &dataPacket) override final;
+      const Packets::DataPacket &dataPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket
@@ -181,7 +181,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
      **/
     virtual void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::AcknowledgementPacket &acknowledgementPacket) override final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleErrorPacket
@@ -191,7 +191,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
-      const Packet::ErrorPacket &errorPacket) override final;
+      const Packets::ErrorPacket &errorPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleOptionsAcknowledgementPacket
@@ -201,7 +201,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
      **/
     virtual void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleInvalidPacket

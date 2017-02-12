@@ -20,7 +20,7 @@
 #include <tftp/PacketHandler.hpp>
 #include <tftp/client/Client.hpp>
 #include <tftp/client/TftpClientOperation.hpp>
-#include <tftp/packet/Packet.hpp>
+#include <tftp/packets/Packets.hpp>
 #include <tftp/options/OptionList.hpp>
 
 #include <boost/asio.hpp>
@@ -87,7 +87,7 @@ class TftpClientOperationImpl :
 
   protected:
     using OptionList = Options::OptionList;
-    using TftpPacket = Packet::TftpPacket;
+    using TftpPacket = Packets::TftpPacket;
 
     /**
      * @brief Constructor of TftpClientOperation
@@ -203,7 +203,7 @@ class TftpClientOperationImpl :
      **/
     virtual void handleReadRequestPacket(
       const UdpAddressType &from,
-      const Packet::ReadRequestPacket &readRequestPacket) override final;
+      const Packets::ReadRequestPacket &readRequestPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleWriteRequestPacket()
@@ -213,14 +213,14 @@ class TftpClientOperationImpl :
      **/
     virtual void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const Packet::WriteRequestPacket &writeRequestPacket) override final;
+      const Packets::WriteRequestPacket &writeRequestPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleErrorPacket()
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
-      const Packet::ErrorPacket &errorPacket) override final;
+      const Packets::ErrorPacket &errorPacket) override final;
 
     /**
      * @copydoc PacketHandler::handleInvalidPacket()

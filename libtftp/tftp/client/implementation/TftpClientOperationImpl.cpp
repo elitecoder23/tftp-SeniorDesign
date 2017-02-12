@@ -19,9 +19,9 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
 
-#include <tftp/packet/ReadRequestPacket.hpp>
-#include <tftp/packet/WriteRequestPacket.hpp>
-#include <tftp/packet/ErrorPacket.hpp>
+#include <tftp/packets/ReadRequestPacket.hpp>
+#include <tftp/packets/WriteRequestPacket.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
 
 #include <tftp/client/implementation/TftpClientInternal.hpp>
 
@@ -347,14 +347,14 @@ void TftpClientOperationImpl::setReceiveTimeout(
 
 void TftpClientOperationImpl::handleReadRequestPacket(
   const UdpAddressType &,
-  const Packet::ReadRequestPacket &readRequestPacket)
+  const Packets::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_FUNCTION();
 
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << readRequestPacket.toString();
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "RRQ not expected"));
 
@@ -369,14 +369,14 @@ void TftpClientOperationImpl::handleReadRequestPacket(
 
 void TftpClientOperationImpl::handleWriteRequestPacket(
   const UdpAddressType &,
-  const Packet::WriteRequestPacket &writeRequestPacket)
+  const Packets::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_FUNCTION();
 
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << writeRequestPacket.toString();
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "WRQ not expected"));
 
@@ -391,7 +391,7 @@ void TftpClientOperationImpl::handleWriteRequestPacket(
 
 void TftpClientOperationImpl::handleErrorPacket(
   const UdpAddressType &,
-  const Packet::ErrorPacket &errorPacket)
+  const Packets::ErrorPacket &errorPacket)
 {
   BOOST_LOG_FUNCTION();
 
@@ -417,7 +417,7 @@ void TftpClientOperationImpl::handleInvalidPacket(
 
   BOOST_LOG_TRIVIAL( error) << "RX ERROR: INVALID Packet";
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "Invalid packet not expected"));
 
@@ -466,7 +466,7 @@ void TftpClientOperationImpl::receiveFirstHandler(
     // sent Error packet to unknown partner
     try
     {
-      Packet::ErrorPacket err(
+      Packets::ErrorPacket err(
         ErrorCode::UNKNOWN_TRANSFER_ID,
         "Packet from wrong source");
 

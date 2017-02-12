@@ -17,7 +17,7 @@
 #include "TftpClientReadRequestOperationImpl.hpp"
 #include <tftp/TftpException.hpp>
 #include <tftp/ReceiveDataOperationHandler.hpp>
-#include <tftp/packet/PacketFactory.hpp>
+#include <tftp/packets/PacketFactory.hpp>
 
 #include <helper/Dump.hpp>
 #include <helper/Logger.hpp>
@@ -72,7 +72,7 @@ void TftpClientReadRequestOperationImpl::operator ()( void)
 
     // send read request packet
     sendFirst(
-      Packet::ReadRequestPacket( getFilename(), getMode(), getOptions()));
+      Packets::ReadRequestPacket( getFilename(), getMode(), getOptions()));
 
     // wait for answers
     TftpClientOperationImpl::operator ()();
@@ -89,7 +89,7 @@ void TftpClientReadRequestOperationImpl::operator ()( void)
 
 void TftpClientReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
-  const Packet::DataPacket &dataPacket)
+  const Packets::DataPacket &dataPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX: " << dataPacket.toString();
 
@@ -99,7 +99,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
     BOOST_LOG_TRIVIAL( info) << "Received last data package again. Re-ACK them";
 
     // Retransmit last ACK packet
-    send( Packet::AcknowledgementPacket( lastReceivedBlockNumber));
+    send( Packets::AcknowledgementPacket( lastReceivedBlockNumber));
 
     return;
   }
@@ -110,7 +110,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
     BOOST_LOG_TRIVIAL( error) << "Wrong Data packet block number";
 
     // send error packet
-    send( Packet::ErrorPacket(
+    send( Packets::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Block Number not expected"));
 
@@ -130,7 +130,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
     BOOST_LOG_TRIVIAL( error) << "Too much data received";
 
     // send error packet
-    send( Packet::ErrorPacket(
+    send( Packets::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Too much data"));
 
@@ -150,7 +150,7 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
   lastReceivedBlockNumber++;
 
   // send ACK
-  send( Packet::AcknowledgementPacket( lastReceivedBlockNumber));
+  send( Packets::AcknowledgementPacket( lastReceivedBlockNumber));
 
   // if received data size is smaller then the expected
   if (dataPacket.getDataSize() < receiveDataSize)
@@ -167,13 +167,13 @@ void TftpClientReadRequestOperationImpl::handleDataPacket(
 
 void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
-  const Packet::AcknowledgementPacket &acknowledgementPacket)
+  const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << acknowledgementPacket.toString();
 
   // send Error
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "ACK not expected"));
 
@@ -188,7 +188,7 @@ void TftpClientReadRequestOperationImpl::handleAcknowledgementPacket(
 
 void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
-  const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << optionsAcknowledgementPacket.toString();
@@ -200,7 +200,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Received option list is empty";
 
-    send( Packet::ErrorPacket(
+    send( Packets::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Empty OACK not allowed"));
 
@@ -220,7 +220,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Option negotiation failed";
 
-    send( Packet::ErrorPacket(
+    send( Packets::ErrorPacket(
       ErrorCode::TFTP_OPTION_REFUSED,
       "Option negotiation failed"));
 
@@ -256,7 +256,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     if (!handler.receivedTransferSize( negotiatedOptions.getTransferSizeOption()))
     {
-      send( Packet::ErrorPacket(
+      send( Packets::ErrorPacket(
         ErrorCode::DISK_FULL_OR_ALLOCATION_EXCEEDS,
         "FILE TO BIG"));
 
@@ -270,7 +270,7 @@ void TftpClientReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // send Acknowledgement with block number set to 0
-  send( Packet::AcknowledgementPacket( 0));
+  send( Packets::AcknowledgementPacket( 0));
 
   // receive next packet
   receive();

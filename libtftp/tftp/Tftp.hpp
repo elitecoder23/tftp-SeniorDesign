@@ -33,7 +33,7 @@
  *
  * The library is divided into sections:
  * - Tftp - Contains the basic definitions.
- * - Tftp::Packet - Contains the implementation of all TFTP packet types
+ * - Tftp::Packets - Contains the implementation of all TFTP packet types
  * - Tftp::Options - Contains the implementation of the TFTP Option handling
  * - Tftp::Client - Base implementation of TFTP clients
  * - Tftp::Server - Base implementation of TFTP servers

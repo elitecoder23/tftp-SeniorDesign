@@ -18,10 +18,10 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataOperationHandler.hpp>
-#include <tftp/packet/AcknowledgementPacket.hpp>
-#include <tftp/packet/OptionsAcknowledgementPacket.hpp>
-#include <tftp/packet/DataPacket.hpp>
-#include <tftp/packet/ErrorPacket.hpp>
+#include <tftp/packets/AcknowledgementPacket.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+#include <tftp/packets/DataPacket.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
 
 #include <helper/Logger.hpp>
 
@@ -103,7 +103,7 @@ void TftpServerReadRequestOperationImpl::operator()()
       if ( getOptions().hasOptions())
       {
         // Send OACK
-        send( Packet::OptionsAcknowledgementPacket( getOptions()));
+        send( Packets::OptionsAcknowledgementPacket( getOptions()));
       }
       else
       {
@@ -129,7 +129,7 @@ void TftpServerReadRequestOperationImpl::sendData()
 {
   lastTransmittedBlockNumber++;
 
-  Packet::DataPacket data(
+  Packets::DataPacket data(
     lastTransmittedBlockNumber,
     handler.sendData( transmitDataSize));
 
@@ -144,11 +144,11 @@ void TftpServerReadRequestOperationImpl::sendData()
 
 void TftpServerReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
-  const Packet::DataPacket &dataPacket)
+  const Packets::DataPacket &dataPacket)
 {
   BOOST_LOG_TRIVIAL( error)<< "RX ERROR: " << dataPacket.toString();
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "DATA not expected"));
 
@@ -163,7 +163,7 @@ void TftpServerReadRequestOperationImpl::handleDataPacket(
 
 void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
-  const Packet::AcknowledgementPacket &acknowledgementPacket)
+  const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info)<<"RX: " << acknowledgementPacket.toString();
 
@@ -182,7 +182,7 @@ void TftpServerReadRequestOperationImpl::handleAcknowledgementPacket(
   {
     BOOST_LOG_TRIVIAL( error) << "Invalid block number received";
 
-    send( Packet::ErrorPacket(
+    send( Packets::ErrorPacket(
       ErrorCode::ILLEGAL_TFTP_OPERATION,
       "Block number not expected"));
 

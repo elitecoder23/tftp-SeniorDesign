@@ -28,28 +28,30 @@ add_library(
   tftp/TftpException.hpp
   tftp/TransmitDataOperationHandler.hpp
   
-  tftp/packet/AcknowledgementPacket.hpp
-  tftp/packet/AcknowledgementPacket.cpp
-  tftp/packet/BaseErrorPacket.hpp
-  tftp/packet/BaseErrorPacket.cpp
-  tftp/packet/BlockNumber.hpp
-  tftp/packet/BlockNumber.cpp
-  tftp/packet/DataPacket.hpp
-  tftp/packet/DataPacket.cpp
-  tftp/packet/ErrorPacket.hpp
-  tftp/packet/ErrorPacket.cpp
-  tftp/packet/OptionsAcknowledgementPacket.hpp
-  tftp/packet/OptionsAcknowledgementPacket.cpp
-  tftp/packet/PacketFactory.hpp
-  tftp/packet/PacketFactory.cpp
-  tftp/packet/ReadRequestPacket.hpp
-  tftp/packet/ReadRequestPacket.cpp
-  tftp/packet/ReadWriteRequestPacket.hpp
-  tftp/packet/ReadWriteRequestPacket.cpp
-  tftp/packet/TftpPacket.hpp
-  tftp/packet/TftpPacket.cpp
-  tftp/packet/WriteRequestPacket.hpp
-  tftp/packet/WriteRequestPacket.cpp
+  tftp/packets/AcknowledgementPacket.hpp
+  tftp/packets/AcknowledgementPacket.cpp
+  tftp/packets/BaseErrorPacket.hpp
+  tftp/packets/BaseErrorPacket.cpp
+  tftp/packets/BlockNumber.hpp
+  tftp/packets/BlockNumber.cpp
+  tftp/packets/DataPacket.hpp
+  tftp/packets/DataPacket.cpp
+  tftp/packets/ErrorPacket.hpp
+  tftp/packets/ErrorPacket.cpp
+  tftp/packets/OptionsAcknowledgementPacket.hpp
+  tftp/packets/OptionsAcknowledgementPacket.cpp
+  tftp/packets/PacketFactory.hpp
+  tftp/packets/PacketFactory.cpp
+  tftp/packets/Packets.hpp
+  tftp/packets/ReadRequestPacket.hpp
+  tftp/packets/ReadRequestPacket.cpp
+  tftp/packets/ReadWriteRequestPacket.hpp
+  tftp/packets/ReadWriteRequestPacket.cpp
+  tftp/packets/TftpPacket.hpp
+  tftp/packets/TftpPacket.cpp
+  tftp/packets/TftpPacketException.hpp
+  tftp/packets/WriteRequestPacket.hpp
+  tftp/packets/WriteRequestPacket.cpp
   
   tftp/options/Option.cpp
   tftp/options/OptionList.cpp
@@ -114,14 +116,14 @@ add_library(
   tftp/options/OptionListTest.cpp
   tftp/options/StringOptionTest.cpp
   
-  tftp/packet/AcknowledgementPacketTest.cpp
-  tftp/packet/BaseErrorPacketTest.cpp
-  tftp/packet/BlockNumberTest.cpp
-  tftp/packet/DataPacketTest.cpp
-  tftp/packet/ErrorPacketTest.cpp
-  tftp/packet/OptionsAcknowledgementPacketTest.cpp
-  tftp/packet/ReadRequestPacketTest.cpp
-  tftp/packet/WriteRequestPacketTest.cpp)
+  tftp/packets/AcknowledgementPacketTest.cpp
+  tftp/packets/BaseErrorPacketTest.cpp
+  tftp/packets/BlockNumberTest.cpp
+  tftp/packets/DataPacketTest.cpp
+  tftp/packets/ErrorPacketTest.cpp
+  tftp/packets/OptionsAcknowledgementPacketTest.cpp
+  tftp/packets/ReadRequestPacketTest.cpp
+  tftp/packets/WriteRequestPacketTest.cpp)
 
 target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 

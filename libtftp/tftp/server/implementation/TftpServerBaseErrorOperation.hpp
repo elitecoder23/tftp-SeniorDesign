@@ -18,7 +18,7 @@
 #define TFTP_SERVER_TFTPSERVERBASEERROROPERATION_HPP
 
 #include <tftp/server/Server.hpp>
-#include <tftp/packet/Packet.hpp>
+#include <tftp/packets/Packets.hpp>
 
 #include <boost/asio.hpp>
 
@@ -62,7 +62,7 @@ class TftpServerBaseErrorOperation
      * @param[in] error
      *   The error packet.
      **/
-    void sendError( const Packet::BaseErrorPacket &error);
+    void sendError( const Packets::BaseErrorPacket &error);
 
   private:
     const UdpAddressType clientAddress;

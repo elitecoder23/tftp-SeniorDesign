@@ -19,10 +19,10 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
 
-#include <tftp/packet/ReadRequestPacket.hpp>
-#include <tftp/packet/WriteRequestPacket.hpp>
-#include <tftp/packet/ErrorPacket.hpp>
-#include <tftp/packet/OptionsAcknowledgementPacket.hpp>
+#include <tftp/packets/ReadRequestPacket.hpp>
+#include <tftp/packets/WriteRequestPacket.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
 #include <tftp/server/implementation/TftpServerInternal.hpp>
 
@@ -150,7 +150,7 @@ void TftpServerOperationImpl::finished() noexcept
   ioService.stop();
 }
 
-void TftpServerOperationImpl::send( const Packet::TftpPacket &packet)
+void TftpServerOperationImpl::send( const Packets::TftpPacket &packet)
 {
   BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
 
@@ -224,11 +224,11 @@ void TftpServerOperationImpl::setReceiveTimeout( const uint8_t receiveTimeout)
 
 void TftpServerOperationImpl::handleReadRequestPacket(
   const UdpAddressType &,
-  const Packet::ReadRequestPacket &readRequestPacket)
+  const Packets::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << readRequestPacket.toString();
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "RRQ not expected"));
 
@@ -243,11 +243,11 @@ void TftpServerOperationImpl::handleReadRequestPacket(
 
 void TftpServerOperationImpl::handleWriteRequestPacket(
   const UdpAddressType &,
-  const Packet::WriteRequestPacket &writeRequestPacket)
+  const Packets::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << writeRequestPacket.toString();
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "WRQ not expected"));
 
@@ -262,7 +262,7 @@ void TftpServerOperationImpl::handleWriteRequestPacket(
 
 void TftpServerOperationImpl::handleErrorPacket(
   const UdpAddressType &,
-  const Packet::ErrorPacket &errorPacket)
+  const Packets::ErrorPacket &errorPacket)
 {
   BOOST_LOG_TRIVIAL( info) << "RX ERROR: " << errorPacket.toString();
 
@@ -276,12 +276,12 @@ void TftpServerOperationImpl::handleErrorPacket(
 
 void TftpServerOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
-  const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+  const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_TRIVIAL( info) <<
     "RX ERROR: " << optionsAcknowledgementPacket.toString();
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "OACK not expected"));
 
@@ -300,7 +300,7 @@ void TftpServerOperationImpl::handleInvalidPacket(
 {
   BOOST_LOG_TRIVIAL( info) << "RX: UNKNOWN";
 
-  send( Packet::ErrorPacket(
+  send( Packets::ErrorPacket(
     ErrorCode::ILLEGAL_TFTP_OPERATION,
     "Invalid packet not expected"));
 

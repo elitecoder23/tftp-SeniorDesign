@@ -19,7 +19,7 @@
 
 #include <tftp/server/Server.hpp>
 
-#include <tftp/packet/Packet.hpp>
+#include <tftp/packets/Packets.hpp>
 
 #include <tftp/options/OptionList.hpp>
 
@@ -99,7 +99,7 @@ class TftpServerOperationImpl: protected PacketHandler
      *
      * @throw CommunicationException
      **/
-    void send( const Packet::TftpPacket &packet);
+    void send( const Packets::TftpPacket &packet);
 
     /**
      * @brief receives a packet and calls the packet handlers
@@ -144,7 +144,7 @@ class TftpServerOperationImpl: protected PacketHandler
      **/
     virtual void handleReadRequestPacket(
       const UdpAddressType &from,
-      const Packet::ReadRequestPacket &readRequestPacket) final;
+      const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
      * @copydoc PacketHandler::handleWriteRequestPacket
@@ -154,7 +154,7 @@ class TftpServerOperationImpl: protected PacketHandler
      **/
     virtual void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const Packet::WriteRequestPacket &writeRequestPacket) final;
+      const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
      * @copydoc PacketHandler::handleErrorPacket()
@@ -163,7 +163,7 @@ class TftpServerOperationImpl: protected PacketHandler
      **/
     virtual void handleErrorPacket(
       const UdpAddressType &from,
-      const Packet::ErrorPacket &errorPacket) final;
+      const Packets::ErrorPacket &errorPacket) final;
 
     /**
      * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
@@ -173,7 +173,7 @@ class TftpServerOperationImpl: protected PacketHandler
      **/
     virtual void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packet::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
         final;
 
     /**
