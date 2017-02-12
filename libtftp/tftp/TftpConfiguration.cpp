@@ -35,7 +35,7 @@ TftpConfiguration::TftpConfiguration( const ptree &properties) :
 
   blockSizeOption( properties.get_optional< uint16_t>( "option.blockSize.value")),
 
-  timeoutOption( properties.get_optional< uint16_t>( "option.timeout.value"))
+  timeoutOption( properties.get_optional< uint8_t>( "option.timeout.value"))
 {
 }
 
@@ -90,7 +90,7 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
     boost::program_options::value< uint16_t>()->implicit_value(
       DefaultTftpReceiveTimeout)->notifier(
       [this]( const uint16_t &value){
-        this->timeoutOption = value;
+        this->timeoutOption = static_cast< uint8_t>( value);
     }),
     "If set handles the timeout option negotiation."
   )
