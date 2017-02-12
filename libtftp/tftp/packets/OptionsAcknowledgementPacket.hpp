@@ -16,7 +16,7 @@
 #define TFTP_PACKETS_OPTIONSACKNOWLEDGEMENTPACKET_HPP
 
 #include <tftp/packets/Packets.hpp>
-#include <tftp/packets/TftpPacket.hpp>
+#include <tftp/packets/Packet.hpp>
 #include <tftp/options/OptionList.hpp>
 
 #include <map>
@@ -37,7 +37,7 @@ namespace Packets {
  * | 2 B  |  str  | 1 B |  str   | 1 B |     |  str  | 1 B |  str   | 1 B |
  *
  **/
-class OptionsAcknowledgementPacket: public TftpPacket
+class OptionsAcknowledgementPacket: public Packet
 {
   public:
     OptionsAcknowledgementPacket( const Options::OptionList &options) noexcept;
@@ -98,12 +98,12 @@ class OptionsAcknowledgementPacket: public TftpPacket
     void setOption( const string &name, const string &value);
 
     /**
-     * @copydoc TftpPacket::encode()
+     * @copydoc Packet::encode()
      **/
     virtual RawTftpPacketType encode() const override;
 
     /**
-     * @copydoc TftpPacket::toString()
+     * @copydoc Packet::toString()
      **/
     virtual string toString() const override;
 

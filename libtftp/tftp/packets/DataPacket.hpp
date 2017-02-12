@@ -18,7 +18,7 @@
 #define TFTP_PACKETS_DATAPACKET_HPP
 
 #include <tftp/packets/Packets.hpp>
-#include <tftp/packets/TftpPacket.hpp>
+#include <tftp/packets/Packet.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
 #include <vector>
@@ -34,7 +34,7 @@ namespace Packets {
  * |:----:|:-------:|:------:|
  * |  2 B |   2 B   |  n B   |
  **/
-class DataPacket: public TftpPacket
+class DataPacket: public Packet
 {
   public:
     //! Data type
@@ -135,10 +135,10 @@ class DataPacket: public TftpPacket
      **/
     size_t getDataSize() const;
 
-    //! @copydoc TftpPacket::encode()
+    //! @copydoc Packet::encode()
     virtual RawTftpPacketType encode() const override;
 
-    //! @copydoc TftpPacket::toString()
+    //! @copydoc Packet::toString()
     virtual string toString() const override;
 
   private:

@@ -11,10 +11,10 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class TftpPacket.
+ * @brief Definition of class Tftp::Packets::Packet.
  **/
 
-#include "TftpPacket.hpp"
+#include "Packet.hpp"
 
 #include <tftp/TftpException.hpp>
 
@@ -24,7 +24,7 @@
 namespace Tftp {
 namespace Packets {
 
-PacketType TftpPacket::getPacketType(
+PacketType Packet::getPacketType(
 	const RawTftpPacketType &rawPacket) noexcept
 {
   // check minimum data size.
@@ -61,12 +61,12 @@ PacketType TftpPacket::getPacketType(
   return static_cast< PacketType>( opcode);
 }
 
-PacketType TftpPacket::getPacketType() const
+PacketType Packet::getPacketType() const
 {
   return packetType;
 }
 
-TftpPacket::string TftpPacket::toString() const
+Packet::string Packet::toString() const
 {
   switch (packetType)
   {
@@ -93,12 +93,12 @@ TftpPacket::string TftpPacket::toString() const
   }
 }
 
-TftpPacket::TftpPacket( const PacketType packetType) noexcept:
+Packet::Packet( const PacketType packetType) noexcept:
   packetType( packetType)
 {
 }
 
-TftpPacket::TftpPacket(
+Packet::Packet(
   const PacketType expectedPacketType,
   const RawTftpPacketType &rawPacket):
   packetType( expectedPacketType)
@@ -123,12 +123,12 @@ TftpPacket::TftpPacket(
   }
 }
 
-void TftpPacket::setPacketType( const PacketType packetType)
+void Packet::setPacketType( const PacketType packetType)
 {
   this->packetType = packetType;
 }
 
-void TftpPacket::insertHeader( RawTftpPacketType &rawPacket) const
+void Packet::insertHeader( RawTftpPacketType &rawPacket) const
 {
   assert( rawPacket.size() >= TFTP_PACKET_HEADER_SIZE);
 

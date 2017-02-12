@@ -18,7 +18,7 @@
 #define TFTP_PACKETS_BASEERRORPACKET_HPP
 
 #include <tftp/packets/Packets.hpp>
-#include <tftp/packets/TftpPacket.hpp>
+#include <tftp/packets/Packet.hpp>
 
 #include <string>
 
@@ -36,7 +36,7 @@ namespace Packets {
  * | 2 B |    2 B    |  str   | 1 B |
  *
  **/
-class BaseErrorPacket: public TftpPacket
+class BaseErrorPacket: public Packet
 {
   public:
     /**
@@ -90,10 +90,10 @@ class BaseErrorPacket: public TftpPacket
      **/
     virtual string getErrorMessage() const = 0;
 
-    //! @copydoc TftpPacket::encode()
+    //! @copydoc Packet::encode()
     virtual RawTftpPacketType encode() const override;
 
-    //! @copydoc TftpPacket::toString()
+    //! @copydoc Packet::toString()
     virtual string toString() const override;
 
   protected:

@@ -11,11 +11,11 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration/ definition of class Tftp::Packets::TftpPacketException.
+ * @brief Declaration/ definition of class Tftp::Packets::PacketException.
  **/
 
-#ifndef TFTP_PACKETS_TFTPPACKETEXCEPTION_HPP
-#define TFTP_PACKETS_TFTPPACKETEXCEPTION_HPP
+#ifndef TFTP_PACKETS_PACKETEXCEPTION_HPP
+#define TFTP_PACKETS_PACKETEXCEPTION_HPP
 
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpException.hpp>

@@ -150,7 +150,7 @@ void TftpServerOperationImpl::finished() noexcept
   ioService.stop();
 }
 
-void TftpServerOperationImpl::send( const Packets::TftpPacket &packet)
+void TftpServerOperationImpl::send( const Packets::Packet &packet)
 {
   BOOST_LOG_TRIVIAL( info) << "TX: " << packet.toString();
 

@@ -48,14 +48,14 @@ BaseErrorPacket::string BaseErrorPacket::getErrorCodeString( ErrorCode errorCode
 }
 
 BaseErrorPacket::BaseErrorPacket( const ErrorCode errorCode) noexcept:
-  TftpPacket( PacketType::Error),
+  Packet( PacketType::Error),
   errorCode( errorCode)
 {
 }
 
 BaseErrorPacket::BaseErrorPacket(
   const RawTftpPacketType &rawPacket):
-  TftpPacket( PacketType::Error, rawPacket)
+  Packet( PacketType::Error, rawPacket)
 {
   // check size
   if (rawPacket.size() < 5)

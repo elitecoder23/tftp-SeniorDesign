@@ -27,14 +27,14 @@ namespace Packets {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   const Options::OptionList &options) noexcept:
-  TftpPacket( PacketType::OptionsAcknowledgement),
+  Packet( PacketType::OptionsAcknowledgement),
   options( options)
 {
 }
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   const RawTftpPacketType &rawPacket):
-  TftpPacket( PacketType::OptionsAcknowledgement, rawPacket)
+  Packet( PacketType::OptionsAcknowledgement, rawPacket)
 {
   // check size
   if (rawPacket.size() <= 2)

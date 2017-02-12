@@ -11,11 +11,11 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::Packets::TftpPacket.
+ * @brief Declaration of class Tftp::Packets::Packet.
  **/
 
-#ifndef TFTP_PACKETS_TFTPPACKET_HPP
-#define TFTP_PACKETS_TFTPPACKET_HPP
+#ifndef TFTP_PACKETS_PACKET_HPP
+#define TFTP_PACKETS_PACKET_HPP
 
 #include <tftp/packets/Packets.hpp>
 
@@ -27,7 +27,7 @@ namespace Packets {
 /**
  * @brief Base-class of all TFTP packets.
  **/
-class TftpPacket
+class Packet
 {
   public:
     using string = std::string;
@@ -67,19 +67,19 @@ class TftpPacket
     virtual RawTftpPacketType encode() const = 0;
 
     //! default copy constructor
-    TftpPacket( const TftpPacket &other) = default;
+    Packet( const Packet &other) = default;
 
     //! default move constructor
-    TftpPacket( TftpPacket &&other) = default;
+    Packet( Packet &&other) = default;
 
     //! default copy assignment operator
-    TftpPacket& operator=( const TftpPacket &other) = default;
+    Packet& operator=( const Packet &other) = default;
 
     //! default copy move operator
-    TftpPacket& operator=( TftpPacket &&other) = default;
+    Packet& operator=( Packet &&other) = default;
 
     //! Default destructor
-    virtual ~TftpPacket() noexcept = default;
+    virtual ~Packet() noexcept = default;
 
     /**
      * @brief Returns a string, which describes the packet.
@@ -97,7 +97,7 @@ class TftpPacket
      * @param[in] packetType
      *   The packet type of the packet.
      **/
-    TftpPacket( PacketType packetType) noexcept;
+    Packet( PacketType packetType) noexcept;
 
     /**
      * @brief Generates a basic TFTP packet from a data buffer
@@ -112,7 +112,7 @@ class TftpPacket
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    TftpPacket(
+    Packet(
       PacketType expectedPacketType,
       const RawTftpPacketType &rawPacket);
 

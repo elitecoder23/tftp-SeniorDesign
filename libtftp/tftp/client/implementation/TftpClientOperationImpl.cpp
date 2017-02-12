@@ -194,7 +194,7 @@ void TftpClientOperationImpl::finished() noexcept
   ioService.stop();
 }
 
-void TftpClientOperationImpl::sendFirst( const TftpPacket &packet)
+void TftpClientOperationImpl::sendFirst( const Packets::Packet &packet)
 {
   BOOST_LOG_FUNCTION();
 
@@ -226,7 +226,7 @@ void TftpClientOperationImpl::sendFirst( const TftpPacket &packet)
   }
 }
 
-void TftpClientOperationImpl::send( const TftpPacket &packet)
+void TftpClientOperationImpl::send( const Packets::Packet &packet)
 {
   BOOST_LOG_FUNCTION();
 

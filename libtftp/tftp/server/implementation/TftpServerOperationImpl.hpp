@@ -99,7 +99,7 @@ class TftpServerOperationImpl: protected PacketHandler
      *
      * @throw CommunicationException
      **/
-    void send( const Packets::TftpPacket &packet);
+    void send( const Packets::Packet &packet);
 
     /**
      * @brief receives a packet and calls the packet handlers

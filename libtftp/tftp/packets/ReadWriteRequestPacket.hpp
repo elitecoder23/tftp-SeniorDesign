@@ -18,7 +18,7 @@
 #define TFTP_PACKETS_READWRITEREQUESTPACKET_HPP
 
 #include <tftp/packets/Packets.hpp>
-#include <tftp/packets/TftpPacket.hpp>
+#include <tftp/packets/Packet.hpp>
 #include <tftp/options/OptionList.hpp>
 
 #include <map>
@@ -34,7 +34,7 @@ namespace Packets {
  * |:-------:|:-----:|:---:|:----:|:---:|:-----:|:---:|:------:|:---:|:---:|:-----:|:---:|:------:|:---:|
  * |   2 B   |  str  | 1 B | str  | 1 B |  str  | 1 B |   str  | 1 B |     |  str  | 1 B |  str   | 1 B |
  **/
-class ReadWriteRequestPacket: public TftpPacket
+class ReadWriteRequestPacket: public Packet
 {
   public:
     /**
@@ -150,12 +150,12 @@ class ReadWriteRequestPacket: public TftpPacket
     void setOption( const string &name, const string &value);
 
     /**
-     * @copydoc TftpPacket::encode()
+     * @copydoc Packet::encode()
      **/
     virtual RawTftpPacketType encode() const override;
 
     /**
-     * @copydoc TftpPacket::toString()
+     * @copydoc Packet::toString()
      **/
     virtual string toString() const override;
 

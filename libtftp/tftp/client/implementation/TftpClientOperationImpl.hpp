@@ -87,7 +87,6 @@ class TftpClientOperationImpl :
 
   protected:
     using OptionList = Options::OptionList;
-    using TftpPacket = Packets::TftpPacket;
 
     /**
      * @brief Constructor of TftpClientOperation
@@ -153,7 +152,7 @@ class TftpClientOperationImpl :
      * @param[in] packet
      *   The TFTP packet to send.
      **/
-    void sendFirst( const TftpPacket &packet);
+    void sendFirst( const Packets::Packet &packet);
 
     /**
      * @brief Sends the packet to the TFTp server.
@@ -161,7 +160,7 @@ class TftpClientOperationImpl :
      * @param[in] packet
      *   The TFTP packet to send.
      **/
-    void send( const TftpPacket &packet);
+    void send( const Packets::Packet &packet);
 
     /**
      * @brief Waits for an incoming response from the server.

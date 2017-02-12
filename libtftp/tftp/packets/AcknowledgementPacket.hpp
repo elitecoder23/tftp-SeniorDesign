@@ -18,7 +18,7 @@
 #define TFTP_PACKETS_ACKNOWLEDGEMENTPACKET_HPP
 
 #include <tftp/packets/Packets.hpp>
-#include <tftp/packets/TftpPacket.hpp>
+#include <tftp/packets/Packet.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
 namespace Tftp {
@@ -34,7 +34,7 @@ namespace Packets {
  * |:---:|:-------:|
  * | 2 B |   2 B   |
  **/
-class AcknowledgementPacket: public TftpPacket
+class AcknowledgementPacket: public Packet
 {
   public:
     /**
@@ -76,10 +76,10 @@ class AcknowledgementPacket: public TftpPacket
      **/
     void setBlockNumber( const BlockNumber blockBumber);
 
-    //! @copydoc TftpPacket::encode()
+    //! @copydoc Packet::encode()
     virtual RawTftpPacketType encode() const override final;
 
-    //! @copydoc TftpPacket::toString()
+    //! @copydoc Packet::toString()
     virtual string toString() const override final;
 
   private:

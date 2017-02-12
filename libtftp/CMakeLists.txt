@@ -40,6 +40,9 @@ add_library(
   tftp/packets/ErrorPacket.cpp
   tftp/packets/OptionsAcknowledgementPacket.hpp
   tftp/packets/OptionsAcknowledgementPacket.cpp
+  tftp/packets/Packet.hpp
+  tftp/packets/Packet.cpp
+  tftp/packets/PacketException.hpp
   tftp/packets/PacketFactory.hpp
   tftp/packets/PacketFactory.cpp
   tftp/packets/Packets.hpp
@@ -47,9 +50,6 @@ add_library(
   tftp/packets/ReadRequestPacket.cpp
   tftp/packets/ReadWriteRequestPacket.hpp
   tftp/packets/ReadWriteRequestPacket.cpp
-  tftp/packets/TftpPacket.hpp
-  tftp/packets/TftpPacket.cpp
-  tftp/packets/TftpPacketException.hpp
   tftp/packets/WriteRequestPacket.hpp
   tftp/packets/WriteRequestPacket.cpp
   

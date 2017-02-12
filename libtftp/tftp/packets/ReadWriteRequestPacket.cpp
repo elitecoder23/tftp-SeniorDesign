@@ -170,7 +170,7 @@ Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
 ReadWriteRequestPacket::string ReadWriteRequestPacket::toString() const
 {
   return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
-    TftpPacket::toString() %
+    Packet::toString() %
     getFilename() %
     getMode( getMode()) %
     getOptions().toString()).str();
@@ -181,7 +181,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   const string &filename,
   const TransferMode mode,
   const Options::OptionList &options):
-  TftpPacket( packetType),
+  Packet( packetType),
   filename( filename),
   mode( getMode( mode)),
   options( options)
@@ -202,7 +202,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
   const RawTftpPacketType &rawPacket):
-  TftpPacket( packetType, rawPacket)
+  Packet( packetType, rawPacket)
 {
   switch (packetType)
   {

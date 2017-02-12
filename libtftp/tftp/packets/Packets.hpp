@@ -14,8 +14,8 @@
  * @brief Declaration of the Tftp::Packets namespace.
  **/
 
-#ifndef TFTP_PACKETS_PACKET_HPP
-#define TFTP_PACKETS_PACKET_HPP
+#ifndef TFTP_PACKETS_PACKETS_HPP
+#define TFTP_PACKETS_PACKETS_HPP
 
 #include <tftp/Tftp.hpp>
 
@@ -30,7 +30,7 @@ namespace Tftp {
  **/
 namespace Packets {
 
-class TftpPacket;
+class Packet;
 class ReadRequestPacket;
 class WriteRequestPacket;
 class DataPacket;
