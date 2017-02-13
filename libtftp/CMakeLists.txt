@@ -103,7 +103,7 @@ add_library(
 
 target_include_directories( tftp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries( tftp helper ${Boost_LIBRARIES})
+target_link_libraries( tftp helper Boost::boost Boost::program_options)
 
 # Add winsock for windows targets
 if(WIN32)

@@ -16,9 +16,6 @@ find_package(
   REQUIRED
   COMPONENTS
   program_options
-  system
-  log_setup
-  log
   filesystem
   thread
   chrono)
@@ -36,5 +33,8 @@ target_link_libraries(
   helper 
   boost_application
   
-  ${Boost_LIBRARIES}
-  ${BOOST_THREAD_LIBRARY})
+  Boost::boost
+  Boost::program_options
+  Boost::filesystem
+  Boost::thread
+  Boost::chrono)

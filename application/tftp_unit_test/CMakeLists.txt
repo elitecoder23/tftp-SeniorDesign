@@ -17,6 +17,6 @@ add_executable(
   $<TARGET_OBJECTS:tftp_test>
   tftp_unit_test.cpp)
 
-target_link_libraries( tftp_unit_test tftp)
+target_link_libraries( tftp_unit_test tftp Boost::boost)
 
 add_test( NAME tftp_unit_test COMMAND tftp_unit_test)
