@@ -16,9 +16,8 @@
 
 #include "ErrorOperation.hpp"
 
+#include <tftp/TftpLogger.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
-
-#include <helper/Logger.hpp>
 
 namespace Tftp {
 namespace Server {

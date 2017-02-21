@@ -17,11 +17,11 @@
 #include "WriteRequestOperationImpl.hpp"
 
 #include <tftp/TftpException.hpp>
+#include <tftp/TftpLogger.hpp>
 #include <tftp/TransmitDataOperationHandler.hpp>
 #include <tftp/packets/PacketFactory.hpp>
 
 #include <helper/Dump.hpp>
-#include <helper/Logger.hpp>
 
 namespace Tftp {
 namespace Client {
@@ -132,7 +132,7 @@ void WriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( dataPacket);
 
   send( Packets::ErrorPacket(
@@ -152,13 +152,13 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
 	const UdpAddressType &,
 	const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
   if (acknowledgementPacket.getBlockNumber() == lastTransmittedBlockNumber.previous())
   {
-    BOOST_LOG_TRIVIAL( info) <<
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
       "Received previous ACK packet: retry of last data package - "
       "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
@@ -168,7 +168,8 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
   // check invalid block number
   if (acknowledgementPacket.getBlockNumber() != lastTransmittedBlockNumber)
   {
-    BOOST_LOG_TRIVIAL( error) << "Invalid block number received";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "Invalid block number received";
 
     send( Packets::ErrorPacket(
       ErrorCode::IllegalTftpOperation,
@@ -201,7 +202,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
   OptionList options( optionsAcknowledgementPacket.getOptions());
@@ -209,7 +210,8 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   // check empty options
   if (options.getOptions().empty())
   {
-    BOOST_LOG_TRIVIAL( error) << "Received option list is empty";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "Received option list is empty";
 
     send( Packets::ErrorPacket(
       ErrorCode::IllegalTftpOperation,
@@ -225,7 +227,8 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   OptionList negotiatedOptions = getOptions().negotiateClient( options);
   if (negotiatedOptions.getOptions().empty())
   {
-    BOOST_LOG_TRIVIAL( error) << "Option negotiation failed";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "Option negotiation failed";
 
     send( Packets::ErrorPacket(
       ErrorCode::TftpOptionRefused,

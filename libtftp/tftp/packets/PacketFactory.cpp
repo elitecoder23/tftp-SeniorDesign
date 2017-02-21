@@ -16,8 +16,6 @@
 
 #include "PacketFactory.hpp"
 
-#include <helper/Logger.hpp>
-
 namespace Tftp {
 namespace Packets {
 

@@ -16,9 +16,10 @@
 
 #include "OptionList.hpp"
 
+#include <tftp/TftpException.hpp>
+#include <tftp/TftpLogger.hpp>
 #include <tftp/options/IntegerOption.hpp>
 #include <tftp/options/StringOption.hpp>
-#include <tftp/TftpException.hpp>
 
 #include <helper/Logger.hpp>
 

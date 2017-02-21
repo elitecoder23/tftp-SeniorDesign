@@ -16,6 +16,7 @@
 
 #include "WriteRequestOperationImpl.hpp"
 
+#include <tftp/TftpLogger.hpp>
 #include <tftp/TftpException.hpp>
 #include <tftp/ReceiveDataOperationHandler.hpp>
 
@@ -23,8 +24,6 @@
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
-
-#include <helper/Logger.hpp>
 
 namespace Tftp {
 namespace Server {
@@ -128,12 +127,14 @@ void WriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<< "RX: " << static_cast< std::string>( dataPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "RX: " << static_cast< std::string>( dataPacket);
 
   // Check retransmission
   if (dataPacket.getBlockNumber() == lastReceivedBlockNumber)
   {
-    BOOST_LOG_TRIVIAL( info) << "Retransmission of last packet - only send ACK";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+      "Retransmission of last packet - only send ACK";
 
     send( Packets::AcknowledgementPacket( lastReceivedBlockNumber));
 
@@ -143,7 +144,8 @@ void WriteRequestOperationImpl::handleDataPacket(
   // check not expected block
   if (dataPacket.getBlockNumber() != lastReceivedBlockNumber.next())
   {
-    BOOST_LOG_TRIVIAL( error) << "Unexpected packet";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "Unexpected packet";
 
     send( Packets::ErrorPacket(
       ErrorCode::IllegalTftpOperation,
@@ -160,7 +162,8 @@ void WriteRequestOperationImpl::handleDataPacket(
   // check for too much data
   if (dataPacket.getDataSize() > receiveDataSize)
   {
-    BOOST_LOG_TRIVIAL( error) << "Too much data received";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "Too much data received";
 
     send( Packets::ErrorPacket(
       ErrorCode::IllegalTftpOperation,
@@ -199,7 +202,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( error) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
     static_cast< std::string>( acknowledgementPacket);
 
   send( Packets::ErrorPacket(

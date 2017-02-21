@@ -19,7 +19,6 @@
 #include <tftp/packets/ReadRequestPacket.hpp>
 
 #include <helper/Dump.hpp>
-#include <helper/Logger.hpp>
 
 #include <iostream>
 

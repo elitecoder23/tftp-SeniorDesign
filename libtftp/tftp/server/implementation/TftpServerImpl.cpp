@@ -23,8 +23,6 @@
 #include <tftp/server/implementation/WriteRequestOperationImpl.hpp>
 #include <tftp/server/implementation/ErrorOperation.hpp>
 
-#include <helper/Logger.hpp>
-
 #include <boost/bind.hpp>
 
 #include <vector>
@@ -87,7 +85,7 @@ TftpServerImpl::~TftpServerImpl() noexcept
   catch ( boost::system::system_error &err)
   {
     // do not throw an exception within the constructor
-    BOOST_LOG_TRIVIAL( error)<< err.what();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)<< err.what();
   }
 }
 
@@ -256,7 +254,8 @@ void TftpServerImpl::receiveHandler(
   // Check error
   if ( errorCode)
   {
-    BOOST_LOG_TRIVIAL( error)<< "receive error: " + errorCode.message();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "receive error: " + errorCode.message();
 
     //! @throw CommunicationException On communication failure.
     BOOST_THROW_EXCEPTION( CommunicationException() <<
@@ -273,7 +272,8 @@ void TftpServerImpl::receiveHandler(
   }
   catch ( TftpException &e)
   {
-    BOOST_LOG_TRIVIAL( error)<< "TFTP exception: " << e.what();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "TFTP exception: " << e.what();
   }
 
   receive();
@@ -283,13 +283,13 @@ void TftpServerImpl::handleReadRequestPacket(
   const UdpAddressType &from,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<< "RX: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)<< "RX: " <<
     static_cast< std::string>( readRequestPacket);
 
   // check handler
   if (!handler)
   {
-    BOOST_LOG_TRIVIAL( info) <<
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
     "No registered handler - reject";
 
     auto operation( createErrorOperation(
@@ -314,13 +314,14 @@ void TftpServerImpl::handleWriteRequestPacket(
   const UdpAddressType &from,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<< "RX: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)<< "RX: " <<
     static_cast< std::string>( writeRequestPacket);
 
   // check handler
   if (!handler)
   {
-    BOOST_LOG_TRIVIAL( info) << "No registered handler - reject";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+      << "No registered handler - reject";
 
     auto operation( createErrorOperation(
       from,
@@ -344,7 +345,7 @@ void TftpServerImpl::handleDataPacket(
   const UdpAddressType &from,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_TRIVIAL( info)<< "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( dataPacket);
 
   auto operation( createErrorOperation(
@@ -360,7 +361,7 @@ void TftpServerImpl::handleAcknowledgementPacket(
   const UdpAddressType &from,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( acknowledgementPacket);
 
   auto operation( createErrorOperation(
@@ -392,7 +393,7 @@ void TftpServerImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &from,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
   auto operation( createErrorOperation(

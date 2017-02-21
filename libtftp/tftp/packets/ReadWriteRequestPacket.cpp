@@ -19,7 +19,6 @@
 #include <tftp/TftpException.hpp>
 
 #include <helper/Endianess.hpp>
-#include <helper/Logger.hpp>
 
 #include <algorithm>
 

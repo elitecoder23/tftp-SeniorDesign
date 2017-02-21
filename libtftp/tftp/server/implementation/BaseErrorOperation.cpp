@@ -15,8 +15,10 @@
  **/
 
 #include "BaseErrorOperation.hpp"
-#include <tftp/packets/BaseErrorPacket.hpp>
+
 #include <tftp/TftpException.hpp>
+#include <tftp/TftpLogger.hpp>
+#include <tftp/packets/BaseErrorPacket.hpp>
 
 #include <helper/Logger.hpp>
 

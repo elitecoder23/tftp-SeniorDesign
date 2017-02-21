@@ -17,13 +17,12 @@
 #include "ReadRequestOperationImpl.hpp"
 
 #include <tftp/TftpException.hpp>
+#include <tftp/TftpLogger.hpp>
 #include <tftp/TransmitDataOperationHandler.hpp>
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
-
-#include <helper/Logger.hpp>
 
 namespace Tftp {
 namespace Server {
@@ -146,7 +145,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_TRIVIAL( error)<< "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
     static_cast< std::string>( dataPacket);
 
   send( Packets::ErrorPacket(
@@ -166,13 +165,13 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
   if (acknowledgementPacket.getBlockNumber() == lastTransmittedBlockNumber.previous())
   {
-    BOOST_LOG_TRIVIAL( info) <<
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
       "Received previous ACK packet: retry of last data package - "
       "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
@@ -182,7 +181,8 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
   // check invalid block number
   if (acknowledgementPacket.getBlockNumber() != lastTransmittedBlockNumber)
   {
-    BOOST_LOG_TRIVIAL( error) << "Invalid block number received";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "Invalid block number received";
 
     send( Packets::ErrorPacket(
       ErrorCode::IllegalTftpOperation,

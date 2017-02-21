@@ -16,8 +16,6 @@
 
 #include <tftp/options/IntegerOption.hpp>
 
-#include <helper/Logger.hpp>
-
 #include <boost/test/unit_test.hpp>
 #include <cstdint>
 

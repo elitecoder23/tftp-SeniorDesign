@@ -17,9 +17,9 @@
 #include "Packet.hpp"
 
 #include <tftp/TftpException.hpp>
+#include <tftp/TftpLogger.hpp>
 
 #include <helper/Endianess.hpp>
-#include <helper/Logger.hpp>
 
 namespace Tftp {
 namespace Packets {
@@ -30,7 +30,8 @@ PacketType Packet::getPacketType(
   // check minimum data size.
   if (rawPacket.size() < HeaderSize)
   {
-    BOOST_LOG_TRIVIAL( error) << "Packet to small";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "Packet to small";
     return PacketType::Invalid;
   }
 
@@ -54,7 +55,8 @@ PacketType Packet::getPacketType(
 
     default:
       // return INVALID for invalid values
-      BOOST_LOG_TRIVIAL( error) << "Invalid opcode " << std::hex << opcode;
+      BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+        "Invalid opcode " << std::hex << opcode;
       return PacketType::Invalid;
   }
 

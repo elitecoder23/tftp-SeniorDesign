@@ -16,7 +16,7 @@
 
 #include "StringOption.hpp"
 
-#include <helper/Logger.hpp>
+#include <tftp/TftpLogger.hpp>
 
 namespace Tftp {
 namespace Options {
@@ -40,7 +40,7 @@ StringOption& StringOption::operator=( const string &value)
 
 OptionPtr StringOption::negotiate( const string &) const noexcept
 {
-  BOOST_LOG_TRIVIAL( error) <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
     "Its not possible to use StringOption for negotiation";
 
   return OptionPtr();

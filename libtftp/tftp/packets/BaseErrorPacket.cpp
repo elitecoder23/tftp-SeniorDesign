@@ -20,7 +20,6 @@
 #include <tftp/ErrorCodeDescription.hpp>
 
 #include <helper/Endianess.hpp>
-#include <helper/Logger.hpp>
 
 #include <map>
 

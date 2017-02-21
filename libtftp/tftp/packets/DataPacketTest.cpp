@@ -19,7 +19,6 @@
 #include <tftp/packets/DataPacket.hpp>
 
 #include <helper/Dump.hpp>
-#include <helper/Logger.hpp>
 
 #include <iostream>
 

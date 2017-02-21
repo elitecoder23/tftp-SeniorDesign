@@ -16,9 +16,8 @@
 
 #include <tftp/options/StringOption.hpp>
 
-#include <helper/Logger.hpp>
-
 #include <boost/test/unit_test.hpp>
+
 #include <cstdint>
 
 namespace Tftp {

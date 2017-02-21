@@ -16,6 +16,7 @@
 
 #include "OperationImpl.hpp"
 
+#include <tftp/TftpLogger.hpp>
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
 
@@ -25,8 +26,6 @@
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
 #include <tftp/server/implementation/TftpServerInternal.hpp>
-
-#include <helper/Logger.hpp>
 
 #include <boost/bind.hpp>
 
@@ -153,7 +152,7 @@ OperationImpl::~OperationImpl() noexcept
   }
   catch (boost::system::system_error &err)
   {
-    BOOST_LOG_TRIVIAL( error) << err.what();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << err.what();
   }
 }
 
@@ -164,7 +163,8 @@ void OperationImpl::finished() noexcept
 
 void OperationImpl::send( const Packets::Packet &packet)
 {
-  BOOST_LOG_TRIVIAL( info) << "TX: " << static_cast< std::string>( packet);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "TX: "
+    << static_cast< std::string>( packet);
 
   // Reset the transmit counter
   transmitCounter = 1;
@@ -238,7 +238,7 @@ void OperationImpl::handleReadRequestPacket(
   const UdpAddressType &,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( readRequestPacket);
 
   send( Packets::ErrorPacket(
@@ -258,7 +258,7 @@ void OperationImpl::handleWriteRequestPacket(
   const UdpAddressType &,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( writeRequestPacket);
 
   send( Packets::ErrorPacket(
@@ -278,7 +278,7 @@ void OperationImpl::handleErrorPacket(
   const UdpAddressType &,
   const Packets::ErrorPacket &errorPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( errorPacket);
 
   //! @throw ErrorReceivedException Always, because this is an error.
@@ -293,7 +293,7 @@ void OperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
   send( Packets::ErrorPacket(
@@ -313,7 +313,7 @@ void OperationImpl::handleInvalidPacket(
   const UdpAddressType &,
   const RawTftpPacketType &)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX: UNKNOWN";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: UNKNOWN";
 
   send( Packets::ErrorPacket(
     ErrorCode::IllegalTftpOperation,
@@ -337,7 +337,8 @@ void OperationImpl::receiveHandler(
   // Check error
   if (errorCode)
   {
-    BOOST_LOG_TRIVIAL( error) << "receive error: " << errorCode.message();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "receive error: " << errorCode.message();
 
     //! @throw CommunicationException On communication failure.
     BOOST_THROW_EXCEPTION( CommunicationException() <<
@@ -362,7 +363,8 @@ void OperationImpl::timeoutHandler(
 
   if (errorCode)
   {
-    BOOST_LOG_TRIVIAL( error) << "timer error: " << errorCode.message();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+      "timer error: " << errorCode.message();
 
     //! @throw CommunicationException On communication failure.
     BOOST_THROW_EXCEPTION( CommunicationException() <<
@@ -376,7 +378,8 @@ void OperationImpl::timeoutHandler(
       AdditionalInfo( "Retry counter exceeded ABORT"));
   }
 
-  BOOST_LOG_TRIVIAL( info) << "retransmit last packet";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "retransmit last packet";
 
   try
   {
