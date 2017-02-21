@@ -28,6 +28,7 @@ add_library(
   tftp/TftpConfiguration.hpp
   tftp/TftpConfiguration.cpp
   tftp/TftpException.hpp
+  tftp/TftpLogger.hpp
   tftp/TransmitDataOperationHandler.hpp
   
   tftp/packets/AcknowledgementPacket.hpp

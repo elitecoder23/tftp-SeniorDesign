@@ -17,6 +17,7 @@
 #include "TftpServerImpl.hpp"
 
 #include <tftp/TftpException.hpp>
+#include <tftp/TftpLogger.hpp>
 #include <tftp/packets/PacketFactory.hpp>
 #include <tftp/server/implementation/ReadRequestOperationImpl.hpp>
 #include <tftp/server/implementation/WriteRequestOperationImpl.hpp>
@@ -375,7 +376,7 @@ void TftpServerImpl::handleErrorPacket(
   const UdpAddressType &from,
   const Packets::ErrorPacket &errorPacket)
 {
-  BOOST_LOG_TRIVIAL( info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( errorPacket);
 
   auto operation( createErrorOperation(
@@ -407,7 +408,8 @@ void TftpServerImpl::handleInvalidPacket(
   const UdpAddressType &,
   const RawTftpPacketType &)
 {
-  BOOST_LOG_TRIVIAL( info)<<"RX: UNKNOWN: *ERROR* - IGNORE";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "RX: UNKNOWN: *ERROR* - IGNORE";
 }
 
 }
