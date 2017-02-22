@@ -20,8 +20,6 @@
 #include <tftp/TftpLogger.hpp>
 #include <tftp/packets/BaseErrorPacket.hpp>
 
-#include <helper/Logger.hpp>
-
 namespace Tftp {
 namespace Server {
 
@@ -45,7 +43,7 @@ BaseErrorOperation::~BaseErrorOperation() noexcept
   }
   catch ( boost::system::system_error &err)
   {
-    BOOST_LOG_TRIVIAL( error)<< err.what();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << err.what();
   }
 }
 

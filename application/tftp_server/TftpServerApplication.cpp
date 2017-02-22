@@ -71,7 +71,7 @@ int TftpServerApplication::operator()()
     // make a absolute path
     baseDir = boost::filesystem::canonical( baseDir);
 
-    BOOST_LOG_TRIVIAL( info) <<
+    std::cout <<
       "Starting TFTP server in " <<
       baseDir.string() <<
       " on port " <<
@@ -199,13 +199,13 @@ void TftpServerApplication::receivedRequest(
   const Tftp::Options::OptionList &options,
   const Tftp::UdpAddressType &from)
 {
-  BOOST_LOG_TRIVIAL( info) << "RQ: " << filename << " from: "
+  std::cout << "RQ: " << filename << " from: "
     << from.address().to_string();
 
   // Check transfer mode
   if ( mode != Tftp::TransferMode::OCTET)
   {
-    BOOST_LOG_TRIVIAL( error) << "Wrong transfer mode";
+    std::cerr << "Wrong transfer mode";
 
     auto operation = server->createErrorOperation(
       from,
@@ -219,7 +219,7 @@ void TftpServerApplication::receivedRequest(
 
   if (!checkFilename( (baseDir / filename).lexically_normal()))
   {
-    BOOST_LOG_TRIVIAL( error) << "Error filename check";
+    std::cerr << "Error filename check";
 
     auto operation = server->createErrorOperation(
       from,
@@ -260,7 +260,7 @@ void TftpServerApplication::transmitFile(
   // check that file was opened successfully
   if ( !fileStream.good())
   {
-    BOOST_LOG_TRIVIAL( error) << "Error opening file";
+    std::cerr << "Error opening file";
 
     auto operation = server->createErrorOperation(
       from,
@@ -300,7 +300,7 @@ void TftpServerApplication::receiveFile(
   // check that file was opened successfully
   if ( !fileStream.good())
   {
-    BOOST_LOG_TRIVIAL( error) << "Error opening file";
+    std::cerr << "Error opening file";
 
     auto operation = server->createErrorOperation(
       from,
