@@ -11,5 +11,6 @@ cmake_minimum_required( VERSION 3.7)
 
 project ( TFTP)
 
-add_subdirectory( libtftp)
+add_subdirectory( tftp)
+
 add_subdirectory( application)
