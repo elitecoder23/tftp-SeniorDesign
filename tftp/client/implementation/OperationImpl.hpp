@@ -65,24 +65,24 @@ class OperationImpl :
      **/
     virtual void operator()() override;
 
-    //! @copydoc TftpClientOperation::gracefulAbort
+    //! @copydoc Operation::gracefulAbort
     virtual void gracefulAbort(
       ErrorCode errorCode,
       const string &errorMessage = string()) override final;
 
-    //! @copydoc TftpClientOperation::abort
+    //! @copydoc Operation::abort
     virtual void abort() override final;
 
-    //! @copydoc TftpClientOperation::getRequestType
+    //! @copydoc Operation::getRequestType
     virtual RequestType getRequestType() const override final;
 
-    //! @copydoc TftpClientOperation::getServerAddress
+    //! @copydoc Operation::getServerAddress
     virtual const UdpAddressType& getServerAddress() const override final;
 
-    //! @copydoc TftpClientOperation::getFilename
+    //! @copydoc Operation::getFilename
     virtual const string& getFilename() const override final;
 
-    //! @copydoc TftpClientOperation::getMode
+    //! @copydoc Operation::getMode
     virtual TransferMode getMode() const override final;
 
   protected:
