@@ -81,7 +81,7 @@ class BaseErrorPacket: public Packet
     //! @copydoc Packet::encode()
     virtual RawTftpPacketType encode() const override;
 
-    //! @copydoc Packet::toString()
+    //! @copydoc Packet::operator string()
     virtual operator string() const override;
 
   protected:

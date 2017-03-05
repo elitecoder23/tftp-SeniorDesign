@@ -37,7 +37,7 @@ class ErrorCodeDescription : public Description<
 /**
  * @brief Parses the input stream as request type and returns them.
  *
- * @param[in] st
+ * @param[in] stream
  *   The input stream
  * @param[out] errorCode
  *   The decoded request type

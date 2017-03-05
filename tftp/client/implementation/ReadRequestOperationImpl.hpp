@@ -81,7 +81,7 @@ class ReadRequestOperationImpl : public OperationImpl
       TransferMode mode);
 
     /**
-     * @copybrief TftpClientOperationImpl::operator()()
+     * @copybrief OperationImpl::operator()()
      *
      * Assembles and transmit TFTP RRQ packet and start parent receive loop.
      **/

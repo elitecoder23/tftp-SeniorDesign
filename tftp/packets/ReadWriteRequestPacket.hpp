@@ -155,7 +155,7 @@ class ReadWriteRequestPacket: public Packet
     virtual RawTftpPacketType encode() const override;
 
     /**
-     * @copydoc Packet::toString()
+     * @copydoc Packet::operator string()
      **/
     virtual operator string() const override;
 

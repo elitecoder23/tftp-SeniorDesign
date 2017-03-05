@@ -78,7 +78,7 @@ class WriteRequestOperationImpl : public OperationImpl
       TransferMode mode);
 
     /**
-     * @copybrief TftpClientOperationImpl::operator()()
+     * @copybrief OperationImpl::operator()()
      *
      * Assembles and transmit TFTP WRQ packet and start parent receive loop.
      **/
