@@ -56,10 +56,15 @@ add_library(
   packets/WriteRequestPacket.hpp
   packets/WriteRequestPacket.cpp
   
+  options/IntegerOption.hpp
+  options/Option.hpp
   options/Option.cpp
+  options/OptionList.hpp
   options/OptionList.cpp
+  options/Options.hpp
+  options/StringOption.hpp
   options/StringOption.cpp
-  
+
   file/File.hpp
   file/TftpFile.hpp
   file/MemoryFile.hpp
@@ -130,8 +135,4 @@ add_library(
 
 target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
-set( 
-  DOXYGEN_TAGFILES 
-  "libhelper.TAGFILE=../../libhelper/html")
-
-GENERATE_DOCUMENTATION()
+add_documentation( TARGET tftp)
