@@ -306,7 +306,8 @@ IntegerOption< IntT, NegotiateT>::IntegerOption(
 }
 
 template< typename IntT, typename NegotiateT>
-IntegerOption< IntT, NegotiateT>& IntegerOption< IntT, NegotiateT>::operator=( IntegerType value)
+IntegerOption< IntT, NegotiateT>& IntegerOption< IntT, NegotiateT>::operator=(
+  const IntegerType value)
 {
   BaseIntegerOption< IntT>::operator=( value);
   return *this;

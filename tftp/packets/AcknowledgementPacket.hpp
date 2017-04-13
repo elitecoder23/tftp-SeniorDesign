@@ -79,7 +79,7 @@ class AcknowledgementPacket: public Packet
     //! @copydoc Packet::encode()
     virtual RawTftpPacketType encode() const override final;
 
-    //! @copydoc Packet::operator string()
+    //! @copydoc Packet::operator string() const
     virtual operator string() const override final;
 
   private:

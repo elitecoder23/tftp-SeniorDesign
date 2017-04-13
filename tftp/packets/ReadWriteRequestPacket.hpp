@@ -72,7 +72,7 @@ class ReadWriteRequestPacket: public Packet
     const string& getFilename() const;
 
     /**
-     * @brief sets the filename
+     * @brief Sets the filename
      *
      * @param[in] filename
      *   The new filename.
@@ -155,7 +155,7 @@ class ReadWriteRequestPacket: public Packet
     virtual RawTftpPacketType encode() const override;
 
     /**
-     * @copydoc Packet::operator string()
+     * @copydoc Packet::operator string() const
      **/
     virtual operator string() const override;
 

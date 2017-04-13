@@ -103,7 +103,7 @@ class OptionsAcknowledgementPacket: public Packet
     virtual RawTftpPacketType encode() const override;
 
     /**
-     * @copydoc Packet::operator string()
+     * @copydoc Packet::operator string() const
      **/
     virtual operator string() const override;
 
