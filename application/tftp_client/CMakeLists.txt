@@ -38,3 +38,11 @@ target_link_libraries(
   Boost::filesystem
   Boost::thread
   Boost::chrono)
+
+# INSTALL
+include( GNUInstallDirs)
+
+install(
+  TARGETS tftp_client
+  COMPONENT runtime
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

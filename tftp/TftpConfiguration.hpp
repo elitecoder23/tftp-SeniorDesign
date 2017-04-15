@@ -109,6 +109,7 @@ class TftpConfiguration
     //! If handleTimeoutOption is set, this value is used for option negotiation
     boost::optional< uint8_t> timeoutOption;
 };
+
 }
 
 #endif

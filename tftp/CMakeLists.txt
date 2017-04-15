@@ -7,9 +7,9 @@
 # 
 # Thomas Vogt, Thomas@Thomas-Vogt.de
 
-cmake_minimum_required( VERSION 3.7)
+cmake_minimum_required( VERSION 3.8)
 
-project ( "TFTP library")
+project ( "TFTP library" VERSION 1.0)
 
 find_package( Boost REQUIRED COMPONENTS program_options)
 
@@ -107,9 +107,11 @@ add_library(
   server/implementation/WriteRequestOperationImpl.cpp
   )
 
-target_include_directories( tftp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..)
+target_include_directories( tftp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
 
-target_link_libraries( tftp helper Boost::boost Boost::program_options)
+target_link_libraries( tftp helper Boost::program_options)
+
+target_compile_features( tftp PUBLIC cxx_std_14)
 
 # Add winsock for windows targets
 if(WIN32)
@@ -136,3 +138,44 @@ add_library(
 target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
 add_documentation( TARGET tftp)
+
+# INSTALL
+include( GNUInstallDirs)
+
+install(
+  TARGETS tftp
+  COMPONENT runtime
+  EXPORT tftp-config 
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  COMPONENT development
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  FILES_MATCHING
+    PATTERN "*.hpp"
+    PATTERN "*Test.*" EXCLUDE
+    PATTERN "implementation" EXCLUDE)
+
+install(
+  DIRECTORY $<TARGET_PROPERTY:tftp_doc,DOCUMENTATION_OUTPUT_DIR>
+  COMPONENT documentation
+  DESTINATION ${CMAKE_INSTALL_DOCDIR})
+
+install(
+  FILES $<TARGET_PROPERTY:tftp_doc,DOCUMENTATION_HTML_FILE>
+  COMPONENT documentation
+  DESTINATION ${CMAKE_INSTALL_DOCDIR})
+
+install(
+  FILES $<TARGET_PROPERTY:tftp_doc,DOCUMENTATION_TAGFILE>
+  COMPONENT documentation
+  DESTINATION ${CMAKE_INSTALL_DOCDIR})
+
+install( 
+  EXPORT tftp-config 
+  COMPONENT development
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+
