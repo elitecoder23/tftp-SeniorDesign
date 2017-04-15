@@ -9,8 +9,6 @@
 
 cmake_minimum_required( VERSION 3.8)
 
-project ( "TFTP Library" VERSION 1.0)
-
 find_package( Boost REQUIRED COMPONENTS program_options)
 
 add_library(
@@ -137,7 +135,7 @@ add_library(
 
 target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
-add_documentation( TARGET tftp)
+add_documentation( TARGET tftp NAME "TFTP Library")
 
 # INSTALL
 include( GNUInstallDirs)

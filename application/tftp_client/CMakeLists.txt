@@ -7,9 +7,7 @@
 # 
 # Thomas Vogt, Thomas@Thomas-Vogt.de
 
-cmake_minimum_required( VERSION 3.7)
-
-project( "TFTP Client")
+cmake_minimum_required( VERSION 3.8)
 
 find_package( 
   Boost

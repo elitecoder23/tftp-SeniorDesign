@@ -6,11 +6,8 @@
 # $Revision$
 # Thomas Vogt, Thomas@Thomas-Vogt.de
 
-cmake_minimum_required( VERSION 3.7)
-
-project ( "TFTP Applications")
+cmake_minimum_required( VERSION 3.8)
 
 add_subdirectory( tftp_unit_test)
-
 add_subdirectory( tftp_client)
 add_subdirectory( tftp_server)
