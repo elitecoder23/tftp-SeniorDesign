@@ -61,7 +61,7 @@ int TftpServerApplication::operator()()
 {
   try
   {
-    std::cout << "TFTP server" << std::endl;
+    std::cout << "TFTP server\n";
 
     if ( !handleCommandLine())
     {
@@ -75,7 +75,7 @@ int TftpServerApplication::operator()()
       "Starting TFTP server in " <<
       baseDir.string() <<
       " on port " <<
-      configuration.tftpServerPort;
+      configuration.tftpServerPort << "\n";
 
     // The TFTP server instance
     server = Tftp::Server::TftpServer::createInstance(

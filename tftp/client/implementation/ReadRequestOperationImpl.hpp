@@ -52,12 +52,14 @@ class ReadRequestOperationImpl : public OperationImpl
      *   communication source
      **/
     ReadRequestOperationImpl(
+      boost::asio::io_service &ioService,
       ReceiveDataOperationHandler &handler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from);
+      const UdpAddressType &from,
+      TftpClient::OperationCompletedHandler operationCompletedHandler);
 
     /**
      * @brief Constructor of TftpClientReadOperation
@@ -74,11 +76,13 @@ class ReadRequestOperationImpl : public OperationImpl
      *   The transfer mode
      **/
     ReadRequestOperationImpl(
+      boost::asio::io_service &ioService,
       ReceiveDataOperationHandler &handler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode);
+      TransferMode mode,
+      TftpClient::OperationCompletedHandler operationCompletedHandler);
 
     /**
      * @copybrief OperationImpl::operator()()

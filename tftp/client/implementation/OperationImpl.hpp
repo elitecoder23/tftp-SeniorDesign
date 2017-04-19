@@ -18,9 +18,13 @@
 #define TFTP_CLIENT_OPERATIONIMPL_HPP
 
 #include <tftp/PacketHandler.hpp>
+
 #include <tftp/client/Client.hpp>
 #include <tftp/client/Operation.hpp>
+#include <tftp/client/TftpClient.hpp>
+
 #include <tftp/packets/Packets.hpp>
+
 #include <tftp/options/OptionList.hpp>
 
 #include <boost/asio.hpp>
@@ -105,12 +109,14 @@ class OperationImpl :
      *   Optional parameter to define the communication source
      **/
     OperationImpl(
+      boost::asio::io_service &ioService,
       RequestType requestType,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from);
+      const UdpAddressType &from,
+      TftpClient::OperationCompletedHandler operationCompletedHandler);
 
     /**
      * @brief Constructor of TftpClientOperation
@@ -127,11 +133,13 @@ class OperationImpl :
      *   The transfer mode
      **/
     OperationImpl(
+      boost::asio::io_service &ioService,
       RequestType requestType,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode);
+      TransferMode mode,
+      TftpClient::OperationCompletedHandler operationCompletedHandler);
 
     /**
      * @brief Returns the TFTP option list.
@@ -288,6 +296,7 @@ class OperationImpl :
     const string filename;
     //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
     const TransferMode mode;
+    TftpClient::OperationCompletedHandler operationCompletedHandler;
     //! options for the transfer
     OptionList options;
     /**
@@ -301,8 +310,6 @@ class OperationImpl :
     //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
     uint8_t receiveTimeout;
 
-    //! The IO service, which handles the asynchronous receive operation
-    boost::asio::io_service ioService;
     //! The TFTP socket
     boost::asio::ip::udp::socket socket;
     //! The receive timeout timer

@@ -22,6 +22,7 @@
 #include <tftp/options/Options.hpp>
 
 #include <string>
+#include <functional>
 
 namespace Tftp {
 namespace Client {
@@ -35,6 +36,8 @@ namespace Client {
 class TftpClient
 {
   public:
+    using OperationCompletedHandler = std::function< void()>;
+
     using string = std::string;
 
     /**
@@ -56,6 +59,10 @@ class TftpClient
     //! Default destructor
     virtual ~TftpClient() noexcept = default;
 
+    virtual void operator()() = 0;
+
+    virtual void stop() = 0;
+
     /**
      * @brief Creates an read request operation (TFTP RRQ).
      *
@@ -77,7 +84,8 @@ class TftpClient
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from) = 0;
+      const UdpAddressType &from,
+      OperationCompletedHandler = {}) = 0;
 
     /**
      * @brief Creates an read request operation (TFTP RRQ).
@@ -97,7 +105,8 @@ class TftpClient
       ReceiveDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode) = 0;
+      TransferMode mode,
+      OperationCompletedHandler = {}) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
@@ -120,7 +129,8 @@ class TftpClient
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from) = 0;
+      const UdpAddressType &from,
+      OperationCompletedHandler = {}) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
@@ -140,7 +150,8 @@ class TftpClient
       TransmitDataOperationHandler &handler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode) = 0;
+      TransferMode mode,
+      OperationCompletedHandler = {}) = 0;
 
   protected:
     //! Protected constructor.

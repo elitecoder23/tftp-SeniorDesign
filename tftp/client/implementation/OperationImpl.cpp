@@ -50,9 +50,6 @@ void OperationImpl::operator()()
 {
   // start first receive operation
   receiveFirst();
-
-  // start the event loop
-  ioService.run();
 }
 
 void OperationImpl::gracefulAbort(
@@ -64,9 +61,7 @@ void OperationImpl::gracefulAbort(
 
 void OperationImpl::abort()
 {
-  ioService.reset();
-
-  ioService.stop();
+  //! @todo
 }
 
 RequestType OperationImpl::getRequestType() const
@@ -90,18 +85,21 @@ TransferMode OperationImpl::getMode() const
 }
 
 OperationImpl::OperationImpl(
+  boost::asio::io_service &ioService,
   const RequestType requestType,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
-  const UdpAddressType &from)
+  const UdpAddressType &from,
+  TftpClient::OperationCompletedHandler operationCompletedHandler)
 try :
   requestType( requestType),
   tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
   mode( mode),
+  operationCompletedHandler( operationCompletedHandler),
   options( tftpClient.getOptionList()),
   maxReceivePacketSize( DefaultMaxPacketSize),
   receiveTimeout( tftpClient.getConfiguration().tftpTimeout),
@@ -139,17 +137,20 @@ catch ( boost::system::system_error &err)
 }
 
 OperationImpl::OperationImpl(
+  boost::asio::io_service &ioService,
   const RequestType requestType,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
-  const TransferMode mode)
+  const TransferMode mode,
+  TftpClient::OperationCompletedHandler operationCompletedHandler)
 try:
   requestType( requestType),
   tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
   mode( mode),
+  operationCompletedHandler( operationCompletedHandler),
   options( tftpClient.getOptionList()),
   maxReceivePacketSize( DefaultMaxPacketSize),
   receiveTimeout( tftpClient.getConfiguration().tftpTimeout),
@@ -190,7 +191,8 @@ OperationImpl::OptionList& OperationImpl::getOptions()
 
 void OperationImpl::finished() noexcept
 {
-  ioService.stop();
+  timer.cancel();
+  socket.cancel();
 }
 
 void OperationImpl::sendFirst( const Packets::Packet &packet)
@@ -303,8 +305,6 @@ void OperationImpl::receive()
   try
   {
     receivePacket.resize( maxReceivePacketSize);
-
-    ioService.reset();
 
     // start receive operation
     socket.async_receive(

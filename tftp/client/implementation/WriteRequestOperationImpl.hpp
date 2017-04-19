@@ -49,12 +49,14 @@ class WriteRequestOperationImpl : public OperationImpl
      *   Optional parameter to define the communication source
      **/
     WriteRequestOperationImpl(
+      boost::asio::io_service &ioService,
       TransmitDataOperationHandler &handler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from);
+      const UdpAddressType &from,
+      TftpClient::OperationCompletedHandler operationCompletedHandler);
 
     /**
      * @brief Constructor of TftpClientWriteOperation
@@ -71,11 +73,13 @@ class WriteRequestOperationImpl : public OperationImpl
      *   The transfer mode
      **/
     WriteRequestOperationImpl(
+      boost::asio::io_service &ioService,
       TransmitDataOperationHandler &handler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode);
+      TransferMode mode,
+      TftpClient::OperationCompletedHandler operationCompletedHandler);
 
     /**
      * @copybrief OperationImpl::operator()()

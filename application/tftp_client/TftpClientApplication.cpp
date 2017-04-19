@@ -74,7 +74,7 @@ int TftpClientApplication::operator()()
 {
   try
   {
-    std::cout << "TFTP client" << std::endl;
+    std::cout << "TFTP client\n";
 
     if ( !handleCommandLine())
     {
@@ -137,10 +137,13 @@ void TftpClientApplication::read( TftpClientPtr client)
     file,
     Tftp::UdpAddressType( address, configuration.tftpServerPort),
     remoteFile,
-    Tftp::TransferMode::OCTET));
+    Tftp::TransferMode::OCTET,
+    std::bind( &Tftp::Client::TftpClient::stop, client)));
 
   // execute operation
   (*op)();
+
+  (*client)();
 }
 
 void TftpClientApplication::write( TftpClientPtr client)
@@ -152,10 +155,13 @@ void TftpClientApplication::write( TftpClientPtr client)
     file,
     Tftp::UdpAddressType( address, configuration.tftpServerPort),
     remoteFile,
-    Tftp::TransferMode::OCTET));
+    Tftp::TransferMode::OCTET,
+    std::bind( &Tftp::Client::TftpClient::stop, client)));
 
   // execute operation
   (*op)();
+
+  (*client)();
 }
 
 bool TftpClientApplication::handleCommandLine()
