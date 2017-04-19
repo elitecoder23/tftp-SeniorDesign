@@ -30,6 +30,7 @@
 #include <boost/asio.hpp>
 
 #include <string>
+#include <memory>
 
 namespace Tftp {
 namespace Client {
@@ -44,6 +45,7 @@ class TftpClientInternal;
  * (Read Operation, Write Operation).
  **/
 class OperationImpl :
+  public std::enable_shared_from_this< OperationImpl>,
   public Operation,
   protected PacketHandler
 {

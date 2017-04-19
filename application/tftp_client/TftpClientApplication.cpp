@@ -26,8 +26,6 @@
 #include <tftp/client/TftpClient.hpp>
 #include <tftp/client/Operation.hpp>
 
-#include <tftp/file/StreamFile.hpp>
-
 #include <helper/Logger.hpp>
 #include <helper/BoostAsioProgramOptions.hpp>
 
@@ -35,7 +33,6 @@
 #include <boost/exception/all.hpp>
 #include <boost/application.hpp>
 
-#include <fstream>
 #include <cstdlib>
 #include <memory>
 
@@ -100,6 +97,10 @@ int TftpClientApplication::operator()()
         std::cerr << "Internal invalid operation" << std::endl;
         return EXIT_FAILURE;
     }
+
+
+    (*tftpClient)();
+
   }
   catch ( Tftp::TftpException &e)
   {
@@ -130,7 +131,7 @@ int TftpClientApplication::operator()()
 
 void TftpClientApplication::read( TftpClientPtr client)
 {
-  Tftp::File::StreamFile< std::fstream> file(
+  file = Tftp::File::StreamFile< std::fstream>(
     std::fstream( localFile, std::fstream::out | std::fstream::trunc));
 
   auto op( client->createReadRequestOperation(
@@ -142,13 +143,11 @@ void TftpClientApplication::read( TftpClientPtr client)
 
   // execute operation
   (*op)();
-
-  (*client)();
 }
 
 void TftpClientApplication::write( TftpClientPtr client)
 {
-  Tftp::File::StreamFile< std::fstream> file(
+  file = Tftp::File::StreamFile< std::fstream>(
     std::fstream( localFile, std::fstream::in));
 
   auto op( client->createWriteRequestOperation(
@@ -160,8 +159,6 @@ void TftpClientApplication::write( TftpClientPtr client)
 
   // execute operation
   (*op)();
-
-  (*client)();
 }
 
 bool TftpClientApplication::handleCommandLine()

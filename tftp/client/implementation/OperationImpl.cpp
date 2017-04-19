@@ -53,15 +53,25 @@ void OperationImpl::operator()()
 }
 
 void OperationImpl::gracefulAbort(
-  const ErrorCode errorCode [[gnu::unused]],
-  const string &errorMessage [[gnu::unused]])
+  const ErrorCode errorCode,
+  const string &errorMessage)
 {
-  //! @todo not implemented
+  BOOST_LOG_FUNCTION();
+
+  send( Packets::ErrorPacket(
+    errorCode,
+    errorMessage));
+
+  // Operation completed
+  finished();
 }
 
 void OperationImpl::abort()
 {
-  //! @todo
+  BOOST_LOG_FUNCTION();
+
+  // Operation completed
+  finished();
 }
 
 RequestType OperationImpl::getRequestType() const
@@ -275,7 +285,7 @@ void OperationImpl::receiveFirst()
       receiveEndpoint,
       boost::bind(
         &OperationImpl::receiveFirstHandler,
-        this,
+        shared_from_this(),
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
 
@@ -285,7 +295,7 @@ void OperationImpl::receiveFirst()
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutFirstHandler,
-      this,
+      shared_from_this(),
       boost::asio::placeholders::error));
   }
   catch (boost::system::system_error &err)
@@ -311,7 +321,7 @@ void OperationImpl::receive()
       boost::asio::buffer( receivePacket),
       boost::bind(
         &OperationImpl::receiveHandler,
-        this,
+        shared_from_this(),
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
 
@@ -321,7 +331,7 @@ void OperationImpl::receive()
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,
-      this,
+      shared_from_this(),
       boost::asio::placeholders::error));
   }
   catch (boost::system::system_error &err)
@@ -355,9 +365,10 @@ void OperationImpl::handleReadRequestPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( readRequestPacket);
 
+  // send error packet
   send( Packets::ErrorPacket(
-      ErrorCode::IllegalTftpOperation,
-      "RRQ not expected"));
+    ErrorCode::IllegalTftpOperation,
+    "RRQ not expected"));
 
   // Operation completed
   finished();
@@ -377,6 +388,7 @@ void OperationImpl::handleWriteRequestPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( writeRequestPacket);
 
+  // send error packet
   send( Packets::ErrorPacket(
     ErrorCode::IllegalTftpOperation,
     "WRQ not expected"));
@@ -403,11 +415,10 @@ void OperationImpl::handleErrorPacket(
   finished();
 
   //! @throw ErrorReceivedException Always, because this is an error.
-  BOOST_THROW_EXCEPTION(
-    ErrorReceivedException() <<
-      AdditionalInfo( "ERR not expected") <<
-      PacketTypeInfo( transmitPacketType) <<
-      ErrorPacketInfo( errorPacket));
+  BOOST_THROW_EXCEPTION( ErrorReceivedException() <<
+    AdditionalInfo( "ERR not expected") <<
+    PacketTypeInfo( transmitPacketType) <<
+    ErrorPacketInfo( errorPacket));
 }
 
 void OperationImpl::handleInvalidPacket(
@@ -419,6 +430,7 @@ void OperationImpl::handleInvalidPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
     "RX ERROR: INVALID Packet";
 
+  // send error packet
   send( Packets::ErrorPacket(
     ErrorCode::IllegalTftpOperation,
     "Invalid packet not expected"));
@@ -468,6 +480,7 @@ void OperationImpl::receiveFirstHandler(
     // sent Error packet to unknown partner
     try
     {
+      // send error packet
       Packets::ErrorPacket err(
         ErrorCode::UnknownTransferId,
         "Packet from wrong source");
@@ -489,7 +502,7 @@ void OperationImpl::receiveFirstHandler(
         receiveEndpoint,
         boost::bind(
           &OperationImpl::receiveFirstHandler,
-          this,
+          shared_from_this(),
           boost::asio::placeholders::error,
           boost::asio::placeholders::bytes_transferred));
 
@@ -608,7 +621,7 @@ void OperationImpl::timeoutFirstHandler(
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutFirstHandler,
-      this,
+      shared_from_this(),
       boost::asio::placeholders::error));
   }
   catch (boost::system::system_error &err)
@@ -671,7 +684,7 @@ void OperationImpl::timeoutHandler(
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,
-      this,
+      shared_from_this(),
       boost::asio::placeholders::error));
   }
   catch (boost::system::system_error &err)

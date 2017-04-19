@@ -19,13 +19,17 @@
 
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpConfiguration.hpp>
+
 #include <tftp/client/Client.hpp>
+
+#include <tftp/file/StreamFile.hpp>
 
 #include <boost/program_options.hpp>
 #include <boost/application.hpp>
 #include <boost/asio.hpp>
 
 #include <string>
+#include <fstream>
 
 class TftpClientApplication
 {
@@ -74,6 +78,7 @@ class TftpClientApplication
     std::string remoteFile;
     boost::asio::ip::address address;
     Tftp::TftpConfiguration configuration;
+    Tftp::File::StreamFile< std::fstream> file;
 };
 
 #endif
