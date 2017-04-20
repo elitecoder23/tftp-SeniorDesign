@@ -53,7 +53,7 @@ class ReadRequestOperationImpl : public OperationImpl
      **/
     ReadRequestOperationImpl(
       boost::asio::io_service &ioService,
-      ReceiveDataOperationHandlerPtr dataHandler,
+      ReceiveDataHandlerPtr dataHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -77,7 +77,7 @@ class ReadRequestOperationImpl : public OperationImpl
      **/
     ReadRequestOperationImpl(
       boost::asio::io_service &ioService,
-      ReceiveDataOperationHandlerPtr dataHandler,
+      ReceiveDataHandlerPtr dataHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -123,7 +123,7 @@ class ReadRequestOperationImpl : public OperationImpl
 
   private:
     //! Registered handler.
-    ReceiveDataOperationHandlerPtr dataHandler;
+    ReceiveDataHandlerPtr dataHandler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! last received block number.

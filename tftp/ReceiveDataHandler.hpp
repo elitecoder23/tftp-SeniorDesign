@@ -11,14 +11,14 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::ReceiveDataOperationHandler.
+ * @brief Declaration of class Tftp::ReceiveDataHandler.
  **/
 
-#ifndef TFTP_RECEIVEDATAOPERATIONHANDLER_HPP
-#define TFTP_RECEIVEDATAOPERATIONHANDLER_HPP
+#ifndef TFTP_RECEIVEDATAHANDLER_HPP
+#define TFTP_RECEIVEDATAHANDLER_HPP
 
 #include <tftp/Tftp.hpp>
-#include <tftp/OperationHandler.hpp>
+#include <tftp/DataHandler.hpp>
 
 namespace Tftp {
 
@@ -27,7 +27,7 @@ namespace Tftp {
  *   wants to receive data from a TFTP operation (TFTP client RRQ or TFTP
  *   server WRQ)
  **/
-class ReceiveDataOperationHandler: public OperationHandler
+class ReceiveDataHandler: public DataHandler
 {
   public:
     /**

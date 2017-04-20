@@ -77,7 +77,7 @@ class TftpClient
      * @return The client operation instance.
      **/
     virtual OperationPtr createReadRequestOperation(
-      ReceiveDataOperationHandlerPtr dataHandler,
+      ReceiveDataHandlerPtr dataHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
@@ -99,7 +99,7 @@ class TftpClient
      * @return The client operation instance.
      **/
     virtual OperationPtr createReadRequestOperation(
-      ReceiveDataOperationHandlerPtr dataHandler,
+      ReceiveDataHandlerPtr dataHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
@@ -122,7 +122,7 @@ class TftpClient
      * @return The client operation instance.
      **/
     virtual OperationPtr createWriteRequestOperation(
-      TransmitDataOperationHandlerPtr dataHandler,
+      TransmitDataHandlerPtr dataHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
@@ -144,7 +144,7 @@ class TftpClient
      * @return The client operation instance.
      **/
     virtual OperationPtr createWriteRequestOperation(
-      TransmitDataOperationHandlerPtr dataHandler,
+      TransmitDataHandlerPtr dataHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,

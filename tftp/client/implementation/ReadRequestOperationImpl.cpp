@@ -18,7 +18,7 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
-#include <tftp/ReceiveDataOperationHandler.hpp>
+#include <tftp/ReceiveDataHandler.hpp>
 #include <tftp/packets/PacketFactory.hpp>
 
 #include <helper/Dump.hpp>
@@ -28,7 +28,7 @@ namespace Client {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
-  ReceiveDataOperationHandlerPtr dataHandler,
+  ReceiveDataHandlerPtr dataHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
@@ -52,7 +52,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
-  ReceiveDataOperationHandlerPtr dataHandler,
+  ReceiveDataHandlerPtr dataHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
@@ -88,12 +88,12 @@ void ReadRequestOperationImpl::start()
   }
   catch ( ...)
   {
-    dataHandler->finishedOperation();
+    dataHandler->finished();
 
     throw;
   }
 
-  dataHandler->finishedOperation();
+  dataHandler->finished();
 }
 
 void ReadRequestOperationImpl::handleDataPacket(

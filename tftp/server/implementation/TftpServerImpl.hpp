@@ -80,27 +80,27 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
 
     //! @copydoc TftpServer::createReadRequestOperation(TransmitDataOperationHandler&,const UdpAddressType&,const Options::OptionList&,const UdpAddressType&)
     virtual OperationPtr createReadRequestOperation(
-      TransmitDataOperationHandler &handler,
+      TransmitDataHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress) override final;
 
     //! @copydoc TftpServer::createReadRequestOperation(TransmitDataOperationHandler&,const UdpAddressType&,const Options::OptionList&)
     virtual OperationPtr createReadRequestOperation(
-      TransmitDataOperationHandler &handler,
+      TransmitDataHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions) override final;
 
     //! @copydoc TftpServer::createWriteRequestOperation(ReceiveDataOperationHandler&,const UdpAddressType&,const Options::OptionList&,const UdpAddressType&)
     virtual OperationPtr createWriteRequestOperation(
-      ReceiveDataOperationHandler &handler,
+      ReceiveDataHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
       const UdpAddressType &serverAddress) override final;
 
     //! @copydoc TftpServer::createWriteRequestOperation(ReceiveDataOperationHandler&,const UdpAddressType&,const Options::OptionList&)
     virtual OperationPtr createWriteRequestOperation(
-      ReceiveDataOperationHandler &handler,
+      ReceiveDataHandler &handler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions) override final;
 

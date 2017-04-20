@@ -18,7 +18,7 @@
 
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TftpException.hpp>
-#include <tftp/ReceiveDataOperationHandler.hpp>
+#include <tftp/ReceiveDataHandler.hpp>
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
@@ -29,7 +29,7 @@ namespace Tftp {
 namespace Server {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
-  ReceiveDataOperationHandler &handler,
+  ReceiveDataHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
@@ -46,7 +46,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 }
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
-  ReceiveDataOperationHandler &handler,
+  ReceiveDataHandler &handler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions) :
@@ -115,12 +115,12 @@ void WriteRequestOperationImpl::operator()()
   }
   catch ( ...)
   {
-    handler.finishedOperation();
+    handler.finished();
 
     throw;
   }
 
-  handler.finishedOperation();
+  handler.finished();
 }
 
 void WriteRequestOperationImpl::handleDataPacket(

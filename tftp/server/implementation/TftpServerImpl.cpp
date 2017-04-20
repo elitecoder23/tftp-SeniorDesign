@@ -117,7 +117,7 @@ void TftpServerImpl::stop()
 }
 
 OperationPtr TftpServerImpl::createReadRequestOperation(
-  TransmitDataOperationHandler &handler,
+  TransmitDataHandler &handler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress)
@@ -133,7 +133,7 @@ OperationPtr TftpServerImpl::createReadRequestOperation(
 }
 
 OperationPtr TftpServerImpl::createReadRequestOperation(
-  TransmitDataOperationHandler &handler,
+  TransmitDataHandler &handler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions)
 {
@@ -147,7 +147,7 @@ OperationPtr TftpServerImpl::createReadRequestOperation(
 }
 
 OperationPtr TftpServerImpl::createWriteRequestOperation(
-  ReceiveDataOperationHandler &handler,
+  ReceiveDataHandler &handler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
   const UdpAddressType &serverAddress)
@@ -163,7 +163,7 @@ OperationPtr TftpServerImpl::createWriteRequestOperation(
 }
 
 OperationPtr TftpServerImpl::createWriteRequestOperation(
-  ReceiveDataOperationHandler &handler,
+  ReceiveDataHandler &handler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions)
 {

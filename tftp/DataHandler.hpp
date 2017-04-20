@@ -11,11 +11,11 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::OperationHandler.
+ * @brief Declaration of class Tftp::DataHandler.
  **/
 
-#ifndef TFTP_OPERATIONHANDLER_HPP
-#define TFTP_OPERATIONHANDLER_HPP
+#ifndef TFTP_DATAHANDLER_HPP
+#define TFTP_DATAHANDLER_HPP
 
 #include <tftp/Tftp.hpp>
 
@@ -27,7 +27,7 @@ namespace Tftp {
 /**
  * @brief Base class for TFTP operation handlers.
  **/
-class OperationHandler
+class DataHandler
 {
   public:
     //! The data type is used for the inherited classes.
@@ -36,14 +36,14 @@ class OperationHandler
     /**
      * @brief Default destructor.
      **/
-    virtual ~OperationHandler() noexcept = default;
+    virtual ~DataHandler() noexcept = default;
 
     /**
      * @brief Called, when the operation has been finished
      *
      * @todo rename to finished.
      **/
-    virtual void finishedOperation() noexcept = 0;
+    virtual void finished() noexcept = 0;
 };
 
 }

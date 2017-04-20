@@ -43,7 +43,7 @@ const MemoryFile::DataType& MemoryFile::getData() const noexcept
   return data;
 }
 
-void MemoryFile::finishedOperation() noexcept
+void MemoryFile::finished() noexcept
 {
   dataPtr = data.begin();
 }

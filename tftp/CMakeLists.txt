@@ -14,12 +14,12 @@ find_package( Boost REQUIRED COMPONENTS program_options)
 add_library(
   tftp
   
+  DataHandler.hpp
   ErrorCodeDescription.hpp
   ErrorCodeDescription.cpp
-  OperationHandler.hpp
   PacketHandler.hpp
   PacketHandler.cpp
-  ReceiveDataOperationHandler.hpp
+  ReceiveDataHandler.hpp
   RequestTypeDescription.hpp
   RequestTypeDescription.cpp
   Tftp.hpp
@@ -27,7 +27,7 @@ add_library(
   TftpConfiguration.cpp
   TftpException.hpp
   TftpLogger.hpp
-  TransmitDataOperationHandler.hpp
+  TransmitDataHandler.hpp
   
   packets/AcknowledgementPacket.hpp
   packets/AcknowledgementPacket.cpp

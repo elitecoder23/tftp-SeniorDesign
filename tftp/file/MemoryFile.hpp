@@ -65,7 +65,7 @@ class MemoryFile: public TftpFile
     /**
      * @copydoc TftpFile::finishedOperation()
      **/
-    virtual void finishedOperation() noexcept override final;
+    virtual void finished() noexcept override final;
 
     /**
      * @copydoc TftpFile::receivedTransferSize()

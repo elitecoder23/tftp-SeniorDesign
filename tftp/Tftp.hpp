@@ -214,13 +214,14 @@ constexpr uint8_t TimeoutOptionMax = 255U;
 // Forward declarations
 class TftpConfiguration;
 
-class ReceiveDataOperationHandler;
-class TransmitDataOperationHandler;
+class DataHandler;
+class ReceiveDataHandler;
+class TransmitDataHandler;
 
-using ReceiveDataOperationHandlerPtr =
-  std::shared_ptr< ReceiveDataOperationHandler>;
-using TransmitDataOperationHandlerPtr =
-  std::shared_ptr< TransmitDataOperationHandler>;
+using ReceiveDataHandlerPtr =
+  std::shared_ptr< ReceiveDataHandler>;
+using TransmitDataHandlerPtr =
+  std::shared_ptr< TransmitDataHandler>;
 
 class PacketHandler;
 

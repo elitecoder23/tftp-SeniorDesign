@@ -59,7 +59,7 @@ void StreamFile< StreamT>::setSize( const size_t size) noexcept
 }
 
 template< typename StreamT>
-void StreamFile< StreamT>::finishedOperation() noexcept
+void StreamFile< StreamT>::finished() noexcept
 {
   stream.flush();
 }

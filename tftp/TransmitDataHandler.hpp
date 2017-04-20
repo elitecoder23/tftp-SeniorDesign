@@ -11,14 +11,14 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of class Tftp::TransmitDataOperationHandler.
+ * @brief Declaration of class Tftp::TransmitDataHandler.
  **/
 
-#ifndef TFTP_TRANSMITDATAOPERATIONHANDLER_HPP
-#define TFTP_TRANSMITDATAOPERATIONHANDLER_HPP
+#ifndef TFTP_TRANSMITDATAHANDLER_HPP
+#define TFTP_TRANSMITDATAHANDLER_HPP
 
 #include <tftp/Tftp.hpp>
-#include <tftp/OperationHandler.hpp>
+#include <tftp/DataHandler.hpp>
 
 namespace Tftp {
 
@@ -27,7 +27,7 @@ namespace Tftp {
  *   wants to transmit data for a TFTP operation (TFTP client WRQ or TFTP
  *   server RRQ)
  **/
-class TransmitDataOperationHandler: public OperationHandler
+class TransmitDataHandler: public DataHandler
 {
   public:
     /**

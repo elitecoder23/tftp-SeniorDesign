@@ -50,7 +50,7 @@ class WriteRequestOperationImpl : public OperationImpl
      **/
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
-      TransmitDataOperationHandlerPtr dataHandler,
+      TransmitDataHandlerPtr dataHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -74,7 +74,7 @@ class WriteRequestOperationImpl : public OperationImpl
      **/
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
-      TransmitDataOperationHandlerPtr dataHandler,
+      TransmitDataHandlerPtr dataHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -133,7 +133,7 @@ class WriteRequestOperationImpl : public OperationImpl
     using BlockNumber = Packets::BlockNumber;
 
     //! The handler, which is called
-    TransmitDataOperationHandlerPtr dataHandler;
+    TransmitDataHandlerPtr dataHandler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t transmitDataSize;
     //! Is set, when the last data packet has been transmitted
