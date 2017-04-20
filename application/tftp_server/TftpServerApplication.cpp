@@ -93,7 +93,8 @@ int TftpServerApplication::operator()()
         boost::asio::ip::address_v4::any(),
         configuration.tftpServerPort));
 
-    (*server)();
+    server->start();
+    server->entry();
   }
   catch ( Tftp::TftpException &e)
   {

@@ -72,8 +72,11 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
      **/
     virtual ~TftpServerImpl() noexcept;
 
-    //! @copydoc TftpServer::operator()()
-    virtual void operator()() override final;
+    //! @copydoc TftpServer::entry()
+    virtual void entry() override final;
+
+    //! @copydoc TftpServer::start()
+    virtual void start() override final;
 
     //! @copydoc TftpServer::stop
     virtual void stop() override final;

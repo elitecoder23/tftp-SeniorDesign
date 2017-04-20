@@ -152,8 +152,11 @@ class OperationImpl :
 
     /**
      * @brief Sets the finished flag.
+     *
+     * @param[in] successful
+     *   if the operation was successful or an error occurred.
      **/
-    void finished() noexcept;
+    void finished( bool successful) noexcept;
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default

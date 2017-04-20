@@ -223,6 +223,9 @@ using ReceiveDataHandlerPtr =
 using TransmitDataHandlerPtr =
   std::shared_ptr< TransmitDataHandler>;
 
+//! Operation Completed handler, which indicates, if the transfer was successful
+using OperationCompletedHandler = std::function< void( bool)>;
+
 class PacketHandler;
 
 }

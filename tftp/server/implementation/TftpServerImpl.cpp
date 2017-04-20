@@ -89,15 +89,25 @@ TftpServerImpl::~TftpServerImpl() noexcept
   }
 }
 
-void TftpServerImpl::operator()()
+void TftpServerImpl::entry()
+{
+  try
+  {
+    // the server loop
+    ioService.run();
+  }
+  catch (boost::system::system_error &err)
+  {
+    //! @todo handle
+  }
+}
+
+void TftpServerImpl::start()
 {
   try
   {
     // start receive
     receive();
-
-    // the server loop
-    ioService.run();
   }
   catch (boost::system::system_error &err)
   {
@@ -111,6 +121,8 @@ void TftpServerImpl::stop()
 {
   // cancel receive operation
   socket.cancel();
+
+  //! @todo cancel TFTP server operations.
 
   // stop handler
   ioService.stop();

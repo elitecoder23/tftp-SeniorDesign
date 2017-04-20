@@ -42,8 +42,6 @@ using TftpClientPtr = std::shared_ptr< TftpClient>;
 //! Declaration of TFTP client operation instance pointer
 using OperationPtr = std::shared_ptr< Operation>;
 
-using OperationCompletedHandler = std::function< void()>;
-
 }
 }
 

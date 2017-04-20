@@ -74,15 +74,25 @@ class TftpServer
     virtual ~TftpServer() noexcept = default;
 
     /**
-     * @brief Starts the TFTP Server.
+     * @brief Entry of the TFTP Server.
      *
-     * This routines starts the server loop, which waits for incoming
-     * requests and calls the handler to handles them.
-     *
+     * This routines enters the IO Service loop.
      * The start routine will be leaved, when an FATAL error occurred or
      * the server has been stopped by calling stop().
+     *
+     * This entry can be called multiple time to allow parallel transfer handling
      **/
-    virtual void operator()() = 0;
+    virtual void entry() = 0;
+
+    /**
+     * @brief Starts the TFTP Server.
+     *
+     * This routines starts the server receive operation.
+     * This routine returns immediately.
+     *
+     * It can be called before entry() is called.
+     **/
+    virtual void start() = 0;
 
     /**
      * @brief Stops the TFTP Server.

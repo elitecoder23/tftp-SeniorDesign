@@ -148,12 +148,7 @@ void WriteRequestOperationImpl::handleDataPacket(
     "DATA not expected"));
 
   // Operation completed
-  finished();
-
-  //! @throw CommunicationException Always, because this packet is invalid.
-  BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "Unexpected packet received") <<
-    PacketTypeInfo( PacketType::Data));
+  finished( false);
 }
 
 void WriteRequestOperationImpl::handleAcknowledgementPacket(
@@ -183,7 +178,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
       ErrorCode::IllegalTftpOperation,
       "Wrong block number"));
 
-    finished();
+    finished( false);
 
     //! @throw CommunicationException When invalid block number has been received.
     BOOST_THROW_EXCEPTION( CommunicationException() <<
@@ -194,7 +189,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
   // if ACK for last data packet - QUIT
   if (lastDataPacketTransmitted)
   {
-    finished();
+    finished( true);
 
     return;
   }
@@ -225,10 +220,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
       ErrorCode::IllegalTftpOperation,
       "Empty OACK not allowed"));
 
-    //! @throw CommunicationException When Option list is empty.
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "Received option list is empty") <<
-      PacketTypeInfo( PacketType::OptionsAcknowledgement));
+    finished( false);
   }
 
   // perform option negotiation
@@ -242,10 +234,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
       ErrorCode::TftpOptionRefused,
       "Option negotiation failed"));
 
-    //! @throw OptionNegotiationException When option negotiation failed.
-    BOOST_THROW_EXCEPTION( OptionNegotiationException() <<
-      AdditionalInfo( "Option negotiation failed") <<
-      PacketTypeInfo( PacketType::OptionsAcknowledgement));
+    finished( false);
   }
 
   // check blocksize option

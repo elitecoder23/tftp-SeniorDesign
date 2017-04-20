@@ -127,13 +127,7 @@ void ReadRequestOperationImpl::handleDataPacket(
       "Block Number not expected"));
 
     // Operation completed
-    finished();
-
-    //! @throw CommunicationException when the DATA packet has an invalid block
-    //! number
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "Wrong Data packet block number") <<
-      PacketTypeInfo( PacketType::Data));
+    finished( false);
   }
 
   // check for too much data
@@ -148,12 +142,7 @@ void ReadRequestOperationImpl::handleDataPacket(
       "Too much data"));
 
     // Operation completed
-    finished();
-
-    //! @throw InvalidPacketException When to much data has been received.
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "To much data received") <<
-      PacketTypeInfo( PacketType::Data));
+    finished( false);
   }
 
   // call call-back
@@ -169,7 +158,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   if (dataPacket.getDataSize() < receiveDataSize)
   {
     // last packet has been received and operation is finished
-    finished();
+    finished( true);
   }
   else
   {
@@ -191,12 +180,7 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
     "ACK not expected"));
 
   // Operation completed
-  finished();
-
-  //! @throw CommunicationException Always, because this packet is invalid.
-  BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "Unexpected packet received") <<
-    PacketTypeInfo( PacketType::Acknowledgement));
+  finished( false);
 }
 
 void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
@@ -219,11 +203,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
       "Empty OACK not allowed"));
 
     // Operation completed
-    finished();
-
-    //! @throw CommunicationException When OACK response is empty.
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "Received option list is empty"));
+    finished( false);
   }
 
   // perform option negotiation
@@ -240,11 +220,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
       "Option negotiation failed"));
 
     // Operation completed
-    finished();
-
-    //! @throw OptionNegotiationException Option negotiation failed.
-    BOOST_THROW_EXCEPTION( OptionNegotiationException() <<
-      AdditionalInfo( "Option negotiation failed"));
+    finished( false);
   }
 
   // check blocksize option
@@ -276,11 +252,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
         "FILE TO BIG"));
 
       // Operation completed
-      finished();
-
-      //! @throw TftpException When file is to big.
-      BOOST_THROW_EXCEPTION( TftpException() <<
-        AdditionalInfo( "FILE TO BIG"));
+      finished( false);
     }
   }
 
