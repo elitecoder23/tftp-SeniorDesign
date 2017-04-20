@@ -89,6 +89,8 @@ class WriteRequestOperationImpl : public OperationImpl
     virtual void start() override;
 
   protected:
+    virtual void finished( bool successful) noexcept override final;
+
     /**
      * @brief Sends the data to the host.
      *

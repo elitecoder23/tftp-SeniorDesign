@@ -111,11 +111,13 @@ void WriteRequestOperationImpl::start()
   }
   catch (...)
   {
-    dataHandler->finished();
-
-    throw;
+    finished( false);
   }
+}
 
+void WriteRequestOperationImpl::finished( const bool successful) noexcept
+{
+  OperationImpl::finished( successful);
   dataHandler->finished();
 }
 
@@ -132,7 +134,7 @@ void WriteRequestOperationImpl::sendData()
     lastDataPacketTransmitted = true;
   }
 
-  //! send packet
+  // send packet
   send( data);
 }
 
@@ -179,11 +181,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
       "Wrong block number"));
 
     finished( false);
-
-    //! @throw CommunicationException When invalid block number has been received.
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "Invalid block number received") <<
-      PacketTypeInfo( PacketType::Acknowledgement));
+    return;
   }
 
   // if ACK for last data packet - QUIT
@@ -221,6 +219,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
       "Empty OACK not allowed"));
 
     finished( false);
+    return;
   }
 
   // perform option negotiation
@@ -235,6 +234,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
       "Option negotiation failed"));
 
     finished( false);
+    return;
   }
 
   // check blocksize option

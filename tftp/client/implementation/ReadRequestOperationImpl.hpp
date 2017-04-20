@@ -92,6 +92,8 @@ class ReadRequestOperationImpl : public OperationImpl
     virtual void start() override final;
 
   protected:
+    virtual void finished( bool successful) noexcept override final;
+
     /**
      * @copydoc PacketHandler::handleDataPacket()
      *

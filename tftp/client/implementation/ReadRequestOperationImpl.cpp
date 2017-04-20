@@ -88,11 +88,13 @@ void ReadRequestOperationImpl::start()
   }
   catch ( ...)
   {
-    dataHandler->finished();
-
-    throw;
+    finished( false);
   }
+}
 
+void ReadRequestOperationImpl::finished( const bool successful) noexcept
+{
+  OperationImpl::finished( successful);
   dataHandler->finished();
 }
 
@@ -128,6 +130,7 @@ void ReadRequestOperationImpl::handleDataPacket(
 
     // Operation completed
     finished( false);
+    return;
   }
 
   // check for too much data
@@ -143,6 +146,7 @@ void ReadRequestOperationImpl::handleDataPacket(
 
     // Operation completed
     finished( false);
+    return;
   }
 
   // call call-back
@@ -204,6 +208,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
     // Operation completed
     finished( false);
+    return;
   }
 
   // perform option negotiation
@@ -221,6 +226,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
     // Operation completed
     finished( false);
+    return;
   }
 
   // check blocksize option
@@ -253,6 +259,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
       // Operation completed
       finished( false);
+      return;
     }
   }
 

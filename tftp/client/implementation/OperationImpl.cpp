@@ -19,6 +19,7 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
 #include <tftp/TftpLogger.hpp>
+#include <tftp/ErrorCodeDescription.hpp>
 
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
@@ -58,6 +59,9 @@ void OperationImpl::gracefulAbort(
 {
   BOOST_LOG_FUNCTION();
 
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) <<
+    "Graceful abort requested: " << errorCode << " '" << errorMessage << "'";
+
   send( Packets::ErrorPacket(
     errorCode,
     errorMessage));
@@ -69,6 +73,9 @@ void OperationImpl::gracefulAbort(
 void OperationImpl::abort()
 {
   BOOST_LOG_FUNCTION();
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) <<
+    "Abort requested";
 
   // Operation completed
   finished( false);
@@ -118,6 +125,8 @@ try :
   transmitPacketType( PacketType::Invalid),
   transmitCounter( 0)
 {
+  BOOST_LOG_FUNCTION();
+
   try
   {
     // Open the socket
@@ -169,6 +178,8 @@ try:
   transmitPacketType( PacketType::Invalid),
   transmitCounter( 0)
 {
+  BOOST_LOG_FUNCTION();
+
   try
   {
     // Open the socket
@@ -194,17 +205,17 @@ catch ( boost::system::system_error &err)
     CommunicationException() << AdditionalInfo( err.what()));
 }
 
-OperationImpl::OptionList& OperationImpl::getOptions()
-{
-  return options;
-}
-
 void OperationImpl::finished( bool successful) noexcept
 {
   timer.cancel();
   socket.cancel();
 
   completionHandler( successful);
+}
+
+OperationImpl::OptionList& OperationImpl::getOptions()
+{
+  return options;
 }
 
 void OperationImpl::sendFirst( const Packets::Packet &packet)
@@ -441,6 +452,7 @@ void OperationImpl::receiveFirstHandler(
       "Error when receiving message: " << errorCode.message();
 
     finished( false);
+    return;
   }
 
   // check, if packet has been received from not expected source
@@ -489,6 +501,7 @@ void OperationImpl::receiveFirstHandler(
         "Start Receive: " << err.what();
 
       finished( false);
+      return;
     }
   }
 
@@ -507,6 +520,7 @@ void OperationImpl::receiveFirstHandler(
       "Connect: " << err.what();
 
     finished( false);
+    return;
   }
 
   receivePacket.resize( bytesTransferred);
@@ -534,6 +548,7 @@ void OperationImpl::receiveHandler(
       "Error when receiving message: " << errorCode.message();
 
     finished( false);
+    return;
   }
 
   receivePacket.resize( bytesTransferred);
@@ -546,7 +561,7 @@ void OperationImpl::timeoutFirstHandler(
 {
   BOOST_LOG_FUNCTION();
 
-  //! operation aborted (packet received)
+  // operation aborted (packet received)
   if (boost::asio::error::operation_aborted == errorCode)
   {
     return;
@@ -559,6 +574,7 @@ void OperationImpl::timeoutFirstHandler(
       "timer error: " + errorCode.message();
 
     finished( false);
+    return;
   }
 
   // if maximum retries exceeded -> abort receive operation
@@ -568,6 +584,7 @@ void OperationImpl::timeoutFirstHandler(
       "Retry counter exceeded ABORT";
 
     finished( false);
+    return;
   }
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
@@ -575,8 +592,10 @@ void OperationImpl::timeoutFirstHandler(
 
   try
   {
+    // resent stored packet
     socket.send_to( boost::asio::buffer( transmitPacket), remoteEndpoint);
 
+    // increment transmit counter
     ++transmitCounter;
 
     timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
@@ -589,7 +608,7 @@ void OperationImpl::timeoutFirstHandler(
   catch (boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Re-TX: " << err.what();
+      "Re-TX error: " << err.what();
 
     finished( false);
   }
@@ -613,6 +632,7 @@ void OperationImpl::timeoutHandler(
       "timer error: " << errorCode.message();
 
     finished( false);
+    return;
   }
 
   // if maximum retries exceeded -> abort receive operation
@@ -622,6 +642,7 @@ void OperationImpl::timeoutHandler(
       "Retry counter exceeded ABORT";
 
     finished( false);
+    return;
   }
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
@@ -643,7 +664,7 @@ void OperationImpl::timeoutHandler(
   catch (boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Re-TX: " << err.what();
+      "Re-TX error: " << err.what();
 
     finished( false);
   }

@@ -144,19 +144,19 @@ class OperationImpl :
       OperationCompletedHandler operationCompletedHandler);
 
     /**
-     * @brief Returns the TFTP option list.
-     *
-     * @return The TFTP option list.
-     **/
-    OptionList & getOptions();
-
-    /**
      * @brief Sets the finished flag.
      *
      * @param[in] successful
      *   if the operation was successful or an error occurred.
      **/
-    void finished( bool successful) noexcept;
+    virtual void finished( bool successful) noexcept;
+
+    /**
+     * @brief Returns the TFTP option list.
+     *
+     * @return The TFTP option list.
+     **/
+    OptionList & getOptions();
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
