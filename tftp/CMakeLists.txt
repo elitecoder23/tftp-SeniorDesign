@@ -70,7 +70,7 @@ add_library(
   file/StreamFile.hpp
   file/StreamFile.ipp
   file/NullSinkFile.hpp
-  file/NullSinkFile.hpp
+  file/NullSinkFile.cpp
   
   client/Client.hpp
   client/Operation.hpp  

@@ -18,6 +18,7 @@
 #define TFTP_FILE_NULLSINKFILE_HPP
 
 #include <tftp/file/File.hpp>
+#include <tftp/ReceiveDataHandler.hpp>
 
 #include <boost/optional.hpp>
 
@@ -27,14 +28,14 @@ namespace File {
 /**
  * @brief NULL sink file.
  *
- * This class provides an receive data operation handler, which drops every
- * received data package.
+ * This class provides an receive data handler, which drops every received
+ * data package.
  * This handler can be used for testing purposes.
  *
  * If a size is given, this size is checked against the value given when calling
  * receivedTransferSize().
  **/
-class NullSinkFile : public ReceiveDataOperationHandler
+class NullSinkFile : public ReceiveDataHandler
 {
   public:
     //! default constructor
@@ -54,7 +55,7 @@ class NullSinkFile : public ReceiveDataOperationHandler
      * If size is given on constructing this file, handle it.
      * Otherwise return true.
      **/
-    virtual bool receivedTransferSize( const uint64_t transferSize) override final;
+    virtual bool receivedTransferSize( uint64_t transferSize) override final;
 
     /**
      * @copydoc ReceiveDataOperationHandler::receviedData

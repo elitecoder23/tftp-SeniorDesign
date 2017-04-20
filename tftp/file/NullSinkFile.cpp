@@ -37,9 +37,9 @@ bool NullSinkFile::receivedTransferSize( const uint64_t transferSize)
   return (transferSize <= size);
 }
 
-void NullSinkFile::receviedData( const DataType &data) noexcept
+void NullSinkFile::receviedData( const DataType &/*data*/) noexcept
 {
-
+  // Do nothing
 }
 
 }
