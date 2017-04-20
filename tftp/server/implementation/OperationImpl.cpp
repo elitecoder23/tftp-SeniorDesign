@@ -69,14 +69,14 @@ void OperationImpl::abort()
 
 OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
+  OperationCompletedHandler completionHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress,
-  OperationCompletedHandler completionHandler)
+  const UdpAddressType &serverAddress)
 try:
-  tftpServerInternal( tftpServerInternal),
   completionHandler( completionHandler),
+  tftpServerInternal( tftpServerInternal),
   options( tftpServerInternal.getOptionList().negotiateServer( clientOptions)),
   maxReceivePacketSize( DefaultMaxPacketSize),
   receiveTimeout( tftpServerInternal.getConfiguration().tftpTimeout),
@@ -117,13 +117,13 @@ catch (boost::system::system_error &err)
 
 OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
+  OperationCompletedHandler completionHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions,
-  OperationCompletedHandler completionHandler)
+  const Options::OptionList &clientOptions)
 try:
-  tftpServerInternal( tftpServerInternal),
   completionHandler( completionHandler),
+  tftpServerInternal( tftpServerInternal),
   options( tftpServerInternal.getOptionList().negotiateServer( clientOptions)),
   maxReceivePacketSize( DefaultMaxPacketSize),
   receiveTimeout( tftpServerInternal.getConfiguration().tftpTimeout),

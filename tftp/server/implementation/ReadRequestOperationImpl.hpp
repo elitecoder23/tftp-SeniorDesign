@@ -57,11 +57,11 @@ class ReadRequestOperationImpl: public OperationImpl
     ReadRequestOperationImpl(
       boost::asio::io_service &ioService,
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress,
-      OperationCompletedHandler completionHandler);
+      const UdpAddressType &serverAddress);
 
     /**
      * @brief Initialises the TFTP server write operation instance.
@@ -78,10 +78,10 @@ class ReadRequestOperationImpl: public OperationImpl
     ReadRequestOperationImpl(
       boost::asio::io_service &ioService,
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions,
-      OperationCompletedHandler completionHandler);
+      const Options::OptionList &clientOptions);
 
     //! Desctructor
     virtual ~ReadRequestOperationImpl() noexcept = default;

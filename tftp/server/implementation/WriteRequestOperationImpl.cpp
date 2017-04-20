@@ -31,18 +31,18 @@ namespace Server {
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_service &ioService,
   ReceiveDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress,
-  OperationCompletedHandler completionHandler) :
+  const UdpAddressType &serverAddress) :
   OperationImpl(
     ioService,
+    completionHandler,
     tftpServerInternal,
     clientAddress,
     clientOptions,
-    serverAddress,
-    completionHandler),
+    serverAddress),
   dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
@@ -52,16 +52,16 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_service &ioService,
   ReceiveDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions,
-  OperationCompletedHandler completionHandler) :
+  const Options::OptionList &clientOptions) :
   OperationImpl(
     ioService,
+    completionHandler,
     tftpServerInternal,
     clientAddress,
-    clientOptions,
-    completionHandler),
+    clientOptions),
   dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)

@@ -59,11 +59,11 @@ class WriteRequestOperationImpl: public OperationImpl
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
       ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress,
-      OperationCompletedHandler completionHandler);
+      const UdpAddressType &serverAddress);
 
     /**
      * @brief Constructs the class.
@@ -80,10 +80,10 @@ class WriteRequestOperationImpl: public OperationImpl
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
       ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions,
-      OperationCompletedHandler completionHandler);
+      const Options::OptionList &clientOptions);
 
     /**
      * @brief Standard destructor.

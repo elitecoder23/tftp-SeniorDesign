@@ -279,6 +279,7 @@ void TftpServerApplication::transmitFile(
       std::make_shared< Tftp::File::StreamFile< std::fstream>>(
         std::move( fileStream),
         boost::filesystem::file_size( filename)),
+      {},
       from,
       options));
 
@@ -319,6 +320,7 @@ void TftpServerApplication::receiveFile(
       std::make_shared< Tftp::File::StreamFile< std::fstream>>(
         std::move( fileStream),
         boost::filesystem::file_size( filename)),
+      {},
       from,
       options));
 

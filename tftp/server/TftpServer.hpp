@@ -115,10 +115,10 @@ class TftpServer
      **/
     virtual OperationPtr createReadRequestOperation(
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      const UdpAddressType &serverAddress) = 0;
 
     /**
      * @brief Creates a TFTP write operation (TFTP RRQ)
@@ -134,9 +134,9 @@ class TftpServer
      **/
     virtual OperationPtr createReadRequestOperation(
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      const Options::OptionList &clientOptions) = 0;
 
     /**
      * @brief Creates a TFTP read operation (TFTP WRQ)
@@ -154,10 +154,10 @@ class TftpServer
      **/
     virtual OperationPtr createWriteRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      const UdpAddressType &serverAddress) = 0;
 
     /**
      * @brief Creates a TFTP read operation (TFTP WRQ)
@@ -173,9 +173,9 @@ class TftpServer
      **/
     virtual OperationPtr createWriteRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      const Options::OptionList &clientOptions) = 0;
 
     /**
      * @brief Creates a TFTP error operation.

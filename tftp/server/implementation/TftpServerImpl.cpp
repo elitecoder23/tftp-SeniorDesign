@@ -130,66 +130,66 @@ void TftpServerImpl::stop()
 
 OperationPtr TftpServerImpl::createReadRequestOperation(
   TransmitDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress,
-  OperationCompletedHandler completionHandler)
+  const UdpAddressType &serverAddress)
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioService,
     dataHandler,
+    completionHandler,
     *this,
     clientAddress,
     clientOptions,
-    serverAddress,
-    completionHandler);
+    serverAddress);
 }
 
 OperationPtr TftpServerImpl::createReadRequestOperation(
   TransmitDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions,
-  OperationCompletedHandler completionHandler)
+  const Options::OptionList &clientOptions)
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioService,
     dataHandler,
+    completionHandler,
     *this,
     clientAddress,
-    clientOptions,
-    completionHandler);
+    clientOptions);
 }
 
 OperationPtr TftpServerImpl::createWriteRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress,
-  OperationCompletedHandler completionHandler)
+  const UdpAddressType &serverAddress)
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioService,
     dataHandler,
+    completionHandler,
     *this,
     clientAddress,
     clientOptions,
-    serverAddress,
-    completionHandler);
+    serverAddress);
 }
 
 OperationPtr TftpServerImpl::createWriteRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions,
-  OperationCompletedHandler completionHandler)
+  const Options::OptionList &clientOptions)
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioService,
     dataHandler,
+    completionHandler,
     *this,
     clientAddress,
-    clientOptions,
-    completionHandler);
+    clientOptions);
 }
 
 OperationPtr TftpServerImpl::createErrorOperation(

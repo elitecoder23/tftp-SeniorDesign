@@ -30,18 +30,18 @@ namespace Server {
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
   TransmitDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress,
-  OperationCompletedHandler completionHandler) :
+  const UdpAddressType &serverAddress) :
   OperationImpl(
     ioService,
+    completionHandler,
     tftpServerInternal,
     clientAddress,
     clientOptions,
-    serverAddress,
-    completionHandler),
+    serverAddress),
   dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
@@ -52,16 +52,16 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
   TransmitDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions,
-  OperationCompletedHandler completionHandler) :
+  const Options::OptionList &clientOptions) :
   OperationImpl(
     ioService,
+    completionHandler,
     tftpServerInternal,
     clientAddress,
-    clientOptions,
-    completionHandler),
+    clientOptions),
   dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),

@@ -74,11 +74,11 @@ class OperationImpl:
      **/
     OperationImpl(
       boost::asio::io_service &ioService,
+      OperationCompletedHandler completionHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress,
-      OperationCompletedHandler completionHandler);
+      const UdpAddressType &serverAddress);
 
     /**
      * @brief Constructor of operation
@@ -92,10 +92,10 @@ class OperationImpl:
      **/
     OperationImpl(
       boost::asio::io_service &ioService,
+      OperationCompletedHandler completionHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions,
-      OperationCompletedHandler completionHandler);
+      const Options::OptionList &clientOptions);
 
     /**
      * @brief default destructor.
@@ -225,10 +225,10 @@ class OperationImpl:
      **/
     void timeoutHandler( const boost::system::error_code& errorCode);
 
-    //! The internal TFTP server
-    const TftpServerInternal &tftpServerInternal;
     //!
     OperationCompletedHandler completionHandler;
+    //! The internal TFTP server
+    const TftpServerInternal &tftpServerInternal;
 
     //! The stored negotiated options
     Options::OptionList options;
