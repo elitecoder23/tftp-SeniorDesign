@@ -55,11 +55,13 @@ class ReadRequestOperationImpl: public OperationImpl
      *   local endpoint, where the server handles the request from.
      **/
     ReadRequestOperationImpl(
-      TransmitDataHandler &handler,
+      boost::asio::io_service &ioService,
+      TransmitDataHandlerPtr dataHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress);
+      const UdpAddressType &serverAddress,
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief Initialises the TFTP server write operation instance.
@@ -74,10 +76,12 @@ class ReadRequestOperationImpl: public OperationImpl
      *   Received option list from client.
      **/
     ReadRequestOperationImpl(
-      TransmitDataHandler &handler,
+      boost::asio::io_service &ioService,
+      TransmitDataHandlerPtr dataHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions);
+      const Options::OptionList &clientOptions,
+      OperationCompletedHandler completionHandler);
 
     //! Desctructor
     virtual ~ReadRequestOperationImpl() noexcept = default;
@@ -85,9 +89,11 @@ class ReadRequestOperationImpl: public OperationImpl
     /**
      * @brief executes the operation.
      **/
-    virtual void operator()() override final;
+    virtual void start() override final;
 
   private:
+    virtual void finished( bool successful) noexcept override final;
+
     /**
      * @brief Sends a data packet to the client.
      *
@@ -120,7 +126,7 @@ class ReadRequestOperationImpl: public OperationImpl
 
   private:
     //! The handler which is called during operation.
-    TransmitDataHandler &handler;
+    TransmitDataHandlerPtr dataHandler;
     //! contains the negotiated blocksize option.
     uint16_t transmitDataSize;
     //! indicates, if the last data packet has been transmitted (closing).

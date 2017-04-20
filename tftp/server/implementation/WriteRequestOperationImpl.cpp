@@ -29,35 +29,46 @@ namespace Tftp {
 namespace Server {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
-  ReceiveDataHandler &handler,
+  boost::asio::io_service &ioService,
+  ReceiveDataHandlerPtr dataHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress) :
+  const UdpAddressType &serverAddress,
+  OperationCompletedHandler completionHandler) :
   OperationImpl(
+    ioService,
     tftpServerInternal,
     clientAddress,
     clientOptions,
-    serverAddress),
-  handler( handler),
+    serverAddress,
+    completionHandler),
+  dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
 }
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
-  ReceiveDataHandler &handler,
+  boost::asio::io_service &ioService,
+  ReceiveDataHandlerPtr dataHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions) :
-  OperationImpl( tftpServerInternal, clientAddress, clientOptions),
-  handler( handler),
+  const Options::OptionList &clientOptions,
+  OperationCompletedHandler completionHandler) :
+  OperationImpl(
+    ioService,
+    tftpServerInternal,
+    clientAddress,
+    clientOptions,
+    completionHandler),
+  dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
 }
 
-void WriteRequestOperationImpl::operator()()
+void WriteRequestOperationImpl::start()
 {
   try
   {
@@ -93,7 +104,7 @@ void WriteRequestOperationImpl::operator()()
       // check transfer size option
       if ( getOptions().hasTransferSizeOption())
       {
-        if ( !handler.receivedTransferSize(
+        if ( !dataHandler->receivedTransferSize(
           getOptions().getTransferSizeOption()))
         {
           send(
@@ -111,16 +122,18 @@ void WriteRequestOperationImpl::operator()()
     }
 
     // start receive loop
-    OperationImpl::operator()();
+    OperationImpl::start();
   }
   catch ( ...)
   {
-    handler.finished();
-
-    throw;
+    finished( false);
   }
+}
 
-  handler.finished();
+void WriteRequestOperationImpl::finished( const bool successful) noexcept
+{
+  OperationImpl::finished( successful);
+  dataHandler->finished();
 }
 
 void WriteRequestOperationImpl::handleDataPacket(
@@ -152,11 +165,8 @@ void WriteRequestOperationImpl::handleDataPacket(
       "Wrong block number"));
 
     // Operation completed
-    finished();
-
-    //! @throw CommunicationException On wrong block number.
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "Wrong block number"));
+    finished( false);
+    return;
   }
 
   // check for too much data
@@ -170,15 +180,12 @@ void WriteRequestOperationImpl::handleDataPacket(
       "Too much data"));
 
    // Operation completed
-   finished();
-
-   //! @throw CommunicationException When to much data is received.
-   BOOST_THROW_EXCEPTION( CommunicationException() <<
-     AdditionalInfo( "Too much data received"));
+    finished( false);
+    return;
   }
 
   // call data handler
-  handler.receviedData( dataPacket.getData());
+  dataHandler->receviedData( dataPacket.getData());
 
   // increment block number
   lastReceivedBlockNumber++;
@@ -189,7 +196,7 @@ void WriteRequestOperationImpl::handleDataPacket(
   // received
   if (dataPacket.getDataSize() < receiveDataSize)
   {
-    finished();
+    finished( true);
   }
   else
   {
@@ -210,12 +217,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
     "ACK not expected"));
 
   // Operation completed
-  finished();
-
-  //! @throw CommunicationException Always, because this packet is invalid.
-  BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "Unexpected packet received") <<
-   PacketTypeInfo( PacketType::Acknowledgement));
+  finished( false);
 }
 
 }

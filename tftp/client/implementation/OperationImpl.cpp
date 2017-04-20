@@ -210,7 +210,10 @@ void OperationImpl::finished( bool successful) noexcept
   timer.cancel();
   socket.cancel();
 
-  completionHandler( successful);
+  if (completionHandler)
+  {
+    completionHandler( successful);
+  }
 }
 
 OperationImpl::OptionList& OperationImpl::getOptions()

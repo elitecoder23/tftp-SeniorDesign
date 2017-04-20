@@ -41,8 +41,8 @@ int main( int argc, char ** argv)
 
   TftpClientApplication app( context);
 
-  context.insert < boost::application::args
-    > (std::make_shared < boost::application::args > (argc, argv));
+  context.insert < boost::application::args>(
+    std::make_shared < boost::application::args > (argc, argv));
 
   return boost::application::launch < boost::application::common> (
     app,

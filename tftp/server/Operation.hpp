@@ -43,7 +43,7 @@ class Operation
      *
      * This routines starts the client communication loop.
      **/
-    virtual void operator()() = 0;
+    virtual void start() = 0;
 
     /**
      * @brief Aborts the operation gracefully.

@@ -28,17 +28,21 @@ namespace Tftp {
 namespace Server {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
-  TransmitDataHandler &handler,
+  boost::asio::io_service &ioService,
+  TransmitDataHandlerPtr dataHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress) :
+  const UdpAddressType &serverAddress,
+  OperationCompletedHandler completionHandler) :
   OperationImpl(
+    ioService,
     tftpServerInternal,
     clientAddress,
     clientOptions,
-    serverAddress),
-  handler( handler),
+    serverAddress,
+    completionHandler),
+  dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
   lastTransmittedBlockNumber( 0)
@@ -46,19 +50,26 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 }
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
-  TransmitDataHandler &handler,
+  boost::asio::io_service &ioService,
+  TransmitDataHandlerPtr dataHandler,
   const TftpServerInternal &tftpServerInternal,
   const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions) :
-  OperationImpl( tftpServerInternal, clientAddress, clientOptions),
-  handler( handler),
+  const Options::OptionList &clientOptions,
+  OperationCompletedHandler completionHandler) :
+  OperationImpl(
+    ioService,
+    tftpServerInternal,
+    clientAddress,
+    clientOptions,
+    completionHandler),
+  dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
   lastTransmittedBlockNumber( 0)
 {
 }
 
-void ReadRequestOperationImpl::operator()()
+void ReadRequestOperationImpl::start()
 {
   try
   {
@@ -87,7 +98,7 @@ void ReadRequestOperationImpl::operator()()
         uint64_t transferSize;
 
         // add transfer size to answer only, if handler supply it.
-        if ( handler.requestedTransferSize( transferSize))
+        if ( dataHandler->requestedTransferSize( transferSize))
         {
           getOptions().addTransferSizeOption( transferSize);
         }
@@ -112,16 +123,18 @@ void ReadRequestOperationImpl::operator()()
     }
 
     // start receive loop
-    OperationImpl::operator()();
+    OperationImpl::start();
   }
   catch ( ...)
   {
-    handler.finished();
-
-    throw;
+    finished( false);
   }
+}
 
-  handler.finished();
+void ReadRequestOperationImpl::finished( const bool successful) noexcept
+{
+  OperationImpl::finished( successful);
+  dataHandler->finished();
 }
 
 void ReadRequestOperationImpl::sendData()
@@ -130,7 +143,7 @@ void ReadRequestOperationImpl::sendData()
 
   Packets::DataPacket data(
     lastTransmittedBlockNumber,
-    handler.sendData( transmitDataSize));
+    dataHandler->sendData( transmitDataSize));
 
   if ( data.getDataSize() < transmitDataSize)
   {
@@ -153,12 +166,7 @@ void ReadRequestOperationImpl::handleDataPacket(
     "DATA not expected"));
 
   // Operation completed
-  finished();
-
-  //! @throw CommunicationException Always, because this packet is invalid.
-  BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( "Unexpected packet received") <<
-   PacketTypeInfo( PacketType::Data));
+  finished( false);
 }
 
 void ReadRequestOperationImpl::handleAcknowledgementPacket(
@@ -189,18 +197,14 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
       "Block number not expected"));
 
     // Operation completed
-    finished();
-
-    //! @throw CommunicationException On invalid block number
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( "Block number not expected"));
-
+    finished( false);
+    return;
   }
 
   // if it was the last ACK of the last data packet - we are finished.
   if (lastDataPacketTransmitted)
   {
-    finished();
+    finished( true);
 
     return;
   }

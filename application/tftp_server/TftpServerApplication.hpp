@@ -75,12 +75,12 @@ class TftpServerApplication
       const Tftp::UdpAddressType &from);
 
     void transmitFile(
-      const string &filename,
+      const boost::filesystem::path &filename,
       const Tftp::Options::OptionList &options,
       const Tftp::UdpAddressType &from);
 
     void receiveFile(
-      const string &filename,
+      const boost::filesystem::path &filename,
       const Tftp::Options::OptionList &options,
       const Tftp::UdpAddressType &from);
 

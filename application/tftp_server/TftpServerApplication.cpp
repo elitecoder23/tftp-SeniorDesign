@@ -200,34 +200,31 @@ void TftpServerApplication::receivedRequest(
   const Tftp::Options::OptionList &options,
   const Tftp::UdpAddressType &from)
 {
-  std::cout << "RQ: " << filename << " from: "
-    << from.address().to_string();
-
   // Check transfer mode
   if ( mode != Tftp::TransferMode::OCTET)
   {
     std::cerr << "Wrong transfer mode";
 
-    auto operation = server->createErrorOperation(
+    auto operation( server->createErrorOperation(
       from,
       Tftp::ErrorCode::IllegalTftpOperation,
-      "wrong transfer mode");
+      "wrong transfer mode"));
 
-    (*operation)();
+    operation->start();
 
     return;
   }
 
   if (!checkFilename( (baseDir / filename).lexically_normal()))
   {
-    std::cerr << "Error filename check";
+    std::cerr << "Error filename check\n";
 
-    auto operation = server->createErrorOperation(
+    auto operation( server->createErrorOperation(
       from,
       Tftp::ErrorCode::AccessViolation,
-      "Illegal filename");
+      "Illegal filename"));
 
-    (*operation)();
+    operation->start();
 
     return;
   }
@@ -236,12 +233,12 @@ void TftpServerApplication::receivedRequest(
   {
     case Tftp::RequestType::Read:
       // we are on server side and transmit the data on RRQ
-      transmitFile( filename, options, from);
+      transmitFile( baseDir / filename, options, from);
       break;
 
     case Tftp::RequestType::Write:
-      // we are on server side and receive the data on RRQ
-      receiveFile( filename, options, from);
+      // we are on server side and receive the data on WRQ
+      receiveFile( baseDir /  filename, options, from);
       break;
 
     default:
@@ -251,48 +248,52 @@ void TftpServerApplication::receivedRequest(
 }
 
 void TftpServerApplication::transmitFile(
-  const string &filename,
+  const boost::filesystem::path &filename,
   const Tftp::Options::OptionList &options,
   const Tftp::UdpAddressType &from)
 {
+  std::cout << "RRQ: " << filename << " from: "
+    << from.address().to_string() << "\n";
+
   // open requested file
   std::fstream fileStream( filename.c_str(), std::fstream::in);
 
   // check that file was opened successfully
   if ( !fileStream.good())
   {
-    std::cerr << "Error opening file";
+    std::cerr << "Error opening file\n";
 
-    auto operation = server->createErrorOperation(
+    auto operation( server->createErrorOperation(
       from,
       Tftp::ErrorCode::FileNotFound,
-      "file not found");
+      "file not found"));
 
-    (*operation)();
+    operation->start();
 
     return;
   }
 
-  Tftp::File::StreamFile< std::fstream> file(
-    std::move( fileStream),
-    boost::filesystem::file_size( filename));
-
   // initiate TFTP operation
   auto operation(
     server->createReadRequestOperation(
-      file,
+      std::make_shared< Tftp::File::StreamFile< std::fstream>>(
+        std::move( fileStream),
+        boost::filesystem::file_size( filename)),
       from,
       options));
 
   // executes the TFTP operation
-  (*operation)();
+  operation->start();
 }
 
 void TftpServerApplication::receiveFile(
-  const string &filename,
+  const boost::filesystem::path &filename,
   const Tftp::Options::OptionList &options,
   const Tftp::UdpAddressType &from)
 {
+  std::cout << "WRQ: " << filename << " from: "
+    << from.address().to_string() << "\n";
+
   // open requested file
   std::fstream fileStream(
     filename.c_str(),
@@ -303,28 +304,26 @@ void TftpServerApplication::receiveFile(
   {
     std::cerr << "Error opening file";
 
-    auto operation = server->createErrorOperation(
+    auto operation( server->createErrorOperation(
       from,
-      Tftp::ErrorCode::AccessViolation);
+      Tftp::ErrorCode::AccessViolation));
 
-    (*operation)();
+    operation->start();
 
     return;
   }
 
-  Tftp::File::StreamFile< std::fstream> file(
-    std::move( fileStream),
-    boost::filesystem::file_size( filename));
-
   // initiate TFTP operation
   auto operation(
     server->createWriteRequestOperation(
-      file,
+      std::make_shared< Tftp::File::StreamFile< std::fstream>>(
+        std::move( fileStream),
+        boost::filesystem::file_size( filename)),
       from,
       options));
 
   // executes the TFTP operation
-  (*operation)();
+  operation->start();
 }
 
 void TftpServerApplication::shutdown()

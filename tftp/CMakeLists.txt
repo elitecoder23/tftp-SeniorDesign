@@ -90,8 +90,6 @@ add_library(
   server/Server.hpp
   server/TftpServer.hpp
   server/TftpServer.cpp
-  server/implementation/BaseErrorOperation.hpp
-  server/implementation/BaseErrorOperation.cpp
   server/implementation/ErrorOperation.hpp
   server/implementation/ErrorOperation.cpp
   server/implementation/OperationImpl.hpp

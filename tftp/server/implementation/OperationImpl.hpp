@@ -29,6 +29,7 @@
 #include <boost/asio.hpp>
 
 #include <string>
+#include <memory>
 
 namespace Tftp {
 namespace Server {
@@ -41,16 +42,19 @@ class TftpServerInternal;
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class OperationImpl: public Operation, protected PacketHandler
+class OperationImpl:
+  public std::enable_shared_from_this< OperationImpl>,
+  public Operation,
+  protected PacketHandler
 {
   public:
-    //! @copydoc Operation::operator()()
-    virtual void operator()() override;
+    //! @copydoc Operation::start()
+    virtual void start() override;
 
     //! @copydoc Operation::gracefulAbort
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage = string()) override;
+      const string &errorMessage) override;
 
     //! @copydoc Operation::abort
     virtual void abort() override;
@@ -69,10 +73,12 @@ class OperationImpl: public Operation, protected PacketHandler
      *   local endpoint, where the server handles the request from.
      **/
     OperationImpl(
+      boost::asio::io_service &ioService,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress);
+      const UdpAddressType &serverAddress,
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief Constructor of operation
@@ -85,9 +91,11 @@ class OperationImpl: public Operation, protected PacketHandler
      *   Received option list from client.
      **/
     OperationImpl(
+      boost::asio::io_service &ioService,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions);
+      const Options::OptionList &clientOptions,
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief default destructor.
@@ -100,7 +108,7 @@ class OperationImpl: public Operation, protected PacketHandler
      * This operation is called, when the last packet has been received or
      * transmitted to stop the receive loop.
      **/
-    void finished() noexcept;
+    virtual void finished( bool successful) noexcept;
 
     /**
      * @brief Sends the given packet to the client.
@@ -219,9 +227,9 @@ class OperationImpl: public Operation, protected PacketHandler
 
     //! The internal TFTP server
     const TftpServerInternal &tftpServerInternal;
+    //!
+    OperationCompletedHandler completionHandler;
 
-    //! The remote (client) endpoint
-    const UdpAddressType clientAddress;
     //! The stored negotiated options
     Options::OptionList options;
     //! The maximum packet size, which can be received
@@ -229,8 +237,6 @@ class OperationImpl: public Operation, protected PacketHandler
     //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
     uint8_t receiveTimeout;
 
-    //! The I/O service, which performs the asynchronous operations.
-    boost::asio::io_service ioService;
     //! The TFTP UDP socket
     boost::asio::ip::udp::socket socket;
     //! The timeout timer

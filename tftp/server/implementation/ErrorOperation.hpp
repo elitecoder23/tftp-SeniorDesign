@@ -18,7 +18,13 @@
 #define TFTP_SERVER_ERROROPERATION_HPP
 
 #include <tftp/Tftp.hpp>
-#include <tftp/server/implementation/BaseErrorOperation.hpp>
+
+#include <tftp/server/Server.hpp>
+#include <tftp/server/Operation.hpp>
+
+#include <tftp/packets/Packets.hpp>
+
+#include <boost/asio.hpp>
 
 #include <string>
 
@@ -29,7 +35,7 @@ namespace Server {
  * @brief This operation can be used to transfer an error message back to
  *  the initiator of an TFTP request.
  **/
-class ErrorOperation: public BaseErrorOperation
+class ErrorOperation: public Operation
 {
   public:
     using string = std::string;
@@ -47,16 +53,20 @@ class ErrorOperation: public BaseErrorOperation
      *   Optional parameter to define the communication source
      **/
     ErrorOperation(
+      boost::asio::io_service &ioService,
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
       ErrorCode errorCode,
-      const string &errorMessage);
+      const string &errorMessage,
+      OperationCompletedHandler completionHandler);
 
     ErrorOperation(
+      boost::asio::io_service &ioService,
       UdpAddressType &&clientAddress,
       UdpAddressType &&from,
       ErrorCode errorCode,
-      string &&errorMessage);
+      string &&errorMessage,
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief Initialises the error operation.
@@ -71,23 +81,49 @@ class ErrorOperation: public BaseErrorOperation
      * @throw CommunicationException
      **/
     ErrorOperation(
+      boost::asio::io_service &ioService,
       const UdpAddressType &clientAddress,
       ErrorCode errorCode,
-      const string &errorMessage);
+      const string &errorMessage,
+      OperationCompletedHandler completionHandler);
 
     ErrorOperation(
+      boost::asio::io_service &ioService,
       UdpAddressType &&clientAddress,
       ErrorCode errorCode,
-      string &&errorMessage);
+      string &&errorMessage,
+      OperationCompletedHandler completionHandler);
+
+    //! Default destructor.
+    virtual ~ErrorOperation() noexcept;
 
     /**
-     * @copydoc Operation::operator()()
+     * @copydoc Operation::start()
      *
      * Executes the error operation
      **/
-    virtual void operator()() override final;
+    virtual void start() override final;
+
+    //! @copydoc Operation::gracefulAbort
+    virtual void gracefulAbort(
+      ErrorCode errorCode,
+      const string &errorMessage = string()) override final;
+
+    //! @copydoc Operation::abort
+    virtual void abort() override final;
 
   private:
+    /**
+     * @brief Sends the given error packet.
+     *
+     * @param[in] error
+     *   The error packet.
+     **/
+    void sendError( const Packets::BaseErrorPacket &error);
+
+    OperationCompletedHandler completionHandler;
+    //!
+    boost::asio::ip::udp::socket socket;
     //! The error code
     const ErrorCode errorCode;
     //! The error message

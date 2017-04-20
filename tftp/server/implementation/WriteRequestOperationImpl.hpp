@@ -57,11 +57,13 @@ class WriteRequestOperationImpl: public OperationImpl
      *   local endpoint, where the server handles the request from.
      **/
     WriteRequestOperationImpl(
-      ReceiveDataHandler &handler,
+      boost::asio::io_service &ioService,
+      ReceiveDataHandlerPtr dataHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress);
+      const UdpAddressType &serverAddress,
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief Constructs the class.
@@ -76,10 +78,12 @@ class WriteRequestOperationImpl: public OperationImpl
      *   Received option list from client.
      **/
     WriteRequestOperationImpl(
-      ReceiveDataHandler &handler,
+      boost::asio::io_service &ioService,
+      ReceiveDataHandlerPtr dataHandler,
       const TftpServerInternal &tftpServerInternal,
       const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions);
+      const Options::OptionList &clientOptions,
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief Standard destructor.
@@ -89,9 +93,11 @@ class WriteRequestOperationImpl: public OperationImpl
     /**
      * @brief Executes the operation.
      **/
-    virtual void operator()() override final;
+    virtual void start() override final;
 
   private:
+    virtual void finished( bool successful) noexcept override final;
+
     /**
      * @copydoc PacketHandler::handleDataPacket
      *
@@ -115,7 +121,7 @@ class WriteRequestOperationImpl: public OperationImpl
 
   private:
     //! Handler which will be called on various events.
-    ReceiveDataHandler &handler;
+    ReceiveDataHandlerPtr dataHandler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! Holds the last received block number.
