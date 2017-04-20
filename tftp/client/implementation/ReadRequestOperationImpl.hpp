@@ -38,7 +38,7 @@ class ReadRequestOperationImpl : public OperationImpl
     /**
      * @brief Constructor of TftpClientReadOperation
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler for received data.
      * @param[in] tftpClient
      *   The TFTP client.
@@ -53,18 +53,18 @@ class ReadRequestOperationImpl : public OperationImpl
      **/
     ReadRequestOperationImpl(
       boost::asio::io_service &ioService,
-      ReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandlerPtr dataHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
       const UdpAddressType &from,
-      TftpClient::OperationCompletedHandler operationCompletedHandler);
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief Constructor of TftpClientReadOperation
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler for received data.
      * @param[in] tftpClient
      *   The TFTP client.
@@ -77,19 +77,19 @@ class ReadRequestOperationImpl : public OperationImpl
      **/
     ReadRequestOperationImpl(
       boost::asio::io_service &ioService,
-      ReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandlerPtr dataHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      TftpClient::OperationCompletedHandler operationCompletedHandler);
+      OperationCompletedHandler completionHandler);
 
     /**
      * @copybrief OperationImpl::operator()()
      *
      * Assembles and transmit TFTP RRQ packet and start parent receive loop.
      **/
-    virtual void operator()() override final;
+    virtual void start() override final;
 
   protected:
     /**
@@ -123,7 +123,7 @@ class ReadRequestOperationImpl : public OperationImpl
 
   private:
     //! Registered handler.
-    ReceiveDataOperationHandler &handler;
+    ReceiveDataOperationHandlerPtr dataHandler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! last received block number.

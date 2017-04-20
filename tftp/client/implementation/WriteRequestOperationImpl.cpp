@@ -28,13 +28,13 @@ namespace Client {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_service &ioService,
-  TransmitDataOperationHandler &handler,
+  TransmitDataOperationHandlerPtr dataHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from,
-  TftpClient::OperationCompletedHandler operationCompletedHandler):
+  OperationCompletedHandler completionHandler):
   OperationImpl(
     ioService,
     RequestType::Write,
@@ -43,8 +43,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     filename,
     mode,
     from,
-    operationCompletedHandler),
-  handler( handler),
+    completionHandler),
+  dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
   lastTransmittedBlockNumber( 0)
@@ -53,12 +53,12 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_service &ioService,
-  TransmitDataOperationHandler &handler,
+  TransmitDataOperationHandlerPtr dataHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
-  TftpClient::OperationCompletedHandler operationCompletedHandler):
+  OperationCompletedHandler completionHandler):
   OperationImpl(
     ioService,
     RequestType::Write,
@@ -66,15 +66,15 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     serverAddress,
     filename,
     mode,
-    operationCompletedHandler),
-  handler( handler),
+    completionHandler),
+  dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
   lastTransmittedBlockNumber( 0)
 {
 }
 
-void WriteRequestOperationImpl::operator()()
+void WriteRequestOperationImpl::start()
 {
   try
   {
@@ -88,7 +88,7 @@ void WriteRequestOperationImpl::operator()()
       uint64_t transferSize;
 
       // If the handler supplies a transfer size
-      if (handler.requestedTransferSize( transferSize))
+      if (dataHandler->requestedTransferSize( transferSize))
       {
         // set transfer size TFTP option
         getOptions().addTransferSizeOption( transferSize);
@@ -107,16 +107,16 @@ void WriteRequestOperationImpl::operator()()
       getOptions()));
 
     // wait for answers
-    OperationImpl::operator()();
+    OperationImpl::start();
   }
   catch (...)
   {
-    handler.finishedOperation();
+    dataHandler->finishedOperation();
 
     throw;
   }
 
-  handler.finishedOperation();
+  dataHandler->finishedOperation();
 }
 
 void WriteRequestOperationImpl::sendData()
@@ -125,7 +125,7 @@ void WriteRequestOperationImpl::sendData()
 
   Packets::DataPacket data(
     lastTransmittedBlockNumber,
-    handler.sendData( transmitDataSize));
+    dataHandler->sendData( transmitDataSize));
 
   if (data.getDataSize() < transmitDataSize)
   {

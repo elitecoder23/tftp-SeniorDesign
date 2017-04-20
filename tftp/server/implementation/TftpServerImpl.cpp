@@ -105,7 +105,6 @@ void TftpServerImpl::operator()()
     BOOST_THROW_EXCEPTION( TftpException() <<
       AdditionalInfo( err.what()));
   }
-
 }
 
 void TftpServerImpl::stop()

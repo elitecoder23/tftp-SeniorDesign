@@ -18,6 +18,7 @@
 #define TFTP_FILE_FILE_HPP
 
 #include <tftp/Tftp.hpp>
+#include <memory>
 
 namespace Tftp {
 
@@ -41,6 +42,8 @@ class TftpFile;
 class MemoryFile;
 class StreamFile;
 class NullSinkFile;
+
+using MemoryFilePtr = std::shared_ptr< MemoryFile>;
 
 }
 }

@@ -69,7 +69,7 @@ class OperationImpl :
      * A child class inheriting from this class must override this operation,
      * sending the request package and then calling this method.
      **/
-    virtual void operator()() override;
+    virtual void start() override;
 
     //! @copydoc Operation::gracefulAbort
     virtual void gracefulAbort(
@@ -118,7 +118,7 @@ class OperationImpl :
       const string &filename,
       TransferMode mode,
       const UdpAddressType &from,
-      TftpClient::OperationCompletedHandler operationCompletedHandler);
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief Constructor of TftpClientOperation
@@ -141,7 +141,7 @@ class OperationImpl :
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      TftpClient::OperationCompletedHandler operationCompletedHandler);
+      OperationCompletedHandler operationCompletedHandler);
 
     /**
      * @brief Returns the TFTP option list.
@@ -298,7 +298,7 @@ class OperationImpl :
     const string filename;
     //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
     const TransferMode mode;
-    TftpClient::OperationCompletedHandler operationCompletedHandler;
+    OperationCompletedHandler completionHandler;
     //! options for the transfer
     OptionList options;
     /**

@@ -41,9 +41,9 @@ class Operation
     /**
      * @brief Executes the TFTP client operation.
      *
-     * This routines starts the client communication loop.
+     * This routines starts the client communication.
      **/
-    virtual void operator()() = 0;
+    virtual void start() = 0;
 
     /**
      * @brief Aborts the operation gracefully.

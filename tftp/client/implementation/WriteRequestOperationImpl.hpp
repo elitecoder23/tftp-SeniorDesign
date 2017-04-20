@@ -35,7 +35,7 @@ class WriteRequestOperationImpl : public OperationImpl
     /**
      * @brief Constructor of TftpClientWriteOperation
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler for data.
      * @param[in] tftpClient
      *   The TFTP client.
@@ -50,18 +50,18 @@ class WriteRequestOperationImpl : public OperationImpl
      **/
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
-      TransmitDataOperationHandler &handler,
+      TransmitDataOperationHandlerPtr dataHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
       const UdpAddressType &from,
-      TftpClient::OperationCompletedHandler operationCompletedHandler);
+      OperationCompletedHandler completionHandler);
 
     /**
      * @brief Constructor of TftpClientWriteOperation
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler for data.
      * @param[in] tftpClient
      *   The TFTP client.
@@ -74,19 +74,19 @@ class WriteRequestOperationImpl : public OperationImpl
      **/
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
-      TransmitDataOperationHandler &handler,
+      TransmitDataOperationHandlerPtr dataHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      TftpClient::OperationCompletedHandler operationCompletedHandler);
+      OperationCompletedHandler completionHandler);
 
     /**
      * @copybrief OperationImpl::operator()()
      *
      * Assembles and transmit TFTP WRQ packet and start parent receive loop.
      **/
-    virtual void operator()() override;
+    virtual void start() override;
 
   protected:
     /**
@@ -133,7 +133,7 @@ class WriteRequestOperationImpl : public OperationImpl
     using BlockNumber = Packets::BlockNumber;
 
     //! The handler, which is called
-    TransmitDataOperationHandler &handler;
+    TransmitDataOperationHandlerPtr dataHandler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t transmitDataSize;
     //! Is set, when the last data packet has been transmitted

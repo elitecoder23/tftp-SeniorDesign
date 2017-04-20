@@ -28,13 +28,13 @@ namespace Client {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
-  ReceiveDataOperationHandler &handler,
+  ReceiveDataOperationHandlerPtr dataHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from,
-  TftpClient::OperationCompletedHandler operationCompletedHandler) :
+  OperationCompletedHandler completionHandler) :
   OperationImpl(
     ioService,
     RequestType::Read,
@@ -43,8 +43,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     filename,
     mode,
     from,
-    operationCompletedHandler),
-  handler( handler),
+    completionHandler),
+  dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
@@ -52,12 +52,12 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
-  ReceiveDataOperationHandler &handler,
+  ReceiveDataOperationHandlerPtr dataHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
-  TftpClient::OperationCompletedHandler operationCompletedHandler) :
+  OperationCompletedHandler completionHandler) :
   OperationImpl(
     ioService,
     RequestType::Read,
@@ -65,14 +65,14 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     serverAddress,
     filename,
     mode,
-    operationCompletedHandler),
-  handler( handler),
+    completionHandler),
+  dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
 {
 }
 
-void ReadRequestOperationImpl::operator ()( void)
+void ReadRequestOperationImpl::start()
 {
   try
   {
@@ -84,16 +84,16 @@ void ReadRequestOperationImpl::operator ()( void)
       Packets::ReadRequestPacket( getFilename(), getMode(), getOptions()));
 
     // wait for answers
-    OperationImpl::operator ()();
+    OperationImpl::start();
   }
   catch ( ...)
   {
-    handler.finishedOperation();
+    dataHandler->finishedOperation();
 
     throw;
   }
 
-  handler.finishedOperation();
+  dataHandler->finishedOperation();
 }
 
 void ReadRequestOperationImpl::handleDataPacket(
@@ -157,7 +157,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   }
 
   // call call-back
-  handler.receviedData( dataPacket.getData());
+  dataHandler->receviedData( dataPacket.getData());
 
   // increment received block number
   lastReceivedBlockNumber++;
@@ -269,7 +269,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   // check transfer size option
   if (negotiatedOptions.hasTransferSizeOption())
   {
-    if (!handler.receivedTransferSize( negotiatedOptions.getTransferSizeOption()))
+    if (!dataHandler->receivedTransferSize( negotiatedOptions.getTransferSizeOption()))
     {
       send( Packets::ErrorPacket(
         ErrorCode::DiskFullOrAllocationExceeds,

@@ -22,7 +22,6 @@
 #include <tftp/options/Options.hpp>
 
 #include <string>
-#include <functional>
 
 namespace Tftp {
 namespace Client {
@@ -36,8 +35,6 @@ namespace Client {
 class TftpClient
 {
   public:
-    using OperationCompletedHandler = std::function< void()>;
-
     using string = std::string;
 
     /**
@@ -59,14 +56,14 @@ class TftpClient
     //! Default destructor
     virtual ~TftpClient() noexcept = default;
 
-    virtual void operator()() = 0;
+    virtual void entry() = 0;
 
     virtual void stop() = 0;
 
     /**
      * @brief Creates an read request operation (TFTP RRQ).
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler for received data.
      * @param[in] serverAddress
      *   Where the connection should be established to.
@@ -80,17 +77,17 @@ class TftpClient
      * @return The client operation instance.
      **/
     virtual OperationPtr createReadRequestOperation(
-      ReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandlerPtr dataHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
       const UdpAddressType &from,
-      OperationCompletedHandler = {}) = 0;
+      OperationCompletedHandler completionHandler = {}) = 0;
 
     /**
      * @brief Creates an read request operation (TFTP RRQ).
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler for received data.
      * @param[in] serverAddress
      *   Where the connection should be established to.
@@ -102,16 +99,16 @@ class TftpClient
      * @return The client operation instance.
      **/
     virtual OperationPtr createReadRequestOperation(
-      ReceiveDataOperationHandler &handler,
+      ReceiveDataOperationHandlerPtr dataHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      OperationCompletedHandler = {}) = 0;
+      OperationCompletedHandler completionHandler = {}) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler for data.
      * @param[in] serverAddress
      *   Where the connection should be established to.
@@ -125,17 +122,17 @@ class TftpClient
      * @return The client operation instance.
      **/
     virtual OperationPtr createWriteRequestOperation(
-      TransmitDataOperationHandler &handler,
+      TransmitDataOperationHandlerPtr dataHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
       const UdpAddressType &from,
-      OperationCompletedHandler = {}) = 0;
+      OperationCompletedHandler completionHandler = {}) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler for data.
      * @param[in] serverAddress
      *   Where the connection should be established to.
@@ -147,11 +144,11 @@ class TftpClient
      * @return The client operation instance.
      **/
     virtual OperationPtr createWriteRequestOperation(
-      TransmitDataOperationHandler &handler,
+      TransmitDataOperationHandlerPtr dataHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      OperationCompletedHandler = {}) = 0;
+      OperationCompletedHandler completionHandler = {}) = 0;
 
   protected:
     //! Protected constructor.

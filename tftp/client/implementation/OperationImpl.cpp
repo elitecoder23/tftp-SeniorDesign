@@ -46,7 +46,7 @@ OperationImpl::~OperationImpl() noexcept
   }
 }
 
-void OperationImpl::operator()()
+void OperationImpl::start()
 {
   // start first receive operation
   receiveFirst();
@@ -102,14 +102,14 @@ OperationImpl::OperationImpl(
   const string &filename,
   const TransferMode mode,
   const UdpAddressType &from,
-  TftpClient::OperationCompletedHandler operationCompletedHandler)
+  OperationCompletedHandler completionHandler)
 try :
   requestType( requestType),
   tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
   mode( mode),
-  operationCompletedHandler( operationCompletedHandler),
+  completionHandler( completionHandler),
   options( tftpClient.getOptionList()),
   maxReceivePacketSize( DefaultMaxPacketSize),
   receiveTimeout( tftpClient.getConfiguration().tftpTimeout),
@@ -153,14 +153,14 @@ OperationImpl::OperationImpl(
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
-  TftpClient::OperationCompletedHandler operationCompletedHandler)
+  OperationCompletedHandler completionHandler)
 try:
   requestType( requestType),
   tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
   mode( mode),
-  operationCompletedHandler( operationCompletedHandler),
+  completionHandler( completionHandler),
   options( tftpClient.getOptionList()),
   maxReceivePacketSize( DefaultMaxPacketSize),
   receiveTimeout( tftpClient.getConfiguration().tftpTimeout),

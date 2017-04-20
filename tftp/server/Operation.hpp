@@ -55,7 +55,7 @@ class Operation
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage = string()) = 0;
+      const string &errorMessage = {}) = 0;
 
     /**
      * @brief Aborts the operation immediately.
