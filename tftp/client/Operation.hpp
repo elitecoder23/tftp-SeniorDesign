@@ -42,6 +42,9 @@ class Operation
      * @brief Executes the TFTP client operation.
      *
      * This routines starts the client communication.
+     *
+     * It returns immediately after sending the request.
+     *
      **/
     virtual void start() = 0;
 
@@ -61,24 +64,6 @@ class Operation
      * @brief Immediately cancels the transfer.
      **/
     virtual void abort() = 0;
-
-    virtual RequestType getRequestType() const = 0;
-
-    virtual const UdpAddressType& getServerAddress() const = 0;
-
-    /**
-     * @brief Returns the request filename.
-     *
-     * @return The request filename.
-     **/
-    virtual const string& getFilename() const = 0;
-
-    /**
-     * @brief Returns the transfer mode.
-     *
-     * @return The transfer mode.
-     **/
-    virtual TransferMode getMode() const = 0;
 };
 
 }

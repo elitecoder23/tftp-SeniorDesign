@@ -37,7 +37,6 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   OperationCompletedHandler completionHandler) :
   OperationImpl(
     ioService,
-    RequestType::Read,
     tftpClient,
     serverAddress,
     filename,
@@ -60,7 +59,6 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   OperationCompletedHandler completionHandler) :
   OperationImpl(
     ioService,
-    RequestType::Read,
     tftpClient,
     serverAddress,
     filename,

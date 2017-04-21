@@ -92,6 +92,7 @@ class ReadRequestOperationImpl : public OperationImpl
     virtual void start() override final;
 
   protected:
+    //! @copydoc OperationImpl::finished
     virtual void finished( bool successful) noexcept override final;
 
     /**

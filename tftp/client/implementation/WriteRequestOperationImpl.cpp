@@ -37,7 +37,6 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   OperationCompletedHandler completionHandler):
   OperationImpl(
     ioService,
-    RequestType::Write,
     tftpClient,
     serverAddress,
     filename,
@@ -61,7 +60,6 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   OperationCompletedHandler completionHandler):
   OperationImpl(
     ioService,
-    RequestType::Write,
     tftpClient,
     serverAddress,
     filename,

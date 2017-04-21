@@ -79,18 +79,6 @@ class OperationImpl :
     //! @copydoc Operation::abort
     virtual void abort() override final;
 
-    //! @copydoc Operation::getRequestType
-    virtual RequestType getRequestType() const override final;
-
-    //! @copydoc Operation::getServerAddress
-    virtual const UdpAddressType& getServerAddress() const override final;
-
-    //! @copydoc Operation::getFilename
-    virtual const string& getFilename() const override final;
-
-    //! @copydoc Operation::getMode
-    virtual TransferMode getMode() const override final;
-
   protected:
     using OptionList = Options::OptionList;
 
@@ -112,7 +100,6 @@ class OperationImpl :
      **/
     OperationImpl(
       boost::asio::io_service &ioService,
-      RequestType requestType,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -136,7 +123,6 @@ class OperationImpl :
      **/
     OperationImpl(
       boost::asio::io_service &ioService,
-      RequestType requestType,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
@@ -144,12 +130,18 @@ class OperationImpl :
       OperationCompletedHandler operationCompletedHandler);
 
     /**
-     * @brief Sets the finished flag.
+     * @brief Returns the request filename.
      *
-     * @param[in] successful
-     *   if the operation was successful or an error occurred.
+     * @return The request filename.
      **/
-    virtual void finished( bool successful) noexcept;
+    const string& getFilename() const;
+
+    /**
+     * @brief Returns the transfer mode.
+     *
+     * @return The transfer mode.
+     **/
+    TransferMode getMode() const;
 
     /**
      * @brief Returns the TFTP option list.
@@ -204,6 +196,14 @@ class OperationImpl :
      *   The new receive timeout.
      **/
     void setReceiveTimeout( uint8_t receiveTimeout) noexcept;
+
+    /**
+     * @brief Sets the finished flag.
+     *
+     * @param[in] successful
+     *   if the operation was successful or an error occurred.
+     **/
+    virtual void finished( bool successful) noexcept;
 
     /**
      * @copydoc PacketHandler::handleReadRequestPacket()
@@ -291,8 +291,6 @@ class OperationImpl :
      **/
     void timeoutHandler( const boost::system::error_code& errorCode);
 
-    //! The request type
-    const RequestType requestType;
     //! The internal TFTP client
     const TftpClientInternal &tftpClient;
     //! The TFTP server endpoint

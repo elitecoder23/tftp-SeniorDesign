@@ -81,29 +81,8 @@ void OperationImpl::abort()
   finished( false);
 }
 
-RequestType OperationImpl::getRequestType() const
-{
-  return requestType;
-}
-
-const UdpAddressType& OperationImpl::getServerAddress() const
-{
-  return remoteEndpoint;
-}
-
-const OperationImpl::string& OperationImpl::getFilename() const
-{
-  return filename;
-}
-
-TransferMode OperationImpl::getMode() const
-{
-  return mode;
-}
-
 OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
-  const RequestType requestType,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
@@ -111,7 +90,6 @@ OperationImpl::OperationImpl(
   const UdpAddressType &from,
   OperationCompletedHandler completionHandler)
 try :
-  requestType( requestType),
   tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
@@ -157,14 +135,12 @@ catch ( boost::system::system_error &err)
 
 OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
-  const RequestType requestType,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
   OperationCompletedHandler completionHandler)
 try:
-  requestType( requestType),
   tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
@@ -205,15 +181,14 @@ catch ( boost::system::system_error &err)
     CommunicationException() << AdditionalInfo( err.what()));
 }
 
-void OperationImpl::finished( bool successful) noexcept
+const OperationImpl::string& OperationImpl::getFilename() const
 {
-  timer.cancel();
-  socket.cancel();
+  return filename;
+}
 
-  if (completionHandler)
-  {
-    completionHandler( successful);
-  }
+TransferMode OperationImpl::getMode() const
+{
+  return mode;
 }
 
 OperationImpl::OptionList& OperationImpl::getOptions()
@@ -225,11 +200,11 @@ void OperationImpl::sendFirst( const Packets::Packet &packet)
 {
   BOOST_LOG_FUNCTION();
 
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "TX: " << static_cast< std::string>( packet);
+
   try
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-      "TX: " << static_cast< std::string>( packet);
-
     // Reset the transmit counter
     transmitCounter = 1;
 
@@ -258,11 +233,11 @@ void OperationImpl::send( const Packets::Packet &packet)
 {
   BOOST_LOG_FUNCTION();
 
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "TX: " << static_cast< std::string>( packet);
+
   try
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-      "TX: " << static_cast< std::string>( packet);
-
     // Reset the transmit counter
     transmitCounter = 1;
 
@@ -367,6 +342,17 @@ void OperationImpl::setReceiveTimeout(
   const uint8_t receiveTimeout) noexcept
 {
   this->receiveTimeout = receiveTimeout;
+}
+
+void OperationImpl::finished( const bool successful) noexcept
+{
+  timer.cancel();
+  socket.cancel();
+
+  if (completionHandler)
+  {
+    completionHandler( successful);
+  }
 }
 
 void OperationImpl::handleReadRequestPacket(

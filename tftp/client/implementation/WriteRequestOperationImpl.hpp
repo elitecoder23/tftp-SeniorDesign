@@ -89,6 +89,7 @@ class WriteRequestOperationImpl : public OperationImpl
     virtual void start() override;
 
   protected:
+    //! @copydoc OperationImpl::finished
     virtual void finished( bool successful) noexcept override final;
 
     /**
