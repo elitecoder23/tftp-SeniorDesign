@@ -90,9 +90,11 @@ void ReadRequestOperationImpl::start()
   }
 }
 
-void ReadRequestOperationImpl::finished( const TransferStatus status) noexcept
+void ReadRequestOperationImpl::finished(
+  const TransferStatus status,
+  ErrorInfo &&errorInfo) noexcept
 {
-  OperationImpl::finished( status);
+  OperationImpl::finished( status, std::move( errorInfo));
   dataHandler->finished();
 }
 
@@ -122,12 +124,13 @@ void ReadRequestOperationImpl::handleDataPacket(
       "Wrong Data packet block number";
 
     // send error packet
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Block Number not expected"));
+      "Block Number not expected");
+    send( errorPacket);
 
     // Operation completed
-    finished( TransferStatus::TransferError);
+    finished( TransferStatus::TransferError, std::move( errorPacket));
     return;
   }
 
@@ -138,12 +141,13 @@ void ReadRequestOperationImpl::handleDataPacket(
       "Too much data received";
 
     // send error packet
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Too much data"));
+      "Too much data");
+    send( errorPacket);
 
     // Operation completed
-    finished( TransferStatus::TransferError);
+    finished( TransferStatus::TransferError, std::move( errorPacket));
     return;
   }
 
@@ -177,12 +181,14 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
     static_cast< std::string>( acknowledgementPacket);
 
   // send Error
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "ACK not expected"));
+    "ACK not expected");
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError);
+  finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
 void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
@@ -200,12 +206,14 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Received option list is empty";
 
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Empty OACK not allowed"));
+      "Empty OACK not allowed");
+
+    send( errorPacket);
 
     // Operation completed
-    finished( TransferStatus::TransferError);
+    finished( TransferStatus::TransferError, std::move( errorPacket));
     return;
   }
 
@@ -218,12 +226,14 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Option negotiation failed";
 
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket(
       ErrorCode::TftpOptionRefused,
-      "Option negotiation failed"));
+      "Option negotiation failed");
+
+    send( errorPacket);
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError);
+    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket));
     return;
   }
 
@@ -251,12 +261,14 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   {
     if (!dataHandler->receivedTransferSize( negotiatedOptions.getTransferSizeOption()))
     {
-      send( Packets::ErrorPacket(
+      Packets::ErrorPacket errorPacket(
         ErrorCode::DiskFullOrAllocationExceeds,
-        "FILE TO BIG"));
+        "FILE TO BIG");
+
+      send( errorPacket);
 
       // Operation completed
-      finished( TransferStatus::TransferError);
+      finished( TransferStatus::TransferError, std::move( errorPacket));
       return;
     }
   }

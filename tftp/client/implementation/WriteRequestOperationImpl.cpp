@@ -113,9 +113,11 @@ void WriteRequestOperationImpl::start()
   }
 }
 
-void WriteRequestOperationImpl::finished( const TransferStatus status) noexcept
+void WriteRequestOperationImpl::finished(
+  const TransferStatus status,
+  ErrorInfo &&errorInfo) noexcept
 {
-  OperationImpl::finished( status);
+  OperationImpl::finished( status, std::move( errorInfo));
   dataHandler->finished();
 }
 

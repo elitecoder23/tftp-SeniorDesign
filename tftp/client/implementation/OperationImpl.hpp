@@ -24,6 +24,7 @@
 #include <tftp/client/TftpClient.hpp>
 
 #include <tftp/packets/Packets.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
 
 #include <tftp/options/OptionList.hpp>
 
@@ -78,6 +79,9 @@ class OperationImpl :
 
     //! @copydoc Operation::abort
     virtual void abort() override final;
+
+    //! @copydoc Operation::getErrorInfo
+    virtual const ErrorInfo& getErrorInfo() const override final;
 
   protected:
     using OptionList = Options::OptionList;
@@ -203,7 +207,7 @@ class OperationImpl :
      * @param[in] status
      *   if the operation was successful or an error occurred.
      **/
-    virtual void finished( TransferStatus status) noexcept;
+    virtual void finished( TransferStatus status, ErrorInfo &&errorInfo = {}) noexcept;
 
     /**
      * @copydoc PacketHandler::handleReadRequestPacket()
@@ -299,6 +303,7 @@ class OperationImpl :
     const string filename;
     //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
     const TransferMode mode;
+    //! Completion Handler
     OperationCompletedHandler completionHandler;
     //! options for the transfer
     OptionList options;
@@ -328,6 +333,8 @@ class OperationImpl :
     PacketType transmitPacketType;
     //! the retransmission counter
     unsigned int transmitCounter;
+    //! Error info
+    ErrorInfo errorInfo;
 };
 
 }

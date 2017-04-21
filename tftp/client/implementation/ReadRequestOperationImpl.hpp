@@ -93,7 +93,9 @@ class ReadRequestOperationImpl : public OperationImpl
 
   protected:
     //! @copydoc OperationImpl::finished
-    virtual void finished( TransferStatus status) noexcept override final;
+    virtual void finished(
+      TransferStatus status,
+      ErrorInfo &&errorInfo = {}) noexcept override final;
 
     /**
      * @copydoc PacketHandler::handleDataPacket()
