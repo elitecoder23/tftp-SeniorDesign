@@ -92,7 +92,9 @@ class ReadRequestOperationImpl: public OperationImpl
     virtual void start() override final;
 
   private:
-    virtual void finished( TransferStatus status) noexcept override final;
+    virtual void finished(
+      TransferStatus status,
+      ErrorInfo &&errorInfo = {}) noexcept override final;
 
     /**
      * @brief Sends a data packet to the client.

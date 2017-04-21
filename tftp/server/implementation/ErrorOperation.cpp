@@ -202,6 +202,11 @@ void ErrorOperation::abort()
   // do nothing
 }
 
+const ErrorOperation::ErrorInfo& ErrorOperation::getErrorInfo() const
+{
+  return {};
+}
+
 void ErrorOperation::sendError( const Packets::BaseErrorPacket &error)
 {
   try

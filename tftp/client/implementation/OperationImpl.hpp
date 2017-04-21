@@ -207,7 +207,9 @@ class OperationImpl :
      * @param[in] status
      *   if the operation was successful or an error occurred.
      **/
-    virtual void finished( TransferStatus status, ErrorInfo &&errorInfo = {}) noexcept;
+    virtual void finished(
+      TransferStatus status,
+      ErrorInfo &&errorInfo = {}) noexcept;
 
     /**
      * @copydoc PacketHandler::handleReadRequestPacket()

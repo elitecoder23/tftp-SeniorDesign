@@ -69,7 +69,7 @@ void OperationImpl::gracefulAbort(
   send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::AbortError, errorPacket);
+  finished( TransferStatus::AbortError, std::move( errorPacket));
 }
 
 void OperationImpl::abort()

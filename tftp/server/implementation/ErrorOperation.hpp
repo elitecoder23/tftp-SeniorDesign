@@ -112,6 +112,9 @@ class ErrorOperation: public Operation
     //! @copydoc Operation::abort
     virtual void abort() override final;
 
+    //! @copydoc Operation::getErrorInfo
+    virtual const ErrorInfo& getErrorInfo() const override final;
+
   private:
     /**
      * @brief Sends the given error packet.

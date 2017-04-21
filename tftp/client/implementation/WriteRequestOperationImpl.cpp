@@ -214,11 +214,13 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Received option list is empty";
 
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Empty OACK not allowed"));
+      "Empty OACK not allowed");
 
-    finished( TransferStatus::TransferError);
+    send( errorPacket);
+
+    finished( TransferStatus::TransferError, std::move( errorPacket));
     return;
   }
 

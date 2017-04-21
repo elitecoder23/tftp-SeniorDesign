@@ -131,9 +131,11 @@ void ReadRequestOperationImpl::start()
   }
 }
 
-void ReadRequestOperationImpl::finished( const TransferStatus status) noexcept
+void ReadRequestOperationImpl::finished(
+  const TransferStatus status,
+  ErrorInfo &&errorInfo) noexcept
 {
-  OperationImpl::finished( status);
+  OperationImpl::finished( status, std::move( errorInfo));
   dataHandler->finished();
 }
 
@@ -161,12 +163,14 @@ void ReadRequestOperationImpl::handleDataPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
     static_cast< std::string>( dataPacket);
 
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected"));
+    "DATA not expected");
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError);
+  finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
 void ReadRequestOperationImpl::handleAcknowledgementPacket(
@@ -192,12 +196,14 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Invalid block number received";
 
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Block number not expected"));
+      "Block number not expected");
+
+    send( errorPacket);
 
     // Operation completed
-    finished( TransferStatus::TransferError);
+    finished( TransferStatus::TransferError, std::move( errorPacket));
     return;
   }
 

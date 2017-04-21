@@ -96,7 +96,9 @@ class WriteRequestOperationImpl: public OperationImpl
     virtual void start() override final;
 
   private:
-    virtual void finished( TransferStatus status) noexcept override final;
+    virtual void finished(
+      TransferStatus status,
+      ErrorInfo &&errorInfo = {}) noexcept override final;
 
     /**
      * @copydoc PacketHandler::handleDataPacket

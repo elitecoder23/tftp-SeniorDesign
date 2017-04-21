@@ -107,12 +107,14 @@ void WriteRequestOperationImpl::start()
         if ( !dataHandler->receivedTransferSize(
           getOptions().getTransferSizeOption()))
         {
-          send(
-            Packets::ErrorPacket(
-              ErrorCode::DiskFullOrAllocationExceeds,
-              "FILE TO BIG"));
+          Packets::ErrorPacket errorPacket(
+            ErrorCode::DiskFullOrAllocationExceeds,
+            "FILE TO BIG");
 
-          finished( TransferStatus::RequestError);
+          send( errorPacket);
+
+          // send transfer error to be in sync with TFTP client
+          finished( TransferStatus::TransferError, std::move( errorPacket));
           return;
         }
       }
@@ -130,9 +132,11 @@ void WriteRequestOperationImpl::start()
   }
 }
 
-void WriteRequestOperationImpl::finished( const TransferStatus status) noexcept
+void WriteRequestOperationImpl::finished(
+  const TransferStatus status,
+  ErrorInfo &&errorInfo) noexcept
 {
-  OperationImpl::finished( status);
+  OperationImpl::finished( status, std::move( errorInfo));
   dataHandler->finished();
 }
 
@@ -160,12 +164,14 @@ void WriteRequestOperationImpl::handleDataPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Unexpected packet";
 
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Wrong block number"));
+      "Wrong block number");
+
+    send( errorPacket);
 
     // Operation completed
-    finished( TransferStatus::TransferError);
+    finished( TransferStatus::TransferError, std::move( errorPacket));
     return;
   }
 
@@ -175,12 +181,14 @@ void WriteRequestOperationImpl::handleDataPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Too much data received";
 
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Too much data"));
+      "Too much data");
+
+    send( errorPacket);
 
    // Operation completed
-    finished( TransferStatus::TransferError);
+    finished( TransferStatus::TransferError, std::move( errorPacket));
     return;
   }
 
@@ -212,12 +220,14 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
     static_cast< std::string>( acknowledgementPacket);
 
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "ACK not expected"));
+    "ACK not expected");
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError);
+  finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
 }

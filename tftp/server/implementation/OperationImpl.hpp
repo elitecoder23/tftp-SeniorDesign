@@ -21,6 +21,7 @@
 #include <tftp/server/Operation.hpp>
 
 #include <tftp/packets/Packets.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
 
 #include <tftp/options/OptionList.hpp>
 
@@ -58,6 +59,9 @@ class OperationImpl:
 
     //! @copydoc Operation::abort
     virtual void abort() override;
+
+    //! @copydoc Operation::getErrorInfo
+    virtual const ErrorInfo& getErrorInfo() const override final;
 
   protected:
     /**
@@ -108,7 +112,9 @@ class OperationImpl:
      * This operation is called, when the last packet has been received or
      * transmitted to stop the receive loop.
      **/
-    virtual void finished( TransferStatus status) noexcept;
+    virtual void finished(
+      TransferStatus status,
+      ErrorInfo &&errorInfo = {}) noexcept;
 
     /**
      * @brief Sends the given packet to the client.
@@ -250,6 +256,8 @@ class OperationImpl:
     PacketType transmitPacketType;
     //! counter to store how often the same packet has been transmitted (retries)
     unsigned int transmitCounter;
+    //! Error info
+    ErrorInfo errorInfo;
 };
 
 }

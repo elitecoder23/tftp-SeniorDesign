@@ -67,6 +67,11 @@ void OperationImpl::abort()
   finished( TransferStatus::AbortError);
 }
 
+const OperationImpl::ErrorInfo& OperationImpl::getErrorInfo() const
+{
+  return errorInfo;
+}
+
 OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
   OperationCompletedHandler completionHandler,
@@ -172,8 +177,12 @@ OperationImpl::~OperationImpl() noexcept
   }
 }
 
-void OperationImpl::finished( const TransferStatus status) noexcept
+void OperationImpl::finished(
+  const TransferStatus status,
+  ErrorInfo &&errorInfo) noexcept
 {
+  this->errorInfo = errorInfo;
+
   timer.cancel();
   socket.cancel();
 
@@ -244,7 +253,6 @@ void OperationImpl::receive()
   }
 }
 
-
 Options::OptionList& OperationImpl::getOptions()
 {
   return options;
@@ -268,12 +276,14 @@ void OperationImpl::handleReadRequestPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( readRequestPacket);
 
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "RRQ not expected"));
+    "RRQ not expected");
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError);
+  finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
 void OperationImpl::handleWriteRequestPacket(
@@ -283,12 +293,14 @@ void OperationImpl::handleWriteRequestPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( writeRequestPacket);
 
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "WRQ not expected"));
+    "WRQ not expected");
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError);
+  finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
 void OperationImpl::handleErrorPacket(
@@ -305,17 +317,17 @@ void OperationImpl::handleErrorPacket(
       switch (errorPacket.getErrorCode())
       {
         case ErrorCode::TftpOptionRefused:
-          finished( TransferStatus::OptionNegotiationError);
+          finished( TransferStatus::OptionNegotiationError, std::move( errorPacket));
           break;
 
         default:
-          finished( TransferStatus::TransferError);
+          finished( TransferStatus::TransferError, std::move( errorPacket));
           break;
       }
       break;
 
     default:
-      finished( TransferStatus::TransferError);
+      finished( TransferStatus::TransferError, std::move( errorPacket));
       break;
   }
 }
@@ -327,12 +339,14 @@ void OperationImpl::handleOptionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "OACK not expected"));
+    "OACK not expected");
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError);
+  finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
 void OperationImpl::handleInvalidPacket(
@@ -341,12 +355,14 @@ void OperationImpl::handleInvalidPacket(
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: UNKNOWN";
 
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "Invalid packet not expected"));
+    "Invalid packet not expected");
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError);
+  finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
 void OperationImpl::receiveHandler(

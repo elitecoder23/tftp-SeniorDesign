@@ -18,6 +18,9 @@
 #define TFTP_SERVER_OPERATION_HPP
 
 #include <tftp/server/Server.hpp>
+#include <tftp/packets/Packets.hpp>
+
+#include <boost/optional.hpp>
 
 #include <string>
 
@@ -33,6 +36,7 @@ namespace Server {
 class Operation
 {
   public:
+    using ErrorInfo = boost::optional< Packets::ErrorPacket>;
     using string = std::string;
 
     //! Default Constructor
@@ -63,6 +67,8 @@ class Operation
      * No error message is sent.
      **/
     virtual void abort() = 0;
+
+    virtual const ErrorInfo& getErrorInfo() const = 0;
 
 };
 }
