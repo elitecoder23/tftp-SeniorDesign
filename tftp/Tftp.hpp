@@ -110,6 +110,25 @@ enum class TransferPhase
   Unknown
 };
 
+enum class TransferStatus
+{
+  //! Transfer completed successfully
+  Successful,
+  //! Communication error (i.e. timeout, read error) occurred
+  CommunicationError,
+  //! Error received/ transmitted - RRQ/ WRQ rejected
+  RequestError,
+  //! Error received/ transmitted - Option Negotiation Failed
+  OptionNegotiationError,
+  //! Error received/ transmitted - Invalid data or packets
+  TransferError,
+  //! User (Own Side) requested abort
+  AbortError,
+
+  //! Invalid value
+  Invalid
+};
+
 //! Default TFTP port.
 constexpr uint16_t DefaultTftpPort = 69;
 

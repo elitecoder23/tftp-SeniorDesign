@@ -44,7 +44,7 @@ class ErrorPacket: public BaseErrorPacket
      *   Error message, which shall be set. By default empty.
      **/
     ErrorPacket(
-      ErrorCode errorCode,
+      ErrorCode errorCode = ErrorCode::Invalid,
       const string &errorMessage = string()) noexcept;
 
     /**

@@ -40,8 +40,7 @@ class BaseErrorPacket: public Packet
 {
   public:
     /**
-     * @brief Generates a TFTP error packet with the given error code and error
-     *   message.
+     * @brief Generates a TFTP error packet with the given error code.
      *
      * @param[in] errorCode
      *   Error code, which shall be set.

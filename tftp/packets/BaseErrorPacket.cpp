@@ -52,7 +52,6 @@ BaseErrorPacket::BaseErrorPacket(
   errorCode = static_cast< ErrorCode>( errorCodeInt);
 }
 
-
 Tftp::ErrorCode BaseErrorPacket::getErrorCode() const
 {
   return errorCode;
