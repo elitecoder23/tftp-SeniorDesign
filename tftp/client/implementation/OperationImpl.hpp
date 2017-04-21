@@ -104,12 +104,12 @@ class OperationImpl :
      **/
     OperationImpl(
       boost::asio::io_service &ioService,
+      OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from,
-      OperationCompletedHandler completionHandler);
+      const UdpAddressType &from);
 
     /**
      * @brief Constructor of TftpClientOperation
@@ -127,11 +127,11 @@ class OperationImpl :
      **/
     OperationImpl(
       boost::asio::io_service &ioService,
+      OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode,
-      OperationCompletedHandler operationCompletedHandler);
+      TransferMode mode);
 
     /**
      * @brief Returns the request filename.
@@ -297,6 +297,8 @@ class OperationImpl :
      **/
     void timeoutHandler( const boost::system::error_code& errorCode);
 
+    //! Completion Handler
+    OperationCompletedHandler completionHandler;
     //! The internal TFTP client
     const TftpClientInternal &tftpClient;
     //! The TFTP server endpoint
@@ -305,8 +307,6 @@ class OperationImpl :
     const string filename;
     //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
     const TransferMode mode;
-    //! Completion Handler
-    OperationCompletedHandler completionHandler;
     //! options for the transfer
     OptionList options;
     /**

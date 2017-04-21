@@ -54,36 +54,36 @@ class TftpClientImpl : public TftpClientInternal
     //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataHandlerPtr &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
     virtual OperationPtr createReadRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from,
-      OperationCompletedHandler completionHandler) override final;
+      const UdpAddressType &from) override final;
 
     //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataHandlerPtr &,const UdpAddressType &,const string &, TransferMode)
     virtual OperationPtr createReadRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode,
-      OperationCompletedHandler completionHandler) override final;
+      TransferMode mode) override final;
 
     //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataHandlerPtr &,const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
     virtual OperationPtr createWriteRequestOperation(
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from,
-      OperationCompletedHandler completionHandler) override final;
+      const UdpAddressType &from) override final;
 
     //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataHandlerPtr &,const UdpAddressType &,const string &, TransferMode)
     virtual OperationPtr createWriteRequestOperation(
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode,
-      OperationCompletedHandler completionHandler) override final;
+      TransferMode mode) override final;
 
     //! @copydoc TftpClientInternal::getConfiguration
     virtual const TftpConfiguration& getConfiguration() const override final;

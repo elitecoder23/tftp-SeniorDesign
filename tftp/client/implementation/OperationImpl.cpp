@@ -90,18 +90,18 @@ const OperationImpl::ErrorInfo& OperationImpl::getErrorInfo() const
 
 OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
+  OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
-  const UdpAddressType &from,
-  OperationCompletedHandler completionHandler)
+  const UdpAddressType &from)
 try :
+  completionHandler( completionHandler),
   tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
   mode( mode),
-  completionHandler( completionHandler),
   options( tftpClient.getOptionList()),
   maxReceivePacketSize( DefaultMaxPacketSize),
   receiveTimeout( tftpClient.getConfiguration().tftpTimeout),
@@ -142,17 +142,17 @@ catch ( boost::system::system_error &err)
 
 OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
+  OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
-  const TransferMode mode,
-  OperationCompletedHandler completionHandler)
+  const TransferMode mode)
 try:
+  completionHandler( completionHandler),
   tftpClient( tftpClient),
   remoteEndpoint( serverAddress),
   filename( filename),
   mode( mode),
-  completionHandler( completionHandler),
   options( tftpClient.getOptionList()),
   maxReceivePacketSize( DefaultMaxPacketSize),
   receiveTimeout( tftpClient.getConfiguration().tftpTimeout),

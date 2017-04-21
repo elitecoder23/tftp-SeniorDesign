@@ -93,20 +93,20 @@ int TftpClientApplication::operator()()
         tftpOperation= tftpClient->createReadRequestOperation(
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
             std::fstream( localFile, std::fstream::out | std::fstream::trunc)),
+          std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
           Tftp::UdpAddressType( address, configuration.tftpServerPort),
           remoteFile,
-          Tftp::TransferMode::OCTET,
-          std::bind( &Tftp::Client::TftpClient::stop, tftpClient));
+          Tftp::TransferMode::OCTET);
         break;
 
       case Tftp::RequestType::Write:
         tftpOperation = tftpClient->createWriteRequestOperation(
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
             std::fstream( localFile, std::fstream::in)),
+          std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
           Tftp::UdpAddressType( address, configuration.tftpServerPort),
           remoteFile,
-          Tftp::TransferMode::OCTET,
-          std::bind( &Tftp::Client::TftpClient::stop, tftpClient));
+          Tftp::TransferMode::OCTET);
         break;
 
       default:

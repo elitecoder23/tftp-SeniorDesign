@@ -78,11 +78,11 @@ class TftpClient
      **/
     virtual OperationPtr createReadRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      const UdpAddressType &from) = 0;
 
     /**
      * @brief Creates an read request operation (TFTP RRQ).
@@ -100,10 +100,10 @@ class TftpClient
      **/
     virtual OperationPtr createReadRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      TransferMode mode) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
@@ -123,11 +123,11 @@ class TftpClient
      **/
     virtual OperationPtr createWriteRequestOperation(
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      const UdpAddressType &from) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
@@ -145,10 +145,10 @@ class TftpClient
      **/
     virtual OperationPtr createWriteRequestOperation(
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      TransferMode mode) = 0;
 
   protected:
     //! Protected constructor.

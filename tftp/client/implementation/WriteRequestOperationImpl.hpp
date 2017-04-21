@@ -51,12 +51,12 @@ class WriteRequestOperationImpl : public OperationImpl
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from,
-      OperationCompletedHandler completionHandler);
+      const UdpAddressType &from);
 
     /**
      * @brief Constructor of TftpClientWriteOperation
@@ -75,11 +75,11 @@ class WriteRequestOperationImpl : public OperationImpl
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
       TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &serverAddress,
       const string &filename,
-      TransferMode mode,
-      OperationCompletedHandler completionHandler);
+      TransferMode mode);
 
     /**
      * @copybrief OperationImpl::operator()()

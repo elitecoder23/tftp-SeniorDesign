@@ -29,20 +29,20 @@ namespace Client {
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
   ReceiveDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
   const TransferMode mode,
-  const UdpAddressType &from,
-  OperationCompletedHandler completionHandler) :
+  const UdpAddressType &from) :
   OperationImpl(
     ioService,
+    completionHandler,
     tftpClient,
     serverAddress,
     filename,
     mode,
-    from,
-    completionHandler),
+    from),
   dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
@@ -52,18 +52,18 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
   ReceiveDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &serverAddress,
   const string &filename,
-  const TransferMode mode,
-  OperationCompletedHandler completionHandler) :
+  const TransferMode mode) :
   OperationImpl(
     ioService,
+    completionHandler,
     tftpClient,
     serverAddress,
     filename,
-    mode,
-    completionHandler),
+    mode),
   dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
