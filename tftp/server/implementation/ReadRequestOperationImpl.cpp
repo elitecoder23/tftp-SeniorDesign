@@ -127,13 +127,13 @@ void ReadRequestOperationImpl::start()
   }
   catch ( ...)
   {
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
-void ReadRequestOperationImpl::finished( const bool successful) noexcept
+void ReadRequestOperationImpl::finished( const TransferStatus status) noexcept
 {
-  OperationImpl::finished( successful);
+  OperationImpl::finished( status);
   dataHandler->finished();
 }
 
@@ -166,7 +166,7 @@ void ReadRequestOperationImpl::handleDataPacket(
     "DATA not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void ReadRequestOperationImpl::handleAcknowledgementPacket(
@@ -197,14 +197,14 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
       "Block number not expected"));
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::TransferError);
     return;
   }
 
   // if it was the last ACK of the last data packet - we are finished.
   if (lastDataPacketTransmitted)
   {
-    finished( true);
+    finished( TransferStatus::Successful);
 
     return;
   }

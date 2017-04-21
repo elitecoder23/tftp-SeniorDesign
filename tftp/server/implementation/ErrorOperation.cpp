@@ -210,7 +210,7 @@ void ErrorOperation::sendError( const Packets::BaseErrorPacket &error)
 
     if (completionHandler)
     {
-      completionHandler( true);
+      completionHandler( TransferStatus::Successful);
     }
   }
   catch ( boost::system::system_error &err)
@@ -219,7 +219,7 @@ void ErrorOperation::sendError( const Packets::BaseErrorPacket &error)
 
     if (completionHandler)
     {
-      completionHandler( false);
+      completionHandler( TransferStatus::CommunicationError);
     }
   }
 }

@@ -109,13 +109,13 @@ void WriteRequestOperationImpl::start()
   }
   catch (...)
   {
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
-void WriteRequestOperationImpl::finished( const bool successful) noexcept
+void WriteRequestOperationImpl::finished( const TransferStatus status) noexcept
 {
-  OperationImpl::finished( successful);
+  OperationImpl::finished( status);
   dataHandler->finished();
 }
 
@@ -148,12 +148,12 @@ void WriteRequestOperationImpl::handleDataPacket(
     "DATA not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void WriteRequestOperationImpl::handleAcknowledgementPacket(
-	const UdpAddressType &,
-	const Packets::AcknowledgementPacket &acknowledgementPacket)
+  const UdpAddressType &,
+  const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( acknowledgementPacket);
@@ -178,14 +178,14 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
       ErrorCode::IllegalTftpOperation,
       "Wrong block number"));
 
-    finished( false);
+    finished( TransferStatus::TransferError);
     return;
   }
 
   // if ACK for last data packet - QUIT
   if (lastDataPacketTransmitted)
   {
-    finished( true);
+    finished( TransferStatus::Successful);
 
     return;
   }
@@ -216,7 +216,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
       ErrorCode::IllegalTftpOperation,
       "Empty OACK not allowed"));
 
-    finished( false);
+    finished( TransferStatus::TransferError);
     return;
   }
 
@@ -231,7 +231,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
       ErrorCode::TftpOptionRefused,
       "Option negotiation failed"));
 
-    finished( false);
+    finished( TransferStatus::OptionNegotiationError);
     return;
   }
 

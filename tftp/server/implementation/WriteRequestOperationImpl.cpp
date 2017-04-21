@@ -112,8 +112,8 @@ void WriteRequestOperationImpl::start()
               ErrorCode::DiskFullOrAllocationExceeds,
               "FILE TO BIG"));
 
-          BOOST_THROW_EXCEPTION(
-            TftpException() << AdditionalInfo( "FILE TO BIG"));
+          finished( TransferStatus::RequestError);
+          return;
         }
       }
 
@@ -126,13 +126,13 @@ void WriteRequestOperationImpl::start()
   }
   catch ( ...)
   {
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
-void WriteRequestOperationImpl::finished( const bool successful) noexcept
+void WriteRequestOperationImpl::finished( const TransferStatus status) noexcept
 {
-  OperationImpl::finished( successful);
+  OperationImpl::finished( status);
   dataHandler->finished();
 }
 
@@ -165,7 +165,7 @@ void WriteRequestOperationImpl::handleDataPacket(
       "Wrong block number"));
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::TransferError);
     return;
   }
 
@@ -180,7 +180,7 @@ void WriteRequestOperationImpl::handleDataPacket(
       "Too much data"));
 
    // Operation completed
-    finished( false);
+    finished( TransferStatus::TransferError);
     return;
   }
 
@@ -196,7 +196,7 @@ void WriteRequestOperationImpl::handleDataPacket(
   // received
   if (dataPacket.getDataSize() < receiveDataSize)
   {
-    finished( true);
+    finished( TransferStatus::Successful);
   }
   else
   {
@@ -217,7 +217,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
     "ACK not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 }

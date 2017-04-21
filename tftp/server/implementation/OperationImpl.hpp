@@ -108,7 +108,7 @@ class OperationImpl:
      * This operation is called, when the last packet has been received or
      * transmitted to stop the receive loop.
      **/
-    virtual void finished( bool successful) noexcept;
+    virtual void finished( TransferStatus status) noexcept;
 
     /**
      * @brief Sends the given packet to the client.

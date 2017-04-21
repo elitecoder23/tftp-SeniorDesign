@@ -53,7 +53,7 @@ void OperationImpl::gracefulAbort(
     errorMessage));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::AbortError);
 }
 
 void OperationImpl::abort()
@@ -64,7 +64,7 @@ void OperationImpl::abort()
     "Abort requested";
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::AbortError);
 }
 
 OperationImpl::OperationImpl(
@@ -172,14 +172,14 @@ OperationImpl::~OperationImpl() noexcept
   }
 }
 
-void OperationImpl::finished( bool successful) noexcept
+void OperationImpl::finished( const TransferStatus status) noexcept
 {
   timer.cancel();
   socket.cancel();
 
   if (completionHandler)
   {
-    completionHandler( successful);
+    completionHandler( status);
   }
 }
 
@@ -207,7 +207,7 @@ void OperationImpl::send( const Packets::Packet &packet)
       err.what();
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 }
@@ -239,7 +239,7 @@ void OperationImpl::receive()
       err.what();
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 }
@@ -273,7 +273,7 @@ void OperationImpl::handleReadRequestPacket(
     "RRQ not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void OperationImpl::handleWriteRequestPacket(
@@ -288,7 +288,7 @@ void OperationImpl::handleWriteRequestPacket(
     "WRQ not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void OperationImpl::handleErrorPacket(
@@ -299,7 +299,25 @@ void OperationImpl::handleErrorPacket(
     static_cast< std::string>( errorPacket);
 
   // Operation completed
-  finished( false);
+  switch (transmitPacketType)
+  {
+    case PacketType::OptionsAcknowledgement:
+      switch (errorPacket.getErrorCode())
+      {
+        case ErrorCode::TftpOptionRefused:
+          finished( TransferStatus::OptionNegotiationError);
+          break;
+
+        default:
+          finished( TransferStatus::TransferError);
+          break;
+      }
+      break;
+
+    default:
+      finished( TransferStatus::TransferError);
+      break;
+  }
 }
 
 void OperationImpl::handleOptionsAcknowledgementPacket(
@@ -314,7 +332,7 @@ void OperationImpl::handleOptionsAcknowledgementPacket(
     "OACK not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void OperationImpl::handleInvalidPacket(
@@ -328,7 +346,7 @@ void OperationImpl::handleInvalidPacket(
     "Invalid packet not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void OperationImpl::receiveHandler(
@@ -348,7 +366,7 @@ void OperationImpl::receiveHandler(
       "receive error: " << errorCode.message();
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -373,7 +391,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
       "timer error: " << errorCode.message();
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -383,7 +401,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
       "Retry counter exceeded ABORT";
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -409,7 +427,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
       "TX error: " << err.what();
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 }

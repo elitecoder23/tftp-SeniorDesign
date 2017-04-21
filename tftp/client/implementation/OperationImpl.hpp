@@ -200,10 +200,10 @@ class OperationImpl :
     /**
      * @brief Sets the finished flag.
      *
-     * @param[in] successful
+     * @param[in] status
      *   if the operation was successful or an error occurred.
      **/
-    virtual void finished( bool successful) noexcept;
+    virtual void finished( TransferStatus status) noexcept;
 
     /**
      * @copydoc PacketHandler::handleReadRequestPacket()

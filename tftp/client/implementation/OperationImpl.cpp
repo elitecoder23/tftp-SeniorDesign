@@ -67,7 +67,7 @@ void OperationImpl::gracefulAbort(
     errorMessage));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::AbortError);
 }
 
 void OperationImpl::abort()
@@ -78,7 +78,7 @@ void OperationImpl::abort()
     "Abort requested";
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::AbortError);
 }
 
 OperationImpl::OperationImpl(
@@ -225,7 +225,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet)
       "TX Error: " << err.what();
 
     // Operation finished
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
@@ -255,7 +255,7 @@ void OperationImpl::send( const Packets::Packet &packet)
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "TX Error: " << err.what();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
@@ -293,7 +293,7 @@ void OperationImpl::receiveFirst()
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "RX Error: " << err.what();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
@@ -328,7 +328,7 @@ void OperationImpl::receive()
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "RX Error: " << err.what();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
@@ -344,14 +344,14 @@ void OperationImpl::setReceiveTimeout(
   this->receiveTimeout = receiveTimeout;
 }
 
-void OperationImpl::finished( const bool successful) noexcept
+void OperationImpl::finished( const TransferStatus status) noexcept
 {
   timer.cancel();
   socket.cancel();
 
   if (completionHandler)
   {
-    completionHandler( successful);
+    completionHandler( status);
   }
 }
 
@@ -370,7 +370,7 @@ void OperationImpl::handleReadRequestPacket(
     "RRQ not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void OperationImpl::handleWriteRequestPacket(
@@ -388,7 +388,7 @@ void OperationImpl::handleWriteRequestPacket(
     "WRQ not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void OperationImpl::handleErrorPacket(
@@ -401,7 +401,26 @@ void OperationImpl::handleErrorPacket(
     static_cast< std::string>( errorPacket);
 
   // Operation completed
-  finished( false);
+  switch (transmitPacketType)
+  {
+    case PacketType::ReadRequest:
+    case PacketType::WriteRequest:
+      switch (errorPacket.getErrorCode())
+      {
+        case ErrorCode::TftpOptionRefused:
+          finished( TransferStatus::OptionNegotiationError);
+          break;
+
+        default:
+          finished( TransferStatus::RequestError);
+          break;
+      }
+      break;
+
+    default:
+      finished( TransferStatus::TransferError);
+      break;
+  }
 }
 
 void OperationImpl::handleInvalidPacket(
@@ -419,7 +438,7 @@ void OperationImpl::handleInvalidPacket(
     "Invalid packet not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void OperationImpl::receiveFirstHandler(
@@ -440,7 +459,7 @@ void OperationImpl::receiveFirstHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Error when receiving message: " << errorCode.message();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -489,7 +508,7 @@ void OperationImpl::receiveFirstHandler(
       BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
         "Start Receive: " << err.what();
 
-      finished( false);
+      finished( TransferStatus::CommunicationError);
       return;
     }
   }
@@ -508,7 +527,7 @@ void OperationImpl::receiveFirstHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Connect: " << err.what();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -536,7 +555,7 @@ void OperationImpl::receiveHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Error when receiving message: " << errorCode.message();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -562,7 +581,7 @@ void OperationImpl::timeoutFirstHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "timer error: " + errorCode.message();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -572,7 +591,7 @@ void OperationImpl::timeoutFirstHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Retry counter exceeded ABORT";
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -599,7 +618,7 @@ void OperationImpl::timeoutFirstHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Re-TX error: " << err.what();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
@@ -620,7 +639,7 @@ void OperationImpl::timeoutHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "timer error: " << errorCode.message();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -630,7 +649,7 @@ void OperationImpl::timeoutHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Retry counter exceeded ABORT";
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
     return;
   }
 
@@ -655,7 +674,7 @@ void OperationImpl::timeoutHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Re-TX error: " << err.what();
 
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 

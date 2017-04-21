@@ -86,13 +86,13 @@ void ReadRequestOperationImpl::start()
   }
   catch ( ...)
   {
-    finished( false);
+    finished( TransferStatus::CommunicationError);
   }
 }
 
-void ReadRequestOperationImpl::finished( const bool successful) noexcept
+void ReadRequestOperationImpl::finished( const TransferStatus status) noexcept
 {
-  OperationImpl::finished( successful);
+  OperationImpl::finished( status);
   dataHandler->finished();
 }
 
@@ -127,7 +127,7 @@ void ReadRequestOperationImpl::handleDataPacket(
       "Block Number not expected"));
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::TransferError);
     return;
   }
 
@@ -143,7 +143,7 @@ void ReadRequestOperationImpl::handleDataPacket(
       "Too much data"));
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::TransferError);
     return;
   }
 
@@ -160,7 +160,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   if (dataPacket.getDataSize() < receiveDataSize)
   {
     // last packet has been received and operation is finished
-    finished( true);
+    finished( TransferStatus::Successful);
   }
   else
   {
@@ -182,7 +182,7 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
     "ACK not expected"));
 
   // Operation completed
-  finished( false);
+  finished( TransferStatus::TransferError);
 }
 
 void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
@@ -205,7 +205,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
       "Empty OACK not allowed"));
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::TransferError);
     return;
   }
 
@@ -223,7 +223,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
       "Option negotiation failed"));
 
     // Operation completed
-    finished( false);
+    finished( TransferStatus::OptionNegotiationError);
     return;
   }
 
@@ -256,7 +256,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
         "FILE TO BIG"));
 
       // Operation completed
-      finished( false);
+      finished( TransferStatus::TransferError);
       return;
     }
   }
