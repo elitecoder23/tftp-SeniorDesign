@@ -19,6 +19,8 @@
 #include <tftp/client/implementation/ReadRequestOperationImpl.hpp>
 #include <tftp/client/implementation/WriteRequestOperationImpl.hpp>
 
+#include <tftp/TftpLogger.hpp>
+
 namespace Tftp {
 namespace Client {
 
@@ -26,17 +28,31 @@ TftpClientImpl::TftpClientImpl(
   const TftpConfiguration &configuration,
   const Options::OptionList& additionalOptions):
   configuration( configuration),
-  options( configuration.getClientOptions( additionalOptions))
+  options( configuration.getClientOptions( additionalOptions)),
+  work( ioService)
 {
 }
 
 void TftpClientImpl::entry()
 {
+  BOOST_LOG_FUNCTION();
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "Start TFTP client IO service";
+
   ioService.run();
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "TFTP client IO service finished";
 }
 
 void TftpClientImpl::stop()
 {
+  BOOST_LOG_FUNCTION();
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "Stop TFTP client IO service";
+
   ioService.stop();
 }
 

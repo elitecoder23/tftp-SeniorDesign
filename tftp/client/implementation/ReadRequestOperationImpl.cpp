@@ -72,6 +72,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 
 void ReadRequestOperationImpl::start()
 {
+  BOOST_LOG_FUNCTION();
+
   try
   {
     receiveDataSize = DefaultDataSize;
@@ -102,6 +104,8 @@ void ReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
+  BOOST_LOG_FUNCTION();
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( dataPacket);
 
@@ -177,6 +181,8 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
+  BOOST_LOG_FUNCTION();
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( acknowledgementPacket);
 
@@ -195,6 +201,8 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
+  BOOST_LOG_FUNCTION();
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 

@@ -24,6 +24,8 @@
 
 #include <tftp/TftpConfiguration.hpp>
 
+#include <boost/asio.hpp>
+
 namespace Tftp {
 namespace Client {
 
@@ -98,6 +100,7 @@ class TftpClientImpl : public TftpClientInternal
     const Options::OptionList options;
     //! The IO service, which handles the asynchronous receive operation
     boost::asio::io_service ioService;
+    boost::asio::io_service::work work;
 };
 
 }

@@ -74,6 +74,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 
 void WriteRequestOperationImpl::start()
 {
+  BOOST_LOG_FUNCTION();
+
   try
   {
     transmitDataSize = DefaultDataSize;
@@ -123,6 +125,8 @@ void WriteRequestOperationImpl::finished(
 
 void WriteRequestOperationImpl::sendData()
 {
+  BOOST_LOG_FUNCTION();
+
   lastTransmittedBlockNumber++;
 
   Packets::DataPacket data(
@@ -142,6 +146,8 @@ void WriteRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
+  BOOST_LOG_FUNCTION();
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( dataPacket);
 
@@ -157,6 +163,8 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
+  BOOST_LOG_FUNCTION();
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( acknowledgementPacket);
 
@@ -203,6 +211,8 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
+  BOOST_LOG_FUNCTION();
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 

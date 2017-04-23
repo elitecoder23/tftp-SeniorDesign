@@ -355,6 +355,8 @@ void OperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo) noexcept
 {
+  BOOST_LOG_FUNCTION();
+
   this->errorInfo = errorInfo;
 
   timer.cancel();

@@ -91,30 +91,30 @@ TftpServerImpl::~TftpServerImpl() noexcept
 
 void TftpServerImpl::entry()
 {
+  BOOST_LOG_FUNCTION();
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "Start TFTP server IO service";
+
   try
   {
-    // the server loop
     ioService.run();
   }
   catch (boost::system::system_error &err)
   {
     //! @todo handle
   }
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "TFTP server IO service finished";
 }
 
 void TftpServerImpl::start()
 {
-  try
-  {
-    // start receive
-    receive();
-  }
-  catch (boost::system::system_error &err)
-  {
-    // only internal error are handled by this exception
-    BOOST_THROW_EXCEPTION( TftpException() <<
-      AdditionalInfo( err.what()));
-  }
+  BOOST_LOG_FUNCTION();
+
+  // start receive
+  receive();
 }
 
 void TftpServerImpl::stop()
