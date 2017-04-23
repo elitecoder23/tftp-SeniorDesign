@@ -357,6 +357,9 @@ void OperationImpl::finished(
 {
   BOOST_LOG_FUNCTION();
 
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "Operation finished";
+
   this->errorInfo = errorInfo;
 
   timer.cancel();
@@ -374,7 +377,7 @@ void OperationImpl::handleReadRequestPacket(
 {
   BOOST_LOG_FUNCTION();
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
     static_cast< std::string>( readRequestPacket);
 
   // send error packet
@@ -394,7 +397,7 @@ void OperationImpl::handleWriteRequestPacket(
 {
   BOOST_LOG_FUNCTION();
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
     static_cast< std::string>( writeRequestPacket);
 
   // send error packet
@@ -414,7 +417,7 @@ void OperationImpl::handleErrorPacket(
 {
   BOOST_LOG_FUNCTION();
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
     static_cast< std::string>( errorPacket);
 
   // Operation completed

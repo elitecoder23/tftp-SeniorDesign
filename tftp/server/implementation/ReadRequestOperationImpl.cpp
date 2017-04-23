@@ -135,13 +135,20 @@ void ReadRequestOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo) noexcept
 {
+  BOOST_LOG_FUNCTION();
+
   OperationImpl::finished( status, std::move( errorInfo));
   dataHandler->finished();
 }
 
 void ReadRequestOperationImpl::sendData()
 {
+  BOOST_LOG_FUNCTION();
+
   lastTransmittedBlockNumber++;
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "Send Data: " << lastTransmittedBlockNumber;
 
   Packets::DataPacket data(
     lastTransmittedBlockNumber,
@@ -160,6 +167,8 @@ void ReadRequestOperationImpl::handleDataPacket(
   const UdpAddressType &,
   const Packets::DataPacket &dataPacket)
 {
+  BOOST_LOG_FUNCTION();
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
     static_cast< std::string>( dataPacket);
 
@@ -177,8 +186,10 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
   const UdpAddressType &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
-    static_cast< std::string>( acknowledgementPacket);
+  BOOST_LOG_FUNCTION();
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+    "RX: " << static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
   if (acknowledgementPacket.getBlockNumber() == lastTransmittedBlockNumber.previous())
@@ -186,6 +197,9 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
       "Received previous ACK packet: retry of last data package - "
       "IGNORE it due to Sorcerer's Apprentice Syndrome";
+
+    // receive next packet
+    receive();
 
     return;
   }
@@ -204,12 +218,16 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
 
     // Operation completed
     finished( TransferStatus::TransferError, std::move( errorPacket));
+
     return;
   }
 
   // if it was the last ACK of the last data packet - we are finished.
   if (lastDataPacketTransmitted)
   {
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
+      "Last acknowledgement received";
+
     finished( TransferStatus::Successful);
 
     return;
