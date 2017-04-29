@@ -102,8 +102,10 @@ class TftpServer
     /**
      * @brief Creates a TFTP write operation (TFTP RRQ)
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler, which will be called on various events.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      * @param[in] clientAddress
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
@@ -123,8 +125,10 @@ class TftpServer
     /**
      * @brief Creates a TFTP write operation (TFTP RRQ)
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler, which will be called on various events.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      * @param[in] clientAddress
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
@@ -141,8 +145,10 @@ class TftpServer
     /**
      * @brief Creates a TFTP read operation (TFTP WRQ)
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler, which will be called on various events.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      * @param[in] clientAddress
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
@@ -162,8 +168,10 @@ class TftpServer
     /**
      * @brief Creates a TFTP read operation (TFTP WRQ)
      *
-     * @param[in] handler
+     * @param[in] dataHandler
      *   Handler, which will be called on various events.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      * @param[in] clientAddress
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
@@ -188,6 +196,8 @@ class TftpServer
      *   The error code of the error packet.
      * @param[in] errorMessage
      *   The error message of the packet.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      **/
     virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,
@@ -205,6 +215,8 @@ class TftpServer
      *   The error code of the error packet.
      * @param[in] errorMessage
      *   The error message of the packet.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      **/
     virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,

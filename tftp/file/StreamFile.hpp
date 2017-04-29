@@ -93,7 +93,9 @@ class StreamFile: public TftpFile
     void setSize( size_t size) noexcept;
 
     /**
-     * @copydoc TftpFile::finishedOperation()
+     * @copydoc TftpFile::finished()
+     *
+     * Flushes the stream.
      **/
     virtual void finished() noexcept override final;
 

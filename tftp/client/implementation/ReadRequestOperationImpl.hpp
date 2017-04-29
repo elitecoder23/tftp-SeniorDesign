@@ -36,10 +36,14 @@ class ReadRequestOperationImpl : public OperationImpl
 {
   public:
     /**
-     * @brief Constructor of TftpClientReadOperation
+     * @brief Initialises the operation.
      *
+     * @param[in] ioService
+     *   The IO service used for communication.
      * @param[in] dataHandler
      *   Handler for received data.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
      *   The TFTP client.
      * @param[in] serverAddress
@@ -62,10 +66,14 @@ class ReadRequestOperationImpl : public OperationImpl
       const UdpAddressType &from);
 
     /**
-     * @brief Constructor of TftpClientReadOperation
+     * @brief Initialises the operation.
      *
+     * @param[in] ioService
+     *   The IO service used for communication.
      * @param[in] dataHandler
      *   Handler for received data.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
      *   The TFTP client.
      * @param[in] serverAddress
@@ -85,7 +93,7 @@ class ReadRequestOperationImpl : public OperationImpl
       TransferMode mode);
 
     /**
-     * @copybrief OperationImpl::operator()()
+     * @copybrief OperationImpl::start()
      *
      * Assembles and transmit TFTP RRQ packet and start parent receive loop.
      **/

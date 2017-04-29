@@ -43,8 +43,12 @@ class ReadRequestOperationImpl: public OperationImpl
     /**
      * @brief Initialises the TFTP server write operation instance.
      *
-     * @param[in] handler
+     * @param[in] ioService
+     *   The IO service used for communication.
+     * @param[in] dataHandler
      *   Handler, which will be called on various events.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      * @param[in] tftpServerInternal
      *   The TFTP internal server.
      * @param[in] clientAddress
@@ -66,8 +70,12 @@ class ReadRequestOperationImpl: public OperationImpl
     /**
      * @brief Initialises the TFTP server write operation instance.
      *
-     * @param[in] handler
+     * @param[in] ioService
+     *   The IO service used for communication.
+     * @param[in] dataHandler
      *   Handler, which will be called on various events.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      * @param[in] tftpServerInternal
      *   The TFTP internal server.
      * @param[in] clientAddress

@@ -61,10 +61,12 @@ class TftpClient
     virtual void stop() = 0;
 
     /**
-     * @brief Creates an read request operation (TFTP RRQ).
+     * @brief Initialises the operation.
      *
      * @param[in] dataHandler
      *   Handler for received data.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -85,10 +87,12 @@ class TftpClient
       const UdpAddressType &from) = 0;
 
     /**
-     * @brief Creates an read request operation (TFTP RRQ).
+     * @brief Initialises the operation.
      *
      * @param[in] dataHandler
      *   Handler for received data.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -110,6 +114,8 @@ class TftpClient
      *
      * @param[in] dataHandler
      *   Handler for data.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename
@@ -134,6 +140,8 @@ class TftpClient
      *
      * @param[in] dataHandler
      *   Handler for data.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
      * @param[in] serverAddress
      *   Where the connection should be established to.
      * @param[in] filename

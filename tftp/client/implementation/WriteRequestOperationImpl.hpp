@@ -1,3 +1,7 @@
+/*
+ * $Date$
+ * $Revision$
+ */
 /**
  * @file
  * @copyright
@@ -5,8 +9,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * $Date$
- * $Revision$
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration of class Tftp::Client::WriteRequestOperationImpl.
@@ -33,10 +35,14 @@ class WriteRequestOperationImpl : public OperationImpl
 {
   public:
     /**
-     * @brief Constructor of TftpClientWriteOperation
+     * @brief Initialises the operation.
      *
+     * @param[in] ioService
+     *   The IO service used for communication.
      * @param[in] dataHandler
      *   Handler for data.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
      *   The TFTP client.
      * @param[in] serverAddress
@@ -59,10 +65,14 @@ class WriteRequestOperationImpl : public OperationImpl
       const UdpAddressType &from);
 
     /**
-     * @brief Constructor of TftpClientWriteOperation
+     * @brief Initialises the operation.
      *
+     * @param[in] ioService
+     *   The IO service used for communication.
      * @param[in] dataHandler
      *   Handler for data.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
      *   The TFTP client.
      * @param[in] serverAddress

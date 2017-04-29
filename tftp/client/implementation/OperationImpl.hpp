@@ -87,10 +87,12 @@ class OperationImpl :
     using OptionList = Options::OptionList;
 
     /**
-     * @brief Constructor of TftpClientOperation
+     * @brief Initialises the operation.
      *
-     * @param[in] requestType
-     *   The TFTP request type.
+     * @param[in] ioService
+     *   The IO service used for communication.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
      *   The TFTP client.
      * @param[in] serverAddress
@@ -112,10 +114,12 @@ class OperationImpl :
       const UdpAddressType &from);
 
     /**
-     * @brief Constructor of TftpClientOperation
+     * @brief Initialises the operation.
      *
-     * @param[in] requestType
-     *   The TFTP request type.
+     * @param[in] ioService
+     *   The IO service used for communication.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
      *   The TFTP client.
      * @param[in] serverAddress
@@ -205,7 +209,9 @@ class OperationImpl :
      * @brief Sets the finished flag.
      *
      * @param[in] status
-     *   if the operation was successful or an error occurred.
+     *   If the operation was successful or an error occurred.
+     * @param[in] errorInfo
+     *   In error case, this information is set accordingly.
      **/
     virtual void finished(
       TransferStatus status,

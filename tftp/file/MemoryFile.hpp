@@ -63,12 +63,17 @@ class MemoryFile: public TftpFile
     const DataType& getData() const noexcept;
 
     /**
-     * @copydoc TftpFile::finishedOperation()
+     * @copydoc TftpFile::finished()
+     *
+     * Reset current position.
      **/
     virtual void finished() noexcept override final;
 
     /**
      * @copydoc TftpFile::receivedTransferSize()
+     *
+     * Value supplied is ignored.
+     * @return Always true.
      **/
     virtual bool receivedTransferSize( uint64_t transferSize) override final;
 

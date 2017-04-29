@@ -43,6 +43,8 @@ class ErrorOperation: public Operation
     /**
      * @brief Initialises the error operation.
      *
+     * @param[in] ioService
+     *   The IO service used for communication.
      * @param[in] clientAddress
      *   Where the error packet shall be transmitted to.
      * @param[in] errorCode
@@ -51,6 +53,8 @@ class ErrorOperation: public Operation
      *   The error message of the packet.
      * @param[in] from
      *   Optional parameter to define the communication source
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      **/
     ErrorOperation(
       boost::asio::io_service &ioService,
@@ -60,6 +64,22 @@ class ErrorOperation: public Operation
       const string &errorMessage,
       OperationCompletedHandler completionHandler);
 
+    /**
+     * @brief Initialises the error operation.
+     *
+     * @param[in] ioService
+     *   The IO service used for communication.
+     * @param[in] clientAddress
+     *   Where the error packet shall be transmitted to.
+     * @param[in] errorCode
+     *   The error code of the error packet.
+     * @param[in] errorMessage
+     *   The error message of the packet.
+     * @param[in] from
+     *   Optional parameter to define the communication source
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
+     **/
     ErrorOperation(
       boost::asio::io_service &ioService,
       UdpAddressType &&clientAddress,
@@ -71,14 +91,16 @@ class ErrorOperation: public Operation
     /**
      * @brief Initialises the error operation.
      *
+     * @param[in] ioService
+     *   The IO service used for communication.
      * @param[in] clientAddress
      *   Where the error packet shall be transmitted to.
      * @param[in] errorCode
      *   The error code of the error packet.
      * @param[in] errorMessage
      *   The error message of the packet.
-     *
-     * @throw CommunicationException
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
      **/
     ErrorOperation(
       boost::asio::io_service &ioService,
@@ -87,6 +109,20 @@ class ErrorOperation: public Operation
       const string &errorMessage,
       OperationCompletedHandler completionHandler);
 
+    /**
+     * @brief Initialises the error operation.
+     *
+     * @param[in] ioService
+     *   The IO service used for communication.
+     * @param[in] clientAddress
+     *   Where the error packet shall be transmitted to.
+     * @param[in] errorCode
+     *   The error code of the error packet.
+     * @param[in] errorMessage
+     *   The error message of the packet.
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
+     **/
     ErrorOperation(
       boost::asio::io_service &ioService,
       UdpAddressType &&clientAddress,
@@ -124,8 +160,9 @@ class ErrorOperation: public Operation
      **/
     void sendError( const Packets::BaseErrorPacket &error);
 
+    //! The completion handler
     OperationCompletedHandler completionHandler;
-    //!
+    //! The communication socket
     boost::asio::ip::udp::socket socket;
     //! The error code
     const ErrorCode errorCode;
