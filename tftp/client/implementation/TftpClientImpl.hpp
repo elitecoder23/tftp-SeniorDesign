@@ -49,8 +49,10 @@ class TftpClientImpl : public TftpClientInternal
       const TftpConfiguration &configuration,
       const Options::OptionList& additionalOptions);
 
-    virtual void entry() override final;
+    //!@copydoc TftpClient::entry
+    virtual void entry() noexcept override final;
 
+    //!@copydoc TftpClient::stop
     virtual void stop() override final;
 
     //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler, const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)

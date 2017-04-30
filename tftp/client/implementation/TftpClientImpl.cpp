@@ -33,7 +33,7 @@ TftpClientImpl::TftpClientImpl(
 {
 }
 
-void TftpClientImpl::entry()
+void TftpClientImpl::entry() noexcept
 {
   BOOST_LOG_FUNCTION();
 

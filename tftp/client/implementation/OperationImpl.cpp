@@ -35,16 +35,6 @@ namespace Client {
 OperationImpl::~OperationImpl() noexcept
 {
   BOOST_LOG_FUNCTION();
-
-  try
-  {
-    abort();
-  }
-  catch (boost::system::system_error &err)
-  {
-    // On error, ignore it and continue.
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << err.what();
-  }
 }
 
 void OperationImpl::start()

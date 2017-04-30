@@ -56,7 +56,7 @@ class TftpClient
     //! Default destructor
     virtual ~TftpClient() noexcept = default;
 
-    virtual void entry() = 0;
+    virtual void entry() noexcept = 0;
 
     virtual void stop() = 0;
 
