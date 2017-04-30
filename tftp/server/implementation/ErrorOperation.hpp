@@ -158,7 +158,7 @@ class ErrorOperation: public Operation
      * @param[in] error
      *   The error packet.
      **/
-    void sendError( const Packets::BaseErrorPacket &error);
+    void sendError( const Packets::ErrorPacket &error);
 
     //! The completion handler
     OperationCompletedHandler completionHandler;

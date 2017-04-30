@@ -31,8 +31,6 @@ add_library(
   
   packets/AcknowledgementPacket.hpp
   packets/AcknowledgementPacket.cpp
-  packets/BaseErrorPacket.hpp
-  packets/BaseErrorPacket.cpp
   packets/BlockNumber.hpp
   packets/BlockNumber.cpp
   packets/DataPacket.hpp
@@ -123,7 +121,6 @@ add_library(
   options/StringOptionTest.cpp
   
   packets/AcknowledgementPacketTest.cpp
-  packets/BaseErrorPacketTest.cpp
   packets/BlockNumberTest.cpp
   packets/DataPacketTest.cpp
   packets/ErrorPacketTest.cpp

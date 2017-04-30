@@ -195,7 +195,7 @@ const ErrorOperation::ErrorInfo& ErrorOperation::getErrorInfo() const
   return errorInfo;
 }
 
-void ErrorOperation::sendError( const Packets::BaseErrorPacket &error)
+void ErrorOperation::sendError( const Packets::ErrorPacket &error)
 {
   try
   {

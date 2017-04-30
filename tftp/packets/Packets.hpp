@@ -35,7 +35,6 @@ class ReadRequestPacket;
 class WriteRequestPacket;
 class DataPacket;
 class AcknowledgementPacket;
-class BaseErrorPacket;
 class ErrorPacket;
 class OptionsAcknowledgementPacket;
 

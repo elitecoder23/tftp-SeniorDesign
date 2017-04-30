@@ -27,7 +27,7 @@ namespace Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpErrorPacket)
 
-BOOST_AUTO_TEST_CASE( constructor )
+BOOST_AUTO_TEST_CASE( constructor1)
 {
   ErrorPacket error( ErrorCode::NotDefined, "ERROR MESSAGE");
 
@@ -35,11 +35,27 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
-  ErrorPacket error2( raw);
 
-  BOOST_CHECK( error.getPacketType() == error2.getPacketType());
-  BOOST_CHECK( error.getErrorCode() == error2.getErrorCode());
-  BOOST_CHECK( error.getErrorMessage() == error2.getErrorMessage());
+  BOOST_CHECK( error.getPacketType() == PacketType::Error);
+  BOOST_CHECK( error.getErrorCode() == ErrorCode::NotDefined);
+  BOOST_CHECK( error.getErrorMessage() == "ERROR MESSAGE");
+}
+
+BOOST_AUTO_TEST_CASE( constructor2)
+{
+  RawTftpPacketType raw{
+    0x00U, 0x05U,
+    0x00U, 0x01U,
+    'E', 'R', 'R', 'O', 'R', 0x00U
+  };
+
+  std::cout << Dump( &(*raw.begin()), raw.size());
+
+  ErrorPacket error( raw);
+
+  BOOST_CHECK( error.getPacketType() == PacketType::Error);
+  BOOST_CHECK( error.getErrorCode() == ErrorCode::FileNotFound);
+  BOOST_CHECK( error.getErrorMessage() == "ERROR");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

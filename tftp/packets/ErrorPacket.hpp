@@ -18,7 +18,7 @@
 #define TFTP_PACKETS_ERRORPACKET_HPP
 
 #include <tftp/packets/Packets.hpp>
-#include <tftp/packets/BaseErrorPacket.hpp>
+#include <tftp/packets/Packet.hpp>
 
 #include <string>
 
@@ -30,8 +30,13 @@ namespace Packets {
  *
  * A TFTP error code consists of an error code and a user readable error
  * message.
+ *
+ * | ERR | ErrorCode | ErrMsg |  0  |
+ * |:---:|:---------:|:------:|:---:|
+ * | 2 B |    2 B    |  str   | 1 B |
+ *
  **/
-class ErrorPacket: public BaseErrorPacket
+class ErrorPacket: public Packet
 {
   public:
     /**
@@ -58,12 +63,33 @@ class ErrorPacket: public BaseErrorPacket
      **/
     ErrorPacket( const RawTftpPacketType &rawPacket);
 
+    //! @copydoc Packet::encode()
+    virtual RawTftpPacketType encode() const override;
+
+    //! @copydoc Packet::operator string() const
+    virtual operator string() const override;
+
+    /**
+     * @brief Returns the error code.
+     *
+     * @return The error code.
+     **/
+    ErrorCode getErrorCode() const;
+
+    /**
+     * @brief Sets the error code.
+     *
+     * @param[in] errorCode
+     *   The error code to set
+     **/
+    void setErrorCode( ErrorCode errorCode);
+
     /**
      * @brief Returns the error message of this packet.
      *
      * @return The error message
      **/
-    virtual string getErrorMessage() const override;
+    string getErrorMessage() const;
 
     /**
      * @brief Sets the error message of this packet.
@@ -74,6 +100,8 @@ class ErrorPacket: public BaseErrorPacket
     void setErrorMessage( const string &errorMessage = string());
 
   private:
+    //! The error code
+    ErrorCode errorCode;
     //! The error message.
     string errorMessage;
 };
