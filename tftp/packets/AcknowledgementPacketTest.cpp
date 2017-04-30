@@ -27,20 +27,30 @@ namespace Packets {
 
 BOOST_AUTO_TEST_SUITE( AcknowledgementPacketTest)
 
-BOOST_AUTO_TEST_CASE( constructor )
+BOOST_AUTO_TEST_CASE( constructor1)
 {
   AcknowledgementPacket ack( 10);
-  BOOST_CHECK( PacketType::Acknowledgement == ack.getPacketType());
-  BOOST_CHECK( 10 == ack.getBlockNumber());
 
   RawTftpPacketType raw = ack.encode();
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
-  AcknowledgementPacket ack2( raw);
+  BOOST_CHECK( ack.getPacketType() == PacketType::Acknowledgement);
+  BOOST_CHECK( ack.getBlockNumber() == BlockNumber( 10U));
+}
 
-  BOOST_CHECK( ack.getPacketType()  == ack2.getPacketType());
-  BOOST_CHECK( ack.getBlockNumber() == ack2.getBlockNumber());
+BOOST_AUTO_TEST_CASE( constructor2)
+{
+  RawTftpPacketType raw{
+    0x00, 0x04,
+    0x10, 0x01
+  };
+
+  AcknowledgementPacket ack( raw);
+  std::cout << Dump( &(*raw.begin()), raw.size());
+
+  BOOST_CHECK( ack.getPacketType() == PacketType::Acknowledgement);
+  BOOST_CHECK( ack.getBlockNumber() == BlockNumber( 4097U));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
