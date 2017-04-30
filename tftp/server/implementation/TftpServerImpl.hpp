@@ -73,7 +73,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
     virtual ~TftpServerImpl() noexcept;
 
     //! @copydoc TftpServer::entry()
-    virtual void entry() override final;
+    virtual void entry() noexcept override final;
 
     //! @copydoc TftpServer::start()
     virtual void start() override final;
@@ -233,6 +233,7 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
     const UdpAddressType serverAddress;
 
     boost::asio::io_service ioService;
+    boost::asio::io_service::work work;
     boost::asio::ip::udp::socket socket;
 
     RawTftpPacketType packet;

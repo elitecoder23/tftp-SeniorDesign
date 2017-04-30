@@ -19,8 +19,6 @@
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TftpException.hpp>
 
-#include <tftp/packets/ErrorPacket.hpp>
-
 namespace Tftp {
 namespace Server {
 
@@ -34,8 +32,7 @@ ErrorOperation::ErrorOperation(
 try :
   completionHandler( completionHandler),
   socket( ioService),
-  errorCode( errorCode),
-  errorMessage( errorMessage)
+  errorInfo( Packets::ErrorPacket( errorCode, errorMessage))
 {
   try
   {
@@ -74,8 +71,7 @@ ErrorOperation::ErrorOperation(
 try :
   completionHandler( completionHandler),
   socket( ioService),
-  errorCode( errorCode),
-  errorMessage( errorMessage)
+  errorInfo( Packets::ErrorPacket( errorCode, errorMessage))
 {
   try
   {
@@ -113,8 +109,7 @@ ErrorOperation::ErrorOperation(
 try :
   completionHandler( completionHandler),
   socket( ioService),
-  errorCode( errorCode),
-  errorMessage( errorMessage)
+  errorInfo( Packets::ErrorPacket( errorCode, errorMessage))
 {
   try
   {
@@ -147,8 +142,7 @@ ErrorOperation::ErrorOperation(
 try :
   completionHandler( completionHandler),
   socket( ioService),
-  errorCode( errorCode),
-  errorMessage( errorMessage)
+  errorInfo( Packets::ErrorPacket( errorCode, errorMessage))
 {
   try
   {
@@ -175,19 +169,13 @@ catch ( boost::system::system_error &err)
 
 ErrorOperation::~ErrorOperation() noexcept
 {
-  try
-  {
-    socket.close();
-  }
-  catch ( boost::system::system_error &err)
-  {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << err.what();
-  }
 }
 
 void ErrorOperation::start()
 {
-  sendError( Packets::ErrorPacket( errorCode, errorMessage));
+  assert( errorInfo);
+
+  sendError( *errorInfo);
 }
 
 void ErrorOperation::gracefulAbort(
@@ -204,7 +192,7 @@ void ErrorOperation::abort()
 
 const ErrorOperation::ErrorInfo& ErrorOperation::getErrorInfo() const
 {
-  return {};
+  return errorInfo;
 }
 
 void ErrorOperation::sendError( const Packets::BaseErrorPacket &error)

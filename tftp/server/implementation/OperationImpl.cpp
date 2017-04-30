@@ -168,17 +168,6 @@ catch (boost::system::system_error &err)
 
 OperationImpl::~OperationImpl() noexcept
 {
-  BOOST_LOG_FUNCTION();
-
-  try
-  {
-    // Close the socket.
-    socket.close();
-  }
-  catch (boost::system::system_error &err)
-  {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << err.what();
-  }
 }
 
 void OperationImpl::finished(

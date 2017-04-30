@@ -22,7 +22,7 @@
 #include <tftp/server/Server.hpp>
 #include <tftp/server/Operation.hpp>
 
-#include <tftp/packets/Packets.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
 
 #include <boost/asio.hpp>
 
@@ -165,9 +165,7 @@ class ErrorOperation: public Operation
     //! The communication socket
     boost::asio::ip::udp::socket socket;
     //! The error code
-    const ErrorCode errorCode;
-    //! The error message
-    const string errorMessage;
+    const ErrorInfo errorInfo;
 };
 
 }

@@ -82,7 +82,7 @@ class TftpServer
      *
      * This entry can be called multiple time to allow parallel transfer handling
      **/
-    virtual void entry() = 0;
+    virtual void entry() noexcept = 0;
 
     /**
      * @brief Starts the TFTP Server.

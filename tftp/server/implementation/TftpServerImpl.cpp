@@ -41,6 +41,7 @@ try :
   configuration( configuration),
   options( configuration.getServerOptions( additionalOptions)),
   serverAddress( serverAddress),
+  work( ioService),
   socket( ioService)
 {
   try
@@ -76,20 +77,9 @@ catch ( boost::system::system_error &err)
 
 TftpServerImpl::~TftpServerImpl() noexcept
 {
-  try
-  {
-    stop();
-
-    socket.close();
-  }
-  catch ( boost::system::system_error &err)
-  {
-    // do not throw an exception within the constructor
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)<< err.what();
-  }
 }
 
-void TftpServerImpl::entry()
+void TftpServerImpl::entry() noexcept
 {
   BOOST_LOG_FUNCTION();
 
@@ -121,7 +111,6 @@ void TftpServerImpl::stop()
 {
   // cancel receive operation
   socket.cancel();
-
   //! @todo cancel TFTP server operations.
 
   // stop handler
