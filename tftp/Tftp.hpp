@@ -110,6 +110,7 @@ enum class TransferPhase
   Unknown
 };
 
+//! The TFTP transfer status
 enum class TransferStatus
 {
   //! Transfer completed successfully
@@ -122,8 +123,8 @@ enum class TransferStatus
   OptionNegotiationError,
   //! Error received/ transmitted - Invalid data or packets
   TransferError,
-  //! User (Own Side) requested abort
-  AbortError,
+  //! User (own side) requested abort (gracefully or not gracefully)
+  Aborted,
 
   //! Invalid value
   Invalid

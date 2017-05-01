@@ -48,12 +48,14 @@ void OperationImpl::gracefulAbort(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) <<
     "Graceful abort requested: " << errorCode << " '" << errorMessage << "'";
 
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket(
     errorCode,
-    errorMessage));
+    errorMessage);
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::AbortError);
+  finished( TransferStatus::Aborted, std::move( errorPacket));
 }
 
 void OperationImpl::abort()
@@ -64,7 +66,7 @@ void OperationImpl::abort()
     "Abort requested";
 
   // Operation completed
-  finished( TransferStatus::AbortError);
+  finished( TransferStatus::Aborted);
 }
 
 const OperationImpl::ErrorInfo& OperationImpl::getErrorInfo() const
