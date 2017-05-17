@@ -39,7 +39,7 @@ class TftpConfiguration
     using ptree = boost::property_tree::ptree;
     using options_description = boost::program_options::options_description;
 
-    //! Loads the configuration with default values.
+    //! Initialises the configuration with default values.
     TftpConfiguration();
 
     /**
