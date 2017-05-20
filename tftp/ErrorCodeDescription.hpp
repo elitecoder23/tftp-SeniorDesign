@@ -35,16 +35,16 @@ class ErrorCodeDescription : public Description<
 };
 
 /**
- * @brief Parses the input stream as request type and returns them.
+ * @brief Outputs the error code to the stream.
  *
  * @param[in] stream
- *   The input stream
+ *   The output stream.
  * @param[out] errorCode
- *   The decoded request type
+ *   The error code.
  *
- * @return The input stream.
+ * @return The output stream.
  **/
-std::ostream& operator<<( std::ostream& stream, ErrorCode& errorCode);
+std::ostream& operator<<( std::ostream& stream, ErrorCode errorCode);
 
 }
 
