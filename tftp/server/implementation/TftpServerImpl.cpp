@@ -92,7 +92,8 @@ void TftpServerImpl::entry() noexcept
   }
   catch (boost::system::system_error &err)
   {
-    //! @todo handle
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::fatal)
+      << "IO error: " << err.what();
   }
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
