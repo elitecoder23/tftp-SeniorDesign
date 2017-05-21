@@ -55,7 +55,30 @@ class Packet
      **/
     PacketType getPacketType() const;
 
-    // virtual void decode( const RawTftpPacketType &rawPacket);
+    //! default copy constructor
+    Packet( const Packet &other) = default;
+
+    //! default move constructor
+    Packet( Packet &&other) = default;
+
+    //! Default destructor
+    virtual ~Packet() noexcept = default;
+
+    //! default copy assignment operator
+    Packet& operator=( const Packet &other);
+
+    //! default copy move operator
+    Packet& operator=( Packet &&other);
+
+    /**
+     * @brief Assigns a raw packet to this packet.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @return *this
+     **/
+    virtual Packet& operator=( const RawTftpPacketType &rawPacket);
 
     /**
      * @brief Get the binary representation of the packet.
@@ -64,22 +87,7 @@ class Packet
      *
      * @return Binary packet data
      **/
-    virtual RawTftpPacketType encode() const = 0;
-
-    //! default copy constructor
-    Packet( const Packet &other) = default;
-
-    //! default move constructor
-    Packet( Packet &&other) = default;
-
-    //! default copy assignment operator
-    Packet& operator=( const Packet &other) = default;
-
-    //! default copy move operator
-    Packet& operator=( Packet &&other) = default;
-
-    //! Default destructor
-    virtual ~Packet() noexcept = default;
+    operator RawTftpPacketType() const;
 
     /**
      * @brief Returns a string, which describes the packet.
@@ -104,28 +112,23 @@ class Packet
      *
      * Only decodes TFTP header.
      *
-     * @param[in] expectedPacketType
-     *   The expected packet type of the packet.
+     * @param[in] packetType
+     *   The packet type of the packet.
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
-     *
-     * @throw InvalidPacketException
-     *   When rawPacket is not an valid packet.
      **/
     Packet(
-      PacketType expectedPacketType,
+      PacketType packetType,
       const RawTftpPacketType &rawPacket);
 
     /**
-     * @brief Set the packet type of the TFTP packet
+     * @brief Get the binary representation of the packet.
      *
-     * This operation can be dangerous if used for derived classes, e.g. set the
-     * packet type of an TFTP Write Request Packet to TFTP error packet.
+     * The data is used to transmit the package over the network.
      *
-     * @param[in] packetType
-     *   The new packet type
+     * @return Binary packet data
      **/
-    void setPacketType( PacketType packetType);
+    virtual RawTftpPacketType encode() const = 0;
 
     /**
      * @brief Insert the header data to the raw packet.
@@ -138,8 +141,19 @@ class Packet
     void insertHeader( RawTftpPacketType &rawPacket) const;
 
   private:
+    /**
+     * @brief Decodes the TFTP header.
+     *
+     * Checks the packet size
+     * Checks the packet type against the opcode.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     **/
+    void decodeHeader( const RawTftpPacketType &rawPacket);
+
     //! The TFTP Packet type
-    PacketType packetType;
+    const PacketType packetType;
 };
 
 }

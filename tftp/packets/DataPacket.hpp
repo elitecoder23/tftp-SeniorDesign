@@ -54,8 +54,8 @@ class DataPacket: public Packet
      *   The data within the packet.
      **/
     DataPacket(
-      BlockNumber blockNumber = BlockNumber(),
-      const DataType &data = DataType()) noexcept;
+      BlockNumber blockNumber = {},
+      const DataType &data = {}) noexcept;
 
     /**
      * @brief Generates a TFTP Data packet from a data buffer.
@@ -67,6 +67,10 @@ class DataPacket: public Packet
      *   When rawPacket is not an valid packet.
      **/
     DataPacket( const RawTftpPacketType &rawPacket);
+
+    //! @copydoc Packet::operator=(const RawTftpPacketType&)
+    virtual DataPacket& operator=(
+      const RawTftpPacketType &rawPacket) override;
 
     /**
      * @brief Returns the block number.
@@ -135,13 +139,15 @@ class DataPacket: public Packet
      **/
     size_t getDataSize() const;
 
-    //! @copydoc Packet::encode()
-    virtual RawTftpPacketType encode() const override;
-
     //! @copydoc Packet::operator string() const
     virtual operator string() const override;
 
   private:
+    //! @copydoc Packet::encode()
+    virtual RawTftpPacketType encode() const override;
+
+    void decodeBody( const RawTftpPacketType &rawPacket);
+
     //! Block number of the packet.
     BlockNumber blockNumber;
     //! The data of the packet.

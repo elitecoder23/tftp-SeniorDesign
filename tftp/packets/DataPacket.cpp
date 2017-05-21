@@ -25,31 +25,24 @@ namespace Packets {
 
 DataPacket::DataPacket(
   BlockNumber blockNumber,
-  const std::vector<uint8_t> &data) noexcept:
+  const DataType &data) noexcept:
   Packet( PacketType::Data),
   blockNumber( blockNumber),
   data( data)
 {
 }
 
-DataPacket::DataPacket(
-  const RawTftpPacketType &rawPacket):
+DataPacket::DataPacket( const RawTftpPacketType &rawPacket) :
   Packet( PacketType::Data, rawPacket)
 {
-  // check size
-  if (rawPacket.size() < 4)
-  {
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size of DATA packet"));
-  }
+  decodeBody( rawPacket);
+}
 
-  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + 2;
-
-  // decode block number
-  packetIt = getInt< uint16_t>( packetIt, blockNumber);
-
-  // copy data
-  data.assign( packetIt, rawPacket.end());
+DataPacket& DataPacket::operator=( const RawTftpPacketType &rawPacket)
+{
+  Packet::operator =( rawPacket);
+  decodeBody( rawPacket);
+  return *this;
 }
 
 BlockNumber DataPacket::getBlockNumber() const
@@ -92,6 +85,13 @@ size_t DataPacket::getDataSize() const
   return data.size();
 }
 
+DataPacket::operator string() const
+{
+  return (boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
+    getBlockNumber() %
+    getDataSize()).str();
+}
+
 Tftp::RawTftpPacketType DataPacket::encode() const
 {
   RawTftpPacketType rawPacket( 4 + data.size());
@@ -109,11 +109,22 @@ Tftp::RawTftpPacketType DataPacket::encode() const
   return rawPacket;
 }
 
-DataPacket::operator string() const
+void DataPacket::decodeBody( const RawTftpPacketType &rawPacket)
 {
-  return (boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
-    getBlockNumber() %
-    getDataSize()).str();
+  // check size
+  if (rawPacket.size() < 4)
+  {
+    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+      AdditionalInfo( "Invalid packet size of DATA packet"));
+  }
+
+  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + 2;
+
+  // decode block number
+  packetIt = getInt< uint16_t>( packetIt, blockNumber);
+
+  // copy data
+  data.assign( packetIt, rawPacket.end());
 }
 
 }

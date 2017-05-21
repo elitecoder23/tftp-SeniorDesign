@@ -209,7 +209,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet)
     transmitPacketType = packet.getPacketType();
 
     // Encode raw packet
-    transmitPacket = packet.encode();
+    transmitPacket = packet;
 
     // Send the packet to the remote server
     socket.send_to(
@@ -242,7 +242,7 @@ void OperationImpl::send( const Packets::Packet &packet)
     transmitPacketType = packet.getPacketType();
 
     // Encode raw packet
-    transmitPacket = packet.encode();
+    transmitPacket = packet;
 
     // Send the packet to the remote server
     socket.send( boost::asio::buffer( transmitPacket));
@@ -491,7 +491,9 @@ void OperationImpl::receiveFirstHandler(
         ErrorCode::UnknownTransferId,
         "Packet from wrong source");
 
-      socket.send_to( boost::asio::buffer( err.encode()), receiveEndpoint);
+      socket.send_to(
+        boost::asio::buffer( static_cast< RawTftpPacketType>( err)),
+        receiveEndpoint);
     }
     catch ( boost::system::system_error &err)
     {

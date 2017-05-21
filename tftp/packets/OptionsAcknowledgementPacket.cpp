@@ -35,17 +35,15 @@ OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   const RawTftpPacketType &rawPacket):
   Packet( PacketType::OptionsAcknowledgement, rawPacket)
 {
-  // check size
-  if (rawPacket.size() <= 2)
-  {
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size of OACK packet"));
-  }
+  decodeBody( rawPacket);
+}
 
-  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + 2;
-
-  // assign options
-  options = Options::OptionList( packetIt, rawPacket.end());
+OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
+  const RawTftpPacketType &rawPacket)
+{
+  Packet::operator =( rawPacket);
+  decodeBody( rawPacket);
+  return *this;
 }
 
 const Options::OptionList& OptionsAcknowledgementPacket::getOptions() const
@@ -80,9 +78,14 @@ void OptionsAcknowledgementPacket::setOption(
   options.setOption( name, value);
 }
 
+OptionsAcknowledgementPacket::operator string() const
+{
+  return (boost::format( "OACK: OPT: \"%s\"") % options.toString()).str();
+}
+
 Tftp::RawTftpPacketType OptionsAcknowledgementPacket::encode() const
 {
-  Options::OptionList::RawOptionsType rawOptions = options.getRawOptions();
+  Options::OptionList::RawOptionsType rawOptions( options.getRawOptions());
 
   RawTftpPacketType rawPacket( 2 + rawOptions.size());
 
@@ -96,9 +99,20 @@ Tftp::RawTftpPacketType OptionsAcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-OptionsAcknowledgementPacket::operator string() const
+void OptionsAcknowledgementPacket::decodeBody(
+  const RawTftpPacketType &rawPacket)
 {
-  return (boost::format( "OACK: OPT: \"%s\"") % options.toString()).str();
+  // check size
+  if (rawPacket.size() <= 2)
+  {
+    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+      AdditionalInfo( "Invalid packet size of OACK packet"));
+  }
+
+  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + 2;
+
+  // assign options
+  options = Options::OptionList( packetIt, rawPacket.end());
 }
 
 }

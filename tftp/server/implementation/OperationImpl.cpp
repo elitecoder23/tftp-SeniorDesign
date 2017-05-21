@@ -204,7 +204,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   transmitPacketType = packet.getPacketType();
 
   // Encode raw packet
-  transmitPacket = packet.encode();
+  transmitPacket = packet;
 
   try
   {

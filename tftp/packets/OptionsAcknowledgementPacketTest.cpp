@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   OptionsAcknowledgementPacket oack( options);
 
-  RawTftpPacketType raw = oack.encode();
+  RawTftpPacketType raw( oack);
 
   std::cout << "OACK:\n" << Dump( &(*raw.begin()), raw.size()) << std::endl;
 

@@ -49,6 +49,14 @@ ReadWriteRequestPacket::string ReadWriteRequestPacket::getMode(
   }
 }
 
+ReadWriteRequestPacket& ReadWriteRequestPacket::operator=(
+  const RawTftpPacketType &rawPacket)
+{
+  Packet::operator =( rawPacket);
+  decodeBody( rawPacket);
+  return *this;
+}
+
 TransferMode ReadWriteRequestPacket::getMode( const string &mode)
 {
   //! @todo check implementation of transform
@@ -136,36 +144,6 @@ void ReadWriteRequestPacket::setOption( const string &name, const string &value)
   options.setOption( name, value);
 }
 
-Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
-{
-  Options::OptionList::RawOptionsType rawOptions = options.getRawOptions();
-
-  RawTftpPacketType rawPacket(
-    HeaderSize +
-    filename.size() + 1 +
-    mode.size() + 1 +
-    rawOptions.size());
-
-  insertHeader( rawPacket);
-
-  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
-
-  // decode filename
-  packetIt = std::copy( filename.begin(), filename.end(), packetIt);
-  *packetIt = 0;
-  ++packetIt;
-
-  // decode mode
-  packetIt = std::copy( mode.begin(), mode.end(), packetIt);
-  *packetIt = 0;
-  ++packetIt;
-
-  // decode options
-  std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
-
-  return rawPacket;
-}
-
 ReadWriteRequestPacket::operator string() const
 {
   return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
@@ -215,7 +193,42 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 
-  RawTftpPacketType::const_iterator packetIt( rawPacket.begin() + HeaderSize);
+  decodeBody( rawPacket);
+}
+
+Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
+{
+  Options::OptionList::RawOptionsType rawOptions( options.getRawOptions());
+
+  RawTftpPacketType rawPacket(
+    HeaderSize +
+    filename.size() + 1 +
+    mode.size() + 1 +
+    rawOptions.size());
+
+  insertHeader( rawPacket);
+
+  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
+
+  // decode filename
+  packetIt = std::copy( filename.begin(), filename.end(), packetIt);
+  *packetIt = 0;
+  ++packetIt;
+
+  // decode mode
+  packetIt = std::copy( mode.begin(), mode.end(), packetIt);
+  *packetIt = 0;
+  ++packetIt;
+
+  // decode options
+  std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
+
+  return rawPacket;
+}
+
+void ReadWriteRequestPacket::decodeBody( const RawTftpPacketType &rawPacket)
+{
+  auto packetIt( rawPacket.begin() + HeaderSize);
 
   // check size
   if (rawPacket.size() <= 2)

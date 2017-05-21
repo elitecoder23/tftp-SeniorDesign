@@ -47,7 +47,7 @@ class AcknowledgementPacket: public Packet
      *   Block number of packet. Defaults to the BlockNumber default
      *   constructor.
      **/
-    AcknowledgementPacket(
+    explicit AcknowledgementPacket(
       const BlockNumber blockNumber = BlockNumber()) noexcept;
 
     /**
@@ -60,6 +60,10 @@ class AcknowledgementPacket: public Packet
      *   When rawPacket is not an valid packet.
      **/
     AcknowledgementPacket( const RawTftpPacketType &rawPacket);
+
+    //! @copydoc Packet::operator=(const RawTftpPacketType&)
+    virtual AcknowledgementPacket& operator=(
+      const RawTftpPacketType &rawPacket) override;
 
     /**
      * @brief Returns the block number.
@@ -76,13 +80,15 @@ class AcknowledgementPacket: public Packet
      **/
     void setBlockNumber( const BlockNumber blockBumber);
 
-    //! @copydoc Packet::encode()
-    virtual RawTftpPacketType encode() const override final;
-
     //! @copydoc Packet::operator string() const
     virtual operator string() const override final;
 
   private:
+    //! @copydoc Packet::encode()
+    virtual RawTftpPacketType encode() const override final;
+
+    void decodeBody( const RawTftpPacketType &rawPacket);
+
     //! Block number of the packet
     BlockNumber blockNumber;
 };

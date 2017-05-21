@@ -24,8 +24,7 @@
 namespace Tftp {
 namespace Packets {
 
-PacketType Packet::getPacketType(
-	const RawTftpPacketType &rawPacket) noexcept
+PacketType Packet::getPacketType( const RawTftpPacketType &rawPacket) noexcept
 {
   // check minimum data size.
   if (rawPacket.size() < HeaderSize)
@@ -101,9 +100,57 @@ Packet::Packet( const PacketType packetType) noexcept:
 }
 
 Packet::Packet(
-  const PacketType expectedPacketType,
+  const PacketType packetType,
   const RawTftpPacketType &rawPacket):
-  packetType( expectedPacketType)
+  packetType( packetType)
+{
+  decodeHeader( rawPacket);
+}
+
+Packet& Packet::operator=( const Packet &other)
+{
+  if (packetType != other.packetType)
+  {
+    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+      AdditionalInfo( "Packet types are not same"));
+  }
+
+  return *this;
+}
+
+Packet& Packet::operator=( Packet &&other)
+{
+  if (packetType != other.packetType)
+  {
+    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+      AdditionalInfo( "Packet types are not same"));
+  }
+
+  return *this;
+}
+
+Packet& Packet::operator=( const RawTftpPacketType &rawPacket)
+{
+  decodeHeader( rawPacket);
+  return *this;
+}
+
+Packet::operator RawTftpPacketType() const
+{
+  return encode();
+}
+
+void Packet::insertHeader( RawTftpPacketType &rawPacket) const
+{
+  assert( rawPacket.size() >= HeaderSize);
+
+  auto packetIt( rawPacket.begin());
+
+  // encode opcode
+  setInt( packetIt, static_cast< uint16_t>( packetType));
+}
+
+void Packet::decodeHeader( const RawTftpPacketType &rawPacket)
 {
   // check size
   if (rawPacket.size() < HeaderSize)
@@ -112,32 +159,17 @@ Packet::Packet(
       AdditionalInfo( "Invalid packet size (<TFTP_PACKETS_HEADER_SIZE)"));
   }
 
-  RawTftpPacketType::const_iterator packetIt = rawPacket.begin();
+  auto packetIt( rawPacket.begin());
 
   // Check Opcode
   uint16_t opcode;
   getInt< uint16_t>( packetIt, opcode);
 
-  if ( static_cast< PacketType>( opcode) != expectedPacketType)
+  if ( static_cast< PacketType>( opcode) != packetType)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "Invalid opcode"));
   }
-}
-
-void Packet::setPacketType( const PacketType packetType)
-{
-  this->packetType = packetType;
-}
-
-void Packet::insertHeader( RawTftpPacketType &rawPacket) const
-{
-  assert( rawPacket.size() >= HeaderSize);
-
-  RawTftpPacketType::iterator packetIt = rawPacket.begin();
-
-  // encode opcode
-  setInt( packetIt, static_cast< uint16_t>( packetType));
 }
 
 }

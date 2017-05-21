@@ -53,6 +53,10 @@ class OptionsAcknowledgementPacket: public Packet
      **/
     OptionsAcknowledgementPacket( const RawTftpPacketType &rawPacket);
 
+    //! @copydoc Packet::operator=(const RawTftpPacketType&)
+    virtual OptionsAcknowledgementPacket& operator=(
+      const RawTftpPacketType &rawPacket) override;
+
     /**
      * @brief Returns the options within the packet (const reference)
      *
@@ -98,16 +102,18 @@ class OptionsAcknowledgementPacket: public Packet
     void setOption( const string &name, const string &value);
 
     /**
-     * @copydoc Packet::encode()
-     **/
-    virtual RawTftpPacketType encode() const override;
-
-    /**
      * @copydoc Packet::operator string() const
      **/
     virtual operator string() const override;
 
   private:
+    /**
+     * @copydoc Packet::encode()
+     **/
+    virtual RawTftpPacketType encode() const override;
+
+    void decodeBody( const RawTftpPacketType &rawPacket);
+
     //! The stored options.
     Options::OptionList options;
 };

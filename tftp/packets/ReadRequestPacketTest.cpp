@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   ReadRequestPacket rrq( "testfile.bin", TransferMode::OCTET, options);
 
-  RawTftpPacketType raw = rrq.encode();
+  RawTftpPacketType raw( rrq);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 

@@ -36,50 +36,15 @@ ErrorPacket::ErrorPacket(
 ErrorPacket::ErrorPacket( const RawTftpPacketType &rawPacket):
   Packet( PacketType::Error, rawPacket)
 {
-  // check size
-  if (rawPacket.size() < 5)
-  {
-    //! @throw InvalidPacketException When rawPacket is not an valid packet.
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size of ERROR packet"));
-  }
-
-  RawTftpPacketType::const_iterator packetIt( rawPacket.begin() + HeaderSize);
-
-  // decode error code
-  uint16_t errorCodeInt;
-  packetIt = getInt< uint16_t>( packetIt, errorCodeInt);
-  errorCode = static_cast< ErrorCode>( errorCodeInt);
-
-  // check terminating 0 character
-  if (rawPacket.back()!=0)
-  {
-    //! @throw InvalidPacketException When the error message is not 0-terminated.
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "error message not 0-terminated"));
-  }
-
-  errorMessage = string( packetIt, rawPacket.end()-1);
+  decodeBody( rawPacket);
 }
 
-Tftp::RawTftpPacketType ErrorPacket::encode() const
+ErrorPacket& ErrorPacket::operator=(
+  const RawTftpPacketType &rawPacket)
 {
-  const string errorMessage = getErrorMessage();
-
-  RawTftpPacketType rawPacket( 4 + errorMessage.length() + 1);
-
-  insertHeader( rawPacket);
-
-  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
-
-  // error code
-  packetIt = setInt( packetIt, static_cast< const uint16_t>( getErrorCode()));
-
-  // error message
-  packetIt = std::copy( errorMessage.begin(), errorMessage.end(), packetIt);
-  *packetIt = 0;
-
-  return rawPacket;
+  Packet::operator =( rawPacket);
+  decodeBody( rawPacket);
+  return *this;
 }
 
 ErrorPacket::operator string() const
@@ -108,6 +73,54 @@ ErrorPacket::string ErrorPacket::getErrorMessage() const
 void ErrorPacket::setErrorMessage( const string &errorMessage)
 {
   this->errorMessage = errorMessage;
+}
+
+Tftp::RawTftpPacketType ErrorPacket::encode() const
+{
+  const string errorMessage = getErrorMessage();
+
+  RawTftpPacketType rawPacket( 4 + errorMessage.length() + 1);
+
+  insertHeader( rawPacket);
+
+  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
+
+  // error code
+  packetIt = setInt( packetIt, static_cast< const uint16_t>( getErrorCode()));
+
+  // error message
+  packetIt = std::copy( errorMessage.begin(), errorMessage.end(), packetIt);
+  *packetIt = 0;
+
+  return rawPacket;
+}
+
+void ErrorPacket::decodeBody( const RawTftpPacketType &rawPacket)
+{
+  // check size
+  if (rawPacket.size() < 5)
+  {
+    //! @throw InvalidPacketException When rawPacket is not an valid packet.
+    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+      AdditionalInfo( "Invalid packet size of ERROR packet"));
+  }
+
+  RawTftpPacketType::const_iterator packetIt( rawPacket.begin() + HeaderSize);
+
+  // decode error code
+  uint16_t errorCodeInt;
+  packetIt = getInt< uint16_t>( packetIt, errorCodeInt);
+  errorCode = static_cast< ErrorCode>( errorCodeInt);
+
+  // check terminating 0 character
+  if (rawPacket.back()!=0)
+  {
+    //! @throw InvalidPacketException When the error message is not 0-terminated.
+    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+      AdditionalInfo( "error message not 0-terminated"));
+  }
+
+  errorMessage = string( packetIt, rawPacket.end()-1);
 }
 
 }

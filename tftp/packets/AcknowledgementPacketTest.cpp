@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 {
   AcknowledgementPacket ack( 10);
 
-  RawTftpPacketType raw = ack.encode();
+  RawTftpPacketType raw( ack);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 

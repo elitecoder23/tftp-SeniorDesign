@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 {
   ErrorPacket error( ErrorCode::NotDefined, "ERROR MESSAGE");
 
-  RawTftpPacketType raw = error.encode();
+  RawTftpPacketType raw( error);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 

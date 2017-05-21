@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   DataPacket data( 10, bindata);
 
-  RawTftpPacketType raw = data.encode();
+  RawTftpPacketType raw( data);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 

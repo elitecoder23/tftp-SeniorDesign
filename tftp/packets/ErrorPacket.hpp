@@ -63,8 +63,9 @@ class ErrorPacket: public Packet
      **/
     ErrorPacket( const RawTftpPacketType &rawPacket);
 
-    //! @copydoc Packet::encode()
-    virtual RawTftpPacketType encode() const override;
+    //! @copydoc Packet::operator=(const RawTftpPacketType&)
+    virtual ErrorPacket& operator=(
+      const RawTftpPacketType &rawPacket) override;
 
     //! @copydoc Packet::operator string() const
     virtual operator string() const override;
@@ -97,9 +98,14 @@ class ErrorPacket: public Packet
      * @param[in] errorMessage
      *   The error message to set. By default empty.
      **/
-    void setErrorMessage( const string &errorMessage = string());
+    void setErrorMessage( const string &errorMessage = {});
 
   private:
+    //! @copydoc Packet::encode()
+    virtual RawTftpPacketType encode() const override;
+
+    void decodeBody( const RawTftpPacketType &rawPacket);
+
     //! The error code
     ErrorCode errorCode;
     //! The error message.

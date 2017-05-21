@@ -34,18 +34,15 @@ AcknowledgementPacket::AcknowledgementPacket(
   const RawTftpPacketType &rawPacket):
   Packet( PacketType::Acknowledgement, rawPacket)
 {
-  // check size
-  if (rawPacket.size() != 4)
-  {
-    //! @throw InvalidPacketException When packet size is invalid
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size of ACK packet"));
-  }
+  decodeBody( rawPacket);
+}
 
-  RawTftpPacketType::const_iterator packetIt( rawPacket.begin() + HeaderSize);
-
-  // decode block number
-  getInt< uint16_t>( packetIt, blockNumber);
+AcknowledgementPacket& AcknowledgementPacket::operator=(
+  const RawTftpPacketType &rawPacket)
+{
+  Packet::operator =( rawPacket);
+  decodeBody( rawPacket);
+  return *this;
 }
 
 BlockNumber AcknowledgementPacket::getBlockNumber() const
@@ -58,14 +55,19 @@ void AcknowledgementPacket::setBlockNumber( const BlockNumber blockBumber)
   this->blockNumber = blockBumber;
 }
 
+AcknowledgementPacket::operator string() const
+{
+  return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
+}
+
 Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
 {
-  RawTftpPacketType rawPacket( 4);
+  RawTftpPacketType rawPacket( 4U);
 
   // insert header data
   insertHeader( rawPacket);
 
-  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
+  auto packetIt( rawPacket.begin() + HeaderSize);
 
   // Add block number
   setInt( packetIt, static_cast< const uint16_t>( blockNumber));
@@ -73,9 +75,20 @@ Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-AcknowledgementPacket::operator string() const
+void AcknowledgementPacket::decodeBody( const RawTftpPacketType &rawPacket)
 {
-  return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
+  // check size
+  if (rawPacket.size() != 4U)
+  {
+    //! @throw InvalidPacketException When packet size is invalid
+    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
+      AdditionalInfo( "Invalid packet size of ACK packet"));
+  }
+
+  auto packetIt( rawPacket.begin() + HeaderSize);
+
+  // decode block number
+  getInt< uint16_t>( packetIt, blockNumber);
 }
 
 }
