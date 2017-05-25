@@ -36,7 +36,9 @@ namespace Client {
 class Operation
 {
   public:
+    //! Error Information type
     using ErrorInfo = boost::optional< Packets::ErrorPacket>;
+    //! String type
     using string = std::string;
 
     //! Default destructor.
@@ -69,6 +71,13 @@ class Operation
      **/
     virtual void abort() = 0;
 
+    /**
+     * @brief Returns the error information.
+     *
+     * @return The error information
+     * @retval ErrorInfo()
+     *   If no error occurred.
+     **/
     virtual const ErrorInfo& getErrorInfo() const = 0;
 };
 

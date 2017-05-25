@@ -25,12 +25,14 @@
 
 namespace Tftp {
 
+//! Description of TFTP Error Codes (ErrorCode)
 class ErrorCodeDescription : public Description<
   ErrorCodeDescription,
   ErrorCode,
   ErrorCode::Invalid>
 {
   public:
+    //! Initialises the instance
     ErrorCodeDescription();
 };
 

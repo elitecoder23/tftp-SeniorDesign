@@ -51,8 +51,6 @@ class OperationImpl :
   protected PacketHandler
 {
   public:
-    using string = std::string;
-
     /**
      * @brief Destructor.
      *
@@ -84,6 +82,7 @@ class OperationImpl :
     virtual const ErrorInfo& getErrorInfo() const override final;
 
   protected:
+    //! TFTP options (list) @todo rename to Options
     using OptionList = Options::OptionList;
 
     /**
