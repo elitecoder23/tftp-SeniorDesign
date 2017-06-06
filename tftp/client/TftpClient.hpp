@@ -35,6 +35,7 @@ namespace Client {
 class TftpClient
 {
   public:
+    //! string type
     using string = std::string;
 
     /**
@@ -56,8 +57,24 @@ class TftpClient
     //! Default destructor
     virtual ~TftpClient() noexcept = default;
 
+    /**
+     * @brief Entry of the TFTP Client.
+     *
+     * This routines enters the IO Service loop.
+     * The start routine will be leaved, when an FATAL error occurred or
+     * the server has been stopped by calling stop().
+     *
+     * This entry can be called multiple time to allow parallel transfer handling
+     **/
     virtual void entry() noexcept = 0;
 
+    /**
+     * @brief Starts the TFTP Client.
+     *
+     * This routine returns immediately.
+     *
+     * It can be called before entry() is called.
+     **/
     virtual void stop() = 0;
 
     /**

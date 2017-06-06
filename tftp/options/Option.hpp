@@ -32,6 +32,7 @@ namespace Options {
 class Option
 {
   public:
+    //! string type
     using string = std::string;
 
     /**

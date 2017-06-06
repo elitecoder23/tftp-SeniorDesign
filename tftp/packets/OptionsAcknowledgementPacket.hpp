@@ -40,6 +40,13 @@ namespace Packets {
 class OptionsAcknowledgementPacket: public Packet
 {
   public:
+    /**
+     * @brief Initialises TFTP Options Acknowledgememnt packet with the given
+     *   options list.
+     *
+     * @param[in] options
+     *   TFTP Options list.
+     **/
     OptionsAcknowledgementPacket( const Options::OptionList &options) noexcept;
 
     /**

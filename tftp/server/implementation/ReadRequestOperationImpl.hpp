@@ -100,6 +100,7 @@ class ReadRequestOperationImpl: public OperationImpl
     virtual void start() override final;
 
   private:
+    //! @copydoc OperationImpl::finished()
     virtual void finished(
       TransferStatus status,
       ErrorInfo &&errorInfo = {}) noexcept override final;

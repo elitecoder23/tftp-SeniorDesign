@@ -238,10 +238,10 @@ class DataHandler;
 class ReceiveDataHandler;
 class TransmitDataHandler;
 
-using ReceiveDataHandlerPtr =
-  std::shared_ptr< ReceiveDataHandler>;
-using TransmitDataHandlerPtr =
-  std::shared_ptr< TransmitDataHandler>;
+//! Receive data handler pointer
+using ReceiveDataHandlerPtr = std::shared_ptr< ReceiveDataHandler>;
+//! Transmit data handler pointer
+using TransmitDataHandlerPtr =  std::shared_ptr< TransmitDataHandler>;
 
 //! Operation Completed handler, which indicates, if the transfer was successful
 using OperationCompletedHandler = std::function< void( TransferStatus)>;

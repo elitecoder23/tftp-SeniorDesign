@@ -232,11 +232,16 @@ class TftpServerImpl: public TftpServerInternal, private PacketHandler
     //! the server address to listen on
     const UdpAddressType serverAddress;
 
+    //! TFTP server ASIO service
     boost::asio::io_service ioService;
+    //! TFTP server dummy work to prevent IO-Service from exiting.
     boost::asio::io_service::work work;
+    //! TFTP well known socket
     boost::asio::ip::udp::socket socket;
 
+    //! Buffer, which holds the received TFTP packet.
     RawTftpPacketType packet;
+    //! The remote endpoint on receive.
     UdpAddressType remoteEndpoint;
 };
 

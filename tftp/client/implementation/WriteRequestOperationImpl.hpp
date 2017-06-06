@@ -145,8 +145,6 @@ class WriteRequestOperationImpl : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
 
   private:
-    using BlockNumber = Packets::BlockNumber;
-
     //! The handler, which is called
     TransmitDataHandlerPtr dataHandler;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
@@ -154,7 +152,7 @@ class WriteRequestOperationImpl : public OperationImpl
     //! Is set, when the last data packet has been transmitted
     bool lastDataPacketTransmitted;
     //! The block number of the last transmitted data packet.
-    BlockNumber lastTransmittedBlockNumber;
+    Packets::BlockNumber lastTransmittedBlockNumber;
 };
 
 }

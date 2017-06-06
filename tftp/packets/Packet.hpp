@@ -30,6 +30,7 @@ namespace Packets {
 class Packet
 {
   public:
+    //! string type
     using string = std::string;
 
     //! The minimum size is the Opcode field.

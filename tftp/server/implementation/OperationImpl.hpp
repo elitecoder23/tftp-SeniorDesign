@@ -119,6 +119,11 @@ class OperationImpl:
      *
      * This operation is called, when the last packet has been received or
      * transmitted to stop the receive loop.
+     *
+     * @param[in] status
+     *   Transfer status.
+     * @param[in] errorInfo
+     *   Optional error information
      **/
     virtual void finished(
       TransferStatus status,
@@ -239,7 +244,7 @@ class OperationImpl:
      **/
     void timeoutHandler( const boost::system::error_code& errorCode);
 
-    //!
+    //! The operation completed handler
     OperationCompletedHandler completionHandler;
     //! The internal TFTP server
     const TftpServerInternal &tftpServerInternal;

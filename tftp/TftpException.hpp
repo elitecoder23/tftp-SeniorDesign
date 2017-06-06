@@ -35,6 +35,11 @@ namespace Tftp {
 class TftpException: public virtual Exception
 {
   public:
+    /**
+     * @brief Returns an exception description.
+     *
+     * @return Exception description.
+     **/
     virtual char const * what() const noexcept override
     {
       return "TFTP exception";
@@ -45,6 +50,7 @@ class TftpException: public virtual Exception
 class InvalidPacketException: public virtual TftpException
 {
   public:
+    //! @copydoc TftpException::what() const
     virtual char const * what() const noexcept override
     {
       return "TFTP Invalid Packet exception";
@@ -55,6 +61,7 @@ class InvalidPacketException: public virtual TftpException
 class CommunicationException: public virtual TftpException
 {
   public:
+    //! @copydoc TftpException::what() const
     virtual char const * what() const noexcept override
     {
       return "TFTP communication exception";
@@ -65,6 +72,7 @@ class CommunicationException: public virtual TftpException
 class OptionNegotiationException: public virtual TftpException
 {
   public:
+    //! @copydoc TftpException::what() const
     virtual char const * what() const noexcept override
     {
       return "TFTP Option Negotiation exception";
@@ -75,6 +83,7 @@ class OptionNegotiationException: public virtual TftpException
 class ErrorReceivedException: public virtual TftpException
 {
   public:
+    //! @copydoc TftpException::what() const
     virtual char const * what() const noexcept override
     {
       return "TFTP Error received exception";

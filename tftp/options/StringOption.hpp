@@ -50,6 +50,8 @@ class StringOption: public Option
      *
      * @param[in] value
      *   The option value.
+     *
+     * @return *this
      **/
     StringOption& operator=( const string &value);
 

@@ -38,6 +38,7 @@ namespace Server {
 class ErrorOperation: public Operation
 {
   public:
+    //! string type
     using string = std::string;
 
     /**

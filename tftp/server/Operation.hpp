@@ -36,7 +36,9 @@ namespace Server {
 class Operation
 {
   public:
+    //! Error info type
     using ErrorInfo = boost::optional< Packets::ErrorPacket>;
+    //! string type
     using string = std::string;
 
     //! Default Constructor
@@ -68,6 +70,13 @@ class Operation
      **/
     virtual void abort() = 0;
 
+    /**
+     * @brief Returns the error info of this operation
+     *
+     * @return The error info of this operation
+     * @retval ErrorInfo()
+     *   When operation has no error.
+     **/
     virtual const ErrorInfo& getErrorInfo() const = 0;
 
 };

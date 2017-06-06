@@ -43,6 +43,7 @@ namespace Options {
 class OptionList
 {
   public:
+    //! string type
     using string = std::string;
     //! short form of option map
     using OptionMap = std::map< string, OptionPtr>;

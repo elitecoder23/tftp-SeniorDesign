@@ -42,6 +42,7 @@ namespace Server {
 class TftpServer
 {
   public:
+    //! string type
     using string = std::string;
 
     /**
@@ -63,6 +64,8 @@ class TftpServer
      *   Additional Options, which shall be used as TFTP server option list.
      * @param[in] serverAddress
      *   Address where the FTP server should listen on.
+     *
+     * @return The created TFTP server instance.
      **/
     static TftpServerPtr createInstance(
       ReceivedTftpRequestHandler handler,
@@ -198,12 +201,14 @@ class TftpServer
      *   The error message of the packet.
      * @param[in] completionHandler
      *   The handler which is called on completion of the operation.
+     *
+     * @return The created TFTP Error operation.
      **/
     virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
       ErrorCode errorCode,
-      const string &errorMessage = string(),
+      const string &errorMessage = {},
       OperationCompletedHandler completionHandler = {}) = 0;
 
     /**
@@ -217,11 +222,13 @@ class TftpServer
      *   The error message of the packet.
      * @param[in] completionHandler
      *   The handler which is called on completion of the operation.
+     *
+     * @return The created TFTP Error operation.
      **/
     virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,
       ErrorCode errorCode,
-      const string &errorMessage = string(),
+      const string &errorMessage = {},
       OperationCompletedHandler completionHandler = {}) = 0;
 
   protected:

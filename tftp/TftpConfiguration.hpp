@@ -36,7 +36,9 @@ namespace Tftp {
 class TftpConfiguration
 {
   public:
+    //! property tree type
     using ptree = boost::property_tree::ptree;
+    //! options description type
     using options_description = boost::program_options::options_description;
 
     //! Initialises the configuration with default values.

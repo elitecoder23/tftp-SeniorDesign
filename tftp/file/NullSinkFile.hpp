@@ -65,6 +65,7 @@ class NullSinkFile : public ReceiveDataHandler
     virtual void receviedData( const DataType &data) noexcept override final;
 
   private:
+    //! Optional size (used for options negotiation)
     boost::optional< uint64_t> size;
 };
 

@@ -102,6 +102,7 @@ class TftpClientImpl : public TftpClientInternal
     const Options::OptionList options;
     //! The IO service, which handles the asynchronous receive operation
     boost::asio::io_service ioService;
+    //! IO-Service dummy work to keep IO-servie loops running
     boost::asio::io_service::work work;
 };
 

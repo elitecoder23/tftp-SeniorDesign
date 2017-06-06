@@ -48,6 +48,7 @@ class TftpServer;
 using TftpServerPtr = std::shared_ptr< TftpServer>;
 
 class Operation;
+//! Operation instance pointer
 using OperationPtr = std::shared_ptr< Operation>;
 
 /**

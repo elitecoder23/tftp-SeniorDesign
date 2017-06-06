@@ -34,8 +34,18 @@ class TftpServerInternal : public TftpServer
     //! Default destructor
     virtual ~TftpServerInternal() = default;
 
+    /**
+     * @brief Returns the TFTP configuration.
+     *
+     * @return The TFTP configuration.
+     **/
     virtual const TftpConfiguration& getConfiguration() const = 0;
 
+    /**
+     * @brief Returns the configured TFTP Options.
+     *
+     * @return The configured TFTP Options.
+     **/
     virtual const Options::OptionList& getOptionList() const = 0;
 };
 

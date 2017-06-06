@@ -43,6 +43,7 @@ class MemoryFile;
 class StreamFile;
 class NullSinkFile;
 
+//! Memory file pointer
 using MemoryFilePtr = std::shared_ptr< MemoryFile>;
 
 }

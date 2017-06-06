@@ -72,6 +72,8 @@ class BaseIntegerOption: public Option
      *
      * @param[in] value
      *   Option value
+     *
+     * @return *this
      **/
     BaseIntegerOption& operator=( IntegerType value);
 
@@ -80,6 +82,8 @@ class BaseIntegerOption: public Option
      *
      * @param[in] value
      *   Value string
+     *
+     * @return *this
      **/
     BaseIntegerOption& operator=( const string &value);
 
@@ -230,11 +234,15 @@ BaseIntegerOption< uint8_t>::toInt( const string &value)
 
 /**
  * @brief TFTP option, which is interpreted as integer.
+ *
+ * @tparam IntT
+ * @tparam NegotiateT
  **/
 template< typename IntT, typename NegotiateT>
 class IntegerOption: public BaseIntegerOption< IntT>
 {
   public:
+    //! Negotiation operation type
     using NegotiateType = NegotiateT;
 
     using typename BaseIntegerOption< IntT>::IntegerType;
@@ -266,6 +274,8 @@ class IntegerOption: public BaseIntegerOption< IntT>
      *
      * @param[in] value
      *   Option value
+     *
+     * @return *this
      **/
     IntegerOption& operator=( IntegerType value);
 
@@ -274,6 +284,8 @@ class IntegerOption: public BaseIntegerOption< IntT>
      *
      * @param[in] value
      *   Value string
+     *
+     * @return *this
      **/
     IntegerOption& operator=( const string &value);
 
@@ -292,6 +304,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
     virtual OptionPtr negotiate( IntegerType optionValue) const noexcept final;
 
   private:
+    //! The negotiation operation
     NegotiateType negotiateOperation;
 };
 
@@ -378,7 +391,9 @@ class NegotiateMinMaxSmaller
     }
 
   private:
+    //! Allowed minimum value
     const IntT minValue;
+    //! Allowed maximum value
     const IntT maxValue;
 };
 
@@ -410,7 +425,9 @@ class NegotiateMinMaxRange
     }
 
   private:
+    //! Allowed minimum value
     const IntT minValue;
+    //! Allowed maximum value
     const IntT maxValue;
 };
 
@@ -479,14 +496,14 @@ using TimeoutOptionBase = BaseIntegerOption< uint8_t>;
 using TimeoutOptionServer =
   IntegerOption< uint8_t, NegotiateMinMaxRange< uint8_t>>;
 
-//! Timeout option on server side - Negotiates exact value.
+//! Timeout option on client side - Negotiates exact value.
 using TimeoutOptionClient =
   IntegerOption< uint8_t, NegotiateExactValue< uint8_t>>;
 
 //! Transfer size option base class
 using TransferSizeOptionBase = BaseIntegerOption< uint64_t>;
 
-//! Timeout option on client and server side - accepts every value.
+//! Transfer size option on client and server side - accepts every value.
 using TransferSizeOptionServerClient =
   IntegerOption< uint64_t, NegotiateAlwaysPass< uint64_t>>;
 
