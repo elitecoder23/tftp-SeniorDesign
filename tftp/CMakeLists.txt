@@ -128,6 +128,8 @@ add_library(
   packets/ReadRequestPacketTest.cpp
   packets/WriteRequestPacketTest.cpp)
 
+target_compile_features( tftp_test PUBLIC cxx_std_14)
+
 target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
 add_documentation( TARGET tftp NAME "TFTP Library")
