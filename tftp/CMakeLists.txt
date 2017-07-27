@@ -7,7 +7,7 @@
 # 
 # Thomas Vogt, Thomas@Thomas-Vogt.de
 
-cmake_minimum_required( VERSION 3.8)
+cmake_minimum_required( VERSION 3.9)
 
 find_package( Boost REQUIRED COMPONENTS program_options)
 
@@ -132,8 +132,6 @@ target_compile_features( tftp_test PUBLIC cxx_std_14)
 
 target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
-add_documentation( TARGET tftp NAME "TFTP Library")
-
 # INSTALL
 include( GNUInstallDirs)
 
@@ -154,23 +152,7 @@ install(
     PATTERN "*Test.*" EXCLUDE
     PATTERN "implementation" EXCLUDE)
 
-install(
-  DIRECTORY $<TARGET_PROPERTY:tftp_doc,DOCUMENTATION_OUTPUT_DIR>
-  COMPONENT documentation
-  DESTINATION ${CMAKE_INSTALL_DOCDIR})
-
-install(
-  FILES $<TARGET_PROPERTY:tftp_doc,DOCUMENTATION_HTML_FILE>
-  COMPONENT documentation
-  DESTINATION ${CMAKE_INSTALL_DOCDIR})
-
-install(
-  FILES $<TARGET_PROPERTY:tftp_doc,DOCUMENTATION_TAGFILE>
-  COMPONENT documentation
-  DESTINATION ${CMAKE_INSTALL_DOCDIR})
-
 install( 
   EXPORT tftp-config 
   COMPONENT development
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
-

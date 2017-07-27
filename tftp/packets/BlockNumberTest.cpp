@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 {
   BOOST_CHECK( 0 == BlockNumber());
   BOOST_CHECK( 1 == BlockNumber( 1));
-  BOOST_CHECK( 0xFFFF == BlockNumber( 0xFFFF));
+  BOOST_CHECK( 0xFFFFU == BlockNumber( 0xFFFFU));
 }
 
 BOOST_AUTO_TEST_CASE( increment )

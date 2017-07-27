@@ -7,9 +7,12 @@
 # 
 # Thomas Vogt, Thomas@Thomas-Vogt.de
 
-cmake_minimum_required( VERSION 3.8)
+cmake_minimum_required( VERSION 3.9)
 
-project ( tftp VERSION 1.0.0.0)
+project( 
+  tftp 
+  VERSION 1.0.0.0
+  DESCRIPTION "TFTP")
 
 add_subdirectory( tftp)
 add_subdirectory( application)

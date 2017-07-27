@@ -56,19 +56,47 @@ class Packet
      **/
     PacketType getPacketType() const;
 
-    //! default copy constructor
+    /**
+     * @brief default copy constructor
+     *
+     * @param[in] other
+     *   Other
+     *
+     * @return *this
+     **/
     Packet( const Packet &other) = default;
 
-    //! default move constructor
+    /**
+     * @brief default move constructor
+     *
+     * @param[in] other
+     *   Other
+     *
+     * @return *this
+     **/
     Packet( Packet &&other) = default;
 
     //! Default destructor
     virtual ~Packet() noexcept = default;
 
-    //! default copy assignment operator
+    /**
+     * @brief default copy assignment operator
+     *
+     * @param[in] other
+     *   Other
+     *
+     * @return *this
+     **/
     Packet& operator=( const Packet &other);
 
-    //! default copy move operator
+    /**
+     * @brief default move assignment operator
+     *
+     * @param[in] other
+     *   Other
+     *
+     * @return *this
+     **/
     Packet& operator=( Packet &&other);
 
     /**
