@@ -1,7 +1,3 @@
-/*
- * $Date$
- * $Revision$
- */
 /**
  * @file
  * @copyright

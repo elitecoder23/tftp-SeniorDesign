@@ -1,7 +1,3 @@
-/*
- * $Date$
- * $Revision$
- */
 /**
  * @file
  * @copyright
@@ -23,9 +19,7 @@
 #include <boost/application.hpp>
 #include <boost/program_options.hpp>
 
-/**
- * @brief The TFTP server application.
- **/
+//! The TFTP server application.
 class TftpServerApplication
 {
   public:

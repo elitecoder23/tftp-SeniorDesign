@@ -1,7 +1,3 @@
-/*
- * $Date$
- * $Revision$
- */
 /**
  * @file
  * @copyright
@@ -43,7 +39,7 @@ class OptionsAcknowledgementPacket: public Packet
 {
   public:
     /**
-     * @brief Initialises TFTP Options Acknowledgememnt packet with the given
+     * @brief Initialises TFTP Options Acknowledgement packet with the given
      *   options list.
      *
      * @param[in] options

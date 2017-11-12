@@ -1,6 +1,3 @@
-# $Date$
-# $Revision$
-#
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -98,19 +95,15 @@ add_library(
   server/implementation/TftpServerImpl.cpp
   server/implementation/TftpServerInternal.hpp
   server/implementation/WriteRequestOperationImpl.hpp
-  server/implementation/WriteRequestOperationImpl.cpp
-  )
+  server/implementation/WriteRequestOperationImpl.cpp)
 
-target_include_directories( tftp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
+target_include_directories( 
+  tftp 
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
 
 target_link_libraries( tftp helper Boost::program_options)
 
 target_compile_features( tftp PUBLIC cxx_std_14)
-
-# Add winsock for windows targets
-if(WIN32)
-  target_link_libraries( tftp wsock32 ws2_32)
-endif()
 
 add_library( 
   tftp_test 
@@ -130,7 +123,9 @@ add_library(
 
 target_compile_features( tftp_test PUBLIC cxx_std_14)
 
-target_include_directories( tftp_test PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
+target_include_directories( 
+  tftp_test
+  PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
 # INSTALL
 include( GNUInstallDirs)

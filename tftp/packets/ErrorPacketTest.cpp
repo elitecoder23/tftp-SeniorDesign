@@ -1,7 +1,3 @@
-/*
- * $Date$
- * $Revision$
- */
 /**
  * @file
  * @copyright
@@ -11,7 +7,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of uint tests of TFTP packet classes
+ * @brief Definition of unit tests of TFTP packet classes.
  **/
 
 #include <tftp/packets/ErrorPacket.hpp>
