@@ -101,6 +101,18 @@ target_include_directories(
   tftp 
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
 
+target_compile_options( 
+  tftp
+  
+  PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:-W4>
+    
+    $<$<CXX_COMPILER_ID:GNU>:-Wall>
+    $<$<CXX_COMPILER_ID:GNU>:-Wextra>
+    
+    $<$<CXX_COMPILER_ID:Clang>:-Wall>
+    $<$<CXX_COMPILER_ID:Clang>:-Wextra>)
+
 target_link_libraries( tftp helper Boost::program_options)
 
 target_compile_features( tftp PUBLIC cxx_std_14)
@@ -120,6 +132,18 @@ add_library(
   packets/OptionsAcknowledgementPacketTest.cpp
   packets/ReadRequestPacketTest.cpp
   packets/WriteRequestPacketTest.cpp)
+
+target_compile_options( 
+  tftp_test
+  
+  PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:-W4>
+    
+    $<$<CXX_COMPILER_ID:GNU>:-Wall>
+    $<$<CXX_COMPILER_ID:GNU>:-Wextra>
+    
+    $<$<CXX_COMPILER_ID:Clang>:-Wall>
+    $<$<CXX_COMPILER_ID:Clang>:-Wextra>)
 
 target_compile_features( tftp_test PUBLIC cxx_std_14)
 

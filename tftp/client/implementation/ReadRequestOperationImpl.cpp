@@ -278,7 +278,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // send Acknowledgement with block number set to 0
-  send( Packets::AcknowledgementPacket( 0));
+  send( Packets::AcknowledgementPacket( Packets::BlockNumber{ 0}));
 
   // receive next packet
   receive();

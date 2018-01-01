@@ -25,14 +25,14 @@ BOOST_AUTO_TEST_SUITE( AcknowledgementPacketTest)
 
 BOOST_AUTO_TEST_CASE( constructor1)
 {
-  AcknowledgementPacket ack( 10);
+  AcknowledgementPacket ack( BlockNumber{ 10U});
 
   RawTftpPacketType raw( ack);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
   BOOST_CHECK( ack.getPacketType() == PacketType::Acknowledgement);
-  BOOST_CHECK( ack.getBlockNumber() == BlockNumber( 10U));
+  BOOST_CHECK( ack.getBlockNumber() == BlockNumber{ 10U});
 }
 
 BOOST_AUTO_TEST_CASE( constructor2)

@@ -82,7 +82,7 @@ Tftp::RawTftpPacketType ErrorPacket::encode() const
   RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // error code
-  packetIt = setInt( packetIt, static_cast< const uint16_t>( getErrorCode()));
+  packetIt = setInt( packetIt, static_cast< uint16_t>( getErrorCode()));
 
   // error message
   packetIt = std::copy( errorMessage.begin(), errorMessage.end(), packetIt);

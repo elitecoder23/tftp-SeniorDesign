@@ -50,7 +50,7 @@ class DataPacket: public Packet
      *   The data within the packet.
      **/
     DataPacket(
-      BlockNumber blockNumber = {},
+      BlockNumber blockNumber = BlockNumber{},
       const DataType &data = {}) noexcept;
 
     /**

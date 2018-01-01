@@ -38,27 +38,28 @@ BOOST_AUTO_TEST_CASE( constructor )
   BOOST_CHECK( dp2.getDataSize() == 5);
   BOOST_CHECK( !dp2.getData().empty());
 
-  DataPacket dp3( 55, {'H', 'E', 'L', 'L', 'O' });
+  DataPacket dp3( BlockNumber{55}, {'H', 'E', 'L', 'L', 'O' });
   BOOST_CHECK( dp3.getPacketType() == PacketType::Data);
   BOOST_CHECK( dp3.getBlockNumber() == BlockNumber(55));
   BOOST_CHECK( dp3.getDataSize() == 5);
   BOOST_CHECK( !dp3.getData().empty());
 
-  std::vector< uint8_t> bindata;
-  bindata.push_back( 'H');
-  bindata.push_back( 'E');
-  bindata.push_back( 'L');
-  bindata.push_back( 'L');
-  bindata.push_back( 'O');
-  bindata.push_back( ' ');
-  bindata.push_back( 'W');
-  bindata.push_back( 'O');
-  bindata.push_back( 'R');
-  bindata.push_back( 'L');
-  bindata.push_back( 'D');
-  bindata.push_back( '!');
-
-  DataPacket data( 10, bindata);
+  DataPacket data(
+    BlockNumber{10},
+    {
+      'H',
+      'E',
+      'L',
+      'L',
+      'O',
+      ' ',
+      'W',
+      'O',
+      'R',
+      'L',
+      'D',
+      '!'
+    });
 
   RawTftpPacketType raw( data);
 
@@ -80,13 +81,13 @@ BOOST_AUTO_TEST_CASE( setBlockNumber )
   BOOST_CHECK( dp1.getBlockNumber() == BlockNumber());
   BOOST_CHECK( dp1Const.getBlockNumber() == BlockNumber());
 
-  dp1.setBlockNumber( 10);
-  BOOST_CHECK( dp1.getBlockNumber() == BlockNumber( 10));
-  BOOST_CHECK( dp1Const.getBlockNumber() == BlockNumber( 10));
+  dp1.setBlockNumber( BlockNumber{10});
+  BOOST_CHECK( dp1.getBlockNumber() == BlockNumber{ 10});
+  BOOST_CHECK( dp1Const.getBlockNumber() == BlockNumber{ 10});
 
   dp1.getBlockNumber()++;
-  BOOST_CHECK( dp1.getBlockNumber() == BlockNumber( 11));
-  BOOST_CHECK( dp1Const.getBlockNumber() == BlockNumber( 11));
+  BOOST_CHECK( dp1.getBlockNumber() == BlockNumber{ 11});
+  BOOST_CHECK( dp1Const.getBlockNumber() == BlockNumber{ 11});
 }
 
 BOOST_AUTO_TEST_SUITE_END()

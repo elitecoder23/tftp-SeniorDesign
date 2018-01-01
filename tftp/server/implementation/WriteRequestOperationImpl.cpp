@@ -74,7 +74,7 @@ void WriteRequestOperationImpl::start()
     if (!getOptions().hasOptions())
     {
       // Then no NOACK is sent back - a simple ACK is sent.
-      send( Packets::AcknowledgementPacket( 0));
+      send( Packets::AcknowledgementPacket( Packets::BlockNumber{ 0U}));
     }
     else
     {

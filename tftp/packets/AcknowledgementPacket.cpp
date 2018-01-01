@@ -66,7 +66,7 @@ Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
   auto packetIt( rawPacket.begin() + HeaderSize);
 
   // Add block number
-  setInt( packetIt, static_cast< const uint16_t>( blockNumber));
+  setInt( packetIt, static_cast< uint16_t>( blockNumber));
 
   return rawPacket;
 }
