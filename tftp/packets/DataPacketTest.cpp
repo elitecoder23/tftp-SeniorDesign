@@ -13,6 +13,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <tftp/packets/DataPacket.hpp>
+#include <tftp/TftpException.hpp>
 
 #include <helper/Dump.hpp>
 
@@ -23,7 +24,8 @@ namespace Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpDataPacket)
 
-BOOST_AUTO_TEST_CASE( constructor )
+//! Constructor test
+BOOST_AUTO_TEST_CASE( constructor1 )
 {
   DataPacket dp1;
 
@@ -73,6 +75,34 @@ BOOST_AUTO_TEST_CASE( constructor )
   BOOST_CHECK( data.getData()        == data2.getData());
 }
 
+//! Constructor test
+BOOST_AUTO_TEST_CASE( constructor2 )
+{
+  DataPacket dataPacket{
+    DataPacket::DataType{
+      0x00, 0x03,
+      0x01, 0x02,
+      'D', 'A', 'T', 'A', '_', 'T', 'E', 'S', 'T'
+    }
+  };
+
+  BOOST_CHECK( dataPacket.getPacketType()  == PacketType::Data);
+  BOOST_CHECK( dataPacket.getBlockNumber() == BlockNumber{ 0x0102});
+  BOOST_CHECK( dataPacket.getDataSize()    == 9);
+  BOOST_CHECK( (dataPacket.getData()       == DataPacket::DataType{'D', 'A', 'T', 'A', '_', 'T', 'E', 'S', 'T'}));
+
+  BOOST_CHECK_THROW(
+    (DataPacket{
+      DataPacket::DataType{
+        0x00, 0x04,
+        0x01, 0x02,
+        'D', 'A', 'T', 'A', '_', 'T', 'E', 'S', 'T'
+      }
+    }),
+    InvalidPacketException);
+}
+
+//! set blocknumber test
 BOOST_AUTO_TEST_CASE( setBlockNumber )
 {
   DataPacket dp1;

@@ -19,6 +19,7 @@ namespace Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpBlockNumber)
 
+//! Constructor test
 BOOST_AUTO_TEST_CASE( constructor )
 {
   BOOST_CHECK( 0 == BlockNumber());
@@ -26,6 +27,7 @@ BOOST_AUTO_TEST_CASE( constructor )
   BOOST_CHECK( 0xFFFFU == BlockNumber( 0xFFFFU));
 }
 
+//! increment test
 BOOST_AUTO_TEST_CASE( increment )
 {
   BlockNumber blockNumber;
@@ -44,6 +46,7 @@ BOOST_AUTO_TEST_CASE( increment )
   BOOST_CHECK( 1 == blockNumber.next());
 }
 
+//! decrement test
 BOOST_AUTO_TEST_CASE( decrement )
 {
   BlockNumber blockNumber( 10);
@@ -62,6 +65,7 @@ BOOST_AUTO_TEST_CASE( decrement )
   BOOST_CHECK( 0xFFFF == blockNumber.previous());
 }
 
+//! Comparison test
 BOOST_AUTO_TEST_CASE( compare )
 {
   BlockNumber blockNumber5a( 5);

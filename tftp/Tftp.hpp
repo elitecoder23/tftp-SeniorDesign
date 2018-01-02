@@ -22,7 +22,6 @@
 #include <cstdint>
 
 /**
- * @mainpage
  * @brief Implementation of the TFTP protocol.
  *
  * This library implementation the TFTP protocol.
@@ -44,10 +43,6 @@
  *   http://tools.ietf.org/html/rfc2348
  * - RFC 2349 TFTP Timeout Interval and Transfer Size Options<br>
  *   http://tools.ietf.org/html/rfc2349
- **/
-
-/**
- * @brief Basic definitions of the TFTP protocol
  **/
 namespace Tftp {
 

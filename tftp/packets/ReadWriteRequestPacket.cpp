@@ -39,9 +39,6 @@ ReadWriteRequestPacket::string ReadWriteRequestPacket::getMode(
       //! @throw InvalidPacketException if mode cannot be decoded
       BOOST_THROW_EXCEPTION( InvalidPacketException() <<
         AdditionalInfo( "Invalid mode"));
-
-      // never return
-      return string();
   }
 }
 

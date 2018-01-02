@@ -58,8 +58,8 @@ class AcknowledgementPacket: public Packet
     AcknowledgementPacket( const RawTftpPacketType &rawPacket);
 
     //! @copydoc Packet::operator=(const RawTftpPacketType&)
-    virtual AcknowledgementPacket& operator=(
-      const RawTftpPacketType &rawPacket) override;
+    AcknowledgementPacket& operator=(
+      const RawTftpPacketType &rawPacket) final;
 
     /**
      * @brief Returns the block number.
@@ -77,12 +77,21 @@ class AcknowledgementPacket: public Packet
     void setBlockNumber( const BlockNumber blockBumber);
 
     //! @copydoc Packet::operator string() const
-    virtual operator string() const override final;
+    operator string() const final;
 
   private:
     //! @copydoc Packet::encode()
     virtual RawTftpPacketType encode() const override final;
 
+    /**
+     * @brief Decodes the TFTP body.
+     *
+     * @param[in] rawPacket
+     *   Raw TFP packet
+     *
+     * @throw InvalidPacketException
+     *   If data or packet is invalid.
+     **/
     void decodeBody( const RawTftpPacketType &rawPacket);
 
     //! Block number of the packet

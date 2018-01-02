@@ -23,6 +23,7 @@ namespace Packets {
 
 BOOST_AUTO_TEST_SUITE( AcknowledgementPacketTest)
 
+//! Constructor test
 BOOST_AUTO_TEST_CASE( constructor1)
 {
   AcknowledgementPacket ack( BlockNumber{ 10U});
@@ -35,6 +36,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
   BOOST_CHECK( ack.getBlockNumber() == BlockNumber{ 10U});
 }
 
+//! Constructor test
 BOOST_AUTO_TEST_CASE( constructor2)
 {
   RawTftpPacketType raw{

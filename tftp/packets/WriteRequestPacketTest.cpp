@@ -23,6 +23,7 @@ namespace Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpWriteRequestPacket)
 
+//! Constructor test
 BOOST_AUTO_TEST_CASE( constructor )
 {
   Options::OptionList options;

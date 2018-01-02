@@ -152,7 +152,7 @@ class ReadWriteRequestPacket: public Packet
     /**
      * @copydoc Packet::operator string() const
      **/
-    virtual operator string() const override;
+    operator string() const final;
 
   protected:
     /**
@@ -198,6 +198,15 @@ class ReadWriteRequestPacket: public Packet
      **/
     virtual RawTftpPacketType encode() const override;
 
+    /**
+     * @brief Decodes the TFTP body.
+     *
+     * @param[in] rawPacket
+     *   Raw TFP packet
+     *
+     * @throw InvalidPacketException
+     *   If data or packet is invalid.
+     **/
     void decodeBody( const RawTftpPacketType &rawPacket);
 
     //! stored request filename

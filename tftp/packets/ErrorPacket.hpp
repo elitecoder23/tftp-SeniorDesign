@@ -98,8 +98,17 @@ class ErrorPacket: public Packet
 
   private:
     //! @copydoc Packet::encode()
-    virtual RawTftpPacketType encode() const override;
+    RawTftpPacketType encode() const final;
 
+    /**
+     * @brief Decodes the TFTP body.
+     *
+     * @param[in] rawPacket
+     *   Raw TFP packet
+     *
+     * @throw InvalidPacketException
+     *   If data or packet is invalid.
+     **/
     void decodeBody( const RawTftpPacketType &rawPacket);
 
     //! The error code
