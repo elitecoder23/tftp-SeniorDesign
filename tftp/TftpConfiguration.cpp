@@ -24,16 +24,16 @@ TftpConfiguration::TftpConfiguration() :
 {
 }
 
-TftpConfiguration::TftpConfiguration( const ptree &properties) :
-  tftpTimeout( properties.get( "timeout", DefaultTftpReceiveTimeout)),
-  tftpRetries( properties.get( "retries", DefaultTftpRetries)),
-  tftpServerPort( properties.get( "port", DefaultTftpPort)),
+TftpConfiguration::TftpConfiguration( const ptree &config) :
+  tftpTimeout( config.get( "timeout", DefaultTftpReceiveTimeout)),
+  tftpRetries( config.get( "retries", DefaultTftpRetries)),
+  tftpServerPort( config.get( "port", DefaultTftpPort)),
 
-  handleTransferSizeOption( properties.get( "option.transferSize", false)),
+  handleTransferSizeOption( config.get( "option.transferSize", false)),
 
-  blockSizeOption( properties.get_optional< uint16_t>( "option.blockSize.value")),
+  blockSizeOption( config.get_optional< uint16_t>( "option.blockSize.value")),
 
-  timeoutOption( properties.get_optional< uint8_t>( "option.timeout.value"))
+  timeoutOption( config.get_optional< uint8_t>( "option.timeout.value"))
 {
 }
 

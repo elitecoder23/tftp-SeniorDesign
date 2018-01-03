@@ -43,10 +43,10 @@ class TftpConfiguration
     /**
      * @brief Loads the configuration via a boost::property_tree::ptree.
      *
-     * @param[in] properties
-     *   The stored properties.
+     * @param[in] config
+     *   The stored configuration.
      **/
-    TftpConfiguration( const ptree &properties);
+    TftpConfiguration( const ptree &config);
 
     /**
      * @brief Converts the configuration values to a
