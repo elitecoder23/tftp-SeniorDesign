@@ -93,13 +93,13 @@ class ReadRequestOperationImpl: public OperationImpl
     /**
      * @brief executes the operation.
      **/
-    virtual void start() override final;
+    void start() final;
 
   private:
     //! @copydoc OperationImpl::finished()
-    virtual void finished(
+    void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept override final;
+      ErrorInfo &&errorInfo = {}) noexcept final;
 
     /**
      * @brief Sends a data packet to the client.
@@ -117,9 +117,9 @@ class ReadRequestOperationImpl: public OperationImpl
      * Data packets are not expected and handled as invalid.
      * An error is sent back and the operation is cancelled.
      **/
-    virtual void handleDataPacket(
+    void handleDataPacket(
       const UdpAddressType &from,
-      const Packets::DataPacket &dataPacket) override;
+      const Packets::DataPacket &dataPacket) final;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket
@@ -127,9 +127,9 @@ class ReadRequestOperationImpl: public OperationImpl
      * The acknowledgement packet is checked and the next data sequence is
      * handled.
      **/
-    virtual void handleAcknowledgementPacket(
+    void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) override;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
   private:
     //! The handler which is called during operation.

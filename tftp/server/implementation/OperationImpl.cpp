@@ -177,7 +177,7 @@ void OperationImpl::finished(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
     "Operation finished";
 
-  this->errorInfo = errorInfo;
+  this->errorInfo = std::move( errorInfo);
 
   timer.cancel();
   socket.cancel();
