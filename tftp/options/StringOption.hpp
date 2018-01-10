@@ -39,7 +39,7 @@ class StringOption: public Option
     /**
      * Returns the value directly.
      **/
-    virtual operator string() const final;
+    operator string() const final;
 
     /**
      * @brief Sets the option value.
@@ -59,8 +59,7 @@ class StringOption: public Option
      *
      * @return Always an empty option pointer.
      **/
-    virtual OptionPtr negotiate(
-      const string &optionValue) const noexcept final;
+    OptionPtr negotiate( const string &optionValue) const noexcept final;
 
   private:
     //! The option value.

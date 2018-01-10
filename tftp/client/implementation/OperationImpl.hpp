@@ -67,15 +67,15 @@ class OperationImpl :
     virtual void start() override;
 
     //! @copydoc Operation::gracefulAbort
-    virtual void gracefulAbort(
+    void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage = string()) override final;
+      const string &errorMessage = string()) final;
 
     //! @copydoc Operation::abort
-    virtual void abort() override final;
+    void abort() override final;
 
     //! @copydoc Operation::getErrorInfo
-    virtual const ErrorInfo& getErrorInfo() const override final;
+    const ErrorInfo& getErrorInfo() const final;
 
   protected:
     //! TFTP options (list) @todo rename to Options
@@ -151,7 +151,7 @@ class OperationImpl :
      *
      * @return The TFTP option list.
      **/
-    OptionList & getOptions();
+    OptionList& getOptions();
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -163,7 +163,7 @@ class OperationImpl :
     void sendFirst( const Packets::Packet &packet);
 
     /**
-     * @brief Sends the packet to the TFTp server.
+     * @brief Sends the packet to the TFTP server.
      *
      * @param[in] packet
      *   The TFTP packet to send.
@@ -172,11 +172,17 @@ class OperationImpl :
 
     /**
      * @brief Waits for an incoming response from the server.
+     *
+     * @sa receiveFirstHandler
+     * @sa timeoutFirstHandler
      **/
     void receiveFirst();
 
     /**
      * @brief Waits for an incoming response from the server.
+     *
+     * @sa receiveHandler
+     * @sa timeoutHandler
      **/
     void receive();
 
@@ -220,9 +226,9 @@ class OperationImpl :
      *
      * This operation always throws an CommunicationException.
      **/
-    virtual void handleReadRequestPacket(
+    void handleReadRequestPacket(
       const UdpAddressType &from,
-      const Packets::ReadRequestPacket &readRequestPacket) override final;
+      const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
      * @copydoc PacketHandler::handleWriteRequestPacket()
@@ -230,23 +236,23 @@ class OperationImpl :
      * A write request packet is handled as failure. A error packet is sent
      * to the origin and the finished flag is set
      **/
-    virtual void handleWriteRequestPacket(
+    void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const Packets::WriteRequestPacket &writeRequestPacket) override final;
+      const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
      * @copydoc PacketHandler::handleErrorPacket()
      **/
-    virtual void handleErrorPacket(
+    void handleErrorPacket(
       const UdpAddressType &from,
-      const Packets::ErrorPacket &errorPacket) override final;
+      const Packets::ErrorPacket &errorPacket) final;
 
     /**
      * @copydoc PacketHandler::handleInvalidPacket()
      **/
-    virtual void handleInvalidPacket(
+    void handleInvalidPacket(
       const UdpAddressType &from,
-      const RawTftpPacketType &rawPacket) override final;
+      const RawTftpPacketType &rawPacket) final;
 
   private:
     /**
@@ -285,7 +291,7 @@ class OperationImpl :
      * @param[in] errorCode
      *   error status of operation.
      **/
-    void timeoutFirstHandler( const boost::system::error_code& errorCode);
+    void timeoutFirstHandler( const boost::system::error_code &errorCode);
 
     /**
      * @brief Called when no data is received for the sent packet.
@@ -296,7 +302,7 @@ class OperationImpl :
      * @param[in] errorCode
      *   error status of operation.
      **/
-    void timeoutHandler( const boost::system::error_code& errorCode);
+    void timeoutHandler( const boost::system::error_code &errorCode);
 
     //! Completion Handler
     OperationCompletedHandler completionHandler;

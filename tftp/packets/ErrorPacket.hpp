@@ -45,8 +45,13 @@ class ErrorPacket: public Packet
      *   Error message, which shall be set. By default empty.
      **/
     ErrorPacket(
-      ErrorCode errorCode = ErrorCode::Invalid,
-      const string &errorMessage = string()) noexcept;
+      ErrorCode errorCode,
+      const string &errorMessage);
+
+    //! @copydoc ErrorPacket(ErrorCode,const string&)
+    ErrorPacket(
+      ErrorCode errorCode,
+      string &&errorMessage = {});
 
     /**
      * @brief Generates a TFTP error packet from a data buffer
@@ -60,11 +65,11 @@ class ErrorPacket: public Packet
     ErrorPacket( const RawTftpPacketType &rawPacket);
 
     //! @copydoc Packet::operator=(const RawTftpPacketType&)
-    virtual ErrorPacket& operator=(
-      const RawTftpPacketType &rawPacket) override;
+    ErrorPacket& operator=(
+      const RawTftpPacketType &rawPacket) final;
 
     //! @copydoc Packet::operator string() const
-    virtual operator string() const override;
+    operator string() const final;
 
     /**
      * @brief Returns the error code.
@@ -94,7 +99,10 @@ class ErrorPacket: public Packet
      * @param[in] errorMessage
      *   The error message to set. By default empty.
      **/
-    void setErrorMessage( const string &errorMessage = {});
+    void setErrorMessage( const string &errorMessage);
+
+    //! @copydoc setErrorMessage(const string&)
+    void setErrorMessage( string &&errorMessage = {});
 
   private:
     //! @copydoc Packet::encode()

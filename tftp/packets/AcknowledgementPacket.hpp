@@ -81,7 +81,7 @@ class AcknowledgementPacket: public Packet
 
   private:
     //! @copydoc Packet::encode()
-    virtual RawTftpPacketType encode() const override final;
+    RawTftpPacketType encode() const final;
 
     /**
      * @brief Decodes the TFTP body.

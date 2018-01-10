@@ -92,7 +92,10 @@ void ReadRequestOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo) noexcept
 {
+  // inform base class
   OperationImpl::finished( status, std::move( errorInfo));
+
+  // Inform data handler
   dataHandler->finished();
 }
 

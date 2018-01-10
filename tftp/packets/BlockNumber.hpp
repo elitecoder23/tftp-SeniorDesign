@@ -40,7 +40,7 @@ class BlockNumber
      * @param[in] blockNumber
      *   Base block number.
      **/
-    explicit BlockNumber( uint16_t blockNumber = 0) noexcept;
+    explicit BlockNumber( uint16_t blockNumber = 0U) noexcept;
 
     //! Default destructor
     ~BlockNumber() noexcept = default;
@@ -68,6 +68,8 @@ class BlockNumber
 
     /**
      * @brief Cast operator of the block number class to an uint16_t&.
+     *
+     * This operator allows direct manipulation of the underlying base type.
      *
      * @return The block number as uint16_t&.
      **/

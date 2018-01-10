@@ -96,9 +96,9 @@ class WriteRequestOperationImpl : public OperationImpl
 
   protected:
     //! @copydoc OperationImpl::finished
-    virtual void finished(
+    void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept override final;
+      ErrorInfo &&errorInfo = {}) noexcept final;
 
     /**
      * @brief Sends the data to the host.
@@ -114,9 +114,9 @@ class WriteRequestOperationImpl : public OperationImpl
      * @throw InvalidPacketException
      *   Always, because an this packet is invalid.
      **/
-    virtual void handleDataPacket(
+    void handleDataPacket(
       const UdpAddressType &from,
-      const Packets::DataPacket &dataPacket) override final;
+      const Packets::DataPacket &dataPacket) final;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket()
@@ -124,9 +124,9 @@ class WriteRequestOperationImpl : public OperationImpl
      * @throw InvalidPacketException
      *   Invalid block number
      **/
-    virtual void handleAcknowledgementPacket(
+    void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) override final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
      * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
@@ -136,9 +136,9 @@ class WriteRequestOperationImpl : public OperationImpl
      * @throw OptionNegotiationException
      *   Option negotiation failed
      **/
-    virtual void handleOptionsAcknowledgementPacket(
+    void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:
     //! The handler, which is called

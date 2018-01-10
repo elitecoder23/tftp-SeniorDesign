@@ -140,7 +140,7 @@ class ErrorOperation: public Operation
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage = {}) final;
+      string &&errorMessage = {}) final;
 
     //! @copydoc Operation::abort
     void abort() final;

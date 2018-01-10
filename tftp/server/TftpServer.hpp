@@ -65,8 +65,8 @@ class TftpServer
      **/
     static TftpServerPtr createInstance(
       ReceivedTftpRequestHandler handler,
-      const TftpConfiguration &configuration = TftpConfiguration(),
-      const Options::OptionList& additionalOptions = Options::OptionList(),
+      const TftpConfiguration &configuration = {},
+      const Options::OptionList& additionalOptions = {},
       const UdpAddressType &serverAddress = DefaultLocalEndpoint);
 
     //! Default destructor
@@ -204,7 +204,15 @@ class TftpServer
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
       ErrorCode errorCode,
-      const string &errorMessage = {},
+      const string &errorMessage,
+      OperationCompletedHandler completionHandler = {}) = 0;
+
+    //! @copydoc createErrorOperation(const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&,OperationCompletedHandler)
+    virtual OperationPtr createErrorOperation(
+      const UdpAddressType &clientAddress,
+      const UdpAddressType &from,
+      ErrorCode errorCode,
+      string &&errorMessage = {},
       OperationCompletedHandler completionHandler = {}) = 0;
 
     /**
@@ -224,7 +232,14 @@ class TftpServer
     virtual OperationPtr createErrorOperation(
       const UdpAddressType &clientAddress,
       ErrorCode errorCode,
-      const string &errorMessage = {},
+      const string &errorMessage,
+      OperationCompletedHandler completionHandler = {}) = 0;
+
+    //! @copydoc createErrorOperation(const UdpAddressType&,ErrorCode,const string&,OperationCompletedHandler)
+    virtual OperationPtr createErrorOperation(
+      const UdpAddressType &clientAddress,
+      ErrorCode errorCode,
+      string &&errorMessage = {},
       OperationCompletedHandler completionHandler = {}) = 0;
 
   protected:

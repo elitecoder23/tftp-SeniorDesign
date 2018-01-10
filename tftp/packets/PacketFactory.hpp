@@ -45,8 +45,7 @@ class PacketFactory
      * @retval INVALID
      *   If the packet cannot be decoded.
      **/
-    static PacketType getPacketType( const RawTftpPacketType &rawPacket)
-      noexcept;
+    static PacketType getPacketType( const RawTftpPacketType &rawPacket) noexcept;
 
     /**
      * @brief Decodes the given raw data as TFTP Read Request Packet.

@@ -37,7 +37,7 @@ void OperationImpl::start()
 
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
-  const string &errorMessage)
+  string &&errorMessage)
 {
   BOOST_LOG_FUNCTION();
 
@@ -46,7 +46,7 @@ void OperationImpl::gracefulAbort(
 
   Packets::ErrorPacket errorPacket(
     errorCode,
-    errorMessage);
+    std::move( errorMessage));
 
   send( errorPacket);
 
@@ -200,7 +200,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   transmitPacketType = packet.getPacketType();
 
   // Encode raw packet
-  transmitPacket = packet;
+  transmitPacket = static_cast< RawTftpPacketType>( packet);
 
   try
   {

@@ -41,7 +41,8 @@ TftpServerApplication::TftpServerApplication(
 
     (
       "server-root",
-      boost::program_options::value< boost::filesystem::path>( &baseDir)->default_value( boost::filesystem::current_path()),
+      boost::program_options::value< boost::filesystem::path>(
+        &baseDir)->default_value( boost::filesystem::current_path()),
       "Directory path, where the server shall have its root"
     );
 

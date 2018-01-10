@@ -205,7 +205,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet)
     transmitPacketType = packet.getPacketType();
 
     // Encode raw packet
-    transmitPacket = packet;
+    transmitPacket = static_cast< RawTftpPacketType>( packet);
 
     // Send the packet to the remote server
     socket.send_to(
@@ -238,7 +238,7 @@ void OperationImpl::send( const Packets::Packet &packet)
     transmitPacketType = packet.getPacketType();
 
     // Encode raw packet
-    transmitPacket = packet;
+    transmitPacket = static_cast< RawTftpPacketType>( packet);
 
     // Send the packet to the remote server
     socket.send( boost::asio::buffer( transmitPacket));
@@ -346,7 +346,7 @@ void OperationImpl::finished(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
     "Operation finished";
 
-  this->errorInfo = errorInfo;
+  this->errorInfo = std::move( errorInfo);
 
   timer.cancel();
   socket.cancel();

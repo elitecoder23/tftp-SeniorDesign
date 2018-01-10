@@ -29,14 +29,14 @@ OptionList::OptionList()
 }
 
 OptionList::OptionList(
-  RawOptionsType::const_iterator begin,
-  RawOptionsType::const_iterator end)
+  RawOptions::const_iterator begin,
+  RawOptions::const_iterator end)
 {
   while (begin != end)
   {
     //! @todo add throw of exception
-    RawOptionsType::const_iterator nameBegin = begin;
-    RawOptionsType::const_iterator nameEnd = std::find( nameBegin, end, 0);
+    auto nameBegin{ begin};
+    auto nameEnd{ std::find( nameBegin, end, 0)};
 
     if (nameEnd==end)
     {
@@ -45,7 +45,7 @@ OptionList::OptionList(
         AdditionalInfo( "Unexpected end of input data"));
     }
 
-    RawOptionsType::const_iterator valueBegin = nameEnd + 1;
+    auto valueBegin{ nameEnd + 1};
 
     if (valueBegin == end)
     {
@@ -54,7 +54,7 @@ OptionList::OptionList(
         AdditionalInfo( "Unexpected end of input data"));
     }
 
-    RawOptionsType::const_iterator valueEnd = std::find( valueBegin, end, 0);
+    auto valueEnd{ std::find( valueBegin, end, 0)};
 
     if (valueEnd == end)
     {
@@ -80,19 +80,19 @@ bool OptionList::hasOptions() const
   return !options.empty();
 }
 
-const OptionList::OptionMap& OptionList::getOptions() const
+const OptionList::Options& OptionList::getOptions() const
 {
   return options;
 }
 
-OptionList::OptionMap& OptionList::getOptions()
+OptionList::Options& OptionList::getOptions()
 {
   return options;
 }
 
-OptionList::RawOptionsType OptionList::getRawOptions() const
+OptionList::RawOptions OptionList::getRawOptions() const
 {
-  RawOptionsType rawOptions;
+  RawOptions rawOptions;
 
   // copy options
   for ( const auto &option : options)
@@ -114,9 +114,9 @@ OptionList::RawOptionsType OptionList::getRawOptions() const
   return rawOptions;
 }
 
-void OptionList::setOptions( const OptionMap &options)
+void OptionList::setOptions( const Options &options)
 {
-	this->options = options;
+  this->options = options;
 }
 
 bool OptionList::hasOption( const string &name) const
@@ -138,8 +138,7 @@ bool OptionList::hasOption( const KnownOptions option) const
 
 const OptionPtr OptionList::getOption( const string &name) const
 {
-  OptionMap::const_iterator it =
-    options.find( name);
+  auto it{ options.find( name)};
 
   return (it != options.end()) ?
     it->second : OptionPtr();
@@ -232,8 +231,7 @@ void OptionList::addBlocksizeOptionServer(
 
 uint16_t OptionList::getBlocksizeOption() const
 {
-  OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( KnownOptions::BlockSize));
+  auto optionIt{ options.find( Option::getOptionName( KnownOptions::BlockSize))};
 
   // option not set
   if (optionIt == options.end())
@@ -288,8 +286,7 @@ void OptionList::addTimeoutOptionServer(
 
 uint8_t OptionList::getTimeoutOption() const
 {
-  OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( KnownOptions::Timeout));
+  auto optionIt{ options.find( Option::getOptionName( KnownOptions::Timeout))};
 
   // option not set
   if (optionIt == options.end())
@@ -332,8 +329,8 @@ bool OptionList::hasTransferSizeOption() const
 
 uint64_t OptionList::getTransferSizeOption() const
 {
-  OptionMap::const_iterator optionIt = options.find(
-    Option::getOptionName( KnownOptions::TransferSize));
+  auto optionIt{ options.find(
+    Option::getOptionName( KnownOptions::TransferSize))};
 
   // option not set
   if (optionIt == options.end())
@@ -361,8 +358,7 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
   // iterate over each received option
   for ( const auto & clientOption : clientOptions.getOptions())
   {
-    OptionMap::const_iterator negotiationEntryIt = options.find(
-      clientOption.first);
+    auto negotiationEntryIt{ options.find( clientOption.first)};
 
     // not found -> ignore option
     if (negotiationEntryIt == options.end())
@@ -395,8 +391,7 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
   for ( const auto & serverOption : serverOptions.getOptions())
   {
     // find negotiation entry
-    OptionMap::const_iterator negotiationEntryIt = options.find(
-      serverOption.first);
+    auto negotiationEntryIt{ options.find( serverOption.first)};
 
     // not found -> server sent an option, which cannot come from us
     if (negotiationEntryIt == options.end())

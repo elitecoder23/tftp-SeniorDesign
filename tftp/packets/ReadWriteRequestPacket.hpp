@@ -196,7 +196,7 @@ class ReadWriteRequestPacket: public Packet
     /**
      * @copydoc Packet::encode()
      **/
-    virtual RawTftpPacketType encode() const override;
+    RawTftpPacketType encode() const final;
 
     /**
      * @brief Decodes the TFTP body.

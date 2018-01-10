@@ -81,7 +81,7 @@ OptionsAcknowledgementPacket::operator string() const
 
 Tftp::RawTftpPacketType OptionsAcknowledgementPacket::encode() const
 {
-  Options::OptionList::RawOptionsType rawOptions( options.getRawOptions());
+  auto rawOptions{ options.getRawOptions()};
 
   RawTftpPacketType rawPacket( 2 + rawOptions.size());
 

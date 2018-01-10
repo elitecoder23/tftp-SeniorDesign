@@ -96,7 +96,7 @@ class BaseIntegerOption: public Option
      * @retval OptionPointer()
      *   If option negotiation failed.
      **/
-    virtual OptionPtr negotiate( const string &optionValue) const noexcept final;
+    OptionPtr negotiate( const string &optionValue) const noexcept final;
 
   protected:
     /**

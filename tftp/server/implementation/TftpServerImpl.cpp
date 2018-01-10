@@ -196,6 +196,22 @@ OperationPtr TftpServerImpl::createErrorOperation(
 
 OperationPtr TftpServerImpl::createErrorOperation(
   const UdpAddressType &clientAddress,
+  const UdpAddressType &from,
+  const ErrorCode errorCode,
+  string &&errorMessage,
+  OperationCompletedHandler completionHandler)
+{
+  return std::make_shared< ErrorOperation>(
+    ioService,
+    clientAddress,
+    from,
+    errorCode,
+    std::move( errorMessage),
+    completionHandler);
+}
+
+OperationPtr TftpServerImpl::createErrorOperation(
+  const UdpAddressType &clientAddress,
   const ErrorCode errorCode,
   const string &errorMessage,
   OperationCompletedHandler completionHandler)
@@ -205,6 +221,20 @@ OperationPtr TftpServerImpl::createErrorOperation(
     clientAddress,
     errorCode,
     errorMessage,
+    completionHandler);
+}
+
+OperationPtr TftpServerImpl::createErrorOperation(
+  const UdpAddressType &clientAddress,
+  const ErrorCode errorCode,
+  string &&errorMessage,
+  OperationCompletedHandler completionHandler)
+{
+  return std::make_shared< ErrorOperation>(
+    ioService,
+    clientAddress,
+    errorCode,
+    std::move( errorMessage),
     completionHandler);
 }
 

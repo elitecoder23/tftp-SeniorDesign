@@ -97,13 +97,13 @@ class WriteRequestOperationImpl: public OperationImpl
     /**
      * @brief Executes the operation.
      **/
-    virtual void start() override final;
+    void start() final;
 
   private:
     //! @copydoc OperationImpl::finished()
-    virtual void finished(
+    void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept override final;
+      ErrorInfo &&errorInfo = {}) noexcept final;
 
     /**
      * @copydoc PacketHandler::handleDataPacket
@@ -112,9 +112,9 @@ class WriteRequestOperationImpl: public OperationImpl
      * TftpReadOperationHandler::receviedData() operation of the registered
      * handler is called.
      **/
-    virtual void handleDataPacket(
+    void handleDataPacket(
       const UdpAddressType &from,
-      const Packets::DataPacket &dataPacket) override;
+      const Packets::DataPacket &dataPacket) final;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket
@@ -122,9 +122,9 @@ class WriteRequestOperationImpl: public OperationImpl
      * Acknowledgement packets are not expected and handled as invalid.
      * An error is sent back and the operation is cancelled.
      **/
-    virtual void handleAcknowledgementPacket(
+    void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) override;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
   private:
     //! Handler which will be called on various events.

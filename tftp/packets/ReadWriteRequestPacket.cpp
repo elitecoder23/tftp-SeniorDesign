@@ -191,7 +191,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
 Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
 {
-  Options::OptionList::RawOptionsType rawOptions( options.getRawOptions());
+  auto rawOptions{ options.getRawOptions()};
 
   RawTftpPacketType rawPacket(
     HeaderSize +
@@ -203,17 +203,17 @@ Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
 
   RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
 
-  // decode filename
+  // encode filename
   packetIt = std::copy( filename.begin(), filename.end(), packetIt);
   *packetIt = 0;
   ++packetIt;
 
-  // decode mode
+  // encode mode
   packetIt = std::copy( mode.begin(), mode.end(), packetIt);
   *packetIt = 0;
   ++packetIt;
 
-  // decode options
+  // encode options
   std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
 
   return rawPacket;

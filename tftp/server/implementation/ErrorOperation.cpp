@@ -176,7 +176,7 @@ void ErrorOperation::start()
 
 void ErrorOperation::gracefulAbort(
   const ErrorCode /* errorCode */,
-  const string &/* errorMessage*/)
+  string &&/* errorMessage*/)
 {
   // do nothing
 }

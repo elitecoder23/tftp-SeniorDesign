@@ -93,13 +93,13 @@ class ReadRequestOperationImpl : public OperationImpl
      *
      * Assembles and transmit TFTP RRQ packet and start parent receive loop.
      **/
-    virtual void start() override final;
+    void start() final;
 
   protected:
     //! @copydoc OperationImpl::finished
-    virtual void finished(
+    void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept override final;
+      ErrorInfo &&errorInfo = {}) noexcept final;
 
     /**
      * @copydoc PacketHandler::handleDataPacket()
@@ -108,9 +108,9 @@ class ReadRequestOperationImpl : public OperationImpl
      * If everything is fine, handler is called with extracted data and the
      * receive operation is continued.
      **/
-    virtual void handleDataPacket(
+    void handleDataPacket(
       const UdpAddressType &from,
-      const Packets::DataPacket &dataPacket) override final;
+      const Packets::DataPacket &dataPacket) final;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket()
@@ -118,17 +118,18 @@ class ReadRequestOperationImpl : public OperationImpl
      * ACK packets are not expected for this operation.
      * They are rejected by error transmission
      **/
-    virtual void handleAcknowledgementPacket(
+    void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) override final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
      * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
      *
+     * Checks received Options for validity and finalises the option negotiation.
      **/
-    virtual void handleOptionsAcknowledgementPacket(
+    void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:
     //! Registered handler.

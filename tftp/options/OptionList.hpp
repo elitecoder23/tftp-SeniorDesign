@@ -42,9 +42,9 @@ class OptionList
     //! string type
     using string = std::string;
     //! short form of option map
-    using OptionMap = std::map< string, OptionPtr>;
+    using Options = std::map< string, OptionPtr>;
     //! short form of raw option
-    using RawOptionsType = std::vector< uint8_t>;
+    using RawOptions = std::vector< uint8_t>;
 
     /**
      * @brief Creates an empty option list
@@ -60,8 +60,8 @@ class OptionList
      *   End of raw option list data
      **/
     OptionList(
-      RawOptionsType::const_iterator begin,
-      RawOptionsType::const_iterator end);
+      RawOptions::const_iterator begin,
+      RawOptions::const_iterator end);
 
     /**
      * @brief Returns, if any option is set.
@@ -75,14 +75,14 @@ class OptionList
      *
      * @return Returns a constant reference to the options map.
      **/
-    const OptionMap& getOptions() const;
+    const Options& getOptions() const;
 
     /**
      * @brief Returns the option map.
      *
      * @return Returns a reference to the options map.
      **/
-    OptionMap& getOptions();
+    Options& getOptions();
 
     /**
      * @brief Returns the option list as raw data
@@ -92,7 +92,7 @@ class OptionList
      *
      * @return The option list as raw data
      **/
-    RawOptionsType getRawOptions() const;
+    RawOptions getRawOptions() const;
 
     /**
      * @brief Replaces the own options by the given one.
@@ -100,7 +100,7 @@ class OptionList
      * @param[in] options
      *   The new options.
      **/
-    void setOptions( const OptionMap &options);
+    void setOptions( const Options &options);
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -350,7 +350,7 @@ class OptionList
 
   private:
     //! the options.
-    OptionMap options;
+    Options options;
 };
 
 }

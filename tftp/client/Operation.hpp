@@ -55,12 +55,14 @@ class Operation
      *
      * Sends an error packet at next possible time point.
      *
-     * @param errorCode
-     * @param errorMessage
+     * @param[in] errorCode
+     *   The TFTP error code.
+     * @param[in] errorMessage
+     *   An additional error message.
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage = string()) = 0;
+      const string &errorMessage = {}) = 0;
 
     /**
      * @brief Immediately cancels the transfer.

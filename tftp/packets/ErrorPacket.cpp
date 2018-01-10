@@ -22,10 +22,19 @@ namespace Packets {
 
 ErrorPacket::ErrorPacket(
   const ErrorCode errorCode,
-  const string &errorMessage) noexcept:
+  const string &errorMessage):
   Packet( PacketType::Error),
   errorCode( errorCode),
   errorMessage( errorMessage)
+{
+}
+
+ErrorPacket::ErrorPacket(
+  ErrorCode errorCode,
+  string &&errorMessage):
+  Packet( PacketType::Error),
+  errorCode( errorCode),
+  errorMessage( std::move( errorMessage))
 {
 }
 
@@ -69,6 +78,11 @@ ErrorPacket::string ErrorPacket::getErrorMessage() const
 void ErrorPacket::setErrorMessage( const string &errorMessage)
 {
   this->errorMessage = errorMessage;
+}
+
+void ErrorPacket::setErrorMessage( string &&errorMessage)
+{
+  this->errorMessage = std::move( errorMessage);
 }
 
 Tftp::RawTftpPacketType ErrorPacket::encode() const

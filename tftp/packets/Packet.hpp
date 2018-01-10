@@ -112,7 +112,7 @@ class Packet
      *
      * @return Binary packet data
      **/
-    operator RawTftpPacketType() const;
+    explicit operator RawTftpPacketType() const;
 
     /**
      * @brief Returns a string, which describes the packet.
@@ -121,7 +121,7 @@ class Packet
      *
      * @return Packet description.
      **/
-    virtual operator string() const;
+    explicit virtual operator string() const;
 
   protected:
     /**

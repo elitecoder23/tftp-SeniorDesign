@@ -46,18 +46,18 @@ class OperationImpl:
 {
   public:
     //! @copydoc Operation::start()
-    virtual void start() override;
+    void start() override;
 
     //! @copydoc Operation::gracefulAbort
-    virtual void gracefulAbort(
+    void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage) override;
+      string &&errorMessage) final;
 
     //! @copydoc Operation::abort
-    virtual void abort() override;
+    void abort() final;
 
     //! @copydoc Operation::getErrorInfo
-    virtual const ErrorInfo& getErrorInfo() const override final;
+    const ErrorInfo& getErrorInfo() const final;
 
   protected:
     /**

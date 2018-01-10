@@ -136,11 +136,11 @@ class DataPacket: public Packet
     size_t getDataSize() const;
 
     //! @copydoc Packet::operator string() const
-    virtual operator string() const override;
+    operator string() const final;
 
   private:
     //! @copydoc Packet::encode()
-    virtual RawTftpPacketType encode() const override;
+    RawTftpPacketType encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
