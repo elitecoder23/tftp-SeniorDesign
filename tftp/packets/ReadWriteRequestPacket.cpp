@@ -76,7 +76,6 @@ TransferMode ReadWriteRequestPacket::getMode( const string &mode)
     return TransferMode::MAIL;
   }
 
-  //! @throw InvalidPacketException When invalid mode has been set
   BOOST_THROW_EXCEPTION(
     InvalidPacketException() << AdditionalInfo( "Invalid string: " + mode));
 

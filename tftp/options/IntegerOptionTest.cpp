@@ -19,6 +19,8 @@ namespace Tftp {
 namespace Options {
 
 BOOST_AUTO_TEST_SUITE( IntegerOptionTest)
+
+//! constructor test
 BOOST_AUTO_TEST_CASE( constructor8u)
 {
   IntegerOption< uint8_t, NegotiateAlwaysPass< uint8_t>> entry( "test", 50, NegotiateAlwaysPass< uint8_t>());
@@ -28,6 +30,7 @@ BOOST_AUTO_TEST_CASE( constructor8u)
   BOOST_CHECK( "test" == entry.getName());
 }
 
+//! constructor test
 BOOST_AUTO_TEST_CASE( constructor16u)
 {
   IntegerOption< uint16_t, NegotiateAlwaysPass< uint16_t>> entry( "test", 50, NegotiateAlwaysPass< uint16_t>());
@@ -37,6 +40,7 @@ BOOST_AUTO_TEST_CASE( constructor16u)
   BOOST_CHECK( "test" == entry.getName());
 }
 
+//! assignment test
 BOOST_AUTO_TEST_CASE( assign)
 {
   IntegerOption< uint8_t, NegotiateAlwaysPass< uint8_t>> entry( "test", 50, NegotiateAlwaysPass< uint8_t>());
@@ -46,6 +50,7 @@ BOOST_AUTO_TEST_CASE( assign)
   BOOST_CHECK( 100 == entry);
 }
 
+//! negotiation min max test
 BOOST_AUTO_TEST_CASE( negotiateNegotiateMinMaxRange)
 {
   BlockSizeOptionClient entry( "test", 50, NegotiateMinMaxRange< uint16_t>(10,50));
@@ -89,6 +94,7 @@ BOOST_AUTO_TEST_CASE( negotiateNegotiateMinMaxRange)
   BOOST_CHECK( !negEntry);
 }
 
+//! negotiation min max smaller test
 BOOST_AUTO_TEST_CASE( negotiateMinMaxSmaller)
 {
   BlockSizeOptionServer entry( "test", 50, NegotiateMinMaxSmaller< uint16_t>(10, 100));
@@ -142,6 +148,7 @@ BOOST_AUTO_TEST_CASE( negotiateMinMaxSmaller)
   BOOST_CHECK( !negEntry);
 }
 
+//! negotiation exact value test
 BOOST_AUTO_TEST_CASE( negotiateExactValue)
 {
   TimeoutOptionClient entry( "test", 50, NegotiateExactValue< uint8_t>(50));
@@ -167,6 +174,7 @@ BOOST_AUTO_TEST_CASE( negotiateExactValue)
   BOOST_CHECK( !negEntry);
 }
 
+//! negotiation always pass test
 BOOST_AUTO_TEST_CASE( negotiateAlwaysPass)
 {
   TransferSizeOptionServerClient entry( "test", 50);

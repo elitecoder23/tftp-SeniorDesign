@@ -148,9 +148,7 @@ class ReadWriteRequestPacket: public Packet
      **/
     void setOption( const string &name, const string &value);
 
-    /**
-     * @copydoc Packet::operator string() const
-     **/
+    // @copydoc Packet::operator string() const
     operator string() const final;
 
   protected:

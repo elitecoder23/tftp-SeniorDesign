@@ -22,6 +22,7 @@ namespace Options {
 
 BOOST_AUTO_TEST_SUITE( OptionNegotiationTest)
 
+//! constructor test
 BOOST_AUTO_TEST_CASE( constructor)
 {
   OptionList optionList;
@@ -33,6 +34,7 @@ BOOST_AUTO_TEST_CASE( constructor)
   BOOST_CHECK( !optionList.hasTransferSizeOption());
 }
 
+//! server negotiation test
 BOOST_AUTO_TEST_CASE( serverNegotiation)
 {
   OptionList serverOptions;
@@ -71,6 +73,7 @@ BOOST_AUTO_TEST_CASE( serverNegotiation)
   BOOST_CHECK( negotiatedOptions.getTransferSizeOption() == 15);
 }
 
+//! client negotiation test
 BOOST_AUTO_TEST_CASE( clientNegotiation)
 {
   OptionList clientOptions;

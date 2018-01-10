@@ -75,7 +75,7 @@ class AcknowledgementPacket: public Packet
      **/
     void setBlockNumber( const BlockNumber blockBumber);
 
-    //! @copydoc Packet::operator string() const
+    // @copydoc Packet::operator string() const
     operator string() const final;
 
   private:

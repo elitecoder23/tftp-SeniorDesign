@@ -54,7 +54,7 @@ class BaseIntegerOption: public Option
     /**
      * Converts value to string and returns the result.
      **/
-    virtual operator string() const final;
+    operator string() const final;
 
     /**
      * @brief Returns the option value.
@@ -120,8 +120,7 @@ class BaseIntegerOption: public Option
      * @retval OptionPtr()
      *   If negotiation failed for this option.
      **/
-    virtual OptionPtr negotiate(
-      IntegerType optionValue) const noexcept = 0;
+    virtual OptionPtr negotiate( IntegerType optionValue) const noexcept = 0;
 
   private:
     /**
@@ -161,14 +160,16 @@ BaseIntegerOption< IntT>::operator IntegerType() const
 }
 
 template< typename IntT>
-BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=( const IntegerType value)
+BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
+  const IntegerType value)
 {
   this->value = value;
   return *this;
 }
 
 template< typename IntT>
-BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=( const string &value)
+BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
+  const string &value)
 {
   setValue( toInt( value));
   return *this;
@@ -210,7 +211,7 @@ inline typename BaseIntegerOption< uint8_t>::string
 BaseIntegerOption< uint8_t>::toString(
   const IntegerType value)
 {
-  return boost::lexical_cast< string>( (uint16_t)value);
+  return boost::lexical_cast< string>( static_cast< uint16_t>( value));
 }
 
 template< typename IntT>
@@ -285,6 +286,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
      **/
     IntegerOption& operator=( const string &value);
 
+    // using operation
     using BaseIntegerOption< IntT>::negotiate;
 
     /**
@@ -297,7 +299,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
      * @retval OptionPointer()
      *   If option negotiation failed.
      **/
-    virtual OptionPtr negotiate( IntegerType optionValue) const noexcept final;
+    OptionPtr negotiate( IntegerType optionValue) const noexcept final;
 
   private:
     //! The negotiation operation
@@ -352,8 +354,8 @@ OptionPtr IntegerOption< IntT, NegotiateT>::negotiate(
 }
 
 /**
- * @brief Negotiation Handler which checks the value against a range and performs
- *   upper-cut down.
+ * @brief Negotiation Handler which checks the value against a range and
+ *   performs upper-cut down.
  *
  * If the negotiation value is bigger then max, max is returned.
  * If the negotiation value is in range the value itself is returned.
@@ -363,12 +365,34 @@ template< typename IntT>
 class NegotiateMinMaxSmaller
 {
   public:
+    /**
+     * @brief Initialises the negotiation instance.
+     *
+     * @param[in] minValue
+     *   The minimal expected value
+     * @param[in] maxValue
+     *   The maximal expected value
+     **/
     NegotiateMinMaxSmaller( const IntT minValue, const IntT maxValue):
       minValue( minValue),
       maxValue( maxValue)
     {
     }
 
+    /**
+     * @brief Negotiates the passed in value.
+     *
+     * @param[in] value
+     *   The value to negotiate.
+     *
+     * @return the negotiated value.
+     * @retval boost::optional< IntT>()
+     *   if [value] < [minValue]
+     * @retval [value]
+     *   if [minValue] <= [value] <= [maxValue]
+     * @retval [maxValue]
+     *   otherwise.
+     **/
     boost::optional< IntT> operator()( const IntT value) const
     {
       // If value is smaller then min -> option negotiation fails
@@ -403,12 +427,29 @@ template< typename IntT>
 class NegotiateMinMaxRange
 {
   public:
+    /**
+     * @brief Initialises the negotiation instance.
+     *
+     * @param[in] minValue
+     *   The minimal expected value
+     * @param[in] maxValue
+     *   The maximal expected value
+     **/
     NegotiateMinMaxRange( const IntT minValue, const IntT maxValue):
       minValue( minValue),
       maxValue( maxValue)
     {
     }
 
+    /**
+     * @brief Negotiates the passed in value.
+     *
+     * @param[in] value
+     *   The value to negotiate.
+     *
+     * @return [value] if [minValue] >= [value] <= [maxValue] otherwise fail
+     *   negotiation.
+     **/
     boost::optional< IntT> operator()( const IntT value) const
     {
       // If value is out of range -> option negotiation fails
@@ -436,11 +477,25 @@ template< typename IntT>
 class NegotiateExactValue
 {
   public:
+    /**
+     * @brief Initialises the negotiation instance.
+     *
+     * @param[in] expectedValue
+     *   The expected value
+     **/
     NegotiateExactValue( const IntT expectedValue):
       expectedValue( expectedValue)
     {
     }
 
+    /**
+     * @brief Negotiates the passed in value.
+     *
+     * @param[in] value
+     *   The value to negotiate.
+     *
+     * @return [value] if [value] == [expectedValue] otherwise fail negotiation.
+     **/
     boost::optional< IntT> operator()( const IntT value) const
     {
       if (expectedValue != value)
@@ -465,8 +520,17 @@ template< typename IntT>
 class NegotiateAlwaysPass
 {
   public:
+    //! Default constructor
     NegotiateAlwaysPass() = default;
 
+    /**
+     * @brief Negotiates the passed in value.
+     *
+     * @param[in] value
+     *   The value to negotiate.
+     *
+     * @return [value]
+     **/
     boost::optional< IntT> operator()( const IntT value) const
     {
       return value;

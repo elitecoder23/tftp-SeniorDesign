@@ -21,6 +21,7 @@ namespace Options {
 
 BOOST_AUTO_TEST_SUITE( StringOptionTest)
 
+//! constructor test
 BOOST_AUTO_TEST_CASE( constructor)
 {
   StringOption entry( "test", "value");
@@ -29,6 +30,7 @@ BOOST_AUTO_TEST_CASE( constructor)
   BOOST_CHECK( "value" == static_cast< std::string>( entry));
 }
 
+//! negotiation test
 BOOST_AUTO_TEST_CASE( negotiate)
 {
   StringOption entry( "test", "value");
@@ -36,6 +38,7 @@ BOOST_AUTO_TEST_CASE( negotiate)
   BOOST_CHECK( !entry.negotiate( "AAAAA"));
 }
 
+//! assignment test
 BOOST_AUTO_TEST_CASE( assign)
 {
   StringOption entry( "test", "value1");

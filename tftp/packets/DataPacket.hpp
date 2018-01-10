@@ -134,7 +134,7 @@ class DataPacket: public Packet
      **/
     size_t getDataSize() const;
 
-    //! @copydoc Packet::operator string() const
+    // @copydoc Packet::operator string() const
     operator string() const final;
 
   private:

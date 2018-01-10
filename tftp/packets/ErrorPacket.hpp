@@ -67,7 +67,7 @@ class ErrorPacket: public Packet
     //! @copydoc Packet::operator=(const RawTftpPacket&)
     ErrorPacket& operator=( const RawTftpPacket &rawPacket) final;
 
-    //! @copydoc Packet::operator string() const
+    // @copydoc Packet::operator string() const
     operator string() const final;
 
     /**
