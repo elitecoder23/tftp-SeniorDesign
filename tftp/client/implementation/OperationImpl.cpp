@@ -205,7 +205,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet)
     transmitPacketType = packet.getPacketType();
 
     // Encode raw packet
-    transmitPacket = static_cast< RawTftpPacketType>( packet);
+    transmitPacket = static_cast< RawTftpPacket>( packet);
 
     // Send the packet to the remote server
     socket.send_to(
@@ -238,7 +238,7 @@ void OperationImpl::send( const Packets::Packet &packet)
     transmitPacketType = packet.getPacketType();
 
     // Encode raw packet
-    transmitPacket = static_cast< RawTftpPacketType>( packet);
+    transmitPacket = static_cast< RawTftpPacket>( packet);
 
     // Send the packet to the remote server
     socket.send( boost::asio::buffer( transmitPacket));
@@ -431,7 +431,7 @@ void OperationImpl::handleErrorPacket(
 
 void OperationImpl::handleInvalidPacket(
   const UdpAddressType &,
-  const RawTftpPacketType &)
+  const RawTftpPacket &)
 {
   BOOST_LOG_FUNCTION();
 
@@ -488,7 +488,7 @@ void OperationImpl::receiveFirstHandler(
         "Packet from wrong source");
 
       socket.send_to(
-        boost::asio::buffer( static_cast< RawTftpPacketType>( err)),
+        boost::asio::buffer( static_cast< RawTftpPacket>( err)),
         receiveEndpoint);
     }
     catch ( boost::system::system_error &err)

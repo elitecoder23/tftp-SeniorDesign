@@ -20,7 +20,7 @@
 namespace Tftp {
 namespace Packets {
 
-PacketType Packet::getPacketType( const RawTftpPacketType &rawPacket) noexcept
+PacketType Packet::getPacketType( const RawTftpPacket &rawPacket) noexcept
 {
   // check minimum data size.
   if (rawPacket.size() < HeaderSize)
@@ -30,7 +30,7 @@ PacketType Packet::getPacketType( const RawTftpPacketType &rawPacket) noexcept
     return PacketType::Invalid;
   }
 
-  RawTftpPacketType::const_iterator it = rawPacket.begin();
+  RawTftpPacket::const_iterator it = rawPacket.begin();
 
   // decode opcode value
   uint16_t opcode;
@@ -97,7 +97,7 @@ Packet::Packet( const PacketType packetType) noexcept:
 
 Packet::Packet(
   const PacketType packetType,
-  const RawTftpPacketType &rawPacket):
+  const RawTftpPacket &rawPacket):
   packetType( packetType)
 {
   decodeHeader( rawPacket);
@@ -125,18 +125,18 @@ Packet& Packet::operator=( Packet &&other)
   return *this;
 }
 
-Packet& Packet::operator=( const RawTftpPacketType &rawPacket)
+Packet& Packet::operator=( const RawTftpPacket &rawPacket)
 {
   decodeHeader( rawPacket);
   return *this;
 }
 
-Packet::operator RawTftpPacketType() const
+Packet::operator RawTftpPacket() const
 {
   return encode();
 }
 
-void Packet::insertHeader( RawTftpPacketType &rawPacket) const
+void Packet::insertHeader( RawTftpPacket &rawPacket) const
 {
   assert( rawPacket.size() >= HeaderSize);
 
@@ -146,7 +146,7 @@ void Packet::insertHeader( RawTftpPacketType &rawPacket) const
   setInt( packetIt, static_cast< uint16_t>( packetType));
 }
 
-void Packet::decodeHeader( const RawTftpPacketType &rawPacket)
+void Packet::decodeHeader( const RawTftpPacket &rawPacket)
 {
   // check size
   if (rawPacket.size() < HeaderSize)

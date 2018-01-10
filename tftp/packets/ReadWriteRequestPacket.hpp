@@ -60,9 +60,8 @@ class ReadWriteRequestPacket: public Packet
      **/
     static TransferMode getMode( const string &mode);
 
-    //! @copydoc Packet::operator=(const RawTftpPacketType&)
-    virtual ReadWriteRequestPacket& operator=(
-      const RawTftpPacketType &rawPacket) override;
+    //! @copydoc Packet::operator=(const RawTftpPacket&)
+    ReadWriteRequestPacket& operator=( const RawTftpPacket &rawPacket) final;
 
     /**
      * @brief Returns the request filename.
@@ -190,13 +189,13 @@ class ReadWriteRequestPacket: public Packet
      **/
     ReadWriteRequestPacket(
       PacketType packetType,
-      const RawTftpPacketType &rawPacket);
+      const RawTftpPacket &rawPacket);
 
   private:
     /**
      * @copydoc Packet::encode()
      **/
-    RawTftpPacketType encode() const final;
+    RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
@@ -207,7 +206,7 @@ class ReadWriteRequestPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacketType &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket);
 
     //! stored request filename
     string filename;

@@ -28,13 +28,13 @@ DataPacket::DataPacket(
 {
 }
 
-DataPacket::DataPacket( const RawTftpPacketType &rawPacket) :
+DataPacket::DataPacket( const RawTftpPacket &rawPacket) :
   Packet( PacketType::Data, rawPacket)
 {
   decodeBody( rawPacket);
 }
 
-DataPacket& DataPacket::operator=( const RawTftpPacketType &rawPacket)
+DataPacket& DataPacket::operator=( const RawTftpPacket &rawPacket)
 {
   Packet::operator =( rawPacket);
   decodeBody( rawPacket);
@@ -88,13 +88,13 @@ DataPacket::operator string() const
     getDataSize()).str();
 }
 
-Tftp::RawTftpPacketType DataPacket::encode() const
+Tftp::RawTftpPacket DataPacket::encode() const
 {
-  RawTftpPacketType rawPacket( 4 + data.size());
+  RawTftpPacket rawPacket( 4 + data.size());
 
   insertHeader( rawPacket);
 
-  RawTftpPacketType::iterator packetIt = rawPacket.begin() + 2;
+  RawTftpPacket::iterator packetIt = rawPacket.begin() + 2;
 
   // block number
   packetIt = setInt( packetIt, static_cast< uint16_t>( getBlockNumber()));
@@ -105,7 +105,7 @@ Tftp::RawTftpPacketType DataPacket::encode() const
   return rawPacket;
 }
 
-void DataPacket::decodeBody( const RawTftpPacketType &rawPacket)
+void DataPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   // check size
   if (rawPacket.size() < 4)
@@ -114,7 +114,7 @@ void DataPacket::decodeBody( const RawTftpPacketType &rawPacket)
       AdditionalInfo( "Invalid packet size of DATA packet"));
   }
 
-  RawTftpPacketType::const_iterator packetIt = rawPacket.begin() + 2;
+  auto packetIt{ rawPacket.begin() + 2};
 
   // decode block number
   packetIt = getInt< uint16_t>( packetIt, blockNumber);

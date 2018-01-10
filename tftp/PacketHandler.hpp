@@ -49,7 +49,7 @@ class PacketHandler
      **/
     void handlePacket(
       const UdpAddressType &from,
-      const RawTftpPacketType &rawPacket);
+      const RawTftpPacket &rawPacket);
 
   protected:
     /**
@@ -134,7 +134,7 @@ class PacketHandler
      **/
     virtual void handleInvalidPacket(
       const UdpAddressType &from,
-      const RawTftpPacketType &rawPacket) = 0;
+      const RawTftpPacket &rawPacket) = 0;
 };
 
 }

@@ -46,7 +46,7 @@ class ReadRequestPacket: public ReadWriteRequestPacket
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    ReadRequestPacket( const RawTftpPacketType &rawPacket);
+    ReadRequestPacket( const RawTftpPacket &rawPacket);
 };
 
 }

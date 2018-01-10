@@ -19,22 +19,20 @@
 namespace Tftp {
 namespace Packets {
 
-AcknowledgementPacket::AcknowledgementPacket(
-  const BlockNumber blockNumber) noexcept:
-  Packet( PacketType::Acknowledgement),
+AcknowledgementPacket::AcknowledgementPacket( const BlockNumber blockNumber)
+  noexcept:Packet( PacketType::Acknowledgement),
   blockNumber( blockNumber)
 {
 }
 
-AcknowledgementPacket::AcknowledgementPacket(
-  const RawTftpPacketType &rawPacket):
+AcknowledgementPacket::AcknowledgementPacket( const RawTftpPacket &rawPacket) :
   Packet( PacketType::Acknowledgement, rawPacket)
 {
   decodeBody( rawPacket);
 }
 
 AcknowledgementPacket& AcknowledgementPacket::operator=(
-  const RawTftpPacketType &rawPacket)
+  const RawTftpPacket &rawPacket)
 {
   Packet::operator =( rawPacket);
   decodeBody( rawPacket);
@@ -56,9 +54,9 @@ AcknowledgementPacket::operator string() const
   return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
 }
 
-Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
+Tftp::RawTftpPacket AcknowledgementPacket::encode() const
 {
-  RawTftpPacketType rawPacket( 4U);
+  RawTftpPacket rawPacket( 4U);
 
   // insert header data
   insertHeader( rawPacket);
@@ -71,7 +69,7 @@ Tftp::RawTftpPacketType AcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-void AcknowledgementPacket::decodeBody( const RawTftpPacketType &rawPacket)
+void AcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   // check size
   if (rawPacket.size() != 4U)

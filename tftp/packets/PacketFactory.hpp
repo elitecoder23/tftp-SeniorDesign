@@ -45,7 +45,7 @@ class PacketFactory
      * @retval INVALID
      *   If the packet cannot be decoded.
      **/
-    static PacketType getPacketType( const RawTftpPacketType &rawPacket) noexcept;
+    static PacketType getPacketType( const RawTftpPacket &rawPacket) noexcept;
 
     /**
      * @brief Decodes the given raw data as TFTP Read Request Packet.
@@ -59,7 +59,7 @@ class PacketFactory
      *   When packet cannot be decoded as Read Request Packet (RRQ).
      **/
     static ReadRequestPacket getReadRequestPacket(
-      const RawTftpPacketType &rawPacket);
+      const RawTftpPacket &rawPacket);
 
     /**
      * @brief Decodes the given raw data as TFTP Write Request Packet.
@@ -73,7 +73,7 @@ class PacketFactory
      *    When packet cannot be decoded as Write Request Packet.
      **/
     static WriteRequestPacket getWriteRequestPacket(
-      const RawTftpPacketType &rawPacket);
+      const RawTftpPacket &rawPacket);
 
     /**
      * @brief Decodes the given raw data as TFTP Data Packet.
@@ -86,7 +86,7 @@ class PacketFactory
      * @throw InvalidPacketException
      *  When packet cannot be decoded as Data Packet.
      **/
-    static DataPacket getDataPacket( const RawTftpPacketType &rawPacket);
+    static DataPacket getDataPacket( const RawTftpPacket &rawPacket);
 
     /**
      * @brief Decodes the given raw data as TFTP Error Packet.
@@ -99,7 +99,7 @@ class PacketFactory
      * @throw InvalidPacketException
      *  When packet cannot be decoded as Error Packet.
      **/
-    static ErrorPacket getErrorPacket( const RawTftpPacketType &rawPacket);
+    static ErrorPacket getErrorPacket( const RawTftpPacket &rawPacket);
 
     /**
      * @brief Decodes the given raw data as TFTP Acknowledgement Packet.
@@ -113,7 +113,7 @@ class PacketFactory
      *    When packet cannot be decoded as Acknowledgement Packet.
      **/
     static AcknowledgementPacket getAcknowledgementPacket(
-      const RawTftpPacketType &rawPacket);
+      const RawTftpPacket &rawPacket);
 
     /**
      * @brief Decodes the given raw data as TFTP Options Acknowledgement
@@ -128,7 +128,7 @@ class PacketFactory
      *   When packet cannot be decoded as Options Acknowledgement Packet.
      **/
     static OptionsAcknowledgementPacket getOptionsAcknowledgementPacket(
-      const RawTftpPacketType &rawPacket);
+      const RawTftpPacket &rawPacket);
 
   private:
     //! Private Constructor, which is not implemented.

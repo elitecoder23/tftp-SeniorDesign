@@ -49,7 +49,7 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      * @throw InvalidPacketException
      *   When the raw data does not represent a valid write request packet
      **/
-    WriteRequestPacket( const RawTftpPacketType &rawPacket);
+    WriteRequestPacket( const RawTftpPacket &rawPacket);
 };
 
 }

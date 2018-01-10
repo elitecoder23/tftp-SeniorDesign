@@ -56,11 +56,11 @@ class OptionsAcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    OptionsAcknowledgementPacket( const RawTftpPacketType &rawPacket);
+    OptionsAcknowledgementPacket( const RawTftpPacket &rawPacket);
 
-    //! @copydoc Packet::operator=(const RawTftpPacketType&)
-    virtual OptionsAcknowledgementPacket& operator=(
-      const RawTftpPacketType &rawPacket) override;
+    //! @copydoc Packet::operator=(const RawTftpPacket&)
+    OptionsAcknowledgementPacket& operator=(
+      const RawTftpPacket &rawPacket) final;
 
     /**
      * @brief Returns the options within the packet (const reference)
@@ -115,7 +115,7 @@ class OptionsAcknowledgementPacket: public Packet
     /**
      * @copydoc Packet::encode()
      **/
-    RawTftpPacketType encode() const final;
+    RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
@@ -126,7 +126,7 @@ class OptionsAcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacketType &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket);
 
     //! The stored options.
     Options::OptionList options;

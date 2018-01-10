@@ -170,9 +170,9 @@ class TftpServerImpl:
      * NewRequestHandler::receviedReadRequest() is called, which actually
      * handles the request.
      **/
-    virtual void handleReadRequestPacket(
+    void handleReadRequestPacket(
       const UdpAddressType &from,
-      const Packets::ReadRequestPacket &readRequestPacket) override final;
+      const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
      * @copydoc PacketHandler::handleWriteRequestPacket
@@ -181,9 +181,9 @@ class TftpServerImpl:
      * NewRequestHandler::receviedWriteRequest() is called, which actually
      * handles the request.
      **/
-    virtual void handleWriteRequestPacket(
+    void handleWriteRequestPacket(
       const UdpAddressType &from,
-      const Packets::WriteRequestPacket &writeRequestPacket) override final;
+      const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
      * @copydoc PacketHandler::handleDataPacket
@@ -191,9 +191,9 @@ class TftpServerImpl:
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
      **/
-    virtual void handleDataPacket(
+    void handleDataPacket(
       const UdpAddressType &from,
-      const Packets::DataPacket &dataPacket) override final;
+      const Packets::DataPacket &dataPacket) final;
 
     /**
      * @copydoc PacketHandler::handleAcknowledgementPacket
@@ -201,9 +201,9 @@ class TftpServerImpl:
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
      **/
-    virtual void handleAcknowledgementPacket(
+    void handleAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) override final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
      * @copydoc PacketHandler::handleErrorPacket
@@ -211,9 +211,9 @@ class TftpServerImpl:
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
      **/
-    virtual void handleErrorPacket(
+    void handleErrorPacket(
       const UdpAddressType &from,
-      const Packets::ErrorPacket &errorPacket) override final;
+      const Packets::ErrorPacket &errorPacket) final;
 
     /**
      * @copydoc PacketHandler::handleOptionsAcknowledgementPacket
@@ -221,9 +221,9 @@ class TftpServerImpl:
      * The TFTP server does not expect this packet. This packet is responded
      * with an TFTP Error Packet.
      **/
-    virtual void handleOptionsAcknowledgementPacket(
+    void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) override final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
     /**
      * @copydoc PacketHandler::handleInvalidPacket
@@ -231,9 +231,9 @@ class TftpServerImpl:
      * The TFTP server does not expect this packet.
      * This packet is ignored.
      **/
-    virtual void handleInvalidPacket(
+    void handleInvalidPacket(
       const UdpAddressType &from,
-      const RawTftpPacketType &rawPacket) override final;
+      const RawTftpPacket &rawPacket) final;
 
   private:
     //! The registered handler
@@ -253,7 +253,7 @@ class TftpServerImpl:
     boost::asio::ip::udp::socket socket;
 
     //! Buffer, which holds the received TFTP packet.
-    RawTftpPacketType packet;
+    RawTftpPacket packet;
     //! The remote endpoint on receive.
     UdpAddressType remoteEndpoint;
 };

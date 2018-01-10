@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   WriteRequestPacket wrq( "testfile.bin", TransferMode::OCTET, options);
 
-  RawTftpPacketType raw( wrq);
+  RawTftpPacket raw( wrq);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 

@@ -38,14 +38,14 @@ ErrorPacket::ErrorPacket(
 {
 }
 
-ErrorPacket::ErrorPacket( const RawTftpPacketType &rawPacket):
+ErrorPacket::ErrorPacket( const RawTftpPacket &rawPacket):
   Packet( PacketType::Error, rawPacket)
 {
   decodeBody( rawPacket);
 }
 
 ErrorPacket& ErrorPacket::operator=(
-  const RawTftpPacketType &rawPacket)
+  const RawTftpPacket &rawPacket)
 {
   Packet::operator =( rawPacket);
   decodeBody( rawPacket);
@@ -85,15 +85,15 @@ void ErrorPacket::setErrorMessage( string &&errorMessage)
   this->errorMessage = std::move( errorMessage);
 }
 
-Tftp::RawTftpPacketType ErrorPacket::encode() const
+Tftp::RawTftpPacket ErrorPacket::encode() const
 {
-  const string errorMessage = getErrorMessage();
+  const auto errorMessage = getErrorMessage();
 
-  RawTftpPacketType rawPacket( 4 + errorMessage.length() + 1);
+  RawTftpPacket rawPacket( 4 + errorMessage.length() + 1);
 
   insertHeader( rawPacket);
 
-  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
+  RawTftpPacket::iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // error code
   packetIt = setInt( packetIt, static_cast< uint16_t>( getErrorCode()));
@@ -105,7 +105,7 @@ Tftp::RawTftpPacketType ErrorPacket::encode() const
   return rawPacket;
 }
 
-void ErrorPacket::decodeBody( const RawTftpPacketType &rawPacket)
+void ErrorPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   // check size
   if (rawPacket.size() < 5)
@@ -115,7 +115,7 @@ void ErrorPacket::decodeBody( const RawTftpPacketType &rawPacket)
       AdditionalInfo( "Invalid packet size of ERROR packet"));
   }
 
-  RawTftpPacketType::const_iterator packetIt( rawPacket.begin() + HeaderSize);
+  auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // decode error code
   uint16_t errorCodeInt;

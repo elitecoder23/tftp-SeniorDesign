@@ -252,7 +252,7 @@ class OperationImpl :
      **/
     void handleInvalidPacket(
       const UdpAddressType &from,
-      const RawTftpPacketType &rawPacket) final;
+      const RawTftpPacket &rawPacket) final;
 
   private:
     /**
@@ -333,11 +333,11 @@ class OperationImpl :
     boost::asio::deadline_timer timer;
 
     //! The received packet data
-    RawTftpPacketType receivePacket;
+    RawTftpPacket receivePacket;
     //! The remote address
     UdpAddressType receiveEndpoint;
     //! The last transmitted packet
-    RawTftpPacketType transmitPacket;
+    RawTftpPacket transmitPacket;
     //! Packet Type of last transmitted packet
     PacketType transmitPacketType;
     //! the retransmission counter

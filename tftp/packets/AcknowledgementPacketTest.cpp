@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 {
   AcknowledgementPacket ack( BlockNumber{ 10U});
 
-  RawTftpPacketType raw( ack);
+  RawTftpPacket raw( ack);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor2)
 {
-  RawTftpPacketType raw{
+  RawTftpPacket raw{
     0x00, 0x04,
     0x10, 0x01
   };

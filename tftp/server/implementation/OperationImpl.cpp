@@ -200,7 +200,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   transmitPacketType = packet.getPacketType();
 
   // Encode raw packet
-  transmitPacket = static_cast< RawTftpPacketType>( packet);
+  transmitPacket = static_cast< RawTftpPacket>( packet);
 
   try
   {
@@ -355,7 +355,7 @@ void OperationImpl::handleOptionsAcknowledgementPacket(
 
 void OperationImpl::handleInvalidPacket(
   const UdpAddressType &,
-  const RawTftpPacketType &)
+  const RawTftpPacket &)
 {
   BOOST_LOG_FUNCTION();
 

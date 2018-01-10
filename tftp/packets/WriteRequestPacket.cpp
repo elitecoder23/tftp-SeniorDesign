@@ -27,7 +27,7 @@ WriteRequestPacket::WriteRequestPacket(
 {
 }
 
-WriteRequestPacket::WriteRequestPacket( const RawTftpPacketType &rawPacket):
+WriteRequestPacket::WriteRequestPacket( const RawTftpPacket &rawPacket):
   ReadWriteRequestPacket( PacketType::WriteRequest, rawPacket)
 {
 }

@@ -440,7 +440,7 @@ void TftpServerImpl::handleOptionsAcknowledgementPacket(
 
 void TftpServerImpl::handleInvalidPacket(
   const UdpAddressType &,
-  const RawTftpPacketType &)
+  const RawTftpPacket &)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) <<
     "RX: UNKNOWN: *ERROR* - IGNORE";

@@ -176,7 +176,7 @@ class OperationImpl:
      * A RRQ packet is not expected - therefore send an error packet an
      * terminate connection.
      **/
-    virtual void handleReadRequestPacket(
+    void handleReadRequestPacket(
       const UdpAddressType &from,
       const Packets::ReadRequestPacket &readRequestPacket) final;
 
@@ -186,7 +186,7 @@ class OperationImpl:
      * A WRQ packet is not expected - therefore send an error packet an
      * terminate connection.
      **/
-    virtual void handleWriteRequestPacket(
+    void handleWriteRequestPacket(
       const UdpAddressType &from,
       const Packets::WriteRequestPacket &writeRequestPacket) final;
 
@@ -195,7 +195,7 @@ class OperationImpl:
      *
      * Terminate connection.
      **/
-    virtual void handleErrorPacket(
+    void handleErrorPacket(
       const UdpAddressType &from,
       const Packets::ErrorPacket &errorPacket) final;
 
@@ -205,19 +205,18 @@ class OperationImpl:
      * A OACK packet is not expected - therefore send an error packet an
      * terminate connection.
      **/
-    virtual void handleOptionsAcknowledgementPacket(
+     void handleOptionsAcknowledgementPacket(
       const UdpAddressType &from,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
-        final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
     /**
      * @copydoc PacketHandler::handleInvalidPacket()
      *
      * Send error packet and terminate connection.
      **/
-    virtual void handleInvalidPacket(
+    void handleInvalidPacket(
       const UdpAddressType &from,
-      const RawTftpPacketType &rawPacket) final;
+      const RawTftpPacket &rawPacket) final;
 
   private:
     /**
@@ -258,9 +257,9 @@ class OperationImpl:
     boost::asio::deadline_timer timer;
 
     //! stores the received packets
-    RawTftpPacketType receivePacket;
+    RawTftpPacket receivePacket;
     //! the transmitted packet is stored for retries
-    RawTftpPacketType transmitPacket;
+    RawTftpPacket transmitPacket;
     //! Packet Type of last transmitted packet
     PacketType transmitPacketType;
     //! counter to store how often the same packet has been transmitted (retries)

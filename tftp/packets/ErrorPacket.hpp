@@ -62,11 +62,10 @@ class ErrorPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    ErrorPacket( const RawTftpPacketType &rawPacket);
+    ErrorPacket( const RawTftpPacket &rawPacket);
 
-    //! @copydoc Packet::operator=(const RawTftpPacketType&)
-    ErrorPacket& operator=(
-      const RawTftpPacketType &rawPacket) final;
+    //! @copydoc Packet::operator=(const RawTftpPacket&)
+    ErrorPacket& operator=( const RawTftpPacket &rawPacket) final;
 
     //! @copydoc Packet::operator string() const
     operator string() const final;
@@ -106,7 +105,7 @@ class ErrorPacket: public Packet
 
   private:
     //! @copydoc Packet::encode()
-    RawTftpPacketType encode() const final;
+    RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
@@ -117,7 +116,7 @@ class ErrorPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacketType &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket);
 
     //! The error code
     ErrorCode errorCode;

@@ -195,7 +195,7 @@ void ErrorOperation::sendError( const Packets::ErrorPacket &error)
 {
   try
   {
-    socket.send( boost::asio::buffer( static_cast< RawTftpPacketType>( error)));
+    socket.send( boost::asio::buffer( static_cast< RawTftpPacket>( error)));
 
     if (completionHandler)
     {

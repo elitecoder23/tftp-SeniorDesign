@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 {
   ErrorPacket error( ErrorCode::NotDefined, "ERROR MESSAGE");
 
-  RawTftpPacketType raw( error);
+  RawTftpPacket raw( error);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 
 BOOST_AUTO_TEST_CASE( constructor2)
 {
-  RawTftpPacketType raw{
+  RawTftpPacket raw{
     0x00U, 0x05U,
     0x00U, 0x01U,
     'E', 'R', 'R', 'O', 'R', 0x00U

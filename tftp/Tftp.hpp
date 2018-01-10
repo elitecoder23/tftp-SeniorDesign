@@ -47,7 +47,7 @@
 namespace Tftp {
 
 //! The packet type of raw data
-using RawTftpPacketType = std::vector< uint8_t>;
+using RawTftpPacket = std::vector< uint8_t>;
 
 //! The address type for TFTP operations
 //! shortened form of the IP address type (v4 + v6)

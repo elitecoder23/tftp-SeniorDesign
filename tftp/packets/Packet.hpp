@@ -42,8 +42,7 @@ class Packet
      * @retval PacketType::INVALID
      *   If packet is to small or invalid opcode value.
      **/
-    static PacketType getPacketType(
-      const RawTftpPacketType &rawPacket) noexcept;
+    static PacketType getPacketType( const RawTftpPacket &rawPacket) noexcept;
 
     /**
      * @brief Return the packet type of the TFTP packet.
@@ -103,7 +102,7 @@ class Packet
      *
      * @return *this
      **/
-    virtual Packet& operator=( const RawTftpPacketType &rawPacket);
+    virtual Packet& operator=( const RawTftpPacket &rawPacket);
 
     /**
      * @brief Get the binary representation of the packet.
@@ -112,7 +111,7 @@ class Packet
      *
      * @return Binary packet data
      **/
-    explicit operator RawTftpPacketType() const;
+    explicit operator RawTftpPacket() const;
 
     /**
      * @brief Returns a string, which describes the packet.
@@ -142,9 +141,7 @@ class Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    Packet(
-      PacketType packetType,
-      const RawTftpPacketType &rawPacket);
+    Packet( PacketType packetType, const RawTftpPacket &rawPacket);
 
     /**
      * @brief Get the binary representation of the packet.
@@ -153,7 +150,7 @@ class Packet
      *
      * @return Binary packet data
      **/
-    virtual RawTftpPacketType encode() const = 0;
+    virtual RawTftpPacket encode() const = 0;
 
     /**
      * @brief Insert the header data to the raw packet.
@@ -163,7 +160,7 @@ class Packet
      * @param[in,out] rawPacket
      *   The raw packet, which will be filled with the approbate data.
      **/
-    void insertHeader( RawTftpPacketType &rawPacket) const;
+    void insertHeader( RawTftpPacket &rawPacket) const;
 
   private:
     /**
@@ -175,7 +172,7 @@ class Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    void decodeHeader( const RawTftpPacketType &rawPacket);
+    void decodeHeader( const RawTftpPacket &rawPacket);
 
     //! The TFTP Packet type
     const PacketType packetType;

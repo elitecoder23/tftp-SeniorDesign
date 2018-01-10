@@ -62,11 +62,10 @@ class DataPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    DataPacket( const RawTftpPacketType &rawPacket);
+    DataPacket( const RawTftpPacket &rawPacket);
 
-    //! @copydoc Packet::operator=(const RawTftpPacketType&)
-    virtual DataPacket& operator=(
-      const RawTftpPacketType &rawPacket) override;
+    //! @copydoc Packet::operator=(const RawTftpPacket&)
+    DataPacket& operator=( const RawTftpPacket &rawPacket) final;
 
     /**
      * @brief Returns the block number.
@@ -140,7 +139,7 @@ class DataPacket: public Packet
 
   private:
     //! @copydoc Packet::encode()
-    RawTftpPacketType encode() const final;
+    RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
@@ -151,7 +150,7 @@ class DataPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacketType &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket);
 
     //! Block number of the packet.
     BlockNumber blockNumber;

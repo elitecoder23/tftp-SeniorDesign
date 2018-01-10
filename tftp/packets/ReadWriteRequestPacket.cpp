@@ -43,7 +43,7 @@ ReadWriteRequestPacket::string ReadWriteRequestPacket::getMode(
 }
 
 ReadWriteRequestPacket& ReadWriteRequestPacket::operator=(
-  const RawTftpPacketType &rawPacket)
+  const RawTftpPacket &rawPacket)
 {
   Packet::operator =( rawPacket);
   decodeBody( rawPacket);
@@ -171,7 +171,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
-  const RawTftpPacketType &rawPacket):
+  const RawTftpPacket &rawPacket):
   Packet( packetType, rawPacket)
 {
   switch (packetType)
@@ -189,11 +189,11 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   decodeBody( rawPacket);
 }
 
-Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
+Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
 {
   auto rawOptions{ options.getRawOptions()};
 
-  RawTftpPacketType rawPacket(
+  RawTftpPacket rawPacket(
     HeaderSize +
     filename.size() + 1 +
     mode.size() + 1 +
@@ -201,7 +201,7 @@ Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
 
   insertHeader( rawPacket);
 
-  RawTftpPacketType::iterator packetIt( rawPacket.begin() + HeaderSize);
+  RawTftpPacket::iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // encode filename
   packetIt = std::copy( filename.begin(), filename.end(), packetIt);
@@ -219,7 +219,7 @@ Tftp::RawTftpPacketType ReadWriteRequestPacket::encode() const
   return rawPacket;
 }
 
-void ReadWriteRequestPacket::decodeBody( const RawTftpPacketType &rawPacket)
+void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   auto packetIt( rawPacket.begin() + HeaderSize);
 
@@ -238,7 +238,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacketType &rawPacket)
   }
 
   // filename
-  RawTftpPacketType::const_iterator filenameEnd =
+  RawTftpPacket::const_iterator filenameEnd =
     std::find( packetIt, rawPacket.end(), 0);
 
   if (filenameEnd == rawPacket.end())
@@ -250,7 +250,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacketType &rawPacket)
   packetIt = filenameEnd + 1;
 
   // mode
-  RawTftpPacketType::const_iterator modeEnd =
+  RawTftpPacket::const_iterator modeEnd =
     std::find( packetIt, rawPacket.end(), 0);
 
   if (modeEnd == rawPacket.end())

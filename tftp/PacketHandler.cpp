@@ -21,7 +21,7 @@ namespace Tftp {
 
 void PacketHandler::handlePacket(
   const UdpAddressType &from,
-  const RawTftpPacketType &rawPacket)
+  const RawTftpPacket &rawPacket)
 {
   BOOST_LOG_FUNCTION();
 

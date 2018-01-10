@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
       '!'
     });
 
-  RawTftpPacketType raw( data);
+  RawTftpPacket raw( data);
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 

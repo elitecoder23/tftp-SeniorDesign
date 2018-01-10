@@ -27,7 +27,7 @@ ReadRequestPacket::ReadRequestPacket(
 {
 }
 
-ReadRequestPacket::ReadRequestPacket( const RawTftpPacketType &rawPacket):
+ReadRequestPacket::ReadRequestPacket( const RawTftpPacket &rawPacket):
   ReadWriteRequestPacket( PacketType::ReadRequest, rawPacket)
 {
 }

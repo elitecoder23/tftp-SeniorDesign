@@ -55,11 +55,10 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    AcknowledgementPacket( const RawTftpPacketType &rawPacket);
+    AcknowledgementPacket( const RawTftpPacket &rawPacket);
 
-    //! @copydoc Packet::operator=(const RawTftpPacketType&)
-    AcknowledgementPacket& operator=(
-      const RawTftpPacketType &rawPacket) final;
+    //! @copydoc Packet::operator=(const RawTftpPacket&)
+    AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket) final;
 
     /**
      * @brief Returns the block number.
@@ -81,7 +80,7 @@ class AcknowledgementPacket: public Packet
 
   private:
     //! @copydoc Packet::encode()
-    RawTftpPacketType encode() const final;
+    RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
@@ -92,7 +91,7 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacketType &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket);
 
     //! Block number of the packet
     BlockNumber blockNumber;
