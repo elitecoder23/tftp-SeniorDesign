@@ -22,7 +22,7 @@
 #include <cstdint>
 
 /**
- * @brief Implementation of the TFTP protocol.
+ * @brief TFTP protocol implementation.
  *
  * This library implementation the TFTP protocol.
  *

@@ -21,7 +21,7 @@
 namespace Tftp {
 
 /**
- * @brief Implementation of TFTP client functionality.
+ * @brief TFTP client implementation.
  *
  * The main entry point for users of this part of the TFTP library is the
  * class TftpClient. With an instance of this class the user can create

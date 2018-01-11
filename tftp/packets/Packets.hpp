@@ -18,7 +18,7 @@
 namespace Tftp {
 
 /**
- * @brief Contains the implementation of all TFTP packets.
+ * @brief TFTP protocol packet implementation.
  *
  * The base for the packets is the class TftpPacket.
  * For raw-data to TFTP packet handling, the class PacketFactory with its

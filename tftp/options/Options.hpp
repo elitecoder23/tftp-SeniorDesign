@@ -20,8 +20,7 @@
 namespace Tftp {
 
 /**
- * @brief Namespace defining classes for accessing TFTP options according to
- *   RFC 2348.
+ * @brief TFTP protocol options implementation (RFC 2348).
  **/
 namespace Options {
 

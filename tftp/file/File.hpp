@@ -19,7 +19,7 @@
 namespace Tftp {
 
 /**
- * @brief File handling for TFTP receive and transmit operations.
+ * @brief TFTP file implementation.
  *
  * This namespace provides common handler of data which shall be received from
  * or transmitted to an other TFTP instance.

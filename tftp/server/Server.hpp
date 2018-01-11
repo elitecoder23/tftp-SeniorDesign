@@ -21,7 +21,7 @@
 
 namespace Tftp {
 /**
- * @brief Implementation of TFTP servers.
+ * @brief TFTP server implementation.
  *
  * The user of this library uses following interface classes to interact with
  * it:
