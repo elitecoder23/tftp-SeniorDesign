@@ -27,8 +27,8 @@ BOOST_AUTO_TEST_CASE( constructor)
 {
   OptionList optionList;
 
-  BOOST_CHECK( !optionList.hasOptions());
-  BOOST_CHECK( optionList.getOptions().empty());
+  BOOST_CHECK( optionList.empty());
+  BOOST_CHECK( optionList.options().empty());
   BOOST_CHECK( optionList.getBlocksizeOption() == 0);
   BOOST_CHECK( optionList.getTimeoutOption() == 0);
   BOOST_CHECK( !optionList.hasTransferSizeOption());
@@ -43,8 +43,8 @@ BOOST_AUTO_TEST_CASE( serverNegotiation)
   serverOptions.addTimeoutOptionServer( TimeoutOptionMin, TimeoutOptionMax);
   serverOptions.addTransferSizeOption();
 
-  BOOST_CHECK( serverOptions.hasOptions());
-  BOOST_CHECK( !serverOptions.getOptions().empty());
+  BOOST_CHECK( !serverOptions.empty());
+  BOOST_CHECK( !serverOptions.options().empty());
   BOOST_CHECK( serverOptions.getBlocksizeOption() == BlocksizeOptionMax);
   BOOST_CHECK( serverOptions.getTimeoutOption() == TimeoutOptionMax);
   BOOST_CHECK( serverOptions.hasTransferSizeOption());
@@ -52,8 +52,8 @@ BOOST_AUTO_TEST_CASE( serverNegotiation)
   OptionList clientOptions;
 
   OptionList negotiatedOptions( serverOptions.negotiateServer( clientOptions));
-  BOOST_CHECK( !negotiatedOptions.hasOptions());
-  BOOST_CHECK( negotiatedOptions.getOptions().empty());
+  BOOST_CHECK( negotiatedOptions.empty());
+  BOOST_CHECK( negotiatedOptions.options().empty());
   BOOST_CHECK( negotiatedOptions.getBlocksizeOption() == 0);
   BOOST_CHECK( negotiatedOptions.getTimeoutOption() == 0);
   BOOST_CHECK( !negotiatedOptions.hasTransferSizeOption());
@@ -66,8 +66,8 @@ BOOST_AUTO_TEST_CASE( serverNegotiation)
   BOOST_CHECK( clientOptions.getTransferSizeOption() == 15);
 
   negotiatedOptions= serverOptions.negotiateServer( clientOptions);
-  BOOST_CHECK( negotiatedOptions.hasOptions());
-  BOOST_CHECK( !negotiatedOptions.getOptions().empty());
+  BOOST_CHECK( !negotiatedOptions.empty());
+  BOOST_CHECK( !negotiatedOptions.options().empty());
   BOOST_CHECK( negotiatedOptions.getBlocksizeOption() == BlocksizeOptionMin+10);
   BOOST_CHECK( negotiatedOptions.getTimeoutOption() == TimeoutOptionMin+10);
   BOOST_CHECK( negotiatedOptions.getTransferSizeOption() == 15);
@@ -89,8 +89,8 @@ BOOST_AUTO_TEST_CASE( clientNegotiation)
   serverOptions.addTransferSizeOption( 99);
 
   OptionList negotiatedOptions( clientOptions.negotiateClient( serverOptions));
-  BOOST_CHECK( negotiatedOptions.hasOptions());
-  BOOST_CHECK( !negotiatedOptions.getOptions().empty());
+  BOOST_CHECK( !negotiatedOptions.empty());
+  BOOST_CHECK( !negotiatedOptions.options().empty());
   BOOST_CHECK( negotiatedOptions.getBlocksizeOption() == BlocksizeOptionMin+9);
   BOOST_CHECK( negotiatedOptions.getTimeoutOption() == TimeoutOptionMin+10);
   BOOST_CHECK( negotiatedOptions.getTransferSizeOption() == 99);

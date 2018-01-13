@@ -67,7 +67,7 @@ OptionList::OptionList(
     string value( valueBegin, valueEnd);
 
     // insert option as string option
-    options.insert( std::make_pair(
+    optionsValue.insert( std::make_pair(
       name,
       std::make_shared< StringOption>( name, value)));
 
@@ -75,27 +75,32 @@ OptionList::OptionList(
   }
 }
 
-bool OptionList::hasOptions() const
+bool OptionList::empty() const
 {
-  return !options.empty();
+  return optionsValue.empty();
 }
 
-const OptionList::Options& OptionList::getOptions() const
+const OptionList::Options& OptionList::options() const
 {
-  return options;
+  return optionsValue;
 }
 
-OptionList::Options& OptionList::getOptions()
+OptionList::Options& OptionList::options()
 {
-  return options;
+  return optionsValue;
 }
 
-OptionList::RawOptions OptionList::getRawOptions() const
+void OptionList::options( const Options &options)
+{
+  optionsValue = options;
+}
+
+OptionList::RawOptions OptionList::rawOptions() const
 {
   RawOptions rawOptions;
 
   // copy options
-  for ( const auto &option : options)
+  for ( const auto &option : optionsValue)
   {
     // option name
     rawOptions.insert( rawOptions.end(), option.first.begin(), option.first.end());
@@ -114,74 +119,69 @@ OptionList::RawOptions OptionList::getRawOptions() const
   return rawOptions;
 }
 
-void OptionList::setOptions( const Options &options)
+bool OptionList::has( const string &name) const
 {
-  this->options = options;
+  return optionsValue.count( name) >= 1;
 }
 
-bool OptionList::hasOption( const string &name) const
+bool OptionList::has( const KnownOptions option) const
 {
-  return options.count( name) >= 1;
-}
-
-bool OptionList::hasOption( const KnownOptions option) const
-{
-  string optionName = Option::getOptionName( option);
+  const auto optionName{ Option::getOptionName( option)};
 
   if ( optionName.empty())
   {
     return false;
   }
 
-  return hasOption( optionName);
+  return has( optionName);
 }
 
-const OptionPtr OptionList::getOption( const string &name) const
+const OptionPtr OptionList::get( const string &name) const
 {
-  auto it{ options.find( name)};
+  auto it{ optionsValue.find( name)};
 
-  return (it != options.end()) ?
+  return (it != optionsValue.end()) ?
     it->second : OptionPtr();
 }
 
-void OptionList::setOption( const string &name, const string &value)
+void OptionList::set( const string &name, const string &value)
 {
   // If option already exists remove it first
-  if (hasOption( name))
+  if (has( name))
   {
-    removeOption( name);
+    remove( name);
   }
 
   // Add option
-  options.insert( std::make_pair(
+  optionsValue.insert( std::make_pair(
     name,
     std::make_shared< StringOption>( name, value)));
 }
 
-void OptionList::setOption( const OptionPtr option)
+void OptionList::set( const OptionPtr option)
 {
   // If option already exists remove it first
-  if (hasOption( option->getName()))
+  if (has( option->name()))
   {
-    removeOption( option->getName());
+    remove( option->name());
   }
 
   // Add option
-  options.insert( std::make_pair( option->getName(), option));
+  optionsValue.insert( std::make_pair( option->name(), option));
 }
 
-void OptionList::removeOption( const std::string &name)
+void OptionList::remove( const std::string &name)
 {
-  options.erase( name);
+  optionsValue.erase( name);
 }
 
-void OptionList::removeOption( const KnownOptions option)
+void OptionList::remove( const KnownOptions option)
 {
-  string optionName = Option::getOptionName( option);
+  const auto optionName{ Option::getOptionName( option)};
 
   if (!optionName.empty())
   {
-    options.erase( optionName);
+    optionsValue.erase( optionName);
   }
 }
 
@@ -204,7 +204,7 @@ void OptionList::addBlocksizeOptionClient(
       requestedBlocksize,
       NegotiateMinMaxRange< uint16_t>( minBlocksize, requestedBlocksize)));
 
-  setOption( entry);
+  set( entry);
 }
 
 void OptionList::addBlocksizeOptionServer(
@@ -226,15 +226,16 @@ void OptionList::addBlocksizeOptionServer(
       maxBlocksize,
       NegotiateMinMaxSmaller< uint16_t>( minBlocksize, maxBlocksize)));
 
-  setOption( entry);
+  set( entry);
 }
 
 uint16_t OptionList::getBlocksizeOption() const
 {
-  auto optionIt{ options.find( Option::getOptionName( KnownOptions::BlockSize))};
+  auto optionIt{ optionsValue.find(
+    Option::getOptionName( KnownOptions::BlockSize))};
 
   // option not set
-  if (optionIt == options.end())
+  if (optionIt == optionsValue.end())
   {
     return 0;
   }
@@ -262,7 +263,7 @@ void OptionList::addTimeoutOptionClient( const uint8_t timeout)
       timeout,
       NegotiateExactValue< uint8_t>( timeout)));
 
-  setOption( entry);
+  set( entry);
 }
 
 void OptionList::addTimeoutOptionServer(
@@ -281,15 +282,16 @@ void OptionList::addTimeoutOptionServer(
       maxTimeout,
       NegotiateMinMaxRange< uint8_t>( minTimeout, maxTimeout)));
 
-  setOption( entry);
+  set( entry);
 }
 
 uint8_t OptionList::getTimeoutOption() const
 {
-  auto optionIt{ options.find( Option::getOptionName( KnownOptions::Timeout))};
+  auto optionIt{ optionsValue.find(
+    Option::getOptionName( KnownOptions::Timeout))};
 
   // option not set
-  if (optionIt == options.end())
+  if (optionIt == optionsValue.end())
   {
     return 0;
   }
@@ -314,26 +316,26 @@ void OptionList::addTransferSizeOption( const uint64_t transferSize)
       transferSize,
       NegotiateAlwaysPass< uint64_t>()));
 
-  setOption( entry);
+  set( entry);
 }
 
 void OptionList::removeTransferSizeOption()
 {
-  removeOption( Option::getOptionName( KnownOptions::TransferSize));
+  remove( Option::getOptionName( KnownOptions::TransferSize));
 }
 
 bool OptionList::hasTransferSizeOption() const
 {
-  return hasOption( Option::getOptionName( KnownOptions::TransferSize));
+  return has( Option::getOptionName( KnownOptions::TransferSize));
 }
 
 uint64_t OptionList::getTransferSizeOption() const
 {
-  auto optionIt{ options.find(
+  auto optionIt{ optionsValue.find(
     Option::getOptionName( KnownOptions::TransferSize))};
 
   // option not set
-  if (optionIt == options.end())
+  if (optionIt == optionsValue.end())
   {
     return 0;
   }
@@ -356,12 +358,12 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
   OptionList negotiatedOptions;
 
   // iterate over each received option
-  for ( const auto & clientOption : clientOptions.getOptions())
+  for ( const auto & clientOption : clientOptions.options())
   {
-    auto negotiationEntryIt{ options.find( clientOption.first)};
+    auto negotiationEntryIt{ optionsValue.find( clientOption.first)};
 
     // not found -> ignore option
-    if (negotiationEntryIt == options.end())
+    if (negotiationEntryIt == optionsValue.end())
     {
       continue;
     }
@@ -373,7 +375,7 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
     // negotiation has returned a value -> copy option to output list
     if (newOptionValue)
     {
-      negotiatedOptions.setOption( newOptionValue);
+      negotiatedOptions.set( newOptionValue);
     }
   }
 
@@ -383,18 +385,18 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
 OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
 {
   // we make sure, that the received options are not empty
-  assert( !serverOptions.getOptions().empty());
+  assert( !serverOptions.options().empty());
 
   OptionList negotiatedOptions;
 
   // iterate over each received option
-  for ( const auto & serverOption : serverOptions.getOptions())
+  for ( const auto & serverOption : serverOptions.options())
   {
     // find negotiation entry
-    auto negotiationEntryIt{ options.find( serverOption.first)};
+    auto negotiationEntryIt{ optionsValue.find( serverOption.first)};
 
     // not found -> server sent an option, which cannot come from us
-    if (negotiationEntryIt == options.end())
+    if (negotiationEntryIt == optionsValue.end())
     {
       return OptionList();
     }
@@ -411,7 +413,7 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
     }
 
     // negotiation has returned a value -> copy option to output list
-    negotiatedOptions.setOption( newOptionValue);
+    negotiatedOptions.set( newOptionValue);
   }
 
   return negotiatedOptions;
@@ -419,7 +421,7 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
 
 OptionList::string OptionList::toString() const
 {
-  if ( options.empty())
+  if ( optionsValue.empty())
   {
     return "(NONE)";
   }
@@ -427,7 +429,7 @@ OptionList::string OptionList::toString() const
   string result;
 
   // iterate over all options
-  for ( const auto option : options)
+  for ( const auto option : optionsValue)
   {
     result += option.second->toString() + ";";
   }

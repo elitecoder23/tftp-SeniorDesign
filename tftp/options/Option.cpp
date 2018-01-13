@@ -36,28 +36,28 @@ Option::string Option::getOptionName( const KnownOptions option) noexcept
 }
 
 Option::Option( const string &name):
-  name( name)
+  nameValue( name)
 {
   // Validate option name
   assert( !name.empty());
 }
 
-Option::string Option::getName() const
+Option::string Option::name() const
 {
-  return name;
+  return nameValue;
 }
 
-void Option::setName( const std::string &name)
+void Option::name( const std::string &name)
 {
   // Validate option name
   assert( !name.empty());
 
-  this->name = name;
+  nameValue = name;
 }
 
 Option::string Option::toString() const
 {
-  return name + ":" + static_cast< std::string>( *this);
+  return nameValue + ":" + static_cast< std::string>( *this);
 }
 
 }

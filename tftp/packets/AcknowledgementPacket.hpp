@@ -44,7 +44,7 @@ class AcknowledgementPacket: public Packet
      *   constructor.
      **/
     explicit AcknowledgementPacket(
-      const BlockNumber blockNumber = BlockNumber()) noexcept;
+      const BlockNumber blockNumber = {}) noexcept;
 
     /**
      * @brief Generates a TFTP acknowledgement packet from a data buffer.
@@ -65,7 +65,7 @@ class AcknowledgementPacket: public Packet
      *
      * @return The block number.
      **/
-    BlockNumber getBlockNumber() const;
+    BlockNumber blockNumber() const;
 
     /**
      * @brief Sets the block number of the packet.
@@ -73,7 +73,7 @@ class AcknowledgementPacket: public Packet
      * @param[in] blockBumber
      *   Block number of packet.
      **/
-    void setBlockNumber( const BlockNumber blockBumber);
+    void blockNumber( const BlockNumber blockBumber);
 
     // @copydoc Packet::operator string() const
     operator string() const final;
@@ -94,7 +94,7 @@ class AcknowledgementPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! Block number of the packet
-    BlockNumber blockNumber;
+    BlockNumber blockNumberValue;
 };
 
 }

@@ -348,7 +348,7 @@ OptionPtr IntegerOption< IntT, NegotiateT>::negotiate(
 
   // return the negotiated option
   return std::make_shared< IntegerOption< IntT, NegotiateT>>(
-    BaseIntegerOption< IntT>::getName(),
+    BaseIntegerOption< IntT>::name(),
     *negotiateValue,
     negotiateOperation);
 }

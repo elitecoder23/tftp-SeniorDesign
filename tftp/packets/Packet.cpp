@@ -20,7 +20,7 @@
 namespace Tftp {
 namespace Packets {
 
-PacketType Packet::getPacketType( const RawTftpPacket &rawPacket) noexcept
+PacketType Packet::packetType( const RawTftpPacket &rawPacket) noexcept
 {
   // check minimum data size.
   if (rawPacket.size() < HeaderSize)
@@ -58,14 +58,14 @@ PacketType Packet::getPacketType( const RawTftpPacket &rawPacket) noexcept
   return static_cast< PacketType>( opcode);
 }
 
-PacketType Packet::getPacketType() const
+PacketType Packet::packetType() const noexcept
 {
-  return packetType;
+  return packetTypeValue;
 }
 
 Packet::operator string() const
 {
-  switch (packetType)
+  switch (packetTypeValue)
   {
     case PacketType::ReadRequest:
       return "RRQ";
@@ -91,21 +91,21 @@ Packet::operator string() const
 }
 
 Packet::Packet( const PacketType packetType) noexcept:
-  packetType( packetType)
+  packetTypeValue( packetType)
 {
 }
 
 Packet::Packet(
   const PacketType packetType,
   const RawTftpPacket &rawPacket):
-  packetType( packetType)
+  packetTypeValue( packetType)
 {
   decodeHeader( rawPacket);
 }
 
 Packet& Packet::operator=( const Packet &other)
 {
-  if (packetType != other.packetType)
+  if (packetTypeValue != other.packetTypeValue)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "Packet types are not same"));
@@ -116,7 +116,7 @@ Packet& Packet::operator=( const Packet &other)
 
 Packet& Packet::operator=( Packet &&other)
 {
-  if (packetType != other.packetType)
+  if (packetTypeValue != other.packetTypeValue)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "Packet types are not same"));
@@ -143,7 +143,7 @@ void Packet::insertHeader( RawTftpPacket &rawPacket) const
   auto packetIt( rawPacket.begin());
 
   // encode opcode
-  setInt( packetIt, static_cast< uint16_t>( packetType));
+  setInt( packetIt, static_cast< uint16_t>( packetTypeValue));
 }
 
 void Packet::decodeHeader( const RawTftpPacket &rawPacket)
@@ -161,7 +161,7 @@ void Packet::decodeHeader( const RawTftpPacket &rawPacket)
   uint16_t opcode;
   getInt< uint16_t>( packetIt, opcode);
 
-  if ( static_cast< PacketType>( opcode) != packetType)
+  if ( static_cast< PacketType>( opcode) != packetTypeValue)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "Invalid opcode"));

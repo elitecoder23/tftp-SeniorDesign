@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 {
   Tftp::Options::OptionList options;
 
-  options.setOption( "blocksize", "4096");
+  options.set( "blocksize", "4096");
 
   ReadRequestPacket rrq( "testfile.bin", TransferMode::OCTET, options);
 
@@ -37,11 +37,11 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   ReadRequestPacket rrq2( raw);
 
-  BOOST_CHECK( rrq.getPacketType() == rrq2.getPacketType());
-  BOOST_CHECK( rrq.getFilename() == rrq2.getFilename());
-  BOOST_CHECK( rrq.getMode() == rrq2.getMode());
-  BOOST_CHECK( rrq.getOption( "blocksize") == rrq2.getOption( "blocksize"));
-  BOOST_CHECK( rrq.getOption( "XXX") == "");
+  BOOST_CHECK( rrq.packetType() == rrq2.packetType());
+  BOOST_CHECK( rrq.filename() == rrq2.filename());
+  BOOST_CHECK( rrq.mode() == rrq2.mode());
+  BOOST_CHECK( rrq.option( "blocksize") == rrq2.option( "blocksize"));
+  BOOST_CHECK( rrq.option( "XXX") == "");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

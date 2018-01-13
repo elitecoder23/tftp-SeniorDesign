@@ -18,7 +18,7 @@ namespace Packets {
 Tftp::PacketType PacketFactory::getPacketType(
   const RawTftpPacket &rawPacket) noexcept
 {
-  return Packet::getPacketType( rawPacket);
+  return Packet::packetType( rawPacket);
 }
 
 ReadRequestPacket PacketFactory::getReadRequestPacket(

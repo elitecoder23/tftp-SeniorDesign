@@ -29,9 +29,12 @@ class ReadRequestPacket: public ReadWriteRequestPacket
      * @brief Creates a TFTP Read Request packet.
      *
      * @param[in] filename
+     *   The filename, which will be requested
      * @param[in] mode
+     *   The transfer mode
      * @param[in] options
-     */
+     *   The options, which are set
+     **/
     ReadRequestPacket(
       const string &filename,
       TransferMode mode,

@@ -41,11 +41,10 @@ class ReadWriteRequestPacket: public Packet
      *   The transfer mode.
      *
      * @return The corresponding string representation.
-     *
-     * @throw InvalidPacketException
-     *   When mode is not a valid transfer mode.
+     * @retval string()
+     *   When [mode] is not a valid transfer mode.
      **/
-    static string getMode( TransferMode mode);
+    static string decodeMode( TransferMode mode);
 
     /**
      * @brief Converts the mode string to the corresponding enumeration.
@@ -54,11 +53,10 @@ class ReadWriteRequestPacket: public Packet
      *   The transfer mode.
      *
      * @return The corresponding mode.
-     *
-     * @throw InvalidPacketException
-     *   When mode is not a valid transfer mode.
+     * @retval TransferMode::Invalid
+     *   When [mode] is not a valid transfer mode.
      **/
-    static TransferMode getMode( const string &mode);
+    static TransferMode decodeMode( const string &mode);
 
     //! @copydoc Packet::operator=(const RawTftpPacket&)
     ReadWriteRequestPacket& operator=( const RawTftpPacket &rawPacket) final;
@@ -68,7 +66,7 @@ class ReadWriteRequestPacket: public Packet
      *
      * @return The filename
      **/
-    const string& getFilename() const;
+    const string& filename() const;
 
     /**
      * @brief Sets the filename
@@ -76,14 +74,14 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] filename
      *   The new filename.
      **/
-    void setFilename( const string &filename);
+    void filename( const string &filename);
 
     /**
      * @brief Returns the transfer mode.
      *
      * @return The transfer mode.
      **/
-    TransferMode getMode() const;
+    TransferMode mode() const;
 
     /**
      * @brief Sets the transfer mode.
@@ -94,7 +92,7 @@ class ReadWriteRequestPacket: public Packet
      * @throw TftpPacketException
      *   When mode is not a valid transfer mode.
      **/
-    void setMode( TransferMode mode);
+    void mode( TransferMode mode);
 
     /**
      * @brief Sets the transfer mode.
@@ -102,21 +100,21 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] mode
      *   The new transfer mode.
      **/
-    void setMode( const string &mode);
+    void mode( const string &mode);
 
     /**
      * @brief Returns the set TFTP options.
      *
      * @return The TFTP options.
      **/
-    const Options::OptionList& getOptions() const;
+    const Options::OptionList& options() const;
 
     /**
      * @brief Returns the set TFTP options.
      *
      * @return The TFTP options.
      **/
-    Options::OptionList& getOptions();
+    Options::OptionList& options();
 
     /**
      * @brief Sets the TFTP options.
@@ -124,7 +122,7 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] options
      *   The TFTP options.
      **/
-    void setOptions( const Options::OptionList &options);
+    void options( const Options::OptionList &options);
 
     /**
      * @brief Returns the option value with the given name.
@@ -136,7 +134,7 @@ class ReadWriteRequestPacket: public Packet
      * @retval std::string()
      *   When the given option is not set.
      **/
-    const string getOption( const string &name) const;
+    const string option( const string &name) const;
 
     /**
      * @brief set a option
@@ -146,7 +144,7 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] value
      *   The option value.
      **/
-    void setOption( const string &name, const string &value);
+    void option( const string &name, const string &value);
 
     // @copydoc Packet::operator string() const
     operator string() const final;
@@ -207,11 +205,11 @@ class ReadWriteRequestPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! stored request filename
-    string filename;
+    string filenameValue;
     //! stored transfer mode
-    string mode;
+    string modeValue;
     //! stored options
-    Options::OptionList options;
+    Options::OptionList optionsValue;
 };
 
 }

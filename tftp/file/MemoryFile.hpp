@@ -56,14 +56,14 @@ class MemoryFile: public TftpFile
      *
      * @return The locally stored data
      **/
-    const DataType& getData() const noexcept;
+    const DataType& data() const noexcept;
 
     /**
      * @copydoc TftpFile::finished()
      *
      * Reset current position.
      **/
-    virtual void finished() noexcept override final;
+    void finished() noexcept final;
 
     /**
      * @copydoc TftpFile::receivedTransferSize()
@@ -71,26 +71,26 @@ class MemoryFile: public TftpFile
      * Value supplied is ignored.
      * @return Always true.
      **/
-    virtual bool receivedTransferSize( uint64_t transferSize) override final;
+    bool receivedTransferSize( uint64_t transferSize) final;
 
     /**
      * @copydoc TftpFile::receviedData()
      **/
-    virtual void receviedData( const DataType &data) noexcept override final;
+    void receviedData( const DataType &data) noexcept final;
 
     /**
      * @copydoc TftpFile::requestedTransferSize()
      **/
-    virtual bool requestedTransferSize( uint64_t &transferSize) override final;
+    bool requestedTransferSize( uint64_t &transferSize) final;
 
     /**
      * @copydoc TftpFile::sendData()
      **/
-    virtual DataType sendData( size_t maxSize) noexcept override final;
+    DataType sendData( size_t maxSize) noexcept final;
 
   private:
     //! the data
-    DataType data;
+    DataType dataValue;
     //! the current read position
     DataType::const_iterator dataPtr;
 };

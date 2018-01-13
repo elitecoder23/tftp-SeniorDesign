@@ -75,7 +75,7 @@ class ErrorPacket: public Packet
      *
      * @return The error code.
      **/
-    ErrorCode getErrorCode() const;
+    ErrorCode errorCode() const noexcept;
 
     /**
      * @brief Sets the error code.
@@ -83,25 +83,25 @@ class ErrorPacket: public Packet
      * @param[in] errorCode
      *   The error code to set
      **/
-    void setErrorCode( ErrorCode errorCode);
+    void errorCode( ErrorCode errorCode) noexcept;
 
     /**
      * @brief Returns the error message of this packet.
      *
      * @return The error message
      **/
-    string getErrorMessage() const;
+    const string& errorMessage() const;
 
     /**
      * @brief Sets the error message of this packet.
      *
      * @param[in] errorMessage
-     *   The error message to set. By default empty.
+     *   The error message to set.
      **/
-    void setErrorMessage( const string &errorMessage);
+    void errorMessage( const string &errorMessage);
 
     //! @copydoc setErrorMessage(const string&)
-    void setErrorMessage( string &&errorMessage = {});
+    void errorMessage( string &&errorMessage);
 
   private:
     //! @copydoc Packet::encode()
@@ -119,9 +119,9 @@ class ErrorPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! The error code
-    ErrorCode errorCode;
+    ErrorCode errorCodeValue;
     //! The error message.
-    string errorMessage;
+    string errorMessageValue;
 };
 
 }

@@ -71,7 +71,7 @@ void WriteRequestOperationImpl::start()
   try
   {
     // option negotiation leads to empty option list
-    if (!getOptions().hasOptions())
+    if (getOptions().empty())
     {
       // Then no NOACK is sent back - a simple ACK is sent.
       send( Packets::AcknowledgementPacket( Packets::BlockNumber{ 0U}));
@@ -150,7 +150,7 @@ void WriteRequestOperationImpl::handleDataPacket(
     "RX: " << static_cast< std::string>( dataPacket);
 
   // Check retransmission
-  if (dataPacket.getBlockNumber() == lastReceivedBlockNumber)
+  if (dataPacket.blockNumber() == lastReceivedBlockNumber)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
       "Retransmission of last packet - only send ACK";
@@ -164,7 +164,7 @@ void WriteRequestOperationImpl::handleDataPacket(
   }
 
   // check not expected block
-  if (dataPacket.getBlockNumber() != lastReceivedBlockNumber.next())
+  if (dataPacket.blockNumber() != lastReceivedBlockNumber.next())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Unexpected packet";
@@ -182,7 +182,7 @@ void WriteRequestOperationImpl::handleDataPacket(
   }
 
   // check for too much data
-  if (dataPacket.getDataSize() > receiveDataSize)
+  if (dataPacket.dataSize() > receiveDataSize)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Too much data received";
@@ -200,7 +200,7 @@ void WriteRequestOperationImpl::handleDataPacket(
   }
 
   // call data handler
-  dataHandler->receviedData( dataPacket.getData());
+  dataHandler->receviedData( dataPacket.data());
 
   // increment block number
   lastReceivedBlockNumber++;
@@ -209,7 +209,7 @@ void WriteRequestOperationImpl::handleDataPacket(
 
   // if received data size is smaller then the expected -> last packet has been
   // received
-  if (dataPacket.getDataSize() < receiveDataSize)
+  if (dataPacket.dataSize() < receiveDataSize)
   {
     finished( TransferStatus::Successful);
   }

@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 {
   Options::OptionList options;
 
-  options.setOption( "blocksize", "4096");
+  options.set( "blocksize", "4096");
 
   WriteRequestPacket wrq( "testfile.bin", TransferMode::OCTET, options);
 
@@ -38,11 +38,11 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   WriteRequestPacket wrq2( raw);
 
-  BOOST_CHECK( wrq.getPacketType() == wrq2.getPacketType());
-  BOOST_CHECK( wrq.getFilename() == wrq2.getFilename());
-  BOOST_CHECK( wrq.getMode() == wrq2.getMode());
-  BOOST_CHECK( wrq.getOption( "blocksize") == wrq2.getOption( "blocksize"));
-  BOOST_CHECK( wrq.getOption( "XXX") == "");
+  BOOST_CHECK( wrq.packetType() == wrq2.packetType());
+  BOOST_CHECK( wrq.filename() == wrq2.filename());
+  BOOST_CHECK( wrq.mode() == wrq2.mode());
+  BOOST_CHECK( wrq.option( "blocksize") == wrq2.option( "blocksize"));
+  BOOST_CHECK( wrq.option( "XXX") == "");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -69,7 +69,7 @@ class Option
      *
      * @return The option name.
      **/
-    string getName() const;
+    string name() const;
 
     /**
      * @brief Set the option name.
@@ -77,7 +77,7 @@ class Option
      * @param[in] name
      *   The new option name. Must be not empty.
      **/
-    void setName( const string &name);
+    void name( const string &name);
 
     /**
      * @brief Returns the option value as string.
@@ -116,7 +116,7 @@ class Option
 
   private:
     //! The option name
-    string name;
+    string nameValue;
 };
 
 }

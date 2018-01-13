@@ -70,7 +70,7 @@ void ReadRequestOperationImpl::start()
   try
   {
     // option negotiation leads to empty option list
-    if ( !getOptions().hasOptions())
+    if ( getOptions().empty())
     {
       sendData();
     }
@@ -105,8 +105,8 @@ void ReadRequestOperationImpl::start()
       }
 
       // if transfer size option is the only option requested, but the handler
-      // does not supply it -> empty OACK is not sent biut data directly
-      if ( getOptions().hasOptions())
+      // does not supply it -> empty OACK is not sent but data directly
+      if ( !getOptions().empty())
       {
         // Send OACK
         send( Packets::OptionsAcknowledgementPacket( getOptions()));
@@ -150,7 +150,7 @@ void ReadRequestOperationImpl::sendData()
     lastTransmittedBlockNumber,
     dataHandler->sendData( transmitDataSize));
 
-  if ( data.getDataSize() < transmitDataSize)
+  if ( data.dataSize() < transmitDataSize)
   {
     lastDataPacketTransmitted = true;
   }
@@ -188,7 +188,7 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
     "RX: " << static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
-  if (acknowledgementPacket.getBlockNumber() == lastTransmittedBlockNumber.previous())
+  if (acknowledgementPacket.blockNumber() == lastTransmittedBlockNumber.previous())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
       "Received previous ACK packet: retry of last data package - "
@@ -201,7 +201,7 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
   }
 
   // check invalid block number
-  if (acknowledgementPacket.getBlockNumber() != lastTransmittedBlockNumber)
+  if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Invalid block number received";

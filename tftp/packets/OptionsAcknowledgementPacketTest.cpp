@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 {
   Tftp::Options::OptionList options;
 
-  options.setOption( "blocksize", "4096");
+  options.set( "blocksize", "4096");
 
   OptionsAcknowledgementPacket oack( options);
 
@@ -37,9 +37,9 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   OptionsAcknowledgementPacket oack2( raw);
 
-  BOOST_CHECK( oack.getPacketType()         == oack2.getPacketType());
-  BOOST_CHECK( oack.getOption( "blocksize") == oack2.getOption( "blocksize"));
-  BOOST_CHECK( oack.getOption( "XXX")       == "");
+  BOOST_CHECK( oack.packetType()         == oack2.packetType());
+  BOOST_CHECK( oack.option( "blocksize") == oack2.option( "blocksize"));
+  BOOST_CHECK( oack.option( "XXX")       == "");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

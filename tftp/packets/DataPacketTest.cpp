@@ -29,22 +29,22 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 {
   DataPacket dp1;
 
-  BOOST_CHECK( dp1.getPacketType() == PacketType::Data);
-  BOOST_CHECK( dp1.getBlockNumber() == BlockNumber());
-  BOOST_CHECK( dp1.getDataSize() == 0);
-  BOOST_CHECK( dp1.getData().empty());
+  BOOST_CHECK( dp1.packetType() == PacketType::Data);
+  BOOST_CHECK( dp1.blockNumber() == BlockNumber());
+  BOOST_CHECK( dp1.dataSize() == 0);
+  BOOST_CHECK( dp1.data().empty());
 
   DataPacket dp2( BlockNumber(), {'H', 'E', 'L', 'L', 'O' });
-  BOOST_CHECK( dp2.getPacketType() == PacketType::Data);
-  BOOST_CHECK( dp2.getBlockNumber() == BlockNumber());
-  BOOST_CHECK( dp2.getDataSize() == 5);
-  BOOST_CHECK( !dp2.getData().empty());
+  BOOST_CHECK( dp2.packetType() == PacketType::Data);
+  BOOST_CHECK( dp2.blockNumber() == BlockNumber());
+  BOOST_CHECK( dp2.dataSize() == 5);
+  BOOST_CHECK( !dp2.data().empty());
 
   DataPacket dp3( BlockNumber{55}, {'H', 'E', 'L', 'L', 'O' });
-  BOOST_CHECK( dp3.getPacketType() == PacketType::Data);
-  BOOST_CHECK( dp3.getBlockNumber() == BlockNumber(55));
-  BOOST_CHECK( dp3.getDataSize() == 5);
-  BOOST_CHECK( !dp3.getData().empty());
+  BOOST_CHECK( dp3.packetType() == PacketType::Data);
+  BOOST_CHECK( dp3.blockNumber() == BlockNumber(55));
+  BOOST_CHECK( dp3.dataSize() == 5);
+  BOOST_CHECK( !dp3.data().empty());
 
   DataPacket data(
     BlockNumber{10},
@@ -69,10 +69,10 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 
   DataPacket data2( raw);
 
-  BOOST_CHECK( data.getPacketType()  == data2.getPacketType());
-  BOOST_CHECK( data.getBlockNumber() == data2.getBlockNumber());
-  BOOST_CHECK( data.getDataSize()    == data2.getDataSize());
-  BOOST_CHECK( data.getData()        == data2.getData());
+  BOOST_CHECK( data.packetType()  == data2.packetType());
+  BOOST_CHECK( data.blockNumber() == data2.blockNumber());
+  BOOST_CHECK( data.dataSize()    == data2.dataSize());
+  BOOST_CHECK( data.data()        == data2.data());
 }
 
 //! Constructor test
@@ -86,10 +86,10 @@ BOOST_AUTO_TEST_CASE( constructor2 )
     }
   };
 
-  BOOST_CHECK( dataPacket.getPacketType()  == PacketType::Data);
-  BOOST_CHECK( dataPacket.getBlockNumber() == BlockNumber{ 0x0102});
-  BOOST_CHECK( dataPacket.getDataSize()    == 9);
-  BOOST_CHECK( (dataPacket.getData()       == DataPacket::DataType{'D', 'A', 'T', 'A', '_', 'T', 'E', 'S', 'T'}));
+  BOOST_CHECK( dataPacket.packetType()  == PacketType::Data);
+  BOOST_CHECK( dataPacket.blockNumber() == BlockNumber{ 0x0102});
+  BOOST_CHECK( dataPacket.dataSize()    == 9);
+  BOOST_CHECK( (dataPacket.data()       == DataPacket::DataType{'D', 'A', 'T', 'A', '_', 'T', 'E', 'S', 'T'}));
 
   BOOST_CHECK_THROW(
     (DataPacket{
@@ -108,16 +108,16 @@ BOOST_AUTO_TEST_CASE( setBlockNumber )
   DataPacket dp1;
   const DataPacket &dp1Const( dp1);
 
-  BOOST_CHECK( dp1.getBlockNumber() == BlockNumber());
-  BOOST_CHECK( dp1Const.getBlockNumber() == BlockNumber());
+  BOOST_CHECK( dp1.blockNumber() == BlockNumber());
+  BOOST_CHECK( dp1Const.blockNumber() == BlockNumber());
 
-  dp1.setBlockNumber( BlockNumber{10});
-  BOOST_CHECK( dp1.getBlockNumber() == BlockNumber{ 10});
-  BOOST_CHECK( dp1Const.getBlockNumber() == BlockNumber{ 10});
+  dp1.blockNumber( BlockNumber{10});
+  BOOST_CHECK( dp1.blockNumber() == BlockNumber{ 10});
+  BOOST_CHECK( dp1Const.blockNumber() == BlockNumber{ 10});
 
-  dp1.getBlockNumber()++;
-  BOOST_CHECK( dp1.getBlockNumber() == BlockNumber{ 11});
-  BOOST_CHECK( dp1Const.getBlockNumber() == BlockNumber{ 11});
+  dp1.blockNumber()++;
+  BOOST_CHECK( dp1.blockNumber() == BlockNumber{ 11});
+  BOOST_CHECK( dp1Const.blockNumber() == BlockNumber{ 11});
 }
 
 BOOST_AUTO_TEST_SUITE_END()

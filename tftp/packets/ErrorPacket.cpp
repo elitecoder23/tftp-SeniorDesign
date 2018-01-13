@@ -24,8 +24,8 @@ ErrorPacket::ErrorPacket(
   const ErrorCode errorCode,
   const string &errorMessage):
   Packet( PacketType::Error),
-  errorCode( errorCode),
-  errorMessage( errorMessage)
+  errorCodeValue( errorCode),
+  errorMessageValue( errorMessage)
 {
 }
 
@@ -33,8 +33,8 @@ ErrorPacket::ErrorPacket(
   ErrorCode errorCode,
   string &&errorMessage):
   Packet( PacketType::Error),
-  errorCode( errorCode),
-  errorMessage( std::move( errorMessage))
+  errorCodeValue( errorCode),
+  errorMessageValue( std::move( errorMessage))
 {
 }
 
@@ -55,51 +55,52 @@ ErrorPacket& ErrorPacket::operator=(
 ErrorPacket::operator string() const
 {
   return (boost::format( "ERR: EC: %s (%d) - DESC: \"%s\"") %
-    ErrorCodeDescription::getInstance().getDescription( getErrorCode()).name %
-    static_cast< uint16_t>( getErrorCode()) %
-    getErrorMessage()).str();
+    ErrorCodeDescription::getInstance().getDescription( errorCode()).name %
+    static_cast< uint16_t>( errorCode()) %
+    errorMessage()).str();
 }
 
-Tftp::ErrorCode ErrorPacket::getErrorCode() const
+Tftp::ErrorCode ErrorPacket::errorCode() const noexcept
 {
-  return errorCode;
+  return errorCodeValue;
 }
 
-void ErrorPacket::setErrorCode( const ErrorCode errorCode)
+void ErrorPacket::errorCode( const ErrorCode errorCode) noexcept
 {
-  this->errorCode = errorCode;
+  errorCodeValue = errorCode;
 }
 
-ErrorPacket::string ErrorPacket::getErrorMessage() const
+const ErrorPacket::string& ErrorPacket::errorMessage() const
 {
-  return errorMessage;
+  return errorMessageValue;
 }
 
-void ErrorPacket::setErrorMessage( const string &errorMessage)
+void ErrorPacket::errorMessage( const string &errorMessage)
 {
-  this->errorMessage = errorMessage;
+  errorMessageValue = errorMessage;
 }
 
-void ErrorPacket::setErrorMessage( string &&errorMessage)
+void ErrorPacket::errorMessage( string &&errorMessage)
 {
-  this->errorMessage = std::move( errorMessage);
+  errorMessageValue = std::move( errorMessage);
 }
 
 Tftp::RawTftpPacket ErrorPacket::encode() const
 {
-  const auto errorMessage = getErrorMessage();
-
-  RawTftpPacket rawPacket( 4 + errorMessage.length() + 1);
+  RawTftpPacket rawPacket( 4 + errorMessageValue.length() + 1);
 
   insertHeader( rawPacket);
 
   RawTftpPacket::iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // error code
-  packetIt = setInt( packetIt, static_cast< uint16_t>( getErrorCode()));
+  packetIt = setInt( packetIt, static_cast< uint16_t>( errorCodeValue));
 
   // error message
-  packetIt = std::copy( errorMessage.begin(), errorMessage.end(), packetIt);
+  packetIt = std::copy(
+    errorMessageValue.begin(),
+    errorMessageValue.end(),
+    packetIt);
   *packetIt = 0;
 
   return rawPacket;
@@ -120,7 +121,7 @@ void ErrorPacket::decodeBody( const RawTftpPacket &rawPacket)
   // decode error code
   uint16_t errorCodeInt;
   packetIt = getInt< uint16_t>( packetIt, errorCodeInt);
-  errorCode = static_cast< ErrorCode>( errorCodeInt);
+  errorCodeValue = static_cast< ErrorCode>( errorCodeInt);
 
   // check terminating 0 character
   if (rawPacket.back()!=0)
@@ -130,7 +131,7 @@ void ErrorPacket::decodeBody( const RawTftpPacket &rawPacket)
       AdditionalInfo( "error message not 0-terminated"));
   }
 
-  errorMessage = string( packetIt, rawPacket.end()-1);
+  errorMessageValue = string( packetIt, rawPacket.end()-1);
 }
 
 }

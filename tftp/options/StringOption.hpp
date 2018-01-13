@@ -34,7 +34,7 @@ class StringOption: public Option
      * @param[in] value
      *   The option value.
      **/
-    StringOption( const string &name, const string &value = string());
+    StringOption( const string &name, const string &value = {});
 
     /**
      * Returns the value directly.

@@ -50,7 +50,7 @@ class DataPacket: public Packet
      *   The data within the packet.
      **/
     DataPacket(
-      BlockNumber blockNumber = BlockNumber{},
+      BlockNumber blockNumber = {},
       const DataType &data = {}) noexcept;
 
     /**
@@ -72,14 +72,14 @@ class DataPacket: public Packet
      *
      * @return The current block number.
      **/
-    BlockNumber getBlockNumber() const;
+    BlockNumber blockNumber() const;
 
     /**
      * @brief Returns the block number.
      *
      * @return The current block number (modifiable).
      **/
-    BlockNumber& getBlockNumber();
+    BlockNumber& blockNumber();
 
     /**
      * @brief Sets the block number of the packet.
@@ -87,7 +87,7 @@ class DataPacket: public Packet
      * @param[in] blockBumber
      *   Block number of packet.
      **/
-    void setBlockNumber( const BlockNumber blockBumber);
+    void blockNumber( const BlockNumber blockBumber);
 
     /**
      * @brief Returns the data as const reference.
@@ -96,7 +96,7 @@ class DataPacket: public Packet
      *
      * @return The data as const reference.
      **/
-    const DataType& getData( ) const;
+    const DataType& data( ) const;
 
     /**
      * @brief Returns the data as reference.
@@ -105,7 +105,7 @@ class DataPacket: public Packet
      *
      * @return The data as reference.
      **/
-    DataType& getData( );
+    DataType& data( );
 
     /**
      * @brief Sets the data of the packet.
@@ -115,7 +115,7 @@ class DataPacket: public Packet
      * @param[in] data
      *   The data to set.
      **/
-    void setData( const DataType &data);
+    void data( const DataType &data);
 
     /**
      * @brief Sets the data of the packet by moving the content of [data].
@@ -125,14 +125,14 @@ class DataPacket: public Packet
      * @param[in] data
      *   The data to set.
      **/
-    void setData( DataType &&data);
+    void data( DataType &&data);
 
     /**
      * @brief Returns the data size.
      *
      * @return The data size in bytes.
      **/
-    size_t getDataSize() const;
+    size_t dataSize() const;
 
     // @copydoc Packet::operator string() const
     operator string() const final;
@@ -153,9 +153,9 @@ class DataPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! Block number of the packet.
-    BlockNumber blockNumber;
+    BlockNumber blockNumberValue;
     //! The data of the packet.
-    DataType data;
+    DataType dataValue;
 };
 
 }

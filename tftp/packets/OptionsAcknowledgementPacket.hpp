@@ -67,14 +67,14 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return Option list (as const reference)
      **/
-    const Options::OptionList& getOptions() const;
+    const Options::OptionList& options() const;
 
     /**
      * @brief Returns the options within the packet (as reference)
      *
      * @return Option list (as reference)
      **/
-    Options::OptionList& getOptions();
+    Options::OptionList& options();
 
     /**
      * @brief Overwrite the options of this packet with the new one.
@@ -82,7 +82,7 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] options
      *   New option list, which shall be used.
      **/
-    void setOptions( const Options::OptionList &options);
+    void options( const Options::OptionList &options);
 
     /**
      * @brief Get a option value for a given name.
@@ -94,7 +94,7 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return The value for the option identified by name.
      **/
-    const string getOption( const string &name) const;
+    const string option( const string &name) const;
 
     /**
      * @brief Sets the option with the given name and value.
@@ -104,7 +104,7 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] value
      *   The option value.
      **/
-    void setOption( const string &name, const string &value);
+    void option( const string &name, const string &value);
 
     // @copydoc Packet::operator string() const
     operator string() const final;
@@ -127,7 +127,7 @@ class OptionsAcknowledgementPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! The stored options.
-    Options::OptionList options;
+    Options::OptionList optionsValue;
 };
 
 }

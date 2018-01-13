@@ -197,7 +197,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   transmitCounter = 1;
 
   // Store packet type
-  transmitPacketType = packet.getPacketType();
+  transmitPacketType = packet.packetType();
 
   // Encode raw packet
   transmitPacket = static_cast< RawTftpPacket>( packet);
@@ -316,7 +316,7 @@ void OperationImpl::handleErrorPacket(
   switch (transmitPacketType)
   {
     case PacketType::OptionsAcknowledgement:
-      switch (errorPacket.getErrorCode())
+      switch (errorPacket.errorCode())
       {
         case ErrorCode::TftpOptionRefused:
           finished( TransferStatus::OptionNegotiationError, std::move( errorPacket));

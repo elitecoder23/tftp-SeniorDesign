@@ -32,8 +32,8 @@ BOOST_AUTO_TEST_CASE( constructor1)
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
-  BOOST_CHECK( ack.getPacketType() == PacketType::Acknowledgement);
-  BOOST_CHECK( ack.getBlockNumber() == BlockNumber{ 10U});
+  BOOST_CHECK( ack.packetType() == PacketType::Acknowledgement);
+  BOOST_CHECK( ack.blockNumber() == BlockNumber{ 10U});
 }
 
 //! Constructor test
@@ -47,8 +47,8 @@ BOOST_AUTO_TEST_CASE( constructor2)
   AcknowledgementPacket ack( raw);
   std::cout << Dump( &(*raw.begin()), raw.size());
 
-  BOOST_CHECK( ack.getPacketType() == PacketType::Acknowledgement);
-  BOOST_CHECK( ack.getBlockNumber() == BlockNumber( 4097U));
+  BOOST_CHECK( ack.packetType() == PacketType::Acknowledgement);
+  BOOST_CHECK( ack.blockNumber() == BlockNumber( 4097U));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

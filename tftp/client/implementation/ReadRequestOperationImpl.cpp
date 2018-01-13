@@ -109,7 +109,7 @@ void ReadRequestOperationImpl::handleDataPacket(
     static_cast< std::string>( dataPacket);
 
   // check retransmission of last packet
-  if (dataPacket.getBlockNumber() == lastReceivedBlockNumber)
+  if (dataPacket.blockNumber() == lastReceivedBlockNumber)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
       "Received last data package again. Re-ACK them";
@@ -121,7 +121,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   }
 
   // check unexpected block number
-  if (dataPacket.getBlockNumber() != lastReceivedBlockNumber.next())
+  if (dataPacket.blockNumber() != lastReceivedBlockNumber.next())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Wrong Data packet block number";
@@ -138,7 +138,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   }
 
   // check for too much data
-  if (dataPacket.getDataSize() > receiveDataSize)
+  if (dataPacket.dataSize() > receiveDataSize)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Too much data received";
@@ -155,7 +155,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   }
 
   // call call-back
-  dataHandler->receviedData( dataPacket.getData());
+  dataHandler->receviedData( dataPacket.data());
 
   // increment received block number
   lastReceivedBlockNumber++;
@@ -164,7 +164,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   send( Packets::AcknowledgementPacket( lastReceivedBlockNumber));
 
   // if received data size is smaller then the expected
-  if (dataPacket.getDataSize() < receiveDataSize)
+  if (dataPacket.dataSize() < receiveDataSize)
   {
     // last packet has been received and operation is finished
     finished( TransferStatus::Successful);
@@ -205,10 +205,10 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
-  OptionList options = optionsAcknowledgementPacket.getOptions();
+  const auto &options{ optionsAcknowledgementPacket.options()};
 
   // check empty options
-  if (options.getOptions().empty())
+  if (options.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Received option list is empty";
@@ -228,7 +228,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   OptionList negotiatedOptions = getOptions().negotiateClient( options);
 
   // Check empty options list
-  if (negotiatedOptions.getOptions().empty())
+  if (negotiatedOptions.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Option negotiation failed";

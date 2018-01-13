@@ -23,8 +23,8 @@ DataPacket::DataPacket(
   BlockNumber blockNumber,
   const DataType &data) noexcept:
   Packet( PacketType::Data),
-  blockNumber( blockNumber),
-  data( data)
+  blockNumberValue( blockNumber),
+  dataValue( data)
 {
 }
 
@@ -41,66 +41,66 @@ DataPacket& DataPacket::operator=( const RawTftpPacket &rawPacket)
   return *this;
 }
 
-BlockNumber DataPacket::getBlockNumber() const
+BlockNumber DataPacket::blockNumber() const
 {
-  return blockNumber;
+  return blockNumberValue;
 }
 
-BlockNumber& DataPacket::getBlockNumber()
+BlockNumber& DataPacket::blockNumber()
 {
-  return blockNumber;
+  return blockNumberValue;
 }
 
-void DataPacket::setBlockNumber( BlockNumber blockBumber)
+void DataPacket::blockNumber( BlockNumber blockBumber)
 {
-  this->blockNumber = blockBumber;
+  blockNumberValue = blockBumber;
 }
 
-const DataPacket::DataType& DataPacket::getData() const
+const DataPacket::DataType& DataPacket::data() const
 {
-  return data;
+  return dataValue;
 }
 
-DataPacket::DataType& DataPacket::getData()
+DataPacket::DataType& DataPacket::data()
 {
-  return data;
+  return dataValue;
 }
 
-void DataPacket::setData( const DataType &data)
+void DataPacket::data( const DataType &data)
 {
-  this->data = data;
+  dataValue = data;
 }
 
-void DataPacket::setData( DataType &&data)
+void DataPacket::data( DataType &&data)
 {
-  this->data = std::move( data);
+  dataValue = std::move( data);
 }
 
-size_t DataPacket::getDataSize() const
+size_t DataPacket::dataSize() const
 {
-  return data.size();
+  return dataValue.size();
 }
 
 DataPacket::operator string() const
 {
   return (boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
-    getBlockNumber() %
-    getDataSize()).str();
+    blockNumber() %
+    dataSize()).str();
 }
 
 Tftp::RawTftpPacket DataPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4 + data.size());
+  RawTftpPacket rawPacket( 4 + dataValue.size());
 
   insertHeader( rawPacket);
 
   RawTftpPacket::iterator packetIt = rawPacket.begin() + 2;
 
   // block number
-  packetIt = setInt( packetIt, static_cast< uint16_t>( getBlockNumber()));
+  packetIt = setInt( packetIt, static_cast< uint16_t>( blockNumberValue));
 
   // data
-  std::copy( data.begin(), data.end(), packetIt);
+  std::copy( dataValue.begin(), dataValue.end(), packetIt);
 
   return rawPacket;
 }
@@ -117,10 +117,10 @@ void DataPacket::decodeBody( const RawTftpPacket &rawPacket)
   auto packetIt{ rawPacket.begin() + 2};
 
   // decode block number
-  packetIt = getInt< uint16_t>( packetIt, blockNumber);
+  packetIt = getInt< uint16_t>( packetIt, blockNumberValue);
 
   // copy data
-  data.assign( packetIt, rawPacket.end());
+  dataValue.assign( packetIt, rawPacket.end());
 }
 
 }

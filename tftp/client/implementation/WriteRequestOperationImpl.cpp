@@ -129,7 +129,7 @@ void WriteRequestOperationImpl::sendData()
     lastTransmittedBlockNumber,
     dataHandler->sendData( transmitDataSize));
 
-  if (data.getDataSize() < transmitDataSize)
+  if (data.dataSize() < transmitDataSize)
   {
     lastDataPacketTransmitted = true;
   }
@@ -165,7 +165,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
     static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
-  if (acknowledgementPacket.getBlockNumber() == lastTransmittedBlockNumber.previous())
+  if (acknowledgementPacket.blockNumber() == lastTransmittedBlockNumber.previous())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
       "Received previous ACK packet: retry of last data package - "
@@ -175,7 +175,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
   }
 
   // check invalid block number
-  if (acknowledgementPacket.getBlockNumber() != lastTransmittedBlockNumber)
+  if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Invalid block number received";
@@ -212,10 +212,10 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
-  OptionList options( optionsAcknowledgementPacket.getOptions());
+  const auto &options( optionsAcknowledgementPacket.options());
 
   // check empty options
-  if (options.getOptions().empty())
+  if (options.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Received option list is empty";
@@ -232,7 +232,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
 
   // perform option negotiation
   OptionList negotiatedOptions = getOptions().negotiateClient( options);
-  if (negotiatedOptions.getOptions().empty())
+  if (negotiatedOptions.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Option negotiation failed";

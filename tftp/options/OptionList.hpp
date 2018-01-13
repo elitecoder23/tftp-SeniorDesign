@@ -68,21 +68,29 @@ class OptionList
      *
      * @return is any option is set.
      **/
-    bool hasOptions() const;
+    bool empty() const;
 
     /**
      * @brief Returns the option map - non modifiable.
      *
      * @return Returns a constant reference to the options map.
      **/
-    const Options& getOptions() const;
+    const Options& options() const;
 
     /**
      * @brief Returns the option map.
      *
      * @return Returns a reference to the options map.
      **/
-    Options& getOptions();
+    Options& options();
+
+    /**
+     * @brief Replaces the own options by the given one.
+     *
+     * @param[in] options
+     *   The new options.
+     **/
+    void options( const Options &options);
 
     /**
      * @brief Returns the option list as raw data
@@ -92,15 +100,7 @@ class OptionList
      *
      * @return The option list as raw data
      **/
-    RawOptions getRawOptions() const;
-
-    /**
-     * @brief Replaces the own options by the given one.
-     *
-     * @param[in] options
-     *   The new options.
-     **/
-    void setOptions( const Options &options);
+    RawOptions rawOptions() const;
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -114,7 +114,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    bool hasOption( const string &name) const;
+    bool has( const string &name) const;
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -128,7 +128,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    bool hasOption( KnownOptions option) const;
+    bool has( KnownOptions option) const;
 
     /**
      * @brief Obtain for option with the given name
@@ -139,7 +139,7 @@ class OptionList
      * @return The value of the option.
      *   If the option is not set, an empty OptionPointer is returned.
      **/
-    const OptionPtr getOption( const string &name) const;
+    const OptionPtr get( const string &name) const;
 
     /**
      * @brief Sets the given option to the given value.
@@ -152,7 +152,7 @@ class OptionList
      * @param[in] value
      *   The option value.
      */
-    void setOption( const string &name, const string &value);
+    void set( const string &name, const string &value);
 
     /**
      * @brief Set the given option
@@ -163,7 +163,7 @@ class OptionList
      * @param[in] option
      *   The option
      **/
-    void setOption( const OptionPtr option);
+    void set( const OptionPtr option);
 
     /**
      * @brief Remove the option with the given name from the option list.
@@ -171,7 +171,7 @@ class OptionList
      * @param[in] name
      *   The name of the option.
      **/
-    void removeOption( const string &name);
+    void remove( const string &name);
 
     /**
      * @brief Remove the given option from the option list.
@@ -179,7 +179,7 @@ class OptionList
      * @param[in] option
      *   The option
      **/
-    void removeOption( KnownOptions option);
+    void remove( KnownOptions option);
 
     /**
      * @brief Adds the Blocksize option to the option list.
@@ -350,7 +350,7 @@ class OptionList
 
   private:
     //! the options.
-    Options options;
+    Options optionsValue;
 };
 
 }

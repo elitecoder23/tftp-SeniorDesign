@@ -32,9 +32,9 @@ BOOST_AUTO_TEST_CASE( constructor1)
   std::cout << Dump( &(*raw.begin()), raw.size());
 
 
-  BOOST_CHECK( error.getPacketType() == PacketType::Error);
-  BOOST_CHECK( error.getErrorCode() == ErrorCode::NotDefined);
-  BOOST_CHECK( error.getErrorMessage() == "ERROR MESSAGE");
+  BOOST_CHECK( error.packetType() == PacketType::Error);
+  BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined);
+  BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE");
 }
 
 BOOST_AUTO_TEST_CASE( constructor2)
@@ -49,9 +49,9 @@ BOOST_AUTO_TEST_CASE( constructor2)
 
   ErrorPacket error( raw);
 
-  BOOST_CHECK( error.getPacketType() == PacketType::Error);
-  BOOST_CHECK( error.getErrorCode() == ErrorCode::FileNotFound);
-  BOOST_CHECK( error.getErrorMessage() == "ERROR");
+  BOOST_CHECK( error.packetType() == PacketType::Error);
+  BOOST_CHECK( error.errorCode() == ErrorCode::FileNotFound);
+  BOOST_CHECK( error.errorMessage() == "ERROR");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

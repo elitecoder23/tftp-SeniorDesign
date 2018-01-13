@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE( constructor)
 {
   StringOption entry( "test", "value");
 
-  BOOST_CHECK( "test" == entry.getName());
+  BOOST_CHECK( "test" == entry.name());
   BOOST_CHECK( "value" == static_cast< std::string>( entry));
 }
 
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE( assign)
 {
   StringOption entry( "test", "value1");
 
-  BOOST_CHECK( entry.getName() == "test");
+  BOOST_CHECK( entry.name() == "test");
   BOOST_CHECK( static_cast< std::string>( entry) == "value1");
   entry="value2";
   BOOST_CHECK( static_cast< std::string>( entry) == "value2");

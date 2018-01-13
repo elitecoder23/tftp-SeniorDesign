@@ -23,7 +23,7 @@ namespace Packets {
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   const Options::OptionList &options) noexcept:
   Packet( PacketType::OptionsAcknowledgement),
-  options( options)
+  optionsValue( options)
 {
 }
 
@@ -42,46 +42,46 @@ OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
   return *this;
 }
 
-const Options::OptionList& OptionsAcknowledgementPacket::getOptions() const
+const Options::OptionList& OptionsAcknowledgementPacket::options() const
 {
-  return options;
+  return optionsValue;
 }
 
-Options::OptionList& OptionsAcknowledgementPacket::getOptions()
+Options::OptionList& OptionsAcknowledgementPacket::options()
 {
-  return options;
+  return optionsValue;
 }
 
-void OptionsAcknowledgementPacket::setOptions(
+void OptionsAcknowledgementPacket::options(
   const Options::OptionList &options)
 {
-  this->options = options;
+  optionsValue = options;
 }
 
 const OptionsAcknowledgementPacket::string
-OptionsAcknowledgementPacket::getOption(
+OptionsAcknowledgementPacket::option(
   const string &name) const
 {
-  Options::OptionPtr option( options.getOption( name));
+  Options::OptionPtr option( optionsValue.get( name));
 
   return (option) ? static_cast< string>( *option) : string();
 }
 
-void OptionsAcknowledgementPacket::setOption(
-  const std::string &name,
-  const std::string &value)
+void OptionsAcknowledgementPacket::option(
+  const string &name,
+  const string &value)
 {
-  options.setOption( name, value);
+  optionsValue.set( name, value);
 }
 
 OptionsAcknowledgementPacket::operator string() const
 {
-  return (boost::format( "OACK: OPT: \"%s\"") % options.toString()).str();
+  return (boost::format( "OACK: OPT: \"%s\"") % optionsValue.toString()).str();
 }
 
 Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
 {
-  auto rawOptions{ options.getRawOptions()};
+  auto rawOptions{ optionsValue.rawOptions()};
 
   RawTftpPacket rawPacket( 2 + rawOptions.size());
 
@@ -107,7 +107,7 @@ void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   RawTftpPacket::const_iterator packetIt = rawPacket.begin() + 2;
 
   // assign options
-  options = Options::OptionList( packetIt, rawPacket.end());
+  optionsValue = Options::OptionList( packetIt, rawPacket.end());
 }
 
 }

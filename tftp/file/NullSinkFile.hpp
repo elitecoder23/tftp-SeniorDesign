@@ -51,14 +51,14 @@ class NullSinkFile : public ReceiveDataHandler
      * If size is given on constructing this file, handle it.
      * Otherwise return true.
      **/
-    virtual bool receivedTransferSize( uint64_t transferSize) override final;
+    bool receivedTransferSize( uint64_t transferSize) final;
 
     /**
      * @copydoc ReceiveDataHandler::receviedData
      *
      * Drops the data immediately.
      **/
-    virtual void receviedData( const DataType &data) noexcept override final;
+    void receviedData( const DataType &data) noexcept final;
 
   private:
     //! Optional size (used for options negotiation)

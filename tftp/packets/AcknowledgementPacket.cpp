@@ -21,7 +21,7 @@ namespace Packets {
 
 AcknowledgementPacket::AcknowledgementPacket( const BlockNumber blockNumber)
   noexcept:Packet( PacketType::Acknowledgement),
-  blockNumber( blockNumber)
+  blockNumberValue( blockNumber)
 {
 }
 
@@ -39,19 +39,19 @@ AcknowledgementPacket& AcknowledgementPacket::operator=(
   return *this;
 }
 
-BlockNumber AcknowledgementPacket::getBlockNumber() const
+BlockNumber AcknowledgementPacket::blockNumber() const
 {
-  return blockNumber;
+  return blockNumberValue;
 }
 
-void AcknowledgementPacket::setBlockNumber( const BlockNumber blockBumber)
+void AcknowledgementPacket::blockNumber( const BlockNumber blockBumber)
 {
-  this->blockNumber = blockBumber;
+  blockNumberValue = blockBumber;
 }
 
 AcknowledgementPacket::operator string() const
 {
-  return (boost::format( "ACK: BLOCKNO: %d") % getBlockNumber()).str();
+  return (boost::format( "ACK: BLOCKNO: %d") % blockNumber()).str();
 }
 
 Tftp::RawTftpPacket AcknowledgementPacket::encode() const
@@ -64,7 +64,7 @@ Tftp::RawTftpPacket AcknowledgementPacket::encode() const
   auto packetIt( rawPacket.begin() + HeaderSize);
 
   // Add block number
-  setInt( packetIt, static_cast< uint16_t>( blockNumber));
+  setInt( packetIt, static_cast< uint16_t>( blockNumberValue));
 
   return rawPacket;
 }
@@ -82,7 +82,7 @@ void AcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   auto packetIt( rawPacket.begin() + HeaderSize);
 
   // decode block number
-  getInt< uint16_t>( packetIt, blockNumber);
+  getInt< uint16_t>( packetIt, blockNumberValue);
 }
 
 }

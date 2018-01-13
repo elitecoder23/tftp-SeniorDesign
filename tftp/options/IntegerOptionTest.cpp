@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE( constructor8u)
 
   BOOST_CHECK( "50" == static_cast< std::string>( entry));
   BOOST_CHECK( 50 == entry);
-  BOOST_CHECK( "test" == entry.getName());
+  BOOST_CHECK( "test" == entry.name());
 }
 
 //! constructor test
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE( constructor16u)
 
   BOOST_CHECK( "50" == static_cast< std::string>( entry));
   BOOST_CHECK( 50 == entry);
-  BOOST_CHECK( "test" == entry.getName());
+  BOOST_CHECK( "test" == entry.name());
 }
 
 //! assignment test

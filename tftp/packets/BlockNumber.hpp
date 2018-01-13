@@ -32,6 +32,9 @@ namespace Packets {
 class BlockNumber
 {
   public:
+    //! Initialises a block number with value 0.
+    BlockNumber() noexcept;
+
     /**
      * @brief Generates a new block number.
      *
@@ -40,7 +43,7 @@ class BlockNumber
      * @param[in] blockNumber
      *   Base block number.
      **/
-    explicit BlockNumber( uint16_t blockNumber = 0U) noexcept;
+    explicit BlockNumber( uint16_t blockNumber) noexcept;
 
     //! Default destructor
     ~BlockNumber() noexcept = default;

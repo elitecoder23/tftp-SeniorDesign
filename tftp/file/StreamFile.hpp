@@ -72,14 +72,14 @@ class StreamFile: public TftpFile
      *
      * @return The stream object
      **/
-    const StreamType& getStream() const;
+    const StreamType& stream() const;
 
     /**
      * @brief Returns the stream object.
      *
      * @return The stream object
      **/
-    StreamType& getStream();
+    StreamType& stream();
 
     /**
      * @brief updates the file size info.
@@ -87,40 +87,40 @@ class StreamFile: public TftpFile
      * @param[in] size
      *   The new size information
      **/
-    void setSize( size_t size) noexcept;
+    void size( size_t size) noexcept;
 
     /**
      * @copydoc TftpFile::finished()
      *
      * Flushes the stream.
      **/
-    virtual void finished() noexcept override final;
+    void finished() noexcept final;
 
     /**
      * @copydoc TftpFile::receivedTransferSize()
      **/
-    virtual bool receivedTransferSize( uint64_t transferSize) override final;
+    bool receivedTransferSize( uint64_t transferSize) final;
 
     /**
      * @copydoc TftpFile::receviedData()
      **/
-    virtual void receviedData( const DataType &data) noexcept override final;
+    void receviedData( const DataType &data) noexcept final;
 
     /**
      * @copydoc TftpFile::requestedTransferSize()
      **/
-    virtual bool requestedTransferSize( uint64_t &transferSize) override final;
+    bool requestedTransferSize( uint64_t &transferSize) final;
 
     /**
      * @copydoc TftpFile::sendData()
      **/
-    virtual DataType sendData( size_t maxSize) noexcept override final;
+    DataType sendData( size_t maxSize) noexcept final;
 
   private:
     //! the data stream
-    StreamType stream;
+    StreamType streamValue;
     //! file size
-    boost::optional< size_t> size;
+    boost::optional< size_t> sizeValue;
 };
 
 }

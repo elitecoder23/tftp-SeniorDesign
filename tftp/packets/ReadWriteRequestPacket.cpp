@@ -21,7 +21,7 @@
 namespace Tftp {
 namespace Packets {
 
-ReadWriteRequestPacket::string ReadWriteRequestPacket::getMode(
+ReadWriteRequestPacket::string ReadWriteRequestPacket::decodeMode(
   const TransferMode mode)
 {
   switch (mode)
@@ -36,21 +36,11 @@ ReadWriteRequestPacket::string ReadWriteRequestPacket::getMode(
       return "MAIL";
 
     default:
-      //! @throw InvalidPacketException if mode cannot be decoded
-      BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-        AdditionalInfo( "Invalid mode"));
+      return string();
   }
 }
 
-ReadWriteRequestPacket& ReadWriteRequestPacket::operator=(
-  const RawTftpPacket &rawPacket)
-{
-  Packet::operator =( rawPacket);
-  decodeBody( rawPacket);
-  return *this;
-}
-
-TransferMode ReadWriteRequestPacket::getMode( const string &mode)
+TransferMode ReadWriteRequestPacket::decodeMode( const string &mode)
 {
   //! @todo check implementation of transform
   string upperMode = mode;
@@ -76,73 +66,77 @@ TransferMode ReadWriteRequestPacket::getMode( const string &mode)
     return TransferMode::MAIL;
   }
 
-  BOOST_THROW_EXCEPTION(
-    InvalidPacketException() << AdditionalInfo( "Invalid string: " + mode));
-
-  // never return
   return TransferMode::INVALID;
 }
 
-const ReadWriteRequestPacket::string& ReadWriteRequestPacket::getFilename() const
+ReadWriteRequestPacket& ReadWriteRequestPacket::operator=(
+  const RawTftpPacket &rawPacket)
 {
-  return filename;
+  Packet::operator =( rawPacket);
+  decodeBody( rawPacket);
+  return *this;
 }
 
-void ReadWriteRequestPacket::setFilename( const string &filename)
+const ReadWriteRequestPacket::string& ReadWriteRequestPacket::filename() const
 {
-  this->filename = filename;
+  return filenameValue;
 }
 
-Tftp::TransferMode ReadWriteRequestPacket::getMode() const
+void ReadWriteRequestPacket::filename( const string &filename)
 {
-  return getMode( mode);
+  filenameValue = filename;
 }
 
-void ReadWriteRequestPacket::setMode( const TransferMode mode)
+Tftp::TransferMode ReadWriteRequestPacket::mode() const
 {
-  this->mode = getMode( mode);
+  return decodeMode( modeValue);
 }
 
-void ReadWriteRequestPacket::setMode( const string &mode)
+void ReadWriteRequestPacket::mode( const TransferMode mode)
 {
-  this->mode = mode;
+  modeValue = decodeMode( mode);
 }
 
-const Options::OptionList& ReadWriteRequestPacket::getOptions() const
+void ReadWriteRequestPacket::mode( const string &mode)
 {
-  return options;
+  modeValue = mode;
 }
 
-Options::OptionList& ReadWriteRequestPacket::getOptions()
+const Options::OptionList& ReadWriteRequestPacket::options() const
 {
-  return options;
+  return optionsValue;
 }
 
-void ReadWriteRequestPacket::setOptions( const Options::OptionList &options)
+Options::OptionList& ReadWriteRequestPacket::options()
 {
-  this->options = options;
+  return optionsValue;
 }
 
-const ReadWriteRequestPacket::string ReadWriteRequestPacket::getOption(
+void ReadWriteRequestPacket::options( const Options::OptionList &options)
+{
+  optionsValue = options;
+}
+
+const ReadWriteRequestPacket::string ReadWriteRequestPacket::option(
   const string &name) const
 {
-  Options::OptionPtr option( options.getOption( name));
+  Options::OptionPtr option( optionsValue.get( name));
 
   return (option) ? static_cast< string>( *option) : string();
 }
 
-void ReadWriteRequestPacket::setOption( const string &name, const string &value)
+void ReadWriteRequestPacket::option( const string &name, const string &value)
 {
-  options.setOption( name, value);
+  optionsValue.set( name, value);
 }
 
 ReadWriteRequestPacket::operator string() const
 {
   return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
     Packet::operator string() %
-    getFilename() %
-    getMode( getMode()) %
-    getOptions().toString()).str();
+    filenameValue %
+    modeValue %
+    optionsValue.toString()).str();
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
@@ -151,9 +145,9 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   const TransferMode mode,
   const Options::OptionList &options):
   Packet( packetType),
-  filename( filename),
-  mode( getMode( mode)),
-  options( options)
+  filenameValue( filename),
+  modeValue( decodeMode( mode)),
+  optionsValue( options)
 {
   switch (packetType)
   {
@@ -190,12 +184,12 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
 Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
 {
-  auto rawOptions{ options.getRawOptions()};
+  auto rawOptions{ optionsValue.rawOptions()};
 
   RawTftpPacket rawPacket(
     HeaderSize +
-    filename.size() + 1 +
-    mode.size() + 1 +
+    filenameValue.size() + 1 +
+    modeValue.size() + 1 +
     rawOptions.size());
 
   insertHeader( rawPacket);
@@ -203,12 +197,12 @@ Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
   RawTftpPacket::iterator packetIt( rawPacket.begin() + HeaderSize);
 
   // encode filename
-  packetIt = std::copy( filename.begin(), filename.end(), packetIt);
+  packetIt = std::copy( filenameValue.begin(), filenameValue.end(), packetIt);
   *packetIt = 0;
   ++packetIt;
 
   // encode mode
-  packetIt = std::copy( mode.begin(), mode.end(), packetIt);
+  packetIt = std::copy( modeValue.begin(), modeValue.end(), packetIt);
   *packetIt = 0;
   ++packetIt;
 
@@ -245,7 +239,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "No 0-termination for filename found"));
   }
-  filename.assign( packetIt, filenameEnd);
+  filenameValue.assign( packetIt, filenameEnd);
   packetIt = filenameEnd + 1;
 
   // mode
@@ -257,11 +251,11 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "No 0-termination for operation found"));
   }
-  mode.assign( packetIt, modeEnd);
+  modeValue.assign( packetIt, modeEnd);
   packetIt = modeEnd + 1;
 
   // assign options
-  options = Options::OptionList( packetIt, rawPacket.end());
+  optionsValue = Options::OptionList( packetIt, rawPacket.end());
 }
 
 }

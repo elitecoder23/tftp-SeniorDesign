@@ -20,9 +20,14 @@ namespace Packets {
 BOOST_AUTO_TEST_SUITE( TftpBlockNumber)
 
 //! Constructor test
-BOOST_AUTO_TEST_CASE( constructor )
+BOOST_AUTO_TEST_CASE( constructor1 )
 {
   BOOST_CHECK( 0 == BlockNumber());
+}
+
+//! Constructor test
+BOOST_AUTO_TEST_CASE( constructor2 )
+{
   BOOST_CHECK( 1 == BlockNumber( 1));
   BOOST_CHECK( 0xFFFFU == BlockNumber( 0xFFFFU));
 }
