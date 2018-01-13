@@ -166,7 +166,7 @@ enum class TransferMode
   NETASCII, //!< NETASCII transfer mode.
   MAIL,     //!< MAIL transfer mode (deprecated).
 
-  INVALID   //!< Invalid value
+  Invalid   //!< Invalid value
 };
 
 /**

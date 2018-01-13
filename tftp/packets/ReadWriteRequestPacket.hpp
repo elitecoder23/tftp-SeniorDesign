@@ -95,14 +95,6 @@ class ReadWriteRequestPacket: public Packet
     void mode( TransferMode mode);
 
     /**
-     * @brief Sets the transfer mode.
-     *
-     * @param[in] mode
-     *   The new transfer mode.
-     **/
-    void mode( const string &mode);
-
-    /**
      * @brief Returns the set TFTP options.
      *
      * @return The TFTP options.
@@ -207,7 +199,7 @@ class ReadWriteRequestPacket: public Packet
     //! stored request filename
     string filenameValue;
     //! stored transfer mode
-    string modeValue;
+    TransferMode modeValue;
     //! stored options
     Options::OptionList optionsValue;
 };

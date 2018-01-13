@@ -66,7 +66,7 @@ TransferMode ReadWriteRequestPacket::decodeMode( const string &mode)
     return TransferMode::MAIL;
   }
 
-  return TransferMode::INVALID;
+  return TransferMode::Invalid;
 }
 
 ReadWriteRequestPacket& ReadWriteRequestPacket::operator=(
@@ -89,15 +89,10 @@ void ReadWriteRequestPacket::filename( const string &filename)
 
 Tftp::TransferMode ReadWriteRequestPacket::mode() const
 {
-  return decodeMode( modeValue);
+  return modeValue;
 }
 
 void ReadWriteRequestPacket::mode( const TransferMode mode)
-{
-  modeValue = decodeMode( mode);
-}
-
-void ReadWriteRequestPacket::mode( const string &mode)
 {
   modeValue = mode;
 }
@@ -135,7 +130,7 @@ ReadWriteRequestPacket::operator string() const
   return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
     Packet::operator string() %
     filenameValue %
-    modeValue %
+    decodeMode( modeValue) %
     optionsValue.toString()).str();
 }
 
@@ -146,7 +141,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   const Options::OptionList &options):
   Packet( packetType),
   filenameValue( filename),
-  modeValue( decodeMode( mode)),
+  modeValue( mode),
   optionsValue( options)
 {
   switch (packetType)
@@ -184,12 +179,13 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
 Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
 {
-  auto rawOptions{ optionsValue.rawOptions()};
+  const auto mode{ decodeMode( modeValue)};
+  const auto rawOptions{ optionsValue.rawOptions()};
 
   RawTftpPacket rawPacket(
     HeaderSize +
     filenameValue.size() + 1 +
-    modeValue.size() + 1 +
+    mode.size() + 1 +
     rawOptions.size());
 
   insertHeader( rawPacket);
@@ -201,8 +197,8 @@ Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
   *packetIt = 0;
   ++packetIt;
 
-  // encode mode
-  packetIt = std::copy( modeValue.begin(), modeValue.end(), packetIt);
+  // encode transfer mode
+  packetIt = std::copy( mode.begin(), mode.end(), packetIt);
   *packetIt = 0;
   ++packetIt;
 
@@ -242,7 +238,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
   filenameValue.assign( packetIt, filenameEnd);
   packetIt = filenameEnd + 1;
 
-  // mode
+  // transfer mode
   RawTftpPacket::const_iterator modeEnd =
     std::find( packetIt, rawPacket.end(), 0);
 
@@ -251,7 +247,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "No 0-termination for operation found"));
   }
-  modeValue.assign( packetIt, modeEnd);
+  modeValue = decodeMode( string{ packetIt, modeEnd});
   packetIt = modeEnd + 1;
 
   // assign options

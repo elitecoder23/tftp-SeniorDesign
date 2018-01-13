@@ -131,6 +131,7 @@ add_library(
   packets/ErrorPacketTest.cpp
   packets/OptionsAcknowledgementPacketTest.cpp
   packets/ReadRequestPacketTest.cpp
+  packets/ReadWriteRequestPacketTest.cpp
   packets/WriteRequestPacketTest.cpp)
 
 target_compile_options( 
