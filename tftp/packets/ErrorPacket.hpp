@@ -100,7 +100,7 @@ class ErrorPacket: public Packet
      **/
     void errorMessage( const string &errorMessage);
 
-    //! @copydoc setErrorMessage(const string&)
+    //! @copydoc errorMessage(const string&)
     void errorMessage( string &&errorMessage);
 
   private:
