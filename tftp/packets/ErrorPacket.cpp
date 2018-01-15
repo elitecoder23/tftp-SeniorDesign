@@ -55,7 +55,7 @@ ErrorPacket& ErrorPacket::operator=(
 ErrorPacket::operator string() const
 {
   return (boost::format( "ERR: EC: %s (%d) - DESC: \"%s\"") %
-    ErrorCodeDescription::getInstance().getDescription( errorCode()).name %
+    ErrorCodeDescription::instance().findName( errorCode()) %
     static_cast< uint16_t>( errorCode()) %
     errorMessage()).str();
 }
