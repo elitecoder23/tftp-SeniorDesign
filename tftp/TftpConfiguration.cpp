@@ -70,7 +70,7 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
   options.add_options()
   ("server-port",
     boost::program_options::value( &tftpServerPort)->default_value(
-      tftpServerPort),
+      tftpServerPort)->value_name( "port"),
     "UDP port, where the server is listen."
   )
   (
@@ -79,7 +79,7 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
     boost::program_options::value< uint16_t>()->notifier(
       [this]( const uint16_t &value){
         this->blockSizeOption = value;
-    }),
+    })->value_name( "blocksize"),
     "blocksize of transfers to use."
   )
   (
@@ -89,8 +89,8 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
       DefaultTftpReceiveTimeout)->notifier(
       [this]( const uint16_t &value){
         this->timeoutOption = static_cast< uint8_t>( value);
-    }),
-    "If set handles the timeout option negotiation."
+    })->value_name( "timeout"),
+    "If set handles the timeout option negotiation (seconds)."
   )
   (
     "handle-transfer-size-option",
@@ -104,7 +104,7 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
 Options::OptionList TftpConfiguration::getClientOptions(
   const Options::OptionList &baseOptions) const
 {
-  Options::OptionList options = baseOptions;
+  Options::OptionList options{ baseOptions};
 
   if ( handleTransferSizeOption)
   {
@@ -127,7 +127,7 @@ Options::OptionList TftpConfiguration::getClientOptions(
 Options::OptionList TftpConfiguration::getServerOptions(
   const Options::OptionList &baseOptions) const
 {
-  Options::OptionList options = baseOptions;
+  Options::OptionList options{ baseOptions};
 
   if ( handleTransferSizeOption)
   {
@@ -144,7 +144,7 @@ Options::OptionList TftpConfiguration::getServerOptions(
   if ( timeoutOption)
   {
     options.addTimeoutOptionServer(
-      BlocksizeOptionMin,
+      TimeoutOptionMin,
       timeoutOption.get());
   }
 

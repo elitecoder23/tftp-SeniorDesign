@@ -30,9 +30,7 @@ RequestTypeDescription::RequestTypeDescription():
 
 std::istream& operator>>( std::istream& st, RequestType& requestType)
 {
-  using std::string;
-
-  string requestTypeStr;
+  std::string requestTypeStr;
 
   st >> requestTypeStr;
 
