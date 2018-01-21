@@ -87,7 +87,7 @@ class Option
     virtual operator string() const = 0;
 
     /**
-     * @brief Option negotiation on server side.
+     * @brief %Option negotiation.
      *
      * This function is called, when the TFTP server receives options within
      * RRQ/ WRQ packets.
@@ -102,6 +102,8 @@ class Option
      *   The input option
      *
      * @return Option negotiation result
+     * @retval OptionPtr()
+     *   If the option value is not acceptable.
      **/
     virtual OptionPtr negotiate( const string &optionValue) const noexcept = 0;
 

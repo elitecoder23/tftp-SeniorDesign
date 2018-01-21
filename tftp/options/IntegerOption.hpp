@@ -84,17 +84,9 @@ class BaseIntegerOption: public Option
     BaseIntegerOption& operator=( const string &value);
 
     /**
-     * @copybrief Option::negotiate()
+     * @copydoc Option::negotiate()
      *
-     * Calls #negotiate(IntegerType) const for concrete option
-     * negotiation.
-     *
-     * @param[in] optionValue
-     *   The option value received from the client.
-     *
-     * @return The negotiated Option.
-     * @retval OptionPointer()
-     *   If option negotiation failed.
+     * Calls #negotiate(IntegerType) const for concrete option negotiation.
      **/
     OptionPtr negotiate( const string &optionValue) const noexcept final;
 
@@ -111,7 +103,7 @@ class BaseIntegerOption: public Option
     BaseIntegerOption( const string &name, IntegerType value);
 
     /**
-     * @copybrief Option::negotiate()
+     * @brief @copybrief Option::negotiate()
      *
      * @param[in] optionValue
      *   The value to negotiate.
@@ -206,6 +198,7 @@ typename BaseIntegerOption< IntT>::string BaseIntegerOption< IntT>::toString(
   return boost::lexical_cast< string>( value);
 }
 
+// Full specialisation for uint8_t
 template<>
 inline typename BaseIntegerOption< uint8_t>::string
 BaseIntegerOption< uint8_t>::toString(
@@ -221,6 +214,7 @@ typename BaseIntegerOption< IntT>::IntegerType BaseIntegerOption< IntT>::toInt(
   return boost::lexical_cast< IntT>( value);
 }
 
+// Full specialisation for uint8_t
 template<>
 inline typename BaseIntegerOption< uint8_t>::IntegerType
 BaseIntegerOption< uint8_t>::toInt( const string &value)
@@ -447,7 +441,7 @@ class NegotiateMinMaxRange
      * @param[in] value
      *   The value to negotiate.
      *
-     * @return [value] if [minValue] >= [value] <= [maxValue] otherwise fail
+     * @return [value] if [minValue] >= [value] <= [maxValue], otherwise fail
      *   negotiation.
      **/
     boost::optional< IntT> operator()( const IntT value) const
