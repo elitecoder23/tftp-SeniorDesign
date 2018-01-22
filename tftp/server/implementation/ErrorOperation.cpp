@@ -23,7 +23,7 @@ ErrorOperation::ErrorOperation(
   const UdpAddressType &clientAddress,
   const UdpAddressType &from,
   const ErrorCode errorCode,
-  const string &errorMessage,
+  const std::string &errorMessage,
   OperationCompletedHandler completionHandler)
 try :
   completionHandler( completionHandler),
@@ -62,12 +62,12 @@ ErrorOperation::ErrorOperation(
   UdpAddressType &&clientAddress,
   UdpAddressType &&from,
   ErrorCode errorCode,
-  string &&errorMessage,
+  std::string &&errorMessage,
   OperationCompletedHandler completionHandler)
 try :
   completionHandler( completionHandler),
   socket( ioService),
-  errorInfo( Packets::ErrorPacket( errorCode, errorMessage))
+  errorInfo( Packets::ErrorPacket( errorCode, std::move( errorMessage)))
 {
   try
   {
@@ -100,7 +100,7 @@ ErrorOperation::ErrorOperation(
   boost::asio::io_service &ioService,
   const UdpAddressType &clientAddress,
   const ErrorCode errorCode,
-  const string &errorMessage,
+  const std::string &errorMessage,
   OperationCompletedHandler completionHandler)
 try :
   completionHandler( completionHandler),
@@ -133,12 +133,12 @@ ErrorOperation::ErrorOperation(
   boost::asio::io_service &ioService,
   UdpAddressType &&clientAddress,
   const ErrorCode errorCode,
-  string &&errorMessage,
+  std::string &&errorMessage,
   OperationCompletedHandler completionHandler)
 try :
   completionHandler( completionHandler),
   socket( ioService),
-  errorInfo( Packets::ErrorPacket( errorCode, errorMessage))
+  errorInfo( Packets::ErrorPacket( errorCode, std::move( errorMessage)))
 {
   try
   {
@@ -193,6 +193,11 @@ const ErrorOperation::ErrorInfo& ErrorOperation::getErrorInfo() const
 
 void ErrorOperation::sendError( const Packets::ErrorPacket &error)
 {
+  BOOST_LOG_FUNCTION();
+
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "TX: "
+    << static_cast< std::string>( error);
+
   try
   {
     socket.send( boost::asio::buffer( static_cast< RawTftpPacket>( error)));

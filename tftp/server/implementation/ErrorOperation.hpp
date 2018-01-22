@@ -34,9 +34,6 @@ namespace Server {
 class ErrorOperation: public Operation
 {
   public:
-    //! string type
-    using string = std::string;
-
     /**
      * @brief Initialises the error operation.
      *
@@ -58,7 +55,7 @@ class ErrorOperation: public Operation
       const UdpAddressType &clientAddress,
       const UdpAddressType &from,
       ErrorCode errorCode,
-      const string &errorMessage,
+      const std::string &errorMessage,
       OperationCompletedHandler completionHandler);
 
     /**
@@ -82,7 +79,7 @@ class ErrorOperation: public Operation
       UdpAddressType &&clientAddress,
       UdpAddressType &&from,
       ErrorCode errorCode,
-      string &&errorMessage,
+      std::string &&errorMessage,
       OperationCompletedHandler completionHandler);
 
     /**
@@ -103,7 +100,7 @@ class ErrorOperation: public Operation
       boost::asio::io_service &ioService,
       const UdpAddressType &clientAddress,
       ErrorCode errorCode,
-      const string &errorMessage,
+      const std::string &errorMessage,
       OperationCompletedHandler completionHandler);
 
     /**
@@ -124,7 +121,7 @@ class ErrorOperation: public Operation
       boost::asio::io_service &ioService,
       UdpAddressType &&clientAddress,
       ErrorCode errorCode,
-      string &&errorMessage,
+      std::string &&errorMessage,
       OperationCompletedHandler completionHandler);
 
     //! Default destructor.

@@ -190,6 +190,8 @@ void OperationImpl::finished(
 
 void OperationImpl::send( const Packets::Packet &packet)
 {
+  BOOST_LOG_FUNCTION();
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "TX: "
     << static_cast< std::string>( packet);
 
