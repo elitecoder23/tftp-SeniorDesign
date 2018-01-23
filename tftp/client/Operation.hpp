@@ -76,7 +76,7 @@ class Operation
      * @retval ErrorInfo()
      *   If no error occurred.
      **/
-    virtual const ErrorInfo& getErrorInfo() const = 0;
+    virtual const ErrorInfo& errorInfo() const = 0;
 };
 
 }

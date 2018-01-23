@@ -46,56 +46,40 @@ class TftpClientImpl : public TftpClientInternal
       const Options::OptionList& additionalOptions);
 
     //!@copydoc TftpClient::entry
-    virtual void entry() noexcept override final;
+    void entry() noexcept final;
 
     //!@copydoc TftpClient::stop
-    virtual void stop() override final;
+    void stop() final;
 
     //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler, const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
-    virtual OperationPtr createReadRequestOperation(
+    OperationPtr createReadRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &serverAddress,
-      const string &filename,
+      const UdpAddressType &remote,
+      const std::string &filename,
       TransferMode mode,
-      const UdpAddressType &from) override final;
-
-    //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler, const UdpAddressType &,const string &, TransferMode)
-    virtual OperationPtr createReadRequestOperation(
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const UdpAddressType &serverAddress,
-      const string &filename,
-      TransferMode mode) override final;
+      const UdpAddressType &local) final;
 
     //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler, const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
-    virtual OperationPtr createWriteRequestOperation(
+    OperationPtr createWriteRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &serverAddress,
-      const string &filename,
+      const UdpAddressType &remote,
+      const std::string &filename,
       TransferMode mode,
-      const UdpAddressType &from) override final;
+      const UdpAddressType &local) final;
 
-    //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler, const UdpAddressType &,const string &, TransferMode)
-    virtual OperationPtr createWriteRequestOperation(
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const UdpAddressType &serverAddress,
-      const string &filename,
-      TransferMode mode) override final;
+    //! @copydoc TftpClientInternal::configuration
+    const TftpConfiguration& configuration() const final;
 
-    //! @copydoc TftpClientInternal::getConfiguration
-    virtual const TftpConfiguration& getConfiguration() const override final;
-
-    //! @copydoc TftpClientInternal::getOptionList
-    virtual const Options::OptionList& getOptionList() const override final;
+    //! @copydoc TftpClientInternal::options
+    const Options::OptionList& options() const final;
 
   private:
     //! The stored TFTP client configuration
-    const TftpConfiguration configuration;
+    const TftpConfiguration configurationV;
     //! The stored TFTP options
-    const Options::OptionList options;
+    const Options::OptionList optionsV;
     //! The IO service, which handles the asynchronous receive operation
     boost::asio::io_service ioService;
     //! IO-Service dummy work to keep IO-servie loops running

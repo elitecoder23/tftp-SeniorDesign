@@ -27,40 +27,18 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
-  const UdpAddressType &serverAddress,
+  const UdpAddressType &remote,
   const string &filename,
   const TransferMode mode,
-  const UdpAddressType &from):
+  const UdpAddressType &local):
   OperationImpl(
     ioService,
     completionHandler,
     tftpClient,
-    serverAddress,
+    remote,
     filename,
     mode,
-    from),
-  dataHandler( dataHandler),
-  transmitDataSize( DefaultDataSize),
-  lastDataPacketTransmitted( false),
-  lastTransmittedBlockNumber( 0)
-{
-}
-
-WriteRequestOperationImpl::WriteRequestOperationImpl(
-  boost::asio::io_service &ioService,
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const TftpClientInternal &tftpClient,
-  const UdpAddressType &serverAddress,
-  const string &filename,
-  const TransferMode mode):
-  OperationImpl(
-    ioService,
-    completionHandler,
-    tftpClient,
-    serverAddress,
-    filename,
-    mode),
+    local),
   dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
@@ -79,7 +57,7 @@ void WriteRequestOperationImpl::start()
     lastTransmittedBlockNumber = 0;
 
     // if Transfer Size option is set, query them from the handler
-    if (getOptions().hasTransferSizeOption())
+    if (options().hasTransferSizeOption())
     {
       uint64_t transferSize;
 
@@ -87,20 +65,20 @@ void WriteRequestOperationImpl::start()
       if (dataHandler->requestedTransferSize( transferSize))
       {
         // set transfer size TFTP option
-        getOptions().addTransferSizeOption( transferSize);
+        options().addTransferSizeOption( transferSize);
       }
       else
       {
         // otherwise remove this option
-        getOptions().removeTransferSizeOption();
+        options().removeTransferSizeOption();
       }
     }
 
     // send write request packet
     sendFirst( Packets::WriteRequestPacket(
-      getFilename(),
-      getMode(),
-      getOptions()));
+      filename(),
+      mode(),
+      options()));
 
     // wait for answers
     OperationImpl::start();
@@ -212,10 +190,10 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
-  const auto &options( optionsAcknowledgementPacket.options());
+  const auto &remoteOptions( optionsAcknowledgementPacket.options());
 
   // check empty options
-  if (options.empty())
+  if (remoteOptions.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Received option list is empty";
@@ -231,7 +209,8 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // perform option negotiation
-  OptionList negotiatedOptions = getOptions().negotiateClient( options);
+  const auto negotiatedOptions{ options().negotiateClient( remoteOptions)};
+
   if (negotiatedOptions.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
@@ -254,7 +233,7 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   // check timeout option
   if (0 != negotiatedOptions.getTimeoutOption())
   {
-    setReceiveTimeout( negotiatedOptions.getTimeoutOption());
+    receiveTimeout( negotiatedOptions.getTimeoutOption());
   }
 
   // Transfer size option is not checked here (already performed during option negotiation)

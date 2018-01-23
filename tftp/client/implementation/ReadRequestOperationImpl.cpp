@@ -27,39 +27,18 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
-  const UdpAddressType &serverAddress,
+  const UdpAddressType &remote,
   const string &filename,
   const TransferMode mode,
-  const UdpAddressType &from) :
+  const UdpAddressType &local) :
   OperationImpl(
     ioService,
     completionHandler,
     tftpClient,
-    serverAddress,
+    remote,
     filename,
     mode,
-    from),
-  dataHandler( dataHandler),
-  receiveDataSize( DefaultDataSize),
-  lastReceivedBlockNumber( 0)
-{
-}
-
-ReadRequestOperationImpl::ReadRequestOperationImpl(
-  boost::asio::io_service &ioService,
-  ReceiveDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const TftpClientInternal &tftpClient,
-  const UdpAddressType &serverAddress,
-  const string &filename,
-  const TransferMode mode) :
-  OperationImpl(
-    ioService,
-    completionHandler,
-    tftpClient,
-    serverAddress,
-    filename,
-    mode),
+    local),
   dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
@@ -77,7 +56,7 @@ void ReadRequestOperationImpl::start()
 
     // send read request packet
     sendFirst(
-      Packets::ReadRequestPacket( getFilename(), getMode(), getOptions()));
+      Packets::ReadRequestPacket( filename(), mode(), options()));
 
     // wait for answers
     OperationImpl::start();
@@ -205,10 +184,10 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
-  const auto &options{ optionsAcknowledgementPacket.options()};
+  const auto &remoteOptions{ optionsAcknowledgementPacket.options()};
 
   // check empty options
-  if (options.empty())
+  if (remoteOptions.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Received option list is empty";
@@ -225,7 +204,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // perform option negotiation
-  OptionList negotiatedOptions = getOptions().negotiateClient( options);
+  const auto negotiatedOptions{ options().negotiateClient( remoteOptions)};
 
   // Check empty options list
   if (negotiatedOptions.empty())
@@ -252,7 +231,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
     // set maximum receive data size if necessary
     if (receiveDataSize > DefaultDataSize)
     {
-      setMaxReceivePacketSize(
+      maxReceivePacketSize(
         receiveDataSize + DefaultTftpDataPacketHeaderSize);
     }
   }
@@ -260,7 +239,7 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   // check timeout option
   if (0 != negotiatedOptions.getTimeoutOption())
   {
-    setReceiveTimeout( negotiatedOptions.getTimeoutOption());
+    receiveTimeout( negotiatedOptions.getTimeoutOption());
   }
 
   // check transfer size option

@@ -23,8 +23,8 @@ namespace Client {
 TftpClientImpl::TftpClientImpl(
   const TftpConfiguration &configuration,
   const Options::OptionList& additionalOptions):
-  configuration( configuration),
-  options( configuration.getClientOptions( additionalOptions)),
+  configurationV( configuration),
+  optionsV( configuration.getClientOptions( additionalOptions)),
   work( ioService)
 {
 }
@@ -55,83 +55,49 @@ void TftpClientImpl::stop()
 OperationPtr TftpClientImpl::createReadRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &serverAddress,
+  const UdpAddressType &remote,
   const string &filename,
   const TransferMode mode,
-  const UdpAddressType &from)
+  const UdpAddressType &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioService,
     dataHandler,
     completionHandler,
     *this,
-    serverAddress,
+    remote,
     filename,
     mode,
-    from);
-}
-
-OperationPtr TftpClientImpl::createReadRequestOperation(
-  ReceiveDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const UdpAddressType &serverAddress,
-  const string &filename,
-  const TransferMode mode)
-{
-  return std::make_shared< ReadRequestOperationImpl>(
-    ioService,
-    dataHandler,
-    completionHandler,
-    *this,
-    serverAddress,
-    filename,
-    mode);
+    local);
 }
 
 OperationPtr TftpClientImpl::createWriteRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &serverAddress,
+  const UdpAddressType &remote,
   const string &filename,
   const TransferMode mode,
-  const UdpAddressType &from)
+  const UdpAddressType &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioService,
     dataHandler,
     completionHandler,
     *this,
-    serverAddress,
+    remote,
     filename,
     mode,
-    from);
+    local);
 }
 
-OperationPtr TftpClientImpl::createWriteRequestOperation(
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const UdpAddressType &serverAddress,
-  const string &filename,
-  const TransferMode mode)
+const Tftp::TftpConfiguration& TftpClientImpl::configuration() const
 {
-  return std::make_shared< WriteRequestOperationImpl>(
-    ioService,
-    dataHandler,
-    completionHandler,
-    *this,
-    serverAddress,
-    filename,
-    mode);
+  return configurationV;
 }
 
-const Tftp::TftpConfiguration& TftpClientImpl::getConfiguration() const
+const Options::OptionList& TftpClientImpl::options() const
 {
-  return configuration;
-}
-
-const Options::OptionList& TftpClientImpl::getOptionList() const
-{
-  return options;
+  return optionsV;
 }
 
 }

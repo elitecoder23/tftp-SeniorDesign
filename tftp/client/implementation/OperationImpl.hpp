@@ -69,18 +69,15 @@ class OperationImpl :
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage = string()) final;
+      const string &errorMessage = {}) final;
 
     //! @copydoc Operation::abort
-    void abort() override final;
+    void abort() final;
 
-    //! @copydoc Operation::getErrorInfo
-    const ErrorInfo& getErrorInfo() const final;
+    //! @copydoc Operation::errorInfo
+    const ErrorInfo& errorInfo() const final;
 
   protected:
-    //! TFTP options (list) @todo rename to Options
-    using OptionList = Options::OptionList;
-
     /**
      * @brief Initialises the operation.
      *
@@ -90,68 +87,44 @@ class OperationImpl :
      *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
      *   The TFTP client.
-     * @param[in] serverAddress
+     * @param[in] remote
      *   Where the connection should be established to.
      * @param[in] filename
      *   Which file shall be requested
      * @param[in] mode
      *   The transfer mode
-     * @param[in] from
-     *   Optional parameter to define the communication source
+     * @param[in] local
+     *   Parameter to define the communication source
      **/
     OperationImpl(
       boost::asio::io_service &ioService,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
-      const UdpAddressType &serverAddress,
+      const UdpAddressType &remote,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from);
-
-    /**
-     * @brief Initialises the operation.
-     *
-     * @param[in] ioService
-     *   The IO service used for communication.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     * @param[in] tftpClient
-     *   The TFTP client.
-     * @param[in] serverAddress
-     *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   The transfer mode
-     **/
-    OperationImpl(
-      boost::asio::io_service &ioService,
-      OperationCompletedHandler completionHandler,
-      const TftpClientInternal &tftpClient,
-      const UdpAddressType &serverAddress,
-      const string &filename,
-      TransferMode mode);
+      const UdpAddressType &local);
 
     /**
      * @brief Returns the request filename.
      *
      * @return The request filename.
      **/
-    const string& getFilename() const;
+    const string& filename() const;
 
     /**
      * @brief Returns the transfer mode.
      *
      * @return The transfer mode.
      **/
-    TransferMode getMode() const;
+    TransferMode mode() const;
 
     /**
      * @brief Returns the TFTP option list.
      *
      * @return The TFTP option list.
      **/
-    OptionList& getOptions();
+    Options::OptionList& options();
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -196,7 +169,7 @@ class OperationImpl :
      * @param[in] maxReceivePacketSize
      *   The new maxReceivePacketSize value.
      **/
-    void setMaxReceivePacketSize( uint16_t maxReceivePacketSize) noexcept;
+    void maxReceivePacketSize( uint16_t maxReceivePacketSize) noexcept;
 
     /**
      * @brief Update the receiveTimeout value.
@@ -204,7 +177,7 @@ class OperationImpl :
      * @param[in] receiveTimeout
      *   The new receive timeout.
      **/
-    void setReceiveTimeout( uint8_t receiveTimeout) noexcept;
+    void receiveTimeout( uint8_t receiveTimeout) noexcept;
 
     /**
      * @brief Sets the finished flag.
@@ -311,11 +284,11 @@ class OperationImpl :
     //! The TFTP server endpoint
     UdpAddressType remoteEndpoint;
     //! The filename of the transfer
-    const string filename;
+    const string filenameV;
     //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
-    const TransferMode mode;
+    const TransferMode modeV;
     //! options for the transfer
-    OptionList options;
+    Options::OptionList optionsV;
     /**
      * The maximum size of a received TFTP packet. Defaults to
      * TftpPacket::DEFAULT_MAX_PACKET_SIZE.
@@ -323,9 +296,9 @@ class OperationImpl :
      * This value can be modified by calling setMaxReceivePacketSize(), e.g.
      * during option negotiation.
      **/
-    uint16_t maxReceivePacketSize;
+    uint16_t maxReceivePacketSizeV;
     //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
-    uint8_t receiveTimeout;
+    uint8_t receiveTimeoutV;
 
     //! The TFTP socket
     boost::asio::ip::udp::socket socket;
@@ -343,7 +316,7 @@ class OperationImpl :
     //! the retransmission counter
     unsigned int transmitCounter;
     //! Error info
-    ErrorInfo errorInfo;
+    ErrorInfo errorInfoV;
 };
 
 }

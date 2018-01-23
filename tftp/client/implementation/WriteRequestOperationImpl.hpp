@@ -41,58 +41,31 @@ class WriteRequestOperationImpl : public OperationImpl
      *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
      *   The TFTP client.
-     * @param[in] serverAddress
+     * @param[in] remote
      *   Where the connection should be established to.
      * @param[in] filename
      *   Which file shall be requested
      * @param[in] mode
      *   The transfer mode
-     * @param[in] from
-     *   Optional parameter to define the communication source
+     * @param[in] local
+     *   Parameter to define the communication source
      **/
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
-      const UdpAddressType &serverAddress,
+      const UdpAddressType &remote,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from);
-
-    /**
-     * @brief Initialises the operation.
-     *
-     * @param[in] ioService
-     *   The IO service used for communication.
-     * @param[in] dataHandler
-     *   Handler for data.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     * @param[in] tftpClient
-     *   The TFTP client.
-     * @param[in] serverAddress
-     *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   The transfer mode
-     **/
-    WriteRequestOperationImpl(
-      boost::asio::io_service &ioService,
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const TftpClientInternal &tftpClient,
-      const UdpAddressType &serverAddress,
-      const string &filename,
-      TransferMode mode);
+      const UdpAddressType &local);
 
     /**
      * @copybrief OperationImpl::start()
      *
      * Assembles and transmit TFTP WRQ packet and start parent receive loop.
      **/
-    virtual void start() override;
+    virtual void start() final;
 
   protected:
     //! @copydoc OperationImpl::finished

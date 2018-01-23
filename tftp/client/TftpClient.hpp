@@ -47,8 +47,8 @@ class TftpClient
      * @return The created TFTP client instance.
      **/
     static TftpClientPtr createInstance(
-      const TftpConfiguration &configuration = TftpConfiguration(),
-      const Options::OptionList& additionalOptions = Options::OptionList());
+      const TftpConfiguration &configuration = {},
+      const Options::OptionList& additionalOptions = {});
 
     //! Default destructor
     virtual ~TftpClient() noexcept = default;
@@ -80,47 +80,24 @@ class TftpClient
      *   Handler for received data.
      * @param[in] completionHandler
      *   The handler which is called on completion of the operation.
-     * @param[in] serverAddress
+     * @param[in] remote
      *   Where the connection should be established to.
      * @param[in] filename
      *   Which file shall be requested
      * @param[in] mode
      *   The transfer mode
-     * @param[in] from
-     *   Optional parameter to define the communication source
+     * @param[in] local
+     *   Parameter to define the communication source
      *
      * @return The client operation instance.
      **/
     virtual OperationPtr createReadRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &serverAddress,
+      const UdpAddressType &remote,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from) = 0;
-
-    /**
-     * @brief Initialises the operation.
-     *
-     * @param[in] dataHandler
-     *   Handler for received data.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
-     * @param[in] serverAddress
-     *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   The transfer mode
-     *
-     * @return The client operation instance.
-     **/
-    virtual OperationPtr createReadRequestOperation(
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const UdpAddressType &serverAddress,
-      const string &filename,
-      TransferMode mode) = 0;
+      const UdpAddressType &local = UdpAddressType{}) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
@@ -129,47 +106,24 @@ class TftpClient
      *   Handler for data.
      * @param[in] completionHandler
      *   The handler which is called on completion of the operation.
-     * @param[in] serverAddress
+     * @param[in] remote
      *   Where the connection should be established to.
      * @param[in] filename
      *   Which file shall be requested
      * @param[in] mode
      *   The transfer mode
-     * @param[in] from
-     *   Optional parameter to define the communication source
+     * @param[in] local
+     *   Parameter to define the communication source
      *
      * @return The client operation instance.
      **/
     virtual OperationPtr createWriteRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &serverAddress,
+      const UdpAddressType &remote,
       const string &filename,
       TransferMode mode,
-      const UdpAddressType &from) = 0;
-
-    /**
-     * @brief Creates an write request operation (TFTP WRQ).
-     *
-     * @param[in] dataHandler
-     *   Handler for data.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
-     * @param[in] serverAddress
-     *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   The transfer mode
-     *
-     * @return The client operation instance.
-     **/
-    virtual OperationPtr createWriteRequestOperation(
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const UdpAddressType &serverAddress,
-      const string &filename,
-      TransferMode mode) = 0;
+      const UdpAddressType &local = UdpAddressType{}) = 0;
 
   protected:
     //! Protected constructor.
