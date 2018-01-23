@@ -43,51 +43,27 @@ class WriteRequestOperationImpl: public OperationImpl
      *
      * @param[in] ioService
      *   The IO service used for communication.
+     * @param[in] tftpServer
+     *   The TFTP internal server.
      * @param[in] dataHandler
      *   Handler, which will be called on various events.
      * @param[in] completionHandler
      *   The handler which is called on completion of this operation.
-     * @param[in] tftpServerInternal
-     *   The TFTP internal server.
-     * @param[in] clientAddress
+     * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
      *   Received option list from client.
-     * @param[in] serverAddress
+     * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
     WriteRequestOperationImpl(
       boost::asio::io_service &ioService,
+      const TftpServerInternal &tftpServer,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const TftpServerInternal &tftpServerInternal,
-      const UdpAddressType &clientAddress,
+      const UdpAddressType &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress);
-
-    /**
-     * @brief Constructs the class.
-     *
-     * @param[in] ioService
-     *   The IO service used for communication.
-     * @param[in] dataHandler
-     *   Handler, which will be called on various events.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     * @param[in] tftpServerInternal
-     *   The TFTP internal server.
-     * @param[in] clientAddress
-     *   Address of the remote endpoint (TFTP client).
-     * @param[in] clientOptions
-     *   Received option list from client.
-     **/
-    WriteRequestOperationImpl(
-      boost::asio::io_service &ioService,
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const TftpServerInternal &tftpServerInternal,
-      const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions);
+      const UdpAddressType &local);
 
     /**
      * @brief Standard destructor.

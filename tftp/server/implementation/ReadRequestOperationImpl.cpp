@@ -25,39 +25,19 @@ namespace Server {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
+  const TftpServerInternal &tftpServerInternal,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const TftpServerInternal &tftpServerInternal,
-  const UdpAddressType &clientAddress,
+  const UdpAddressType &remote,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress) :
+  const UdpAddressType &local) :
   OperationImpl(
     ioService,
-    completionHandler,
     tftpServerInternal,
-    clientAddress,
+    completionHandler,
+    remote,
     clientOptions,
-    serverAddress),
-  dataHandler( dataHandler),
-  transmitDataSize( DefaultDataSize),
-  lastDataPacketTransmitted( false),
-  lastTransmittedBlockNumber( 0)
-{
-}
-
-ReadRequestOperationImpl::ReadRequestOperationImpl(
-  boost::asio::io_service &ioService,
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const TftpServerInternal &tftpServerInternal,
-  const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions) :
-  OperationImpl(
-    ioService,
-    completionHandler,
-    tftpServerInternal,
-    clientAddress,
-    clientOptions),
+    local),
   dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
@@ -70,46 +50,46 @@ void ReadRequestOperationImpl::start()
   try
   {
     // option negotiation leads to empty option list
-    if ( getOptions().empty())
+    if ( options().empty())
     {
       sendData();
     }
     else
     {
       // check blocksize option
-      if ( 0 != getOptions().getBlocksizeOption())
+      if ( 0 != options().getBlocksizeOption())
       {
-        transmitDataSize = getOptions().getBlocksizeOption();
+        transmitDataSize = options().getBlocksizeOption();
       }
 
       // check timeout option
-      if ( 0 != getOptions().getTimeoutOption())
+      if ( 0 != options().getTimeoutOption())
       {
-        setReceiveTimeout( getOptions().getTimeoutOption());
+        receiveTimeout( options().getTimeoutOption());
       }
 
       // check transfer size option
-      if ( getOptions().hasTransferSizeOption())
+      if ( options().hasTransferSizeOption())
       {
         uint64_t transferSize;
 
         // add transfer size to answer only, if handler supply it.
         if ( dataHandler->requestedTransferSize( transferSize))
         {
-          getOptions().addTransferSizeOption( transferSize);
+          options().addTransferSizeOption( transferSize);
         }
         else
         {
-          getOptions().removeTransferSizeOption();
+          options().removeTransferSizeOption();
         }
       }
 
       // if transfer size option is the only option requested, but the handler
       // does not supply it -> empty OACK is not sent but data directly
-      if ( !getOptions().empty())
+      if ( !options().empty())
       {
         // Send OACK
-        send( Packets::OptionsAcknowledgementPacket( getOptions()));
+        send( Packets::OptionsAcknowledgementPacket( options()));
       }
       else
       {

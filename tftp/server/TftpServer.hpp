@@ -105,11 +105,11 @@ class TftpServer
      *   Handler, which will be called on various events.
      * @param[in] completionHandler
      *   The handler which is called on completion of the operation.
-     * @param[in] clientAddress
+     * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
      *   Received option list from client.
-     * @param[in] serverAddress
+     * @param[in] local
      *   local endpoint, where the server handles the request from.
      *
      * @return The TFTP server write operation.
@@ -117,29 +117,9 @@ class TftpServer
     virtual OperationPtr createReadRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &clientAddress,
+      const UdpAddressType &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress) = 0;
-
-    /**
-     * @brief Creates a TFTP write operation (TFTP RRQ)
-     *
-     * @param[in] dataHandler
-     *   Handler, which will be called on various events.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
-     * @param[in] clientAddress
-     *   Address of the remote endpoint (TFTP client).
-     * @param[in] clientOptions
-     *   Received option list from client.
-     *
-     * @return The TFTP server write operation.
-     **/
-    virtual OperationPtr createReadRequestOperation(
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions) = 0;
+      const UdpAddressType &local) = 0;
 
     /**
      * @brief Creates a TFTP read operation (TFTP WRQ)
@@ -148,11 +128,11 @@ class TftpServer
      *   Handler, which will be called on various events.
      * @param[in] completionHandler
      *   The handler which is called on completion of the operation.
-     * @param[in] clientAddress
+     * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
      *   Received option list from client.
-     * @param[in] serverAddress
+     * @param[in] local
      *   local endpoint, where the server handles the request from.
      *
      * @return The TFTP server read operation.
@@ -160,87 +140,40 @@ class TftpServer
     virtual OperationPtr createWriteRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &clientAddress,
+      const UdpAddressType &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress) = 0;
-
-    /**
-     * @brief Creates a TFTP read operation (TFTP WRQ)
-     *
-     * @param[in] dataHandler
-     *   Handler, which will be called on various events.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
-     * @param[in] clientAddress
-     *   Address of the remote endpoint (TFTP client).
-     * @param[in] clientOptions
-     *   Received option list from client.
-     *
-     * @return The TFTP server read operation.
-     **/
-    virtual OperationPtr createWriteRequestOperation(
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions) = 0;
+      const UdpAddressType &local) = 0;
 
     /**
      * @brief Creates a TFTP error operation.
      *
-     * @param[in] clientAddress
+     * @param[in] completionHandler
+     *   The handler which is called on completion of the operation.
+     * @param[in] remote
      *   Where the error packet shall be transmitted to.
-     * @param[in] from
+     * @param[in] local
      *   Optional parameter to define the communication source
      * @param[in] errorCode
      *   The error code of the error packet.
      * @param[in] errorMessage
      *   The error message of the packet.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
      *
      * @return The created TFTP Error operation.
      **/
     virtual OperationPtr createErrorOperation(
-      const UdpAddressType &clientAddress,
-      const UdpAddressType &from,
+      OperationCompletedHandler completionHandler,
+      const UdpAddressType &remote,
+      const UdpAddressType &local,
       ErrorCode errorCode,
-      const string &errorMessage,
-      OperationCompletedHandler completionHandler = {}) = 0;
+      const string &errorMessage) = 0;
 
-    //! @copydoc createErrorOperation(const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&,OperationCompletedHandler)
+    //! @copydoc createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&)
     virtual OperationPtr createErrorOperation(
-      const UdpAddressType &clientAddress,
-      const UdpAddressType &from,
+      OperationCompletedHandler completionHandler,
+      const UdpAddressType &remote,
+      const UdpAddressType &local,
       ErrorCode errorCode,
-      string &&errorMessage = {},
-      OperationCompletedHandler completionHandler = {}) = 0;
-
-    /**
-     * @brief Creates a TFTP error operation.
-     *
-     * @param[in] clientAddress
-     *   Where the error packet shall be transmitted to.
-     * @param[in] errorCode
-     *   The error code of the error packet.
-     * @param[in] errorMessage
-     *   The error message of the packet.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
-     *
-     * @return The created TFTP Error operation.
-     **/
-    virtual OperationPtr createErrorOperation(
-      const UdpAddressType &clientAddress,
-      ErrorCode errorCode,
-      const string &errorMessage,
-      OperationCompletedHandler completionHandler = {}) = 0;
-
-    //! @copydoc createErrorOperation(const UdpAddressType&,ErrorCode,const string&,OperationCompletedHandler)
-    virtual OperationPtr createErrorOperation(
-      const UdpAddressType &clientAddress,
-      ErrorCode errorCode,
-      string &&errorMessage = {},
-      OperationCompletedHandler completionHandler = {}) = 0;
+      string &&errorMessage = {}) = 0;
 
   protected:
     //! Protected constructor

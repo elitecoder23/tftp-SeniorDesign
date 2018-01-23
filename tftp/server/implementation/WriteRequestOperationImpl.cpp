@@ -26,38 +26,19 @@ namespace Server {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_service &ioService,
+  const TftpServerInternal &tftpServer,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const TftpServerInternal &tftpServerInternal,
-  const UdpAddressType &clientAddress,
+  const UdpAddressType &remote,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress) :
+  const UdpAddressType &local) :
   OperationImpl(
     ioService,
+    tftpServer,
     completionHandler,
-    tftpServerInternal,
-    clientAddress,
+    remote,
     clientOptions,
-    serverAddress),
-  dataHandler( dataHandler),
-  receiveDataSize( DefaultDataSize),
-  lastReceivedBlockNumber( 0)
-{
-}
-
-WriteRequestOperationImpl::WriteRequestOperationImpl(
-  boost::asio::io_service &ioService,
-  ReceiveDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const TftpServerInternal &tftpServerInternal,
-  const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions) :
-  OperationImpl(
-    ioService,
-    completionHandler,
-    tftpServerInternal,
-    clientAddress,
-    clientOptions),
+    local),
   dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
   lastReceivedBlockNumber( 0)
@@ -71,7 +52,7 @@ void WriteRequestOperationImpl::start()
   try
   {
     // option negotiation leads to empty option list
-    if (getOptions().empty())
+    if (options().empty())
     {
       // Then no NOACK is sent back - a simple ACK is sent.
       send( Packets::AcknowledgementPacket( Packets::BlockNumber{ 0U}));
@@ -81,29 +62,29 @@ void WriteRequestOperationImpl::start()
       //validate received options
 
       // check blocksize option
-      if ( 0 != getOptions().getBlocksizeOption())
+      if ( 0 != options().getBlocksizeOption())
       {
-        receiveDataSize = getOptions().getBlocksizeOption();
+        receiveDataSize = options().getBlocksizeOption();
 
         // set receive data size if necessary
         if ( receiveDataSize > DefaultDataSize)
         {
-          setMaxReceivePacketSize(
+          maxReceivePacketSize(
             receiveDataSize + DefaultTftpDataPacketHeaderSize);
         }
       }
 
       // check timeout option
-      if ( 0 != getOptions().getTimeoutOption())
+      if ( 0 != options().getTimeoutOption())
       {
-        setReceiveTimeout( getOptions().getTimeoutOption());
+        receiveTimeout( options().getTimeoutOption());
       }
 
       // check transfer size option
-      if ( getOptions().hasTransferSizeOption())
+      if ( options().hasTransferSizeOption())
       {
         if ( !dataHandler->receivedTransferSize(
-          getOptions().getTransferSizeOption()))
+          options().getTransferSizeOption()))
         {
           Packets::ErrorPacket errorPacket(
             ErrorCode::DiskFullOrAllocationExceeds,
@@ -118,7 +99,7 @@ void WriteRequestOperationImpl::start()
       }
 
       // send OACK
-      send( Packets::OptionsAcknowledgementPacket( getOptions()));
+      send( Packets::OptionsAcknowledgementPacket( options()));
     }
 
     // start receive loop

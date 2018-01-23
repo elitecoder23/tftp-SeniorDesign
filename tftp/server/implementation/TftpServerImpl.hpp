@@ -79,71 +79,43 @@ class TftpServerImpl:
     //! @copydoc TftpServer::stop
     void stop() final;
 
-    //! @copydoc TftpServer::createReadRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const Options::OptionList&,const UdpAddressType&)
+    //! @copydoc TftpServer::createReadRequestOperation
     OperationPtr createReadRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &clientAddress,
+      const UdpAddressType &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress) final;
+      const UdpAddressType &local) final;
 
-    //! @copydoc TftpServer::createReadRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const Options::OptionList&)
-    OperationPtr createReadRequestOperation(
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions) final;
-
-    //! @copydoc TftpServer::createWriteRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const Options::OptionList&,const UdpAddressType&)
+    //! @copydoc TftpServer::createWriteRequestOperation
     OperationPtr createWriteRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &clientAddress,
+      const UdpAddressType &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress) final;
+      const UdpAddressType &local) final;
 
-    //! @copydoc TftpServer::createWriteRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const Options::OptionList&)
-    OperationPtr createWriteRequestOperation(
-      ReceiveDataHandlerPtr dataHandler,
+    //! @copydoc TftpServer::createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&)
+    OperationPtr createErrorOperation(
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions) final;
-
-    //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&,OperationCompletedHandler)
-    OperationPtr createErrorOperation(
-      const UdpAddressType &clientAddress,
-      const UdpAddressType &from,
+      const UdpAddressType &remote,
+      const UdpAddressType &local,
       ErrorCode errorCode,
-      const string &errorMessage,
-      OperationCompletedHandler completionHandler = {}) final;
+      const string &errorMessage) final;
 
-    //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,const UdpAddressType&,ErrorCode,string&&,OperationCompletedHandler)
+    //! @copydoc TftpServer::createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,string&&)
     OperationPtr createErrorOperation(
-      const UdpAddressType &clientAddress,
-      const UdpAddressType &from,
+      OperationCompletedHandler completionHandler,
+      const UdpAddressType &remote,
+      const UdpAddressType &local,
       ErrorCode errorCode,
-      string &&errorMessage = {},
-      OperationCompletedHandler completionHandler = {}) final;
+      string &&errorMessage = {}) final;
 
-    //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,ErrorCode,const string&,OperationCompletedHandler)
-    OperationPtr createErrorOperation(
-      const UdpAddressType &clientAddress,
-      ErrorCode errorCode,
-      const string &errorMessage,
-      OperationCompletedHandler completionHandler = {}) final;
+    //! @copydoc TftpServerInternal::configuration
+    const TftpConfiguration& configuration() const final;
 
-    //! @copydoc TftpServer::createErrorOperation(const UdpAddressType&,ErrorCode,string&&,OperationCompletedHandler)
-    OperationPtr createErrorOperation(
-      const UdpAddressType &clientAddress,
-      ErrorCode errorCode,
-      string &&errorMessage,
-      OperationCompletedHandler completionHandler = {}) final;
-
-    //! @copydoc TftpServerInternal::getConfiguration
-    const TftpConfiguration& getConfiguration() const final;
-
-    //! @copydoc TftpServerInternal::getOptionList
-    const Options::OptionList& getOptionList() const final;
+    //! @copydoc TftpServerInternal::options
+    const Options::OptionList& options() const final;
 
   private:
     /**
@@ -239,9 +211,9 @@ class TftpServerImpl:
     //! The registered handler
     ReceivedTftpRequestHandler handler;
     //! The TFTP configuration
-    const TftpConfiguration configuration;
+    const TftpConfiguration configurationV;
     //! The Server option list.
-    const Options::OptionList options;
+    const Options::OptionList optionsV;
     //! the server address to listen on
     const UdpAddressType serverAddress;
 

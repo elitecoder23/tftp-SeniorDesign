@@ -65,24 +65,24 @@ void OperationImpl::abort()
   finished( TransferStatus::Aborted);
 }
 
-const OperationImpl::ErrorInfo& OperationImpl::getErrorInfo() const
+const OperationImpl::ErrorInfo& OperationImpl::errorInfo() const
 {
-  return errorInfo;
+  return errorInfoV;
 }
 
 OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
+  const TftpServerInternal &tftpServer,
   OperationCompletedHandler completionHandler,
-  const TftpServerInternal &tftpServerInternal,
-  const UdpAddressType &clientAddress,
+  const UdpAddressType &remote,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress)
+  const UdpAddressType &local)
 try:
   completionHandler( completionHandler),
-  tftpServerInternal( tftpServerInternal),
-  options( tftpServerInternal.getOptionList().negotiateServer( clientOptions)),
-  maxReceivePacketSize( DefaultMaxPacketSize),
-  receiveTimeout( tftpServerInternal.getConfiguration().tftpTimeout),
+  tftpServer( tftpServer),
+  optionsV( tftpServer.options().negotiateServer( clientOptions)),
+  maxReceivePacketSizeV( DefaultMaxPacketSize),
+  receiveTimeoutV( tftpServer.configuration().tftpTimeout),
   socket( ioService),
   timer( ioService),
   transmitPacketType( PacketType::Invalid),
@@ -91,59 +91,13 @@ try:
   try
   {
     // Open the socket
-    socket.open( clientAddress.protocol());
+    socket.open( remote.protocol());
 
     // bind to local address
-    socket.bind( serverAddress);
+    socket.bind( local);
 
     // connect to client.
-    socket.connect( clientAddress);
-  }
-  catch (boost::system::system_error &err)
-  {
-    if (socket.is_open())
-    {
-      socket.close();
-    }
-
-    //! @throw CommunicationException
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( err.what()));
-  }
-}
-catch (boost::system::system_error &err)
-{
-  //! @throw CommunicationException
-  BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( err.what()));
-}
-
-OperationImpl::OperationImpl(
-  boost::asio::io_service &ioService,
-  OperationCompletedHandler completionHandler,
-  const TftpServerInternal &tftpServerInternal,
-  const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions)
-try:
-  completionHandler( completionHandler),
-  tftpServerInternal( tftpServerInternal),
-  options( tftpServerInternal.getOptionList().negotiateServer( clientOptions)),
-  maxReceivePacketSize( DefaultMaxPacketSize),
-  receiveTimeout( tftpServerInternal.getConfiguration().tftpTimeout),
-  socket( ioService),
-  timer( ioService),
-  transmitPacketType( PacketType::Invalid),
-  transmitCounter( 0)
-{
-  BOOST_LOG_FUNCTION();
-
-  try
-  {
-    // Open socket
-    socket.open( clientAddress.protocol());
-
-    // Connect to client
-    socket.connect( clientAddress);
+    socket.connect( remote);
   }
   catch (boost::system::system_error &err)
   {
@@ -177,7 +131,7 @@ void OperationImpl::finished(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
     "Operation finished";
 
-  this->errorInfo = std::move( errorInfo);
+  errorInfoV = std::move( errorInfo);
 
   timer.cancel();
   socket.cancel();
@@ -225,7 +179,7 @@ void OperationImpl::receive()
 
   try
   {
-    receivePacket.resize( maxReceivePacketSize);
+    receivePacket.resize( maxReceivePacketSizeV);
 
     socket.async_receive(
       boost::asio::buffer( receivePacket),
@@ -235,7 +189,7 @@ void OperationImpl::receive()
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
 
-    timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
+    timer.expires_from_now( boost::posix_time::seconds( receiveTimeoutV));
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,
@@ -253,20 +207,20 @@ void OperationImpl::receive()
   }
 }
 
-Options::OptionList& OperationImpl::getOptions()
+Options::OptionList& OperationImpl::options()
 {
-  return options;
+  return optionsV;
 }
 
-void OperationImpl::setMaxReceivePacketSize(
+void OperationImpl::maxReceivePacketSize(
   const uint16_t maxReceivePacketSize)
 {
-  this->maxReceivePacketSize = maxReceivePacketSize;
+  maxReceivePacketSizeV = maxReceivePacketSize;
 }
 
-void OperationImpl::setReceiveTimeout( const uint8_t receiveTimeout)
+void OperationImpl::receiveTimeout( const uint8_t receiveTimeout)
 {
-  this->receiveTimeout = receiveTimeout;
+  receiveTimeoutV = receiveTimeout;
 }
 
 void OperationImpl::handleReadRequestPacket(
@@ -423,7 +377,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
     return;
   }
 
-  if (transmitCounter > tftpServerInternal.getConfiguration().tftpRetries)
+  if (transmitCounter > tftpServer.configuration().tftpRetries)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Retry counter exceeded ABORT";
@@ -442,7 +396,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
 
     ++transmitCounter;
 
-    timer.expires_from_now( boost::posix_time::seconds( receiveTimeout));
+    timer.expires_from_now( boost::posix_time::seconds( receiveTimeoutV));
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,

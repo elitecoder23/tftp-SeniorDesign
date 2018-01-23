@@ -20,23 +20,23 @@ namespace Server {
 
 ErrorOperation::ErrorOperation(
   boost::asio::io_service &ioService,
-  const UdpAddressType &clientAddress,
-  const UdpAddressType &from,
+  OperationCompletedHandler completionHandler,
+  const UdpAddressType &remote,
+  const UdpAddressType &local,
   const ErrorCode errorCode,
-  const std::string &errorMessage,
-  OperationCompletedHandler completionHandler)
+  const std::string &errorMessage)
 try :
   completionHandler( completionHandler),
   socket( ioService),
-  errorInfo( Packets::ErrorPacket( errorCode, errorMessage))
+  errorInfoV( Packets::ErrorPacket( errorCode, errorMessage))
 {
   try
   {
-    socket.open( clientAddress.protocol());
+    socket.open( remote.protocol());
 
-    socket.bind( from);
+    socket.bind( local);
 
-    socket.connect( clientAddress);
+    socket.connect( remote);
   }
   catch ( boost::system::system_error &err)
   {
@@ -59,23 +59,23 @@ catch ( boost::system::system_error &err)
 
 ErrorOperation::ErrorOperation(
   boost::asio::io_service &ioService,
-  UdpAddressType &&clientAddress,
-  UdpAddressType &&from,
+  OperationCompletedHandler completionHandler,
+  UdpAddressType &&remote,
+  UdpAddressType &&local,
   ErrorCode errorCode,
-  std::string &&errorMessage,
-  OperationCompletedHandler completionHandler)
+  std::string &&errorMessage)
 try :
   completionHandler( completionHandler),
   socket( ioService),
-  errorInfo( Packets::ErrorPacket( errorCode, std::move( errorMessage)))
+  errorInfoV( Packets::ErrorPacket( errorCode, std::move( errorMessage)))
 {
   try
   {
-    socket.open( clientAddress.protocol());
+    socket.open( remote.protocol());
 
-    socket.bind( from);
+    socket.bind( local);
 
-    socket.connect( clientAddress);
+    socket.connect( remote);
   }
   catch ( boost::system::system_error &err)
   {
@@ -95,73 +95,6 @@ catch ( boost::system::system_error &err)
   BOOST_THROW_EXCEPTION(
     CommunicationException() << AdditionalInfo( err.what()));
 }
-
-ErrorOperation::ErrorOperation(
-  boost::asio::io_service &ioService,
-  const UdpAddressType &clientAddress,
-  const ErrorCode errorCode,
-  const std::string &errorMessage,
-  OperationCompletedHandler completionHandler)
-try :
-  completionHandler( completionHandler),
-  socket( ioService),
-  errorInfo( Packets::ErrorPacket( errorCode, errorMessage))
-{
-  try
-  {
-    socket.open( clientAddress.protocol());
-
-    socket.connect( clientAddress);
-  }
-  catch ( boost::system::system_error &err)
-  {
-    if ( socket.is_open())
-    {
-      socket.close();
-    }
-
-    BOOST_THROW_EXCEPTION( TftpException() << AdditionalInfo( err.what()));
-  }
-}
-catch ( boost::system::system_error &err)
-{
-  BOOST_THROW_EXCEPTION(
-    CommunicationException() << AdditionalInfo( err.what()));
-}
-
-ErrorOperation::ErrorOperation(
-  boost::asio::io_service &ioService,
-  UdpAddressType &&clientAddress,
-  const ErrorCode errorCode,
-  std::string &&errorMessage,
-  OperationCompletedHandler completionHandler)
-try :
-  completionHandler( completionHandler),
-  socket( ioService),
-  errorInfo( Packets::ErrorPacket( errorCode, std::move( errorMessage)))
-{
-  try
-  {
-    socket.open( clientAddress.protocol());
-
-    socket.connect( clientAddress);
-  }
-  catch ( boost::system::system_error &err)
-  {
-    if ( socket.is_open())
-    {
-      socket.close();
-    }
-
-    BOOST_THROW_EXCEPTION( TftpException() << AdditionalInfo( err.what()));
-  }
-}
-catch ( boost::system::system_error &err)
-{
-  BOOST_THROW_EXCEPTION(
-    CommunicationException() << AdditionalInfo( err.what()));
-}
-
 
 ErrorOperation::~ErrorOperation() noexcept
 {
@@ -169,14 +102,14 @@ ErrorOperation::~ErrorOperation() noexcept
 
 void ErrorOperation::start()
 {
-  assert( errorInfo);
+  assert( errorInfoV);
 
-  sendError( *errorInfo);
+  sendError( *errorInfoV);
 }
 
 void ErrorOperation::gracefulAbort(
-  const ErrorCode /* errorCode */,
-  string &&/* errorMessage*/)
+  const ErrorCode errorCode [[maybe_unused]],
+  string &&errorMessage [[maybe_unused]])
 {
   // do nothing
 }
@@ -186,9 +119,9 @@ void ErrorOperation::abort()
   // do nothing
 }
 
-const ErrorOperation::ErrorInfo& ErrorOperation::getErrorInfo() const
+const ErrorOperation::ErrorInfo& ErrorOperation::errorInfo() const
 {
-  return errorInfo;
+  return errorInfoV;
 }
 
 void ErrorOperation::sendError( const Packets::ErrorPacket &error)

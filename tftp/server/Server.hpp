@@ -48,29 +48,21 @@ class Operation;
 using OperationPtr = std::shared_ptr< Operation>;
 
 /**
- * @brief Prototype for new TFTP requests handler.
+ * @brief Function handler definition.
  *
- * @param[in] requestType
- *   The kind of request.
- * @param[in] filename
- *   Filename of file to read.
- * @param[in] mode
- *   Transfer mode.
- * @param[in] options
- *   List of received TFTP options.
- * @param[in] from
- *   Where the request comes from (the TFTP client).
+ * * requestType
+ * * filename
+ * * mode
+ * * options
+ * * from
  **/
-typedef void (ReceivedTftpRequestHandlerType)(
-  RequestType requestType,
-  const std::string &filename,
-  TransferMode mode,
-  const Options::OptionList &options,
-  const UdpAddressType &from);
-
-//! Function handler definition.
 using ReceivedTftpRequestHandler =
-  std::function< ReceivedTftpRequestHandlerType>;
+  std::function< void (
+    RequestType,
+    const std::string&,
+    TransferMode,
+    const Options::OptionList&,
+    const UdpAddressType&)>;
 
 }
 }

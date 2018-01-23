@@ -35,14 +35,14 @@ class TftpServerInternal : public TftpServer
      *
      * @return The TFTP configuration.
      **/
-    virtual const TftpConfiguration& getConfiguration() const = 0;
+    virtual const TftpConfiguration& configuration() const = 0;
 
     /**
      * @brief Returns the configured TFTP Options.
      *
      * @return The configured TFTP Options.
      **/
-    virtual const Options::OptionList& getOptionList() const = 0;
+    virtual const Options::OptionList& options() const = 0;
 };
 
 }

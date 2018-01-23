@@ -56,8 +56,8 @@ class OperationImpl:
     //! @copydoc Operation::abort
     void abort() final;
 
-    //! @copydoc Operation::getErrorInfo
-    const ErrorInfo& getErrorInfo() const final;
+    //! @copydoc Operation::errorInfo
+    const ErrorInfo& errorInfo() const final;
 
   protected:
     /**
@@ -65,45 +65,24 @@ class OperationImpl:
      *
      * @param[in] ioService
      *   The IO service used for communication.
+     * @param[in] tftpServer
+     *   The TFTP internal server.
      * @param[in] completionHandler
      *   The handler which is called on completion of this operation.
-     * @param[in] tftpServerInternal
-     *   The TFTP internal server.
-     * @param[in] clientAddress
+     * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
      *   Received option list from client.
-     * @param[in] serverAddress
+     * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
     OperationImpl(
       boost::asio::io_service &ioService,
+      const TftpServerInternal &tftpServer,
       OperationCompletedHandler completionHandler,
-      const TftpServerInternal &tftpServerInternal,
-      const UdpAddressType &clientAddress,
+      const UdpAddressType &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &serverAddress);
-
-    /**
-     * @brief Constructor of operation
-     *
-     * @param[in] ioService
-     *   The IO service used for communication.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     * @param[in] tftpServerInternal
-     *   The TFTP internal server.
-     * @param[in] clientAddress
-     *   Address of the remote endpoint (TFTP client).
-     * @param[in] clientOptions
-     *   Received option list from client.
-     **/
-    OperationImpl(
-      boost::asio::io_service &ioService,
-      OperationCompletedHandler completionHandler,
-      const TftpServerInternal &tftpServerInternal,
-      const UdpAddressType &clientAddress,
-      const Options::OptionList &clientOptions);
+      const UdpAddressType &local);
 
     /**
      * @brief default destructor.
@@ -145,7 +124,7 @@ class OperationImpl:
      *
      * @return The stored TFTP option list.
      **/
-    Options::OptionList& getOptions();
+    Options::OptionList& options();
 
     /**
      * @brief Updates the limit of maximum packet size for the receive
@@ -160,7 +139,7 @@ class OperationImpl:
      * @param[in] maxReceivePacketSize
      *   The new maximum packet size for receive operation.
      **/
-    void setMaxReceivePacketSize( uint16_t maxReceivePacketSize);
+    void maxReceivePacketSize( uint16_t maxReceivePacketSize);
 
     /**
      * @brief Update the receiveTimeout value.
@@ -168,7 +147,7 @@ class OperationImpl:
      * @param[in] receiveTimeout
      *   The new receive timeout.
      **/
-    void setReceiveTimeout( uint8_t receiveTimeout);
+    void receiveTimeout( uint8_t receiveTimeout);
 
     /**
      * @copydoc PacketHandler::handleReadRequestPacket
@@ -242,14 +221,14 @@ class OperationImpl:
     //! The operation completed handler
     OperationCompletedHandler completionHandler;
     //! The internal TFTP server
-    const TftpServerInternal &tftpServerInternal;
+    const TftpServerInternal &tftpServer;
 
     //! The stored negotiated options
-    Options::OptionList options;
+    Options::OptionList optionsV;
     //! The maximum packet size, which can be received
-    uint16_t maxReceivePacketSize;
+    uint16_t maxReceivePacketSizeV;
     //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
-    uint8_t receiveTimeout;
+    uint8_t receiveTimeoutV;
 
     //! The TFTP UDP socket
     boost::asio::ip::udp::socket socket;
@@ -265,7 +244,7 @@ class OperationImpl:
     //! counter to store how often the same packet has been transmitted (retries)
     unsigned int transmitCounter;
     //! Error info
-    ErrorInfo errorInfo;
+    ErrorInfo errorInfoV;
 };
 
 }

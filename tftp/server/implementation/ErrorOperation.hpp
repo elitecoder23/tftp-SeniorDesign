@@ -39,90 +39,33 @@ class ErrorOperation: public Operation
      *
      * @param[in] ioService
      *   The IO service used for communication.
-     * @param[in] clientAddress
+     * @param[in] completionHandler
+     *   The handler which is called on completion of this operation.
+     * @param[in] remote
      *   Where the error packet shall be transmitted to.
-     * @param[in] errorCode
-     *   The error code of the error packet.
-     * @param[in] errorMessage
-     *   The error message of the packet.
-     * @param[in] from
+     * @param[in] local
      *   Optional parameter to define the communication source
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     **/
-    ErrorOperation(
-      boost::asio::io_service &ioService,
-      const UdpAddressType &clientAddress,
-      const UdpAddressType &from,
-      ErrorCode errorCode,
-      const std::string &errorMessage,
-      OperationCompletedHandler completionHandler);
-
-    /**
-     * @brief Initialises the error operation.
-     *
-     * @param[in] ioService
-     *   The IO service used for communication.
-     * @param[in] clientAddress
-     *   Where the error packet shall be transmitted to.
      * @param[in] errorCode
      *   The error code of the error packet.
      * @param[in] errorMessage
      *   The error message of the packet.
-     * @param[in] from
-     *   Optional parameter to define the communication source
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
      **/
     ErrorOperation(
       boost::asio::io_service &ioService,
-      UdpAddressType &&clientAddress,
-      UdpAddressType &&from,
+      OperationCompletedHandler completionHandler,
+      const UdpAddressType &remote,
+      const UdpAddressType &local,
       ErrorCode errorCode,
-      std::string &&errorMessage,
-      OperationCompletedHandler completionHandler);
+      const std::string &errorMessage);
 
-    /**
-     * @brief Initialises the error operation.
-     *
-     * @param[in] ioService
-     *   The IO service used for communication.
-     * @param[in] clientAddress
-     *   Where the error packet shall be transmitted to.
-     * @param[in] errorCode
-     *   The error code of the error packet.
-     * @param[in] errorMessage
-     *   The error message of the packet.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     **/
+    //! @copydoc ErrorOperation(boost::asio::io_service&,OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const std::string&)
     ErrorOperation(
       boost::asio::io_service &ioService,
-      const UdpAddressType &clientAddress,
+      OperationCompletedHandler completionHandler,
+      UdpAddressType &&remote,
+      UdpAddressType &&local,
       ErrorCode errorCode,
-      const std::string &errorMessage,
-      OperationCompletedHandler completionHandler);
-
-    /**
-     * @brief Initialises the error operation.
-     *
-     * @param[in] ioService
-     *   The IO service used for communication.
-     * @param[in] clientAddress
-     *   Where the error packet shall be transmitted to.
-     * @param[in] errorCode
-     *   The error code of the error packet.
-     * @param[in] errorMessage
-     *   The error message of the packet.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     **/
-    ErrorOperation(
-      boost::asio::io_service &ioService,
-      UdpAddressType &&clientAddress,
-      ErrorCode errorCode,
-      std::string &&errorMessage,
-      OperationCompletedHandler completionHandler);
+      std::string &&errorMessage);
 
     //! Default destructor.
     virtual ~ErrorOperation() noexcept;
@@ -142,8 +85,8 @@ class ErrorOperation: public Operation
     //! @copydoc Operation::abort
     void abort() final;
 
-    //! @copydoc Operation::getErrorInfo
-    const ErrorInfo& getErrorInfo() const final;
+    //! @copydoc Operation::errorInfo
+    const ErrorInfo& errorInfo() const final;
 
   private:
     /**
@@ -159,7 +102,7 @@ class ErrorOperation: public Operation
     //! The communication socket
     boost::asio::ip::udp::socket socket;
     //! The error code
-    const ErrorInfo errorInfo;
+    const ErrorInfo errorInfoV;
 };
 
 }

@@ -34,8 +34,8 @@ TftpServerImpl::TftpServerImpl(
   const UdpAddressType &serverAddress)
 try :
   handler( handler),
-  configuration( configuration),
-  options( configuration.getServerOptions( additionalOptions)),
+  configurationV( configuration),
+  optionsV( configuration.getServerOptions( additionalOptions)),
   serverAddress( serverAddress),
   work( ioService),
   socket( ioService)
@@ -117,135 +117,77 @@ void TftpServerImpl::stop()
 OperationPtr TftpServerImpl::createReadRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &clientAddress,
+  const UdpAddressType &remote,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress)
+  const UdpAddressType &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioService,
+    *this,
     dataHandler,
     completionHandler,
-    *this,
-    clientAddress,
+    remote,
     clientOptions,
-    serverAddress);
-}
-
-OperationPtr TftpServerImpl::createReadRequestOperation(
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions)
-{
-  return std::make_shared< ReadRequestOperationImpl>(
-    ioService,
-    dataHandler,
-    completionHandler,
-    *this,
-    clientAddress,
-    clientOptions);
+    local);
 }
 
 OperationPtr TftpServerImpl::createWriteRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &clientAddress,
+  const UdpAddressType &remote,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &serverAddress)
+  const UdpAddressType &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioService,
+    *this,
     dataHandler,
     completionHandler,
-    *this,
-    clientAddress,
+    remote,
     clientOptions,
-    serverAddress);
+    local);
 }
 
-OperationPtr TftpServerImpl::createWriteRequestOperation(
-  ReceiveDataHandlerPtr dataHandler,
+OperationPtr TftpServerImpl::createErrorOperation(
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &clientAddress,
-  const Options::OptionList &clientOptions)
+  const UdpAddressType &remote,
+  const UdpAddressType &local,
+  const ErrorCode errorCode,
+  const string &errorMessage)
 {
-  return std::make_shared< WriteRequestOperationImpl>(
+  return std::make_shared< ErrorOperation>(
     ioService,
-    dataHandler,
     completionHandler,
-    *this,
-    clientAddress,
-    clientOptions);
+    remote,
+    local,
+    errorCode,
+    errorMessage);
 }
 
 OperationPtr TftpServerImpl::createErrorOperation(
-  const UdpAddressType &clientAddress,
-  const UdpAddressType &from,
+  OperationCompletedHandler completionHandler,
+  const UdpAddressType &remote,
+  const UdpAddressType &local,
   const ErrorCode errorCode,
-  const string &errorMessage,
-  OperationCompletedHandler completionHandler)
+  string &&errorMessage)
 {
   return std::make_shared< ErrorOperation>(
     ioService,
-    clientAddress,
-    from,
+    completionHandler,
+    remote,
+    local,
     errorCode,
-    errorMessage,
-    completionHandler);
+    std::move( errorMessage));
 }
 
-OperationPtr TftpServerImpl::createErrorOperation(
-  const UdpAddressType &clientAddress,
-  const UdpAddressType &from,
-  const ErrorCode errorCode,
-  string &&errorMessage,
-  OperationCompletedHandler completionHandler)
+const Tftp::TftpConfiguration& TftpServerImpl::configuration() const
 {
-  return std::make_shared< ErrorOperation>(
-    ioService,
-    clientAddress,
-    from,
-    errorCode,
-    std::move( errorMessage),
-    completionHandler);
+  return configurationV;
 }
 
-OperationPtr TftpServerImpl::createErrorOperation(
-  const UdpAddressType &clientAddress,
-  const ErrorCode errorCode,
-  const string &errorMessage,
-  OperationCompletedHandler completionHandler)
+const Options::OptionList& TftpServerImpl::options() const
 {
-  return std::make_shared< ErrorOperation>(
-    ioService,
-    clientAddress,
-    errorCode,
-    errorMessage,
-    completionHandler);
-}
-
-OperationPtr TftpServerImpl::createErrorOperation(
-  const UdpAddressType &clientAddress,
-  const ErrorCode errorCode,
-  string &&errorMessage,
-  OperationCompletedHandler completionHandler)
-{
-  return std::make_shared< ErrorOperation>(
-    ioService,
-    clientAddress,
-    errorCode,
-    std::move( errorMessage),
-    completionHandler);
-}
-
-const Tftp::TftpConfiguration& TftpServerImpl::getConfiguration() const
-{
-  return configuration;
-}
-
-const Options::OptionList& TftpServerImpl::getOptionList() const
-{
-  return options;
+  return optionsV;
 }
 
 void TftpServerImpl::receive()
@@ -326,7 +268,9 @@ void TftpServerImpl::handleReadRequestPacket(
     "No registered handler - reject";
 
     auto operation( createErrorOperation(
+      {},
       from,
+      UdpAddressType{ serverAddress.address(), 0},
       ErrorCode::FileNotFound,
       "RRQ not accepted"));
 
@@ -357,7 +301,9 @@ void TftpServerImpl::handleWriteRequestPacket(
       << "No registered handler - reject";
 
     auto operation( createErrorOperation(
+      {},
       from,
+      UdpAddressType{ serverAddress.address(), 0},
       ErrorCode::FileNotFound,
       "WRQ"));
 
@@ -382,7 +328,9 @@ void TftpServerImpl::handleDataPacket(
     static_cast< std::string>( dataPacket);
 
   auto operation( createErrorOperation(
+    {},
     from,
+    UdpAddressType{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
     "DATA not expected"));
 
@@ -398,7 +346,9 @@ void TftpServerImpl::handleAcknowledgementPacket(
     static_cast< std::string>( acknowledgementPacket);
 
   auto operation( createErrorOperation(
+    {},
     from,
+    UdpAddressType{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
     "ACK not expected"));
 
@@ -414,7 +364,9 @@ void TftpServerImpl::handleErrorPacket(
     static_cast< std::string>( errorPacket);
 
   auto operation( createErrorOperation(
+    {},
     from,
+    UdpAddressType{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
     "ERROR not expected"));
 
@@ -430,7 +382,9 @@ void TftpServerImpl::handleOptionsAcknowledgementPacket(
     static_cast< std::string>( optionsAcknowledgementPacket);
 
   auto operation( createErrorOperation(
+    {},
     from,
+    UdpAddressType{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
     "OACK not expected"));
 
