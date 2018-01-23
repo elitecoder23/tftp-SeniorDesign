@@ -60,7 +60,7 @@ TftpConfiguration::ptree TftpConfiguration::toProperties() const
   return properties;
 }
 
-TftpConfiguration::options_description TftpConfiguration::getOptions()
+TftpConfiguration::options_description TftpConfiguration::options()
 {
   //! @todo for boost::options: https://github.com/boostorg/program_options/pull/18
   //! should be in source on boost 1.64
@@ -101,7 +101,7 @@ TftpConfiguration::options_description TftpConfiguration::getOptions()
   return options;
 }
 
-Options::OptionList TftpConfiguration::getClientOptions(
+Options::OptionList TftpConfiguration::clientOptions(
   const Options::OptionList &baseOptions) const
 {
   Options::OptionList options{ baseOptions};
@@ -124,7 +124,7 @@ Options::OptionList TftpConfiguration::getClientOptions(
   return options;
 }
 
-Options::OptionList TftpConfiguration::getServerOptions(
+Options::OptionList TftpConfiguration::serverOptions(
   const Options::OptionList &baseOptions) const
 {
   Options::OptionList options{ baseOptions};

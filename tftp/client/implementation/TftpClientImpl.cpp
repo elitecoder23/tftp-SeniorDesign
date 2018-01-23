@@ -24,7 +24,7 @@ TftpClientImpl::TftpClientImpl(
   const TftpConfiguration &configuration,
   const Options::OptionList& additionalOptions):
   configurationV( configuration),
-  optionsV( configuration.getClientOptions( additionalOptions)),
+  optionsV( configuration.clientOptions( additionalOptions)),
   work( ioService)
 {
 }

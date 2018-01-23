@@ -63,7 +63,7 @@ TftpClientApplication::TftpClientApplication(
     );
 
   // Add common TFTP options
-  optionsDescription.add( configuration.getOptions());
+  optionsDescription.add( configuration.options());
 }
 
 int TftpClientApplication::operator()()

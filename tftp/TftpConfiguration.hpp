@@ -62,7 +62,7 @@ class TftpConfiguration
      *
      * @return
      **/
-    options_description getOptions();
+    options_description options();
 
     /**
      * @brief Creates an option list (for TFTP clients) based on the actual
@@ -74,7 +74,7 @@ class TftpConfiguration
      * @return Option list (for TFTP clients) based on the actual
      *   configuration and the supplied base options.
      **/
-    Options::OptionList getClientOptions(
+    Options::OptionList clientOptions(
       const Options::OptionList &baseOptions = {}) const;
 
     /**
@@ -87,7 +87,7 @@ class TftpConfiguration
      * @return Option list (for TFTP servers) based on the actual
      *   configuration and the supplied base options.
      **/
-    Options::OptionList getServerOptions(
+    Options::OptionList serverOptions(
       const Options::OptionList &baseOptions = {}) const;
 
     //! The TFTP timeout - The standard when no timeout option is negotiated in seconds.

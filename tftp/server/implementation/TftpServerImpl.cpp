@@ -35,7 +35,7 @@ TftpServerImpl::TftpServerImpl(
 try :
   handler( handler),
   configurationV( configuration),
-  optionsV( configuration.getServerOptions( additionalOptions)),
+  optionsV( configuration.serverOptions( additionalOptions)),
   serverAddress( serverAddress),
   work( ioService),
   socket( ioService)

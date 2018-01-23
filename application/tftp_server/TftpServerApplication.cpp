@@ -47,7 +47,7 @@ TftpServerApplication::TftpServerApplication(
     );
 
   // Add TFTP options
-  optionsDescription.add( configuration.getOptions());
+  optionsDescription.add( configuration.options());
 }
 
 TftpServerApplication::~TftpServerApplication() noexcept
