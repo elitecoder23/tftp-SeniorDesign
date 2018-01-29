@@ -63,8 +63,8 @@ OptionList::OptionList(
         AdditionalInfo( "Unexpected end of input data"));
     }
 
-    string name( nameBegin, nameEnd);
-    string value( valueBegin, valueEnd);
+    std::string name( nameBegin, nameEnd);
+    std::string value( valueBegin, valueEnd);
 
     // insert option as string option
     optionsValue.insert( std::make_pair(
@@ -109,7 +109,7 @@ OptionList::RawOptions OptionList::rawOptions() const
     rawOptions.push_back( 0);
 
     // option value
-    const string value( *(option.second));
+    const std::string value( *(option.second));
     rawOptions.insert( rawOptions.end(), value.begin(), value.end());
 
     // option terminator
@@ -119,7 +119,7 @@ OptionList::RawOptions OptionList::rawOptions() const
   return rawOptions;
 }
 
-bool OptionList::has( const string &name) const
+bool OptionList::has( const std::string &name) const
 {
   return optionsValue.count( name) >= 1;
 }
@@ -136,7 +136,7 @@ bool OptionList::has( const KnownOptions option) const
   return has( optionName);
 }
 
-const OptionPtr OptionList::get( const string &name) const
+const OptionPtr OptionList::get( const std::string &name) const
 {
   auto it{ optionsValue.find( name)};
 
@@ -144,7 +144,7 @@ const OptionPtr OptionList::get( const string &name) const
     it->second : OptionPtr();
 }
 
-void OptionList::set( const string &name, const string &value)
+void OptionList::set( const std::string &name, const std::string &value)
 {
   // If option already exists remove it first
   if (has( name))
@@ -419,17 +419,17 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
   return negotiatedOptions;
 }
 
-OptionList::string OptionList::toString() const
+std::string OptionList::toString() const
 {
   if ( optionsValue.empty())
   {
     return "(NONE)";
   }
 
-  string result;
+  std::string result;
 
   // iterate over all options
-  for ( const auto option : optionsValue)
+  for ( const auto &option : optionsValue)
   {
     result += option.second->toString() + ";";
   }

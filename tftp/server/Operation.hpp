@@ -34,8 +34,6 @@ class Operation
   public:
     //! Error info type
     using ErrorInfo = boost::optional< Packets::ErrorPacket>;
-    //! string type
-    using string = std::string;
 
     //! Default Constructor
     virtual ~Operation() noexcept = default;
@@ -57,7 +55,7 @@ class Operation
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      string &&errorMessage = {}) = 0;
+      std::string &&errorMessage = {}) = 0;
 
     /**
      * @brief Aborts the operation immediately.

@@ -37,7 +37,7 @@ void OperationImpl::start()
 
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
-  string &&errorMessage)
+  std::string &&errorMessage)
 {
   BOOST_LOG_FUNCTION();
 

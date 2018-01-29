@@ -15,7 +15,7 @@
 namespace Tftp {
 namespace Options {
 
-Option::string Option::getOptionName( const KnownOptions option) noexcept
+std::string Option::getOptionName( const KnownOptions option) noexcept
 {
   switch (option)
   {
@@ -32,17 +32,24 @@ Option::string Option::getOptionName( const KnownOptions option) noexcept
       break;
   }
 
-  return string();
+  return {};
 }
 
-Option::Option( const string &name):
+Option::Option( const std::string &name):
   nameValue( name)
 {
   // Validate option name
   assert( !name.empty());
 }
 
-Option::string Option::name() const
+Option::Option( std::string &&name):
+  nameValue( std::move( name))
+{
+  // Validate option name
+  assert( !nameValue.empty());
+}
+
+std::string Option::name() const
 {
   return nameValue;
 }
@@ -55,7 +62,7 @@ void Option::name( const std::string &name)
   nameValue = name;
 }
 
-Option::string Option::toString() const
+std::string Option::toString() const
 {
   return nameValue + ":" + static_cast< std::string>( *this);
 }

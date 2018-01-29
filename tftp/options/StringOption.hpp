@@ -34,12 +34,14 @@ class StringOption: public Option
      * @param[in] value
      *   The option value.
      **/
-    StringOption( const string &name, const string &value = {});
+    StringOption( const std::string &name, const std::string &value);
+
+    StringOption( std::string &&name, std::string &&value = {});
 
     /**
      * Returns the value directly.
      **/
-    operator string() const final;
+    operator std::string() const final;
 
     /**
      * @brief Sets the option value.
@@ -49,7 +51,7 @@ class StringOption: public Option
      *
      * @return *this
      **/
-    StringOption& operator=( const string &value);
+    StringOption& operator=( const std::string &value);
 
     /**
      * @copydoc Option::negotiate()
@@ -59,11 +61,11 @@ class StringOption: public Option
      *
      * @return Always an empty option pointer.
      **/
-    OptionPtr negotiate( const string &optionValue) const noexcept final;
+    OptionPtr negotiate( const std::string &optionValue) const noexcept final;
 
   private:
     //! The option value.
-    string value;
+    std::string value;
 };
 }
 }

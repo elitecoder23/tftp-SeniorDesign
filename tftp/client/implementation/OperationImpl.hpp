@@ -69,7 +69,7 @@ class OperationImpl :
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage = {}) final;
+      const std::string &errorMessage = {}) final;
 
     //! @copydoc Operation::abort
     void abort() final;
@@ -101,7 +101,7 @@ class OperationImpl :
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const UdpAddressType &remote,
-      const string &filename,
+      const std::string &filename,
       TransferMode mode,
       const UdpAddressType &local);
 
@@ -110,7 +110,7 @@ class OperationImpl :
      *
      * @return The request filename.
      **/
-    const string& filename() const;
+    const std::string& filename() const;
 
     /**
      * @brief Returns the transfer mode.
@@ -284,7 +284,7 @@ class OperationImpl :
     //! The TFTP server endpoint
     UdpAddressType remoteEndpoint;
     //! The filename of the transfer
-    const string filenameV;
+    const std::string filenameV;
     //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
     const TransferMode modeV;
     //! options for the transfer

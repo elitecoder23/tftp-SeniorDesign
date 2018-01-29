@@ -56,7 +56,7 @@ OperationPtr TftpClientImpl::createReadRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const UdpAddressType &remote,
-  const string &filename,
+  const std::string &filename,
   const TransferMode mode,
   const UdpAddressType &local)
 {
@@ -75,7 +75,7 @@ OperationPtr TftpClientImpl::createWriteRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const UdpAddressType &remote,
-  const string &filename,
+  const std::string &filename,
   const TransferMode mode,
   const UdpAddressType &local)
 {

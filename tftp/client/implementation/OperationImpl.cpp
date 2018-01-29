@@ -41,7 +41,7 @@ void OperationImpl::start()
 
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
-  const string &errorMessage)
+  const std::string &errorMessage)
 {
   BOOST_LOG_FUNCTION();
 
@@ -79,7 +79,7 @@ OperationImpl::OperationImpl(
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &remote,
-  const string &filename,
+  const std::string &filename,
   const TransferMode mode,
   const UdpAddressType &local)
 try :
@@ -126,7 +126,7 @@ catch ( boost::system::system_error &err)
     CommunicationException() << AdditionalInfo( err.what()));
 }
 
-const OperationImpl::string& OperationImpl::filename() const
+const std::string& OperationImpl::filename() const
 {
   return filenameV;
 }

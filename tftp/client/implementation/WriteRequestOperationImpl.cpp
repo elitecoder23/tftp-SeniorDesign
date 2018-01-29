@@ -28,7 +28,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const UdpAddressType &remote,
-  const string &filename,
+  const std::string &filename,
   const TransferMode mode,
   const UdpAddressType &local):
   OperationImpl(

@@ -51,7 +51,7 @@ class OperationImpl:
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      string &&errorMessage) final;
+      std::string &&errorMessage) final;
 
     //! @copydoc Operation::abort
     void abort() final;

@@ -39,10 +39,8 @@ namespace Options {
 class OptionList
 {
   public:
-    //! string type
-    using string = std::string;
     //! short form of option map
-    using Options = std::map< string, OptionPtr>;
+    using Options = std::map< std::string, OptionPtr>;
     //! short form of raw option
     using RawOptions = std::vector< uint8_t>;
 
@@ -114,7 +112,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    bool has( const string &name) const;
+    bool has( const std::string &name) const;
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -139,7 +137,7 @@ class OptionList
      * @return The value of the option.
      *   If the option is not set, an empty OptionPointer is returned.
      **/
-    const OptionPtr get( const string &name) const;
+    const OptionPtr get( const std::string &name) const;
 
     /**
      * @brief Sets the given option to the given value.
@@ -152,7 +150,7 @@ class OptionList
      * @param[in] value
      *   The option value.
      */
-    void set( const string &name, const string &value);
+    void set( const std::string &name, const std::string &value);
 
     /**
      * @brief Set the given option
@@ -171,7 +169,7 @@ class OptionList
      * @param[in] name
      *   The name of the option.
      **/
-    void remove( const string &name);
+    void remove( const std::string &name);
 
     /**
      * @brief Remove the given option from the option list.
@@ -346,7 +344,7 @@ class OptionList
      *
      * @return Option list description.
      **/
-    string toString() const;
+    std::string toString() const;
 
   private:
     //! the options.

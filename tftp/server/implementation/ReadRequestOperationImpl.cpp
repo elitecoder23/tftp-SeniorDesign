@@ -25,7 +25,7 @@ namespace Server {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
-  const TftpServerInternal &tftpServerInternal,
+  const TftpServerInternal &tftpServer,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const UdpAddressType &remote,
@@ -33,7 +33,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   const UdpAddressType &local) :
   OperationImpl(
     ioService,
-    tftpServerInternal,
+    tftpServer,
     completionHandler,
     remote,
     clientOptions,

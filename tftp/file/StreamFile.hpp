@@ -31,7 +31,9 @@ template< typename StreamT>
 class StreamFile: public TftpFile
 {
   public:
-    static_assert( std::is_base_of< std::iostream, StreamT>::value, "StreamT must be a std::iostream");
+    static_assert(
+      std::is_base_of< std::iostream, StreamT>::value,
+      "StreamT must be a std::iostream");
 
     //! The stream type
     using StreamType = StreamT;

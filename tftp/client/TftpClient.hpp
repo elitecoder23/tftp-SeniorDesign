@@ -31,9 +31,6 @@ namespace Client {
 class TftpClient
 {
   public:
-    //! string type
-    using string = std::string;
-
     /**
      * @brief Creates an instance of TFTP client.
      *
@@ -95,7 +92,7 @@ class TftpClient
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const UdpAddressType &remote,
-      const string &filename,
+      const std::string &filename,
       TransferMode mode,
       const UdpAddressType &local = UdpAddressType{}) = 0;
 
@@ -121,7 +118,7 @@ class TftpClient
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const UdpAddressType &remote,
-      const string &filename,
+      const std::string &filename,
       TransferMode mode,
       const UdpAddressType &local = UdpAddressType{}) = 0;
 

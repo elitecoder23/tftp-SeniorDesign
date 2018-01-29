@@ -101,7 +101,7 @@ class TftpServerImpl:
       const UdpAddressType &remote,
       const UdpAddressType &local,
       ErrorCode errorCode,
-      const string &errorMessage) final;
+      const std::string &errorMessage) final;
 
     //! @copydoc TftpServer::createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,string&&)
     OperationPtr createErrorOperation(
@@ -109,7 +109,7 @@ class TftpServerImpl:
       const UdpAddressType &remote,
       const UdpAddressType &local,
       ErrorCode errorCode,
-      string &&errorMessage = {}) final;
+      std::string &&errorMessage = {}) final;
 
     //! @copydoc TftpServerInternal::configuration
     const TftpConfiguration& configuration() const final;

@@ -109,7 +109,7 @@ void ErrorOperation::start()
 
 void ErrorOperation::gracefulAbort(
   const ErrorCode errorCode [[maybe_unused]],
-  string &&errorMessage [[maybe_unused]])
+  std::string &&errorMessage [[maybe_unused]])
 {
   // do nothing
 }

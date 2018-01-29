@@ -153,7 +153,7 @@ OperationPtr TftpServerImpl::createErrorOperation(
   const UdpAddressType &remote,
   const UdpAddressType &local,
   const ErrorCode errorCode,
-  const string &errorMessage)
+  const std::string &errorMessage)
 {
   return std::make_shared< ErrorOperation>(
     ioService,
@@ -169,7 +169,7 @@ OperationPtr TftpServerImpl::createErrorOperation(
   const UdpAddressType &remote,
   const UdpAddressType &local,
   const ErrorCode errorCode,
-  string &&errorMessage)
+  std::string &&errorMessage)
 {
   return std::make_shared< ErrorOperation>(
     ioService,

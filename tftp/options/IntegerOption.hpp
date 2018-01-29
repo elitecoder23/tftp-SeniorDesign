@@ -54,7 +54,7 @@ class BaseIntegerOption: public Option
     /**
      * Converts value to string and returns the result.
      **/
-    operator string() const final;
+    operator std::string() const final;
 
     /**
      * @brief Returns the option value.
@@ -81,14 +81,14 @@ class BaseIntegerOption: public Option
      *
      * @return *this
      **/
-    BaseIntegerOption& operator=( const string &value);
+    BaseIntegerOption& operator=( const std::string &value);
 
     /**
      * @copydoc Option::negotiate()
      *
      * Calls #negotiate(IntegerType) const for concrete option negotiation.
      **/
-    OptionPtr negotiate( const string &optionValue) const noexcept final;
+    OptionPtr negotiate( const std::string &optionValue) const noexcept final;
 
   protected:
     /**
@@ -100,7 +100,7 @@ class BaseIntegerOption: public Option
      *   Current value.
      *   Should be compliant to option negotiation ranges.
      **/
-    BaseIntegerOption( const string &name, IntegerType value);
+    BaseIntegerOption( const std::string &name, IntegerType value);
 
     /**
      * @brief @copybrief Option::negotiate()
@@ -123,7 +123,7 @@ class BaseIntegerOption: public Option
      *
      * @return The value converted to a string.
      **/
-    static string toString( IntegerType value);
+    static std::string toString( IntegerType value);
 
     /**
      * @brief Converts the given string to an integer.
@@ -133,14 +133,14 @@ class BaseIntegerOption: public Option
      *
      * @return The converted value
      **/
-    static IntegerType toInt( const string &value);
+    static IntegerType toInt( const std::string &value);
 
     //! The value
     IntegerType value;
 };
 
 template< typename IntT>
-BaseIntegerOption< IntT>::operator string() const
+BaseIntegerOption< IntT>::operator std::string() const
 {
   return toString( value);
 }
@@ -161,7 +161,7 @@ BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
 
 template< typename IntT>
 BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
-  const string &value)
+  const std::string &value)
 {
   setValue( toInt( value));
   return *this;
@@ -169,7 +169,7 @@ BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
 
 template< typename IntT>
 BaseIntegerOption< IntT>::BaseIntegerOption(
-  const string &name,
+  const std::string &name,
   const IntegerType value):
   Option( name),
   value( value)
@@ -178,7 +178,7 @@ BaseIntegerOption< IntT>::BaseIntegerOption(
 
 template< typename IntT>
 OptionPtr BaseIntegerOption< IntT>::negotiate(
-  const string &optionValue) const noexcept
+  const std::string &optionValue) const noexcept
 {
   try
   {
@@ -192,24 +192,21 @@ OptionPtr BaseIntegerOption< IntT>::negotiate(
 }
 
 template< typename IntT>
-typename BaseIntegerOption< IntT>::string BaseIntegerOption< IntT>::toString(
-  const IntegerType value)
+std::string BaseIntegerOption< IntT>::toString( IntegerType value)
 {
-  return boost::lexical_cast< string>( value);
+  return boost::lexical_cast< std::string>( value);
 }
 
-// Full specialisation for uint8_t
-template<>
-inline typename BaseIntegerOption< uint8_t>::string
-BaseIntegerOption< uint8_t>::toString(
-  const IntegerType value)
+// Full specialisation for uint8_t - must be marked as inline because its a real function now - otherwise put definition in cpp file
+template< >
+inline std::string BaseIntegerOption< uint8_t>::toString( IntegerType value)
 {
-  return boost::lexical_cast< string>( static_cast< uint16_t>( value));
+  return boost::lexical_cast< std::string>( static_cast< uint16_t>( value));
 }
 
 template< typename IntT>
 typename BaseIntegerOption< IntT>::IntegerType BaseIntegerOption< IntT>::toInt(
-  const string &value)
+  const std::string &value)
 {
   return boost::lexical_cast< IntT>( value);
 }
@@ -217,7 +214,7 @@ typename BaseIntegerOption< IntT>::IntegerType BaseIntegerOption< IntT>::toInt(
 // Full specialisation for uint8_t
 template<>
 inline typename BaseIntegerOption< uint8_t>::IntegerType
-BaseIntegerOption< uint8_t>::toInt( const string &value)
+BaseIntegerOption< uint8_t>::toInt( const std::string &value)
 {
   return (uint8_t)boost::lexical_cast< uint16_t>( value);
 }
@@ -237,7 +234,6 @@ class IntegerOption: public BaseIntegerOption< IntT>
     using NegotiateType = NegotiateT;
 
     using typename BaseIntegerOption< IntT>::IntegerType;
-    using typename BaseIntegerOption< IntT>::string;
 
     //! Optional integer value
     using OptionalIntegerType = boost::optional< IntT>;
@@ -253,7 +249,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
      *   The negotiation operation to use.
      **/
     IntegerOption(
-      const typename BaseIntegerOption< IntT>::string &name,
+      const std::string &name,
       typename BaseIntegerOption< IntT>::IntegerType value,
       NegotiateType negotiateOperation = NegotiateType());
 
@@ -278,7 +274,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
      *
      * @return *this
      **/
-    IntegerOption& operator=( const string &value);
+    IntegerOption& operator=( const std::string &value);
 
     // using operation
     using BaseIntegerOption< IntT>::negotiate;
@@ -302,7 +298,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
 
 template< typename IntT, typename NegotiateT>
 IntegerOption< IntT, NegotiateT>::IntegerOption(
-  const typename BaseIntegerOption< IntT>::string &name,
+  const std::string &name,
   const typename BaseIntegerOption< IntT>::IntegerType value,
   NegotiateType negotiateOperation):
   BaseIntegerOption< IntT>( name, value),
@@ -320,7 +316,7 @@ IntegerOption< IntT, NegotiateT>& IntegerOption< IntT, NegotiateT>::operator=(
 
 template< typename IntT, typename NegotiateT>
 IntegerOption< IntT, NegotiateT>& IntegerOption< IntT, NegotiateT>::operator=(
-  const string &value)
+  const std::string &value)
 {
   BaseIntegerOption< IntT>::operator=( value);
   return *this;

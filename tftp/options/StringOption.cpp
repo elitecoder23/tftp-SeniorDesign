@@ -17,24 +17,30 @@
 namespace Tftp {
 namespace Options {
 
-StringOption::StringOption(const string &name, const string &value):
+StringOption::StringOption(const std::string &name, const std::string &value):
   Option( name),
   value( value)
 {
 }
 
-StringOption::operator StringOption::string() const
+StringOption::StringOption( std::string &&name, std::string &&value):
+  Option( std::move( name)),
+  value( std::move( value))
+{
+}
+
+StringOption::operator std::string() const
 {
   return value;
 }
 
-StringOption& StringOption::operator=( const string &value)
+StringOption& StringOption::operator=( const std::string &value)
 {
   this->value = value;
   return *this;
 }
 
-OptionPtr StringOption::negotiate( const string &) const noexcept
+OptionPtr StringOption::negotiate( const std::string &) const noexcept
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
     "Its not possible to use StringOption for negotiation";

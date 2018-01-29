@@ -34,8 +34,6 @@ class Operation
   public:
     //! Error Information type
     using ErrorInfo = boost::optional< Packets::ErrorPacket>;
-    //! String type
-    using string = std::string;
 
     //! Default destructor.
     virtual ~Operation() noexcept = default;
@@ -62,7 +60,7 @@ class Operation
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      const string &errorMessage = {}) = 0;
+      const std::string &errorMessage = {}) = 0;
 
     /**
      * @brief Immediately cancels the transfer.

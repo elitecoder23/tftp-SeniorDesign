@@ -57,7 +57,7 @@ class TransmitDataHandler: public DataHandler
      *
      * @return The data, which will be transmitted.
      **/
-    virtual DataType sendData( size_t maxSize) noexcept = 0;
+    virtual DataType sendData( std::size_t maxSize) noexcept = 0;
 };
 
 }

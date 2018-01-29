@@ -38,9 +38,6 @@ namespace Server {
 class TftpServer
 {
   public:
-    //! string type
-    using string = std::string;
-
     /**
      * @brief The default address, where the server listens.
      *
@@ -165,7 +162,7 @@ class TftpServer
       const UdpAddressType &remote,
       const UdpAddressType &local,
       ErrorCode errorCode,
-      const string &errorMessage) = 0;
+      const std::string &errorMessage) = 0;
 
     //! @copydoc createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&)
     virtual OperationPtr createErrorOperation(
@@ -173,7 +170,7 @@ class TftpServer
       const UdpAddressType &remote,
       const UdpAddressType &local,
       ErrorCode errorCode,
-      string &&errorMessage = {}) = 0;
+      std::string &&errorMessage = {}) = 0;
 
   protected:
     //! Protected constructor

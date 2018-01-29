@@ -28,9 +28,6 @@ namespace Options {
 class Option
 {
   public:
-    //! string type
-    using string = std::string;
-
     /**
      * @brief Returns the option string for the given option.
      *
@@ -39,7 +36,7 @@ class Option
      *
      * @return Returns the option name.
      **/
-    static string getOptionName( const KnownOptions option) noexcept;
+    static std::string getOptionName( const KnownOptions option) noexcept;
 
     /**
      * @brief Generate TFTP option with the given name.
@@ -47,7 +44,9 @@ class Option
      * @param[in] name
      *   The option name. Must be not empty.
      **/
-    Option( const string &name);
+    Option( const std::string &name);
+
+    Option( std::string &&name);
 
     //! default copy constructor
     Option( const Option &other) = default;
@@ -69,7 +68,7 @@ class Option
      *
      * @return The option name.
      **/
-    string name() const;
+    std::string name() const;
 
     /**
      * @brief Set the option name.
@@ -77,14 +76,14 @@ class Option
      * @param[in] name
      *   The new option name. Must be not empty.
      **/
-    void name( const string &name);
+    void name( const std::string &name);
 
     /**
      * @brief Returns the option value as string.
      *
      * @return The option value as string.
      **/
-    virtual operator string() const = 0;
+    virtual operator std::string() const = 0;
 
     /**
      * @brief %Option negotiation.
@@ -105,7 +104,7 @@ class Option
      * @retval OptionPtr()
      *   If the option value is not acceptable.
      **/
-    virtual OptionPtr negotiate( const string &optionValue) const noexcept = 0;
+    virtual OptionPtr negotiate( const std::string &optionValue) const noexcept = 0;
 
     /**
      * @brief Returns a string, which describes the option.
@@ -114,11 +113,11 @@ class Option
      *
      * @return Option list description.
      **/
-    virtual string toString() const;
+    virtual std::string toString() const;
 
   private:
     //! The option name
-    string nameValue;
+    std::string nameValue;
 };
 
 }
