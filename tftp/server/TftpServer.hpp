@@ -164,7 +164,7 @@ class TftpServer
       ErrorCode errorCode,
       const std::string &errorMessage) = 0;
 
-    //! @copydoc createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const string&)
+    //! @copydoc createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const std::string&)
     virtual OperationPtr createErrorOperation(
       OperationCompletedHandler completionHandler,
       const UdpAddressType &remote,

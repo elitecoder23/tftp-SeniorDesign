@@ -46,6 +46,7 @@ class Option
      **/
     Option( const std::string &name);
 
+    //! @copydoc Option(const std::string&)
     Option( std::string &&name);
 
     //! default copy constructor

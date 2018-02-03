@@ -51,7 +51,7 @@ class TftpClientImpl : public TftpClientInternal
     //!@copydoc TftpClient::stop
     void stop() final;
 
-    //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler, const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
+    //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const std::string&,TransferMode,const UdpAddressType&)
     OperationPtr createReadRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -60,7 +60,7 @@ class TftpClientImpl : public TftpClientInternal
       TransferMode mode,
       const UdpAddressType &local) final;
 
-    //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler, const UdpAddressType &,const string &, TransferMode,const UdpAddressType &)
+    //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const std::string&,TransferMode,const UdpAddressType&)
     OperationPtr createWriteRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -82,7 +82,7 @@ class TftpClientImpl : public TftpClientInternal
     const Options::OptionList optionsV;
     //! The IO service, which handles the asynchronous receive operation
     boost::asio::io_service ioService;
-    //! IO-Service dummy work to keep IO-servie loops running
+    //! IO-Service dummy work to keep IO-service loops running
     boost::asio::io_service::work work;
 };
 
