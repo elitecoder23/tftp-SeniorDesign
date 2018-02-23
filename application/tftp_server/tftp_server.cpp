@@ -14,8 +14,6 @@
 
 #include <helper/Logger.hpp>
 
-#include <boost/application.hpp>
-
 /**
  * @brief TFTP server program entry point
  *
@@ -32,25 +30,9 @@ int main( int argc, char ** argv)
 {
   initLogging();
 
-  // The application context
-  boost::application::context context;
-
   // The application
-  TftpServerApplication app( context);
-
-  // Arguments
-  context.insert < boost::application::args>(
-    std::make_shared < boost::application::args > (argc, argv));
-
-  // Termination Handler
-  context.insert < boost::application::termination_handler>(
-    std::make_shared < boost::application::termination_handler>(
-      boost::application::handler< bool>::make_callback(
-        app,
-        &TftpServerApplication::stop)));
+  TftpServerApplication app;
 
   // start application
-  return boost::application::launch < boost::application::common>(
-    app,
-    context);
+  return app( argc, argv);
 }

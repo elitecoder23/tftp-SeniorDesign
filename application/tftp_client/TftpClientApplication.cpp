@@ -29,15 +29,12 @@
 
 #include <boost/program_options.hpp>
 #include <boost/exception/all.hpp>
-#include <boost/application.hpp>
 
 #include <cstdlib>
 #include <memory>
 #include <fstream>
 
-TftpClientApplication::TftpClientApplication(
-  boost::application::context &context) :
-  context( context),
+TftpClientApplication::TftpClientApplication() :
   optionsDescription( "TFTP Client Options"),
   requestType( Tftp::RequestType::Invalid)
 {
@@ -66,20 +63,31 @@ TftpClientApplication::TftpClientApplication(
   optionsDescription.add( configuration.options());
 }
 
-int TftpClientApplication::operator()()
+int TftpClientApplication::operator()( int argc, char *argv[])
 {
   try
   {
     std::cout << "TFTP client\n";
 
-    if ( !handleCommandLine())
+    boost::program_options::variables_map options;
+    boost::program_options::store(
+      boost::program_options::parse_command_line(
+        argc,
+        argv,
+        optionsDescription),
+      options);
+
+    if ( options.count( "help") != 0)
     {
+      std::cout << optionsDescription << std::endl;
       return EXIT_FAILURE;
     }
 
+    boost::program_options::notify( options);
+
     // Assemble TFTP configuration
 
-    auto tftpClient( Tftp::Client::TftpClient::createInstance( configuration));
+    auto tftpClient{ Tftp::Client::TftpClient::createInstance( configuration)};
 
     Tftp::Client::OperationPtr tftpOperation;
 
@@ -114,6 +122,11 @@ int TftpClientApplication::operator()()
     tftpOperation->start();
     tftpClient->entry();
   }
+  catch ( boost::program_options::error &e)
+  {
+    std::cout << e.what() << std::endl << optionsDescription << std::endl;
+    return EXIT_FAILURE;
+  }
   catch ( Tftp::TftpException &e)
   {
     std::string const * info = boost::get_error_info< AdditionalInfo>( e);
@@ -139,35 +152,4 @@ int TftpClientApplication::operator()()
   }
 
   return EXIT_SUCCESS;
-}
-
-bool TftpClientApplication::handleCommandLine()
-{
-  try
-  {
-    std::shared_ptr< boost::application::args> args(
-      context.find< boost::application::args>());
-
-    boost::program_options::variables_map options;
-    boost::program_options::store(
-      boost::program_options::parse_command_line(
-        args->argc(),
-        args->argv(),
-        optionsDescription),
-      options);
-    boost::program_options::notify( options);
-
-    if ( options.count( "help") != 0)
-    {
-      std::cout << optionsDescription << std::endl;
-      return false;
-    }
-  }
-  catch ( boost::program_options::error &e)
-  {
-    std::cout << e.what() << std::endl << optionsDescription << std::endl;
-    return false;
-  }
-
-  return true;
 }

@@ -28,10 +28,9 @@
 
 using Tftp::TftpException;
 
-TftpServerApplication::TftpServerApplication(
-  boost::application::context &context) :
-  context( context),
-  optionsDescription( "TFTP server options")
+TftpServerApplication::TftpServerApplication() :
+  optionsDescription( "TFTP server options"),
+  signals( ioService, SIGINT, SIGTERM)
 {
   optionsDescription.add_options()
     (
@@ -54,16 +53,27 @@ TftpServerApplication::~TftpServerApplication() noexcept
 {
 }
 
-int TftpServerApplication::operator()()
+int TftpServerApplication::operator()( int argc, char *argv[])
 {
   try
   {
     std::cout << "TFTP server\n";
 
-    if ( !handleCommandLine())
+    boost::program_options::variables_map options;
+    boost::program_options::store(
+      boost::program_options::parse_command_line(
+        argc,
+        argv,
+        optionsDescription),
+      options);
+
+    if ( options.count( "help") != 0)
     {
+      std::cout << optionsDescription << std::endl;
       return EXIT_FAILURE;
     }
+
+    boost::program_options::notify( options);
 
     // make a absolute path
     baseDir = boost::filesystem::canonical( baseDir);
@@ -92,6 +102,19 @@ int TftpServerApplication::operator()()
 
     server->start();
     server->entry();
+
+    // connect to SIGINT and SIGTERM
+    signals.async_wait(
+     boost::bind(
+       &TftpServerApplication::stop,
+       this));
+
+    ioService.run();
+  }
+  catch ( boost::program_options::error &e)
+  {
+    std::cout << e.what() << std::endl << optionsDescription << std::endl;
+    return EXIT_FAILURE;
   }
   catch ( Tftp::TftpException &e)
   {
@@ -123,37 +146,6 @@ bool TftpServerApplication::stop()
   std::cout << "Termination request" << std::endl;
 
   server->stop();
-
-  return true;
-}
-
-bool TftpServerApplication::handleCommandLine()
-{
-  try
-  {
-    std::shared_ptr < boost::application::args > args = context.find<
-      boost::application::args>();
-
-    boost::program_options::variables_map options;
-    boost::program_options::store(
-      boost::program_options::parse_command_line(
-        args->argc(),
-        args->argv(),
-        optionsDescription),
-      options);
-    boost::program_options::notify( options);
-
-    if ( options.count( "help") != 0)
-    {
-      std::cout << optionsDescription << std::endl;
-      return false;
-    }
-  }
-  catch ( boost::program_options::error &e)
-  {
-    std::cout << e.what() << std::endl << optionsDescription << std::endl;
-    return false;
-  }
 
   return true;
 }
@@ -192,7 +184,7 @@ bool TftpServerApplication::checkFilename( const boost::filesystem::path &filena
 
 void TftpServerApplication::receivedRequest(
   const Tftp::RequestType requestType,
-  const string &filename,
+  const std::string &filename,
   const Tftp::TransferMode mode,
   const Tftp::Options::OptionList &options,
   const Tftp::UdpAddressType &from)

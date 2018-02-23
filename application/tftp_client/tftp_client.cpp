@@ -14,8 +14,6 @@
 
 #include <helper/Logger.hpp>
 
-#include <boost/application.hpp>
-
 #include <cstdlib>
 #include <memory>
 
@@ -35,14 +33,7 @@ int main( int argc, char ** argv)
 {
   initLogging();
 
-  boost::application::context context;
+  TftpClientApplication app;
 
-  TftpClientApplication app( context);
-
-  context.insert < boost::application::args>(
-    std::make_shared < boost::application::args > (argc, argv));
-
-  return boost::application::launch < boost::application::common> (
-    app,
-    context);
+  return app( argc, argv);
 }

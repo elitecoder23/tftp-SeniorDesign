@@ -19,7 +19,6 @@
 #include <tftp/client/Client.hpp>
 
 #include <boost/program_options.hpp>
-#include <boost/application.hpp>
 #include <boost/asio.hpp>
 
 #include <string>
@@ -27,15 +26,13 @@
 class TftpClientApplication
 {
   public:
-    using TftpClientPtr = Tftp::Client::TftpClientPtr;
-
     /**
      * @brief Constructs the TFTP client application.
      *
      * @param[in] context
      *   The application context.
      **/
-    TftpClientApplication( boost::application::context &context);
+    TftpClientApplication();
 
     /**
      * @brief Executes the TFTP client.
@@ -46,22 +43,13 @@ class TftpClientApplication
      * @retval EXIT_FAILURE
      *   If an error has occurred.
      **/
-    int operator()();
+    int operator()( int argc, char *argv[]);
 
   private:
-    void read( TftpClientPtr client);
+    void read( Tftp::Client::TftpClientPtr client);
 
-    void write( TftpClientPtr client);
+    void write( Tftp::Client::TftpClientPtr client);
 
-    /**
-     * @brief Parsed the command line and assigns parameter.
-     *
-     * @return If parsing was successful
-     **/
-    bool handleCommandLine();
-
-    //! The application context
-    boost::application::context& context;
     //! Program Options description
     boost::program_options::options_description optionsDescription;
 

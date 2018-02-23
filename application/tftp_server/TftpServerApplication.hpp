@@ -16,8 +16,8 @@
 #include <tftp/server/TftpServer.hpp>
 
 #include <boost/filesystem.hpp>
-#include <boost/application.hpp>
 #include <boost/program_options.hpp>
+#include <boost/asio.hpp>
 
 //! The TFTP server application.
 class TftpServerApplication
@@ -25,45 +25,26 @@ class TftpServerApplication
   public:
     /**
      * @brief Constructor, which instantiates the TFT server application.
-     *
-     * @param[in] baseDir
-     *   Base directory, where the server works in.
-     * @param[in] port
-     *   UDP port, where the server listens on.
      **/
-    TftpServerApplication( boost::application::context &context);
+    TftpServerApplication();
 
     /**
      * @brief Destructor of the TFTP server application.
      **/
     virtual ~TftpServerApplication() noexcept;
 
-    int operator()();
+    int operator()( int argc, char *argv[]);
 
     bool stop();
 
   private:
-    using string = std::string;
-
-    bool handleCommandLine();
-
     void shutdown();
 
-    /**
-     * @brief
-     *
-     * @param filename
-     *
-     * @throw
-     **/
     bool checkFilename( const boost::filesystem::path &filename) const;
 
-    /**
-     *
-     **/
     void receivedRequest(
       Tftp::RequestType requestType,
-      const string &filename,
+      const std::string &filename,
       Tftp::TransferMode mode,
       const Tftp::Options::OptionList &options,
       const Tftp::UdpAddressType &from);
@@ -78,8 +59,7 @@ class TftpServerApplication
       const Tftp::Options::OptionList &options,
       const Tftp::UdpAddressType &from);
 
-
-    boost::application::context &context;
+    //! Options description
     boost::program_options::options_description optionsDescription;
 
     //! base directory of TFTP server
@@ -88,6 +68,12 @@ class TftpServerApplication
     Tftp::TftpConfiguration configuration;
     //! The TFTP server instance
     Tftp::Server::TftpServerPtr server;
+
+    //! IO Service
+    boost::asio::io_service ioService;
+    //! ASIO signal handler
+    boost::asio::signal_set signals;
+
 };
 
 #endif
