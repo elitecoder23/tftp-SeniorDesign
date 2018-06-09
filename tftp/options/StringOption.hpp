@@ -62,7 +62,7 @@ class StringOption: public Option
      *
      * @return Always an empty option pointer.
      **/
-    OptionPtr negotiate( const std::string &optionValue) const noexcept final;
+    OptionPtr negotiate( std::string_view optionValue) const noexcept final;
 
   private:
     //! The option value.

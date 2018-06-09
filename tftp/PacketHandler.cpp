@@ -27,14 +27,14 @@ void PacketHandler::handlePacket(
 
   using Packets::PacketFactory;
 
-  switch ( PacketFactory::getPacketType( rawPacket))
+  switch ( PacketFactory::packetType( rawPacket))
   {
     case PacketType::ReadRequest:
       try
       {
         handleReadRequestPacket(
           from,
-          PacketFactory::getReadRequestPacket( rawPacket));
+          PacketFactory::readRequestPacket( rawPacket));
       }
       catch ( InvalidPacketException &e)
       {
@@ -50,7 +50,7 @@ void PacketHandler::handlePacket(
       {
         handleWriteRequestPacket(
           from,
-          PacketFactory::getWriteRequestPacket( rawPacket));
+          PacketFactory::writeRequestPacket( rawPacket));
       }
       catch ( InvalidPacketException &e)
       {
@@ -64,7 +64,7 @@ void PacketHandler::handlePacket(
     case PacketType::Data:
       try
       {
-        handleDataPacket( from, PacketFactory::getDataPacket( rawPacket));
+        handleDataPacket( from, PacketFactory::dataPacket( rawPacket));
       }
       catch ( InvalidPacketException &e)
       {
@@ -80,7 +80,7 @@ void PacketHandler::handlePacket(
       {
         handleAcknowledgementPacket(
           from,
-          PacketFactory::getAcknowledgementPacket( rawPacket));
+          PacketFactory::acknowledgementPacket( rawPacket));
       }
       catch ( InvalidPacketException &e)
       {
@@ -94,7 +94,7 @@ void PacketHandler::handlePacket(
     case PacketType::Error:
       try
       {
-        handleErrorPacket( from, PacketFactory::getErrorPacket( rawPacket));
+        handleErrorPacket( from, PacketFactory::errorPacket( rawPacket));
       }
       catch ( InvalidPacketException &e)
       {
@@ -110,7 +110,7 @@ void PacketHandler::handlePacket(
       {
         handleOptionsAcknowledgementPacket(
           from,
-          PacketFactory::getOptionsAcknowledgementPacket( rawPacket));
+          PacketFactory::optionsAcknowledgementPacket( rawPacket));
       }
       catch ( InvalidPacketException &e)
       {

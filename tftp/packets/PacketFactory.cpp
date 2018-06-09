@@ -15,41 +15,41 @@
 namespace Tftp {
 namespace Packets {
 
-Tftp::PacketType PacketFactory::getPacketType(
+Tftp::PacketType PacketFactory::packetType(
   const RawTftpPacket &rawPacket) noexcept
 {
   return Packet::packetType( rawPacket);
 }
 
-ReadRequestPacket PacketFactory::getReadRequestPacket(
+ReadRequestPacket PacketFactory::readRequestPacket(
   const RawTftpPacket &rawPacket)
 {
   return ReadRequestPacket( rawPacket);
 }
 
-WriteRequestPacket PacketFactory::getWriteRequestPacket(
+WriteRequestPacket PacketFactory::writeRequestPacket(
   const RawTftpPacket &rawPacket)
 {
   return WriteRequestPacket( rawPacket);
 }
 
-DataPacket PacketFactory::getDataPacket( const RawTftpPacket &rawPacket)
+DataPacket PacketFactory::dataPacket( const RawTftpPacket &rawPacket)
 {
   return DataPacket( rawPacket);
 }
 
-ErrorPacket PacketFactory::getErrorPacket( const RawTftpPacket &rawPacket)
+ErrorPacket PacketFactory::errorPacket( const RawTftpPacket &rawPacket)
 {
   return ErrorPacket( rawPacket);
 }
 
-AcknowledgementPacket PacketFactory::getAcknowledgementPacket(
+AcknowledgementPacket PacketFactory::acknowledgementPacket(
   const RawTftpPacket &rawPacket)
 {
   return AcknowledgementPacket( rawPacket);
 }
 
-OptionsAcknowledgementPacket PacketFactory::getOptionsAcknowledgementPacket(
+OptionsAcknowledgementPacket PacketFactory::optionsAcknowledgementPacket(
   const RawTftpPacket &rawPacket)
 {
   return OptionsAcknowledgementPacket( rawPacket);

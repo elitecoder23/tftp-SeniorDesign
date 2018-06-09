@@ -40,7 +40,7 @@ ReadWriteRequestPacket::string ReadWriteRequestPacket::decodeMode(
   }
 }
 
-TransferMode ReadWriteRequestPacket::decodeMode( const string &mode)
+TransferMode ReadWriteRequestPacket::decodeMode( const std::string &mode)
 {
   //! @todo check implementation of transform
   string upperMode = mode;
@@ -77,12 +77,12 @@ ReadWriteRequestPacket& ReadWriteRequestPacket::operator=(
   return *this;
 }
 
-const ReadWriteRequestPacket::string& ReadWriteRequestPacket::filename() const
+const std::string& ReadWriteRequestPacket::filename() const
 {
   return filenameValue;
 }
 
-void ReadWriteRequestPacket::filename( const string &filename)
+void ReadWriteRequestPacket::filename( const std::string &filename)
 {
   filenameValue = filename;
 }
@@ -113,19 +113,21 @@ void ReadWriteRequestPacket::options( const Options::OptionList &options)
 }
 
 const ReadWriteRequestPacket::string ReadWriteRequestPacket::option(
-  const string &name) const
+  const std::string &name) const
 {
   Options::OptionPtr option( optionsValue.get( name));
 
   return (option) ? static_cast< string>( *option) : string();
 }
 
-void ReadWriteRequestPacket::option( const string &name, const string &value)
+void ReadWriteRequestPacket::option(
+  const std::string &name,
+  const std::string &value)
 {
   optionsValue.set( name, value);
 }
 
-ReadWriteRequestPacket::operator string() const
+ReadWriteRequestPacket::operator std::string() const
 {
   return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
     Packet::operator string() %

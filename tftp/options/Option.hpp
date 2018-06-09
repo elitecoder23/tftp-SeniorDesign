@@ -16,6 +16,7 @@
 #include <tftp/options/Options.hpp>
 
 #include <string>
+#include <string_view>
 
 namespace Tftp {
 namespace Options {
@@ -36,7 +37,7 @@ class Option
      *
      * @return Returns the option name.
      **/
-    static std::string getOptionName( const KnownOptions option) noexcept;
+    static std::string optionName( const KnownOptions option) noexcept;
 
     /**
      * @brief Generate TFTP option with the given name.
@@ -105,7 +106,7 @@ class Option
      * @retval OptionPtr()
      *   If the option value is not acceptable.
      **/
-    virtual OptionPtr negotiate( const std::string &optionValue) const noexcept = 0;
+    virtual OptionPtr negotiate( std::string_view optionValue) const noexcept = 0;
 
     /**
      * @brief Returns a string, which describes the option.

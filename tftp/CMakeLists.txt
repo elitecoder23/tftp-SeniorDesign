@@ -115,13 +115,14 @@ target_compile_options(
 
 target_link_libraries( tftp helper Boost::program_options)
 
-target_compile_features( tftp PUBLIC cxx_std_14)
+target_compile_features( tftp PUBLIC cxx_std_17)
 
 add_library( 
   tftp_test 
   OBJECT
   
   options/IntegerOptionTest.cpp
+  options/OptionTest.cpp
   options/OptionListTest.cpp
   options/StringOptionTest.cpp
   
@@ -146,7 +147,7 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra>)
 
-target_compile_features( tftp_test PUBLIC cxx_std_14)
+target_compile_features( tftp_test PUBLIC cxx_std_17)
 
 target_include_directories( 
   tftp_test

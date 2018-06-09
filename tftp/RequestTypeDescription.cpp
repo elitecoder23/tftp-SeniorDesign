@@ -35,7 +35,7 @@ std::istream& operator>>( std::istream& st, RequestType& requestType)
   st >> requestTypeStr;
 
   // decode BHM area
-  requestType = RequestTypeDescription::instance().findEnum( requestTypeStr);
+  requestType = RequestTypeDescription::instance().enumeration( requestTypeStr);
 
   if ( RequestType::Invalid == requestType)
   {

@@ -45,7 +45,7 @@ class PacketFactory
      * @retval INVALID
      *   If the packet cannot be decoded.
      **/
-    static PacketType getPacketType( const RawTftpPacket &rawPacket) noexcept;
+    static PacketType packetType( const RawTftpPacket &rawPacket) noexcept;
 
     /**
      * @brief Decodes the given raw data as TFTP Read Request Packet.
@@ -58,7 +58,7 @@ class PacketFactory
      * @throw InvalidPacketException
      *   When packet cannot be decoded as Read Request Packet (RRQ).
      **/
-    static ReadRequestPacket getReadRequestPacket(
+    static ReadRequestPacket readRequestPacket(
       const RawTftpPacket &rawPacket);
 
     /**
@@ -72,7 +72,7 @@ class PacketFactory
      * @throw InvalidPacketException
      *    When packet cannot be decoded as Write Request Packet.
      **/
-    static WriteRequestPacket getWriteRequestPacket(
+    static WriteRequestPacket writeRequestPacket(
       const RawTftpPacket &rawPacket);
 
     /**
@@ -86,7 +86,7 @@ class PacketFactory
      * @throw InvalidPacketException
      *  When packet cannot be decoded as Data Packet.
      **/
-    static DataPacket getDataPacket( const RawTftpPacket &rawPacket);
+    static DataPacket dataPacket( const RawTftpPacket &rawPacket);
 
     /**
      * @brief Decodes the given raw data as TFTP Error Packet.
@@ -99,7 +99,7 @@ class PacketFactory
      * @throw InvalidPacketException
      *  When packet cannot be decoded as Error Packet.
      **/
-    static ErrorPacket getErrorPacket( const RawTftpPacket &rawPacket);
+    static ErrorPacket errorPacket( const RawTftpPacket &rawPacket);
 
     /**
      * @brief Decodes the given raw data as TFTP Acknowledgement Packet.
@@ -112,7 +112,7 @@ class PacketFactory
      * @throw InvalidPacketException
      *    When packet cannot be decoded as Acknowledgement Packet.
      **/
-    static AcknowledgementPacket getAcknowledgementPacket(
+    static AcknowledgementPacket acknowledgementPacket(
       const RawTftpPacket &rawPacket);
 
     /**
@@ -127,7 +127,7 @@ class PacketFactory
      * @throw InvalidPacketException
      *   When packet cannot be decoded as Options Acknowledgement Packet.
      **/
-    static OptionsAcknowledgementPacket getOptionsAcknowledgementPacket(
+    static OptionsAcknowledgementPacket optionsAcknowledgementPacket(
       const RawTftpPacket &rawPacket);
 
   private:

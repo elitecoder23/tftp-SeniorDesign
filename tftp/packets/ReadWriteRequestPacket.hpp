@@ -19,6 +19,7 @@
 
 #include <map>
 #include <string>
+#include <string_view>
 
 namespace Tftp {
 namespace Packets {
@@ -44,7 +45,7 @@ class ReadWriteRequestPacket: public Packet
      * @retval string()
      *   When [mode] is not a valid transfer mode.
      **/
-    static string decodeMode( TransferMode mode);
+    static std::string decodeMode( TransferMode mode);
 
     /**
      * @brief Converts the mode string to the corresponding enumeration.
@@ -56,7 +57,7 @@ class ReadWriteRequestPacket: public Packet
      * @retval TransferMode::Invalid
      *   When [mode] is not a valid transfer mode.
      **/
-    static TransferMode decodeMode( const string &mode);
+    static TransferMode decodeMode( const std::string &mode);
 
     //! @copydoc Packet::operator=(const RawTftpPacket&)
     ReadWriteRequestPacket& operator=( const RawTftpPacket &rawPacket) final;
@@ -66,7 +67,7 @@ class ReadWriteRequestPacket: public Packet
      *
      * @return The filename
      **/
-    const string& filename() const;
+    const std::string& filename() const;
 
     /**
      * @brief Sets the filename
@@ -74,7 +75,7 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] filename
      *   The new filename.
      **/
-    void filename( const string &filename);
+    void filename( const std::string &filename);
 
     /**
      * @brief Returns the transfer mode.
@@ -126,7 +127,7 @@ class ReadWriteRequestPacket: public Packet
      * @retval std::string()
      *   When the given option is not set.
      **/
-    const string option( const string &name) const;
+    const std::string option( const std::string &name) const;
 
     /**
      * @brief set a option
@@ -136,10 +137,10 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] value
      *   The option value.
      **/
-    void option( const string &name, const string &value);
+    void option( const std::string &name, const std::string &value);
 
-    // @copydoc Packet::operator string() const
-    operator string() const final;
+    // @copydoc Packet::operator std::string() const
+    operator std::string() const final;
 
   protected:
     /**
@@ -159,7 +160,7 @@ class ReadWriteRequestPacket: public Packet
      **/
     ReadWriteRequestPacket(
       PacketType packetType,
-      const string &filename,
+      const std::string &filename,
       TransferMode mode,
       const Options::OptionList &options);
 

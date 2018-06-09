@@ -22,6 +22,7 @@
 
 #include <boost/optional.hpp>
 
+#include <string_view>
 #include <stdexcept>
 
 namespace Tftp {
@@ -88,7 +89,7 @@ class BaseIntegerOption: public Option
      *
      * Calls #negotiate(IntegerType) const for concrete option negotiation.
      **/
-    OptionPtr negotiate( const std::string &optionValue) const noexcept final;
+    OptionPtr negotiate( std::string_view optionValue) const noexcept final;
 
   protected:
     /**
@@ -133,7 +134,7 @@ class BaseIntegerOption: public Option
      *
      * @return The converted value
      **/
-    static IntegerType toInt( const std::string &value);
+    static IntegerType toInt( std::string_view value);
 
     //! The value
     IntegerType value;
@@ -178,7 +179,7 @@ BaseIntegerOption< IntT>::BaseIntegerOption(
 
 template< typename IntT>
 OptionPtr BaseIntegerOption< IntT>::negotiate(
-  const std::string &optionValue) const noexcept
+  std::string_view optionValue) const noexcept
 {
   try
   {
@@ -206,7 +207,7 @@ inline std::string BaseIntegerOption< uint8_t>::toString( IntegerType value)
 
 template< typename IntT>
 typename BaseIntegerOption< IntT>::IntegerType BaseIntegerOption< IntT>::toInt(
-  const std::string &value)
+  std::string_view value)
 {
   return boost::lexical_cast< IntT>( value);
 }
@@ -214,7 +215,7 @@ typename BaseIntegerOption< IntT>::IntegerType BaseIntegerOption< IntT>::toInt(
 // Full specialisation for uint8_t
 template<>
 inline typename BaseIntegerOption< uint8_t>::IntegerType
-BaseIntegerOption< uint8_t>::toInt( const std::string &value)
+BaseIntegerOption< uint8_t>::toInt( std::string_view value)
 {
   return (uint8_t)boost::lexical_cast< uint16_t>( value);
 }

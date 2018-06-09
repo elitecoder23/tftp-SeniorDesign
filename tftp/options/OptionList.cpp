@@ -126,7 +126,7 @@ bool OptionList::has( const std::string &name) const
 
 bool OptionList::has( const KnownOptions option) const
 {
-  const auto optionName{ Option::getOptionName( option)};
+  const auto optionName{ Option::optionName( option)};
 
   if ( optionName.empty())
   {
@@ -177,7 +177,7 @@ void OptionList::remove( const std::string &name)
 
 void OptionList::remove( const KnownOptions option)
 {
-  const auto optionName{ Option::getOptionName( option)};
+  const auto optionName{ Option::optionName( option)};
 
   if (!optionName.empty())
   {
@@ -200,7 +200,7 @@ void OptionList::addBlocksizeOptionClient(
   assert( minBlocksize <= requestedBlocksize);
 
   OptionPtr entry( std::make_shared< BlockSizeOptionClient>(
-      Option::getOptionName( KnownOptions::BlockSize),
+      Option::optionName( KnownOptions::BlockSize),
       requestedBlocksize,
       NegotiateMinMaxRange< uint16_t>( minBlocksize, requestedBlocksize)));
 
@@ -222,7 +222,7 @@ void OptionList::addBlocksizeOptionServer(
   assert( minBlocksize <= maxBlocksize);
 
   OptionPtr entry( std::make_shared< BlockSizeOptionServer>(
-      Option::getOptionName( KnownOptions::BlockSize),
+      Option::optionName( KnownOptions::BlockSize),
       maxBlocksize,
       NegotiateMinMaxSmaller< uint16_t>( minBlocksize, maxBlocksize)));
 
@@ -232,7 +232,7 @@ void OptionList::addBlocksizeOptionServer(
 uint16_t OptionList::getBlocksizeOption() const
 {
   auto optionIt{ optionsValue.find(
-    Option::getOptionName( KnownOptions::BlockSize))};
+    Option::optionName( KnownOptions::BlockSize))};
 
   // option not set
   if (optionIt == optionsValue.end())
@@ -259,7 +259,7 @@ void OptionList::addTimeoutOptionClient( const uint8_t timeout)
   assert( timeout >= TimeoutOptionMin);
 
   OptionPtr entry( std::make_shared< TimeoutOptionClient>(
-      Option::getOptionName( KnownOptions::Timeout),
+      Option::optionName( KnownOptions::Timeout),
       timeout,
       NegotiateExactValue< uint8_t>( timeout)));
 
@@ -278,7 +278,7 @@ void OptionList::addTimeoutOptionServer(
   assert( (minTimeout <= maxTimeout));
 
   OptionPtr entry( std::make_shared< TimeoutOptionServer>(
-      Option::getOptionName( KnownOptions::Timeout),
+      Option::optionName( KnownOptions::Timeout),
       maxTimeout,
       NegotiateMinMaxRange< uint8_t>( minTimeout, maxTimeout)));
 
@@ -288,7 +288,7 @@ void OptionList::addTimeoutOptionServer(
 uint8_t OptionList::getTimeoutOption() const
 {
   auto optionIt{ optionsValue.find(
-    Option::getOptionName( KnownOptions::Timeout))};
+    Option::optionName( KnownOptions::Timeout))};
 
   // option not set
   if (optionIt == optionsValue.end())
@@ -312,7 +312,7 @@ uint8_t OptionList::getTimeoutOption() const
 void OptionList::addTransferSizeOption( const uint64_t transferSize)
 {
   OptionPtr entry( std::make_shared< TransferSizeOptionServerClient>(
-      Option::getOptionName( KnownOptions::TransferSize),
+      Option::optionName( KnownOptions::TransferSize),
       transferSize,
       NegotiateAlwaysPass< uint64_t>()));
 
@@ -321,18 +321,18 @@ void OptionList::addTransferSizeOption( const uint64_t transferSize)
 
 void OptionList::removeTransferSizeOption()
 {
-  remove( Option::getOptionName( KnownOptions::TransferSize));
+  remove( Option::optionName( KnownOptions::TransferSize));
 }
 
 bool OptionList::hasTransferSizeOption() const
 {
-  return has( Option::getOptionName( KnownOptions::TransferSize));
+  return has( Option::optionName( KnownOptions::TransferSize));
 }
 
 uint64_t OptionList::getTransferSizeOption() const
 {
   auto optionIt{ optionsValue.find(
-    Option::getOptionName( KnownOptions::TransferSize))};
+    Option::optionName( KnownOptions::TransferSize))};
 
   // option not set
   if (optionIt == optionsValue.end())
@@ -370,7 +370,7 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
 
     // negotiate option
     OptionPtr newOptionValue( negotiationEntryIt->second->negotiate(
-      *(clientOption.second)));
+      static_cast< std::string>( *(clientOption.second))));
 
     // negotiation has returned a value -> copy option to output list
     if (newOptionValue)
@@ -403,7 +403,7 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
 
     // negotiate option, if failed also fail on top level
     OptionPtr newOptionValue( negotiationEntryIt->second->negotiate(
-      (*serverOption.second)));
+      static_cast< std::string>(*serverOption.second)));
 
     // check negotiation result
     if (!newOptionValue)

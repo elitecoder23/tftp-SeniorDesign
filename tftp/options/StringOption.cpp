@@ -40,12 +40,12 @@ StringOption& StringOption::operator=( const std::string &value)
   return *this;
 }
 
-OptionPtr StringOption::negotiate( const std::string &) const noexcept
+OptionPtr StringOption::negotiate( std::string_view) const noexcept
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
     "Its not possible to use StringOption for negotiation";
 
-  return OptionPtr();
+  return {};
 }
 
 }

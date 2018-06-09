@@ -15,7 +15,7 @@
 namespace Tftp {
 namespace Options {
 
-std::string Option::getOptionName( const KnownOptions option) noexcept
+std::string Option::optionName( const KnownOptions option) noexcept
 {
   switch (option)
   {

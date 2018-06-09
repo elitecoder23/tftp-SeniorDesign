@@ -96,7 +96,7 @@ class DataPacket: public Packet
      *
      * @return The data as const reference.
      **/
-    const DataType& data( ) const;
+    const DataType& data() const;
 
     /**
      * @brief Returns the data as reference.
@@ -105,7 +105,7 @@ class DataPacket: public Packet
      *
      * @return The data as reference.
      **/
-    DataType& data( );
+    DataType& data();
 
     /**
      * @brief Sets the data of the packet.
