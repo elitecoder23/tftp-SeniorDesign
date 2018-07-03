@@ -20,8 +20,7 @@
 
 #include <string>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 /**
  * @brief base class for TFTP client operations.
@@ -77,7 +76,6 @@ class Operation
     virtual const ErrorInfo& errorInfo() const = 0;
 };
 
-}
 }
 
 #endif

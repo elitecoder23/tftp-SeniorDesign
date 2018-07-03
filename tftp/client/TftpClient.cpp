@@ -14,8 +14,7 @@
 
 #include <tftp/client/implementation/TftpClientImpl.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 TftpClientPtr TftpClient::createInstance(
   const TftpConfiguration &configuration,
@@ -24,5 +23,4 @@ TftpClientPtr TftpClient::createInstance(
   return std::make_shared< TftpClientImpl>( configuration, additionalOptions);
 }
 
-}
 }

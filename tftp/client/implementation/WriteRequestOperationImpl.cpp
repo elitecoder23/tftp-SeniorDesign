@@ -19,8 +19,7 @@
 
 #include <helper/Dump.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_service &ioService,
@@ -225,9 +224,9 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // check blocksize option
-  if (0 != negotiatedOptions.getBlocksizeOption())
+  if (0 != negotiatedOptions.blocksize())
   {
-    transmitDataSize = negotiatedOptions.getBlocksizeOption();
+    transmitDataSize = negotiatedOptions.blocksize();
   }
 
   // check timeout option
@@ -245,5 +244,4 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   receive();
 }
 
-}
 }

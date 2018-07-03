@@ -94,7 +94,7 @@ int TftpClientApplication::operator()( int argc, char *argv[])
     switch ( requestType)
     {
       case Tftp::RequestType::Read:
-        tftpOperation= tftpClient->createReadRequestOperation(
+        tftpOperation= tftpClient->readRequestOperation(
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
             std::fstream( localFile, std::fstream::out | std::fstream::trunc)),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
@@ -104,7 +104,7 @@ int TftpClientApplication::operator()( int argc, char *argv[])
         break;
 
       case Tftp::RequestType::Write:
-        tftpOperation = tftpClient->createWriteRequestOperation(
+        tftpOperation = tftpClient->writeRequestOperation(
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
             std::fstream( localFile, std::fstream::in)),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),

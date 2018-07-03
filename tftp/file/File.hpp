@@ -16,8 +16,6 @@
 #include <tftp/Tftp.hpp>
 #include <memory>
 
-namespace Tftp {
-
 /**
  * @brief TFTP file implementation.
  *
@@ -32,7 +30,7 @@ namespace Tftp {
  * The two implementations do not handle the data in the manner of encoding
  * handling, i.e. only the TFTP OCTET transfer mode is supported.
  **/
-namespace File {
+namespace Tftp::File {
 
 class TftpFile;
 class MemoryFile;
@@ -42,7 +40,6 @@ class NullSinkFile;
 //! Memory file pointer
 using MemoryFilePtr = std::shared_ptr< MemoryFile>;
 
-}
 }
 
 #endif

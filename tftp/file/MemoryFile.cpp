@@ -14,8 +14,7 @@
 
 #include <tftp/TftpLogger.hpp>
 
-namespace Tftp {
-namespace File {
+namespace Tftp::File {
 
 MemoryFile::MemoryFile():
   dataPtr( dataValue.begin())
@@ -90,5 +89,4 @@ MemoryFile::DataType MemoryFile::sendData( const size_t maxSize) noexcept
   return DataType( startPtr, endPtr);
 }
 
-}
 }

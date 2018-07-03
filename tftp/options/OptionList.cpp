@@ -21,8 +21,7 @@
 
 #include <algorithm>
 
-namespace Tftp {
-namespace Options {
+namespace Tftp::Options {
 
 OptionList::OptionList()
 {
@@ -185,7 +184,7 @@ void OptionList::remove( const KnownOptions option)
   }
 }
 
-void OptionList::addBlocksizeOptionClient(
+void OptionList::blocksizeClient(
   uint16_t requestedBlocksize,
   uint16_t minBlocksize)
 {
@@ -207,7 +206,7 @@ void OptionList::addBlocksizeOptionClient(
   set( entry);
 }
 
-void OptionList::addBlocksizeOptionServer(
+void OptionList::blocksizeServer(
   const uint16_t minBlocksize,
   const uint16_t maxBlocksize)
 {
@@ -229,7 +228,7 @@ void OptionList::addBlocksizeOptionServer(
   set( entry);
 }
 
-uint16_t OptionList::getBlocksizeOption() const
+uint16_t OptionList::blocksize() const
 {
   auto optionIt{ optionsValue.find(
     Option::optionName( KnownOptions::BlockSize))};
@@ -437,5 +436,4 @@ std::string OptionList::toString() const
   return result;
 }
 
-}
 }

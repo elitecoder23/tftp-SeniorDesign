@@ -24,8 +24,7 @@
 #include <memory>
 #include <cstdint>
 
-namespace Tftp {
-namespace Options {
+namespace Tftp::Options {
 
 /**
  * @brief Representation of TFTP option list.
@@ -191,7 +190,7 @@ class OptionList
      * @param[in] minBlocksize
      *   The minimal accepted blocksize option value.
      **/
-    void addBlocksizeOptionClient(
+    void blocksizeClient(
       uint16_t requestedBlocksize,
       uint16_t minBlocksize = BlocksizeOptionMin);
 
@@ -210,7 +209,7 @@ class OptionList
      * @param[in] maxBlocksize
      *    The minimum blocksize option value.
      **/
-    void addBlocksizeOptionServer(
+    void blocksizeServer(
       uint16_t minBlocksize = BlocksizeOptionMin,
       uint16_t maxBlocksize = BlocksizeOptionMax);
 
@@ -221,7 +220,7 @@ class OptionList
      * @retval 0
      *   If blocksize option has not been added to this option list.
      **/
-    uint16_t getBlocksizeOption() const;
+    uint16_t blocksize() const;
 
     /**
      * @brief Adds the timeout option to the option list.
@@ -352,7 +351,6 @@ class OptionList
     Options optionsValue;
 };
 
-}
 }
 
 #endif

@@ -17,8 +17,7 @@
 
 #include <tftp/TftpLogger.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 TftpClientImpl::TftpClientImpl(
   const TftpConfiguration &configuration,
@@ -52,7 +51,7 @@ void TftpClientImpl::stop()
   ioService.stop();
 }
 
-OperationPtr TftpClientImpl::createReadRequestOperation(
+OperationPtr TftpClientImpl::readRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const UdpAddressType &remote,
@@ -71,7 +70,7 @@ OperationPtr TftpClientImpl::createReadRequestOperation(
     local);
 }
 
-OperationPtr TftpClientImpl::createWriteRequestOperation(
+OperationPtr TftpClientImpl::writeRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const UdpAddressType &remote,
@@ -100,5 +99,4 @@ const Options::OptionList& TftpClientImpl::options() const
   return optionsV;
 }
 
-}
 }

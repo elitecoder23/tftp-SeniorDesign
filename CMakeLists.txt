@@ -6,8 +6,8 @@
 
 cmake_minimum_required( VERSION 3.11)
 
-project( 
-  tftp 
+project(
+  tftp
   VERSION 1.0.0.0
   DESCRIPTION "TFTP")
 

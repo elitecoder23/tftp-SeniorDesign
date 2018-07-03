@@ -17,8 +17,7 @@
 #include <tftp/client/TftpClient.hpp>
 #include <tftp/options/Options.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 /**
  * @brief This interface class defines the methods used internally for TFTP
@@ -45,7 +44,6 @@ class TftpClientInternal : public TftpClient
     virtual const Options::OptionList& options() const = 0;
 };
 
-}
 }
 
 #endif

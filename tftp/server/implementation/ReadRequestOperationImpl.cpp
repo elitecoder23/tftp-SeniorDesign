@@ -57,9 +57,9 @@ void ReadRequestOperationImpl::start()
     else
     {
       // check blocksize option
-      if ( 0 != options().getBlocksizeOption())
+      if ( 0 != options().blocksize())
       {
-        transmitDataSize = options().getBlocksizeOption();
+        transmitDataSize = options().blocksize();
       }
 
       // check timeout option

@@ -224,9 +224,9 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // check blocksize option
-  if (0 != negotiatedOptions.getBlocksizeOption())
+  if (0 != negotiatedOptions.blocksize())
   {
-    receiveDataSize = negotiatedOptions.getBlocksizeOption();
+    receiveDataSize = negotiatedOptions.blocksize();
 
     // set maximum receive data size if necessary
     if (receiveDataSize > DefaultDataSize)

@@ -16,8 +16,7 @@
 #include <tftp/ReceiveDataHandler.hpp>
 #include <tftp/TransmitDataHandler.hpp>
 
-namespace Tftp {
-namespace File {
+namespace Tftp::File {
 
 /**
  * @brief Base class for a TFTP file operation handler, which can be used to
@@ -30,5 +29,5 @@ class TftpFile:
 };
 
 }
-}
+
 #endif

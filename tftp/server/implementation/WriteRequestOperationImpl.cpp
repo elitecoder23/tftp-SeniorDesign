@@ -62,9 +62,9 @@ void WriteRequestOperationImpl::start()
       //validate received options
 
       // check blocksize option
-      if ( 0 != options().getBlocksizeOption())
+      if ( 0 != options().blocksize())
       {
-        receiveDataSize = options().getBlocksizeOption();
+        receiveDataSize = options().blocksize();
 
         // set receive data size if necessary
         if ( receiveDataSize > DefaultDataSize)

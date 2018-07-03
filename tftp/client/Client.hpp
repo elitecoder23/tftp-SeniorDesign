@@ -18,8 +18,6 @@
 #include <memory>
 #include <functional>
 
-namespace Tftp {
-
 /**
  * @brief TFTP client implementation.
  *
@@ -27,7 +25,7 @@ namespace Tftp {
  * class TftpClient. With an instance of this class the user can create
  * TFTP client read and write operations.
  **/
-namespace Client {
+namespace Tftp::Client {
 
 class TftpClient;
 class Operation;
@@ -38,7 +36,6 @@ using TftpClientPtr = std::shared_ptr< TftpClient>;
 //! Declaration of TFTP client operation instance pointer
 using OperationPtr = std::shared_ptr< Operation>;
 
-}
 }
 
 #endif

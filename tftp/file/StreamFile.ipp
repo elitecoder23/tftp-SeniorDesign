@@ -10,8 +10,7 @@
  * @brief Definition of template class Tftp::File::StreamFile.
  **/
 
-namespace Tftp {
-namespace File {
+namespace Tftp::File {
 
 template< typename StreamT>
 StreamFile< StreamT>::StreamFile( StreamType &&stream) :
@@ -100,5 +99,4 @@ typename StreamFile< StreamT>::DataType StreamFile< StreamT>::sendData(
   return data;
 }
 
-}
 }

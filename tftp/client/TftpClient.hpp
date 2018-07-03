@@ -19,8 +19,7 @@
 
 #include <string>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 /**
  * @brief The main entry for implementors of a TFTP client.
@@ -88,7 +87,7 @@ class TftpClient
      *
      * @return The client operation instance.
      **/
-    virtual OperationPtr createReadRequestOperation(
+    virtual OperationPtr readRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const UdpAddressType &remote,
@@ -114,7 +113,7 @@ class TftpClient
      *
      * @return The client operation instance.
      **/
-    virtual OperationPtr createWriteRequestOperation(
+    virtual OperationPtr writeRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const UdpAddressType &remote,
@@ -127,7 +126,6 @@ class TftpClient
     TftpClient() = default;
 };
 
-}
 }
 
 #endif

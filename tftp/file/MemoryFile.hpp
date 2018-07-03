@@ -15,8 +15,7 @@
 
 #include <tftp/file/TftpFile.hpp>
 
-namespace Tftp {
-namespace File {
+namespace Tftp::File {
 
 /**
  * @brief File implementation, which holds all data in memory.
@@ -95,7 +94,6 @@ class MemoryFile: public TftpFile
     DataType::const_iterator dataPtr;
 };
 
-}
 }
 
 #endif

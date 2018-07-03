@@ -12,8 +12,7 @@
 
 #include "NullSinkFile.hpp"
 
-namespace Tftp {
-namespace File {
+namespace Tftp::File {
 
 NullSinkFile::NullSinkFile( uint64_t size):
   size( size)
@@ -38,5 +37,4 @@ void NullSinkFile::receviedData( const DataType &/*data*/) noexcept
   // Do nothing
 }
 
-}
 }

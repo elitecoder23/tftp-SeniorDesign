@@ -139,7 +139,7 @@ class ReadWriteRequestPacket: public Packet
      **/
     void option( const std::string &name, const std::string &value);
 
-    // @copydoc Packet::operator std::string() const
+    //! @copydoc Packet::operator std::string() const
     operator std::string() const final;
 
   protected:

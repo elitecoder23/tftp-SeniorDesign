@@ -17,8 +17,7 @@
 #include <tftp/client/implementation/OperationImpl.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 /**
  * @brief Class which handles a TFTP Write Request on client side.
@@ -124,7 +123,6 @@ class WriteRequestOperationImpl : public OperationImpl
     Packets::BlockNumber lastTransmittedBlockNumber;
 };
 
-}
 }
 
 #endif

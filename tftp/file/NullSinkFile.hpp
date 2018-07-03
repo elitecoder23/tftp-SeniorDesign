@@ -18,8 +18,7 @@
 
 #include <boost/optional.hpp>
 
-namespace Tftp {
-namespace File {
+namespace Tftp::File {
 
 /**
  * @brief NULL sink file.
@@ -65,7 +64,6 @@ class NullSinkFile : public ReceiveDataHandler
     boost::optional< uint64_t> size;
 };
 
-}
 }
 
 #endif

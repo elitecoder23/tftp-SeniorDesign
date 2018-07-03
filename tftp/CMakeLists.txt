@@ -10,7 +10,7 @@ find_package( Boost REQUIRED COMPONENTS program_options)
 
 add_library(
   tftp
-  
+
   DataHandler.hpp
   ErrorCodeDescription.hpp
   ErrorCodeDescription.cpp
@@ -25,7 +25,7 @@ add_library(
   TftpException.hpp
   TftpLogger.hpp
   TransmitDataHandler.hpp
-  
+
   packets/AcknowledgementPacket.hpp
   packets/AcknowledgementPacket.cpp
   packets/BlockNumber.hpp
@@ -48,7 +48,7 @@ add_library(
   packets/ReadWriteRequestPacket.cpp
   packets/WriteRequestPacket.hpp
   packets/WriteRequestPacket.cpp
-  
+
   options/IntegerOption.hpp
   options/Option.hpp
   options/Option.cpp
@@ -66,7 +66,7 @@ add_library(
   file/StreamFile.ipp
   file/NullSinkFile.hpp
   file/NullSinkFile.cpp
-  
+
   client/Client.hpp
   client/Operation.hpp  
   client/TftpClient.hpp
@@ -97,19 +97,19 @@ add_library(
   server/implementation/WriteRequestOperationImpl.hpp
   server/implementation/WriteRequestOperationImpl.cpp)
 
-target_include_directories( 
-  tftp 
+target_include_directories(
+  tftp
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
 
-target_compile_options( 
+target_compile_options(
   tftp
-  
+
   PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:-W4>
-    
+
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
-    
+
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra>)
 
@@ -117,15 +117,15 @@ target_link_libraries( tftp helper Boost::program_options)
 
 target_compile_features( tftp PUBLIC cxx_std_17)
 
-add_library( 
-  tftp_test 
+add_library(
+  tftp_test
   OBJECT
-  
+
   options/IntegerOptionTest.cpp
   options/OptionTest.cpp
   options/OptionListTest.cpp
   options/StringOptionTest.cpp
-  
+
   packets/AcknowledgementPacketTest.cpp
   packets/BlockNumberTest.cpp
   packets/DataPacketTest.cpp
@@ -135,21 +135,21 @@ add_library(
   packets/ReadWriteRequestPacketTest.cpp
   packets/WriteRequestPacketTest.cpp)
 
-target_compile_options( 
+target_compile_options(
   tftp_test
-  
+
   PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:-W4>
-    
+
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
-    
+
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra>)
 
 target_compile_features( tftp_test PUBLIC cxx_std_17)
 
-target_include_directories( 
+target_include_directories(
   tftp_test
   PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
 
@@ -159,7 +159,7 @@ include( GNUInstallDirs)
 install(
   TARGETS tftp
   COMPONENT runtime
-  EXPORT tftp-config 
+  EXPORT tftp-config
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -173,7 +173,7 @@ install(
     PATTERN "*Test.*" EXCLUDE
     PATTERN "implementation" EXCLUDE)
 
-install( 
-  EXPORT tftp-config 
+install(
+  EXPORT tftp-config
   COMPONENT development
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)

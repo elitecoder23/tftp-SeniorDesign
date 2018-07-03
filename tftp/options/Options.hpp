@@ -17,12 +17,10 @@
 
 #include <memory>
 
-namespace Tftp {
-
 /**
  * @brief TFTP protocol options implementation (RFC 2348).
  **/
-namespace Options {
+namespace Tftp::Options {
 
 class Option;
 class OptionList;
@@ -30,7 +28,6 @@ class OptionList;
 //! Shortened form of option pointer
 using OptionPtr = std::shared_ptr< Option>;
 
-}
 }
 
 #endif

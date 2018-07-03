@@ -14,8 +14,7 @@
 
 #include <tftp/TftpLogger.hpp>
 
-namespace Tftp {
-namespace Options {
+namespace Tftp::Options {
 
 StringOption::StringOption(const std::string &name, const std::string &value):
   Option( name),
@@ -48,5 +47,4 @@ OptionPtr StringOption::negotiate( std::string_view) const noexcept
   return {};
 }
 
-}
 }

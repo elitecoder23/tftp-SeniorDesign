@@ -22,8 +22,7 @@
 
 #include <boost/asio.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 /**
  * @brief Implementation of TFTP Client factory interface.
@@ -51,8 +50,8 @@ class TftpClientImpl : public TftpClientInternal
     //!@copydoc TftpClient::stop
     void stop() final;
 
-    //!@copydoc TftpClient::createReadRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const std::string&,TransferMode,const UdpAddressType&)
-    OperationPtr createReadRequestOperation(
+    //!@copydoc TftpClient::readRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const std::string&,TransferMode,const UdpAddressType&)
+    OperationPtr readRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const UdpAddressType &remote,
@@ -60,8 +59,8 @@ class TftpClientImpl : public TftpClientInternal
       TransferMode mode,
       const UdpAddressType &local) final;
 
-    //!@copydoc TftpClient::createWriteRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const std::string&,TransferMode,const UdpAddressType&)
-    OperationPtr createWriteRequestOperation(
+    //!@copydoc TftpClient::writeRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const std::string&,TransferMode,const UdpAddressType&)
+    OperationPtr writeRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const UdpAddressType &remote,
@@ -86,7 +85,6 @@ class TftpClientImpl : public TftpClientInternal
     boost::asio::io_service::work work;
 };
 
-}
 }
 
 #endif

@@ -113,7 +113,7 @@ Options::OptionList TftpConfiguration::clientOptions(
 
   if ( blockSizeOption)
   {
-    options.addBlocksizeOptionClient( blockSizeOption.get());
+    options.blocksizeClient( blockSizeOption.get());
   }
 
   if ( timeoutOption)
@@ -136,7 +136,7 @@ Options::OptionList TftpConfiguration::serverOptions(
 
   if ( blockSizeOption)
   {
-    options.addBlocksizeOptionServer(
+    options.blocksizeServer(
       BlocksizeOptionMin,
       blockSizeOption.get());
   }

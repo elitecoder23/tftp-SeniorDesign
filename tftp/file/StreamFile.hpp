@@ -20,8 +20,7 @@
 #include <iostream>
 #include <type_traits>
 
-namespace Tftp {
-namespace File {
+namespace Tftp::File {
 
 /**
  * @brief File implementation, which uses an std::iostream for file I/O
@@ -125,7 +124,6 @@ class StreamFile: public TftpFile
     boost::optional< size_t> sizeValue;
 };
 
-}
 }
 
 #include "StreamFile.ipp"

@@ -17,8 +17,7 @@
 
 #include <string>
 
-namespace Tftp {
-namespace Options {
+namespace Tftp::Options {
 
 /**
  * @brief TFTP option, which is interpreted as string.
@@ -68,7 +67,7 @@ class StringOption: public Option
     //! The option value.
     std::string value;
 };
-}
+
 }
 
 #endif
