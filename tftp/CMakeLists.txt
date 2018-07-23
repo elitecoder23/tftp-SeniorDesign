@@ -169,9 +169,9 @@ install(
   COMPONENT development
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILES_MATCHING
-    PATTERN "*.hpp"
-    PATTERN "*Test.*" EXCLUDE
-    PATTERN "implementation" EXCLUDE)
+  PATTERN "*.hpp"
+  PATTERN "*Test.*" EXCLUDE
+  PATTERN "implementation" EXCLUDE)
 
 install(
   EXPORT tftp-config
