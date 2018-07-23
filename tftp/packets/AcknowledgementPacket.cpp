@@ -18,8 +18,9 @@
 
 namespace Tftp::Packets {
 
-AcknowledgementPacket::AcknowledgementPacket( const BlockNumber blockNumber)
-  noexcept:Packet( PacketType::Acknowledgement),
+AcknowledgementPacket::AcknowledgementPacket(
+  const BlockNumber blockNumber) noexcept :
+  Packet( PacketType::Acknowledgement),
   blockNumberValue( blockNumber)
 {
 }

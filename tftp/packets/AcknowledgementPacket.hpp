@@ -17,7 +17,7 @@
 #include <tftp/packets/Packet.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
-namespace Tftp ::Packets {
+namespace Tftp::Packets {
 
 /**
  * @brief TFTP Acknowledgement package (ACK).
@@ -42,8 +42,7 @@ class AcknowledgementPacket: public Packet
      *   Block number of packet. Defaults to the BlockNumber default
      *   constructor.
      **/
-    explicit AcknowledgementPacket(
-      const BlockNumber blockNumber = {}) noexcept;
+    explicit AcknowledgementPacket( BlockNumber blockNumber = {}) noexcept;
 
     /**
      * @brief Generates a TFTP acknowledgement packet from a data buffer.
