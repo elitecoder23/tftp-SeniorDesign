@@ -16,8 +16,7 @@
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/ReadWriteRequestPacket.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 /**
  * @brief TFTP Write Request packet (WRQ).
@@ -36,7 +35,7 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      *   The options, which are set
      **/
     WriteRequestPacket(
-      const string &filename,
+      const std::string &filename,
       TransferMode mode,
       const Options::OptionList &options) noexcept;
 
@@ -52,7 +51,6 @@ class WriteRequestPacket: public ReadWriteRequestPacket
     WriteRequestPacket( const RawTftpPacket &rawPacket);
 };
 
-}
 }
 
 #endif

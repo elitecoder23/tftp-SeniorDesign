@@ -19,8 +19,7 @@
 
 #include <iostream>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpDataPacket)
 
@@ -122,5 +121,4 @@ BOOST_AUTO_TEST_CASE( setBlockNumber )
 
 BOOST_AUTO_TEST_SUITE_END()
 
-}
 }

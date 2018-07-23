@@ -17,8 +17,7 @@
 
 #include <string>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 /**
  * @brief Base-class of all TFTP packets.
@@ -26,9 +25,6 @@ namespace Packets {
 class Packet
 {
   public:
-    //! string type
-    using string = std::string;
-
     //! The minimum size is the Opcode field.
     static constexpr std::size_t HeaderSize = sizeof( uint16_t);
 
@@ -120,7 +116,7 @@ class Packet
      *
      * @return Packet description.
      **/
-    explicit virtual operator string() const;
+    explicit virtual operator std::string() const;
 
   protected:
     /**
@@ -178,7 +174,6 @@ class Packet
     const PacketType packetTypeValue;
 };
 
-}
 }
 
 #endif

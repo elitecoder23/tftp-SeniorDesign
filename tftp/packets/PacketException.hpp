@@ -16,10 +16,8 @@
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpException.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
-}
 }
 
 #endif

@@ -21,8 +21,7 @@
 #include <string>
 #include <string_view>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 /**
  * @brief Base class for TFTP Read-/ Write- Request packet.
@@ -139,7 +138,7 @@ class ReadWriteRequestPacket: public Packet
      **/
     void option( const std::string &name, const std::string &value);
 
-    //! @copydoc Packet::operator std::string() const
+    // @copydoc Packet::operator std::string() const
     operator std::string() const final;
 
   protected:
@@ -198,14 +197,13 @@ class ReadWriteRequestPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! stored request filename
-    string filenameValue;
+    std::string filenameValue;
     //! stored transfer mode
     TransferMode modeValue;
     //! stored options
     Options::OptionList optionsValue;
 };
 
-}
 }
 
 #endif

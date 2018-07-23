@@ -16,8 +16,7 @@
 
 #include <helper/Endianess.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 DataPacket::DataPacket(
   BlockNumber blockNumber,
@@ -81,7 +80,7 @@ size_t DataPacket::dataSize() const
   return dataValue.size();
 }
 
-DataPacket::operator string() const
+DataPacket::operator std::string() const
 {
   return (boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
     blockNumber() %
@@ -123,5 +122,4 @@ void DataPacket::decodeBody( const RawTftpPacket &rawPacket)
   dataValue.assign( packetIt, rawPacket.end());
 }
 
-}
 }

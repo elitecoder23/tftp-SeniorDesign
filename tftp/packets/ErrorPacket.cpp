@@ -17,12 +17,11 @@
 
 #include <helper/Endianess.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 ErrorPacket::ErrorPacket(
   const ErrorCode errorCode,
-  const string &errorMessage):
+  const std::string &errorMessage):
   Packet( PacketType::Error),
   errorCodeValue( errorCode),
   errorMessageValue( errorMessage)
@@ -31,7 +30,7 @@ ErrorPacket::ErrorPacket(
 
 ErrorPacket::ErrorPacket(
   ErrorCode errorCode,
-  string &&errorMessage):
+  std::string &&errorMessage):
   Packet( PacketType::Error),
   errorCodeValue( errorCode),
   errorMessageValue( std::move( errorMessage))
@@ -52,7 +51,7 @@ ErrorPacket& ErrorPacket::operator=(
   return *this;
 }
 
-ErrorPacket::operator string() const
+ErrorPacket::operator std::string() const
 {
   return (boost::format( "ERR: EC: %s (%d) - DESC: \"%s\"") %
     ErrorCodeDescription::instance().name( errorCode()) %
@@ -70,17 +69,17 @@ void ErrorPacket::errorCode( const ErrorCode errorCode) noexcept
   errorCodeValue = errorCode;
 }
 
-const ErrorPacket::string& ErrorPacket::errorMessage() const
+const std::string& ErrorPacket::errorMessage() const
 {
   return errorMessageValue;
 }
 
-void ErrorPacket::errorMessage( const string &errorMessage)
+void ErrorPacket::errorMessage( const std::string &errorMessage)
 {
   errorMessageValue = errorMessage;
 }
 
-void ErrorPacket::errorMessage( string &&errorMessage)
+void ErrorPacket::errorMessage( std::string &&errorMessage)
 {
   errorMessageValue = std::move( errorMessage);
 }
@@ -131,8 +130,7 @@ void ErrorPacket::decodeBody( const RawTftpPacket &rawPacket)
       AdditionalInfo( "error message not 0-terminated"));
   }
 
-  errorMessageValue = string( packetIt, rawPacket.end()-1);
+  errorMessageValue = std::string{ packetIt, rawPacket.end()-1};
 }
 
-}
 }

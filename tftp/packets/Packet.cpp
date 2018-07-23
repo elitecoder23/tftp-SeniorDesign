@@ -17,8 +17,7 @@
 
 #include <helper/Endianess.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 PacketType Packet::packetType( const RawTftpPacket &rawPacket) noexcept
 {
@@ -63,7 +62,7 @@ PacketType Packet::packetType() const noexcept
   return packetTypeValue;
 }
 
-Packet::operator string() const
+Packet::operator std::string() const
 {
   switch (packetTypeValue)
   {
@@ -168,5 +167,4 @@ void Packet::decodeHeader( const RawTftpPacket &rawPacket)
   }
 }
 
-}
 }

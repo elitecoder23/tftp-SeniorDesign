@@ -17,8 +17,7 @@
 
 #include <helper/Endianess.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   const Options::OptionList &options) noexcept:
@@ -58,23 +57,22 @@ void OptionsAcknowledgementPacket::options(
   optionsValue = options;
 }
 
-const OptionsAcknowledgementPacket::string
-OptionsAcknowledgementPacket::option(
-  const string &name) const
+const std::string OptionsAcknowledgementPacket::option(
+  const std::string &name) const
 {
   Options::OptionPtr option( optionsValue.get( name));
 
-  return (option) ? static_cast< string>( *option) : string();
+  return (option) ? static_cast< std::string>( *option) : std::string();
 }
 
 void OptionsAcknowledgementPacket::option(
-  const string &name,
-  const string &value)
+  const std::string &name,
+  const std::string &value)
 {
   optionsValue.set( name, value);
 }
 
-OptionsAcknowledgementPacket::operator string() const
+OptionsAcknowledgementPacket::operator std::string() const
 {
   return (boost::format( "OACK: OPT: \"%s\"") % optionsValue.toString()).str();
 }
@@ -110,5 +108,4 @@ void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   optionsValue = Options::OptionList( packetIt, rawPacket.end());
 }
 
-}
 }

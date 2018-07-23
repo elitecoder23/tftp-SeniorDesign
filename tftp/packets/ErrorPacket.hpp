@@ -18,8 +18,7 @@
 
 #include <string>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 /**
  * @brief TFTP Error packet (ERR).
@@ -46,12 +45,12 @@ class ErrorPacket: public Packet
      **/
     ErrorPacket(
       ErrorCode errorCode,
-      const string &errorMessage);
+      const std::string &errorMessage);
 
-    //! @copydoc ErrorPacket(ErrorCode,const string&)
+    //! @copydoc ErrorPacket(ErrorCode,const std::string&)
     ErrorPacket(
       ErrorCode errorCode,
-      string &&errorMessage = {});
+      std::string &&errorMessage = {});
 
     /**
      * @brief Generates a TFTP error packet from a data buffer
@@ -67,8 +66,8 @@ class ErrorPacket: public Packet
     //! @copydoc Packet::operator=(const RawTftpPacket&)
     ErrorPacket& operator=( const RawTftpPacket &rawPacket) final;
 
-    // @copydoc Packet::operator string() const
-    operator string() const final;
+    // @copydoc Packet::operator std::string() const
+    operator std::string() const final;
 
     /**
      * @brief Returns the error code.
@@ -90,7 +89,7 @@ class ErrorPacket: public Packet
      *
      * @return The error message
      **/
-    const string& errorMessage() const;
+    const std::string& errorMessage() const;
 
     /**
      * @brief Sets the error message of this packet.
@@ -98,10 +97,10 @@ class ErrorPacket: public Packet
      * @param[in] errorMessage
      *   The error message to set.
      **/
-    void errorMessage( const string &errorMessage);
+    void errorMessage( const std::string &errorMessage);
 
-    //! @copydoc errorMessage(const string&)
-    void errorMessage( string &&errorMessage);
+    //! @copydoc errorMessage(const std::string&)
+    void errorMessage( std::string &&errorMessage);
 
   private:
     //! @copydoc Packet::encode()
@@ -121,10 +120,9 @@ class ErrorPacket: public Packet
     //! The error code
     ErrorCode errorCodeValue;
     //! The error message.
-    string errorMessageValue;
+    std::string errorMessageValue;
 };
 
-}
 }
 
 #endif

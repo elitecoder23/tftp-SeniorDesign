@@ -20,8 +20,7 @@
 #include <vector>
 #include <cstdint>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 /**
  * @brief TFTP Data packet (DATA).
@@ -134,8 +133,8 @@ class DataPacket: public Packet
      **/
     size_t dataSize() const;
 
-    // @copydoc Packet::operator string() const
-    operator string() const final;
+    // @copydoc Packet::operator std::string() const
+    operator std::string() const final;
 
   private:
     //! @copydoc Packet::encode()
@@ -158,7 +157,6 @@ class DataPacket: public Packet
     DataType dataValue;
 };
 
-}
 }
 
 #endif

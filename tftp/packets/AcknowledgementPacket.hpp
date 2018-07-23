@@ -17,8 +17,7 @@
 #include <tftp/packets/Packet.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp ::Packets {
 
 /**
  * @brief TFTP Acknowledgement package (ACK).
@@ -57,7 +56,7 @@ class AcknowledgementPacket: public Packet
      **/
     AcknowledgementPacket( const RawTftpPacket &rawPacket);
 
-    //! @copydoc Packet::operator=(const RawTftpPacket&)
+    // @copydoc Packet::operator=(const RawTftpPacket&)
     AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket) final;
 
     /**
@@ -75,11 +74,11 @@ class AcknowledgementPacket: public Packet
      **/
     void blockNumber( const BlockNumber blockBumber);
 
-    // @copydoc Packet::operator string() const
-    operator string() const final;
+    // @copydoc Packet::operator std::string() const
+    operator std::string() const final;
 
   private:
-    //! @copydoc Packet::encode()
+    //! @copydoc Packet::encode() const
     RawTftpPacket encode() const final;
 
     /**
@@ -97,7 +96,6 @@ class AcknowledgementPacket: public Packet
     BlockNumber blockNumberValue;
 };
 
-}
 }
 
 #endif

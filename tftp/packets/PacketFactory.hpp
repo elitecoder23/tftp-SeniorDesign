@@ -22,8 +22,7 @@
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 /**
  * @brief Helper Class to get the type of a received TFTP packet and get the
@@ -135,7 +134,6 @@ class PacketFactory
     PacketFactory() = delete;
 };
 
-}
 }
 
 #endif

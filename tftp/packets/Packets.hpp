@@ -15,8 +15,6 @@
 
 #include <tftp/Tftp.hpp>
 
-namespace Tftp {
-
 /**
  * @brief TFTP protocol packet implementation.
  *
@@ -24,7 +22,7 @@ namespace Tftp {
  * For raw-data to TFTP packet handling, the class PacketFactory with its
  * static methods can be used.
  **/
-namespace Packets {
+namespace Tftp::Packets {
 
 class Packet;
 class ReadRequestPacket;
@@ -37,7 +35,6 @@ class OptionsAcknowledgementPacket;
 class BlockNumber;
 
 class PacketFactory;
-}
 }
 
 #endif

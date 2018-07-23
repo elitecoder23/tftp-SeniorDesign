@@ -18,10 +18,9 @@
 
 #include <algorithm>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
-ReadWriteRequestPacket::string ReadWriteRequestPacket::decodeMode(
+std::string ReadWriteRequestPacket::decodeMode(
   const TransferMode mode)
 {
   switch (mode)
@@ -36,14 +35,14 @@ ReadWriteRequestPacket::string ReadWriteRequestPacket::decodeMode(
       return "MAIL";
 
     default:
-      return string();
+      return {};
   }
 }
 
 TransferMode ReadWriteRequestPacket::decodeMode( const std::string &mode)
 {
   //! @todo check implementation of transform
-  string upperMode = mode;
+  std::string upperMode = mode;
 
   std::transform(
     upperMode.begin(),
@@ -112,12 +111,12 @@ void ReadWriteRequestPacket::options( const Options::OptionList &options)
   optionsValue = options;
 }
 
-const ReadWriteRequestPacket::string ReadWriteRequestPacket::option(
+const std::string ReadWriteRequestPacket::option(
   const std::string &name) const
 {
   Options::OptionPtr option( optionsValue.get( name));
 
-  return (option) ? static_cast< string>( *option) : string();
+  return (option) ? static_cast< std::string>( *option) : std::string();
 }
 
 void ReadWriteRequestPacket::option(
@@ -130,7 +129,7 @@ void ReadWriteRequestPacket::option(
 ReadWriteRequestPacket::operator std::string() const
 {
   return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
-    Packet::operator string() %
+    Packet::operator std::string() %
     filenameValue %
     decodeMode( modeValue) %
     optionsValue.toString()).str();
@@ -138,7 +137,7 @@ ReadWriteRequestPacket::operator std::string() const
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
-  const string &filename,
+  const std::string &filename,
   const TransferMode mode,
   const Options::OptionList &options):
   Packet( packetType),
@@ -249,12 +248,11 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
     BOOST_THROW_EXCEPTION( InvalidPacketException() <<
       AdditionalInfo( "No 0-termination for operation found"));
   }
-  modeValue = decodeMode( string{ packetIt, modeEnd});
+  modeValue = decodeMode( std::string{ packetIt, modeEnd});
   packetIt = modeEnd + 1;
 
   // assign options
   optionsValue = Options::OptionList( packetIt, rawPacket.end());
 }
 
-}
 }

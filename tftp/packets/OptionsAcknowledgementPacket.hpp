@@ -19,8 +19,7 @@
 
 #include <map>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 
 /**
@@ -94,7 +93,7 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return The value for the option identified by name.
      **/
-    const string option( const string &name) const;
+    const std::string option( const std::string &name) const;
 
     /**
      * @brief Sets the option with the given name and value.
@@ -104,10 +103,10 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] value
      *   The option value.
      **/
-    void option( const string &name, const string &value);
+    void option( const std::string &name, const std::string &value);
 
-    // @copydoc Packet::operator string() const
-    operator string() const final;
+    // @copydoc Packet::operator std::string() const
+    operator std::string() const final;
 
   private:
     /**
@@ -130,7 +129,6 @@ class OptionsAcknowledgementPacket: public Packet
     Options::OptionList optionsValue;
 };
 
-}
 }
 
 #endif

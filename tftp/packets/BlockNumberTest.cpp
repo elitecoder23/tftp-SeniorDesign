@@ -14,8 +14,7 @@
 
 #include <tftp/packets/BlockNumber.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpBlockNumber)
 
@@ -96,5 +95,3 @@ BOOST_AUTO_TEST_CASE( compare )
 BOOST_AUTO_TEST_SUITE_END()
 
 }
-}
-

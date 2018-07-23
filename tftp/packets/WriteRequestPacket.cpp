@@ -12,11 +12,10 @@
 
 #include "WriteRequestPacket.hpp"
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 WriteRequestPacket::WriteRequestPacket(
-  const string &filename,
+  const std::string &filename,
   const TransferMode mode,
   const Options::OptionList &options) noexcept:
   ReadWriteRequestPacket(
@@ -32,5 +31,4 @@ WriteRequestPacket::WriteRequestPacket( const RawTftpPacket &rawPacket):
 {
 }
 
-}
 }

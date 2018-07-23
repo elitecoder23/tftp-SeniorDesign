@@ -18,8 +18,7 @@
 
 #include <iostream>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpOptionsAcknowledgementPacket)
 
@@ -44,5 +43,4 @@ BOOST_AUTO_TEST_CASE( constructor )
 
 BOOST_AUTO_TEST_SUITE_END()
 
-}
 }

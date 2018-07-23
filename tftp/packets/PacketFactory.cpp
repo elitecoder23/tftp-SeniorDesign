@@ -12,8 +12,7 @@
 
 #include "PacketFactory.hpp"
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 Tftp::PacketType PacketFactory::packetType(
   const RawTftpPacket &rawPacket) noexcept
@@ -55,5 +54,4 @@ OptionsAcknowledgementPacket PacketFactory::optionsAcknowledgementPacket(
   return OptionsAcknowledgementPacket( rawPacket);
 }
 
-}
 }

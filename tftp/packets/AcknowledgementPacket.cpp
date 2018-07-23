@@ -16,8 +16,7 @@
 
 #include <helper/Endianess.hpp>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 AcknowledgementPacket::AcknowledgementPacket( const BlockNumber blockNumber)
   noexcept:Packet( PacketType::Acknowledgement),
@@ -49,7 +48,7 @@ void AcknowledgementPacket::blockNumber( const BlockNumber blockBumber)
   blockNumberValue = blockBumber;
 }
 
-AcknowledgementPacket::operator string() const
+AcknowledgementPacket::operator std::string() const
 {
   return (boost::format( "ACK: BLOCKNO: %d") % blockNumber()).str();
 }
@@ -85,5 +84,4 @@ void AcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   getInt< uint16_t>( packetIt, blockNumberValue);
 }
 
-}
 }
