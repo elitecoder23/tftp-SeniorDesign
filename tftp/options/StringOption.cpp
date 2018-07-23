@@ -16,7 +16,7 @@
 
 namespace Tftp::Options {
 
-StringOption::StringOption(const std::string &name, const std::string &value):
+StringOption::StringOption( const std::string &name, const std::string &value):
   Option( name),
   value( value)
 {

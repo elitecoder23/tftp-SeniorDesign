@@ -16,7 +16,7 @@
 #include <tftp/file/File.hpp>
 #include <tftp/ReceiveDataHandler.hpp>
 
-#include <boost/optional.hpp>
+#include <optional>
 
 namespace Tftp::File {
 
@@ -61,7 +61,7 @@ class NullSinkFile : public ReceiveDataHandler
 
   private:
     //! Optional size (used for options negotiation)
-    boost::optional< uint64_t> size;
+    std::optional< uint64_t> size;
 };
 
 }

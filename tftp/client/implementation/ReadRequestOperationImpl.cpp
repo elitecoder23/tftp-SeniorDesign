@@ -15,12 +15,13 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
 #include <tftp/ReceiveDataHandler.hpp>
+#include <tftp/TftpConfiguration.hpp>
+
 #include <tftp/packets/PacketFactory.hpp>
 
 #include <helper/Dump.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
@@ -41,7 +42,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     local),
   dataHandler( dataHandler),
   receiveDataSize( DefaultDataSize),
-  lastReceivedBlockNumber( 0)
+  lastReceivedBlockNumber( 0U)
 {
 }
 
@@ -52,11 +53,19 @@ void ReadRequestOperationImpl::start()
   try
   {
     receiveDataSize = DefaultDataSize;
-    lastReceivedBlockNumber = 0;
+    lastReceivedBlockNumber = 0U;
+
+    Options::OptionList reqOptions{ options()};
+
+    // Add transfer size option with size '0' if requested.
+    if ( configuration().handleTransferSizeOption)
+    {
+      reqOptions.transferSizeOption( 0U);
+    }
 
     // send read request packet
     sendFirst(
-      Packets::ReadRequestPacket( filename(), mode(), options()));
+      Packets::ReadRequestPacket( filename(), mode(), reqOptions));
 
     // wait for answers
     OperationImpl::start();
@@ -224,9 +233,9 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // check blocksize option
-  if (0 != negotiatedOptions.blocksize())
+  if ( auto blocksizeOption{ negotiatedOptions.blocksize()}; blocksizeOption)
   {
-    receiveDataSize = negotiatedOptions.blocksize();
+    receiveDataSize = *blocksizeOption;
 
     // set maximum receive data size if necessary
     if (receiveDataSize > DefaultDataSize)
@@ -237,15 +246,15 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // check timeout option
-  if (0 != negotiatedOptions.getTimeoutOption())
+  if ( auto timeoutOption{ negotiatedOptions.timeoutOption()}; timeoutOption)
   {
-    receiveTimeout( negotiatedOptions.getTimeoutOption());
+    receiveTimeout( *timeoutOption);
   }
 
   // check transfer size option
-  if (negotiatedOptions.hasTransferSizeOption())
+  if (auto transferSizeOption{ negotiatedOptions.transferSizeOption()}; transferSizeOption)
   {
-    if (!dataHandler->receivedTransferSize( negotiatedOptions.getTransferSizeOption()))
+    if ( !dataHandler->receivedTransferSize( *transferSizeOption))
     {
       Packets::ErrorPacket errorPacket(
         ErrorCode::DiskFullOrAllocationExceeds,
@@ -259,12 +268,11 @@ void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
     }
   }
 
-  // send Acknowledgement with block number set to 0
+  // send Acknowledgment with block number set to 0
   send( Packets::AcknowledgementPacket( Packets::BlockNumber{ 0}));
 
   // receive next packet
   receive();
 }
 
-}
 }

@@ -64,7 +64,7 @@ class WriteRequestOperationImpl : public OperationImpl
      *
      * Assembles and transmit TFTP WRQ packet and start parent receive loop.
      **/
-    virtual void start() final;
+    void start() final;
 
   protected:
     //! @copydoc OperationImpl::finished

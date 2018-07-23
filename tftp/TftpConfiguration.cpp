@@ -106,11 +106,6 @@ Options::OptionList TftpConfiguration::clientOptions(
 {
   Options::OptionList options{ baseOptions};
 
-  if ( handleTransferSizeOption)
-  {
-    options.addTransferSizeOption();
-  }
-
   if ( blockSizeOption)
   {
     options.blocksizeClient( blockSizeOption.get());
@@ -118,7 +113,7 @@ Options::OptionList TftpConfiguration::clientOptions(
 
   if ( timeoutOption)
   {
-    options.addTimeoutOptionClient( timeoutOption.get());
+    options.timeoutOptionClient( timeoutOption.get());
   }
 
   return options;
@@ -129,11 +124,6 @@ Options::OptionList TftpConfiguration::serverOptions(
 {
   Options::OptionList options{ baseOptions};
 
-  if ( handleTransferSizeOption)
-  {
-    options.addTransferSizeOption();
-  }
-
   if ( blockSizeOption)
   {
     options.blocksizeServer(
@@ -143,7 +133,7 @@ Options::OptionList TftpConfiguration::serverOptions(
 
   if ( timeoutOption)
   {
-    options.addTimeoutOptionServer(
+    options.timeoutOptionServer(
       TimeoutOptionMin,
       timeoutOption.get());
   }

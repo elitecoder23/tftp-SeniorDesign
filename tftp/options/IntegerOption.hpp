@@ -25,8 +25,7 @@
 #include <string_view>
 #include <stdexcept>
 
-namespace Tftp {
-namespace Options {
+namespace Tftp::Options {
 
 /**
  * @brief Base Integer Option template.
@@ -559,7 +558,5 @@ using TransferSizeOptionServerClient =
   IntegerOption< uint64_t, NegotiateAlwaysPass< uint64_t>>;
 
 }
-}
-
 
 #endif

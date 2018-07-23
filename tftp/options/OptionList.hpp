@@ -18,6 +18,7 @@
 
 #include <string>
 #include <string_view>
+#include <optional>
 #include <map>
 #include <vector>
 #include <limits>
@@ -56,6 +57,9 @@ class OptionList
      *   Begin of raw option list data
      * @param[in] end
      *   End of raw option list data
+     *
+     * @throw InvalidPacketException
+     *   On invalid input data
      **/
     OptionList(
       RawOptions::const_iterator begin,
@@ -152,6 +156,9 @@ class OptionList
      */
     void set( const std::string &name, const std::string &value);
 
+    //! copydoc set(const std::string&,const std::string&)
+    void set( const std::string &&name, const std::string &&value);
+
     /**
      * @brief Set the given option
      *
@@ -217,10 +224,10 @@ class OptionList
      * @brief Returns the set blocksize option value.
      *
      * @return The set blocksize option value.
-     * @retval 0
+     * @retval {}
      *   If blocksize option has not been added to this option list.
      **/
-    uint16_t blocksize() const;
+    std::optional< uint16_t> blocksize() const;
 
     /**
      * @brief Adds the timeout option to the option list.
@@ -230,7 +237,7 @@ class OptionList
      * @param[in] timeout
      *   The requested timeout.
      **/
-    void addTimeoutOptionClient( uint8_t timeout);
+    void timeoutOptionClient( uint8_t timeout);
 
     /**
      * @brief Adds the timeout option to the option list.
@@ -246,7 +253,7 @@ class OptionList
      * @param[in] maxTimeout
      *   The maximum acceptable timeout
      **/
-    void addTimeoutOptionServer(
+    void timeoutOptionServer(
       uint8_t minTimeout = TimeoutOptionMin,
       uint8_t maxTimeout = TimeoutOptionMax);
 
@@ -254,10 +261,10 @@ class OptionList
      * @brief Returns the value of the timeout option.
      *
      * @return The timeout option value.
-     * @retval 0
+     * @retval {}
      *   If timeout option has not been added to this option list.
      **/
-    uint8_t getTimeoutOption() const;
+    std::optional< uint8_t> timeoutOption() const;
 
     /**
      * @brief Add the transfer size option with the given transfer size.
@@ -273,33 +280,23 @@ class OptionList
      *
      * @param[in] transferSize
      *   The transfer size option value.
+     *   Set to '0' when in Read Request.
      **/
-    void addTransferSizeOption( uint64_t transferSize = 0ULL);
+    void transferSizeOption( uint64_t transferSize);
+
+    /**
+     * @brief Returns the value of the transfer size option.
+     *
+     * @return The transfer size option value.
+     * @retval {}
+     *   If transfer size option has not been added to this option list.
+     **/
+    std::optional< uint64_t> transferSizeOption() const;
 
     /**
      * @brief Removes the transfer size option.
      **/
     void removeTransferSizeOption();
-
-    /**
-     * @brief Checks, if the transfer size option has been set.
-     *
-     * @return If the transfer size option has been set.
-     **/
-    bool hasTransferSizeOption() const;
-
-    /**
-     * @brief Returns the value of the transfer size option.
-     *
-     * When the transfer size option is not set, 0 is returned.
-     * Due to the fact, that 0 is a valid transfer size option value, this value
-     * does not mean that the option is set either.
-     *
-     * To check that the option is set, call hasTransferSizeOptionOption().
-     *
-     * @return The transfer size option value.
-     **/
-    uint64_t getTransferSizeOption() const;
 
     /**
      * @brief Performs the option negotiation on server side.

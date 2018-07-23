@@ -41,7 +41,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   dataHandler( dataHandler),
   transmitDataSize( DefaultDataSize),
   lastDataPacketTransmitted( false),
-  lastTransmittedBlockNumber( 0)
+  lastTransmittedBlockNumber( 0U)
 {
 }
 
@@ -55,21 +55,18 @@ void WriteRequestOperationImpl::start()
     lastDataPacketTransmitted = false;
     lastTransmittedBlockNumber = 0;
 
-    // if Transfer Size option is set, query them from the handler
-    if (options().hasTransferSizeOption())
+    Options::OptionList reqOptions{ options()};
+
+    // Add transfer size option with size '0' if requested.
+    if (configuration().handleTransferSizeOption)
     {
-      uint64_t transferSize;
+      uint64_t transferSize=0;
 
       // If the handler supplies a transfer size
       if (dataHandler->requestedTransferSize( transferSize))
       {
         // set transfer size TFTP option
-        options().addTransferSizeOption( transferSize);
-      }
-      else
-      {
-        // otherwise remove this option
-        options().removeTransferSizeOption();
+        reqOptions.transferSizeOption( transferSize);
       }
     }
 
@@ -77,7 +74,7 @@ void WriteRequestOperationImpl::start()
     sendFirst( Packets::WriteRequestPacket(
       filename(),
       mode(),
-      options()));
+      reqOptions));
 
     // wait for answers
     OperationImpl::start();
@@ -224,15 +221,15 @@ void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
   }
 
   // check blocksize option
-  if (0 != negotiatedOptions.blocksize())
+  if (auto blocksize{ negotiatedOptions.blocksize()}; blocksize)
   {
-    transmitDataSize = negotiatedOptions.blocksize();
+    transmitDataSize = *blocksize;
   }
 
   // check timeout option
-  if (0 != negotiatedOptions.getTimeoutOption())
+  if ( auto timeoutOption{ negotiatedOptions.timeoutOption()}; timeoutOption)
   {
-    receiveTimeout( negotiatedOptions.getTimeoutOption());
+    receiveTimeout( *timeoutOption);
   }
 
   // Transfer size option is not checked here (already performed during option negotiation)

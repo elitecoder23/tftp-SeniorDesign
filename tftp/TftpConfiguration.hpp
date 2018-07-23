@@ -68,6 +68,13 @@ class TftpConfiguration
      * @brief Creates an option list (for TFTP clients) based on the actual
      *   configuration and the supplied base options.
      *
+     * This operation handles:
+     * * blocksize option and
+     * * timeout option.
+     *
+     * The transfersize option must be handled manually, due to the different
+     * handling on RRG/ WRQ.
+     *
      * @param[in] baseOptions
      *   Base options, which shall be used for creation of this option list.
      *
@@ -80,6 +87,13 @@ class TftpConfiguration
     /**
      * @brief Creates an option list (for TFTP servers) based on the actual
      *   configuration and the supplied base options.
+     *
+     * This operation handles:
+     * * blocksize option and
+     * * timeout option.
+     *
+     * The transfersize option must be handled manually, due to the different
+     * handling on RRG/ WRQ.
      *
      * @param[in] baseOptions
      *   Base options, which shall be used for creation of this option list.

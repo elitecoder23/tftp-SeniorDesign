@@ -25,8 +25,7 @@
 
 #include <boost/bind.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 OperationImpl::~OperationImpl() noexcept
 {
@@ -136,7 +135,12 @@ TransferMode OperationImpl::mode() const
   return modeV;
 }
 
-Options::OptionList& OperationImpl::options()
+const TftpConfiguration& OperationImpl::configuration() const
+{
+  return tftpClient.configuration();
+}
+
+const Options::OptionList& OperationImpl::options() const
 {
   return optionsV;
 }
@@ -465,7 +469,6 @@ void OperationImpl::receiveFirstHandler(
     }
     catch ( boost::system::system_error &err)
     {
-      //! @throw CommunicationException On communication error.
       BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
         "Start Receive: " << err.what();
 
@@ -484,7 +487,6 @@ void OperationImpl::receiveFirstHandler(
   }
   catch ( boost::system::system_error &err)
   {
-    //! @throw CommunicationException On communication error.
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
       "Connect: " << err.what();
 
@@ -639,5 +641,4 @@ void OperationImpl::timeoutHandler(
   }
 }
 
-}
 }

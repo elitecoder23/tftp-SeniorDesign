@@ -207,7 +207,12 @@ void OperationImpl::receive()
   }
 }
 
-Options::OptionList& OperationImpl::options()
+const TftpConfiguration& OperationImpl::configuration() const
+{
+  return tftpServer.configuration();
+}
+
+const Options::OptionList& OperationImpl::options() const
 {
   return optionsV;
 }
@@ -218,7 +223,7 @@ void OperationImpl::maxReceivePacketSize(
   maxReceivePacketSizeV = maxReceivePacketSize;
 }
 
-void OperationImpl::receiveTimeout( const uint8_t receiveTimeout)
+void OperationImpl::receiveTimeout( const uint8_t receiveTimeout) noexcept
 {
   receiveTimeoutV = receiveTimeout;
 }

@@ -51,8 +51,10 @@ void WriteRequestOperationImpl::start()
 
   try
   {
+    auto respOptions{ options()};
+
     // option negotiation leads to empty option list
-    if (options().empty())
+    if (respOptions.empty())
     {
       // Then no NOACK is sent back - a simple ACK is sent.
       send( Packets::AcknowledgementPacket( Packets::BlockNumber{ 0U}));
@@ -62,9 +64,9 @@ void WriteRequestOperationImpl::start()
       //validate received options
 
       // check blocksize option
-      if ( 0 != options().blocksize())
+      if ( auto blocksize{ respOptions.blocksize()}; blocksize)
       {
-        receiveDataSize = options().blocksize();
+        receiveDataSize = *blocksize;
 
         // set receive data size if necessary
         if ( receiveDataSize > DefaultDataSize)
@@ -75,20 +77,19 @@ void WriteRequestOperationImpl::start()
       }
 
       // check timeout option
-      if ( 0 != options().getTimeoutOption())
+      if ( auto timeoutOption{ respOptions.timeoutOption()}; timeoutOption)
       {
-        receiveTimeout( options().getTimeoutOption());
+        receiveTimeout( *timeoutOption);
       }
 
       // check transfer size option
-      if ( options().hasTransferSizeOption())
-      {
-        if ( !dataHandler->receivedTransferSize(
-          options().getTransferSizeOption()))
+       if ( auto transferSizeOption{ respOptions.transferSizeOption()})
+       {
+        if ( !dataHandler->receivedTransferSize( *transferSizeOption))
         {
-          Packets::ErrorPacket errorPacket(
+          Packets::ErrorPacket errorPacket{
             ErrorCode::DiskFullOrAllocationExceeds,
-            "FILE TO BIG");
+            "FILE TO BIG"};
 
           send( errorPacket);
 
@@ -99,7 +100,7 @@ void WriteRequestOperationImpl::start()
       }
 
       // send OACK
-      send( Packets::OptionsAcknowledgementPacket( options()));
+      send( Packets::OptionsAcknowledgementPacket{ respOptions});
     }
 
     // start receive loop

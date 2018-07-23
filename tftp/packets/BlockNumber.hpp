@@ -16,8 +16,7 @@
 #include <tftp/packets/Packets.hpp>
 #include <cstdint>
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 /**
  * @brief Represents a block number in TFTP Data and Acknowledgement packets.
@@ -89,14 +88,14 @@ class BlockNumber
     BlockNumber& operator=( uint16_t blockNumber);
 
     /**
-     * @brief Increment of the block number.
+     * @brief Pre-Increment of the block number.
      *
      * @return The class itself
      **/
     BlockNumber& operator++();
 
     /**
-     * @brief Increment of the block number.
+     * @brief Post-Increment of the block number.
      *
      * @return The class itself
      **/
@@ -104,14 +103,14 @@ class BlockNumber
     BlockNumber operator++( int);
 
     /**
-     * @brief Decrement of the block number.
+     * @brief Pre-Decrement of the block number.
      *
      * @return The class itself
      **/
     BlockNumber& operator--();
 
     /**
-     * @brief Decrement of the block number.
+     * @brief Post-Decrement of the block number.
      *
      * @return The class itself.
      **/
@@ -162,7 +161,6 @@ class BlockNumber
     uint16_t blockNumber;
 };
 
-}
 }
 
 #endif

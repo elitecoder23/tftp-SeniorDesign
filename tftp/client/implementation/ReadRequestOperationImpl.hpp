@@ -17,8 +17,7 @@
 #include <tftp/client/implementation/OperationImpl.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
 /**
  * @brief Class which handles a TFTP Read Request on client side.
@@ -113,7 +112,6 @@ class ReadRequestOperationImpl : public OperationImpl
     Packets::BlockNumber lastReceivedBlockNumber;
 };
 
-}
 }
 
 #endif

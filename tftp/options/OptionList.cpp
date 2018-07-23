@@ -39,7 +39,6 @@ OptionList::OptionList(
 
     if (nameEnd==end)
     {
-      //! @throw InvalidPacketException on Unexpected end of input data
       BOOST_THROW_EXCEPTION( InvalidPacketException() <<
         AdditionalInfo( "Unexpected end of input data"));
     }
@@ -48,7 +47,6 @@ OptionList::OptionList(
 
     if (valueBegin == end)
     {
-      //! @throw InvalidPacketException on Unexpected end of input data
       BOOST_THROW_EXCEPTION( InvalidPacketException() <<
         AdditionalInfo( "Unexpected end of input data"));
     }
@@ -57,7 +55,6 @@ OptionList::OptionList(
 
     if (valueEnd == end)
     {
-      //! @throw InvalidPacketException on Unexpected end of input data
       BOOST_THROW_EXCEPTION( InvalidPacketException() <<
         AdditionalInfo( "Unexpected end of input data"));
     }
@@ -157,6 +154,20 @@ void OptionList::set( const std::string &name, const std::string &value)
     std::make_shared< StringOption>( name, value)));
 }
 
+void OptionList::set( const std::string &&name, const std::string &&value)
+{
+  // If option already exists remove it first
+  if (has( name))
+  {
+    remove( name);
+  }
+
+  // Add option
+  optionsValue.insert( std::make_pair(
+    name,
+    std::make_shared< StringOption>( std::move( name), std::move( value))));
+}
+
 void OptionList::set( const OptionPtr option)
 {
   // If option already exists remove it first
@@ -228,7 +239,7 @@ void OptionList::blocksizeServer(
   set( entry);
 }
 
-uint16_t OptionList::blocksize() const
+std::optional< uint16_t> OptionList::blocksize() const
 {
   auto optionIt{ optionsValue.find(
     Option::optionName( KnownOptions::BlockSize))};
@@ -236,7 +247,7 @@ uint16_t OptionList::blocksize() const
   // option not set
   if (optionIt == optionsValue.end())
   {
-    return 0;
+    return {};
   }
 
   const BlockSizeOptionBase* integerOption =
@@ -246,13 +257,13 @@ uint16_t OptionList::blocksize() const
   // invalid cast
   if (!integerOption)
   {
-    return 0;
+    return {};
   }
 
   return *integerOption;
 }
 
-void OptionList::addTimeoutOptionClient( const uint8_t timeout)
+void OptionList::timeoutOptionClient( const uint8_t timeout)
 {
   // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
   assert( timeout >= TimeoutOptionMin);
@@ -265,7 +276,7 @@ void OptionList::addTimeoutOptionClient( const uint8_t timeout)
   set( entry);
 }
 
-void OptionList::addTimeoutOptionServer(
+void OptionList::timeoutOptionServer(
   const uint8_t minTimeout,
   const uint8_t maxTimeout)
 {
@@ -284,7 +295,7 @@ void OptionList::addTimeoutOptionServer(
   set( entry);
 }
 
-uint8_t OptionList::getTimeoutOption() const
+std::optional< uint8_t> OptionList::timeoutOption() const
 {
   auto optionIt{ optionsValue.find(
     Option::optionName( KnownOptions::Timeout))};
@@ -292,7 +303,7 @@ uint8_t OptionList::getTimeoutOption() const
   // option not set
   if (optionIt == optionsValue.end())
   {
-    return 0;
+    return {};
   }
 
   const TimeoutOptionBase* integerOption =
@@ -302,13 +313,13 @@ uint8_t OptionList::getTimeoutOption() const
   // invalid cast
   if (!integerOption)
   {
-    return 0;
+    return {};
   }
 
   return *integerOption;
 }
 
-void OptionList::addTransferSizeOption( const uint64_t transferSize)
+void OptionList::transferSizeOption( const uint64_t transferSize)
 {
   OptionPtr entry( std::make_shared< TransferSizeOptionServerClient>(
       Option::optionName( KnownOptions::TransferSize),
@@ -323,12 +334,7 @@ void OptionList::removeTransferSizeOption()
   remove( Option::optionName( KnownOptions::TransferSize));
 }
 
-bool OptionList::hasTransferSizeOption() const
-{
-  return has( Option::optionName( KnownOptions::TransferSize));
-}
-
-uint64_t OptionList::getTransferSizeOption() const
+std::optional< uint64_t> OptionList::transferSizeOption() const
 {
   auto optionIt{ optionsValue.find(
     Option::optionName( KnownOptions::TransferSize))};
@@ -336,7 +342,7 @@ uint64_t OptionList::getTransferSizeOption() const
   // option not set
   if (optionIt == optionsValue.end())
   {
-    return 0;
+    return {};
   }
 
   const TransferSizeOptionBase* integerOption =
@@ -346,7 +352,7 @@ uint64_t OptionList::getTransferSizeOption() const
   // invalid cast
   if (!integerOption)
   {
-    return 0;
+    return {};
   }
 
   return *integerOption;

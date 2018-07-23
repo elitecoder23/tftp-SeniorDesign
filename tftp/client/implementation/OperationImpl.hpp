@@ -29,10 +29,9 @@
 #include <string>
 #include <memory>
 
-namespace Tftp {
-namespace Client {
+namespace Tftp::Client {
 
-
+// Forward declaration
 class TftpClientInternal;
 
 /**
@@ -64,7 +63,7 @@ class OperationImpl :
      * A child class inheriting from this class must override this operation,
      * sending the request package and then calling this method.
      **/
-    virtual void start() override;
+    void start() override;
 
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
@@ -120,11 +119,18 @@ class OperationImpl :
     TransferMode mode() const;
 
     /**
+      * @brief Returns the TFTP configuration.
+      *
+      * @return The TFTP configuration.
+      **/
+    const TftpConfiguration& configuration() const;
+
+    /**
      * @brief Returns the TFTP option list.
      *
      * @return The TFTP option list.
      **/
-    Options::OptionList& options();
+    const Options::OptionList& options() const;
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -238,6 +244,9 @@ class OperationImpl :
      *   error status of operation.
      * @param[in] bytesTransferred
      *   Number of bytes transfered.
+     *
+     * @throw CommunicationException
+     *   On communication error.
      **/
     void receiveFirstHandler(
       const boost::system::error_code& errorCode,
@@ -319,7 +328,6 @@ class OperationImpl :
     ErrorInfo errorInfoV;
 };
 
-}
 }
 
 #endif

@@ -15,6 +15,8 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TransmitDataHandler.hpp>
+#include <tftp/TftpConfiguration.hpp>
+
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
@@ -49,38 +51,56 @@ void ReadRequestOperationImpl::start()
 {
   try
   {
+    auto respOptions{ options()};
+
     // option negotiation leads to empty option list
-    if ( options().empty())
+    if ( respOptions.empty())
     {
       sendData();
     }
     else
     {
       // check blocksize option
-      if ( 0 != options().blocksize())
+      if ( auto blocksize{ respOptions.blocksize()}; blocksize)
       {
-        transmitDataSize = options().blocksize();
+        transmitDataSize = *blocksize;
       }
 
       // check timeout option
-      if ( 0 != options().getTimeoutOption())
+      if ( auto timeoutOption{ respOptions.timeoutOption()}; timeoutOption)
       {
-        receiveTimeout( options().getTimeoutOption());
+        receiveTimeout( *timeoutOption);
       }
 
       // check transfer size option
-      if ( options().hasTransferSizeOption())
+      if ( auto transferSizeOption{ respOptions.transferSizeOption()})
       {
+        if ( 0U != *transferSizeOption)
+        {
+          BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
+            "Received transfer size must be 0";
+
+          Packets::ErrorPacket errorPacket(
+            ErrorCode::TftpOptionRefused,
+            "transfer size must be 0");
+          send( errorPacket);
+
+          // Operation completed
+          finished( TransferStatus::TransferError, std::move( errorPacket));
+
+          return;
+        }
+
         uint64_t transferSize;
 
         // add transfer size to answer only, if handler supply it.
         if ( dataHandler->requestedTransferSize( transferSize))
         {
-          options().addTransferSizeOption( transferSize);
+          respOptions.transferSizeOption( transferSize);
         }
         else
         {
-          options().removeTransferSizeOption();
+          respOptions.removeTransferSizeOption();
         }
       }
 

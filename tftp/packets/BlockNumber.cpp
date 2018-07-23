@@ -12,8 +12,7 @@
 
 #include "BlockNumber.hpp"
 
-namespace Tftp {
-namespace Packets {
+namespace Tftp::Packets {
 
 BlockNumber::BlockNumber() noexcept:
   blockNumber( 0U)
@@ -69,7 +68,7 @@ BlockNumber& BlockNumber::operator++()
 
 BlockNumber BlockNumber::operator++( int)
 {
-  BlockNumber old( blockNumber);
+  BlockNumber old{ blockNumber};
   blockNumber = next();
   return old;
 }
@@ -82,7 +81,7 @@ BlockNumber& BlockNumber::operator--()
 
 BlockNumber BlockNumber::operator--( int)
 {
-  BlockNumber old( blockNumber);
+  BlockNumber old{ blockNumber};
   blockNumber = previous();
   return old;
 }
@@ -107,5 +106,4 @@ bool BlockNumber::operator !=( uint16_t rhs) const
   return blockNumber != rhs;
 }
 
-}
 }

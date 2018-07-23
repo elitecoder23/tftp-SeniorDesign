@@ -28,8 +28,7 @@
 #include <string>
 #include <memory>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 class TftpServerInternal;
 
@@ -120,11 +119,18 @@ class OperationImpl:
     void receive();
 
     /**
+      * @brief Returns the TFTP configuration.
+      *
+      * @return The TFTP configuration.
+      **/
+    const TftpConfiguration& configuration() const;
+
+    /**
      * @brief Returns the stored TFTP option list.
      *
      * @return The stored TFTP option list.
      **/
-    Options::OptionList& options();
+    const Options::OptionList& options() const;
 
     /**
      * @brief Updates the limit of maximum packet size for the receive
@@ -147,7 +153,7 @@ class OperationImpl:
      * @param[in] receiveTimeout
      *   The new receive timeout.
      **/
-    void receiveTimeout( uint8_t receiveTimeout);
+    void receiveTimeout( uint8_t receiveTimeout) noexcept;
 
     /**
      * @copydoc PacketHandler::handleReadRequestPacket
@@ -247,7 +253,6 @@ class OperationImpl:
     ErrorInfo errorInfoV;
 };
 
-}
 }
 
 #endif
