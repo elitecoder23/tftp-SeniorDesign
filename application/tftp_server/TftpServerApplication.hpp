@@ -15,9 +15,10 @@
 
 #include <tftp/server/TftpServer.hpp>
 
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 #include <boost/asio.hpp>
+
+#include <filesystem>
 
 //! The TFTP server application.
 class TftpServerApplication
@@ -33,14 +34,29 @@ class TftpServerApplication
      **/
     virtual ~TftpServerApplication() noexcept;
 
+    /**
+     * @brief Entry point of the TFTP server.
+     *
+     * @param[in] argc
+     *   argument count
+     * @param[in] argv
+     *   argument values.
+     *
+     * @return Return code.
+     **/
     int operator()( int argc, char *argv[]);
 
+    /**
+     * @brief Stops the TFTP server.
+     *
+     * @return
+     **/
     bool stop();
 
   private:
     void shutdown();
 
-    bool checkFilename( const boost::filesystem::path &filename) const;
+    bool checkFilename( const std::filesystem::path &filename) const;
 
     void receivedRequest(
       Tftp::RequestType requestType,
@@ -50,12 +66,12 @@ class TftpServerApplication
       const Tftp::UdpAddressType &from);
 
     void transmitFile(
-      const boost::filesystem::path &filename,
+      const std::filesystem::path &filename,
       const Tftp::Options::OptionList &options,
       const Tftp::UdpAddressType &from);
 
     void receiveFile(
-      const boost::filesystem::path &filename,
+      const std::filesystem::path &filename,
       const Tftp::Options::OptionList &options,
       const Tftp::UdpAddressType &from);
 
@@ -63,7 +79,7 @@ class TftpServerApplication
     boost::program_options::options_description optionsDescription;
 
     //! base directory of TFTP server
-    boost::filesystem::path baseDir;
+    std::filesystem::path baseDir;
     //! The TFTP configuration
     Tftp::TftpConfiguration configuration;
     //! The TFTP server instance
@@ -73,7 +89,6 @@ class TftpServerApplication
     boost::asio::io_service ioService;
     //! ASIO signal handler
     boost::asio::signal_set signals;
-
 };
 
 #endif

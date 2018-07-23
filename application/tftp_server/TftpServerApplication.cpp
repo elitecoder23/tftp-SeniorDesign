@@ -40,8 +40,8 @@ TftpServerApplication::TftpServerApplication() :
 
     (
       "server-root",
-      boost::program_options::value< boost::filesystem::path>(
-        &baseDir)->default_value( boost::filesystem::current_path()),
+      boost::program_options::value( &baseDir)->default_value(
+        std::filesystem::current_path()),
       "Directory path, where the server shall have its root"
     );
 
@@ -76,7 +76,7 @@ int TftpServerApplication::operator()( int argc, char *argv[])
     boost::program_options::notify( options);
 
     // make a absolute path
-    baseDir = boost::filesystem::canonical( baseDir);
+    baseDir = std::filesystem::canonical( baseDir);
 
     std::cout <<
       "Starting TFTP server in " <<
@@ -150,19 +150,20 @@ bool TftpServerApplication::stop()
   return true;
 }
 
-bool TftpServerApplication::checkFilename( const boost::filesystem::path &filename) const
+bool TftpServerApplication::checkFilename(
+  const std::filesystem::path &filename) const
 {
   if ( filename.is_relative())
   {
     return false;
   }
 
-  if ( boost::filesystem::is_directory( filename))
+  if ( std::filesystem::is_directory( filename))
   {
     return false;
   }
 
-  boost::filesystem::path::iterator fileIt( filename.begin());
+  auto fileIt{ filename.begin()};
 
   for (const auto& pathItem : baseDir)
   {
@@ -241,7 +242,7 @@ void TftpServerApplication::receivedRequest(
 }
 
 void TftpServerApplication::transmitFile(
-  const boost::filesystem::path &filename,
+  const std::filesystem::path &filename,
   const Tftp::Options::OptionList &options,
   const Tftp::UdpAddressType &from)
 {
@@ -273,7 +274,7 @@ void TftpServerApplication::transmitFile(
     server->createReadRequestOperation(
       std::make_shared< Tftp::File::StreamFile< std::fstream>>(
         std::move( fileStream),
-        boost::filesystem::file_size( filename)),
+        std::filesystem::file_size( filename)),
       {},
       from,
       options,
@@ -284,7 +285,7 @@ void TftpServerApplication::transmitFile(
 }
 
 void TftpServerApplication::receiveFile(
-  const boost::filesystem::path &filename,
+  const std::filesystem::path &filename,
   const Tftp::Options::OptionList &options,
   const Tftp::UdpAddressType &from)
 {
@@ -317,7 +318,7 @@ void TftpServerApplication::receiveFile(
     server->createWriteRequestOperation(
       std::make_shared< Tftp::File::StreamFile< std::fstream>>(
         std::move( fileStream),
-        boost::filesystem::file_size( filename)),
+        std::filesystem::file_size( filename)),
       {},
       from,
       options,

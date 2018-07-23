@@ -47,15 +47,15 @@ TftpClientApplication::TftpClientApplication() :
       "the desired operation (\"Read\"|\"Write\")"
     )
     ("local-file",
-      boost::program_options::value< std::string>( &localFile),
+      boost::program_options::value( &localFile),
       "filename of local file"
     )
     ("remote-file",
-      boost::program_options::value< std::string>( &remoteFile)->required(),
+      boost::program_options::value( &remoteFile)->required(),
       "filename of remote file"
     )
     ("address",
-      boost::program_options::value< boost::asio::ip::address>( &address)->required(),
+      boost::program_options::value( &address)->required(),
       "remote address"
     );
 

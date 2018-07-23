@@ -6,14 +6,11 @@
 
 cmake_minimum_required( VERSION 3.11)
 
-find_package( 
+find_package(
   Boost
   REQUIRED
   COMPONENTS
-  program_options
-  filesystem
-  thread
-  chrono)
+    thread)
 
 add_executable(
   tftp_server
@@ -23,15 +20,14 @@ add_executable(
 
 target_link_libraries( 
   tftp_server 
-  
+
   tftp 
   helper 
-  
-  Boost::boost
-  Boost::program_options
-  Boost::filesystem
-  Boost::thread
-  Boost::chrono)
+
+  $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
+  $<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,7.0>>:stdc++fs>
+
+  Boost::thread)
 
 # INSTALL
 include( GNUInstallDirs)
