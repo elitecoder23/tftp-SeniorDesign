@@ -80,7 +80,7 @@ class MemoryFile: public TftpFile
     /**
      * @copydoc TftpFile::requestedTransferSize()
      **/
-    bool requestedTransferSize( uint64_t &transferSize) final;
+    std::optional< uint64_t> requestedTransferSize() final;
 
     /**
      * @copydoc TftpFile::sendData()

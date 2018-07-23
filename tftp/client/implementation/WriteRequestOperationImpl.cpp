@@ -60,13 +60,11 @@ void WriteRequestOperationImpl::start()
     // Add transfer size option with size '0' if requested.
     if (configuration().handleTransferSizeOption)
     {
-      uint64_t transferSize=0;
-
       // If the handler supplies a transfer size
-      if (dataHandler->requestedTransferSize( transferSize))
+      if ( auto transferSize{ dataHandler->requestedTransferSize()}; transferSize)
       {
         // set transfer size TFTP option
-        reqOptions.transferSizeOption( transferSize);
+        reqOptions.transferSizeOption( *transferSize);
       }
     }
 

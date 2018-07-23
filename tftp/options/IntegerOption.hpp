@@ -18,10 +18,11 @@
 
 #include <tftp/options/Option.hpp>
 
+#include <helper/SafeCast.hpp>
+
 #include <boost/lexical_cast.hpp>
 
-#include <boost/optional.hpp>
-
+#include <optional>
 #include <string_view>
 #include <stdexcept>
 
@@ -102,6 +103,9 @@ class BaseIntegerOption: public Option
      **/
     BaseIntegerOption( const std::string &name, IntegerType value);
 
+    //! @copydoc BaseIntegerOption(const std::string&,IntegerType)
+    BaseIntegerOption( std::string &&name, IntegerType value);
+
     /**
      * @brief @copybrief Option::negotiate()
      *
@@ -177,6 +181,15 @@ BaseIntegerOption< IntT>::BaseIntegerOption(
 }
 
 template< typename IntT>
+BaseIntegerOption< IntT>::BaseIntegerOption(
+  std::string &&name,
+  const IntegerType value):
+  Option( std::move( name)),
+  value( value)
+{
+}
+
+template< typename IntT>
 OptionPtr BaseIntegerOption< IntT>::negotiate(
   std::string_view optionValue) const noexcept
 {
@@ -192,16 +205,22 @@ OptionPtr BaseIntegerOption< IntT>::negotiate(
 }
 
 template< typename IntT>
-std::string BaseIntegerOption< IntT>::toString( IntegerType value)
+std::string BaseIntegerOption< IntT>::toString( const IntegerType value)
 {
-  return boost::lexical_cast< std::string>( value);
+  return std::to_string( value);
 }
 
 // Full specialisation for uint8_t - must be marked as inline because its a real function now - otherwise put definition in cpp file
+/**
+ * @copydoc BaseIntegerOption<IntT>::toString()
+ *
+ * Full specialisation for uint8_t.
+ **/
 template< >
-inline std::string BaseIntegerOption< uint8_t>::toString( IntegerType value)
+inline std::string BaseIntegerOption< uint8_t>::toString(
+  const IntegerType value)
 {
-  return boost::lexical_cast< std::string>( static_cast< uint16_t>( value));
+  return std::to_string( static_cast< uint16_t>( value));
 }
 
 template< typename IntT>
@@ -212,11 +231,16 @@ typename BaseIntegerOption< IntT>::IntegerType BaseIntegerOption< IntT>::toInt(
 }
 
 // Full specialisation for uint8_t
+/**
+ * @copydoc BaseIntegerOption<IntT>::toInt()
+ *
+ * Full specialisation for uint8_t.
+ **/
 template<>
 inline typename BaseIntegerOption< uint8_t>::IntegerType
 BaseIntegerOption< uint8_t>::toInt( std::string_view value)
 {
-  return (uint8_t)boost::lexical_cast< uint16_t>( value);
+  return safeCast< uint8_t>( boost::lexical_cast< uint16_t>( value));
 }
 
 
@@ -236,7 +260,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
     using typename BaseIntegerOption< IntT>::IntegerType;
 
     //! Optional integer value
-    using OptionalIntegerType = boost::optional< IntT>;
+    using OptionalIntegerType = std::optional< IntT>;
 
     /**
      * @brief Generates a option with the given parameters.
@@ -250,6 +274,12 @@ class IntegerOption: public BaseIntegerOption< IntT>
      **/
     IntegerOption(
       const std::string &name,
+      typename BaseIntegerOption< IntT>::IntegerType value,
+      NegotiateType negotiateOperation = NegotiateType());
+
+    //! @copydoc IntegerOption(const std::string&,BaseIntegerOption< IntT>::IntegerType,NegotiateType)
+    IntegerOption(
+      std::string &&name,
       typename BaseIntegerOption< IntT>::IntegerType value,
       NegotiateType negotiateOperation = NegotiateType());
 
@@ -302,6 +332,16 @@ IntegerOption< IntT, NegotiateT>::IntegerOption(
   const typename BaseIntegerOption< IntT>::IntegerType value,
   NegotiateType negotiateOperation):
   BaseIntegerOption< IntT>( name, value),
+  negotiateOperation( negotiateOperation)
+{
+}
+
+template< typename IntT, typename NegotiateT>
+IntegerOption< IntT, NegotiateT>::IntegerOption(
+  std::string &&name,
+  const typename BaseIntegerOption< IntT>::IntegerType value,
+  NegotiateType negotiateOperation):
+  BaseIntegerOption< IntT>( std::move( name), value),
   negotiateOperation( negotiateOperation)
 {
 }
@@ -383,12 +423,12 @@ class NegotiateMinMaxSmaller
      * @retval [maxValue]
      *   otherwise.
      **/
-    boost::optional< IntT> operator()( const IntT value) const
+    std::optional< IntT> operator()( const IntT value) const
     {
       // If value is smaller then min -> option negotiation fails
       if (value < minValue)
       {
-        return boost::optional< IntT>();
+        return {};
       }
 
       // if value is bigger than maximum-> cut down to max.
@@ -440,12 +480,12 @@ class NegotiateMinMaxRange
      * @return [value] if [minValue] >= [value] <= [maxValue], otherwise fail
      *   negotiation.
      **/
-    boost::optional< IntT> operator()( const IntT value) const
+    std::optional< IntT> operator()( const IntT value) const
     {
       // If value is out of range -> option negotiation fails
       if ((value < minValue) || (value > maxValue))
       {
-        return boost::optional< IntT>();
+        return {};
       }
 
       return value;
@@ -486,11 +526,11 @@ class NegotiateExactValue
      *
      * @return [value] if [value] == [expectedValue] otherwise fail negotiation.
      **/
-    boost::optional< IntT> operator()( const IntT value) const
+    std::optional< IntT> operator()( const IntT value) const
     {
       if (expectedValue != value)
       {
-        return boost::optional< IntT>();
+        return {};
       }
 
       return value;
@@ -521,7 +561,7 @@ class NegotiateAlwaysPass
      *
      * @return [value]
      **/
-    boost::optional< IntT> operator()( const IntT value) const
+    std::optional< IntT> operator()( const IntT value) const
     {
       return value;
     }

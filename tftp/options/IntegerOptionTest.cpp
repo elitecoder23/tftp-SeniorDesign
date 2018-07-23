@@ -15,8 +15,7 @@
 #include <boost/test/unit_test.hpp>
 #include <cstdint>
 
-namespace Tftp {
-namespace Options {
+namespace Tftp::Options {
 
 BOOST_AUTO_TEST_SUITE( IntegerOptionTest)
 
@@ -210,5 +209,4 @@ BOOST_AUTO_TEST_CASE( negotiateAlwaysPass)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-}
 }

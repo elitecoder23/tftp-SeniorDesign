@@ -61,10 +61,9 @@ void MemoryFile::receviedData( const DataType &data) noexcept
   dataPtr = dataValue.begin();
 }
 
-bool MemoryFile::requestedTransferSize( uint64_t &transferSize)
+std::optional< uint64_t> MemoryFile::requestedTransferSize()
 {
-  transferSize = dataValue.size();
-  return true;
+  return dataValue.size();
 }
 
 MemoryFile::DataType MemoryFile::sendData( const size_t maxSize) noexcept

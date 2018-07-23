@@ -24,8 +24,7 @@
 #include <vector>
 #include <cstdint>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 TftpServerImpl::TftpServerImpl(
   ReceivedTftpRequestHandler handler,
@@ -400,5 +399,4 @@ void TftpServerImpl::handleInvalidPacket(
     "RX: UNKNOWN: *ERROR* - IGNORE";
 }
 
-}
 }

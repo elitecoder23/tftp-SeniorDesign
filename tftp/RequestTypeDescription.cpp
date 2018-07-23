@@ -47,5 +47,3 @@ std::istream& operator>>( std::istream& st, RequestType& requestType)
 }
 
 }
-
-

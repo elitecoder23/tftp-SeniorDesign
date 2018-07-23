@@ -24,8 +24,7 @@
 
 #include <string>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 /**
  * @brief This operation can be used to transfer an error message back to
@@ -49,6 +48,9 @@ class ErrorOperation: public Operation
      *   The error code of the error packet.
      * @param[in] errorMessage
      *   The error message of the packet.
+     *
+     * @throw CommunicationException
+     *   On system_error
      **/
     ErrorOperation(
       boost::asio::io_service &ioService,
@@ -105,7 +107,6 @@ class ErrorOperation: public Operation
     const ErrorInfo errorInfoV;
 };
 
-}
 }
 
 #endif

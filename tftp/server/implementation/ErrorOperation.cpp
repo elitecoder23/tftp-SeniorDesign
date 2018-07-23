@@ -15,8 +15,7 @@
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TftpException.hpp>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 ErrorOperation::ErrorOperation(
   boost::asio::io_service &ioService,
@@ -45,14 +44,12 @@ try :
       socket.close();
     }
 
-    //! @throw CommunicationException on system_error
     BOOST_THROW_EXCEPTION(
       CommunicationException() << AdditionalInfo( err.what()));
   }
 }
 catch ( boost::system::system_error &err)
 {
-  //! @throw CommunicationException on system_error
   BOOST_THROW_EXCEPTION(
     CommunicationException() << AdditionalInfo( err.what()));
 }
@@ -84,14 +81,12 @@ try :
       socket.close();
     }
 
-    //! @throw CommunicationException on system_error
     BOOST_THROW_EXCEPTION(
       CommunicationException() << AdditionalInfo( err.what()));
   }
 }
 catch ( boost::system::system_error &err)
 {
-  //! @throw CommunicationException on system_error
   BOOST_THROW_EXCEPTION(
     CommunicationException() << AdditionalInfo( err.what()));
 }
@@ -151,5 +146,4 @@ void ErrorOperation::sendError( const Packets::ErrorPacket &error)
   }
 }
 
-}
 }

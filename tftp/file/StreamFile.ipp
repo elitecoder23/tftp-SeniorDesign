@@ -80,10 +80,9 @@ void StreamFile< StreamT>::receviedData( const DataType &data) noexcept
 }
 
 template< typename StreamT>
-bool StreamFile< StreamT>::requestedTransferSize( uint64_t &transferSize)
+std::optional< uint64_t> StreamFile< StreamT>::requestedTransferSize()
 {
-  transferSize = sizeValue.value_or( 0);
-  return sizeValue.is_initialized();
+  return sizeValue;
 }
 
 template< typename StreamT>

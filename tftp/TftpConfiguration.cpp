@@ -62,9 +62,6 @@ TftpConfiguration::ptree TftpConfiguration::toProperties() const
 
 TftpConfiguration::options_description TftpConfiguration::options()
 {
-  //! @todo for boost::options: https://github.com/boostorg/program_options/pull/18
-  //! should be in source on boost 1.64
-
   options_description options( "TFTP options");
 
   options.add_options()
@@ -75,21 +72,12 @@ TftpConfiguration::options_description TftpConfiguration::options()
   )
   (
     "blocksize-option",
-    //boost::program_options::value( &blockSizeOption),
-    boost::program_options::value< uint16_t>()->notifier(
-      [this]( const uint16_t &value){
-        this->blockSizeOption = value;
-    })->value_name( "blocksize"),
+    boost::program_options::value( &blockSizeOption)->value_name( "blocksize"),
     "blocksize of transfers to use."
   )
   (
     "timeout-option",
-    //boost::program_options::value( &timoutOption),
-    boost::program_options::value< uint16_t>()->implicit_value(
-      DefaultTftpReceiveTimeout)->notifier(
-      [this]( const uint16_t &value){
-        this->timeoutOption = static_cast< uint8_t>( value);
-    })->value_name( "timeout"),
+    boost::program_options::value( &timeoutOption)->value_name( "timeout"),
     "If set handles the timeout option negotiation (seconds)."
   )
   (

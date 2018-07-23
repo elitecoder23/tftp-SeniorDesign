@@ -22,8 +22,7 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_service &ioService,
@@ -91,12 +90,10 @@ void ReadRequestOperationImpl::start()
           return;
         }
 
-        uint64_t transferSize;
-
         // add transfer size to answer only, if handler supply it.
-        if ( dataHandler->requestedTransferSize( transferSize))
+        if ( auto transferSize{ dataHandler->requestedTransferSize()}; transferSize)
         {
-          respOptions.transferSizeOption( transferSize);
+          respOptions.transferSizeOption( *transferSize);
         }
         else
         {
@@ -236,5 +233,4 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
   receive();
 }
 
-}
 }

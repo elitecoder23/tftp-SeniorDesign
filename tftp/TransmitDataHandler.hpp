@@ -16,6 +16,8 @@
 #include <tftp/Tftp.hpp>
 #include <tftp/DataHandler.hpp>
 
+#include <optional>
+
 namespace Tftp {
 
 /**
@@ -32,12 +34,11 @@ class TransmitDataHandler: public DataHandler
      *
      * The call to this call-back is optional.
      *
-     * @param[out] transferSize
-     *   The transfer size.
-     *
-     * @return If the transfer size of the data can be provided.
+     * @return The transfer size, if it can be priveded
+     * @retval {}
+     *   If the transfer size of the data cannot be provided.
      **/
-    virtual bool requestedTransferSize( uint64_t &transferSize) = 0;
+    virtual std::optional< uint64_t> requestedTransferSize() = 0;
 
     /**
      * @brief Request for data, which will be transmitted.

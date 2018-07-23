@@ -25,8 +25,7 @@
 #include <string>
 #include <map>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 /**
  * @brief TFTP server implementation.
@@ -230,7 +229,6 @@ class TftpServerImpl:
     UdpAddressType remoteEndpoint;
 };
 
-}
 }
 
 #endif

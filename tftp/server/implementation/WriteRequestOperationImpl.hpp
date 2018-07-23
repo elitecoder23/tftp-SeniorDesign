@@ -24,8 +24,7 @@
 
 #include <string>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 /**
  * @brief TFTP server read operation.
@@ -111,7 +110,6 @@ class WriteRequestOperationImpl: public OperationImpl
     Packets::BlockNumber lastReceivedBlockNumber;
 };
 
-}
 }
 
 #endif

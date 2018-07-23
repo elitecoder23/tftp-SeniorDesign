@@ -16,8 +16,7 @@
 
 #include <cstdint>
 
-namespace Tftp {
-namespace Options {
+namespace Tftp::Options {
 
 BOOST_AUTO_TEST_SUITE( OptionTest)
 
@@ -32,5 +31,4 @@ BOOST_AUTO_TEST_CASE( optionName)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-}
 }

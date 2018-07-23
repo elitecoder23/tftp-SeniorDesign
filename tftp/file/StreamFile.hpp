@@ -15,8 +15,6 @@
 
 #include <tftp/file/TftpFile.hpp>
 
-#include <boost/optional.hpp>
-
 #include <iostream>
 #include <type_traits>
 
@@ -110,7 +108,7 @@ class StreamFile: public TftpFile
     /**
      * @copydoc TftpFile::requestedTransferSize()
      **/
-    bool requestedTransferSize( uint64_t &transferSize) final;
+    std::optional< uint64_t> requestedTransferSize() final;
 
     /**
      * @copydoc TftpFile::sendData()
@@ -121,7 +119,7 @@ class StreamFile: public TftpFile
     //! the data stream
     StreamType streamValue;
     //! file size
-    boost::optional< size_t> sizeValue;
+    std::optional< size_t> sizeValue;
 };
 
 }

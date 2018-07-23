@@ -21,8 +21,7 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_service &ioService,
@@ -221,5 +220,4 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
-}
 }

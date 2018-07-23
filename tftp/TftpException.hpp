@@ -36,7 +36,7 @@ class TftpException: public virtual Exception
      *
      * @return Exception description.
      **/
-    virtual char const * what() const noexcept override
+    char const * what() const noexcept override
     {
       return "TFTP exception";
     }
@@ -47,7 +47,7 @@ class InvalidPacketException: public virtual TftpException
 {
   public:
     //! @copydoc TftpException::what() const
-    virtual char const * what() const noexcept override
+    char const * what() const noexcept override
     {
       return "TFTP Invalid Packet exception";
     }
@@ -58,7 +58,7 @@ class CommunicationException: public virtual TftpException
 {
   public:
     //! @copydoc TftpException::what() const
-    virtual char const * what() const noexcept override
+    char const * what() const noexcept override
     {
       return "TFTP communication exception";
     }
@@ -69,7 +69,7 @@ class OptionNegotiationException: public virtual TftpException
 {
   public:
     //! @copydoc TftpException::what() const
-    virtual char const * what() const noexcept override
+    char const * what() const noexcept override
     {
       return "TFTP Option Negotiation exception";
     }
@@ -80,7 +80,7 @@ class ErrorReceivedException: public virtual TftpException
 {
   public:
     //! @copydoc TftpException::what() const
-    virtual char const * what() const noexcept override
+    char const * what() const noexcept override
     {
       return "TFTP Error received exception";
     }

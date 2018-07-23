@@ -18,8 +18,7 @@
 #include <string>
 #include <string_view>
 
-namespace Tftp {
-namespace Options {
+namespace Tftp::Options {
 
 /**
  * @brief Base class of a TFTP option.
@@ -70,13 +69,14 @@ class Option
      *
      * @return The option name.
      **/
-    std::string name() const;
+    const std::string& name() const;
 
     /**
      * @brief Set the option name.
      *
      * @param[in] name
-     *   The new option name. Must be not empty.
+     *   The new option name.
+     *   Must be not empty.
      **/
     void name( const std::string &name);
 
@@ -122,7 +122,6 @@ class Option
     std::string nameValue;
 };
 
-}
 }
 
 #endif

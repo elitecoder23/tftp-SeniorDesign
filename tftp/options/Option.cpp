@@ -12,8 +12,7 @@
 
 #include "Option.hpp"
 
-namespace Tftp {
-namespace Options {
+namespace Tftp ::Options {
 
 std::string Option::optionName( const KnownOptions option) noexcept
 {
@@ -49,7 +48,7 @@ Option::Option( std::string &&name):
   assert( !nameValue.empty());
 }
 
-std::string Option::name() const
+const std::string& Option::name() const
 {
   return nameValue;
 }
@@ -67,5 +66,4 @@ std::string Option::toString() const
   return nameValue + ":" + static_cast< std::string>( *this);
 }
 
-}
 }
