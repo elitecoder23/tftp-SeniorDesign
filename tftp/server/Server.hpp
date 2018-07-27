@@ -19,7 +19,6 @@
 #include <memory>
 #include <functional>
 
-namespace Tftp {
 /**
  * @brief TFTP server implementation.
  *
@@ -35,7 +34,7 @@ namespace Tftp {
  *   interface class must be implemented by the user of this library to make
  *   use of the TFTP server operations.
  **/
-namespace Server {
+namespace Tftp::Server {
 
 // Forward declarations
 class TftpServer;
@@ -64,7 +63,6 @@ using ReceivedTftpRequestHandler =
     const Options::OptionList&,
     const UdpAddressType&)>;
 
-}
 }
 
 #endif

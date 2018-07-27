@@ -26,8 +26,7 @@
 
 #include <boost/bind.hpp>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 void OperationImpl::start()
 {
@@ -419,5 +418,4 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
   }
 }
 
-}
 }

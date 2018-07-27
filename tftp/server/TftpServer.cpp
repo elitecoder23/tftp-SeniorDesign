@@ -14,8 +14,7 @@
 
 #include <tftp/server/implementation/TftpServerImpl.hpp>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 const Tftp::UdpAddressType TftpServer::DefaultLocalEndpoint = UdpAddressType(
   boost::asio::ip::address_v4::any(),
@@ -35,5 +34,4 @@ TftpServerPtr TftpServer::createInstance(
     serverAddress);
 }
 
-}
 }

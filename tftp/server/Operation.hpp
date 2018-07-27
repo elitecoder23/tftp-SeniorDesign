@@ -16,12 +16,10 @@
 #include <tftp/server/Server.hpp>
 #include <tftp/packets/Packets.hpp>
 
-#include <boost/optional.hpp>
-
+#include <optional>
 #include <string>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 /**
  * @brief base class for TFTP server operations.
@@ -33,7 +31,7 @@ class Operation
 {
   public:
     //! Error info type
-    using ErrorInfo = boost::optional< Packets::ErrorPacket>;
+    using ErrorInfo = std::optional< Packets::ErrorPacket>;
 
     //! Default Constructor
     virtual ~Operation() noexcept = default;
@@ -74,7 +72,7 @@ class Operation
     virtual const ErrorInfo& errorInfo() const = 0;
 
 };
-}
+
 }
 
 #endif

@@ -17,8 +17,7 @@
 #include <tftp/server/TftpServer.hpp>
 #include <tftp/options/Options.hpp>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 /**
  * @brief This interface class defines the methods used internally for TFTP
@@ -45,7 +44,6 @@ class TftpServerInternal : public TftpServer
     virtual const Options::OptionList& options() const = 0;
 };
 
-}
 }
 
 #endif

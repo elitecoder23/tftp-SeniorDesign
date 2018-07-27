@@ -21,8 +21,7 @@
 
 #include <string>
 
-namespace Tftp {
-namespace Server {
+namespace Tftp::Server {
 
 /**
  * @brief Public interface of TFTP servers.
@@ -177,7 +176,6 @@ class TftpServer
     TftpServer() = default;
 };
 
-}
 }
 
 #endif

@@ -12,7 +12,7 @@
 
 #include "Option.hpp"
 
-namespace Tftp ::Options {
+namespace Tftp::Options {
 
 std::string Option::optionName( const KnownOptions option) noexcept
 {
