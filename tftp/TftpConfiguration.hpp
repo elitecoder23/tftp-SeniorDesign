@@ -32,8 +32,6 @@ namespace Tftp {
 class TftpConfiguration
 {
   public:
-    //! property tree type
-    using ptree = boost::property_tree::ptree;
     //! options description type
     using options_description = boost::program_options::options_description;
 
@@ -46,7 +44,7 @@ class TftpConfiguration
      * @param[in] config
      *   The stored configuration.
      **/
-    TftpConfiguration( const ptree &config);
+    TftpConfiguration( const boost::property_tree::ptree &config);
 
     /**
      * @brief Converts the configuration values to a
@@ -54,7 +52,7 @@ class TftpConfiguration
      *
      * @return The boost::property_tree::ptree.
      **/
-    ptree toProperties() const;
+    boost::property_tree::ptree toProperties() const;
 
     /**
      * @brief Returns an option description, which can be used to parse a

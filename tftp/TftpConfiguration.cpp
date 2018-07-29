@@ -24,7 +24,8 @@ TftpConfiguration::TftpConfiguration() :
 {
 }
 
-TftpConfiguration::TftpConfiguration( const ptree &config) :
+TftpConfiguration::TftpConfiguration(
+  const boost::property_tree::ptree &config) :
   tftpTimeout( config.get( "timeout", DefaultTftpReceiveTimeout)),
   tftpRetries( config.get( "retries", DefaultTftpRetries)),
   tftpServerPort( config.get( "port", DefaultTftpPort)),
@@ -37,9 +38,9 @@ TftpConfiguration::TftpConfiguration( const ptree &config) :
 {
 }
 
-TftpConfiguration::ptree TftpConfiguration::toProperties() const
+boost::property_tree::ptree TftpConfiguration::toProperties() const
 {
-  ptree properties;
+  boost::property_tree::ptree properties;
 
   properties.add( "timeout", tftpTimeout);
   properties.add( "retries", tftpRetries);
