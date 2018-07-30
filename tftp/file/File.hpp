@@ -14,7 +14,9 @@
 #define TFTP_FILE_FILE_HPP
 
 #include <tftp/Tftp.hpp>
+
 #include <memory>
+#include <iosfwd>
 
 /**
  * @brief TFTP file implementation.
@@ -34,11 +36,15 @@ namespace Tftp::File {
 
 class TftpFile;
 class MemoryFile;
+template< typename StreamT>
 class StreamFile;
 class NullSinkFile;
 
 //! Memory file pointer
 using MemoryFilePtr = std::shared_ptr< MemoryFile>;
+
+//! Memory file pointer
+using FileStreamFilePtr = std::shared_ptr< StreamFile< std::fstream> >;
 
 }
 
