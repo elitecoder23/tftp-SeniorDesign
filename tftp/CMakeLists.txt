@@ -113,6 +113,13 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra>)
 
+target_compile_definitions(
+  tftp
+
+  PRIVATE
+  # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+  $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING>)
+
 target_link_libraries( tftp helper Boost::program_options)
 
 target_compile_features( tftp PUBLIC cxx_std_17)
