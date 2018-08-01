@@ -29,6 +29,13 @@ target_link_libraries(
 
   Boost::thread)
 
+target_compile_definitions(
+  tftp_server
+
+  PRIVATE
+    # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING>)
+
 # INSTALL
 include( GNUInstallDirs)
 
