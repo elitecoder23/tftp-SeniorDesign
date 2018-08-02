@@ -44,7 +44,7 @@ class TftpClient
      *
      * @return The created TFTP client instance.
      **/
-    static TftpClientPtr createInstance(
+    static TftpClientPtr instance(
       const TftpConfiguration &configuration = {},
       const Options::OptionList& additionalOptions = {});
 

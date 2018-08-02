@@ -87,7 +87,7 @@ int TftpClientApplication::operator()( int argc, char *argv[])
 
     // Assemble TFTP configuration
 
-    auto tftpClient{ Tftp::Client::TftpClient::createInstance( configuration)};
+    auto tftpClient{ Tftp::Client::TftpClient::instance( configuration)};
 
     Tftp::Client::OperationPtr tftpOperation;
 

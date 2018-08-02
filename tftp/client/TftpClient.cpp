@@ -16,7 +16,7 @@
 
 namespace Tftp::Client {
 
-TftpClientPtr TftpClient::createInstance(
+TftpClientPtr TftpClient::instance(
   const TftpConfiguration &configuration,
   const Options::OptionList& additionalOptions)
 {
