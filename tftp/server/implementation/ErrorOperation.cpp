@@ -20,8 +20,8 @@ namespace Tftp::Server {
 ErrorOperation::ErrorOperation(
   boost::asio::io_service &ioService,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &remote,
-  const UdpAddressType &local,
+  const boost::asio::ip::udp::endpoint &remote,
+  const boost::asio::ip::udp::endpoint &local,
   const ErrorCode errorCode,
   const std::string &errorMessage)
 try :
@@ -57,8 +57,8 @@ catch ( boost::system::system_error &err)
 ErrorOperation::ErrorOperation(
   boost::asio::io_service &ioService,
   OperationCompletedHandler completionHandler,
-  UdpAddressType &&remote,
-  UdpAddressType &&local,
+  boost::asio::ip::udp::endpoint &&remote,
+  boost::asio::ip::udp::endpoint &&local,
   ErrorCode errorCode,
   std::string &&errorMessage)
 try :

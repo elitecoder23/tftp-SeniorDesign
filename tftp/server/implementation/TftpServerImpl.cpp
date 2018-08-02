@@ -30,7 +30,7 @@ TftpServerImpl::TftpServerImpl(
   ReceivedTftpRequestHandler handler,
   const TftpConfiguration &configuration,
   const Options::OptionList& additionalOptions,
-  const UdpAddressType &serverAddress)
+  const boost::asio::ip::udp::endpoint &serverAddress)
 try :
   handler( handler),
   configurationV( configuration),
@@ -113,12 +113,12 @@ void TftpServerImpl::stop()
   ioService.stop();
 }
 
-OperationPtr TftpServerImpl::createReadRequestOperation(
+OperationPtr TftpServerImpl::readRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &remote,
+  const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &local)
+  const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioService,
@@ -130,12 +130,12 @@ OperationPtr TftpServerImpl::createReadRequestOperation(
     local);
 }
 
-OperationPtr TftpServerImpl::createWriteRequestOperation(
+OperationPtr TftpServerImpl::writeRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &remote,
+  const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &local)
+  const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioService,
@@ -147,10 +147,10 @@ OperationPtr TftpServerImpl::createWriteRequestOperation(
     local);
 }
 
-OperationPtr TftpServerImpl::createErrorOperation(
+OperationPtr TftpServerImpl::errorOperation(
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &remote,
-  const UdpAddressType &local,
+  const boost::asio::ip::udp::endpoint &remote,
+  const boost::asio::ip::udp::endpoint &local,
   const ErrorCode errorCode,
   const std::string &errorMessage)
 {
@@ -163,10 +163,10 @@ OperationPtr TftpServerImpl::createErrorOperation(
     errorMessage);
 }
 
-OperationPtr TftpServerImpl::createErrorOperation(
+OperationPtr TftpServerImpl::errorOperation(
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &remote,
-  const UdpAddressType &local,
+  const boost::asio::ip::udp::endpoint &remote,
+  const boost::asio::ip::udp::endpoint &local,
   const ErrorCode errorCode,
   std::string &&errorMessage)
 {
@@ -254,7 +254,7 @@ void TftpServerImpl::receiveHandler(
 }
 
 void TftpServerImpl::handleReadRequestPacket(
-  const UdpAddressType &from,
+  const boost::asio::ip::udp::endpoint &from,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)<< "RX: " <<
@@ -266,10 +266,10 @@ void TftpServerImpl::handleReadRequestPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) <<
     "No registered handler - reject";
 
-    auto operation( createErrorOperation(
+    auto operation( errorOperation(
       {},
       from,
-      UdpAddressType{ serverAddress.address(), 0},
+      boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
       ErrorCode::FileNotFound,
       "RRQ not accepted"));
 
@@ -287,7 +287,7 @@ void TftpServerImpl::handleReadRequestPacket(
 }
 
 void TftpServerImpl::handleWriteRequestPacket(
-  const UdpAddressType &from,
+  const boost::asio::ip::udp::endpoint &from,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)<< "RX: " <<
@@ -299,10 +299,10 @@ void TftpServerImpl::handleWriteRequestPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
       << "No registered handler - reject";
 
-    auto operation( createErrorOperation(
+    auto operation( errorOperation(
       {},
       from,
-      UdpAddressType{ serverAddress.address(), 0},
+      boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
       ErrorCode::FileNotFound,
       "WRQ"));
 
@@ -320,16 +320,16 @@ void TftpServerImpl::handleWriteRequestPacket(
 }
 
 void TftpServerImpl::handleDataPacket(
-  const UdpAddressType &from,
+  const boost::asio::ip::udp::endpoint &from,
   const Packets::DataPacket &dataPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) << "RX ERROR: " <<
     static_cast< std::string>( dataPacket);
 
-  auto operation( createErrorOperation(
+  auto operation( errorOperation(
     {},
     from,
-    UdpAddressType{ serverAddress.address(), 0},
+    boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
     "DATA not expected"));
 
@@ -338,16 +338,16 @@ void TftpServerImpl::handleDataPacket(
 }
 
 void TftpServerImpl::handleAcknowledgementPacket(
-  const UdpAddressType &from,
+  const boost::asio::ip::udp::endpoint &from,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) << "RX ERROR: " <<
     static_cast< std::string>( acknowledgementPacket);
 
-  auto operation( createErrorOperation(
+  auto operation( errorOperation(
     {},
     from,
-    UdpAddressType{ serverAddress.address(), 0},
+    boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
     "ACK not expected"));
 
@@ -356,16 +356,16 @@ void TftpServerImpl::handleAcknowledgementPacket(
 }
 
 void TftpServerImpl::handleErrorPacket(
-  const UdpAddressType &from,
+  const boost::asio::ip::udp::endpoint &from,
   const Packets::ErrorPacket &errorPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) << "RX ERROR: " <<
     static_cast< std::string>( errorPacket);
 
-  auto operation( createErrorOperation(
+  auto operation( errorOperation(
     {},
     from,
-    UdpAddressType{ serverAddress.address(), 0},
+    boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
     "ERROR not expected"));
 
@@ -374,16 +374,16 @@ void TftpServerImpl::handleErrorPacket(
 }
 
 void TftpServerImpl::handleOptionsAcknowledgementPacket(
-  const UdpAddressType &from,
+  const boost::asio::ip::udp::endpoint &from,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) << "RX ERROR: " <<
     static_cast< std::string>( optionsAcknowledgementPacket);
 
-  auto operation( createErrorOperation(
+  auto operation( errorOperation(
     {},
     from,
-    UdpAddressType{ serverAddress.address(), 0},
+    boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
     "OACK not expected"));
 
@@ -392,7 +392,7 @@ void TftpServerImpl::handleOptionsAcknowledgementPacket(
 }
 
 void TftpServerImpl::handleInvalidPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const RawTftpPacket &)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) <<

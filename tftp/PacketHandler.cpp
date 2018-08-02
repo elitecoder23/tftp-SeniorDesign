@@ -20,7 +20,7 @@
 namespace Tftp {
 
 void PacketHandler::handlePacket(
-  const UdpAddressType &from,
+  const boost::asio::ip::udp::endpoint &from,
   const RawTftpPacket &rawPacket)
 {
   BOOST_LOG_FUNCTION();

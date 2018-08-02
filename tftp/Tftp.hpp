@@ -14,7 +14,6 @@
 #define TFTP_TFTP_HPP
 
 #include <boost/asio/ip/address.hpp>
-#include <boost/asio/ip/udp.hpp>
 
 #include <string>
 #include <vector>
@@ -52,9 +51,6 @@ using RawTftpPacket = std::vector< uint8_t>;
 //! The address type for TFTP operations
 //! shortened form of the IP address type (v4 + v6)
 using IpAddressType = boost::asio::ip::address;
-
-//! shortened form of the UDP address type (IP + UDP Port)
-using UdpAddressType = boost::asio::ip::udp::endpoint;
 
 //!  TFTP version information
 enum class Version

@@ -16,6 +16,8 @@
 #include <tftp/Tftp.hpp>
 #include <tftp/packets/Packets.hpp>
 
+#include <boost/asio/ip/udp.hpp>
+
 namespace Tftp {
 
 /**
@@ -48,7 +50,7 @@ class PacketHandler
      *   The received packet.
      **/
     void handlePacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const RawTftpPacket &rawPacket);
 
   protected:
@@ -61,7 +63,7 @@ class PacketHandler
      *   The read request packet.
      **/
     virtual void handleReadRequestPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::ReadRequestPacket &readRequestPacket) = 0;
 
     /**
@@ -73,7 +75,7 @@ class PacketHandler
      *   The write request packet.
      **/
     virtual void handleWriteRequestPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::WriteRequestPacket &writeRequestPacket) = 0;
 
     /**
@@ -85,7 +87,7 @@ class PacketHandler
      *   The data packet.
      **/
     virtual void handleDataPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::DataPacket &dataPacket) = 0;
 
     /**
@@ -97,7 +99,7 @@ class PacketHandler
      *   The acknowledgement packet.
      **/
     virtual void handleAcknowledgementPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::AcknowledgementPacket &acknowledgementPacket) = 0;
 
     /**
@@ -109,7 +111,7 @@ class PacketHandler
      *   The error packet.
      **/
     virtual void handleErrorPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::ErrorPacket &errorPacket) = 0;
 
     /**
@@ -121,7 +123,7 @@ class PacketHandler
      *   The option acknowledgement packet.
      **/
     virtual void handleOptionsAcknowledgementPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) = 0;
 
     /**
@@ -133,7 +135,7 @@ class PacketHandler
      *   The invalid packet data.
      **/
     virtual void handleInvalidPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const RawTftpPacket &rawPacket) = 0;
 };
 

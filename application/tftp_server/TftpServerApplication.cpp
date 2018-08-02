@@ -85,7 +85,7 @@ int TftpServerApplication::operator()( int argc, char *argv[])
       configuration.tftpServerPort << "\n";
 
     // The TFTP server instance
-    server = Tftp::Server::TftpServer::createInstance(
+    server = Tftp::Server::TftpServer::instance(
       std::bind(
         &TftpServerApplication::receivedRequest,
         this,
@@ -95,10 +95,10 @@ int TftpServerApplication::operator()( int argc, char *argv[])
         std::placeholders::_4,
         std::placeholders::_5),
       configuration,
-      Tftp::Options::OptionList(),
-      Tftp::UdpAddressType(
+      Tftp::Options::OptionList{},
+      boost::asio::ip::udp::endpoint{
         boost::asio::ip::address_v4::any(),
-        configuration.tftpServerPort));
+        configuration.tftpServerPort});
 
     server->start();
     server->entry();
@@ -188,14 +188,14 @@ void TftpServerApplication::receivedRequest(
   const std::string &filename,
   const Tftp::TransferMode mode,
   const Tftp::Options::OptionList &options,
-  const Tftp::UdpAddressType &from)
+  const boost::asio::ip::udp::endpoint &from)
 {
   // Check transfer mode
   if ( mode != Tftp::TransferMode::OCTET)
   {
     std::cerr << "Wrong transfer mode";
 
-    auto operation( server->createErrorOperation(
+    auto operation( server->errorOperation(
       {},
       from,
       {boost::asio::ip::address_v4::any(), 0},
@@ -211,7 +211,7 @@ void TftpServerApplication::receivedRequest(
   {
     std::cerr << "Error filename check\n";
 
-    auto operation( server->createErrorOperation(
+    auto operation( server->errorOperation(
       {},
       from,
       {boost::asio::ip::address_v4::any(), 0},
@@ -244,7 +244,7 @@ void TftpServerApplication::receivedRequest(
 void TftpServerApplication::transmitFile(
   const std::filesystem::path &filename,
   const Tftp::Options::OptionList &options,
-  const Tftp::UdpAddressType &from)
+  const boost::asio::ip::udp::endpoint &from)
 {
   std::cout << "RRQ: " << filename << " from: "
     << from.address().to_string() << "\n";
@@ -257,7 +257,7 @@ void TftpServerApplication::transmitFile(
   {
     std::cerr << "Error opening file\n";
 
-    auto operation( server->createErrorOperation(
+    auto operation( server->errorOperation(
       {},
       from,
       {boost::asio::ip::address_v4::any(), 0},
@@ -271,7 +271,7 @@ void TftpServerApplication::transmitFile(
 
   // initiate TFTP operation
   auto operation(
-    server->createReadRequestOperation(
+    server->readRequestOperation(
       std::make_shared< Tftp::File::StreamFile< std::fstream>>(
         std::move( fileStream),
         std::filesystem::file_size( filename)),
@@ -287,7 +287,7 @@ void TftpServerApplication::transmitFile(
 void TftpServerApplication::receiveFile(
   const std::filesystem::path &filename,
   const Tftp::Options::OptionList &options,
-  const Tftp::UdpAddressType &from)
+  const boost::asio::ip::udp::endpoint &from)
 {
   std::cout << "WRQ: " << filename << " from: "
     << from.address().to_string() << "\n";
@@ -302,7 +302,7 @@ void TftpServerApplication::receiveFile(
   {
     std::cerr << "Error opening file";
 
-    auto operation( server->createErrorOperation(
+    auto operation( server->errorOperation(
       {},
       from,
       {boost::asio::ip::address_v4::any(), 0},
@@ -315,7 +315,7 @@ void TftpServerApplication::receiveFile(
 
   // initiate TFTP operation
   auto operation(
-    server->createWriteRequestOperation(
+    server->writeRequestOperation(
       std::make_shared< Tftp::File::StreamFile< std::fstream>>(
         std::move( fileStream),
         std::filesystem::file_size( filename)),

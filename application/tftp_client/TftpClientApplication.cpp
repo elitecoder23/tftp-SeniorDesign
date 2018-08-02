@@ -98,7 +98,7 @@ int TftpClientApplication::operator()( int argc, char *argv[])
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
             std::fstream( localFile, std::fstream::out | std::fstream::trunc)),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
-          Tftp::UdpAddressType( address, configuration.tftpServerPort),
+          boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
           Tftp::TransferMode::OCTET);
         break;
@@ -108,7 +108,7 @@ int TftpClientApplication::operator()( int argc, char *argv[])
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
             std::fstream( localFile, std::fstream::in)),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
-          Tftp::UdpAddressType( address, configuration.tftpServerPort),
+          boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
           Tftp::TransferMode::OCTET);
         break;

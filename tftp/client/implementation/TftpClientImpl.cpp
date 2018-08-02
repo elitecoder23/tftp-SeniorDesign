@@ -54,10 +54,10 @@ void TftpClientImpl::stop()
 OperationPtr TftpClientImpl::readRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &remote,
+  const boost::asio::ip::udp::endpoint &remote,
   const std::string &filename,
   const TransferMode mode,
-  const UdpAddressType &local)
+  const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioService,
@@ -73,10 +73,10 @@ OperationPtr TftpClientImpl::readRequestOperation(
 OperationPtr TftpClientImpl::writeRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &remote,
+  const boost::asio::ip::udp::endpoint &remote,
   const std::string &filename,
   const TransferMode mode,
-  const UdpAddressType &local)
+  const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioService,

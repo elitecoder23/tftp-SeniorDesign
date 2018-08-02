@@ -99,10 +99,10 @@ class OperationImpl :
       boost::asio::io_service &ioService,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const std::string &filename,
       TransferMode mode,
-      const UdpAddressType &local);
+      const boost::asio::ip::udp::endpoint &local);
 
     /**
      * @brief Returns the request filename.
@@ -206,7 +206,7 @@ class OperationImpl :
      * This operation always throws an CommunicationException.
      **/
     void handleReadRequestPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
@@ -216,21 +216,21 @@ class OperationImpl :
      * to the origin and the finished flag is set
      **/
     void handleWriteRequestPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
      * @copydoc PacketHandler::handleErrorPacket()
      **/
     void handleErrorPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::ErrorPacket &errorPacket) final;
 
     /**
      * @copydoc PacketHandler::handleInvalidPacket()
      **/
     void handleInvalidPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const RawTftpPacket &rawPacket) final;
 
   private:
@@ -291,7 +291,7 @@ class OperationImpl :
     //! The internal TFTP client
     const TftpClientInternal &tftpClient;
     //! The TFTP server endpoint
-    UdpAddressType remoteEndpoint;
+    boost::asio::ip::udp::endpoint remoteEndpoint;
     //! The filename of the transfer
     const std::string filenameV;
     //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
@@ -317,7 +317,7 @@ class OperationImpl :
     //! The received packet data
     RawTftpPacket receivePacket;
     //! The remote address
-    UdpAddressType receiveEndpoint;
+    boost::asio::ip::udp::endpoint receiveEndpoint;
     //! The last transmitted packet
     RawTftpPacket transmitPacket;
     //! Packet Type of last transmitted packet

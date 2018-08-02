@@ -17,6 +17,8 @@
 #include <tftp/client/Client.hpp>
 #include <tftp/options/Options.hpp>
 
+#include <boost/asio/ip/udp.hpp>
+
 #include <string>
 
 namespace Tftp::Client {
@@ -90,10 +92,10 @@ class TftpClient
     virtual OperationPtr readRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const std::string &filename,
       TransferMode mode,
-      const UdpAddressType &local = UdpAddressType{}) = 0;
+      const boost::asio::ip::udp::endpoint &local = {}) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
@@ -116,10 +118,10 @@ class TftpClient
     virtual OperationPtr writeRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const std::string &filename,
       TransferMode mode,
-      const UdpAddressType &local = UdpAddressType{}) = 0;
+      const boost::asio::ip::udp::endpoint &local = {}) = 0;
 
   protected:
     //! Protected constructor.

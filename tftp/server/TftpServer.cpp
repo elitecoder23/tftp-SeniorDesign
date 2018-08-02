@@ -16,15 +16,15 @@
 
 namespace Tftp::Server {
 
-const Tftp::UdpAddressType TftpServer::DefaultLocalEndpoint = UdpAddressType(
+const boost::asio::ip::udp::endpoint TftpServer::DefaultLocalEndpoint{
   boost::asio::ip::address_v4::any(),
-  DefaultTftpPort);
+  DefaultTftpPort};
 
-TftpServerPtr TftpServer::createInstance(
+TftpServerPtr TftpServer::instance(
   ReceivedTftpRequestHandler handler,
   const TftpConfiguration &configuration,
   const Options::OptionList& additionalOptions,
-  const UdpAddressType &serverAddress)
+  const boost::asio::ip::udp::endpoint &serverAddress)
 {
   // create and return the real TFTP server
   return std::make_shared< TftpServerImpl>(

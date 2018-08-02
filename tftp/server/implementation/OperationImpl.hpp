@@ -79,9 +79,9 @@ class OperationImpl:
       boost::asio::io_service &ioService,
       const TftpServerInternal &tftpServer,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &local);
+      const boost::asio::ip::udp::endpoint &local);
 
     /**
      * @brief default destructor.
@@ -162,7 +162,7 @@ class OperationImpl:
      * terminate connection.
      **/
     void handleReadRequestPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
@@ -172,7 +172,7 @@ class OperationImpl:
      * terminate connection.
      **/
     void handleWriteRequestPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
@@ -181,7 +181,7 @@ class OperationImpl:
      * Terminate connection.
      **/
     void handleErrorPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::ErrorPacket &errorPacket) final;
 
     /**
@@ -191,7 +191,7 @@ class OperationImpl:
      * terminate connection.
      **/
      void handleOptionsAcknowledgementPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
     /**
@@ -200,7 +200,7 @@ class OperationImpl:
      * Send error packet and terminate connection.
      **/
     void handleInvalidPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const RawTftpPacket &rawPacket) final;
 
   private:

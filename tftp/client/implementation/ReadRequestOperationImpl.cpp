@@ -28,10 +28,10 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
-  const UdpAddressType &remote,
+  const boost::asio::ip::udp::endpoint &remote,
   const std::string &filename,
   const TransferMode mode,
-  const UdpAddressType &local) :
+  const boost::asio::ip::udp::endpoint &local) :
   OperationImpl(
     ioService,
     completionHandler,
@@ -88,7 +88,7 @@ void ReadRequestOperationImpl::finished(
 }
 
 void ReadRequestOperationImpl::handleDataPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -165,7 +165,7 @@ void ReadRequestOperationImpl::handleDataPacket(
 }
 
 void ReadRequestOperationImpl::handleAcknowledgementPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -185,7 +185,7 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
 }
 
 void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_FUNCTION();

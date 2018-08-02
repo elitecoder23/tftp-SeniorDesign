@@ -60,9 +60,9 @@ class WriteRequestOperationImpl: public OperationImpl
       const TftpServerInternal &tftpServer,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &local);
+      const boost::asio::ip::udp::endpoint &local);
 
     /**
      * @brief Standard destructor.
@@ -88,7 +88,7 @@ class WriteRequestOperationImpl: public OperationImpl
      * handler is called.
      **/
     void handleDataPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::DataPacket &dataPacket) final;
 
     /**
@@ -98,7 +98,7 @@ class WriteRequestOperationImpl: public OperationImpl
      * An error is sent back and the operation is cancelled.
      **/
     void handleAcknowledgementPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
   private:

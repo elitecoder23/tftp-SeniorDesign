@@ -62,7 +62,7 @@ class TftpServerImpl:
       ReceivedTftpRequestHandler handler,
       const TftpConfiguration &configuration,
       const Options::OptionList& additionalOptions,
-      const UdpAddressType &serverAddress);
+      const boost::asio::ip::udp::endpoint &serverAddress);
 
     /**
      * @brief Destructor
@@ -78,35 +78,35 @@ class TftpServerImpl:
     //! @copydoc TftpServer::stop
     void stop() final;
 
-    //! @copydoc TftpServer::createReadRequestOperation
-    OperationPtr createReadRequestOperation(
+    //! @copydoc TftpServer::readRequestOperation
+    OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &local) final;
+      const boost::asio::ip::udp::endpoint &local) final;
 
-    //! @copydoc TftpServer::createWriteRequestOperation
-    OperationPtr createWriteRequestOperation(
+    //! @copydoc TftpServer::writeRequestOperation
+    OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &local) final;
+      const boost::asio::ip::udp::endpoint &local) final;
 
-    //! @copydoc TftpServer::createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const std::string&)
-    OperationPtr createErrorOperation(
+    //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,const std::string&)
+    OperationPtr errorOperation(
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
-      const UdpAddressType &local,
+      const boost::asio::ip::udp::endpoint &remote,
+      const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
       const std::string &errorMessage) final;
 
-    //! @copydoc TftpServer::createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,std::string&&)
-    OperationPtr createErrorOperation(
+    //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string&&)
+    OperationPtr errorOperation(
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
-      const UdpAddressType &local,
+      const boost::asio::ip::udp::endpoint &remote,
+      const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
       std::string &&errorMessage = {}) final;
 
@@ -142,7 +142,7 @@ class TftpServerImpl:
      * handles the request.
      **/
     void handleReadRequestPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
@@ -153,7 +153,7 @@ class TftpServerImpl:
      * handles the request.
      **/
     void handleWriteRequestPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
@@ -163,7 +163,7 @@ class TftpServerImpl:
      * This packet is responded with an TFTP Error Packet.
      **/
     void handleDataPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::DataPacket &dataPacket) final;
 
     /**
@@ -173,7 +173,7 @@ class TftpServerImpl:
      * This packet is responded with an TFTP Error Packet.
      **/
     void handleAcknowledgementPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
@@ -183,7 +183,7 @@ class TftpServerImpl:
      * This packet is responded with an TFTP Error Packet.
      **/
     void handleErrorPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::ErrorPacket &errorPacket) final;
 
     /**
@@ -193,7 +193,7 @@ class TftpServerImpl:
      * with an TFTP Error Packet.
      **/
     void handleOptionsAcknowledgementPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
     /**
@@ -203,7 +203,7 @@ class TftpServerImpl:
      * This packet is ignored.
      **/
     void handleInvalidPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const RawTftpPacket &rawPacket) final;
 
   private:
@@ -214,7 +214,7 @@ class TftpServerImpl:
     //! The Server option list.
     const Options::OptionList optionsV;
     //! the server address to listen on
-    const UdpAddressType serverAddress;
+    const boost::asio::ip::udp::endpoint serverAddress;
 
     //! TFTP server ASIO service
     boost::asio::io_service ioService;
@@ -226,7 +226,7 @@ class TftpServerImpl:
     //! Buffer, which holds the received TFTP packet.
     RawTftpPacket packet;
     //! The remote endpoint on receive.
-    UdpAddressType remoteEndpoint;
+    boost::asio::ip::udp::endpoint remoteEndpoint;
 };
 
 }

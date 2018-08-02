@@ -16,6 +16,8 @@
 #include <tftp/Tftp.hpp>
 #include <tftp/options/Options.hpp>
 
+#include <boost/asio/ip/udp.hpp>
+
 #include <memory>
 #include <functional>
 
@@ -61,7 +63,7 @@ using ReceivedTftpRequestHandler =
     const std::string&,
     TransferMode,
     const Options::OptionList&,
-    const UdpAddressType&)>;
+    const boost::asio::ip::udp::endpoint&)>;
 
 }
 

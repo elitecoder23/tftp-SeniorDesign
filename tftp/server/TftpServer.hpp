@@ -43,7 +43,7 @@ class TftpServer
      * The default local end-point where the TFTP server is listening is the
      * default TFTP Port any IP address.
      **/
-    static const UdpAddressType DefaultLocalEndpoint;
+    static const boost::asio::ip::udp::endpoint DefaultLocalEndpoint;
 
     /**
      * @brief Creates an instance of the TFTP server.
@@ -59,11 +59,11 @@ class TftpServer
      *
      * @return The created TFTP server instance.
      **/
-    static TftpServerPtr createInstance(
+    static TftpServerPtr instance(
       ReceivedTftpRequestHandler handler,
       const TftpConfiguration &configuration = {},
       const Options::OptionList& additionalOptions = {},
-      const UdpAddressType &serverAddress = DefaultLocalEndpoint);
+      const boost::asio::ip::udp::endpoint &serverAddress = DefaultLocalEndpoint);
 
     //! Default destructor
     virtual ~TftpServer() noexcept = default;
@@ -110,12 +110,12 @@ class TftpServer
      *
      * @return The TFTP server write operation.
      **/
-    virtual OperationPtr createReadRequestOperation(
+    virtual OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &local) = 0;
+      const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**
      * @brief Creates a TFTP read operation (TFTP WRQ)
@@ -133,12 +133,12 @@ class TftpServer
      *
      * @return The TFTP server read operation.
      **/
-    virtual OperationPtr createWriteRequestOperation(
+    virtual OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &clientOptions,
-      const UdpAddressType &local) = 0;
+      const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**
      * @brief Creates a TFTP error operation.
@@ -156,18 +156,18 @@ class TftpServer
      *
      * @return The created TFTP Error operation.
      **/
-    virtual OperationPtr createErrorOperation(
+    virtual OperationPtr errorOperation(
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
-      const UdpAddressType &local,
+      const boost::asio::ip::udp::endpoint &remote,
+      const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
       const std::string &errorMessage) = 0;
 
     //! @copydoc createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const std::string&)
-    virtual OperationPtr createErrorOperation(
+    virtual OperationPtr errorOperation(
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
-      const UdpAddressType &local,
+      const boost::asio::ip::udp::endpoint &remote,
+      const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
       std::string &&errorMessage = {}) = 0;
 

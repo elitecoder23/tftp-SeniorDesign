@@ -55,10 +55,10 @@ class ReadRequestOperationImpl : public OperationImpl
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const std::string &filename,
       TransferMode mode,
-      const UdpAddressType &local);
+      const boost::asio::ip::udp::endpoint &local);
 
     /**
      * @copybrief OperationImpl::start()
@@ -81,7 +81,7 @@ class ReadRequestOperationImpl : public OperationImpl
      * receive operation is continued.
      **/
     void handleDataPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::DataPacket &dataPacket) final;
 
     /**
@@ -91,7 +91,7 @@ class ReadRequestOperationImpl : public OperationImpl
      * They are rejected by error transmission
      **/
     void handleAcknowledgementPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
@@ -100,7 +100,7 @@ class ReadRequestOperationImpl : public OperationImpl
      * Checks received Options for validity and finalises the option negotiation.
      **/
     void handleOptionsAcknowledgementPacket(
-      const UdpAddressType &from,
+      const boost::asio::ip::udp::endpoint &from,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:

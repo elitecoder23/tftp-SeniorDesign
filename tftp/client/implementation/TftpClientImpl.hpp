@@ -50,23 +50,23 @@ class TftpClientImpl : public TftpClientInternal
     //!@copydoc TftpClient::stop
     void stop() final;
 
-    //!@copydoc TftpClient::readRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const std::string&,TransferMode,const UdpAddressType&)
+    //!@copydoc TftpClient::readRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const std::string&,TransferMode,const boost::asio::ip::udp::endpoint&)
     OperationPtr readRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const std::string &filename,
       TransferMode mode,
-      const UdpAddressType &local) final;
+      const boost::asio::ip::udp::endpoint &local) final;
 
-    //!@copydoc TftpClient::writeRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const UdpAddressType&,const std::string&,TransferMode,const UdpAddressType&)
+    //!@copydoc TftpClient::writeRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const std::string&,TransferMode,const boost::asio::ip::udp::endpoint&)
     OperationPtr writeRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const UdpAddressType &remote,
+      const boost::asio::ip::udp::endpoint &remote,
       const std::string &filename,
       TransferMode mode,
-      const UdpAddressType &local) final;
+      const boost::asio::ip::udp::endpoint &local) final;
 
     //! @copydoc TftpClientInternal::configuration
     const TftpConfiguration& configuration() const final;

@@ -73,9 +73,9 @@ OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
   const TftpServerInternal &tftpServer,
   OperationCompletedHandler completionHandler,
-  const UdpAddressType &remote,
+  const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList &clientOptions,
-  const UdpAddressType &local)
+  const boost::asio::ip::udp::endpoint &local)
 try:
   completionHandler( completionHandler),
   tftpServer( tftpServer),
@@ -228,7 +228,7 @@ void OperationImpl::receiveTimeout( const uint8_t receiveTimeout) noexcept
 }
 
 void OperationImpl::handleReadRequestPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -247,7 +247,7 @@ void OperationImpl::handleReadRequestPacket(
 }
 
 void OperationImpl::handleWriteRequestPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
@@ -264,7 +264,7 @@ void OperationImpl::handleWriteRequestPacket(
 }
 
 void OperationImpl::handleErrorPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::ErrorPacket &errorPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -295,7 +295,7 @@ void OperationImpl::handleErrorPacket(
 }
 
 void OperationImpl::handleOptionsAcknowledgementPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -314,7 +314,7 @@ void OperationImpl::handleOptionsAcknowledgementPacket(
 }
 
 void OperationImpl::handleInvalidPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const RawTftpPacket &)
 {
   BOOST_LOG_FUNCTION();

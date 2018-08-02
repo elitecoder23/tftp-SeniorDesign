@@ -77,10 +77,10 @@ OperationImpl::OperationImpl(
   boost::asio::io_service &ioService,
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
-  const UdpAddressType &remote,
+  const boost::asio::ip::udp::endpoint &remote,
   const std::string &filename,
   const TransferMode mode,
-  const UdpAddressType &local)
+  const boost::asio::ip::udp::endpoint &local)
 try :
   completionHandler( completionHandler),
   tftpClient( tftpClient),
@@ -313,7 +313,7 @@ void OperationImpl::finished(
 }
 
 void OperationImpl::handleReadRequestPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -333,7 +333,7 @@ void OperationImpl::handleReadRequestPacket(
 }
 
 void OperationImpl::handleWriteRequestPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -353,7 +353,7 @@ void OperationImpl::handleWriteRequestPacket(
 }
 
 void OperationImpl::handleErrorPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const Packets::ErrorPacket &errorPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -385,7 +385,7 @@ void OperationImpl::handleErrorPacket(
 }
 
 void OperationImpl::handleInvalidPacket(
-  const UdpAddressType &,
+  const boost::asio::ip::udp::endpoint &,
   const RawTftpPacket &)
 {
   BOOST_LOG_FUNCTION();
