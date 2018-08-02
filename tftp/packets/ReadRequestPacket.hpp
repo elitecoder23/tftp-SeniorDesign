@@ -39,6 +39,12 @@ class ReadRequestPacket: public ReadWriteRequestPacket
       TransferMode mode,
       const Options::OptionList &options) noexcept;
 
+    //! @copydoc ReadRequestPacket(const std::string&,TransferMode,const Options::OptionList&)
+    ReadRequestPacket(
+      std::string &&filename,
+      TransferMode mode,
+      Options::OptionList &&options) noexcept;
+
     /**
      * @brief Generates a TFTP Read Request packet from a data buffer
      *
@@ -48,7 +54,7 @@ class ReadRequestPacket: public ReadWriteRequestPacket
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    ReadRequestPacket( const RawTftpPacket &rawPacket);
+    explicit ReadRequestPacket( const RawTftpPacket &rawPacket);
 };
 
 }

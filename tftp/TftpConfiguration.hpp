@@ -67,7 +67,7 @@ class TftpConfiguration
      * * blocksize option and
      * * timeout option.
      *
-     * The transfersize option must be handled manually, due to the different
+     * The transfer size option must be handled manually, due to the different
      * handling on RRG/ WRQ.
      *
      * @param[in] baseOptions

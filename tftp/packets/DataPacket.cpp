@@ -27,6 +27,15 @@ DataPacket::DataPacket(
 {
 }
 
+DataPacket::DataPacket(
+  BlockNumber blockNumber,
+  DataType &&data) noexcept:
+  Packet( PacketType::Data),
+  blockNumberValue( std::move( blockNumber)),
+  dataValue( std::move( data))
+{
+}
+
 DataPacket::DataPacket( const RawTftpPacket &rawPacket) :
   Packet( PacketType::Data, rawPacket)
 {
@@ -50,7 +59,7 @@ BlockNumber& DataPacket::blockNumber()
   return blockNumberValue;
 }
 
-void DataPacket::blockNumber( BlockNumber blockBumber)
+void DataPacket::blockNumber( const BlockNumber blockBumber)
 {
   blockNumberValue = blockBumber;
 }

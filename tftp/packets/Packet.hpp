@@ -125,7 +125,7 @@ class Packet
      * @param[in] packetType
      *   The packet type of the packet.
      **/
-    Packet( PacketType packetType) noexcept;
+    explicit Packet( PacketType packetType) noexcept;
 
     /**
      * @brief Generates a basic TFTP packet from a data buffer

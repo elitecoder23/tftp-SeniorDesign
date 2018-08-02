@@ -163,6 +163,13 @@ class ReadWriteRequestPacket: public Packet
       TransferMode mode,
       const Options::OptionList &options);
 
+    //! @copydoc ReadWriteRequestPacket(PacketType,const std::string&,TransferMode,const Options::OptionList&)
+    ReadWriteRequestPacket(
+      PacketType packetType,
+      std::string &&filename,
+      TransferMode mode,
+      Options::OptionList &&options);
+
     /**
      * @brief Generates a TFTP Read/ Write Request packet from a data buffer
      *

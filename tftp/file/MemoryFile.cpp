@@ -51,7 +51,7 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
   return true;
 }
 
-void MemoryFile::receviedData( const DataType &data) noexcept
+void MemoryFile::receivedData( const DataType &data) noexcept
 {
   dataValue.insert(
     dataValue.end(),

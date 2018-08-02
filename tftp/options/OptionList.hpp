@@ -201,7 +201,6 @@ class OptionList
       uint16_t requestedBlocksize,
       uint16_t minBlocksize = BlocksizeOptionMin);
 
-
     /**
      * @brief Adds the Blocksize option to the option list.
      *

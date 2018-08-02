@@ -39,6 +39,12 @@ class WriteRequestPacket: public ReadWriteRequestPacket
       TransferMode mode,
       const Options::OptionList &options) noexcept;
 
+    //! @copydoc WriteRequestPacket(const std::string&,TransferMode,const Options::OptionList&)
+    WriteRequestPacket(
+      std::string &&filename,
+      TransferMode mode,
+      Options::OptionList &&options) noexcept;
+
     /**
      * @brief Generates a TFTP Write Request packet from a data buffer
      *
@@ -48,7 +54,7 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      * @throw InvalidPacketException
      *   When the raw data does not represent a valid write request packet
      **/
-    WriteRequestPacket( const RawTftpPacket &rawPacket);
+    explicit WriteRequestPacket( const RawTftpPacket &rawPacket);
 };
 
 }

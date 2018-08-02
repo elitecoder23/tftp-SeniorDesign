@@ -36,7 +36,7 @@ class Option
      *
      * @return Returns the option name.
      **/
-    static std::string optionName( const KnownOptions option) noexcept;
+    static std::string optionName( KnownOptions option) noexcept;
 
     /**
      * @brief Generate TFTP option with the given name.
@@ -44,10 +44,10 @@ class Option
      * @param[in] name
      *   The option name. Must be not empty.
      **/
-    Option( const std::string &name);
+    explicit Option( const std::string &name);
 
     //! @copydoc Option(const std::string&)
-    Option( std::string &&name);
+    explicit Option( std::string &&name);
 
     //! default copy constructor
     Option( const Option &other) = default;

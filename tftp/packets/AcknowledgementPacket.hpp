@@ -53,7 +53,7 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    AcknowledgementPacket( const RawTftpPacket &rawPacket);
+    explicit AcknowledgementPacket( const RawTftpPacket &rawPacket);
 
     // @copydoc Packet::operator=(const RawTftpPacket&)
     AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket) final;
@@ -71,7 +71,7 @@ class AcknowledgementPacket: public Packet
      * @param[in] blockBumber
      *   Block number of packet.
      **/
-    void blockNumber( const BlockNumber blockBumber);
+    void blockNumber( BlockNumber blockBumber);
 
     // @copydoc Packet::operator std::string() const
     operator std::string() const final;

@@ -38,7 +38,7 @@ class MemoryFile: public TftpFile
      * @param[in] data
      *   The initial data.
      **/
-    MemoryFile( const DataType &data);
+    explicit MemoryFile( const DataType &data);
 
     /**
      * @brief Move constructor.
@@ -48,7 +48,7 @@ class MemoryFile: public TftpFile
      * @param[in] data
      *   Data of memory file.
      **/
-    MemoryFile( DataType &&data);
+    explicit MemoryFile( DataType &&data);
 
     /**
      * @brief Returns a reference to the locally stored data.
@@ -73,9 +73,9 @@ class MemoryFile: public TftpFile
     bool receivedTransferSize( uint64_t transferSize) final;
 
     /**
-     * @copydoc TftpFile::receviedData()
+     * @copydoc TftpFile::receivedData()
      **/
-    void receviedData( const DataType &data) noexcept final;
+    void receivedData( const DataType &data) noexcept final;
 
     /**
      * @copydoc TftpFile::requestedTransferSize()

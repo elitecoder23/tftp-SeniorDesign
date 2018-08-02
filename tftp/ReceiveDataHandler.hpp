@@ -51,7 +51,7 @@ class ReceiveDataHandler: public DataHandler
      * @param[in] data
      *   The received data.
      **/
-    virtual void receviedData( const DataType &data) noexcept = 0;
+    virtual void receivedData( const DataType &data) noexcept = 0;
 };
 
 }

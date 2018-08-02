@@ -513,7 +513,7 @@ class NegotiateExactValue
      * @param[in] expectedValue
      *   The expected value
      **/
-    NegotiateExactValue( const IntT expectedValue):
+    explicit NegotiateExactValue( const IntT expectedValue):
       expectedValue( expectedValue)
     {
     }

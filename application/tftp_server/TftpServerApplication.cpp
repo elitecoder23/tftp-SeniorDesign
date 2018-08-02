@@ -121,7 +121,7 @@ int TftpServerApplication::operator()( int argc, char *argv[])
     std::string const * info = boost::get_error_info < AdditionalInfo > (e);
 
     std::cerr << "TFTP Server exited with failure: "
-      << ((0 == info) ? "Unknown" : *info) << std::endl;
+      << ((nullptr == info) ? "Unknown" : *info) << std::endl;
 
     return EXIT_FAILURE;
   }

@@ -101,9 +101,9 @@ class StreamFile: public TftpFile
     bool receivedTransferSize( uint64_t transferSize) final;
 
     /**
-     * @copydoc TftpFile::receviedData()
+     * @copydoc TftpFile::receivedData()
      **/
-    void receviedData( const DataType &data) noexcept final;
+    void receivedData( const DataType &data) noexcept final;
 
     /**
      * @copydoc TftpFile::requestedTransferSize()

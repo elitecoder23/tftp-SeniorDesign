@@ -44,7 +44,12 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] options
      *   TFTP Options list.
      **/
-    OptionsAcknowledgementPacket( const Options::OptionList &options) noexcept;
+    explicit OptionsAcknowledgementPacket(
+      const Options::OptionList &options) noexcept;
+
+    //! @copydoc OptionsAcknowledgementPacket(const Options::OptionList&) noexcept
+    explicit OptionsAcknowledgementPacket(
+      Options::OptionList &&options) noexcept;
 
     /**
      * @brief Generates a TFTP Options Acknowledgement packet from a data buffer
@@ -55,7 +60,7 @@ class OptionsAcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    OptionsAcknowledgementPacket( const RawTftpPacket &rawPacket);
+    explicit OptionsAcknowledgementPacket( const RawTftpPacket &rawPacket);
 
     //! @copydoc Packet::operator=(const RawTftpPacket&)
     OptionsAcknowledgementPacket& operator=(

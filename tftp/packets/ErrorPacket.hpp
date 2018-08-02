@@ -48,7 +48,7 @@ class ErrorPacket: public Packet
       const std::string &errorMessage);
 
     //! @copydoc ErrorPacket(ErrorCode,const std::string&)
-    ErrorPacket(
+    explicit ErrorPacket(
       ErrorCode errorCode,
       std::string &&errorMessage = {});
 
@@ -61,7 +61,7 @@ class ErrorPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    ErrorPacket( const RawTftpPacket &rawPacket);
+    explicit ErrorPacket( const RawTftpPacket &rawPacket);
 
     //! @copydoc Packet::operator=(const RawTftpPacket&)
     ErrorPacket& operator=( const RawTftpPacket &rawPacket) final;

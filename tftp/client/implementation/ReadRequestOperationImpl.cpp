@@ -146,7 +146,7 @@ void ReadRequestOperationImpl::dataPacket(
   }
 
   // call call-back
-  dataHandler->receviedData( dataPacket.data());
+  dataHandler->receivedData( dataPacket.data());
 
   // increment received block number
   lastReceivedBlockNumber++;

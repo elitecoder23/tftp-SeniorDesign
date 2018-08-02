@@ -74,7 +74,7 @@ bool StreamFile< StreamT>::receivedTransferSize( const uint64_t transferSize)
 }
 
 template< typename StreamT>
-void StreamFile< StreamT>::receviedData( const DataType &data) noexcept
+void StreamFile< StreamT>::receivedData( const DataType &data) noexcept
 {
   streamValue.write( reinterpret_cast< const char*>( &data[0]), data.size());
 }

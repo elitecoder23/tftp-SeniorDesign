@@ -36,7 +36,7 @@ class StringOption: public Option
     StringOption( const std::string &name, const std::string &value);
 
     //! @copydoc StringOption(const std::string&,const std::string&)
-    StringOption( std::string &&name, std::string &&value = {});
+    explicit StringOption( std::string &&name, std::string &&value = {});
 
     /**
      * Returns the value directly.
