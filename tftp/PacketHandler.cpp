@@ -25,8 +25,8 @@
 
 namespace Tftp {
 
-void PacketHandler::handlePacket(
-  const boost::asio::ip::udp::endpoint &from,
+void PacketHandler::packet(
+  const boost::asio::ip::udp::endpoint &remote,
   const RawTftpPacket &rawPacket)
 {
   BOOST_LOG_FUNCTION();
@@ -36,8 +36,8 @@ void PacketHandler::handlePacket(
     case PacketType::ReadRequest:
       try
       {
-        handleReadRequestPacket(
-          from,
+        readRequestPacket(
+          remote,
           Packets::ReadRequestPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
@@ -45,15 +45,15 @@ void PacketHandler::handlePacket(
         BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
           "Error decoding/ handling RRQ packet: " <<
           e.what();
-        handleInvalidPacket( from, rawPacket);
+        invalidPacket( remote, rawPacket);
       }
       break;
 
     case PacketType::WriteRequest:
       try
       {
-        handleWriteRequestPacket(
-          from,
+        writeRequestPacket(
+          remote,
           Packets::WriteRequestPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
@@ -61,29 +61,29 @@ void PacketHandler::handlePacket(
         BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
           "Error decoding/ handling WRQ packet: " <<
           e.what();
-        handleInvalidPacket( from, rawPacket);
+        invalidPacket( remote, rawPacket);
       }
       break;
 
     case PacketType::Data:
       try
       {
-        handleDataPacket( from, Packets::DataPacket{ rawPacket});
+        dataPacket( remote, Packets::DataPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
       {
         BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
           "Error decoding/ handling DATA packet: "<<
           e.what();
-        handleInvalidPacket( from, rawPacket);
+        invalidPacket( remote, rawPacket);
       }
       break;
 
     case PacketType::Acknowledgement:
       try
       {
-        handleAcknowledgementPacket(
-          from,
+        acknowledgementPacket(
+          remote,
           Packets::AcknowledgementPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
@@ -91,29 +91,29 @@ void PacketHandler::handlePacket(
         BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
           "Error decoding/ handling ACK packet: " <<
           e.what();
-        handleInvalidPacket( from, rawPacket);
+        invalidPacket( remote, rawPacket);
       }
       break;
 
     case PacketType::Error:
       try
       {
-        handleErrorPacket( from, Packets::ErrorPacket{ rawPacket});
+        errorPacket( remote, Packets::ErrorPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
       {
         BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
           "Error decoding/ handling ERR packet: " <<
           e.what();
-        handleInvalidPacket( from, rawPacket);
+        invalidPacket( remote, rawPacket);
       }
       break;
 
     case PacketType::OptionsAcknowledgement:
       try
       {
-        handleOptionsAcknowledgementPacket(
-          from,
+        optionsAcknowledgementPacket(
+          remote,
           Packets::OptionsAcknowledgementPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
@@ -121,12 +121,12 @@ void PacketHandler::handlePacket(
         BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
           "Error decoding/ handling OACK packet: " <<
           e.what();
-        handleInvalidPacket( from, rawPacket);
+        invalidPacket( remote, rawPacket);
       }
       break;
 
     default:
-      handleInvalidPacket( from, rawPacket);
+      invalidPacket( remote, rawPacket);
       break;
   }
 }

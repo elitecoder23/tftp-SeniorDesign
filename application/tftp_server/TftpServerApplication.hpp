@@ -63,17 +63,17 @@ class TftpServerApplication
       const std::string &filename,
       Tftp::TransferMode mode,
       const Tftp::Options::OptionList &options,
-      const boost::asio::ip::udp::endpoint &from);
+      const boost::asio::ip::udp::endpoint &remote);
 
     void transmitFile(
       const std::filesystem::path &filename,
       const Tftp::Options::OptionList &options,
-      const boost::asio::ip::udp::endpoint &from);
+      const boost::asio::ip::udp::endpoint &remote);
 
     void receiveFile(
       const std::filesystem::path &filename,
       const Tftp::Options::OptionList &options,
-      const boost::asio::ip::udp::endpoint &from);
+      const boost::asio::ip::udp::endpoint &remote);
 
     //! Options description
     boost::program_options::options_description optionsDescription;

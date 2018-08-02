@@ -227,7 +227,7 @@ void OperationImpl::receiveTimeout( const uint8_t receiveTimeout) noexcept
   receiveTimeoutV = receiveTimeout;
 }
 
-void OperationImpl::handleReadRequestPacket(
+void OperationImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
@@ -246,7 +246,7 @@ void OperationImpl::handleReadRequestPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
-void OperationImpl::handleWriteRequestPacket(
+void OperationImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
@@ -263,7 +263,7 @@ void OperationImpl::handleWriteRequestPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
-void OperationImpl::handleErrorPacket(
+void OperationImpl::errorPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::ErrorPacket &errorPacket)
 {
@@ -294,7 +294,7 @@ void OperationImpl::handleErrorPacket(
   }
 }
 
-void OperationImpl::handleOptionsAcknowledgementPacket(
+void OperationImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
@@ -313,7 +313,7 @@ void OperationImpl::handleOptionsAcknowledgementPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
-void OperationImpl::handleInvalidPacket(
+void OperationImpl::invalidPacket(
   const boost::asio::ip::udp::endpoint &,
   const RawTftpPacket &)
 {
@@ -358,7 +358,7 @@ void OperationImpl::receiveHandler(
   receivePacket.resize( bytesTransferred);
 
   // handle the received packet
-  handlePacket( socket.remote_endpoint(), receivePacket);
+  packet( socket.remote_endpoint(), receivePacket);
 }
 
 void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)

@@ -135,75 +135,75 @@ class TftpServerImpl:
       std::size_t bytesTransferred);
 
     /**
-     * @copydoc PacketHandler::handleReadRequestPacket
+     * @copydoc PacketHandler::readRequestPacket
      *
      * The packet is decoded, and when valid the handler
      * NewRequestHandler::receviedReadRequest() is called, which actually
      * handles the request.
      **/
-    void handleReadRequestPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void readRequestPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleWriteRequestPacket
+     * @copydoc PacketHandler::writeRequestPacket
      *
      * The packet is decoded, and when valid the handler
      * NewRequestHandler::receviedWriteRequest() is called, which actually
      * handles the request.
      **/
-    void handleWriteRequestPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void writeRequestPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleDataPacket
+     * @copydoc PacketHandler::dataPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
      **/
-    void handleDataPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void dataPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleAcknowledgementPacket
+     * @copydoc PacketHandler::acknowledgementPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
      **/
-    void handleAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void acknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleErrorPacket
+     * @copydoc PacketHandler::errorPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
      **/
-    void handleErrorPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void errorPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::ErrorPacket &errorPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleOptionsAcknowledgementPacket
+     * @copydoc PacketHandler::optionsAcknowledgementPacket
      *
      * The TFTP server does not expect this packet. This packet is responded
      * with an TFTP Error Packet.
      **/
-    void handleOptionsAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void optionsAcknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleInvalidPacket
+     * @copydoc PacketHandler::invalidPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is ignored.
      **/
-    void handleInvalidPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void invalidPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const RawTftpPacket &rawPacket) final;
 
   private:
@@ -224,7 +224,7 @@ class TftpServerImpl:
     boost::asio::ip::udp::socket socket;
 
     //! Buffer, which holds the received TFTP packet.
-    RawTftpPacket packet;
+    RawTftpPacket receivePacket;
     //! The remote endpoint on receive.
     boost::asio::ip::udp::endpoint remoteEndpoint;
 };

@@ -121,7 +121,7 @@ void WriteRequestOperationImpl::finished(
   dataHandler->finished();
 }
 
-void WriteRequestOperationImpl::handleDataPacket(
+void WriteRequestOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
@@ -201,7 +201,7 @@ void WriteRequestOperationImpl::handleDataPacket(
   }
 }
 
-void WriteRequestOperationImpl::handleAcknowledgementPacket(
+void WriteRequestOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {

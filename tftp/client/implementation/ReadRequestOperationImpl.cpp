@@ -90,7 +90,7 @@ void ReadRequestOperationImpl::finished(
   dataHandler->finished();
 }
 
-void ReadRequestOperationImpl::handleDataPacket(
+void ReadRequestOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
@@ -167,7 +167,7 @@ void ReadRequestOperationImpl::handleDataPacket(
   }
 }
 
-void ReadRequestOperationImpl::handleAcknowledgementPacket(
+void ReadRequestOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
@@ -187,7 +187,7 @@ void ReadRequestOperationImpl::handleAcknowledgementPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
-void ReadRequestOperationImpl::handleOptionsAcknowledgementPacket(
+void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {

@@ -198,39 +198,39 @@ class OperationImpl :
       ErrorInfo &&errorInfo = {}) noexcept;
 
     /**
-     * @copydoc PacketHandler::handleReadRequestPacket()
+     * @copydoc PacketHandler::readRequestPacket()
      *
      * A read request packet is handled as failure. A error packet is sent
      * to the origin and the finished flag is set
      *
      * This operation always throws an CommunicationException.
      **/
-    void handleReadRequestPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void readRequestPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleWriteRequestPacket()
+     * @copydoc PacketHandler::writeRequestPacket()
      *
      * A write request packet is handled as failure. A error packet is sent
      * to the origin and the finished flag is set
      **/
-    void handleWriteRequestPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void writeRequestPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleErrorPacket()
+     * @copydoc PacketHandler::errorPacket()
      **/
-    void handleErrorPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void errorPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::ErrorPacket &errorPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleInvalidPacket()
+     * @copydoc PacketHandler::invalidPacket()
      **/
-    void handleInvalidPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void invalidPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const RawTftpPacket &rawPacket) final;
 
   private:

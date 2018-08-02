@@ -55,7 +55,7 @@ using OperationPtr = std::shared_ptr< Operation>;
  * * filename
  * * mode
  * * options
- * * from
+ * * remote
  **/
 using ReceivedTftpRequestHandler =
   std::function< void (

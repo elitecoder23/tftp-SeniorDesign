@@ -74,33 +74,33 @@ class ReadRequestOperationImpl : public OperationImpl
       ErrorInfo &&errorInfo = {}) noexcept final;
 
     /**
-     * @copydoc PacketHandler::handleDataPacket()
+     * @copydoc PacketHandler::dataPacket()
      *
      * The TFTP DATA packet is decoded and checked.
      * If everything is fine, handler is called with extracted data and the
      * receive operation is continued.
      **/
-    void handleDataPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void dataPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleAcknowledgementPacket()
+     * @copydoc PacketHandler::acknowledgementPacket()
      *
      * ACK packets are not expected for this operation.
      * They are rejected by error transmission
      **/
-    void handleAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void acknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
+     * @copydoc PacketHandler::optionsAcknowledgementPacket()
      *
      * Checks received Options for validity and finalises the option negotiation.
      **/
-    void handleOptionsAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void optionsAcknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:

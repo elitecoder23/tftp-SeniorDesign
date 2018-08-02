@@ -312,7 +312,7 @@ void OperationImpl::finished(
   }
 }
 
-void OperationImpl::handleReadRequestPacket(
+void OperationImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
@@ -332,7 +332,7 @@ void OperationImpl::handleReadRequestPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
-void OperationImpl::handleWriteRequestPacket(
+void OperationImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
@@ -352,7 +352,7 @@ void OperationImpl::handleWriteRequestPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
-void OperationImpl::handleErrorPacket(
+void OperationImpl::errorPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::ErrorPacket &errorPacket)
 {
@@ -384,7 +384,7 @@ void OperationImpl::handleErrorPacket(
   }
 }
 
-void OperationImpl::handleInvalidPacket(
+void OperationImpl::invalidPacket(
   const boost::asio::ip::udp::endpoint &,
   const RawTftpPacket &)
 {
@@ -496,7 +496,7 @@ void OperationImpl::receiveFirstHandler(
 
   receivePacket.resize( bytesTransferred);
 
-  handlePacket( receiveEndpoint, receivePacket);
+  packet( receiveEndpoint, receivePacket);
 }
 
 void OperationImpl::receiveHandler(
@@ -524,7 +524,7 @@ void OperationImpl::receiveHandler(
 
   receivePacket.resize( bytesTransferred);
 
-  handlePacket( remoteEndpoint, receivePacket);
+  packet( remoteEndpoint, receivePacket);
 }
 
 void OperationImpl::timeoutFirstHandler(

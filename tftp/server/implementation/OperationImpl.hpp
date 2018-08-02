@@ -156,51 +156,51 @@ class OperationImpl:
     void receiveTimeout( uint8_t receiveTimeout) noexcept;
 
     /**
-     * @copydoc PacketHandler::handleReadRequestPacket
+     * @copydoc PacketHandler::readRequestPacket
      *
      * A RRQ packet is not expected - therefore send an error packet an
      * terminate connection.
      **/
-    void handleReadRequestPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void readRequestPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleWriteRequestPacket
+     * @copydoc PacketHandler::writeRequestPacket
      *
      * A WRQ packet is not expected - therefore send an error packet an
      * terminate connection.
      **/
-    void handleWriteRequestPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void writeRequestPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleErrorPacket()
+     * @copydoc PacketHandler::errorPacket()
      *
      * Terminate connection.
      **/
-    void handleErrorPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void errorPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::ErrorPacket &errorPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
+     * @copydoc PacketHandler::optionsAcknowledgementPacket()
      *
      * A OACK packet is not expected - therefore send an error packet an
      * terminate connection.
      **/
-     void handleOptionsAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+     void optionsAcknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleInvalidPacket()
+     * @copydoc PacketHandler::invalidPacket()
      *
      * Send error packet and terminate connection.
      **/
-    void handleInvalidPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void invalidPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const RawTftpPacket &rawPacket) final;
 
   private:

@@ -114,7 +114,7 @@ void WriteRequestOperationImpl::sendData()
   send( data);
 }
 
-void WriteRequestOperationImpl::handleDataPacket(
+void WriteRequestOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
@@ -131,7 +131,7 @@ void WriteRequestOperationImpl::handleDataPacket(
   finished( TransferStatus::TransferError);
 }
 
-void WriteRequestOperationImpl::handleAcknowledgementPacket(
+void WriteRequestOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
@@ -179,7 +179,7 @@ void WriteRequestOperationImpl::handleAcknowledgementPacket(
   receive();
 }
 
-void WriteRequestOperationImpl::handleOptionsAcknowledgementPacket(
+void WriteRequestOperationImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {

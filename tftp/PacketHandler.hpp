@@ -44,98 +44,98 @@ class PacketHandler
      * exception is thrown, handleInvalidPacket is called automatically.
      * This exception is not re-thrown.
      *
-     * @param[in] from
+     * @param[in] remote
      *   The source of the packet.
      * @param[in] rawPacket
      *   The received packet.
      **/
-    void handlePacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void packet(
+      const boost::asio::ip::udp::endpoint &remote,
       const RawTftpPacket &rawPacket);
 
   protected:
     /**
      * @brief Handler for TFTP read request packets (RRQ).
      *
-     * @param[in] from
+     * @param[in] remote
      *   Source of the packet.
      * @param[in] readRequestPacket
      *   The read request packet.
      **/
-    virtual void handleReadRequestPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    virtual void readRequestPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::ReadRequestPacket &readRequestPacket) = 0;
 
     /**
      * @brief Handler for TFTP write request packets (WRQ).
      *
-     * @param[in] from
+     * @param[in] remote
      *   Source of the packet.
      * @param[in] writeRequestPacket
      *   The write request packet.
      **/
-    virtual void handleWriteRequestPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    virtual void writeRequestPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::WriteRequestPacket &writeRequestPacket) = 0;
 
     /**
      * @brief Handler for TFTP data packets (DATA).
      *
-     * @param[in] from
+     * @param[in] remote
      *   Source of the packet.
      * @param[in] dataPacket
      *   The data packet.
      **/
-    virtual void handleDataPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    virtual void dataPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::DataPacket &dataPacket) = 0;
 
     /**
      * @brief Handler for TFTP acknowledgement packets (ACK).
      *
-     * @param[in] from
+     * @param[in] remote
      *   Source of the packet.
      * @param[in] acknowledgementPacket
      *   The acknowledgement packet.
      **/
-    virtual void handleAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    virtual void acknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket) = 0;
 
     /**
      * @brief Handler for TFTP error packets (ERR).
      *
-     * @param[in] from
+     * @param[in] remote
      *   Source of the packet.
      * @param[in] errorPacket
      *   The error packet.
      **/
-    virtual void handleErrorPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    virtual void errorPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::ErrorPacket &errorPacket) = 0;
 
     /**
      * @brief Handler for TFTP option acknowledgement packets (RRQ).
      *
-     * @param[in] from
+     * @param[in] remote
      *   Source of the packet.
      * @param[in] optionsAcknowledgementPacket
      *   The option acknowledgement packet.
      **/
-    virtual void handleOptionsAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    virtual void optionsAcknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) = 0;
 
     /**
      * @brief Handler for invalid TFTP packets.
      *
-     * @param[in] from
+     * @param[in] remote
      *   Source of the packet.
      * @param[in] rawPacket
      *   The invalid packet data.
      **/
-    virtual void handleInvalidPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    virtual void invalidPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const RawTftpPacket &rawPacket) = 0;
 };
 

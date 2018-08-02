@@ -87,23 +87,23 @@ class ReadRequestOperationImpl: public OperationImpl
     void sendData();
 
     /**
-     * @copydoc PacketHandler::handleDataPacket
+     * @copydoc PacketHandler::dataPacket
      *
      * Data packets are not expected and handled as invalid.
      * An error is sent back and the operation is cancelled.
      **/
-    void handleDataPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void dataPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleAcknowledgementPacket
+     * @copydoc PacketHandler::acknowledgementPacket
      *
      * The acknowledgement packet is checked and the next data sequence is
      * handled.
      **/
-    void handleAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void acknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
   private:

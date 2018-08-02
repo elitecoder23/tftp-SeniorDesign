@@ -81,35 +81,35 @@ class WriteRequestOperationImpl : public OperationImpl
     void sendData();
 
     /**
-     * @copydoc PacketHandler::handleDataPacket()
+     * @copydoc PacketHandler::dataPacket()
      *
      * @throw InvalidPacketException
      *   Always, because an this packet is invalid.
      **/
-    void handleDataPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void dataPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleAcknowledgementPacket()
+     * @copydoc PacketHandler::acknowledgementPacket()
      *
      * @throw InvalidPacketException
      *   Invalid block number
      **/
-    void handleAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void acknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
-     * @copydoc PacketHandler::handleOptionsAcknowledgementPacket()
+     * @copydoc PacketHandler::optionsAcknowledgementPacket()
      *
      * @throw InvalidPacketException
      *   Empty option list
      * @throw OptionNegotiationException
      *   Option negotiation failed
      **/
-    void handleOptionsAcknowledgementPacket(
-      const boost::asio::ip::udp::endpoint &from,
+    void optionsAcknowledgementPacket(
+      const boost::asio::ip::udp::endpoint &remote,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:

@@ -36,8 +36,6 @@ class DataHandler
 
     /**
      * @brief Called, when the operation has been finished
-     *
-     * @todo rename to finished.
      **/
     virtual void finished() noexcept = 0;
 };

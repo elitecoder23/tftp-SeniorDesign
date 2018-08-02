@@ -188,7 +188,7 @@ void TftpServerApplication::receivedRequest(
   const std::string &filename,
   const Tftp::TransferMode mode,
   const Tftp::Options::OptionList &options,
-  const boost::asio::ip::udp::endpoint &from)
+  const boost::asio::ip::udp::endpoint &remote)
 {
   // Check transfer mode
   if ( mode != Tftp::TransferMode::OCTET)
@@ -197,7 +197,7 @@ void TftpServerApplication::receivedRequest(
 
     auto operation( server->errorOperation(
       {},
-      from,
+      remote,
       {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::IllegalTftpOperation,
       "wrong transfer mode"));
@@ -213,7 +213,7 @@ void TftpServerApplication::receivedRequest(
 
     auto operation( server->errorOperation(
       {},
-      from,
+      remote,
       {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::AccessViolation,
       "Illegal filename"));
@@ -227,12 +227,12 @@ void TftpServerApplication::receivedRequest(
   {
     case Tftp::RequestType::Read:
       // we are on server side and transmit the data on RRQ
-      transmitFile( baseDir / filename, options, from);
+      transmitFile( baseDir / filename, options, remote);
       break;
 
     case Tftp::RequestType::Write:
       // we are on server side and receive the data on WRQ
-      receiveFile( baseDir /  filename, options, from);
+      receiveFile( baseDir /  filename, options, remote);
       break;
 
     default:
@@ -244,10 +244,10 @@ void TftpServerApplication::receivedRequest(
 void TftpServerApplication::transmitFile(
   const std::filesystem::path &filename,
   const Tftp::Options::OptionList &options,
-  const boost::asio::ip::udp::endpoint &from)
+  const boost::asio::ip::udp::endpoint &remote)
 {
   std::cout << "RRQ: " << filename << " from: "
-    << from.address().to_string() << "\n";
+    << remote.address().to_string() << "\n";
 
   // open requested file
   std::fstream fileStream( filename.c_str(), std::fstream::in);
@@ -259,7 +259,7 @@ void TftpServerApplication::transmitFile(
 
     auto operation( server->errorOperation(
       {},
-      from,
+      remote,
       {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::FileNotFound,
       "file not found"));
@@ -276,7 +276,7 @@ void TftpServerApplication::transmitFile(
         std::move( fileStream),
         std::filesystem::file_size( filename)),
       {},
-      from,
+      remote,
       options,
       {boost::asio::ip::address_v4::any(), 0}));
 
@@ -287,10 +287,10 @@ void TftpServerApplication::transmitFile(
 void TftpServerApplication::receiveFile(
   const std::filesystem::path &filename,
   const Tftp::Options::OptionList &options,
-  const boost::asio::ip::udp::endpoint &from)
+  const boost::asio::ip::udp::endpoint &remote)
 {
   std::cout << "WRQ: " << filename << " from: "
-    << from.address().to_string() << "\n";
+    << remote.address().to_string() << "\n";
 
   // open requested file
   std::fstream fileStream(
@@ -304,7 +304,7 @@ void TftpServerApplication::receiveFile(
 
     auto operation( server->errorOperation(
       {},
-      from,
+      remote,
       {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::AccessViolation));
 
@@ -320,7 +320,7 @@ void TftpServerApplication::receiveFile(
         std::move( fileStream),
         std::filesystem::file_size( filename)),
       {},
-      from,
+      remote,
       options,
       {boost::asio::ip::address_v4::any(), 0}));
 
