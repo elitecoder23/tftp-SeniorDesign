@@ -12,7 +12,13 @@
 
 #include "PacketHandler.hpp"
 
-#include <tftp/packets/PacketFactory.hpp>
+#include <tftp/packets/Packet.hpp>
+#include <tftp/packets/ReadRequestPacket.hpp>
+#include <tftp/packets/WriteRequestPacket.hpp>
+#include <tftp/packets/AcknowledgementPacket.hpp>
+#include <tftp/packets/DataPacket.hpp>
+#include <tftp/packets/ErrorPacket.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
@@ -25,16 +31,14 @@ void PacketHandler::handlePacket(
 {
   BOOST_LOG_FUNCTION();
 
-  using Packets::PacketFactory;
-
-  switch ( PacketFactory::packetType( rawPacket))
+  switch ( Packets::Packet::packetType( rawPacket))
   {
     case PacketType::ReadRequest:
       try
       {
         handleReadRequestPacket(
           from,
-          PacketFactory::readRequestPacket( rawPacket));
+          Packets::ReadRequestPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
       {
@@ -50,7 +54,7 @@ void PacketHandler::handlePacket(
       {
         handleWriteRequestPacket(
           from,
-          PacketFactory::writeRequestPacket( rawPacket));
+          Packets::WriteRequestPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
       {
@@ -64,7 +68,7 @@ void PacketHandler::handlePacket(
     case PacketType::Data:
       try
       {
-        handleDataPacket( from, PacketFactory::dataPacket( rawPacket));
+        handleDataPacket( from, Packets::DataPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
       {
@@ -80,7 +84,7 @@ void PacketHandler::handlePacket(
       {
         handleAcknowledgementPacket(
           from,
-          PacketFactory::acknowledgementPacket( rawPacket));
+          Packets::AcknowledgementPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
       {
@@ -94,7 +98,7 @@ void PacketHandler::handlePacket(
     case PacketType::Error:
       try
       {
-        handleErrorPacket( from, PacketFactory::errorPacket( rawPacket));
+        handleErrorPacket( from, Packets::ErrorPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
       {
@@ -110,7 +114,7 @@ void PacketHandler::handlePacket(
       {
         handleOptionsAcknowledgementPacket(
           from,
-          PacketFactory::optionsAcknowledgementPacket( rawPacket));
+          Packets::OptionsAcknowledgementPacket{ rawPacket});
       }
       catch ( InvalidPacketException &e)
       {

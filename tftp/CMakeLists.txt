@@ -39,8 +39,6 @@ add_library(
   packets/Packet.hpp
   packets/Packet.cpp
   packets/PacketException.hpp
-  packets/PacketFactory.hpp
-  packets/PacketFactory.cpp
   packets/Packets.hpp
   packets/ReadRequestPacket.hpp
   packets/ReadRequestPacket.cpp

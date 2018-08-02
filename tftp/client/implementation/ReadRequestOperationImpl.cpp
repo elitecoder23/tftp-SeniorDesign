@@ -12,12 +12,15 @@
 
 #include "ReadRequestOperationImpl.hpp"
 
+#include <tftp/packets/AcknowledgementPacket.hpp>
+#include <tftp/packets/ReadRequestPacket.hpp>
+#include <tftp/packets/DataPacket.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
 #include <tftp/ReceiveDataHandler.hpp>
 #include <tftp/TftpConfiguration.hpp>
-
-#include <tftp/packets/PacketFactory.hpp>
 
 #include <helper/Dump.hpp>
 
@@ -65,7 +68,7 @@ void ReadRequestOperationImpl::start()
 
     // send read request packet
     sendFirst(
-      Packets::ReadRequestPacket( filename(), mode(), reqOptions));
+      Packets::ReadRequestPacket{ filename(), mode(), reqOptions});
 
     // wait for answers
     OperationImpl::start();

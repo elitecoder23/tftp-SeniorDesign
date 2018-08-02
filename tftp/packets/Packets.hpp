@@ -33,8 +33,6 @@ class ErrorPacket;
 class OptionsAcknowledgementPacket;
 
 class BlockNumber;
-
-class PacketFactory;
 }
 
 #endif

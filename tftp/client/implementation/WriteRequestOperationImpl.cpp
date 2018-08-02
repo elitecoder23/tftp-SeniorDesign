@@ -12,10 +12,14 @@
 
 #include "WriteRequestOperationImpl.hpp"
 
+#include <tftp/packets/AcknowledgementPacket.hpp>
+#include <tftp/packets/WriteRequestPacket.hpp>
+#include <tftp/packets/DataPacket.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TransmitDataHandler.hpp>
-#include <tftp/packets/PacketFactory.hpp>
 
 #include <helper/Dump.hpp>
 
@@ -69,10 +73,10 @@ void WriteRequestOperationImpl::start()
     }
 
     // send write request packet
-    sendFirst( Packets::WriteRequestPacket(
+    sendFirst( Packets::WriteRequestPacket{
       filename(),
       mode(),
-      reqOptions));
+      reqOptions});
 
     // wait for answers
     OperationImpl::start();

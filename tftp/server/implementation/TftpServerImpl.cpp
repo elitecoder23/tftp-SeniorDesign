@@ -12,12 +12,18 @@
 
 #include "TftpServerImpl.hpp"
 
-#include <tftp/TftpException.hpp>
-#include <tftp/TftpLogger.hpp>
-#include <tftp/packets/PacketFactory.hpp>
 #include <tftp/server/implementation/ReadRequestOperationImpl.hpp>
 #include <tftp/server/implementation/WriteRequestOperationImpl.hpp>
 #include <tftp/server/implementation/ErrorOperation.hpp>
+
+#include <tftp/packets/ReadRequestPacket.hpp>
+#include <tftp/packets/WriteRequestPacket.hpp>
+#include <tftp/packets/DataPacket.hpp>
+#include <tftp/packets/AcknowledgementPacket.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+
+#include <tftp/TftpException.hpp>
+#include <tftp/TftpLogger.hpp>
 
 #include <boost/bind.hpp>
 
