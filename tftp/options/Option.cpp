@@ -12,6 +12,8 @@
 
 #include "Option.hpp"
 
+#include <cassert>
+
 namespace Tftp::Options {
 
 std::string Option::optionName( const KnownOptions option) noexcept

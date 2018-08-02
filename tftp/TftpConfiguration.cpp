@@ -61,9 +61,9 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
   return properties;
 }
 
-TftpConfiguration::options_description TftpConfiguration::options()
+boost::program_options::options_description TftpConfiguration::options()
 {
-  options_description options( "TFTP options");
+  boost::program_options::options_description options{ "TFTP options"};
 
   options.add_options()
   ("server-port",

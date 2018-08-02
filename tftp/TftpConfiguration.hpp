@@ -32,9 +32,6 @@ namespace Tftp {
 class TftpConfiguration
 {
   public:
-    //! options description type
-    using options_description = boost::program_options::options_description;
-
     //! Initialises the configuration with default values.
     TftpConfiguration();
 
@@ -60,7 +57,7 @@ class TftpConfiguration
      *
      * @return
      **/
-    options_description options();
+    boost::program_options::options_description options();
 
     /**
      * @brief Creates an option list (for TFTP clients) based on the actual

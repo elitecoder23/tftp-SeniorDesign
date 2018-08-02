@@ -13,11 +13,10 @@
 #ifndef TFTP_TFTP_HPP
 #define TFTP_TFTP_HPP
 
-#include <boost/asio/ip/address.hpp>
-
 #include <string>
 #include <vector>
 #include <memory>
+#include <functional>
 #include <cstdint>
 
 /**
@@ -47,10 +46,6 @@ namespace Tftp {
 
 //! The packet type of raw data
 using RawTftpPacket = std::vector< uint8_t>;
-
-//! The address type for TFTP operations
-//! shortened form of the IP address type (v4 + v6)
-using IpAddressType = boost::asio::ip::address;
 
 //!  TFTP version information
 enum class Version
