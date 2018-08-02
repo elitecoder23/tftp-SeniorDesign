@@ -51,19 +51,19 @@ using OperationPtr = std::shared_ptr< Operation>;
 /**
  * @brief Function handler definition.
  *
- * * requestType
- * * filename
- * * mode
- * * options
- * * remote
+ * * Remote Endpoint
+ * * TFTP Request Type
+ * * Filename
+ * * Transfer Mode
+ * * Options
  **/
 using ReceivedTftpRequestHandler =
-  std::function< void (
+  std::function< void(
+    const boost::asio::ip::udp::endpoint&,
     RequestType,
     const std::string&,
     TransferMode,
-    const Options::OptionList&,
-    const boost::asio::ip::udp::endpoint&)>;
+    const Options::OptionList&)>;
 
 }
 

@@ -84,8 +84,8 @@ void TftpServerImpl::entry() noexcept
 {
   BOOST_LOG_FUNCTION();
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "Start TFTP server IO service";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "Start TFTP server IO service";
 
   try
   {
@@ -263,8 +263,8 @@ void TftpServerImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)<< "RX: " <<
-    static_cast< std::string>( readRequestPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)<< "RX: "
+    << static_cast< std::string>( readRequestPacket);
 
   // check handler
   if (!handler)
@@ -285,11 +285,11 @@ void TftpServerImpl::readRequestPacket(
 
   // call the handler, which handles the received request
   handler(
+    remote,
     RequestType::Read,
     readRequestPacket.filename(),
     readRequestPacket.mode(),
-    readRequestPacket.options(),
-    remote);
+    readRequestPacket.options());
 }
 
 void TftpServerImpl::writeRequestPacket(
@@ -318,11 +318,11 @@ void TftpServerImpl::writeRequestPacket(
 
   // call the handler, which handles the received request
   handler(
+    remote,
     RequestType::Write,
     writeRequestPacket.filename(),
     writeRequestPacket.mode(),
-    writeRequestPacket.options(),
-    remote);
+    writeRequestPacket.options());
 }
 
 void TftpServerImpl::dataPacket(
