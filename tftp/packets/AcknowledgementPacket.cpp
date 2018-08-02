@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::Packets::AcknowledgmentPacket.
+ * @brief Definition of class Tftp::Packets::AcknowledgementPacket.
  **/
 
 #include "AcknowledgementPacket.hpp"

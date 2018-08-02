@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Declaration of the Tftp::Packets namespace.
+ * @brief Declaration of namespace Tftp::Packets.
  **/
 
 #ifndef TFTP_PACKETS_PACKETS_HPP

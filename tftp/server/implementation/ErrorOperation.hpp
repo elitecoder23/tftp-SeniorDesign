@@ -60,7 +60,7 @@ class ErrorOperation: public Operation
       ErrorCode errorCode,
       const std::string &errorMessage);
 
-    //! @copydoc ErrorOperation(boost::asio::io_service&,OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const std::string&)
+    //! @copydoc ErrorOperation(boost::asio::io_service&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,const std::string&)
     ErrorOperation(
       boost::asio::io_service &ioService,
       OperationCompletedHandler completionHandler,

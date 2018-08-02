@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class OptionsAcknowledgementPacket.
+ * @brief Definition of class Tftp::Packets::OptionsAcknowledgementPacket.
  **/
 
 #include "OptionsAcknowledgementPacket.hpp"

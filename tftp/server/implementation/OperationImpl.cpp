@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class Tftp::Server::TftpServerOperation.
+ * @brief Definition of class Tftp::Server::OperationImpl.
  **/
 
 #include "OperationImpl.hpp"

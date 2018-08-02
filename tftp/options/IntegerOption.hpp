@@ -8,7 +8,7 @@
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
  * @brief Declaration/ definition of template class
- *   Tftp::Options::BaserIntegerOption and Tftp::Options::IntegerOption.
+ *   Tftp::Options::BaseIntegerOption and Tftp::Options::IntegerOption.
  *
  * Additional named types are generated for the well-known TFTP options.
  **/

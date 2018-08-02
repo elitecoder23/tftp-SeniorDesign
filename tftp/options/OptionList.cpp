@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, Thomas@Thomas-Vogt.de
  *
- * @brief Definition of class OptionList.
+ * @brief Definition of class Tftp::Options::OptionList.
  **/
 
 #include "OptionList.hpp"

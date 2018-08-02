@@ -163,7 +163,7 @@ class TftpServer
       ErrorCode errorCode,
       const std::string &errorMessage) = 0;
 
-    //! @copydoc createErrorOperation(OperationCompletedHandler,const UdpAddressType&,const UdpAddressType&,ErrorCode,const std::string&)
+    //! @copydoc errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,const std::string&)
     virtual OperationPtr errorOperation(
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
