@@ -4,7 +4,7 @@
 # 
 # Thomas Vogt, Thomas@Thomas-Vogt.de
 
-cmake_minimum_required( VERSION 3.11)
+cmake_minimum_required( VERSION 3.12)
 
 find_package( Boost REQUIRED COMPONENTS program_options)
 
@@ -161,9 +161,8 @@ target_compile_definitions(
 
 target_compile_features( tftp_test PUBLIC cxx_std_17)
 
-target_include_directories(
-  tftp_test
-  PRIVATE $<TARGET_PROPERTY:tftp,INCLUDE_DIRECTORIES>)
+target_link_libraries( tftp_test PUBLIC tftp)
+
 
 # INSTALL
 include( GNUInstallDirs)
