@@ -96,16 +96,16 @@ OptionList::RawOptions OptionList::rawOptions() const
   RawOptions rawOptions;
 
   // copy options
-  for ( const auto &option : optionsValue)
+  for ( const auto &[name, option] : optionsValue)
   {
     // option name
-    rawOptions.insert( rawOptions.end(), option.first.begin(), option.first.end());
+    rawOptions.insert( rawOptions.end(), name.begin(), name.end());
 
     // name value divider
     rawOptions.push_back( 0);
 
     // option value
-    const std::string value( *(option.second));
+    const std::string value( *option);
     rawOptions.insert( rawOptions.end(), value.begin(), value.end());
 
     // option terminator
