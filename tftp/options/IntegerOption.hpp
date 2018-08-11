@@ -416,7 +416,7 @@ class NegotiateMinMaxSmaller
      *   The value to negotiate.
      *
      * @return the negotiated value.
-     * @retval boost::optional< IntT>()
+     * @retval std::optional< IntT>()
      *   if [value] < [minValue]
      * @retval [value]
      *   if [minValue] <= [value] <= [maxValue]

@@ -16,9 +16,8 @@
 #include <tftp/client/Client.hpp>
 #include <tftp/packets/Packets.hpp>
 
-#include <boost/optional.hpp>
-
 #include <string>
+#include <optional>
 
 namespace Tftp::Client {
 
@@ -32,7 +31,7 @@ class Operation
 {
   public:
     //! Error Information type
-    using ErrorInfo = boost::optional< Packets::ErrorPacket>;
+    using ErrorInfo = std::optional< Packets::ErrorPacket>;
 
     //! Default destructor.
     virtual ~Operation() noexcept = default;

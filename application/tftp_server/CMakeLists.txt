@@ -14,15 +14,15 @@ find_package(
 
 add_executable(
   tftp_server
-  
+
   tftp_server.cpp
   TftpServerApplication.cpp)
 
 target_link_libraries( 
-  tftp_server 
+  tftp_server
 
-  tftp 
-  helper 
+  tftp
+  helper
 
   $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
   $<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,7.0>>:stdc++fs>
