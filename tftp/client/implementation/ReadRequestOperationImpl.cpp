@@ -27,7 +27,7 @@
 namespace Tftp::Client {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
-  boost::asio::io_service &ioService,
+  boost::asio::io_context &ioContext,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
@@ -36,7 +36,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   const TransferMode mode,
   const boost::asio::ip::udp::endpoint &local) :
   OperationImpl(
-    ioService,
+    ioContext,
     completionHandler,
     tftpClient,
     remote,

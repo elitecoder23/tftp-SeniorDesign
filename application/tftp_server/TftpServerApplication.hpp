@@ -85,8 +85,8 @@ class TftpServerApplication
     //! The TFTP server instance
     Tftp::Server::TftpServerPtr server;
 
-    //! IO Service
-    boost::asio::io_service ioService;
+    //! I/O context
+    boost::asio::io_context ioContext;
     //! ASIO signal handler
     boost::asio::signal_set signals;
 };

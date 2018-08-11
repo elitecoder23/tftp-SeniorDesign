@@ -38,8 +38,8 @@ class ReadRequestOperationImpl: public OperationImpl
     /**
      * @brief Initialises the TFTP server write operation instance.
      *
-     * @param[in] ioService
-     *   The IO service used for communication.
+     * @param[in] ioContext
+     *   The I/O context used for communication.
      * @param[in] tftpServer
      *   The TFTP internal server.
      * @param[in] dataHandler
@@ -54,7 +54,7 @@ class ReadRequestOperationImpl: public OperationImpl
      *   local endpoint, where the server handles the request from.
      **/
     ReadRequestOperationImpl(
-      boost::asio::io_service &ioService,
+      boost::asio::io_context &ioContext,
       const TftpServerInternal &tftpServer,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,

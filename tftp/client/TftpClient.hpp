@@ -54,7 +54,7 @@ class TftpClient
     /**
      * @brief Entry of the TFTP Client.
      *
-     * This routines enters the IO Service loop.
+     * This routines enters the IO loop.
      * The start routine will be leaved, when an FATAL error occurred or
      * the server has been stopped by calling stop().
      *

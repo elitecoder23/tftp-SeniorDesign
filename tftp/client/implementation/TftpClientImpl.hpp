@@ -79,10 +79,10 @@ class TftpClientImpl : public TftpClientInternal
     const TftpConfiguration configurationV;
     //! The stored TFTP options
     const Options::OptionList optionsV;
-    //! The IO service, which handles the asynchronous receive operation
-    boost::asio::io_service ioService;
-    //! IO-Service dummy work to keep IO-service loops running
-    boost::asio::io_service::work work;
+    //! The I/O context, which handles the asynchronous receive operation
+    boost::asio::io_context ioContext;
+    //! I/O context dummy work to keep I/O context loops running
+    boost::asio::io_context::work work;
 };
 
 }

@@ -24,7 +24,7 @@ TftpClientImpl::TftpClientImpl(
   const Options::OptionList& additionalOptions):
   configurationV( configuration),
   optionsV( configuration.clientOptions( additionalOptions)),
-  work( ioService)
+  work( ioContext)
 {
 }
 
@@ -33,12 +33,12 @@ void TftpClientImpl::entry() noexcept
   BOOST_LOG_FUNCTION();
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "Start TFTP client IO service";
+    "Start TFTP client I/O context";
 
-  ioService.run();
+  ioContext.run();
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "TFTP client IO service finished";
+    "TFTP client I/O context finished";
 }
 
 void TftpClientImpl::stop()
@@ -46,9 +46,9 @@ void TftpClientImpl::stop()
   BOOST_LOG_FUNCTION();
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "Stop TFTP client IO service";
+    "Stop TFTP client I/O context";
 
-  ioService.stop();
+  ioContext.stop();
 }
 
 OperationPtr TftpClientImpl::readRequestOperation(
@@ -60,7 +60,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
-    ioService,
+    ioContext,
     dataHandler,
     completionHandler,
     *this,
@@ -79,7 +79,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
-    ioService,
+    ioContext,
     dataHandler,
     completionHandler,
     *this,

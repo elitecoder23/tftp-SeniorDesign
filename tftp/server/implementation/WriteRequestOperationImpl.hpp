@@ -40,8 +40,8 @@ class WriteRequestOperationImpl: public OperationImpl
     /**
      * @brief Constructs the class.
      *
-     * @param[in] ioService
-     *   The IO service used for communication.
+     * @param[in] ioContext
+     *   The I/O context used for communication.
      * @param[in] tftpServer
      *   The TFTP internal server.
      * @param[in] dataHandler
@@ -56,7 +56,7 @@ class WriteRequestOperationImpl: public OperationImpl
      *   local endpoint, where the server handles the request from.
      **/
     WriteRequestOperationImpl(
-      boost::asio::io_service &ioService,
+      boost::asio::io_context &ioContext,
       const TftpServerInternal &tftpServer,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,

@@ -80,8 +80,8 @@ class OperationImpl :
     /**
      * @brief Initialises the operation.
      *
-     * @param[in] ioService
-     *   The IO service used for communication.
+     * @param[in] ioContext
+     *   The I/O context used for communication.
      * @param[in] completionHandler
      *   The handler which is called on completion of this operation.
      * @param[in] tftpClient
@@ -96,7 +96,7 @@ class OperationImpl :
      *   Parameter to define the communication source
      **/
     OperationImpl(
-      boost::asio::io_service &ioService,
+      boost::asio::io_context &ioContext,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const boost::asio::ip::udp::endpoint &remote,
@@ -322,7 +322,7 @@ class OperationImpl :
     RawTftpPacket transmitPacket;
     //! Packet Type of last transmitted packet
     PacketType transmitPacketType;
-    //! the retransmission counter
+    //! Re-transmission counter
     unsigned int transmitCounter;
     //! Error info
     ErrorInfo errorInfoV;

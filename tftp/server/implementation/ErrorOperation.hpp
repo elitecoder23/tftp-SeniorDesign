@@ -36,8 +36,8 @@ class ErrorOperation: public Operation
     /**
      * @brief Initialises the error operation.
      *
-     * @param[in] ioService
-     *   The IO service used for communication.
+     * @param[in] ioContext
+     *   The I/O context used for communication.
      * @param[in] completionHandler
      *   The handler which is called on completion of this operation.
      * @param[in] remote
@@ -53,16 +53,16 @@ class ErrorOperation: public Operation
      *   On system_error
      **/
     ErrorOperation(
-      boost::asio::io_service &ioService,
+      boost::asio::io_context &ioContext,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
       const std::string &errorMessage);
 
-    //! @copydoc ErrorOperation(boost::asio::io_service&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,const std::string&)
+    //! @copydoc ErrorOperation(boost::asio::io_context&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,const std::string&)
     ErrorOperation(
-      boost::asio::io_service &ioService,
+      boost::asio::io_context &ioContext,
       OperationCompletedHandler completionHandler,
       boost::asio::ip::udp::endpoint &&remote,
       boost::asio::ip::udp::endpoint &&local,

@@ -216,10 +216,10 @@ class TftpServerImpl:
     //! the server address to listen on
     const boost::asio::ip::udp::endpoint serverAddress;
 
-    //! TFTP server ASIO service
-    boost::asio::io_service ioService;
-    //! TFTP server dummy work to prevent IO-Service from exiting.
-    boost::asio::io_service::work work;
+    //! TFTP server ASIO context
+    boost::asio::io_context ioContext;
+    //! TFTP server dummy work to prevent I/O context from exiting.
+    boost::asio::io_context::work work;
     //! TFTP well known socket
     boost::asio::ip::udp::socket socket;
 

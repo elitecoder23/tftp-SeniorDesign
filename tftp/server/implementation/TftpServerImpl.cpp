@@ -42,8 +42,8 @@ try :
   configurationV( configuration),
   optionsV( configuration.serverOptions( additionalOptions)),
   serverAddress( serverAddress),
-  work( ioService),
-  socket( ioService)
+  work( ioContext),
+  socket( ioContext)
 {
   try
   {
@@ -85,11 +85,11 @@ void TftpServerImpl::entry() noexcept
   BOOST_LOG_FUNCTION();
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
-    << "Start TFTP server IO service";
+    << "Start TFTP server I/O context";
 
   try
   {
-    ioService.run();
+    ioContext.run();
   }
   catch (boost::system::system_error &err)
   {
@@ -98,7 +98,7 @@ void TftpServerImpl::entry() noexcept
   }
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "TFTP server IO service finished";
+    "TFTP server I/O context finished";
 }
 
 void TftpServerImpl::start()
@@ -116,7 +116,7 @@ void TftpServerImpl::stop()
   //! @todo cancel TFTP server operations.
 
   // stop handler
-  ioService.stop();
+  ioContext.stop();
 }
 
 OperationPtr TftpServerImpl::readRequestOperation(
@@ -127,7 +127,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
-    ioService,
+    ioContext,
     *this,
     dataHandler,
     completionHandler,
@@ -144,7 +144,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
-    ioService,
+    ioContext,
     *this,
     dataHandler,
     completionHandler,
@@ -161,7 +161,7 @@ OperationPtr TftpServerImpl::errorOperation(
   const std::string &errorMessage)
 {
   return std::make_shared< ErrorOperation>(
-    ioService,
+    ioContext,
     completionHandler,
     remote,
     local,
@@ -177,7 +177,7 @@ OperationPtr TftpServerImpl::errorOperation(
   std::string &&errorMessage)
 {
   return std::make_shared< ErrorOperation>(
-    ioService,
+    ioContext,
     completionHandler,
     remote,
     local,
@@ -213,7 +213,7 @@ void TftpServerImpl::receive()
   }
   catch ( boost::system::system_error &err)
   {
-    ioService.stop();
+    ioContext.stop();
 
     //! @throw CommunicationException on IO error.
     BOOST_THROW_EXCEPTION(

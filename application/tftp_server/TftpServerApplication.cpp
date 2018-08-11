@@ -30,7 +30,7 @@ using Tftp::TftpException;
 
 TftpServerApplication::TftpServerApplication() :
   optionsDescription( "TFTP server options"),
-  signals( ioService, SIGINT, SIGTERM)
+  signals( ioContext, SIGINT, SIGTERM)
 {
   optionsDescription.add_options()
     (
@@ -109,7 +109,7 @@ int TftpServerApplication::operator()( int argc, char *argv[])
        &TftpServerApplication::stop,
        this));
 
-    ioService.run();
+    ioContext.run();
   }
   catch ( boost::program_options::error &e)
   {

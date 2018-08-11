@@ -33,8 +33,8 @@ class ReadRequestOperationImpl : public OperationImpl
     /**
      * @brief Initialises the operation.
      *
-     * @param[in] ioService
-     *   The IO service used for communication.
+     * @param[in] ioContext
+     *   The I/O context used for communication.
      * @param[in] dataHandler
      *   Handler for received data.
      * @param[in] completionHandler
@@ -51,7 +51,7 @@ class ReadRequestOperationImpl : public OperationImpl
      *   communication source
      **/
     ReadRequestOperationImpl(
-      boost::asio::io_service &ioService,
+      boost::asio::io_context &ioContext,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
