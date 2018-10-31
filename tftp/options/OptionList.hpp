@@ -41,7 +41,7 @@ class OptionList
 {
   public:
     //! short form of option map
-    using Options = std::map< std::string, OptionPtr>;
+    using Options = std::map< std::string, OptionPtr, std::less<>>;
     //! short form of raw option
     using RawOptions = std::vector< uint8_t>;
 
