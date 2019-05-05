@@ -37,22 +37,22 @@ std::string Option::optionName( const KnownOptions option) noexcept
 }
 
 Option::Option( const std::string &name):
-  nameValue( name)
+  nameV( name)
 {
   // Validate option name
   assert( !name.empty());
 }
 
 Option::Option( std::string &&name):
-  nameValue( std::move( name))
+  nameV( std::move( name))
 {
   // Validate option name
-  assert( !nameValue.empty());
+  assert( !nameV.empty());
 }
 
 const std::string& Option::name() const
 {
-  return nameValue;
+  return nameV;
 }
 
 void Option::name( const std::string &name)
@@ -60,12 +60,12 @@ void Option::name( const std::string &name)
   // Validate option name
   assert( !name.empty());
 
-  nameValue = name;
+  nameV = name;
 }
 
 std::string Option::toString() const
 {
-  return nameValue + ":" + static_cast< std::string>( *this);
+  return nameV + ":" + static_cast< std::string>( *this);
 }
 
 }

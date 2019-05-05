@@ -5,10 +5,16 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration/ definition of TFTP unit test main entry
+ * @brief Declaration/ Definition of TFTP Unit Test Main Entry
  **/
 
+/**
+ * @dir
+ * @brief TFTP Unit Test Application
+ **/
+
+//! Automatically Defines Unit Test Entry.
 #define BOOST_TEST_MODULE TFTP Unit Tests
 #include <boost/test/included/unit_test.hpp>

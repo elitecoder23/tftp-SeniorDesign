@@ -5,9 +5,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of namespace Tftp::Server.
+ * @brief Declaration of Namespace Tftp::Server.
+ **/
+
+/**
+ * @dir
+ * @brief Declaration/ Definition of Namespace Tftp::Server.
  **/
 
 #ifndef TFTP_SERVER_SERVER_HPP
@@ -22,7 +27,7 @@
 #include <functional>
 
 /**
- * @brief TFTP server implementation.
+ * @brief TFTP Server Implementation.
  *
  * The user of this library uses following interface classes to interact with
  * it:

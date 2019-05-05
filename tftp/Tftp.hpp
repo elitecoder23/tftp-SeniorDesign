@@ -5,9 +5,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of namespace Tftp.
+ * @brief Declaration of Namespace Tftp.
+ **/
+
+/**
+ * @dir
+ * @brief Declaration/ Definition of Namespace Tftp.
  **/
 
 #ifndef TFTP_TFTP_HPP
@@ -20,7 +25,7 @@
 #include <cstdint>
 
 /**
- * @brief TFTP protocol implementation.
+ * @brief TFTP Protocol Implementation.
  *
  * This library implementation the TFTP protocol.
  *
@@ -113,7 +118,7 @@ enum class TransferStatus
 };
 
 //! Default TFTP port.
-constexpr uint16_t DefaultTftpPort = 69;
+constexpr uint16_t DefaultTftpPort = 69U;
 
 //! The default TFTP receive timeout in seconds (2 seconds)
 constexpr unsigned int DefaultTftpReceiveTimeout = 2;
@@ -122,7 +127,7 @@ constexpr unsigned int DefaultTftpReceiveTimeout = 2;
 constexpr unsigned int DefaultTftpRetries = 1;
 
 /**
- * @brief TFTP Packet types.
+ * @brief TFTP Packet Types.
  *
  * All packet types, except TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6), are
  * defined within RFC 1350. The packet type
@@ -161,7 +166,7 @@ enum class TransferMode
 };
 
 /**
- * @brief The TFTP Error codes as defined within the RFCs.
+ * @brief The TFTP Error Codes as Defined within the RFCs.
  *
  * The error codes, except the ERROR_CODE_TFTP_OPTION_REFUSED (8) are
  * described within RFC 1350.
@@ -192,7 +197,7 @@ enum class ErrorCode : uint16_t
   Invalid                     = 0xFFFFU
 };
 
-//! Enumeration of all known TFTP options
+//! Enumeration of all known TFTP Options
 enum class KnownOptions
 {
   //! Block size option (RFC 2348)

@@ -156,7 +156,7 @@ class OptionList
      */
     void set( const std::string &name, const std::string &value);
 
-    //! copydoc set(const std::string&,const std::string&)
+    //! @copydoc set(const std::string&,const std::string&)
     void set( const std::string &&name, const std::string &&value);
 
     /**

@@ -1,37 +1,36 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-# 
-# Thomas Vogt, Thomas@Thomas-Vogt.de
+#
+# Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.12)
+cmake_minimum_required( VERSION 3.13)
 
-find_package( 
+find_package(
   Boost
   REQUIRED
   COMPONENTS
-  program_options
-  filesystem
-  thread
-  chrono)
+    program_options
+    filesystem
+    thread
+    chrono)
 
-add_executable(
-  tftp_client
-  
-  tftp_client.cpp
-  TftpClientApplication.cpp)
+add_executable( tftp_client)
 
-target_link_libraries( 
+target_sources( tftp_client PRIVATE tftp_client.cpp)
+
+target_link_libraries(
   tftp_client
 
-  tftp
-  helper
-  
-  Boost::boost
-  Boost::program_options
-  Boost::filesystem
-  Boost::thread
-  Boost::chrono)
+  PUBLIC
+    tftp
+    helper
+
+    Boost::boost
+    Boost::program_options
+    Boost::filesystem
+    Boost::thread
+    Boost::chrono)
 
 target_compile_definitions(
   tftp_client

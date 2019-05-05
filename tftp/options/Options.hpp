@@ -5,9 +5,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of namespace Tftp::Options.
+ * @brief Declaration of Namespace Tftp::Options.
+ **/
+
+/**
+ * @dir
+ * @brief Declaration/ Definition of Namespace Tftp::Options.
  **/
 
 #ifndef TFTP_OPTIONS_OPTIONS_HPP
@@ -18,7 +23,7 @@
 #include <memory>
 
 /**
- * @brief TFTP protocol options implementation (RFC 2348).
+ * @brief TFTP Protocol Options Implementation (RFC 2348).
  **/
 namespace Tftp::Options {
 

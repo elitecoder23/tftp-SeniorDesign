@@ -49,23 +49,41 @@ class Option
     //! @copydoc Option(const std::string&)
     explicit Option( std::string &&name);
 
-    //! default copy constructor
+    /**
+     * @brief Copy Constructor
+     * @param[in] other
+     *   Object to copy.
+     **/
     Option( const Option &other) = default;
 
-    //! default move constructor
+    /**
+     * @brief Move Constructor
+     * @param[in] other
+     *   Object to move.
+     **/
     Option( Option &&other) = default;
 
-    //! default copy assignment operator
+    /**
+     * @brief Copy Assignment Operator
+     * @param[in] other
+     *   Object to copy.
+     * @return *this.
+     **/
     Option& operator=( const Option &other) = default;
 
-    //! default copy move operator
+    /**
+     * @brief Move Assignment Operator
+     * @param[in] other
+     *   Object to move.
+     * @return *this.
+     **/
     Option& operator=( Option &&other) = default;
 
     //! Default destructor
     virtual ~Option() noexcept = default;
 
     /**
-     * @brief Returns the option name.
+     * @brief Returns the Option Name.
      *
      * @return The option name.
      **/
@@ -119,7 +137,7 @@ class Option
 
   private:
     //! The option name
-    std::string nameValue;
+    std::string nameV;
 };
 
 }

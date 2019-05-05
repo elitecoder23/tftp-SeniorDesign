@@ -5,9 +5,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of namespace Tftp::Client.
+ * @brief Declaration of Namespace Tftp::Client.
+ **/
+
+/**
+ * @dir
+ * @brief Declaration/ Definition of Namespace Tftp::Client.
  **/
 
 #ifndef TFTP_CLIENT_CLIENT_HPP
@@ -19,7 +24,7 @@
 #include <functional>
 
 /**
- * @brief TFTP client implementation.
+ * @brief TFTP Client Implementation.
  *
  * The main entry point for users of this part of the TFTP library is the
  * class TftpClient. With an instance of this class the user can create

@@ -5,9 +5,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of namespace Tftp::File
+ * @brief Declaration of Namespace Tftp::File
+ **/
+
+/**
+ * @dir
+ * @brief Declaration/ Definition of Namespace Tftp::File.
  **/
 
 #ifndef TFTP_FILE_FILE_HPP
@@ -19,7 +24,7 @@
 #include <iosfwd>
 
 /**
- * @brief TFTP file implementation.
+ * @brief TFTP File Implementation.
  *
  * This namespace provides common handler of data which shall be received from
  * or transmitted to an other TFTP instance.

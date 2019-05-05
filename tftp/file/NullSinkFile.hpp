@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of class Tftp::File::NullSinkFile.
+ * @brief Declaration of Class Tftp::File::NullSinkFile.
  **/
 
 #ifndef TFTP_FILE_NULLSINKFILE_HPP
@@ -21,7 +21,7 @@
 namespace Tftp::File {
 
 /**
- * @brief NULL sink file.
+ * @brief NULL Sink File.
  *
  * This class provides an receive data handler, which drops every received
  * data package.

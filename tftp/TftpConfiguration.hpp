@@ -41,7 +41,7 @@ class TftpConfiguration
      * @param[in] config
      *   The stored configuration.
      **/
-    TftpConfiguration( const boost::property_tree::ptree &config);
+    explicit TftpConfiguration( const boost::property_tree::ptree &config);
 
     /**
      * @brief Converts the configuration values to a

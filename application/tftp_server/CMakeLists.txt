@@ -1,10 +1,10 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
-# 
-# Thomas Vogt, Thomas@Thomas-Vogt.de
+#
+# Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.12)
+cmake_minimum_required( VERSION 3.13)
 
 find_package(
   Boost
@@ -12,22 +12,26 @@ find_package(
   COMPONENTS
     thread)
 
-add_executable(
+add_executable( tftp_server)
+
+target_sources(
   tftp_server
 
-  tftp_server.cpp
-  TftpServerApplication.cpp)
+  PRIVATE
+    tftp_server.cpp
+    TftpServerApplication.cpp)
 
-target_link_libraries( 
+target_link_libraries(
   tftp_server
 
-  tftp
-  helper
+  PRIVATE
+    tftp
+    helper
 
-  $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
-  $<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,7.0>>:stdc++fs>
+    $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
+    $<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,7.0>>:stdc++fs>
 
-  Boost::thread)
+    Boost::thread)
 
 target_compile_definitions(
   tftp_server
