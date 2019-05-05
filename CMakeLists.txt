@@ -53,12 +53,12 @@ include( FetchContent)
 FetchContent_Declare(
   cmake_common
   GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/cmake_common.git
-  GIT_TAG        origin/master)
+  GIT_TAG        master)
 
 FetchContent_Declare(
   helper
   GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/helper.git
-  GIT_TAG        origin/master)
+  GIT_TAG        master)
 
 
 FetchContent_GetProperties( cmake_common)

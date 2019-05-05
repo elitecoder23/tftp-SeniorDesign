@@ -49,11 +49,11 @@
  **/
 namespace Tftp {
 
-//! The packet type of raw data
+//! The Packet Type of Raw Data
 using RawTftpPacket = std::vector< uint8_t>;
 
-//!  TFTP version information
-enum class Version
+//!  TFTP Version Information
+enum class TftpVersion
 {
   //! TFTP Version 2 (RFC1350)
   Version2,
@@ -64,16 +64,16 @@ enum class Version
   Invalid
 };
 
-//! TFTP role enumeration
+//! TFTP Role Enumeration
 enum class Role
 {
-  Client, //!< TFTP client role
-  Server, //!< TFTP server role
+  Client, //!< TFTP Client Role
+  Server, //!< TFTP Server Role
 
-  Invalid //!< invalid value
+  Invalid //!< Invalid Value
 };
 
-//! TFTP request type
+//! TFTP Request Type
 enum class RequestType
 {
   Read,
@@ -81,7 +81,7 @@ enum class RequestType
 
   Invalid
 };
-//! @brief Phases of TFTP transfer
+//! @brief Phases of TFTP Transfer
 enum class TransferPhase
 {
   //! Initialisation phase before any request has been sent/ received.
@@ -97,7 +97,7 @@ enum class TransferPhase
   Unknown
 };
 
-//! The TFTP transfer status
+//! The TFTP Transfer Status
 enum class TransferStatus
 {
   //! Transfer completed successfully
@@ -117,7 +117,7 @@ enum class TransferStatus
   Invalid
 };
 
-//! Default TFTP port.
+//! Default TFTP Port.
 constexpr uint16_t DefaultTftpPort = 69U;
 
 //! The default TFTP receive timeout in seconds (2 seconds)
@@ -168,9 +168,9 @@ enum class TransferMode
 /**
  * @brief The TFTP Error Codes as Defined within the RFCs.
  *
- * The error codes, except the ERROR_CODE_TFTP_OPTION_REFUSED (8) are
+ * The error codes, except the ErrorCode::TftpOptionRefused (8) are
  * described within RFC 1350.
- * The error code ERROR_CODE_TFTP_OPTION_REFUSED (8) is described within
+ * The error code ErrorCode::TftpOptionRefused (8) is described within
  * RFC 2347.
  **/
 enum class ErrorCode : uint16_t
@@ -235,6 +235,7 @@ using OperationCompletedHandler = std::function< void( TransferStatus)>;
 
 class PacketHandler;
 
+class Version;
 }
 
 #endif

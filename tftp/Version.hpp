@@ -1,0 +1,51 @@
+/**
+ * @file
+ * @copyright
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ *
+ * @brief Declaration of Class Tftp::Version.
+ **/
+
+#ifndef DMGS_BHM_VERSION_HPP
+#define DMGS_BHM_VERSION_HPP
+
+#include <tftp/Tftp.hpp>
+
+#include <cstdint>
+#include <string>
+#include <string_view>
+
+namespace Tftp {
+
+//! TFTP C++ Library Version Information
+class Version
+{
+  public:
+    // delete constructors
+    Version() = delete;
+
+    //! Major Version
+    static const uint32_t Major;
+    //! Minor Version
+    static const uint32_t Minor;
+    //! Patch Version
+    static const uint32_t Patch;
+
+    //! Additional Version Information
+    static std::string_view Addition;
+
+    /**
+     * @brief Returns the Version as String.
+     *
+     * @return The version as string.
+     **/
+    static std::string version();
+};
+
+}
+
+#endif

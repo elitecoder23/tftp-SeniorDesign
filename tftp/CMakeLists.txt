@@ -8,6 +8,24 @@ cmake_minimum_required( VERSION 3.13)
 
 find_package( Boost REQUIRED COMPONENTS program_options)
 
+find_package( Git)
+
+if (GIT_FOUND)
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} rev-parse --verify --short HEAD
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_HASH
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  set( PROJECT_VERSION_ADDITION "${PROJECT_VERSION_ADDITION}-${GIT_HASH}")
+endif()
+
+# prepare Version.cpp
+configure_file(
+  Version.cpp.in
+  Version.cpp)
+
+
 add_library( tftp)
 
 target_sources(
@@ -28,6 +46,8 @@ target_sources(
     TftpException.hpp
     TftpLogger.hpp
     TransmitDataHandler.hpp
+    Version.hpp
+    ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp
 
     packets/AcknowledgementPacket.hpp
     packets/AcknowledgementPacket.cpp
@@ -57,16 +77,7 @@ target_sources(
     options/OptionList.cpp
     options/Options.hpp
     options/StringOption.hpp
-    options/StringOption.cpp
-
-    file/File.hpp
-    file/TftpFile.hpp
-    file/MemoryFile.hpp
-    file/MemoryFile.cpp
-    file/StreamFile.hpp
-    file/StreamFile.ipp
-    file/NullSinkFile.hpp
-    file/NullSinkFile.cpp)
+    options/StringOption.cpp)
 
 target_include_directories(
   tftp
@@ -140,6 +151,7 @@ target_compile_features( tftp_test PUBLIC cxx_std_17)
 target_link_libraries( tftp_test PUBLIC tftp)
 
 
+add_subdirectory( file)
 add_subdirectory( client)
 add_subdirectory( server)
 
