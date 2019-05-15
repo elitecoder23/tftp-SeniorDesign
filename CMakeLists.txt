@@ -23,7 +23,6 @@ find_program(
   NAMES
   clang-tidy-8.0
   clang-tidy-7.0
-  clang-tidy-6.0
   clang-tidy)
 
 if( CLANG_TIDY_EXE)

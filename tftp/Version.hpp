@@ -5,13 +5,13 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
  * @brief Declaration of Class Tftp::Version.
  **/
 
-#ifndef DMGS_BHM_VERSION_HPP
-#define DMGS_BHM_VERSION_HPP
+#ifndef TFTP_VERSION_HPP
+#define TFTP_VERSION_HPP
 
 #include <tftp/Tftp.hpp>
 

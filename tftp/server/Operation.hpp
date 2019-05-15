@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of class Tftp::Server::Operation.
+ * @brief Declaration of Class Tftp::Server::Operation.
  **/
 
 #ifndef TFTP_SERVER_OPERATION_HPP
@@ -22,7 +22,7 @@
 namespace Tftp::Server {
 
 /**
- * @brief base class for TFTP server operations.
+ * @brief TFTP Server Operations Base Class.
  *
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
@@ -30,21 +30,21 @@ namespace Tftp::Server {
 class Operation
 {
   public:
-    //! Error info type
+    //! Error Info Type
     using ErrorInfo = std::optional< Packets::ErrorPacket>;
 
-    //! Default Constructor
+    //! Constructor
     virtual ~Operation() noexcept = default;
 
     /**
-     * @brief Executes the TFTP client operation.
+     * @brief Executes the TFTP Server Operation.
      *
-     * This routines starts the client communication loop.
+     * This routines starts the server communication loop.
      **/
     virtual void start() = 0;
 
     /**
-     * @brief Aborts the operation gracefully.
+     * @brief Aborts the Operation Gracefully.
      *
      * @param[in] errorCode
      *   Abort error code.
@@ -56,14 +56,14 @@ class Operation
       std::string &&errorMessage = {}) = 0;
 
     /**
-     * @brief Aborts the operation immediately.
+     * @brief Aborts the Operation Immediately.
      *
      * No error message is sent.
      **/
     virtual void abort() = 0;
 
     /**
-     * @brief Returns the error info of this operation
+     * @brief Returns the Error Information of this Operation
      *
      * @return The error info of this operation
      * @retval ErrorInfo()

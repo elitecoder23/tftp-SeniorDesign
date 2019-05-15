@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of class Tftp::Server::TftpServer.
+ * @brief Declaration of Vlass Tftp::Server::TftpServer.
  *
  * The class TftpServer is the main entry for a TFTP server application.
  **/
@@ -24,7 +24,7 @@
 namespace Tftp::Server {
 
 /**
- * @brief Public interface of TFTP servers.
+ * @brief Public Interface of TFTP Servers.
  *
  * Waits on the specified port for a valid TFTP request and calls the
  * approbate call-back, which has to handle the request.
@@ -65,11 +65,11 @@ class TftpServer
       const Options::OptionList& additionalOptions = {},
       const boost::asio::ip::udp::endpoint &serverAddress = DefaultLocalEndpoint);
 
-    //! Default destructor
+    //! Destructor
     virtual ~TftpServer() noexcept = default;
 
     /**
-     * @brief Entry of the TFTP Server.
+     * @brief Entry of TFTP Server.
      *
      * This routines enters the I/O context loop.
      * The start routine will be leaved, when an FATAL error occurred or

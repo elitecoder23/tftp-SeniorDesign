@@ -46,15 +46,15 @@ namespace Tftp::Server {
 // Forward declarations
 class TftpServer;
 
-//! Declaration of TFTP server operation instance pointer
+//! Declaration of TFTP Server Operation Instance Pointer
 using TftpServerPtr = std::shared_ptr< TftpServer>;
 
 class Operation;
-//! Operation instance pointer
+//! Operation Instance Pointer
 using OperationPtr = std::shared_ptr< Operation>;
 
 /**
- * @brief Function handler definition.
+ * @brief Function Handler Definition.
  *
  * * Remote Endpoint
  * * TFTP Request Type
