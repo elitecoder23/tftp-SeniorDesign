@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of class Tftp::TransmitDataHandler.
+ * @brief Declaration of Class Tftp::TransmitDataHandler.
  **/
 
 #ifndef TFTP_TRANSMITDATAHANDLER_HPP
@@ -21,9 +21,10 @@
 namespace Tftp {
 
 /**
- * @brief Class interface, which must be implemented by an class, which
- *   wants to transmit data for a TFTP operation (TFTP client WRQ or TFTP
- *   server RRQ)
+ * @brief Transmit Data Handler
+ *
+ * Class interface, which must be implemented by an class, which wants to
+ * transmit data for a TFTP operation (TFTP client WRQ or TFTP server RRQ)
  **/
 class TransmitDataHandler: public DataHandler
 {

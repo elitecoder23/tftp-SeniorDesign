@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of class Tftp::PacketHandler.
+ * @brief Definition of Class Tftp::PacketHandler.
  **/
 
 #include "PacketHandler.hpp"
@@ -29,7 +29,7 @@ void PacketHandler::packet(
   const boost::asio::ip::udp::endpoint &remote,
   const RawTftpPacket &rawPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   switch ( Packets::Packet::packetType( rawPacket))
   {
@@ -42,9 +42,8 @@ void PacketHandler::packet(
       }
       catch ( InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-          "Error decoding/ handling RRQ packet: " <<
-          e.what();
+        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+          << "Error decoding/ handling RRQ packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
       break;
@@ -58,9 +57,8 @@ void PacketHandler::packet(
       }
       catch ( InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-          "Error decoding/ handling WRQ packet: " <<
-          e.what();
+        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+          << "Error decoding/ handling WRQ packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
       break;
@@ -72,9 +70,8 @@ void PacketHandler::packet(
       }
       catch ( InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-          "Error decoding/ handling DATA packet: "<<
-          e.what();
+        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+          << "Error decoding/ handling DATA packet: "<< e.what();
         invalidPacket( remote, rawPacket);
       }
       break;
@@ -88,9 +85,8 @@ void PacketHandler::packet(
       }
       catch ( InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-          "Error decoding/ handling ACK packet: " <<
-          e.what();
+        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+          << "Error decoding/ handling ACK packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
       break;
@@ -102,9 +98,8 @@ void PacketHandler::packet(
       }
       catch ( InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-          "Error decoding/ handling ERR packet: " <<
-          e.what();
+        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+          << "Error decoding/ handling ERR packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
       break;
@@ -118,9 +113,8 @@ void PacketHandler::packet(
       }
       catch ( InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-          "Error decoding/ handling OACK packet: " <<
-          e.what();
+        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+          << "Error decoding/ handling OACK packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
       break;

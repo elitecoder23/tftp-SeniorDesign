@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of class Tftp::ReceiveDataHandler.
+ * @brief Declaration of Class Tftp::ReceiveDataHandler.
  **/
 
 #ifndef TFTP_RECEIVEDATAHANDLER_HPP
@@ -19,9 +19,10 @@
 namespace Tftp {
 
 /**
- * @brief Class interface, which must be implemented by an class, which
- *   wants to receive data from a TFTP operation (TFTP client RRQ or TFTP
- *   server WRQ)
+ * @brief Receive Data Handler
+ *
+ * Class interface, which must be implemented by an class, which wants to
+ * receive data from a TFTP operation (TFTP client RRQ or TFTP server WRQ)
  **/
 class ReceiveDataHandler: public DataHandler
 {

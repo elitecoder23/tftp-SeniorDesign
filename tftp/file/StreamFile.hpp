@@ -32,9 +32,10 @@ class StreamFile: public TftpFile
       std::is_base_of< std::iostream, StreamT>::value,
       "StreamT must be a std::iostream");
 
-    //! The stream type
+    //! Stream Type
     using StreamType = StreamT;
 
+    //! Constructor
     StreamFile() = default;
 
     /**
@@ -116,10 +117,10 @@ class StreamFile: public TftpFile
     DataType sendData( size_t maxSize) noexcept final;
 
   private:
-    //! the data stream
-    StreamType streamValue;
-    //! file size
-    std::optional< size_t> sizeValue;
+    //! Data Stream
+    StreamType streamV;
+    //! File Size
+    std::optional< size_t> sizeV;
 };
 
 }

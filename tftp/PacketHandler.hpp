@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of class interface Tftp::PacketHandler.
+ * @brief Declaration of Class Tftp::PacketHandler.
  **/
 
 #ifndef TFTP_PACKETHANDLER_HPP
@@ -21,7 +21,9 @@
 namespace Tftp {
 
 /**
- * @brief Interface, which must be implemented by an TFTP packet Handler.
+ * @brief TFTP Packet Handler
+ *
+ * Interface, which must be implemented by an TFTP packet Handler.
  *
  * The packet handlers are used internally.
  * A user of the TFTP library doesn't need to derive from this class.
@@ -29,7 +31,7 @@ namespace Tftp {
 class PacketHandler
 {
   public:
-    //! Default virtual destructur
+    //! Destructur
     virtual ~PacketHandler() noexcept = default;
 
     /**
@@ -55,7 +57,7 @@ class PacketHandler
 
   protected:
     /**
-     * @brief Handler for TFTP read request packets (RRQ).
+     * @brief Handler for TFTP Read Request Packets (RRQ).
      *
      * @param[in] remote
      *   Source of the packet.
@@ -67,7 +69,7 @@ class PacketHandler
       const Packets::ReadRequestPacket &readRequestPacket) = 0;
 
     /**
-     * @brief Handler for TFTP write request packets (WRQ).
+     * @brief Handler for TFTP Write Request Packets (WRQ).
      *
      * @param[in] remote
      *   Source of the packet.
@@ -79,7 +81,7 @@ class PacketHandler
       const Packets::WriteRequestPacket &writeRequestPacket) = 0;
 
     /**
-     * @brief Handler for TFTP data packets (DATA).
+     * @brief Handler for TFTP Data Packets (DATA).
      *
      * @param[in] remote
      *   Source of the packet.
@@ -91,7 +93,7 @@ class PacketHandler
       const Packets::DataPacket &dataPacket) = 0;
 
     /**
-     * @brief Handler for TFTP acknowledgement packets (ACK).
+     * @brief Handler for TFTP Acknowledgement Packets (ACK).
      *
      * @param[in] remote
      *   Source of the packet.
@@ -103,7 +105,7 @@ class PacketHandler
       const Packets::AcknowledgementPacket &acknowledgementPacket) = 0;
 
     /**
-     * @brief Handler for TFTP error packets (ERR).
+     * @brief Handler for TFTP Error Packets (ERR).
      *
      * @param[in] remote
      *   Source of the packet.
@@ -115,7 +117,7 @@ class PacketHandler
       const Packets::ErrorPacket &errorPacket) = 0;
 
     /**
-     * @brief Handler for TFTP option acknowledgement packets (RRQ).
+     * @brief Handler for TFTP Option Acknowledgement Packets (RRQ).
      *
      * @param[in] remote
      *   Source of the packet.
@@ -127,7 +129,7 @@ class PacketHandler
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) = 0;
 
     /**
-     * @brief Handler for invalid TFTP packets.
+     * @brief Handler for Invalid TFTP Packets.
      *
      * @param[in] remote
      *   Source of the packet.

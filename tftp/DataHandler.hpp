@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of class Tftp::DataHandler.
+ * @brief Declaration of Class Tftp::DataHandler.
  **/
 
 #ifndef TFTP_DATAHANDLER_HPP
@@ -21,7 +21,7 @@
 namespace Tftp {
 
 /**
- * @brief Base class for TFTP operation handlers.
+ * @brief TFTP Data Handler.
  **/
 class DataHandler
 {

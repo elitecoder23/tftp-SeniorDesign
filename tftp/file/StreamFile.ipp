@@ -14,22 +14,22 @@ namespace Tftp::File {
 
 template< typename StreamT>
 StreamFile< StreamT>::StreamFile( StreamType &&stream) :
-  streamValue( std::move( stream))
+  streamV( std::move( stream))
 {
 }
 
 template< typename StreamT>
 StreamFile< StreamT>::StreamFile( StreamType &&stream, const size_t size) :
-  streamValue( std::move( stream)),
-  sizeValue( size)
+  streamV( std::move( stream)),
+  sizeV( size)
 {
 }
 
 template< typename StreamT>
 StreamFile< StreamT>& StreamFile< StreamT>::operator=( StreamType &&stream)
 {
-  streamValue = stream;
-  sizeValue.reset();
+  streamV = stream;
+  sizeV.reset();
 
   return *this;
 }
@@ -38,51 +38,51 @@ template< typename StreamT>
 const typename StreamFile< StreamT>::StreamType&
 StreamFile< StreamT>::stream() const
 {
-  return streamValue;
+  return streamV;
 }
 
 template< typename StreamT>
 typename StreamFile< StreamT>::StreamType& StreamFile< StreamT>::stream()
 {
-  return streamValue;
+  return streamV;
 }
 
 template< typename StreamT>
 void StreamFile< StreamT>::size( const size_t size) noexcept
 {
-  sizeValue = size;
+  sizeV = size;
 }
 
 template< typename StreamT>
 void StreamFile< StreamT>::finished() noexcept
 {
-  streamValue.flush();
+  streamV.flush();
 }
 
 template< typename StreamT>
 bool StreamFile< StreamT>::receivedTransferSize( const uint64_t transferSize)
 {
   // If no size is provided
-  if ( !sizeValue)
+  if ( !sizeV)
   {
     // Always accept file based on size
     return true;
   }
 
   // Accept file if size is matching the maximum allowed one.
-  return (transferSize <= sizeValue);
+  return (transferSize <= sizeV);
 }
 
 template< typename StreamT>
 void StreamFile< StreamT>::receivedData( const DataType &data) noexcept
 {
-  streamValue.write( reinterpret_cast< const char*>( &data[0]), data.size());
+  streamV.write( reinterpret_cast< const char*>( &data[0]), data.size());
 }
 
 template< typename StreamT>
 std::optional< uint64_t> StreamFile< StreamT>::requestedTransferSize()
 {
-  return sizeValue;
+  return sizeV;
 }
 
 template< typename StreamT>
@@ -91,9 +91,9 @@ typename StreamFile< StreamT>::DataType StreamFile< StreamT>::sendData(
 {
   DataType data( maxSize);
 
-  streamValue.read( reinterpret_cast< char*>(&data[0]), maxSize);
+  streamV.read( reinterpret_cast< char*>(&data[0]), maxSize);
 
-  data.resize( streamValue.gcount());
+  data.resize( streamV.gcount());
 
   return data;
 }
