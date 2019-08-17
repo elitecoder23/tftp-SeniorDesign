@@ -20,22 +20,20 @@
 
 #include <filesystem>
 
-//! The TFTP server application.
+//! TFTP Server Application.
 class TftpServerApplication
 {
   public:
     /**
-     * @brief Constructor, which instantiates the TFT server application.
+     * @brief Instantiates the TFTP Server Application.
      **/
     TftpServerApplication();
 
-    /**
-     * @brief Destructor of the TFTP server application.
-     **/
+    //! Destructor
     virtual ~TftpServerApplication() noexcept;
 
     /**
-     * @brief Entry point of the TFTP server.
+     * @brief Entry Point of TFTP Server.
      *
      * @param[in] argc
      *   argument count
@@ -75,19 +73,19 @@ class TftpServerApplication
       const std::filesystem::path &filename,
       const Tftp::Options::OptionList &options);
 
-    //! Options description
+    //! Options Description
     boost::program_options::options_description optionsDescription;
 
-    //! base directory of TFTP server
+    //! Base Directory of TFTP Server
     std::filesystem::path baseDir;
-    //! The TFTP configuration
+    //! TFTP Configuration
     Tftp::TftpConfiguration configuration;
-    //! The TFTP server instance
+    //! TFTP Server Instance
     Tftp::Server::TftpServerPtr server;
 
-    //! I/O context
+    //! I/O Context
     boost::asio::io_context ioContext;
-    //! ASIO signal handler
+    //! ASIO Signal Handler
     boost::asio::signal_set signals;
 };
 
