@@ -124,7 +124,7 @@ class TftpClient
       const boost::asio::ip::udp::endpoint &local = {}) = 0;
 
   protected:
-    //! Protected constructor.
+    //! Constructor.
     TftpClient() = default;
 };
 

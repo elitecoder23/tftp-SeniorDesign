@@ -51,7 +51,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 
 void ReadRequestOperationImpl::start()
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   try
   {

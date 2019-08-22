@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of class Tftp::Options::OptionList.
+ * @brief Definition of Class Tftp::Options::OptionList.
  **/
 
 #include "OptionList.hpp"
@@ -23,10 +23,6 @@
 
 namespace Tftp::Options {
 
-OptionList::OptionList()
-{
-}
-
 OptionList::OptionList(
   RawOptions::const_iterator begin,
   RawOptions::const_iterator end)
@@ -39,35 +35,35 @@ OptionList::OptionList(
 
     if (nameEnd==end)
     {
-      BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-        AdditionalInfo( "Unexpected end of input data"));
+      BOOST_THROW_EXCEPTION( InvalidPacketException()
+        << AdditionalInfo( "Unexpected end of input data"));
     }
 
     auto valueBegin{ nameEnd + 1};
 
     if (valueBegin == end)
     {
-      BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-        AdditionalInfo( "Unexpected end of input data"));
+      BOOST_THROW_EXCEPTION( InvalidPacketException()
+        << AdditionalInfo( "Unexpected end of input data"));
     }
 
     auto valueEnd{ std::find( valueBegin, end, 0)};
 
     if (valueEnd == end)
     {
-      BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-        AdditionalInfo( "Unexpected end of input data"));
+      BOOST_THROW_EXCEPTION( InvalidPacketException()
+        << AdditionalInfo( "Unexpected end of input data"));
     }
 
-    std::string name( nameBegin, nameEnd);
-    std::string value( valueBegin, valueEnd);
+    std::string name{ nameBegin, nameEnd};
+    std::string value{ valueBegin, valueEnd};
 
     // insert option as string option
     optionsValue.insert( std::make_pair(
       name,
       std::make_shared< StringOption>( name, value)));
 
-    begin = valueEnd + 1;
+    begin = valueEnd + 1U;
   }
 }
 
@@ -250,7 +246,7 @@ std::optional< uint16_t> OptionList::blocksize() const
     return {};
   }
 
-  const BlockSizeOptionBase* integerOption =
+  const auto* integerOption =
     dynamic_cast< const BlockSizeOptionBase*>(
       optionIt->second.get());
 
@@ -260,7 +256,7 @@ std::optional< uint16_t> OptionList::blocksize() const
     return {};
   }
 
-  return *integerOption;
+  return static_cast< uint16_t>( *integerOption);
 }
 
 void OptionList::timeoutOptionClient( const uint8_t timeout)
@@ -268,10 +264,10 @@ void OptionList::timeoutOptionClient( const uint8_t timeout)
   // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
   assert( timeout >= TimeoutOptionMin);
 
-  OptionPtr entry( std::make_shared< TimeoutOptionClient>(
+  auto entry{ std::make_shared< TimeoutOptionClient>(
       Option::optionName( KnownOptions::Timeout),
       timeout,
-      NegotiateExactValue< uint8_t>( timeout)));
+      NegotiateExactValue< uint8_t>( timeout))};
 
   set( entry);
 }
@@ -306,7 +302,7 @@ std::optional< uint8_t> OptionList::timeoutOption() const
     return {};
   }
 
-  const TimeoutOptionBase* integerOption =
+  const auto* integerOption =
     dynamic_cast< const TimeoutOptionBase*>(
       optionIt->second.get());
 
@@ -316,15 +312,15 @@ std::optional< uint8_t> OptionList::timeoutOption() const
     return {};
   }
 
-  return *integerOption;
+  return static_cast< uint8_t >( *integerOption);
 }
 
 void OptionList::transferSizeOption( const uint64_t transferSize)
 {
-  OptionPtr entry( std::make_shared< TransferSizeOptionServerClient>(
+  auto entry{ std::make_shared< TransferSizeOptionServerClient>(
       Option::optionName( KnownOptions::TransferSize),
       transferSize,
-      NegotiateAlwaysPass< uint64_t>()));
+      NegotiateAlwaysPass< uint64_t>())};
 
   set( entry);
 }
@@ -345,7 +341,7 @@ std::optional< uint64_t> OptionList::transferSizeOption() const
     return {};
   }
 
-  const TransferSizeOptionBase* integerOption =
+  const auto* integerOption =
     dynamic_cast< const TransferSizeOptionBase*>(
       optionIt->second.get());
 
@@ -355,12 +351,12 @@ std::optional< uint64_t> OptionList::transferSizeOption() const
     return {};
   }
 
-  return *integerOption;
+  return static_cast< uint64_t >( *integerOption);
 }
 
 OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
 {
-  OptionList negotiatedOptions;
+  OptionList negotiatedOptions{};
 
   // iterate over each received option
   for ( const auto & clientOption : clientOptions.options())
@@ -374,8 +370,8 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
     }
 
     // negotiate option
-    OptionPtr newOptionValue( negotiationEntryIt->second->negotiate(
-      static_cast< std::string>( *(clientOption.second))));
+    auto newOptionValue{ negotiationEntryIt->second->negotiate(
+      static_cast< std::string>( *(clientOption.second)))};
 
     // negotiation has returned a value -> copy option to output list
     if (newOptionValue)

@@ -51,7 +51,7 @@ class OperationImpl :
      *
      * Closes the socket.
      **/
-    virtual ~OperationImpl() noexcept;
+    ~OperationImpl() noexcept override;
 
     /**
      * @brief Operation execution
@@ -288,13 +288,13 @@ class OperationImpl :
 
     //! Completion Handler
     OperationCompletedHandler completionHandler;
-    //! The internal TFTP client
+    //! TFTP client
     const TftpClientInternal &tftpClient;
-    //! The TFTP server endpoint
+    //! TFTP server endpoint
     boost::asio::ip::udp::endpoint remoteEndpoint;
-    //! The filename of the transfer
+    //! Filename of the transfer
     const std::string filenameV;
-    //! The transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
+    //! Transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
     const TransferMode modeV;
     //! options for the transfer
     Options::OptionList optionsV;

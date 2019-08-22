@@ -63,7 +63,7 @@ class ReadRequestOperationImpl: public OperationImpl
       const boost::asio::ip::udp::endpoint &local);
 
     //! Desctructor
-    virtual ~ReadRequestOperationImpl() noexcept = default;
+    ~ReadRequestOperationImpl() noexcept override = default;
 
     /**
      * @brief executes the operation.

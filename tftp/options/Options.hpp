@@ -30,7 +30,7 @@ namespace Tftp::Options {
 class Option;
 class OptionList;
 
-//! Shortened form of option pointer
+//! Option Pointer
 using OptionPtr = std::shared_ptr< Option>;
 
 }

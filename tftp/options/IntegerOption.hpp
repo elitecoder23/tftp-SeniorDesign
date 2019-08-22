@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration/ definition of template class
+ * @brief Declaration/ Definition of Template Class
  *   Tftp::Options::BaseIntegerOption and Tftp::Options::IntegerOption.
  *
  * Additional named types are generated for the well-known TFTP options.
@@ -116,7 +116,8 @@ class BaseIntegerOption: public Option
      * @retval OptionPtr()
      *   If negotiation failed for this option.
      **/
-    virtual OptionPtr negotiate( IntegerType optionValue) const noexcept = 0;
+    [[nodiscard]] virtual OptionPtr negotiate(
+      IntegerType optionValue) const noexcept = 0;
 
   private:
     /**
@@ -511,10 +512,10 @@ class NegotiateExactValue
      * @brief Initialises the negotiation instance.
      *
      * @param[in] expectedValue
-     *   The expected value
+     *   Expected value
      **/
     explicit NegotiateExactValue( const IntT expectedValue):
-      expectedValue( expectedValue)
+      expectedValue{ expectedValue}
     {
     }
 
@@ -537,7 +538,7 @@ class NegotiateExactValue
     }
 
   private:
-    //! the expected value
+    //! Expected Value
     const IntT expectedValue;
 };
 
@@ -550,7 +551,7 @@ template< typename IntT>
 class NegotiateAlwaysPass
 {
   public:
-    //! Default constructor
+    //! Constructor
     NegotiateAlwaysPass() = default;
 
     /**
@@ -559,7 +560,7 @@ class NegotiateAlwaysPass
      * @param[in] value
      *   The value to negotiate.
      *
-     * @return [value]
+     * @return @p value
      **/
     std::optional< IntT> operator()( const IntT value) const
     {

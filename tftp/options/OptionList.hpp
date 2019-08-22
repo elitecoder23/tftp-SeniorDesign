@@ -5,9 +5,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, Thomas@Thomas-Vogt.de
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of class Tftp::Options::OptionList.
+ * @brief Declaration of Class Tftp::Options::OptionList.
  **/
 
 #ifndef TFTP_OPTIONS_OPTIONLIST_HPP
@@ -28,7 +28,7 @@
 namespace Tftp::Options {
 
 /**
- * @brief Representation of TFTP option list.
+ * @brief TFTP Option List.
  *
  * A TFTP option is a name - value pair.
  *
@@ -40,18 +40,20 @@ namespace Tftp::Options {
 class OptionList
 {
   public:
-    //! short form of option map
+    //! Declaration of Option Map.
     using Options = std::map< std::string, OptionPtr, std::less<>>;
-    //! short form of raw option
+    //! Declaration of Raw Options.
     using RawOptions = std::vector< uint8_t>;
 
     /**
      * @brief Creates an empty option list
      **/
-    OptionList();
+    OptionList() = default;
 
     /**
      * @brief Loads the option list from the given raw data.
+     *
+     * All options are added as StringOption.
      *
      * @param[in] begin
      *   Begin of raw option list data
@@ -70,14 +72,14 @@ class OptionList
      *
      * @return is any option is set.
      **/
-    bool empty() const;
+    [[nodiscard]] bool empty() const;
 
     /**
      * @brief Returns the option map - non modifiable.
      *
      * @return Returns a constant reference to the options map.
      **/
-    const Options& options() const;
+    [[nodiscard]] const Options& options() const;
 
     /**
      * @brief Returns the option map.
@@ -102,7 +104,7 @@ class OptionList
      *
      * @return The option list as raw data
      **/
-    RawOptions rawOptions() const;
+    [[nodiscard]] RawOptions rawOptions() const;
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -116,7 +118,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    bool has( const std::string &name) const;
+    [[nodiscard]] bool has( const std::string &name) const;
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -130,7 +132,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    bool has( KnownOptions option) const;
+    [[nodiscard]] bool has( KnownOptions option) const;
 
     /**
      * @brief Obtain for option with the given name
@@ -141,7 +143,7 @@ class OptionList
      * @return The value of the option.
      *   If the option is not set, an empty OptionPointer is returned.
      **/
-    const OptionPtr get( const std::string &name) const;
+    [[nodiscard]] const OptionPtr get( const std::string &name) const;
 
     /**
      * @brief Sets the given option to the given value.
@@ -168,13 +170,13 @@ class OptionList
      * @param[in] option
      *   The option
      **/
-    void set( const OptionPtr option);
+    void set( OptionPtr option);
 
     /**
      * @brief Remove the option with the given name from the option list.
      *
      * @param[in] name
-     *   The name of the option.
+     *   Name of the option.
      **/
     void remove( const std::string &name);
 
@@ -182,7 +184,7 @@ class OptionList
      * @brief Remove the given option from the option list.
      *
      * @param[in] option
-     *   The option
+     *   Option
      **/
     void remove( KnownOptions option);
 
@@ -226,7 +228,7 @@ class OptionList
      * @retval {}
      *   If blocksize option has not been added to this option list.
      **/
-    std::optional< uint16_t> blocksize() const;
+    [[nodiscard]] std::optional< uint16_t> blocksize() const;
 
     /**
      * @brief Adds the timeout option to the option list.
@@ -290,7 +292,7 @@ class OptionList
      * @retval {}
      *   If transfer size option has not been added to this option list.
      **/
-    std::optional< uint64_t> transferSizeOption() const;
+    [[nodiscard]] std::optional< uint64_t> transferSizeOption() const;
 
     /**
      * @brief Removes the transfer size option.
@@ -312,7 +314,8 @@ class OptionList
      *   When no option can be fulfilled, an empty option list is returned.
      *   The server should not send an OACK with an empty option list
      **/
-    OptionList negotiateServer( const OptionList &clientOptions) const;
+    [[nodiscard]] OptionList negotiateServer(
+      const OptionList &clientOptions) const;
 
     /**
      * @brief Performs the option negotiation on client side.
@@ -331,7 +334,8 @@ class OptionList
      *   If an unexpected option has been received or the returned option
      *   is unacceptable.
      **/
-    OptionList negotiateClient( const OptionList &serverOptions) const;
+    [[nodiscard]] OptionList negotiateClient(
+      const OptionList &serverOptions) const;
 
     /**
      * @brief Returns a string, which describes the option list.
@@ -340,10 +344,10 @@ class OptionList
      *
      * @return Option list description.
      **/
-    std::string toString() const;
+    [[nodiscard]] std::string toString() const;
 
   private:
-    //! the options.
+    //! Options.
     Options optionsValue;
 };
 

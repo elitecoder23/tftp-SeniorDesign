@@ -172,7 +172,7 @@ class TftpServer
       std::string &&errorMessage = {}) = 0;
 
   protected:
-    //! Protected constructor
+    //! Constructor
     TftpServer() = default;
 };
 

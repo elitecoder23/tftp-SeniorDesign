@@ -190,7 +190,7 @@ class ReadWriteRequestPacket: public Packet
     /**
      * @copydoc Packet::encode()
      **/
-    RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.

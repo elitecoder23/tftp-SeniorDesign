@@ -87,7 +87,7 @@ class Option
      *
      * @return The option name.
      **/
-    const std::string& name() const;
+    [[nodiscard]] const std::string& name() const;
 
     /**
      * @brief Set the option name.
@@ -136,7 +136,7 @@ class Option
     virtual std::string toString() const;
 
   private:
-    //! The option name
+    //! Option name
     std::string nameV;
 };
 

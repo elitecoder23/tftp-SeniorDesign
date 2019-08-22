@@ -49,7 +49,7 @@ class TftpConfiguration
      *
      * @return The boost::property_tree::ptree.
      **/
-    boost::property_tree::ptree toProperties() const;
+    [[nodiscard]] boost::property_tree::ptree toProperties() const;
 
     /**
      * @brief Returns an option description, which can be used to parse a
@@ -76,7 +76,7 @@ class TftpConfiguration
      * @return Option list (for TFTP clients) based on the actual
      *   configuration and the supplied base options.
      **/
-    Options::OptionList clientOptions(
+    [[nodiscard]] Options::OptionList clientOptions(
       const Options::OptionList &baseOptions = {}) const;
 
     /**
@@ -96,7 +96,7 @@ class TftpConfiguration
      * @return Option list (for TFTP servers) based on the actual
      *   configuration and the supplied base options.
      **/
-    Options::OptionList serverOptions(
+    [[nodiscard]] Options::OptionList serverOptions(
       const Options::OptionList &baseOptions = {}) const;
 
     //! The TFTP timeout - The standard when no timeout option is negotiated in seconds.

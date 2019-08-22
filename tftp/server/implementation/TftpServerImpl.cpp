@@ -103,7 +103,7 @@ void TftpServerImpl::entry() noexcept
 
 void TftpServerImpl::start()
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   // start receive
   receive();
