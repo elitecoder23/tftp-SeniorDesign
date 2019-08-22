@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of namespace Tftp::Packets.
+ * @brief Declaration of Namespace Tftp::Packets.
  **/
 
 /**
