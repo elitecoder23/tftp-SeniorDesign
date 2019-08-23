@@ -47,37 +47,7 @@ target_sources(
     TftpLogger.hpp
     TransmitDataHandler.hpp
     Version.hpp
-    ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp
-
-    packets/AcknowledgementPacket.hpp
-    packets/AcknowledgementPacket.cpp
-    packets/BlockNumber.hpp
-    packets/BlockNumber.cpp
-    packets/DataPacket.hpp
-    packets/DataPacket.cpp
-    packets/ErrorPacket.hpp
-    packets/ErrorPacket.cpp
-    packets/OptionsAcknowledgementPacket.hpp
-    packets/OptionsAcknowledgementPacket.cpp
-    packets/Packet.hpp
-    packets/Packet.cpp
-    packets/PacketException.hpp
-    packets/Packets.hpp
-    packets/ReadRequestPacket.hpp
-    packets/ReadRequestPacket.cpp
-    packets/ReadWriteRequestPacket.hpp
-    packets/ReadWriteRequestPacket.cpp
-    packets/WriteRequestPacket.hpp
-    packets/WriteRequestPacket.cpp
-
-    options/IntegerOption.hpp
-    options/Option.hpp
-    options/Option.cpp
-    options/OptionList.hpp
-    options/OptionList.cpp
-    options/Options.hpp
-    options/StringOption.hpp
-    options/StringOption.cpp)
+    ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp)
 
 target_include_directories(
   tftp
@@ -112,20 +82,7 @@ add_library( tftp_test OBJECT)
 target_sources(
   tftp_test
 
-  PRIVATE
-    options/IntegerOptionTest.cpp
-    options/OptionTest.cpp
-    options/OptionListTest.cpp
-    options/StringOptionTest.cpp
-
-    packets/AcknowledgementPacketTest.cpp
-    packets/BlockNumberTest.cpp
-    packets/DataPacketTest.cpp
-    packets/ErrorPacketTest.cpp
-    packets/OptionsAcknowledgementPacketTest.cpp
-    packets/ReadRequestPacketTest.cpp
-    packets/ReadWriteRequestPacketTest.cpp
-    packets/WriteRequestPacketTest.cpp)
+  PRIVATE)
 
 target_compile_options(
   tftp_test
@@ -154,6 +111,8 @@ target_link_libraries( tftp_test PUBLIC tftp)
 
 
 add_subdirectory( file)
+add_subdirectory( packets)
+add_subdirectory( options)
 add_subdirectory( client)
 add_subdirectory( server)
 

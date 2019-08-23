@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration/ definition of TFTP server entry point.
+ * @brief Declaration/ Definition of TFTP Server Entry Point.
  **/
 
 /**
