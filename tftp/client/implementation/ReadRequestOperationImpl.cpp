@@ -94,7 +94,7 @@ void ReadRequestOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
     static_cast< std::string>( dataPacket);
@@ -114,13 +114,14 @@ void ReadRequestOperationImpl::dataPacket(
   // check unexpected block number
   if (dataPacket.blockNumber() != lastReceivedBlockNumber.next())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Wrong Data packet block number";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Wrong Data packet block number";
 
     // send error packet
+    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Block Number not expected");
+      "Block Number not expected"sv);
     send( errorPacket);
 
     // Operation completed
@@ -131,13 +132,14 @@ void ReadRequestOperationImpl::dataPacket(
   // check for too much data
   if (dataPacket.dataSize() > receiveDataSize)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Too much data received";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Too much data received";
 
     // send error packet
+    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Too much data");
+      "Too much data"sv);
     send( errorPacket);
 
     // Operation completed
@@ -171,15 +173,16 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
-    static_cast< std::string>( acknowledgementPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket);
 
   // send Error
+  using namespace std::literals::string_view_literals;
   Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "ACK not expected");
+    "ACK not expected"sv);
 
   send( errorPacket);
 
@@ -191,22 +194,23 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
-    static_cast< std::string>( optionsAcknowledgementPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket);
 
   const auto &remoteOptions{ optionsAcknowledgementPacket.options()};
 
   // check empty options
   if (remoteOptions.empty())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Received option list is empty";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Received option list is empty";
 
+    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Empty OACK not allowed");
+      "Empty OACK not allowed"sv);
 
     send( errorPacket);
 
@@ -221,12 +225,13 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   // Check empty options list
   if (negotiatedOptions.empty())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Option negotiation failed";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Option negotiation failed";
 
+    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::TftpOptionRefused,
-      "Option negotiation failed");
+      "Option negotiation failed"sv);
 
     send( errorPacket);
 
@@ -259,9 +264,10 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   {
     if ( !dataHandler->receivedTransferSize( *transferSizeOption))
     {
+      using namespace std::literals::string_view_literals;
       Packets::ErrorPacket errorPacket(
         ErrorCode::DiskFullOrAllocationExceeds,
-        "FILE TO BIG");
+        "FILE TO BIG"sv);
 
       send( errorPacket);
 
@@ -272,7 +278,7 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   }
 
   // send Acknowledgment with block number set to 0
-  send( Packets::AcknowledgementPacket( Packets::BlockNumber{ 0}));
+  send( Packets::AcknowledgementPacket{ Packets::BlockNumber{ 0}});
 
   // receive next packet
   receive();

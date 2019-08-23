@@ -186,7 +186,7 @@ bool TftpServerApplication::checkFilename(
 void TftpServerApplication::receivedRequest(
   const boost::asio::ip::udp::endpoint &remote,
   const Tftp::RequestType requestType,
-  const std::string &filename,
+  std::string_view filename,
   const Tftp::TransferMode mode,
   const Tftp::Options::OptionList &options)
 {

@@ -7,7 +7,8 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of uint tests of TFTP packet classes
+ * @brief Definition of Unit Tests of Class
+ *   Tftp::Packets::TftpOptionsAcknowledgementPacket.
  **/
 
 #include <boost/test/unit_test.hpp>
@@ -24,13 +25,14 @@ BOOST_AUTO_TEST_SUITE( TftpOptionsAcknowledgementPacket)
 
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Tftp::Options::OptionList options;
+  Tftp::Options::OptionList options{};
 
-  options.set( "blocksize", "4096");
+  using namespace std::literals::string_view_literals;
+  options.set( "blocksize"sv, "4096"sv);
 
-  OptionsAcknowledgementPacket oack( options);
+  OptionsAcknowledgementPacket oack{ options};
 
-  RawTftpPacket raw( oack);
+  RawTftpPacket raw{ oack};
 
   std::cout << "OACK:\n" << Dump( &(*raw.begin()), raw.size()) << std::endl;
 

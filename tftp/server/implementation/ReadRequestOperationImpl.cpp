@@ -76,12 +76,13 @@ void ReadRequestOperationImpl::start()
       {
         if ( 0U != *transferSizeOption)
         {
-          BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-            "Received transfer size must be 0";
+          BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+            << "Received transfer size must be 0";
 
+          using namespace std::literals::string_view_literals;
           Packets::ErrorPacket errorPacket(
             ErrorCode::TftpOptionRefused,
-            "transfer size must be 0");
+            "transfer size must be 0"sv);
           send( errorPacket);
 
           // Operation completed
@@ -128,7 +129,7 @@ void ReadRequestOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo) noexcept
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   OperationImpl::finished( status, std::move( errorInfo));
   dataHandler->finished();
@@ -136,12 +137,12 @@ void ReadRequestOperationImpl::finished(
 
 void ReadRequestOperationImpl::sendData()
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   lastTransmittedBlockNumber++;
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "Send Data: " << lastTransmittedBlockNumber;
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "Send Data: " << lastTransmittedBlockNumber;
 
   Packets::DataPacket data(
     lastTransmittedBlockNumber,
@@ -160,14 +161,15 @@ void ReadRequestOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
-    static_cast< std::string>( dataPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
+  using namespace std::literals::string_view_literals;
   Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected");
+    "DATA not expected"sv);
 
   send( errorPacket);
 
@@ -179,17 +181,17 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "RX: " << static_cast< std::string>( acknowledgementPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "RX: " << static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
   if (acknowledgementPacket.blockNumber() == lastTransmittedBlockNumber.previous())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-      "Received previous ACK packet: retry of last data package - "
-      "IGNORE it due to Sorcerer's Apprentice Syndrome";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+      << "Received previous ACK packet: retry of last data package - "
+         "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
     // receive next packet
     receive();
@@ -200,12 +202,13 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   // check invalid block number
   if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Invalid block number received";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Invalid block number received";
 
+    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Block number not expected");
+      "Block number not expected"sv);
 
     send( errorPacket);
 

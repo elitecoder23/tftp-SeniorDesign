@@ -16,6 +16,7 @@
 #include <tftp/options/Option.hpp>
 
 #include <string>
+#include <string_view>
 
 namespace Tftp::Options {
 
@@ -33,9 +34,9 @@ class StringOption: public Option
      * @param[in] value
      *   The option value.
      **/
-    StringOption( const std::string &name, const std::string &value);
+    StringOption( std::string_view name, std::string_view value);
 
-    //! @copydoc StringOption(const std::string&,const std::string&)
+    //! @copydoc StringOption(std::string_view,std::string_view)
     explicit StringOption( std::string &&name, std::string &&value = {});
 
     /**
@@ -51,7 +52,10 @@ class StringOption: public Option
      *
      * @return *this
      **/
-    StringOption& operator=( const std::string &value);
+    StringOption& operator=( std::string_view value);
+
+    //! @copydoc operator=(std::string_view)
+    StringOption& operator=( std::string &&value);
 
     /**
      * @copydoc Option::negotiate()
@@ -61,10 +65,11 @@ class StringOption: public Option
      *
      * @return Always an empty option pointer.
      **/
-    OptionPtr negotiate( std::string_view optionValue) const noexcept final;
+    [[nodiscard]] OptionPtr negotiate(
+      std::string_view optionValue) const noexcept final;
 
   private:
-    //! The option value.
+    //! Option value.
     std::string value;
 };
 

@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of unit tests of class Tftp::Packets::BlockNumber
+ * @brief Definition of Unit Tests of Class Tftp::Packets::BlockNumber
  **/
 
 #include <boost/test/unit_test.hpp>
@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor2 )
 {
-  BOOST_CHECK( 1 == BlockNumber( 1));
+  BOOST_CHECK( 1 == BlockNumber{ 1});
   BOOST_CHECK( 0xFFFFU == BlockNumber( 0xFFFFU));
 }
 
@@ -45,15 +45,15 @@ BOOST_AUTO_TEST_CASE( increment )
   BOOST_CHECK( 2 == ++blockNumber);
   BOOST_CHECK( 2 == blockNumber);
 
-  blockNumber = 0xFFFF;
-  BOOST_CHECK( 0xFFFF == blockNumber);
+  blockNumber = 0xFFFFU;
+  BOOST_CHECK( 0xFFFFU == blockNumber);
   BOOST_CHECK( 1 == blockNumber.next());
 }
 
 //! decrement test
 BOOST_AUTO_TEST_CASE( decrement )
 {
-  BlockNumber blockNumber( 10);
+  BlockNumber blockNumber{ 10};
 
   BOOST_CHECK( 10 == blockNumber);
 
@@ -66,18 +66,18 @@ BOOST_AUTO_TEST_CASE( decrement )
 
   blockNumber = 1;
   BOOST_CHECK( 1 == blockNumber);
-  BOOST_CHECK( 0xFFFF == blockNumber.previous());
+  BOOST_CHECK( 0xFFFFU == blockNumber.previous());
 }
 
 //! Comparison test
 BOOST_AUTO_TEST_CASE( compare )
 {
-  BlockNumber blockNumber5a( 5);
-  BlockNumber blockNumber5b( 5);
-  BlockNumber blockNumber6( 6);
+  BlockNumber blockNumber5a{ 5};
+  BlockNumber blockNumber5b{ 5};
+  BlockNumber blockNumber6{ 6};
 
-  const uint16_t int5 = 5;
-  const uint16_t int6 = 6;
+  const uint16_t int5{ 5};
+  const uint16_t int6{ 6};
 
   BOOST_CHECK( blockNumber5a != blockNumber6);
   BOOST_CHECK( !(blockNumber5a == blockNumber6));

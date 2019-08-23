@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of unit tests of TFTP packet classes.
+ * @brief Definition of Unit Tests of TFTP Packet Classes.
  **/
 
 #include <tftp/packets/ErrorPacket.hpp>
@@ -24,9 +24,10 @@ BOOST_AUTO_TEST_SUITE( TftpErrorPacket)
 
 BOOST_AUTO_TEST_CASE( constructor1)
 {
-  ErrorPacket error( ErrorCode::NotDefined, "ERROR MESSAGE");
+  using namespace std::literals::string_view_literals;
+  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"sv};
 
-  RawTftpPacket raw( error);
+  RawTftpPacket raw{ error};
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
@@ -34,9 +35,36 @@ BOOST_AUTO_TEST_CASE( constructor1)
   BOOST_CHECK( error.packetType() == PacketType::Error);
   BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined);
   BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE");
+
+  BOOST_CHECK((raw == RawTftpPacket{
+    0x00U, 0x05U,
+    0x00U, 0x00U,
+    'E', 'R', 'R', 'O', 'R', ' ', 'M', 'E', 'S', 'S', 'A', 'G', 'E', 0x00U
+  }));
 }
 
 BOOST_AUTO_TEST_CASE( constructor2)
+{
+  using namespace std::literals::string_literals;
+  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"s};
+
+  RawTftpPacket raw{ error};
+
+  std::cout << Dump( &(*raw.begin()), raw.size());
+
+
+  BOOST_CHECK( error.packetType() == PacketType::Error);
+  BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined);
+  BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE");
+
+  BOOST_CHECK((raw == RawTftpPacket{
+    0x00U, 0x05U,
+    0x00U, 0x00U,
+    'E', 'R', 'R', 'O', 'R', ' ', 'M', 'E', 'S', 'S', 'A', 'G', 'E', 0x00U
+  }));
+}
+
+BOOST_AUTO_TEST_CASE( constructor3)
 {
   RawTftpPacket raw{
     0x00U, 0x05U,
@@ -46,7 +74,7 @@ BOOST_AUTO_TEST_CASE( constructor2)
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
-  ErrorPacket error( raw);
+  ErrorPacket error{ raw};
 
   BOOST_CHECK( error.packetType() == PacketType::Error);
   BOOST_CHECK( error.errorCode() == ErrorCode::FileNotFound);

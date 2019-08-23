@@ -38,11 +38,11 @@ class OptionsAcknowledgementPacket: public Packet
 {
   public:
     /**
-     * @brief Initialises TFTP Options Acknowledgement packet with the given
-     *   options list.
+     * @brief Initialises TFTP Options Acknowledgement Packet with the given
+     *   Options List.
      *
      * @param[in] options
-     *   TFTP Options list.
+     *   TFTP Options List.
      **/
     explicit OptionsAcknowledgementPacket(
       const Options::OptionList &options) noexcept;
@@ -88,6 +88,9 @@ class OptionsAcknowledgementPacket: public Packet
      **/
     void options( const Options::OptionList &options);
 
+    //! @copydoc options(const Options::OptionList&)
+    void options( Options::OptionList &&options);
+
     /**
      * @brief Get a option value for a given name.
      *
@@ -98,7 +101,7 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return The value for the option identified by name.
      **/
-    const std::string option( const std::string &name) const;
+    std::string option( const std::string &name) const;
 
     /**
      * @brief Sets the option with the given name and value.
@@ -110,14 +113,17 @@ class OptionsAcknowledgementPacket: public Packet
      **/
     void option( const std::string &name, const std::string &value);
 
+    //! @copydoc option(const std::string&,const std::string&)
+    void option( std::string &&name, std::string &&value);
+
     // @copydoc Packet::operator std::string() const
-    operator std::string() const final;
+    explicit operator std::string() const final;
 
   private:
     /**
      * @copydoc Packet::encode()
      **/
-    RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
@@ -130,7 +136,7 @@ class OptionsAcknowledgementPacket: public Packet
      **/
     void decodeBody( const RawTftpPacket &rawPacket);
 
-    //! The stored options.
+    //! Stored options.
     Options::OptionList optionsValue;
 };
 

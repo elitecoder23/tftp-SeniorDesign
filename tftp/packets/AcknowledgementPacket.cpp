@@ -12,7 +12,7 @@
 
 #include "AcknowledgementPacket.hpp"
 
-#include <tftp/TftpException.hpp>
+#include <tftp/packets/PacketException.hpp>
 
 #include <helper/Endianess.hpp>
 
@@ -20,13 +20,13 @@ namespace Tftp::Packets {
 
 AcknowledgementPacket::AcknowledgementPacket(
   const BlockNumber blockNumber) noexcept :
-  Packet( PacketType::Acknowledgement),
-  blockNumberValue( blockNumber)
+  Packet{ PacketType::Acknowledgement},
+  blockNumberValue{ blockNumber}
 {
 }
 
 AcknowledgementPacket::AcknowledgementPacket( const RawTftpPacket &rawPacket) :
-  Packet( PacketType::Acknowledgement, rawPacket)
+  Packet{ PacketType::Acknowledgement, rawPacket}
 {
   decodeBody( rawPacket);
 }
@@ -34,7 +34,9 @@ AcknowledgementPacket::AcknowledgementPacket( const RawTftpPacket &rawPacket) :
 AcknowledgementPacket& AcknowledgementPacket::operator=(
   const RawTftpPacket &rawPacket)
 {
+  // call inherited operator
   Packet::operator =( rawPacket);
+  // decode body
   decodeBody( rawPacket);
   return *this;
 }
@@ -44,9 +46,9 @@ BlockNumber AcknowledgementPacket::blockNumber() const
   return blockNumberValue;
 }
 
-void AcknowledgementPacket::blockNumber( const BlockNumber blockBumber)
+void AcknowledgementPacket::blockNumber( const BlockNumber blockNumber)
 {
-  blockNumberValue = blockBumber;
+  blockNumberValue = blockNumber;
 }
 
 AcknowledgementPacket::operator std::string() const
@@ -74,9 +76,8 @@ void AcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   // check size
   if (rawPacket.size() != 4U)
   {
-    //! @throw InvalidPacketException When packet size is invalid
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size of ACK packet"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "Invalid packet size of ACK packet"));
   }
 
   auto packetIt( rawPacket.begin() + HeaderSize);

@@ -12,7 +12,8 @@
 
 #include "Packet.hpp"
 
-#include <tftp/TftpException.hpp>
+#include <tftp/packets/PacketException.hpp>
+
 #include <tftp/TftpLogger.hpp>
 
 #include <helper/Endianess.hpp>
@@ -24,8 +25,8 @@ PacketType Packet::packetType( const RawTftpPacket &rawPacket) noexcept
   // check minimum data size.
   if (rawPacket.size() < HeaderSize)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Packet to small";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Packet to small";
     return PacketType::Invalid;
   }
 
@@ -49,8 +50,8 @@ PacketType Packet::packetType( const RawTftpPacket &rawPacket) noexcept
 
     default:
       // return INVALID for invalid values
-      BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-        "Invalid opcode " << std::hex << opcode;
+      BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+        << "Invalid opcode " << std::hex << opcode;
       return PacketType::Invalid;
   }
 
@@ -106,8 +107,8 @@ Packet& Packet::operator=( const Packet &other)
 {
   if (packetTypeValue != other.packetTypeValue)
   {
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Packet types are not same"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "Packet types are not same"));
   }
 
   return *this;
@@ -117,8 +118,8 @@ Packet& Packet::operator=( Packet &&other)
 {
   if (packetTypeValue != other.packetTypeValue)
   {
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Packet types are not same"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "Packet types are not same"));
   }
 
   return *this;
@@ -139,7 +140,7 @@ void Packet::insertHeader( RawTftpPacket &rawPacket) const
 {
   assert( rawPacket.size() >= HeaderSize);
 
-  auto packetIt( rawPacket.begin());
+  auto packetIt{ rawPacket.begin()};
 
   // encode opcode
   setInt( packetIt, static_cast< uint16_t>( packetTypeValue));
@@ -150,11 +151,11 @@ void Packet::decodeHeader( const RawTftpPacket &rawPacket)
   // check size
   if (rawPacket.size() < HeaderSize)
   {
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size (<TFTP_PACKETS_HEADER_SIZE)"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "Invalid packet size (<HEADER SIZE)"));
   }
 
-  auto packetIt( rawPacket.begin());
+  auto packetIt{ rawPacket.begin()};
 
   // Check Opcode
   uint16_t opcode;
@@ -162,8 +163,8 @@ void Packet::decodeHeader( const RawTftpPacket &rawPacket)
 
   if ( static_cast< PacketType>( opcode) != packetTypeValue)
   {
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid opcode"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "Invalid opcode"));
   }
 }
 

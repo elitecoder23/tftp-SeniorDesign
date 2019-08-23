@@ -35,11 +35,11 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      *   The options, which are set
      **/
     WriteRequestPacket(
-      const std::string &filename,
+      std::string_view filename,
       TransferMode mode,
       const Options::OptionList &options) noexcept;
 
-    //! @copydoc WriteRequestPacket(const std::string&,TransferMode,const Options::OptionList&)
+    //! @copydoc WriteRequestPacket(std::string_view,TransferMode,const Options::OptionList&)
     WriteRequestPacket(
       std::string &&filename,
       TransferMode mode,

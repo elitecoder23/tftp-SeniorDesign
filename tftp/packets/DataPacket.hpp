@@ -32,8 +32,8 @@ namespace Tftp::Packets {
 class DataPacket: public Packet
 {
   public:
-    //! Data type
-    using DataType = std::vector< uint8_t>;
+    //! Data Type
+    using Data = std::vector< uint8_t>;
 
     /**
      * @brief Generates a TFTP Data Packet with the given block number and data.
@@ -50,12 +50,12 @@ class DataPacket: public Packet
      **/
     DataPacket(
       BlockNumber blockNumber,
-      const DataType &data) noexcept;
+      const Data &data) noexcept;
 
-    //! @copydoc DataPacket(BlockNumber,const DataType&)
+    //! @copydoc DataPacket(BlockNumber,const Data&)
     explicit DataPacket(
       BlockNumber blockNumber = {},
-      DataType &&data = {}) noexcept;
+      Data &&data = {}) noexcept;
 
     /**
      * @brief Generates a TFTP Data packet from a data buffer.
@@ -76,7 +76,7 @@ class DataPacket: public Packet
      *
      * @return The current block number.
      **/
-    BlockNumber blockNumber() const;
+    [[nodiscard]] BlockNumber blockNumber() const;
 
     /**
      * @brief Returns the block number.
@@ -88,10 +88,10 @@ class DataPacket: public Packet
     /**
      * @brief Sets the block number of the packet.
      *
-     * @param[in] blockBumber
+     * @param[in] blockNumber
      *   Block number of packet.
      **/
-    void blockNumber( BlockNumber blockBumber);
+    void blockNumber( BlockNumber blockNumber);
 
     /**
      * @brief Returns the data as const reference.
@@ -100,7 +100,7 @@ class DataPacket: public Packet
      *
      * @return The data as const reference.
      **/
-    const DataType& data() const;
+    [[nodiscard]] const Data& data() const;
 
     /**
      * @brief Returns the data as reference.
@@ -109,7 +109,7 @@ class DataPacket: public Packet
      *
      * @return The data as reference.
      **/
-    DataType& data();
+    Data& data();
 
     /**
      * @brief Sets the data of the packet.
@@ -119,7 +119,7 @@ class DataPacket: public Packet
      * @param[in] data
      *   The data to set.
      **/
-    void data( const DataType &data);
+    void data( const Data &data);
 
     /**
      * @brief Sets the data of the packet by moving the content of [data].
@@ -129,21 +129,21 @@ class DataPacket: public Packet
      * @param[in] data
      *   The data to set.
      **/
-    void data( DataType &&data);
+    void data( Data &&data);
 
     /**
      * @brief Returns the data size.
      *
      * @return The data size in bytes.
      **/
-    size_t dataSize() const;
+    [[nodiscard]] size_t dataSize() const;
 
     // @copydoc Packet::operator std::string() const
-    operator std::string() const final;
+    explicit operator std::string() const final;
 
   private:
     //! @copydoc Packet::encode()
-    RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
@@ -158,8 +158,8 @@ class DataPacket: public Packet
 
     //! Block number of the packet.
     BlockNumber blockNumberValue;
-    //! The data of the packet.
-    DataType dataValue;
+    //! Data of the packet.
+    Data dataValue;
 };
 
 }

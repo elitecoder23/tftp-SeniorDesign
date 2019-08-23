@@ -15,95 +15,95 @@
 namespace Tftp::Packets {
 
 BlockNumber::BlockNumber() noexcept:
-  blockNumber( 0U)
+  blockNumberValue{ 0U}
 {
 }
 
 BlockNumber::BlockNumber( uint16_t blockNumber) noexcept:
-  blockNumber( blockNumber)
+  blockNumberValue{ blockNumber}
 {
 }
 
 uint16_t BlockNumber::next() const
 {
-  if ( blockNumber == 0xFFFF)
+  if ( blockNumberValue == 0xFFFFU)
   {
-    return 1;
+    return 1U;
   }
 
-  return blockNumber + 1;
+  return blockNumberValue + 1U;
 }
 
 uint16_t BlockNumber::previous() const
 {
-  if ( blockNumber == 1)
+  if ( blockNumberValue == 1U)
   {
-    return 0xFFFF;
+    return 0xFFFFU;
   }
 
-  return blockNumber - 1;
+  return blockNumberValue - 1U;
 }
 
 BlockNumber::operator uint16_t() const
 {
-  return blockNumber;
+  return blockNumberValue;
 }
 
 BlockNumber::operator uint16_t&()
 {
-  return blockNumber;
+  return blockNumberValue;
 }
 
-BlockNumber& BlockNumber::operator=( uint16_t blockNumber)
+BlockNumber& BlockNumber::operator=( const uint16_t blockNumber)
 {
-  this->blockNumber = blockNumber;
+  blockNumberValue = blockNumber;
   return *this;
 }
 
 BlockNumber& BlockNumber::operator++()
 {
-  blockNumber = next();
+  blockNumberValue = next();
   return *this;
 }
 
-BlockNumber BlockNumber::operator++( int)
+const BlockNumber BlockNumber::operator++( int)
 {
-  BlockNumber old{ blockNumber};
-  blockNumber = next();
+  const BlockNumber old{ blockNumberValue};
+  blockNumberValue = next();
   return old;
 }
 
 BlockNumber& BlockNumber::operator--()
 {
-  blockNumber = previous();
+  blockNumberValue = previous();
   return *this;
 }
 
-BlockNumber BlockNumber::operator--( int)
+const BlockNumber BlockNumber::operator--( int)
 {
-  BlockNumber old{ blockNumber};
-  blockNumber = previous();
+  const BlockNumber old{ blockNumberValue};
+  blockNumberValue = previous();
   return old;
 }
 
 bool BlockNumber::operator ==( const BlockNumber &rhs) const
 {
-  return blockNumber == rhs.blockNumber;
+  return blockNumberValue == rhs.blockNumberValue;
 }
 
 bool BlockNumber::operator ==( uint16_t rhs) const
 {
-  return blockNumber == rhs;
+  return blockNumberValue == rhs;
 }
 
 bool BlockNumber::operator !=( const BlockNumber &rhs) const
 {
-  return blockNumber != rhs.blockNumber;
+  return blockNumberValue != rhs.blockNumberValue;
 }
 
 bool BlockNumber::operator !=( uint16_t rhs) const
 {
-  return blockNumber != rhs;
+  return blockNumberValue != rhs;
 }
 
 }

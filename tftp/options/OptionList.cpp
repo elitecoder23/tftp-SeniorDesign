@@ -12,7 +12,8 @@
 
 #include "OptionList.hpp"
 
-#include <tftp/TftpException.hpp>
+#include <tftp/packets/PacketException.hpp>
+
 #include <tftp/TftpLogger.hpp>
 #include <tftp/options/IntegerOption.hpp>
 #include <tftp/options/StringOption.hpp>
@@ -35,7 +36,7 @@ OptionList::OptionList(
 
     if (nameEnd==end)
     {
-      BOOST_THROW_EXCEPTION( InvalidPacketException()
+      BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
         << AdditionalInfo( "Unexpected end of input data"));
     }
 
@@ -43,7 +44,7 @@ OptionList::OptionList(
 
     if (valueBegin == end)
     {
-      BOOST_THROW_EXCEPTION( InvalidPacketException()
+      BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
         << AdditionalInfo( "Unexpected end of input data"));
     }
 
@@ -51,7 +52,7 @@ OptionList::OptionList(
 
     if (valueEnd == end)
     {
-      BOOST_THROW_EXCEPTION( InvalidPacketException()
+      BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
         << AdditionalInfo( "Unexpected end of input data"));
     }
 
@@ -111,7 +112,7 @@ OptionList::RawOptions OptionList::rawOptions() const
   return rawOptions;
 }
 
-bool OptionList::has( const std::string &name) const
+bool OptionList::has( std::string_view name) const
 {
   return optionsValue.count( name) >= 1;
 }
@@ -128,7 +129,7 @@ bool OptionList::has( const KnownOptions option) const
   return has( optionName);
 }
 
-const OptionPtr OptionList::get( const std::string &name) const
+OptionPtr OptionList::get(  std::string_view name) const
 {
   auto it{ optionsValue.find( name)};
 
@@ -136,7 +137,7 @@ const OptionPtr OptionList::get( const std::string &name) const
     it->second : OptionPtr();
 }
 
-void OptionList::set( const std::string &name, const std::string &value)
+void OptionList::set( std::string_view name, std::string_view value)
 {
   // If option already exists remove it first
   if (has( name))
@@ -176,9 +177,9 @@ void OptionList::set( const OptionPtr option)
   optionsValue.insert( std::make_pair( option->name(), option));
 }
 
-void OptionList::remove( const std::string &name)
+void OptionList::remove( std::string_view name)
 {
-  optionsValue.erase( name);
+  optionsValue.erase( std::string{ name}); //! @todo check implementation
 }
 
 void OptionList::remove( const KnownOptions option)
@@ -187,7 +188,7 @@ void OptionList::remove( const KnownOptions option)
 
   if (!optionName.empty())
   {
-    optionsValue.erase( optionName);
+    optionsValue.erase( std::string{ optionName}); //! @todo check implementation
   }
 }
 
@@ -205,10 +206,10 @@ void OptionList::blocksizeClient(
 
   assert( minBlocksize <= requestedBlocksize);
 
-  OptionPtr entry( std::make_shared< BlockSizeOptionClient>(
+  auto entry{ std::make_shared< BlockSizeOptionClient>(
       Option::optionName( KnownOptions::BlockSize),
       requestedBlocksize,
-      NegotiateMinMaxRange< uint16_t>( minBlocksize, requestedBlocksize)));
+      NegotiateMinMaxRange< uint16_t>( minBlocksize, requestedBlocksize))};
 
   set( entry);
 }

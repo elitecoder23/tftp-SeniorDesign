@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of unit tests of TFTP packet classes
+ * @brief Definition of Unit Tests of TFTP Packet Classes.
  **/
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
@@ -25,9 +25,9 @@ BOOST_AUTO_TEST_SUITE( AcknowledgementPacketTest)
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor1)
 {
-  AcknowledgementPacket ack( BlockNumber{ 10U});
+  AcknowledgementPacket ack{ BlockNumber{ 10U}};
 
-  RawTftpPacket raw( ack);
+  RawTftpPacket raw{ ack};
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 

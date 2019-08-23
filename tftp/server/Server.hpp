@@ -66,7 +66,7 @@ using ReceivedTftpRequestHandler =
   std::function< void(
     const boost::asio::ip::udp::endpoint&,
     RequestType,
-    const std::string&,
+    std::string_view,
     TransferMode,
     const Options::OptionList&)>;
 

@@ -55,43 +55,45 @@ class AcknowledgementPacket: public Packet
      **/
     explicit AcknowledgementPacket( const RawTftpPacket &rawPacket);
 
-    // @copydoc Packet::operator=(const RawTftpPacket&)
+    //! @copydoc Packet::operator=(const RawTftpPacket&)
     AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket) final;
 
     /**
-     * @brief Returns the block number.
+     * @brief Returns the Block Number.
      *
      * @return The block number.
      **/
-    BlockNumber blockNumber() const;
+    [[nodiscard]] BlockNumber blockNumber() const;
 
     /**
      * @brief Sets the block number of the packet.
      *
-     * @param[in] blockBumber
+     * @param[in] blockNumber
      *   Block number of packet.
      **/
-    void blockNumber( BlockNumber blockBumber);
+    void blockNumber( BlockNumber blockNumber);
 
-    // @copydoc Packet::operator std::string() const
-    operator std::string() const final;
+    //! @copydoc Packet::operator std::string() const
+    explicit operator std::string() const final;
 
   private:
     //! @copydoc Packet::encode() const
-    RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const final;
 
     /**
-     * @brief Decodes the TFTP body.
+     * @brief Decodes the TFTP Body.
      *
      * @param[in] rawPacket
      *   Raw TFP packet
      *
      * @throw InvalidPacketException
      *   If data or packet is invalid.
+     * @throw InvalidPacketException
+     *   When packet size is invalid
      **/
     void decodeBody( const RawTftpPacket &rawPacket);
 
-    //! Block number of the packet
+    //! Block Number of Packet
     BlockNumber blockNumberValue;
 };
 

@@ -12,7 +12,7 @@
 
 #include "ErrorPacket.hpp"
 
-#include <tftp/TftpException.hpp>
+#include <tftp/packets/PacketException.hpp>
 #include <tftp/ErrorCodeDescription.hpp>
 
 #include <helper/Endianess.hpp>
@@ -21,24 +21,25 @@ namespace Tftp::Packets {
 
 ErrorPacket::ErrorPacket(
   const ErrorCode errorCode,
-  const std::string &errorMessage):
-  Packet( PacketType::Error),
-  errorCodeValue( errorCode),
-  errorMessageValue( errorMessage)
+  std::string_view errorMessage):
+  Packet{ PacketType::Error},
+  errorCodeValue{ errorCode},
+  errorMessageValue{ errorMessage}
 {
 }
 
 ErrorPacket::ErrorPacket(
   ErrorCode errorCode,
   std::string &&errorMessage):
-  Packet( PacketType::Error),
-  errorCodeValue( errorCode),
-  errorMessageValue( std::move( errorMessage))
+  Packet{ PacketType::Error},
+  errorCodeValue{ errorCode},
+  errorMessageValue{ std::move( errorMessage)}
 {
 }
 
 ErrorPacket::ErrorPacket( const RawTftpPacket &rawPacket):
-  Packet( PacketType::Error, rawPacket)
+  Packet{ PacketType::Error, rawPacket},
+  errorCodeValue{ ErrorCode::Invalid}
 {
   decodeBody( rawPacket);
 }
@@ -46,6 +47,7 @@ ErrorPacket::ErrorPacket( const RawTftpPacket &rawPacket):
 ErrorPacket& ErrorPacket::operator=(
   const RawTftpPacket &rawPacket)
 {
+  // call inherited operator
   Packet::operator =( rawPacket);
   decodeBody( rawPacket);
   return *this;
@@ -69,12 +71,12 @@ void ErrorPacket::errorCode( const ErrorCode errorCode) noexcept
   errorCodeValue = errorCode;
 }
 
-const std::string& ErrorPacket::errorMessage() const
+std::string_view ErrorPacket::errorMessage() const
 {
   return errorMessageValue;
 }
 
-void ErrorPacket::errorMessage( const std::string &errorMessage)
+void ErrorPacket::errorMessage( std::string_view errorMessage)
 {
   errorMessageValue = errorMessage;
 }
@@ -86,11 +88,11 @@ void ErrorPacket::errorMessage( std::string &&errorMessage)
 
 Tftp::RawTftpPacket ErrorPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4 + errorMessageValue.length() + 1);
+  RawTftpPacket rawPacket( 4U + errorMessageValue.length() + 1U);
 
   insertHeader( rawPacket);
 
-  RawTftpPacket::iterator packetIt( rawPacket.begin() + HeaderSize);
+  auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // error code
   packetIt = setInt( packetIt, static_cast< uint16_t>( errorCodeValue));
@@ -108,29 +110,27 @@ Tftp::RawTftpPacket ErrorPacket::encode() const
 void ErrorPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   // check size
-  if (rawPacket.size() < 5)
+  if (rawPacket.size() < 5U)
   {
-    //! @throw InvalidPacketException When rawPacket is not an valid packet.
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size of ERROR packet"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "Invalid packet size of ERROR packet"));
   }
 
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // decode error code
-  uint16_t errorCodeInt;
+  uint16_t errorCodeInt{};
   packetIt = getInt< uint16_t>( packetIt, errorCodeInt);
   errorCodeValue = static_cast< ErrorCode>( errorCodeInt);
 
   // check terminating 0 character
-  if (rawPacket.back()!=0)
+  if (rawPacket.back()!=0U)
   {
-    //! @throw InvalidPacketException When the error message is not 0-terminated.
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "error message not 0-terminated"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "error message not 0-terminated"));
   }
 
-  errorMessageValue = std::string{ packetIt, rawPacket.end()-1};
+  errorMessageValue = std::string{ packetIt, rawPacket.end()-1U};
 }
 
 }

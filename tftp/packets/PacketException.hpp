@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration/ definition of class Tftp::Packets::PacketException.
+ * @brief Declaration/ Definition of Class Tftp::Packets::PacketException.
  **/
 
 #ifndef TFTP_PACKETS_PACKETEXCEPTION_HPP
@@ -17,6 +17,17 @@
 #include <tftp/TftpException.hpp>
 
 namespace Tftp::Packets {
+
+//! Exception Cccurred during TFTP Packet Processing.
+class InvalidPacketException: public virtual TftpException
+{
+  public:
+    //! @copydoc TftpException::what() const
+    char const * what() const noexcept override
+    {
+      return "TFTP Invalid Packet exception";
+    }
+};
 
 }
 

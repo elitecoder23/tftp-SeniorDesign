@@ -41,14 +41,14 @@ class Packet
     static PacketType packetType( const RawTftpPacket &rawPacket) noexcept;
 
     /**
-     * @brief Return the packet type of the TFTP packet.
+     * @brief Return the packet type of the TFTP Packet.
      *
-     * @return The packet type.
+     * @return Packet type.
      **/
-    PacketType packetType() const noexcept;
+    [[nodiscard]] PacketType packetType() const noexcept;
 
     /**
-     * @brief default copy constructor
+     * @brief Copy Constructor
      *
      * @param[in] other
      *   Other
@@ -58,7 +58,7 @@ class Packet
     Packet( const Packet &other) = default;
 
     /**
-     * @brief default move constructor
+     * @brief Move Constructor
      *
      * @param[in] other
      *   Other
@@ -67,11 +67,11 @@ class Packet
      **/
     Packet( Packet &&other) = default;
 
-    //! Default destructor
+    //! Destructor
     virtual ~Packet() noexcept = default;
 
     /**
-     * @brief default copy assignment operator
+     * @brief Copy assignment operator
      *
      * @param[in] other
      *   Other
@@ -81,7 +81,7 @@ class Packet
     Packet& operator=( const Packet &other);
 
     /**
-     * @brief default move assignment operator
+     * @brief Move assignment operator
      *
      * @param[in] other
      *   Other
@@ -146,7 +146,7 @@ class Packet
      *
      * @return Binary packet data
      **/
-    virtual RawTftpPacket encode() const = 0;
+    [[nodiscard]] virtual RawTftpPacket encode() const = 0;
 
     /**
      * @brief Insert the header data to the raw packet.
@@ -170,7 +170,7 @@ class Packet
      **/
     void decodeHeader( const RawTftpPacket &rawPacket);
 
-    //! The TFTP Packet type
+    //! TFTP Packet Type
     const PacketType packetTypeValue;
 };
 

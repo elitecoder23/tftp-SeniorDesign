@@ -46,7 +46,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 
 void WriteRequestOperationImpl::start()
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   try
   {
@@ -86,9 +86,10 @@ void WriteRequestOperationImpl::start()
        {
         if ( !dataHandler->receivedTransferSize( *transferSizeOption))
         {
+          using namespace std::literals::string_view_literals;
           Packets::ErrorPacket errorPacket{
             ErrorCode::DiskFullOrAllocationExceeds,
-            "FILE TO BIG"};
+            "FILE TO BIG"sv};
 
           send( errorPacket);
 
@@ -115,7 +116,7 @@ void WriteRequestOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo) noexcept
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   OperationImpl::finished( status, std::move( errorInfo));
   dataHandler->finished();
@@ -125,10 +126,10 @@ void WriteRequestOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "RX: " << static_cast< std::string>( dataPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "RX: " << static_cast< std::string>( dataPacket);
 
   // Check retransmission
   if (dataPacket.blockNumber() == lastReceivedBlockNumber)
@@ -147,12 +148,13 @@ void WriteRequestOperationImpl::dataPacket(
   // check not expected block
   if (dataPacket.blockNumber() != lastReceivedBlockNumber.next())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Unexpected packet";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Unexpected packet";
 
+    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Wrong block number");
+      "Wrong block number"sv);
 
     send( errorPacket);
 
@@ -165,12 +167,14 @@ void WriteRequestOperationImpl::dataPacket(
   // check for too much data
   if (dataPacket.dataSize() > receiveDataSize)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Too much data received";
+    using namespace std::literals::string_view_literals;
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Too much data received";
 
+    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Too much data");
+      "Too much data"sv);
 
     send( errorPacket);
 
@@ -205,14 +209,15 @@ void WriteRequestOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << "RX ERROR: " <<
-    static_cast< std::string>( acknowledgementPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket);
 
+  using namespace std::literals::string_view_literals;
   Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "ACK not expected");
+    "ACK not expected"sv);
 
   send( errorPacket);
 

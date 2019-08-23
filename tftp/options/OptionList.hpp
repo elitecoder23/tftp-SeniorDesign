@@ -118,7 +118,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    [[nodiscard]] bool has( const std::string &name) const;
+    [[nodiscard]] bool has( std::string_view name) const;
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -143,7 +143,7 @@ class OptionList
      * @return The value of the option.
      *   If the option is not set, an empty OptionPointer is returned.
      **/
-    [[nodiscard]] const OptionPtr get( const std::string &name) const;
+    [[nodiscard]] OptionPtr get( std::string_view name) const;
 
     /**
      * @brief Sets the given option to the given value.
@@ -156,9 +156,9 @@ class OptionList
      * @param[in] value
      *   The option value.
      */
-    void set( const std::string &name, const std::string &value);
+    void set( std::string_view name, std::string_view value);
 
-    //! @copydoc set(const std::string&,const std::string&)
+    //! @copydoc set(std::string_view,std::string_view)
     void set( const std::string &&name, const std::string &&value);
 
     /**
@@ -178,7 +178,7 @@ class OptionList
      * @param[in] name
      *   Name of the option.
      **/
-    void remove( const std::string &name);
+    void remove( std::string_view name);
 
     /**
      * @brief Remove the given option from the option list.
@@ -265,7 +265,7 @@ class OptionList
      * @retval {}
      *   If timeout option has not been added to this option list.
      **/
-    std::optional< uint8_t> timeoutOption() const;
+    [[nodiscard]] std::optional< uint8_t> timeoutOption() const;
 
     /**
      * @brief Add the transfer size option with the given transfer size.

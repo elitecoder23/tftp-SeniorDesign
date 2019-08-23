@@ -52,22 +52,66 @@ class TftpServerApplication
     bool stop();
 
   private:
+    //! Shutdowns the TFTP Server.
     void shutdown();
 
-    bool checkFilename( const std::filesystem::path &filename) const;
+    /**
+     * @brief Performs Validity Check of supplied Filename.
+     *
+     * @param[in] filename
+     *   Filename to check.
+     *
+     * @return If filename is valid.
+     **/
+    [[nodiscard]] bool checkFilename(
+      const std::filesystem::path &filename) const;
 
+    /**
+     * @brief Handler for Recevifed TFTP Requests.
+     *
+     * @param[in] remote
+     *   Remote address.
+     * @param[in] requestType
+     *   TFTP Request Type (RRQ/ WRQ)
+     * @param[in] filename
+     *   Requested filename.
+     * @param[in] mode
+     *   Transfer Mode
+     * @param[in] options
+     *   Received Options.
+     **/
     void receivedRequest(
       const boost::asio::ip::udp::endpoint &remote,
       Tftp::RequestType requestType,
-      const std::string &filename,
+      std::string_view filename,
       Tftp::TransferMode mode,
       const Tftp::Options::OptionList &options);
 
+    /**
+     * @brief Transmits a requested file (RRQ).
+     *
+     * @param[in] remote
+     *   Remote address.
+     * @param[in] filename
+     *   Requested filename.
+     * @param[in] options
+     *   Received Options.
+     **/
     void transmitFile(
       const boost::asio::ip::udp::endpoint &remote,
       const std::filesystem::path &filename,
       const Tftp::Options::OptionList &options);
 
+    /**
+     * @brief Receives a requested file (WRQ).
+     *
+     * @param[in] remote
+     *   Remote address.
+     * @param[in] filename
+     *   Requested filename.
+     * @param[in] options
+     *   Received Options.
+     **/
     void receiveFile(
       const boost::asio::ip::udp::endpoint &remote,
       const std::filesystem::path &filename,

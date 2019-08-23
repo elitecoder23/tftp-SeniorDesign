@@ -12,7 +12,8 @@
 
 #include "OptionsAcknowledgementPacket.hpp"
 
-#include <tftp/TftpException.hpp>
+#include <tftp/packets/PacketException.hpp>
+
 #include <tftp/options/OptionList.hpp>
 
 #include <helper/Endianess.hpp>
@@ -21,14 +22,21 @@ namespace Tftp::Packets {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   const Options::OptionList &options) noexcept:
-  Packet( PacketType::OptionsAcknowledgement),
-  optionsValue( options)
+  Packet{ PacketType::OptionsAcknowledgement},
+  optionsValue{ options}
+{
+}
+
+OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
+  Options::OptionList &&options) noexcept:
+  Packet{ PacketType::OptionsAcknowledgement},
+  optionsValue{ std::move( options)}
 {
 }
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   const RawTftpPacket &rawPacket):
-  Packet( PacketType::OptionsAcknowledgement, rawPacket)
+  Packet{ PacketType::OptionsAcknowledgement, rawPacket}
 {
   decodeBody( rawPacket);
 }
@@ -36,7 +44,9 @@ OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
 OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
   const RawTftpPacket &rawPacket)
 {
+  // call inherited operator
   Packet::operator =( rawPacket);
+  // decode body
   decodeBody( rawPacket);
   return *this;
 }
@@ -57,10 +67,15 @@ void OptionsAcknowledgementPacket::options(
   optionsValue = options;
 }
 
-const std::string OptionsAcknowledgementPacket::option(
+void OptionsAcknowledgementPacket::options( Options::OptionList &&options)
+{
+  optionsValue = std::move( options);
+}
+
+std::string OptionsAcknowledgementPacket::option(
   const std::string &name) const
 {
-  Options::OptionPtr option( optionsValue.get( name));
+  auto option{ optionsValue.get( name)};
 
   return (option) ? static_cast< std::string>( *option) : std::string();
 }
@@ -70,6 +85,13 @@ void OptionsAcknowledgementPacket::option(
   const std::string &value)
 {
   optionsValue.set( name, value);
+}
+
+void OptionsAcknowledgementPacket::option(
+  std::string &&name,
+  std::string &&value)
+{
+  optionsValue.set( std::move( name), std::move( value));
 }
 
 OptionsAcknowledgementPacket::operator std::string() const
@@ -85,7 +107,7 @@ Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
 
   insertHeader( rawPacket);
 
-  RawTftpPacket::iterator packetIt = rawPacket.begin() + 2;
+  auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // options
   std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
@@ -96,13 +118,13 @@ Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
 void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   // check size
-  if (rawPacket.size() <= 2)
+  if (rawPacket.size() <= HeaderSize)
   {
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size of OACK packet"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "Invalid packet size of OACK packet"));
   }
 
-  RawTftpPacket::const_iterator packetIt = rawPacket.begin() + 2;
+  auto packetIt = rawPacket.begin() + HeaderSize;
 
   // assign options
   optionsValue = Options::OptionList( packetIt, rawPacket.end());

@@ -82,14 +82,15 @@ class BaseIntegerOption: public Option
      *
      * @return *this
      **/
-    BaseIntegerOption& operator=( const std::string &value);
+    BaseIntegerOption& operator=( std::string_view value);
 
     /**
      * @copydoc Option::negotiate()
      *
      * Calls #negotiate(IntegerType) const for concrete option negotiation.
      **/
-    OptionPtr negotiate( std::string_view optionValue) const noexcept final;
+    [[nodiscard]] OptionPtr negotiate(
+      std::string_view optionValue) const noexcept final;
 
   protected:
     /**
@@ -101,9 +102,9 @@ class BaseIntegerOption: public Option
      *   Current value.
      *   Should be compliant to option negotiation ranges.
      **/
-    BaseIntegerOption( const std::string &name, IntegerType value);
+    BaseIntegerOption( std::string_view name, IntegerType value);
 
-    //! @copydoc BaseIntegerOption(const std::string&,IntegerType)
+    //! @copydoc BaseIntegerOption(std::string_view,IntegerType)
     BaseIntegerOption( std::string &&name, IntegerType value);
 
     /**
@@ -140,33 +141,33 @@ class BaseIntegerOption: public Option
      **/
     static IntegerType toInt( std::string_view value);
 
-    //! The value
-    IntegerType value;
+    //! Value
+    IntegerType intValue;
 };
 
 template< typename IntT>
 BaseIntegerOption< IntT>::operator std::string() const
 {
-  return toString( value);
+  return toString( intValue);
 }
 
 template< typename IntT>
 BaseIntegerOption< IntT>::operator IntegerType() const
 {
-  return value;
+  return intValue;
 }
 
 template< typename IntT>
 BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
   const IntegerType value)
 {
-  this->value = value;
+  intValue = value;
   return *this;
 }
 
 template< typename IntT>
 BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
-  const std::string &value)
+  std::string_view value)
 {
   setValue( toInt( value));
   return *this;
@@ -174,10 +175,10 @@ BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
 
 template< typename IntT>
 BaseIntegerOption< IntT>::BaseIntegerOption(
-  const std::string &name,
+  std::string_view name,
   const IntegerType value):
   Option( name),
-  value( value)
+  intValue( value)
 {
 }
 
@@ -186,7 +187,7 @@ BaseIntegerOption< IntT>::BaseIntegerOption(
   std::string &&name,
   const IntegerType value):
   Option( std::move( name)),
-  value( value)
+  intValue( value)
 {
 }
 
@@ -274,17 +275,17 @@ class IntegerOption: public BaseIntegerOption< IntT>
      *   The negotiation operation to use.
      **/
     IntegerOption(
-      const std::string &name,
+      std::string_view name,
       typename BaseIntegerOption< IntT>::IntegerType value,
       NegotiateType negotiateOperation = NegotiateType());
 
-    //! @copydoc IntegerOption(const std::string&,BaseIntegerOption< IntT>::IntegerType,NegotiateType)
+    //! @copydoc IntegerOption(std::string_view,BaseIntegerOption< IntT>::IntegerType,NegotiateType)
     IntegerOption(
       std::string &&name,
       typename BaseIntegerOption< IntT>::IntegerType value,
       NegotiateType negotiateOperation = NegotiateType());
 
-    //! Default destructor
+    //! Destructor
     virtual ~IntegerOption() noexcept = default;
 
     /**
@@ -305,7 +306,7 @@ class IntegerOption: public BaseIntegerOption< IntT>
      *
      * @return *this
      **/
-    IntegerOption& operator=( const std::string &value);
+    IntegerOption& operator=( std::string_view value);
 
     // using operation
     using BaseIntegerOption< IntT>::negotiate;
@@ -323,13 +324,13 @@ class IntegerOption: public BaseIntegerOption< IntT>
     OptionPtr negotiate( IntegerType optionValue) const noexcept final;
 
   private:
-    //! The negotiation operation
+    //! Negotiation operation
     NegotiateType negotiateOperation;
 };
 
 template< typename IntT, typename NegotiateT>
 IntegerOption< IntT, NegotiateT>::IntegerOption(
-  const std::string &name,
+  std::string_view name,
   const typename BaseIntegerOption< IntT>::IntegerType value,
   NegotiateType negotiateOperation):
   BaseIntegerOption< IntT>( name, value),
@@ -357,7 +358,7 @@ IntegerOption< IntT, NegotiateT>& IntegerOption< IntT, NegotiateT>::operator=(
 
 template< typename IntT, typename NegotiateT>
 IntegerOption< IntT, NegotiateT>& IntegerOption< IntT, NegotiateT>::operator=(
-  const std::string &value)
+  std::string_view value)
 {
   BaseIntegerOption< IntT>::operator=( value);
   return *this;

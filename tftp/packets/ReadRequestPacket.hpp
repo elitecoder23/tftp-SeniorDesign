@@ -16,6 +16,9 @@
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/ReadWriteRequestPacket.hpp>
 
+#include <string_view>
+#include <string>
+
 namespace Tftp::Packets {
 
 /**
@@ -25,21 +28,21 @@ class ReadRequestPacket: public ReadWriteRequestPacket
 {
   public:
     /**
-     * @brief Creates a TFTP Read Request packet.
+     * @brief Creates a TFTP Read Request Packet.
      *
      * @param[in] filename
-     *   The filename, which will be requested
+     *   filename, which will be requested
      * @param[in] mode
      *   The transfer mode
      * @param[in] options
      *   The options, which are set
      **/
     ReadRequestPacket(
-      const std::string &filename,
+      std::string_view filename,
       TransferMode mode,
       const Options::OptionList &options) noexcept;
 
-    //! @copydoc ReadRequestPacket(const std::string&,TransferMode,const Options::OptionList&)
+    //! @copydoc ReadRequestPacket(std::string_view,TransferMode,const Options::OptionList&)
     ReadRequestPacket(
       std::string &&filename,
       TransferMode mode,

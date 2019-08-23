@@ -42,17 +42,6 @@ class TftpException: public virtual Exception
     }
 };
 
-//! Exception occurred during TFTP packet processing.
-class InvalidPacketException: public virtual TftpException
-{
-  public:
-    //! @copydoc TftpException::what() const
-    char const * what() const noexcept override
-    {
-      return "TFTP Invalid Packet exception";
-    }
-};
-
 //! Exception occurred during TFTP communication.
 class CommunicationException: public virtual TftpException
 {

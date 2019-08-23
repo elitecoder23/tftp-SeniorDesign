@@ -17,6 +17,7 @@
 #include <tftp/packets/Packet.hpp>
 
 #include <string>
+#include <string_view>
 
 namespace Tftp::Packets {
 
@@ -45,9 +46,9 @@ class ErrorPacket: public Packet
      **/
     ErrorPacket(
       ErrorCode errorCode,
-      const std::string &errorMessage);
+      std::string_view errorMessage);
 
-    //! @copydoc ErrorPacket(ErrorCode,const std::string&)
+    //! @copydoc ErrorPacket(ErrorCode,std::string_view)
     explicit ErrorPacket(
       ErrorCode errorCode,
       std::string &&errorMessage = {});
@@ -66,7 +67,7 @@ class ErrorPacket: public Packet
     //! @copydoc Packet::operator=(const RawTftpPacket&)
     ErrorPacket& operator=( const RawTftpPacket &rawPacket) final;
 
-    // @copydoc Packet::operator std::string() const
+    //! @copydoc Packet::operator std::string() const
     operator std::string() const final;
 
     /**
@@ -74,7 +75,7 @@ class ErrorPacket: public Packet
      *
      * @return The error code.
      **/
-    ErrorCode errorCode() const noexcept;
+    [[nodiscard]] ErrorCode errorCode() const noexcept;
 
     /**
      * @brief Sets the error code.
@@ -89,7 +90,7 @@ class ErrorPacket: public Packet
      *
      * @return The error message
      **/
-    const std::string& errorMessage() const;
+    [[nodiscard]] std::string_view errorMessage() const;
 
     /**
      * @brief Sets the error message of this packet.
@@ -97,14 +98,14 @@ class ErrorPacket: public Packet
      * @param[in] errorMessage
      *   The error message to set.
      **/
-    void errorMessage( const std::string &errorMessage);
+    void errorMessage( std::string_view errorMessage);
 
-    //! @copydoc errorMessage(const std::string&)
+    //! @copydoc errorMessage(std::string_view)
     void errorMessage( std::string &&errorMessage);
 
   private:
     //! @copydoc Packet::encode()
-    RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const final;
 
     /**
      * @brief Decodes the TFTP body.
@@ -114,12 +115,16 @@ class ErrorPacket: public Packet
      *
      * @throw InvalidPacketException
      *   If data or packet is invalid.
+     * @throw InvalidPacketException
+     *   When rawPacket is not an valid packet.
+     * @throw InvalidPacketException
+     *   When the error message is not 0-terminated.
      **/
     void decodeBody( const RawTftpPacket &rawPacket);
 
-    //! The error code
+    //! Error Code
     ErrorCode errorCodeValue;
-    //! The error message.
+    //! Error Message.
     std::string errorMessageValue;
 };
 

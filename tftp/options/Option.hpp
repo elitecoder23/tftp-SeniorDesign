@@ -36,7 +36,7 @@ class Option
      *
      * @return Returns the option name.
      **/
-    static std::string optionName( KnownOptions option) noexcept;
+    static std::string_view optionName( KnownOptions option) noexcept;
 
     /**
      * @brief Generate TFTP option with the given name.
@@ -44,9 +44,9 @@ class Option
      * @param[in] name
      *   The option name. Must be not empty.
      **/
-    explicit Option( const std::string &name);
+    explicit Option( std::string_view name);
 
-    //! @copydoc Option(const std::string&)
+    //! @copydoc Option(std::string_view)
     explicit Option( std::string &&name);
 
     /**
@@ -87,7 +87,7 @@ class Option
      *
      * @return The option name.
      **/
-    [[nodiscard]] const std::string& name() const;
+    [[nodiscard]] std::string_view name() const;
 
     /**
      * @brief Set the option name.
@@ -96,14 +96,17 @@ class Option
      *   The new option name.
      *   Must be not empty.
      **/
-    void name( const std::string &name);
+    void name( std::string_view name);
+
+    //! @copydoc name(std::string_view)
+    void name( std::string &&name);
 
     /**
      * @brief Returns the option value as string.
      *
      * @return The option value as string.
      **/
-    virtual operator std::string() const = 0;
+    virtual explicit operator std::string() const = 0;
 
     /**
      * @brief %Option negotiation.
@@ -124,7 +127,8 @@ class Option
      * @retval OptionPtr()
      *   If the option value is not acceptable.
      **/
-    virtual OptionPtr negotiate( std::string_view optionValue) const noexcept = 0;
+    [[nodiscard]] virtual OptionPtr negotiate(
+      std::string_view optionValue) const noexcept = 0;
 
     /**
      * @brief Returns a string, which describes the option.
@@ -133,10 +137,10 @@ class Option
      *
      * @return Option list description.
      **/
-    virtual std::string toString() const;
+    [[nodiscard]] virtual std::string toString() const;
 
   private:
-    //! Option name
+    //! Option Name
     std::string nameV;
 };
 

@@ -51,7 +51,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 
 void WriteRequestOperationImpl::start()
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   try
   {
@@ -97,13 +97,13 @@ void WriteRequestOperationImpl::finished(
 
 void WriteRequestOperationImpl::sendData()
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   lastTransmittedBlockNumber++;
 
-  Packets::DataPacket data(
+  Packets::DataPacket data{
     lastTransmittedBlockNumber,
-    dataHandler->sendData( transmitDataSize));
+    dataHandler->sendData( transmitDataSize)};
 
   if (data.dataSize() < transmitDataSize)
   {
@@ -118,14 +118,15 @@ void WriteRequestOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX ERROR: " <<
-    static_cast< std::string>( dataPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
+  using namespace std::literals::string_view_literals;
   send( Packets::ErrorPacket(
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected"));
+    "DATA not expected"sv));
 
   // Operation completed
   finished( TransferStatus::TransferError);
@@ -135,17 +136,17 @@ void WriteRequestOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
-    static_cast< std::string>( acknowledgementPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "RX: " << static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
   if (acknowledgementPacket.blockNumber() == lastTransmittedBlockNumber.previous())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-      "Received previous ACK packet: retry of last data package - "
-      "IGNORE it due to Sorcerer's Apprentice Syndrome";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+      << "Received previous ACK packet: retry of last data package - "
+         "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
     return;
   }
@@ -153,12 +154,13 @@ void WriteRequestOperationImpl::acknowledgementPacket(
   // check invalid block number
   if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Invalid block number received";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Invalid block number received";
 
+    using namespace std::literals::string_view_literals;
     send( Packets::ErrorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Wrong block number"));
+      "Wrong block number"sv));
 
     finished( TransferStatus::TransferError);
     return;
@@ -183,22 +185,23 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
-    static_cast< std::string>( optionsAcknowledgementPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket);
 
-  const auto &remoteOptions( optionsAcknowledgementPacket.options());
+  const auto &remoteOptions{ optionsAcknowledgementPacket.options()};
 
   // check empty options
   if (remoteOptions.empty())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Received option list is empty";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Received option list is empty";
 
+    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Empty OACK not allowed");
+      "Empty OACK not allowed"sv);
 
     send( errorPacket);
 
@@ -211,12 +214,13 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
 
   if (negotiatedOptions.empty())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Option negotiation failed";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Option negotiation failed";
 
+    using namespace std::literals::string_view_literals;
     send( Packets::ErrorPacket(
       ErrorCode::TftpOptionRefused,
-      "Option negotiation failed"));
+      "Option negotiation failed"sv));
 
     finished( TransferStatus::OptionNegotiationError);
     return;

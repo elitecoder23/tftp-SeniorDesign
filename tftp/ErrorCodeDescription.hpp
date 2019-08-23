@@ -28,7 +28,7 @@ class ErrorCodeDescription : public Description<
   ErrorCode::Invalid>
 {
   public:
-    //! Initialises the instance
+    //! Initialises the Instance
     ErrorCodeDescription();
 };
 

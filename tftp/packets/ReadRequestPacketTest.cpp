@@ -24,17 +24,18 @@ BOOST_AUTO_TEST_SUITE( TftpReadRequestPacket)
 
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Tftp::Options::OptionList options;
+  Tftp::Options::OptionList options{};
 
-  options.set( "blocksize", "4096");
+  using namespace std::literals::string_view_literals;
+  options.set( "blocksize"sv, "4096"sv);
 
-  ReadRequestPacket rrq( "testfile.bin", TransferMode::OCTET, options);
+  ReadRequestPacket rrq{ "testfile.bin", TransferMode::OCTET, options};
 
-  RawTftpPacket raw( rrq);
+  RawTftpPacket raw{ rrq};
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
-  ReadRequestPacket rrq2( raw);
+  ReadRequestPacket rrq2{ raw};
 
   BOOST_CHECK( rrq.packetType() == rrq2.packetType());
   BOOST_CHECK( rrq.filename() == rrq2.filename());

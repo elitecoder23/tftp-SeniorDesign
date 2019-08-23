@@ -15,19 +15,31 @@
 namespace Tftp::Packets {
 
 WriteRequestPacket::WriteRequestPacket(
-  const std::string &filename,
+  std::string_view filename,
   const TransferMode mode,
   const Options::OptionList &options) noexcept:
-  ReadWriteRequestPacket(
+  ReadWriteRequestPacket{
     PacketType::WriteRequest,
     filename,
     mode,
-    options)
+    options}
+{
+}
+
+WriteRequestPacket::WriteRequestPacket(
+  std::string &&filename,
+  TransferMode mode,
+  Options::OptionList &&options) noexcept:
+  ReadWriteRequestPacket{
+    PacketType::WriteRequest,
+    std::move( filename),
+    mode,
+    std::move( options)}
 {
 }
 
 WriteRequestPacket::WriteRequestPacket( const RawTftpPacket &rawPacket):
-  ReadWriteRequestPacket( PacketType::WriteRequest, rawPacket)
+  ReadWriteRequestPacket{ PacketType::WriteRequest, rawPacket}
 {
 }
 

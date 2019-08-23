@@ -19,11 +19,12 @@
 namespace Tftp::Packets {
 
 /**
- * @brief Represents a block number in TFTP Data and Acknowledgement packets.
+ * @brief Represents a Block Number in TFTP Data and Acknowledgement Packets.
  *
  * Block numbers are used within the TFTP Data and TFTP Acknowledgement
  * packet. A block number is an 16 Bit integer, which has a special meaning
- * of the 0-value. This 0-value handling is implemented within this class.
+ * of the 0-value.
+ * This 0-value handling is implemented within this class.
  *
  * @sa DataPacket
  * @sa AcknowledgementPacket
@@ -35,7 +36,7 @@ class BlockNumber
     BlockNumber() noexcept;
 
     /**
-     * @brief Generates a new block number.
+     * @brief Generates a new Block Number.
      *
      * The block number is initialised to the given value.
      *
@@ -44,7 +45,7 @@ class BlockNumber
      **/
     explicit BlockNumber( uint16_t blockNumber) noexcept;
 
-    //! Default destructor
+    //! Destructor
     ~BlockNumber() noexcept = default;
 
     /**
@@ -52,14 +53,14 @@ class BlockNumber
      *
      * @return The next block number.
      **/
-    uint16_t next() const;
+    [[nodiscard]] uint16_t next() const;
 
     /**
      * @brief Returns the previous block number.
      *
      * @return The next block number.
      **/
-    uint16_t previous() const;
+    [[nodiscard]] uint16_t previous() const;
 
     /**
      * @brief Cast operator of the block number class to an uint16_t.
@@ -78,7 +79,7 @@ class BlockNumber
     operator uint16_t&();
 
     /**
-     * @brief Assignment operator to the block number.
+     * @brief Assignment Operator to the Block Number.
      *
      * @param[in] blockNumber
      *   New block number value.
@@ -100,7 +101,7 @@ class BlockNumber
      * @return The class itself
      **/
 
-    BlockNumber operator++( int);
+    const BlockNumber operator++( int);
 
     /**
      * @brief Pre-Decrement of the block number.
@@ -114,7 +115,7 @@ class BlockNumber
      *
      * @return The class itself.
      **/
-    BlockNumber operator--( int);
+    const BlockNumber operator--( int);
 
     /**
      * @brief Comparison operator of block number class.
@@ -124,7 +125,7 @@ class BlockNumber
      *
      * @return Equality of the block numbers.
      **/
-    bool operator ==( const BlockNumber &rhs) const;
+    bool operator==( const BlockNumber &rhs) const;
 
     /**
      * @brief Comparison operator of block number class.
@@ -134,7 +135,7 @@ class BlockNumber
      *
      * @return Equality of the block numbers.
      **/
-    bool operator ==( uint16_t rhs) const;
+    bool operator==( uint16_t rhs) const;
 
     /**
      * @brief Comparison operator of block number class.
@@ -144,7 +145,7 @@ class BlockNumber
      *
      * @return In-Equality of the block numbers.
      **/
-    bool operator !=( const BlockNumber &rhs) const;
+    bool operator!=( const BlockNumber &rhs) const;
 
     /**
      * @brief Comparison operator of block number class.
@@ -154,11 +155,11 @@ class BlockNumber
      *
      * @return In-Equality of the block numbers.
      **/
-    bool operator !=( uint16_t rhs) const;
+    bool operator!=( uint16_t rhs) const;
 
   private:
-    //! The block number value
-    uint16_t blockNumber;
+    //! Block Number Value
+    uint16_t blockNumberValue;
 };
 
 }

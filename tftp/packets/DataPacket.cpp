@@ -12,39 +12,42 @@
 
 #include "DataPacket.hpp"
 
-#include <tftp/TftpException.hpp>
+#include <tftp/packets/PacketException.hpp>
 
 #include <helper/Endianess.hpp>
+#include <utility>
 
 namespace Tftp::Packets {
 
 DataPacket::DataPacket(
   BlockNumber blockNumber,
-  const DataType &data) noexcept:
-  Packet( PacketType::Data),
-  blockNumberValue( blockNumber),
-  dataValue( data)
+  const Data &data) noexcept:
+  Packet{ PacketType::Data},
+  blockNumberValue{ blockNumber},
+  dataValue{ data}
 {
 }
 
 DataPacket::DataPacket(
   BlockNumber blockNumber,
-  DataType &&data) noexcept:
-  Packet( PacketType::Data),
-  blockNumberValue( std::move( blockNumber)),
-  dataValue( std::move( data))
+  Data &&data) noexcept:
+  Packet{ PacketType::Data},
+  blockNumberValue{ blockNumber},
+  dataValue{ std::move( data)}
 {
 }
 
 DataPacket::DataPacket( const RawTftpPacket &rawPacket) :
-  Packet( PacketType::Data, rawPacket)
+  Packet{ PacketType::Data, rawPacket}
 {
   decodeBody( rawPacket);
 }
 
 DataPacket& DataPacket::operator=( const RawTftpPacket &rawPacket)
 {
+  // inherited operator
   Packet::operator =( rawPacket);
+  // decode body
   decodeBody( rawPacket);
   return *this;
 }
@@ -59,27 +62,27 @@ BlockNumber& DataPacket::blockNumber()
   return blockNumberValue;
 }
 
-void DataPacket::blockNumber( const BlockNumber blockBumber)
+void DataPacket::blockNumber( const BlockNumber blockNumber)
 {
-  blockNumberValue = blockBumber;
+  blockNumberValue = blockNumber;
 }
 
-const DataPacket::DataType& DataPacket::data() const
-{
-  return dataValue;
-}
-
-DataPacket::DataType& DataPacket::data()
+const DataPacket::Data& DataPacket::data() const
 {
   return dataValue;
 }
 
-void DataPacket::data( const DataType &data)
+DataPacket::Data& DataPacket::data()
+{
+  return dataValue;
+}
+
+void DataPacket::data( const Data &data)
 {
   dataValue = data;
 }
 
-void DataPacket::data( DataType &&data)
+void DataPacket::data( Data &&data)
 {
   dataValue = std::move( data);
 }
@@ -102,7 +105,7 @@ Tftp::RawTftpPacket DataPacket::encode() const
 
   insertHeader( rawPacket);
 
-  RawTftpPacket::iterator packetIt = rawPacket.begin() + 2;
+  auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // block number
   packetIt = setInt( packetIt, static_cast< uint16_t>( blockNumberValue));
@@ -116,13 +119,13 @@ Tftp::RawTftpPacket DataPacket::encode() const
 void DataPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   // check size
-  if (rawPacket.size() < 4)
+  if (rawPacket.size() < 4U)
   {
-    BOOST_THROW_EXCEPTION( InvalidPacketException() <<
-      AdditionalInfo( "Invalid packet size of DATA packet"));
+    BOOST_THROW_EXCEPTION( InvalidPacketException()
+      << AdditionalInfo( "Invalid packet size of DATA packet"));
   }
 
-  auto packetIt{ rawPacket.begin() + 2};
+  auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // decode block number
   packetIt = getInt< uint16_t>( packetIt, blockNumberValue);

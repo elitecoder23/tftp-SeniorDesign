@@ -16,7 +16,7 @@
 
 namespace Tftp::Options {
 
-StringOption::StringOption( const std::string &name, const std::string &value):
+StringOption::StringOption( std::string_view name, std::string_view value):
   Option( name),
   value( value)
 {
@@ -33,9 +33,15 @@ StringOption::operator std::string() const
   return value;
 }
 
-StringOption& StringOption::operator=( const std::string &value)
+StringOption& StringOption::operator=( std::string_view value)
 {
   this->value = value;
+  return *this;
+}
+
+StringOption& StringOption::operator=( std::string &&value)
+{
+  this->value = std::move( value);
   return *this;
 }
 

@@ -25,17 +25,18 @@ BOOST_AUTO_TEST_SUITE( TftpWriteRequestPacket)
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Options::OptionList options;
+  Options::OptionList options{};
 
-  options.set( "blocksize", "4096");
+  using namespace std::literals::string_view_literals;
+  options.set( "blocksize"sv, "4096"sv);
 
-  WriteRequestPacket wrq( "testfile.bin", TransferMode::OCTET, options);
+  WriteRequestPacket wrq{ "testfile.bin", TransferMode::OCTET, options};
 
-  RawTftpPacket raw( wrq);
+  RawTftpPacket raw{ wrq};
 
   std::cout << Dump( &(*raw.begin()), raw.size());
 
-  WriteRequestPacket wrq2( raw);
+  WriteRequestPacket wrq2{ raw};
 
   BOOST_CHECK( wrq.packetType() == wrq2.packetType());
   BOOST_CHECK( wrq.filename() == wrq2.filename());
