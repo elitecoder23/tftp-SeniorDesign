@@ -39,18 +39,13 @@ class Option
     static std::string_view optionName( KnownOptions option) noexcept;
 
     /**
-     * @brief Generate TFTP option with the given name.
-     *
-     * @param[in] name
-     *   The option name. Must be not empty.
+     * @brief Generate TFTP Option.
      **/
-    explicit Option( std::string_view name);
-
-    //! @copydoc Option(std::string_view)
-    explicit Option( std::string &&name);
+    Option() = default;
 
     /**
      * @brief Copy Constructor
+     *
      * @param[in] other
      *   Object to copy.
      **/
@@ -58,6 +53,7 @@ class Option
 
     /**
      * @brief Move Constructor
+     *
      * @param[in] other
      *   Object to move.
      **/
@@ -65,6 +61,7 @@ class Option
 
     /**
      * @brief Copy Assignment Operator
+     *
      * @param[in] other
      *   Object to copy.
      * @return *this.
@@ -73,33 +70,15 @@ class Option
 
     /**
      * @brief Move Assignment Operator
+     *
      * @param[in] other
      *   Object to move.
      * @return *this.
      **/
     Option& operator=( Option &&other) = default;
 
-    //! Default destructor
+    //! Destructor
     virtual ~Option() noexcept = default;
-
-    /**
-     * @brief Returns the Option Name.
-     *
-     * @return The option name.
-     **/
-    [[nodiscard]] std::string_view name() const;
-
-    /**
-     * @brief Set the option name.
-     *
-     * @param[in] name
-     *   The new option name.
-     *   Must be not empty.
-     **/
-    void name( std::string_view name);
-
-    //! @copydoc name(std::string_view)
-    void name( std::string &&name);
 
     /**
      * @brief Returns the option value as string.
@@ -129,19 +108,6 @@ class Option
      **/
     [[nodiscard]] virtual OptionPtr negotiate(
       std::string_view optionValue) const noexcept = 0;
-
-    /**
-     * @brief Returns a string, which describes the option.
-     *
-     * This operation is used for debugging and information purposes.
-     *
-     * @return Option list description.
-     **/
-    [[nodiscard]] virtual std::string toString() const;
-
-  private:
-    //! Option Name
-    std::string nameV;
 };
 
 }

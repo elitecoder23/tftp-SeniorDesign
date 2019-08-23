@@ -24,9 +24,8 @@ BOOST_AUTO_TEST_SUITE( StringOptionTest)
 BOOST_AUTO_TEST_CASE( constructor)
 {
   using namespace std::literals::string_view_literals;
-  StringOption entry{ "test"sv, "value"sv};
+  StringOption entry{ "value"sv};
 
-  BOOST_CHECK( "test" == entry.name());
   BOOST_CHECK( "value" == static_cast< std::string>( entry));
 }
 
@@ -34,7 +33,7 @@ BOOST_AUTO_TEST_CASE( constructor)
 BOOST_AUTO_TEST_CASE( negotiate)
 {
   using namespace std::literals::string_view_literals;
-  StringOption entry{ "test"sv, "value"sv};
+  StringOption entry{ "value"sv};
 
   BOOST_CHECK( !entry.negotiate( "AAAAA"));
 }
@@ -43,9 +42,8 @@ BOOST_AUTO_TEST_CASE( negotiate)
 BOOST_AUTO_TEST_CASE( assign)
 {
   using namespace std::literals::string_view_literals;
-  StringOption entry{ "test"sv, "value1"sv};
+  StringOption entry{ "value1"sv};
 
-  BOOST_CHECK( entry.name() == "test");
   BOOST_CHECK( static_cast< std::string>( entry) == "value1");
   entry="value2"sv;
   BOOST_CHECK( static_cast< std::string>( entry) == "value2");

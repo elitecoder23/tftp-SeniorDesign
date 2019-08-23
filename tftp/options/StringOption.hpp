@@ -29,15 +29,13 @@ class StringOption: public Option
     /**
      * @brief Generates an option with the given name an value.
      *
-     * @param[in] name
-     *   The option name.
      * @param[in] value
      *   The option value.
      **/
-    StringOption( std::string_view name, std::string_view value);
+    explicit StringOption( std::string_view value);
 
-    //! @copydoc StringOption(std::string_view,std::string_view)
-    explicit StringOption( std::string &&name, std::string &&value = {});
+    //! @copydoc StringOption(std::string_view)
+    explicit StringOption( std::string &&value);
 
     /**
      * Returns the value directly.
@@ -69,7 +67,7 @@ class StringOption: public Option
       std::string_view optionValue) const noexcept final;
 
   private:
-    //! Option value.
+    //! Option Value.
     std::string value;
 };
 

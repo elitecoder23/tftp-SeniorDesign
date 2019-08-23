@@ -36,44 +36,4 @@ std::string_view Option::optionName( const KnownOptions option) noexcept
   return {};
 }
 
-Option::Option( std::string_view name):
-  nameV( name)
-{
-  // Validate option name
-  assert( !name.empty());
-}
-
-Option::Option( std::string &&name):
-  nameV( std::move( name))
-{
-  // Validate option name
-  assert( !nameV.empty());
-}
-
-std::string_view Option::name() const
-{
-  return nameV;
-}
-
-void Option::name( std::string_view name)
-{
-  // Validate option name
-  assert( !name.empty());
-
-  nameV = name;
-}
-
-void Option::name( std::string &&name)
-{
-  // Validate option name
-  assert( !name.empty());
-
-  nameV = std::move( name);
-}
-
-std::string Option::toString() const
-{
-  return nameV + ":" + static_cast< std::string>( *this);
-}
-
 }

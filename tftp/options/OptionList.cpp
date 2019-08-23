@@ -62,7 +62,7 @@ OptionList::OptionList(
     // insert option as string option
     optionsValue.insert( std::make_pair(
       name,
-      std::make_shared< StringOption>( name, value)));
+      std::make_shared< StringOption>( value)));
 
     begin = valueEnd + 1U;
   }
@@ -148,7 +148,7 @@ void OptionList::set( std::string_view name, std::string_view value)
   // Add option
   optionsValue.insert( std::make_pair(
     name,
-    std::make_shared< StringOption>( name, value)));
+    std::make_shared< StringOption>( value)));
 }
 
 void OptionList::set( const std::string &&name, const std::string &&value)
@@ -162,19 +162,19 @@ void OptionList::set( const std::string &&name, const std::string &&value)
   // Add option
   optionsValue.insert( std::make_pair(
     name,
-    std::make_shared< StringOption>( std::move( name), std::move( value))));
+    std::make_shared< StringOption>( std::move( value))));
 }
 
-void OptionList::set( const OptionPtr option)
+void OptionList::set( std::string_view name, OptionPtr option)
 {
   // If option already exists remove it first
-  if (has( option->name()))
+  if (has( name))
   {
-    remove( option->name());
+    remove( name);
   }
 
   // Add option
-  optionsValue.insert( std::make_pair( option->name(), option));
+  optionsValue.insert( std::make_pair( name, option));
 }
 
 void OptionList::remove( std::string_view name)
@@ -207,11 +207,10 @@ void OptionList::blocksizeClient(
   assert( minBlocksize <= requestedBlocksize);
 
   auto entry{ std::make_shared< BlockSizeOptionClient>(
-      Option::optionName( KnownOptions::BlockSize),
       requestedBlocksize,
       NegotiateMinMaxRange< uint16_t>( minBlocksize, requestedBlocksize))};
 
-  set( entry);
+  set( Option::optionName( KnownOptions::BlockSize), entry);
 }
 
 void OptionList::blocksizeServer(
@@ -228,12 +227,11 @@ void OptionList::blocksizeServer(
 
   assert( minBlocksize <= maxBlocksize);
 
-  OptionPtr entry( std::make_shared< BlockSizeOptionServer>(
-      Option::optionName( KnownOptions::BlockSize),
+  auto entry( std::make_shared< BlockSizeOptionServer>(
       maxBlocksize,
       NegotiateMinMaxSmaller< uint16_t>( minBlocksize, maxBlocksize)));
 
-  set( entry);
+  set( Option::optionName( KnownOptions::BlockSize), entry);
 }
 
 std::optional< uint16_t> OptionList::blocksize() const
@@ -247,9 +245,9 @@ std::optional< uint16_t> OptionList::blocksize() const
     return {};
   }
 
-  const auto* integerOption =
+  const auto* integerOption{
     dynamic_cast< const BlockSizeOptionBase*>(
-      optionIt->second.get());
+      optionIt->second.get())};
 
   // invalid cast
   if (!integerOption)
@@ -266,11 +264,10 @@ void OptionList::timeoutOptionClient( const uint8_t timeout)
   assert( timeout >= TimeoutOptionMin);
 
   auto entry{ std::make_shared< TimeoutOptionClient>(
-      Option::optionName( KnownOptions::Timeout),
       timeout,
       NegotiateExactValue< uint8_t>( timeout))};
 
-  set( entry);
+  set( Option::optionName( KnownOptions::Timeout), entry);
 }
 
 void OptionList::timeoutOptionServer(
@@ -285,11 +282,10 @@ void OptionList::timeoutOptionServer(
   assert( (minTimeout <= maxTimeout));
 
   OptionPtr entry( std::make_shared< TimeoutOptionServer>(
-      Option::optionName( KnownOptions::Timeout),
       maxTimeout,
       NegotiateMinMaxRange< uint8_t>( minTimeout, maxTimeout)));
 
-  set( entry);
+  set( Option::optionName( KnownOptions::Timeout), entry);
 }
 
 std::optional< uint8_t> OptionList::timeoutOption() const
@@ -319,11 +315,10 @@ std::optional< uint8_t> OptionList::timeoutOption() const
 void OptionList::transferSizeOption( const uint64_t transferSize)
 {
   auto entry{ std::make_shared< TransferSizeOptionServerClient>(
-      Option::optionName( KnownOptions::TransferSize),
       transferSize,
       NegotiateAlwaysPass< uint64_t>())};
 
-  set( entry);
+  set( Option::optionName( KnownOptions::TransferSize), entry);
 }
 
 void OptionList::removeTransferSizeOption()
@@ -375,9 +370,9 @@ OptionList OptionList::negotiateServer( const OptionList &clientOptions) const
       static_cast< std::string>( *(clientOption.second)))};
 
     // negotiation has returned a value -> copy option to output list
-    if (newOptionValue)
+    if ( newOptionValue)
     {
-      negotiatedOptions.set( newOptionValue);
+      negotiatedOptions.set( clientOption.first, newOptionValue);
     }
   }
 
@@ -415,7 +410,7 @@ OptionList OptionList::negotiateClient( const OptionList &serverOptions) const
     }
 
     // negotiation has returned a value -> copy option to output list
-    negotiatedOptions.set( newOptionValue);
+    negotiatedOptions.set( serverOption.first, newOptionValue);
   }
 
   return negotiatedOptions;
@@ -431,9 +426,9 @@ std::string OptionList::toString() const
   std::string result;
 
   // iterate over all options
-  for ( const auto &option : optionsValue)
+  for ( const auto &[name,option] : optionsValue)
   {
-    result += option.second->toString() + ";";
+    result += name + ":" + static_cast< std::string>( *option) + ";";
   }
 
   return result;

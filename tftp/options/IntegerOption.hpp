@@ -96,18 +96,13 @@ class BaseIntegerOption: public Option
     /**
      * @brief Generates a option with the given parameters.
      *
-     * @param[in] name
-     *   Option name
      * @param[in] value
      *   Current value.
      *   Should be compliant to option negotiation ranges.
      **/
-    BaseIntegerOption( std::string_view name, IntegerType value);
+    BaseIntegerOption( IntegerType value);
 
-    //! @copydoc BaseIntegerOption(std::string_view,IntegerType)
-    BaseIntegerOption( std::string &&name, IntegerType value);
-
-    /**
+     /**
      * @brief @copybrief Option::negotiate()
      *
      * @param[in] optionValue
@@ -175,19 +170,8 @@ BaseIntegerOption< IntT>& BaseIntegerOption< IntT>::operator=(
 
 template< typename IntT>
 BaseIntegerOption< IntT>::BaseIntegerOption(
-  std::string_view name,
   const IntegerType value):
-  Option( name),
-  intValue( value)
-{
-}
-
-template< typename IntT>
-BaseIntegerOption< IntT>::BaseIntegerOption(
-  std::string &&name,
-  const IntegerType value):
-  Option( std::move( name)),
-  intValue( value)
+  intValue{ value}
 {
 }
 
@@ -267,21 +251,12 @@ class IntegerOption: public BaseIntegerOption< IntT>
     /**
      * @brief Generates a option with the given parameters.
      *
-     * @param[in] name
-     *   Option name
      * @param[in] value
      *   Current value
      * @param[in] negotiateOperation
      *   The negotiation operation to use.
      **/
     IntegerOption(
-      std::string_view name,
-      typename BaseIntegerOption< IntT>::IntegerType value,
-      NegotiateType negotiateOperation = NegotiateType());
-
-    //! @copydoc IntegerOption(std::string_view,BaseIntegerOption< IntT>::IntegerType,NegotiateType)
-    IntegerOption(
-      std::string &&name,
       typename BaseIntegerOption< IntT>::IntegerType value,
       NegotiateType negotiateOperation = NegotiateType());
 
@@ -330,21 +305,10 @@ class IntegerOption: public BaseIntegerOption< IntT>
 
 template< typename IntT, typename NegotiateT>
 IntegerOption< IntT, NegotiateT>::IntegerOption(
-  std::string_view name,
   const typename BaseIntegerOption< IntT>::IntegerType value,
   NegotiateType negotiateOperation):
-  BaseIntegerOption< IntT>( name, value),
-  negotiateOperation( negotiateOperation)
-{
-}
-
-template< typename IntT, typename NegotiateT>
-IntegerOption< IntT, NegotiateT>::IntegerOption(
-  std::string &&name,
-  const typename BaseIntegerOption< IntT>::IntegerType value,
-  NegotiateType negotiateOperation):
-  BaseIntegerOption< IntT>( std::move( name), value),
-  negotiateOperation( negotiateOperation)
+  BaseIntegerOption< IntT>{ value},
+  negotiateOperation{ negotiateOperation}
 {
 }
 
@@ -380,7 +344,6 @@ OptionPtr IntegerOption< IntT, NegotiateT>::negotiate(
 
   // return the negotiated option
   return std::make_shared< IntegerOption< IntT, NegotiateT>>(
-    BaseIntegerOption< IntT>::name(),
     *negotiateValue,
     negotiateOperation);
 }

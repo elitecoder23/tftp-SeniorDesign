@@ -22,30 +22,25 @@ BOOST_AUTO_TEST_SUITE( IntegerOptionTest)
 //! constructor test
 BOOST_AUTO_TEST_CASE( constructor8u)
 {
-  using namespace std::literals::string_view_literals;
-  IntegerOption< uint8_t, NegotiateAlwaysPass< uint8_t>> entry( "test"sv, 50, NegotiateAlwaysPass< uint8_t>());
+  IntegerOption< uint8_t, NegotiateAlwaysPass< uint8_t>> entry( 50, NegotiateAlwaysPass< uint8_t>());
 
   BOOST_CHECK( "50" == static_cast< std::string>( entry));
   BOOST_CHECK( 50 == entry);
-  BOOST_CHECK( "test" == entry.name());
 }
 
 //! constructor test
 BOOST_AUTO_TEST_CASE( constructor16u)
 {
-  using namespace std::literals::string_view_literals;
-  IntegerOption< uint16_t, NegotiateAlwaysPass< uint16_t>> entry( "test"sv, 50, NegotiateAlwaysPass< uint16_t>());
+  IntegerOption< uint16_t, NegotiateAlwaysPass< uint16_t>> entry( 50, NegotiateAlwaysPass< uint16_t>());
 
   BOOST_CHECK( "50" == static_cast< std::string>( entry));
   BOOST_CHECK( 50 == entry);
-  BOOST_CHECK( "test" == entry.name());
 }
 
 //! assignment test
 BOOST_AUTO_TEST_CASE( assign)
 {
-  using namespace std::literals::string_view_literals;
-  IntegerOption< uint8_t, NegotiateAlwaysPass< uint8_t>> entry( "test"sv, 50, NegotiateAlwaysPass< uint8_t>());
+  IntegerOption< uint8_t, NegotiateAlwaysPass< uint8_t>> entry( 50, NegotiateAlwaysPass< uint8_t>());
 
   BOOST_CHECK( 50 == entry);
   entry = uint8_t( 100);
@@ -55,8 +50,7 @@ BOOST_AUTO_TEST_CASE( assign)
 //! negotiation min max test
 BOOST_AUTO_TEST_CASE( negotiateNegotiateMinMaxRange)
 {
-  using namespace std::literals::string_view_literals;
-  BlockSizeOptionClient entry( "test"sv, 50, NegotiateMinMaxRange< uint16_t>(10,50));
+  BlockSizeOptionClient entry( 50, NegotiateMinMaxRange< uint16_t>(10,50));
   OptionPtr negEntry;
 
   negEntry = entry.negotiate( "101");
@@ -100,11 +94,10 @@ BOOST_AUTO_TEST_CASE( negotiateNegotiateMinMaxRange)
 //! negotiation min max smaller test
 BOOST_AUTO_TEST_CASE( negotiateMinMaxSmaller)
 {
-  using namespace std::literals::string_view_literals;
-  BlockSizeOptionServer entry( "test"sv, 50, NegotiateMinMaxSmaller< uint16_t>(10, 100));
+  BlockSizeOptionServer entry( 50, NegotiateMinMaxSmaller< uint16_t>(10, 100));
   BOOST_CHECK( 50 == entry);
 
-  OptionPtr negEntry;
+  OptionPtr negEntry{};
 
   negEntry = entry.negotiate( "101");
   BOOST_CHECK( negEntry);
@@ -155,8 +148,7 @@ BOOST_AUTO_TEST_CASE( negotiateMinMaxSmaller)
 //! negotiation exact value test
 BOOST_AUTO_TEST_CASE( negotiateExactValue)
 {
-  using namespace std::literals::string_view_literals;
-  TimeoutOptionClient entry( "test"sv, 50, NegotiateExactValue< uint8_t>(50));
+  TimeoutOptionClient entry( 50, NegotiateExactValue< uint8_t>(50));
   BOOST_CHECK( 50 == entry);
 
   OptionPtr negEntry;
@@ -182,8 +174,7 @@ BOOST_AUTO_TEST_CASE( negotiateExactValue)
 //! negotiation always pass test
 BOOST_AUTO_TEST_CASE( negotiateAlwaysPass)
 {
-  using namespace std::literals::string_view_literals;
-  TransferSizeOptionServerClient entry( "test"sv, 50);
+  TransferSizeOptionServerClient entry( 50);
   BOOST_CHECK( 50 == entry);
 
   OptionPtr negEntry;

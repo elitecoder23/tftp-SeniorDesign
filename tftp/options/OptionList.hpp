@@ -167,10 +167,12 @@ class OptionList
      * If the option is set in the current option list, it is removed
      * firstly.
      *
+     * @param[in] name
+     *   Name of the option.
      * @param[in] option
      *   The option
      **/
-    void set( OptionPtr option);
+    void set( std::string_view name, OptionPtr option);
 
     /**
      * @brief Remove the option with the given name from the option list.

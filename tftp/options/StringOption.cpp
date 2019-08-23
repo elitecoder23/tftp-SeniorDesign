@@ -16,14 +16,12 @@
 
 namespace Tftp::Options {
 
-StringOption::StringOption( std::string_view name, std::string_view value):
-  Option( name),
+StringOption::StringOption( std::string_view value):
   value( value)
 {
 }
 
-StringOption::StringOption( std::string &&name, std::string &&value):
-  Option( std::move( name)),
+StringOption::StringOption( std::string &&value):
   value( std::move( value))
 {
 }
@@ -47,8 +45,8 @@ StringOption& StringOption::operator=( std::string &&value)
 
 OptionPtr StringOption::negotiate( std::string_view) const noexcept
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-    "Its not possible to use StringOption for negotiation";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    << "Its not possible to use StringOption for negotiation";
 
   return {};
 }
