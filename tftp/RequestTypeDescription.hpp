@@ -19,14 +19,14 @@
 
 namespace Tftp {
 
-//! Description of request type (RequestType)
+//! Description of Request Type (RequestType)
 class RequestTypeDescription : public Description<
   RequestTypeDescription,
   RequestType,
   RequestType::Invalid>
 {
   public:
-    //! Initialises the instance.
+    //! Initialises the Instance.
     RequestTypeDescription();
 };
 

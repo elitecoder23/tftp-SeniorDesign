@@ -58,9 +58,9 @@ class ErrorOperation: public Operation
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
-      const std::string &errorMessage);
+      std::string_view errorMessage);
 
-    //! @copydoc ErrorOperation(boost::asio::io_context&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,const std::string&)
+    //! @copydoc ErrorOperation(boost::asio::io_context&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
     ErrorOperation(
       boost::asio::io_context &ioContext,
       OperationCompletedHandler completionHandler,
@@ -82,13 +82,13 @@ class ErrorOperation: public Operation
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      std::string &&errorMessage = {}) final;
+      std::string_view errorMessage = {}) final;
 
     //! @copydoc Operation::abort
     void abort() final;
 
     //! @copydoc Operation::errorInfo
-    const ErrorInfo& errorInfo() const final;
+    [[nodiscard]] const ErrorInfo& errorInfo() const final;
 
   private:
     /**

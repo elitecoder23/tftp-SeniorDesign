@@ -14,8 +14,8 @@
 
 namespace Tftp::File {
 
-NullSinkFile::NullSinkFile( uint64_t size):
-  size( size)
+NullSinkFile::NullSinkFile( std::optional< uint64_t> size):
+  size{ size}
 {
 }
 

@@ -19,7 +19,7 @@
 
 #include <boost/asio/ip/udp.hpp>
 
-#include <string>
+#include <string_view>
 
 namespace Tftp::Client {
 
@@ -48,7 +48,7 @@ class TftpClient
       const TftpConfiguration &configuration = {},
       const Options::OptionList& additionalOptions = {});
 
-    //! Default destructor
+    //! Destructor
     virtual ~TftpClient() noexcept = default;
 
     /**
@@ -93,7 +93,7 @@ class TftpClient
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const std::string &filename,
+      std::string_view filename,
       TransferMode mode,
       const boost::asio::ip::udp::endpoint &local = {}) = 0;
 
@@ -119,7 +119,7 @@ class TftpClient
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const std::string &filename,
+      std::string_view filename,
       TransferMode mode,
       const boost::asio::ip::udp::endpoint &local = {}) = 0;
 

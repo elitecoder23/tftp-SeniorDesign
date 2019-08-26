@@ -195,12 +195,13 @@ void TftpServerApplication::receivedRequest(
   {
     std::cerr << "Wrong transfer mode";
 
+    using namespace std::string_view_literals;
     auto operation( server->errorOperation(
       {},
       remote,
       {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::IllegalTftpOperation,
-      "wrong transfer mode"));
+      "wrong transfer mode"sv));
 
     operation->start();
 
@@ -211,12 +212,13 @@ void TftpServerApplication::receivedRequest(
   {
     std::cerr << "Error filename check\n";
 
+    using namespace std::string_view_literals;
     auto operation( server->errorOperation(
       {},
       remote,
       {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::AccessViolation,
-      "Illegal filename"));
+      "Illegal filename"sv));
 
     operation->start();
 
@@ -257,12 +259,13 @@ void TftpServerApplication::transmitFile(
   {
     std::cerr << "Error opening file\n";
 
+    using namespace std::string_view_literals;
     auto operation( server->errorOperation(
       {},
       remote,
       {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::FileNotFound,
-      "file not found"));
+      "file not found"sv));
 
     operation->start();
 

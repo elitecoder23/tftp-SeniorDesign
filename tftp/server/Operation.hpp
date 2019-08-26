@@ -17,7 +17,7 @@
 #include <tftp/packets/Packets.hpp>
 
 #include <optional>
-#include <string>
+#include <string_view>
 
 namespace Tftp::Server {
 
@@ -53,7 +53,7 @@ class Operation
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      std::string &&errorMessage = {}) = 0;
+      std::string_view errorMessage = {}) = 0;
 
     /**
      * @brief Aborts the Operation Immediately.
@@ -69,7 +69,7 @@ class Operation
      * @retval ErrorInfo()
      *   When operation has no error.
      **/
-    virtual const ErrorInfo& errorInfo() const = 0;
+    [[nodiscard]] virtual const ErrorInfo& errorInfo() const = 0;
 
 };
 

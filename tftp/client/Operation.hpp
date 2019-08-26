@@ -30,10 +30,10 @@ namespace Tftp::Client {
 class Operation
 {
   public:
-    //! Error Information type
+    //! Error Information
     using ErrorInfo = std::optional< Packets::ErrorPacket>;
 
-    //! Default destructor.
+    //! Destructor.
     virtual ~Operation() noexcept = default;
 
     /**
@@ -42,7 +42,6 @@ class Operation
      * This routines starts the client communication.
      *
      * It returns immediately after sending the request.
-     *
      **/
     virtual void start() = 0;
 
@@ -58,7 +57,7 @@ class Operation
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      const std::string &errorMessage = {}) = 0;
+      std::string_view errorMessage = {}) = 0;
 
     /**
      * @brief Immediately cancels the transfer.
@@ -72,7 +71,7 @@ class Operation
      * @retval ErrorInfo()
      *   If no error occurred.
      **/
-    virtual const ErrorInfo& errorInfo() const = 0;
+    [[nodiscard]] virtual const ErrorInfo& errorInfo() const = 0;
 };
 
 }

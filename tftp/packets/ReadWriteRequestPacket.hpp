@@ -132,7 +132,7 @@ class ReadWriteRequestPacket: public Packet
      * @retval std::string()
      *   When the given option is not set.
      **/
-    std::string option( std::string_view name) const;
+    [[nodiscard]] std::string option( std::string_view name) const;
 
     /**
      * @brief set a option

@@ -32,20 +32,20 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
-  const std::string &filename,
+  std::string_view filename,
   const TransferMode mode,
   const boost::asio::ip::udp::endpoint &local) :
-  OperationImpl(
+  OperationImpl{
     ioContext,
     completionHandler,
     tftpClient,
     remote,
     filename,
     mode,
-    local),
-  dataHandler( dataHandler),
-  receiveDataSize( DefaultDataSize),
-  lastReceivedBlockNumber( 0U)
+    local},
+  dataHandler{ dataHandler},
+  receiveDataSize{ DefaultDataSize},
+  lastReceivedBlockNumber{ 0U}
 {
 }
 
@@ -96,14 +96,14 @@ void ReadRequestOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "RX: " <<
-    static_cast< std::string>( dataPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "RX: " << static_cast< std::string>( dataPacket);
 
   // check retransmission of last packet
   if (dataPacket.blockNumber() == lastReceivedBlockNumber)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-      "Received last data package again. Re-ACK them";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+      << "Received last data package again. Re-ACK them";
 
     // Retransmit last ACK packet
     send( Packets::AcknowledgementPacket( lastReceivedBlockNumber));

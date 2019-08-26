@@ -17,19 +17,19 @@
 namespace Tftp::File {
 
 MemoryFile::MemoryFile():
-  dataPtr( dataValue.begin())
+  dataPtr{ dataValue.begin()}
 {
 }
 
 MemoryFile::MemoryFile( const DataType &data):
-  dataValue( data),
-  dataPtr( dataValue.begin())
+  dataValue{ data},
+  dataPtr{ dataValue.begin()}
 {
 }
 
 MemoryFile::MemoryFile( DataType &&data):
-  dataValue( data),
-  dataPtr( dataValue.begin())
+  dataValue{ data},
+  dataPtr{ dataValue.begin()}
 {
 }
 
@@ -45,8 +45,8 @@ void MemoryFile::finished() noexcept
 
 bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "Received transfer size: " << transferSize;
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "Received transfer size: " << transferSize;
 
   return true;
 }

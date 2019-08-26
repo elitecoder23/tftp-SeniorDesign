@@ -67,7 +67,7 @@ class WriteRequestOperationImpl: public OperationImpl
     /**
      * @brief Standard destructor.
      **/
-    virtual ~WriteRequestOperationImpl() noexcept = default;
+    ~WriteRequestOperationImpl() noexcept override = default;
 
     /**
      * @brief Executes the operation.

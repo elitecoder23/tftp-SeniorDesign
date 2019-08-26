@@ -71,7 +71,7 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return Option list (as const reference)
      **/
-    const Options::OptionList& options() const;
+    [[nodiscard]] const Options::OptionList& options() const;
 
     /**
      * @brief Returns the options within the packet (as reference)
@@ -101,7 +101,7 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return The value for the option identified by name.
      **/
-    std::string option( const std::string &name) const;
+    [[nodiscard]] std::string option( const std::string &name) const;
 
     /**
      * @brief Sets the option with the given name and value.

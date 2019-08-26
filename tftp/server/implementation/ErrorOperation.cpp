@@ -23,11 +23,11 @@ ErrorOperation::ErrorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local,
   const ErrorCode errorCode,
-  const std::string &errorMessage)
+  std::string_view errorMessage)
 try :
-  completionHandler( completionHandler),
-  socket( ioContext),
-  errorInfoV( Packets::ErrorPacket( errorCode, errorMessage))
+  completionHandler{ completionHandler},
+  socket{ ioContext},
+  errorInfoV{ Packets::ErrorPacket{ errorCode, errorMessage}}
 {
   try
   {
@@ -62,9 +62,9 @@ ErrorOperation::ErrorOperation(
   ErrorCode errorCode,
   std::string &&errorMessage)
 try :
-  completionHandler( completionHandler),
-  socket( ioContext),
-  errorInfoV( Packets::ErrorPacket( errorCode, std::move( errorMessage)))
+  completionHandler{ completionHandler},
+  socket{ ioContext},
+  errorInfoV{ Packets::ErrorPacket{ errorCode, std::move( errorMessage)}}
 {
   try
   {
@@ -81,14 +81,14 @@ try :
       socket.close();
     }
 
-    BOOST_THROW_EXCEPTION(
-      CommunicationException() << AdditionalInfo( err.what()));
+    BOOST_THROW_EXCEPTION( CommunicationException()
+      << AdditionalInfo( err.what()));
   }
 }
 catch ( boost::system::system_error &err)
 {
-  BOOST_THROW_EXCEPTION(
-    CommunicationException() << AdditionalInfo( err.what()));
+  BOOST_THROW_EXCEPTION( CommunicationException()
+    << AdditionalInfo( err.what()));
 }
 
 ErrorOperation::~ErrorOperation() noexcept
@@ -104,7 +104,7 @@ void ErrorOperation::start()
 
 void ErrorOperation::gracefulAbort(
   const ErrorCode errorCode [[maybe_unused]],
-  std::string &&errorMessage [[maybe_unused]])
+  std::string_view errorMessage [[maybe_unused]])
 {
   // do nothing
 }
@@ -121,10 +121,10 @@ const ErrorOperation::ErrorInfo& ErrorOperation::errorInfo() const
 
 void ErrorOperation::sendError( const Packets::ErrorPacket &error)
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) << "TX: "
-    << static_cast< std::string>( error);
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "TX: " << static_cast< std::string>( error);
 
   try
   {
@@ -137,7 +137,8 @@ void ErrorOperation::sendError( const Packets::ErrorPacket &error)
   }
   catch ( boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) << err.what();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << err.what();
 
     if (completionHandler)
     {

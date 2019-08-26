@@ -68,7 +68,7 @@ class OperationImpl :
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      const std::string &errorMessage = {}) final;
+      std::string_view errorMessage = {}) final;
 
     //! @copydoc Operation::abort
     void abort() final;
@@ -100,7 +100,7 @@ class OperationImpl :
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const boost::asio::ip::udp::endpoint &remote,
-      const std::string &filename,
+      std::string_view filename,
       TransferMode mode,
       const boost::asio::ip::udp::endpoint &local);
 
@@ -109,7 +109,7 @@ class OperationImpl :
      *
      * @return The request filename.
      **/
-    const std::string& filename() const;
+    std::string_view filename() const;
 
     /**
      * @brief Returns the transfer mode.
@@ -243,7 +243,7 @@ class OperationImpl :
      * @param[in] errorCode
      *   error status of operation.
      * @param[in] bytesTransferred
-     *   Number of bytes transfered.
+     *   Number of bytes transferred.
      *
      * @throw CommunicationException
      *   On communication error.
@@ -288,9 +288,9 @@ class OperationImpl :
 
     //! Completion Handler
     OperationCompletedHandler completionHandler;
-    //! TFTP client
+    //! TFTP Client
     const TftpClientInternal &tftpClient;
-    //! TFTP server endpoint
+    //! TFTP Server Endpoint
     boost::asio::ip::udp::endpoint remoteEndpoint;
     //! Filename of the transfer
     const std::string filenameV;
@@ -309,16 +309,16 @@ class OperationImpl :
     //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
     uint8_t receiveTimeoutV;
 
-    //! The TFTP socket
+    //! TFTP socket
     boost::asio::ip::udp::socket socket;
     //! The receive timeout timer
     boost::asio::deadline_timer timer;
 
-    //! The received packet data
+    //! received packet data
     RawTftpPacket receivePacket;
-    //! The remote address
+    //! remote address
     boost::asio::ip::udp::endpoint receiveEndpoint;
-    //! The last transmitted packet
+    //! last transmitted packet
     RawTftpPacket transmitPacket;
     //! Packet Type of last transmitted packet
     PacketType transmitPacketType;

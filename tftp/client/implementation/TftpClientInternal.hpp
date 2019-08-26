@@ -27,21 +27,21 @@ class TftpClientInternal : public TftpClient
 {
   public:
     //! Default destructor
-    virtual ~TftpClientInternal() = default;
+    ~TftpClientInternal() override = default;
 
     /**
-     * @brief Returns the used TFTP configuration.
+     * @brief Returns the used TFTP Configuration.
      *
      * @return The TFTP configuration
      **/
-    virtual const TftpConfiguration& configuration() const = 0;
+    [[nodiscard]] virtual const TftpConfiguration& configuration() const = 0;
 
     /**
      * @brief Returns the own options list.
      *
      * @return The options list.
      **/
-    virtual const Options::OptionList& options() const = 0;
+    [[nodiscard]] virtual const Options::OptionList& options() const = 0;
 };
 
 }

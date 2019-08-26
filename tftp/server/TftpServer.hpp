@@ -161,9 +161,9 @@ class TftpServer
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
-      const std::string &errorMessage) = 0;
+      std::string_view errorMessage) = 0;
 
-    //! @copydoc errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,const std::string&)
+    //! @copydoc errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
     virtual OperationPtr errorOperation(
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,

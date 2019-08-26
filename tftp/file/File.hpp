@@ -45,10 +45,10 @@ template< typename StreamT>
 class StreamFile;
 class NullSinkFile;
 
-//! Memory file pointer
+//! Memory File Pointer
 using MemoryFilePtr = std::shared_ptr< MemoryFile>;
 
-//! Memory file pointer
+//! Stream File Pointer
 using FileStreamFilePtr = std::shared_ptr< StreamFile< std::fstream> >;
 
 }

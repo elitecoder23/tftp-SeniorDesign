@@ -22,9 +22,9 @@ namespace Tftp::Client {
 TftpClientImpl::TftpClientImpl(
   const TftpConfiguration &configuration,
   const Options::OptionList& additionalOptions):
-  configurationV( configuration),
-  optionsV( configuration.clientOptions( additionalOptions)),
-  work( ioContext)
+  configurationV{ configuration},
+  optionsV{ configuration.clientOptions( additionalOptions)},
+  work{ ioContext}
 {
 }
 
@@ -32,13 +32,13 @@ void TftpClientImpl::entry() noexcept
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "Start TFTP client I/O context";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "Start TFTP client I/O context";
 
   ioContext.run();
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "TFTP client I/O context finished";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "TFTP client I/O context finished";
 }
 
 void TftpClientImpl::stop()
@@ -55,7 +55,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const std::string &filename,
+  std::string_view filename,
   const TransferMode mode,
   const boost::asio::ip::udp::endpoint &local)
 {
@@ -74,7 +74,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const std::string &filename,
+  std::string_view filename,
   const TransferMode mode,
   const boost::asio::ip::udp::endpoint &local)
 {

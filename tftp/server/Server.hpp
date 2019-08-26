@@ -46,29 +46,34 @@ namespace Tftp::Server {
 // Forward declarations
 class TftpServer;
 
-//! Declaration of TFTP Server Operation Instance Pointer
+//! TFTP Server Instance Pointer
 using TftpServerPtr = std::shared_ptr< TftpServer>;
 
 class Operation;
-//! Operation Instance Pointer
+//! TFTP Server Operation Instance Pointer
 using OperationPtr = std::shared_ptr< Operation>;
 
 /**
  * @brief Function Handler Definition.
  *
- * * Remote Endpoint
- * * TFTP Request Type
- * * Filename
- * * Transfer Mode
- * * Options
+ * @param[in] remote
+ *   Remote Endpoint
+ * @param[in] requestType
+ *   TFTP Request Type
+ * @param[in] filename
+ *   Filename
+ * @param[in] mode
+ *   Transfer Mode
+ * @param[in] options
+ *   TFTP Options
  **/
 using ReceivedTftpRequestHandler =
   std::function< void(
-    const boost::asio::ip::udp::endpoint&,
-    RequestType,
-    std::string_view,
-    TransferMode,
-    const Options::OptionList&)>;
+    const boost::asio::ip::udp::endpoint &remote,
+    RequestType requestType,
+    std::string_view filename,
+    TransferMode mode,
+    const Options::OptionList &options)>;
 
 }
 

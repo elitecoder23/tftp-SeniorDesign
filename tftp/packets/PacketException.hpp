@@ -18,7 +18,7 @@
 
 namespace Tftp::Packets {
 
-//! Exception Cccurred during TFTP Packet Processing.
+//! Exception Occurred during TFTP Packet Processing.
 class InvalidPacketException: public virtual TftpException
 {
   public:

@@ -26,22 +26,22 @@ namespace Tftp::Server {
 class TftpServerInternal : public TftpServer
 {
   public:
-    //! Default destructor
-    virtual ~TftpServerInternal() = default;
+    //! Destructor
+    ~TftpServerInternal() override = default;
 
     /**
      * @brief Returns the TFTP configuration.
      *
      * @return The TFTP configuration.
      **/
-    virtual const TftpConfiguration& configuration() const = 0;
+    [[nodiscard]] virtual const TftpConfiguration& configuration() const = 0;
 
     /**
      * @brief Returns the configured TFTP Options.
      *
      * @return The configured TFTP Options.
      **/
-    virtual const Options::OptionList& options() const = 0;
+    [[nodiscard]] virtual const Options::OptionList& options() const = 0;
 };
 
 }

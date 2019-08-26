@@ -35,10 +35,10 @@ namespace Tftp::Client {
 class TftpClient;
 class Operation;
 
-//! Declaration of TFTP client instance pointer
+//! TFTP Client Instance Pointer
 using TftpClientPtr = std::shared_ptr< TftpClient>;
 
-//! Declaration of TFTP client operation instance pointer
+//! TFTP Client Operation Instance Pointer
 using OperationPtr = std::shared_ptr< Operation>;
 
 }

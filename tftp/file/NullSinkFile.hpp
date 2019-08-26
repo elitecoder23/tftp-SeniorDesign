@@ -33,7 +33,7 @@ namespace Tftp::File {
 class NullSinkFile : public ReceiveDataHandler
 {
   public:
-    //! default constructor
+    //! Constructor
     NullSinkFile() = default;
 
     /**
@@ -42,7 +42,7 @@ class NullSinkFile : public ReceiveDataHandler
      * @param[in] size
      *   The maximum allowed size.
      **/
-    explicit NullSinkFile( uint64_t size);
+    explicit NullSinkFile( std::optional< uint64_t> size = {});
 
     /**
      * @copydoc ReceiveDataHandler::receivedTransferSize

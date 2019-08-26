@@ -56,7 +56,7 @@ class ReadRequestOperationImpl : public OperationImpl
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const boost::asio::ip::udp::endpoint &remote,
-      const std::string &filename,
+      std::string_view filename,
       TransferMode mode,
       const boost::asio::ip::udp::endpoint &local);
 

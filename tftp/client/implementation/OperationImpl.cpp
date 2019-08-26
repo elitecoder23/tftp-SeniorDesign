@@ -40,7 +40,7 @@ void OperationImpl::start()
 
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
-  const std::string &errorMessage)
+  std::string_view errorMessage)
 {
   BOOST_LOG_FUNCTION()
 
@@ -78,22 +78,22 @@ OperationImpl::OperationImpl(
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
-  const std::string &filename,
+  std::string_view filename,
   const TransferMode mode,
   const boost::asio::ip::udp::endpoint &local)
 try :
-  completionHandler( completionHandler),
-  tftpClient( tftpClient),
-  remoteEndpoint( remote),
-  filenameV( filename),
-  modeV( mode),
-  optionsV( tftpClient.options()),
-  maxReceivePacketSizeV( DefaultMaxPacketSize),
-  receiveTimeoutV( tftpClient.configuration().tftpTimeout),
-  socket( ioContext),
-  timer( ioContext),
-  transmitPacketType( PacketType::Invalid),
-  transmitCounter( 0)
+  completionHandler{ completionHandler},
+  tftpClient{ tftpClient},
+  remoteEndpoint{ remote},
+  filenameV{ filename},
+  modeV{ mode},
+  optionsV{ tftpClient.options()},
+  maxReceivePacketSizeV{ DefaultMaxPacketSize},
+  receiveTimeoutV{ tftpClient.configuration().tftpTimeout},
+  socket{ ioContext},
+  timer{ ioContext},
+  transmitPacketType{ PacketType::Invalid},
+  transmitCounter{ 0}
 {
   BOOST_LOG_FUNCTION()
 
@@ -114,18 +114,18 @@ try :
     }
 
     //! @throw CommunicationException Socket cannot be created or binded.
-    BOOST_THROW_EXCEPTION(
-      CommunicationException() << AdditionalInfo( err.what()));
+    BOOST_THROW_EXCEPTION( CommunicationException()
+      << AdditionalInfo( err.what()));
   }
 }
 catch ( boost::system::system_error &err)
 {
   //! @throw CommunicationException Error during initialisation of communication objects.
-  BOOST_THROW_EXCEPTION(
-    CommunicationException() << AdditionalInfo( err.what()));
+  BOOST_THROW_EXCEPTION( CommunicationException()
+    << AdditionalInfo( err.what()));
 }
 
-const std::string& OperationImpl::filename() const
+std::string_view  OperationImpl::filename() const
 {
   return filenameV;
 }
@@ -274,8 +274,8 @@ void OperationImpl::receive()
   }
   catch (boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "RX Error: " << err.what();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "RX Error: " << err.what();
 
     finished( TransferStatus::CommunicationError);
   }
@@ -298,8 +298,8 @@ void OperationImpl::finished(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-    "Operation finished";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    << "Operation finished";
 
   errorInfoV = std::move( errorInfo);
 
@@ -545,8 +545,8 @@ void OperationImpl::timeoutFirstHandler(
   // internal (timer) error occurred
   if (errorCode)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "timer error: " + errorCode.message();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "timer error: " + errorCode.message();
 
     finished( TransferStatus::CommunicationError);
     return;
@@ -603,8 +603,8 @@ void OperationImpl::timeoutHandler(
   // internal (timer) error occurred
   if (errorCode)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "timer error: " << errorCode.message();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "timer error: " << errorCode.message();
 
     finished( TransferStatus::CommunicationError);
     return;

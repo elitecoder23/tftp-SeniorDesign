@@ -31,21 +31,21 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
-  const std::string &filename,
+  std::string_view filename,
   const TransferMode mode,
   const boost::asio::ip::udp::endpoint &local):
-  OperationImpl(
+  OperationImpl{
     ioContext,
     completionHandler,
     tftpClient,
     remote,
     filename,
     mode,
-    local),
-  dataHandler( dataHandler),
-  transmitDataSize( DefaultDataSize),
-  lastDataPacketTransmitted( false),
-  lastTransmittedBlockNumber( 0U)
+    local},
+  dataHandler{ dataHandler},
+  transmitDataSize{ DefaultDataSize},
+  lastDataPacketTransmitted{ false},
+  lastTransmittedBlockNumber{ 0U}
 {
 }
 

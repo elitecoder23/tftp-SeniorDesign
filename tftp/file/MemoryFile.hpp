@@ -55,7 +55,7 @@ class MemoryFile: public TftpFile
      *
      * @return The locally stored data
      **/
-    const DataType& data() const noexcept;
+    [[nodiscard]] const DataType& data() const noexcept;
 
     /**
      * @copydoc TftpFile::finished()
@@ -88,9 +88,9 @@ class MemoryFile: public TftpFile
     DataType sendData( size_t maxSize) noexcept final;
 
   private:
-    //! the data
+    //! data
     DataType dataValue;
-    //! the current read position
+    //! current read position
     DataType::const_iterator dataPtr;
 };
 

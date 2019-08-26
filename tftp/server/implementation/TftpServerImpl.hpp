@@ -67,7 +67,7 @@ class TftpServerImpl:
     /**
      * @brief Destructor
      **/
-    virtual ~TftpServerImpl() noexcept;
+    ~TftpServerImpl() noexcept override;
 
     //! @copydoc TftpServer::entry()
     void entry() noexcept final;
@@ -94,13 +94,13 @@ class TftpServerImpl:
       const Options::OptionList &clientOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
-    //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,const std::string&)
+    //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
     OperationPtr errorOperation(
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
-      const std::string &errorMessage) final;
+      std::string_view errorMessage) final;
 
     //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string&&)
     OperationPtr errorOperation(
@@ -111,10 +111,10 @@ class TftpServerImpl:
       std::string &&errorMessage = {}) final;
 
     //! @copydoc TftpServerInternal::configuration
-    const TftpConfiguration& configuration() const final;
+    [[nodiscard]] const TftpConfiguration& configuration() const final;
 
     //! @copydoc TftpServerInternal::options
-    const Options::OptionList& options() const final;
+    [[nodiscard]] const Options::OptionList& options() const final;
 
   private:
     /**

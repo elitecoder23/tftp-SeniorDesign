@@ -50,7 +50,7 @@ class OperationImpl:
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      std::string &&errorMessage) final;
+      std::string_view errorMessage) final;
 
     //! @copydoc Operation::abort
     void abort() final;
@@ -86,7 +86,7 @@ class OperationImpl:
     /**
      * @brief default destructor.
      **/
-    virtual ~OperationImpl() noexcept;
+    ~OperationImpl() noexcept override;
 
     /**
      * @brief Sets the Finished flag.
