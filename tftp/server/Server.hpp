@@ -73,7 +73,7 @@ using ReceivedTftpRequestHandler =
     RequestType requestType,
     std::string_view filename,
     TransferMode mode,
-    const Options::OptionList &options)>;
+    const Options::Options &options)>;
 
 }
 

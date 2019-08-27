@@ -114,7 +114,7 @@ class TftpServer
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &clientOptions,
+      const Options::Options &clientOptions,
       const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**
@@ -137,7 +137,7 @@ class TftpServer
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &clientOptions,
+      const Options::Options &clientOptions,
       const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**

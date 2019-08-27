@@ -21,14 +21,14 @@
 namespace Tftp::Packets {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  const Options::OptionList &options) noexcept:
+  const Options::Options &options) noexcept:
   Packet{ PacketType::OptionsAcknowledgement},
   optionsValue{ options}
 {
 }
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  Options::OptionList &&options) noexcept:
+  Options::Options &&options) noexcept:
   Packet{ PacketType::OptionsAcknowledgement},
   optionsValue{ std::move( options)}
 {
@@ -51,57 +51,35 @@ OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
   return *this;
 }
 
-const Options::OptionList& OptionsAcknowledgementPacket::options() const
+const Options::Options& OptionsAcknowledgementPacket::options() const
 {
   return optionsValue;
 }
 
-Options::OptionList& OptionsAcknowledgementPacket::options()
+Options::Options& OptionsAcknowledgementPacket::options()
 {
   return optionsValue;
 }
 
-void OptionsAcknowledgementPacket::options(
-  const Options::OptionList &options)
+void OptionsAcknowledgementPacket::options( const Options::Options &options)
 {
   optionsValue = options;
 }
 
-void OptionsAcknowledgementPacket::options( Options::OptionList &&options)
+void OptionsAcknowledgementPacket::options( Options::Options &&options)
 {
   optionsValue = std::move( options);
 }
 
-std::string OptionsAcknowledgementPacket::option(
-  const std::string &name) const
-{
-  auto option{ optionsValue.get( name)};
-
-  return (option) ? static_cast< std::string>( *option) : std::string();
-}
-
-void OptionsAcknowledgementPacket::option(
-  const std::string &name,
-  const std::string &value)
-{
-  optionsValue.set( name, value);
-}
-
-void OptionsAcknowledgementPacket::option(
-  std::string &&name,
-  std::string &&value)
-{
-  optionsValue.set( std::move( name), std::move( value));
-}
-
 OptionsAcknowledgementPacket::operator std::string() const
 {
-  return (boost::format( "OACK: OPT: \"%s\"") % optionsValue.toString()).str();
+  return (boost::format( "OACK: OPT: \"%s\"") %
+    Options::OptionList::toString( optionsValue)).str();
 }
 
 Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
 {
-  auto rawOptions{ optionsValue.rawOptions()};
+  auto rawOptions{ Options::OptionList::rawOptions( optionsValue)};
 
   RawTftpPacket rawPacket( 2 + rawOptions.size());
 
@@ -124,10 +102,10 @@ void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
       << AdditionalInfo( "Invalid packet size of OACK packet"));
   }
 
-  auto packetIt = rawPacket.begin() + HeaderSize;
+  auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // assign options
-  optionsValue = Options::OptionList( packetIt, rawPacket.end());
+  optionsValue = Options::OptionList::options( packetIt, rawPacket.end());
 }
 
 }

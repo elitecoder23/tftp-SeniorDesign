@@ -15,7 +15,7 @@
 
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/Packet.hpp>
-#include <tftp/options/OptionList.hpp>
+#include <tftp/options/Options.hpp>
 
 #include <map>
 
@@ -45,11 +45,11 @@ class OptionsAcknowledgementPacket: public Packet
      *   TFTP Options List.
      **/
     explicit OptionsAcknowledgementPacket(
-      const Options::OptionList &options) noexcept;
+      const Options::Options &options) noexcept;
 
-    //! @copydoc OptionsAcknowledgementPacket(const Options::OptionList&) noexcept
+    //! @copydoc OptionsAcknowledgementPacket(const Options::Options&) noexcept
     explicit OptionsAcknowledgementPacket(
-      Options::OptionList &&options) noexcept;
+      Options::Options &&options) noexcept;
 
     /**
      * @brief Generates a TFTP Options Acknowledgement packet from a data buffer
@@ -71,14 +71,14 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return Option list (as const reference)
      **/
-    [[nodiscard]] const Options::OptionList& options() const;
+    [[nodiscard]] const Options::Options& options() const;
 
     /**
      * @brief Returns the options within the packet (as reference)
      *
      * @return Option list (as reference)
      **/
-    Options::OptionList& options();
+    Options::Options& options();
 
     /**
      * @brief Overwrite the options of this packet with the new one.
@@ -86,35 +86,10 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] options
      *   New option list, which shall be used.
      **/
-    void options( const Options::OptionList &options);
+    void options( const Options::Options &options);
 
-    //! @copydoc options(const Options::OptionList&)
-    void options( Options::OptionList &&options);
-
-    /**
-     * @brief Get a option value for a given name.
-     *
-     * If the option is not set, return an empty string.
-     *
-     * @param[in] name
-     *   The option name.
-     *
-     * @return The value for the option identified by name.
-     **/
-    [[nodiscard]] std::string option( const std::string &name) const;
-
-    /**
-     * @brief Sets the option with the given name and value.
-     *
-     * @param[in] name
-     *   The option name.
-     * @param[in] value
-     *   The option value.
-     **/
-    void option( const std::string &name, const std::string &value);
-
-    //! @copydoc option(const std::string&,const std::string&)
-    void option( std::string &&name, std::string &&value);
+    //! @copydoc options(const Options::Options&)
+    void options( Options::Options &&options);
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
@@ -137,7 +112,7 @@ class OptionsAcknowledgementPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! Stored options.
-    Options::OptionList optionsValue;
+    Options::Options optionsValue;
 };
 
 }

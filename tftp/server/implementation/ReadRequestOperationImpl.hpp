@@ -59,7 +59,7 @@ class ReadRequestOperationImpl: public OperationImpl
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &clientOptions,
+      const Options::Options &clientOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     //! Desctructor

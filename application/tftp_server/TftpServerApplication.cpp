@@ -188,7 +188,7 @@ void TftpServerApplication::receivedRequest(
   const Tftp::RequestType requestType,
   std::string_view filename,
   const Tftp::TransferMode mode,
-  const Tftp::Options::OptionList &options)
+  const Tftp::Options::Options &options)
 {
   // Check transfer mode
   if ( mode != Tftp::TransferMode::OCTET)
@@ -246,7 +246,7 @@ void TftpServerApplication::receivedRequest(
 void TftpServerApplication::transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::OptionList &options)
+  const Tftp::Options::Options &options)
 {
   std::cout << "RRQ: " << filename << " from: "
     << remote.address().to_string() << "\n";
@@ -290,7 +290,7 @@ void TftpServerApplication::transmitFile(
 void TftpServerApplication::receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::OptionList &options)
+  const Tftp::Options::Options &options)
 {
   std::cout << "WRQ: " << filename << " from: "
     << remote.address().to_string() << "\n";

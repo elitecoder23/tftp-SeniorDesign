@@ -25,11 +25,7 @@ BOOST_AUTO_TEST_SUITE( TftpWriteRequestPacket)
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Options::OptionList options{};
-
-  using namespace std::literals::string_view_literals;
-  options.set( "blocksize"sv, "4096"sv);
-
+  Options::Options options{ {"blocksize", "4096"}};
   WriteRequestPacket wrq{ "testfile.bin", TransferMode::OCTET, options};
 
   RawTftpPacket raw{ wrq};
@@ -41,8 +37,21 @@ BOOST_AUTO_TEST_CASE( constructor )
   BOOST_CHECK( wrq.packetType() == wrq2.packetType());
   BOOST_CHECK( wrq.filename() == wrq2.filename());
   BOOST_CHECK( wrq.mode() == wrq2.mode());
-  BOOST_CHECK( wrq.option( "blocksize") == wrq2.option( "blocksize"));
-  BOOST_CHECK( wrq.option( "XXX") == "");
+
+  auto options2{ wrq.options()};
+  BOOST_CHECK( options2.size() == 1);
+  auto blocksizeOption1{ options.find( "blocksize")};
+  BOOST_CHECK( blocksizeOption1 != options2.end());
+
+  auto options3{ wrq2.options()};
+  BOOST_CHECK( options3.size() == 1);
+  auto blocksizeOption2{ options.find( "blocksize")};
+  BOOST_CHECK( blocksizeOption2 != options3.end());
+
+  BOOST_CHECK( blocksizeOption1->first == blocksizeOption2->first);
+  BOOST_CHECK( blocksizeOption1->second == blocksizeOption2->second);
+  BOOST_CHECK( blocksizeOption1->second == "4096");
+  BOOST_CHECK( blocksizeOption2->second == "4096");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

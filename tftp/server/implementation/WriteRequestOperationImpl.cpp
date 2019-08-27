@@ -29,18 +29,18 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList &clientOptions,
+  const Options::Options &clientOptions,
   const boost::asio::ip::udp::endpoint &local) :
-  OperationImpl(
+  OperationImpl{
     ioContext,
     tftpServer,
     completionHandler,
     remote,
     clientOptions,
-    local),
-  dataHandler( dataHandler),
-  receiveDataSize( DefaultDataSize),
-  lastReceivedBlockNumber( 0)
+    local},
+  dataHandler{ dataHandler},
+  receiveDataSize{ DefaultDataSize},
+  lastReceivedBlockNumber{ 0}
 {
 }
 
@@ -100,7 +100,7 @@ void WriteRequestOperationImpl::start()
       }
 
       // send OACK
-      send( Packets::OptionsAcknowledgementPacket{ respOptions});
+      send( Packets::OptionsAcknowledgementPacket{ respOptions.options()});
     }
 
     // start receive loop

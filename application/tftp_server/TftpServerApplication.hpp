@@ -85,7 +85,7 @@ class TftpServerApplication
       Tftp::RequestType requestType,
       std::string_view filename,
       Tftp::TransferMode mode,
-      const Tftp::Options::OptionList &options);
+      const Tftp::Options::Options &options);
 
     /**
      * @brief Transmits a requested file (RRQ).
@@ -100,7 +100,7 @@ class TftpServerApplication
     void transmitFile(
       const boost::asio::ip::udp::endpoint &remote,
       const std::filesystem::path &filename,
-      const Tftp::Options::OptionList &options);
+      const Tftp::Options::Options &options);
 
     /**
      * @brief Receives a requested file (WRQ).
@@ -115,7 +115,7 @@ class TftpServerApplication
     void receiveFile(
       const boost::asio::ip::udp::endpoint &remote,
       const std::filesystem::path &filename,
-      const Tftp::Options::OptionList &options);
+      const Tftp::Options::Options &options);
 
     //! Options Description
     boost::program_options::options_description optionsDescription;

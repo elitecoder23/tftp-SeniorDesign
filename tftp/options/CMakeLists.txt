@@ -10,20 +10,17 @@ target_sources(
   tftp
 
   PRIVATE
-    IntegerOption.hpp
-    Option.hpp
-    Option.cpp
+    #IntegerOption.hpp
+    #Option.hpp
+    #Option.cpp
     OptionList.hpp
     OptionList.cpp
-    Options.hpp
-    StringOption.hpp
-    StringOption.cpp)
+    OptionNegotiation.hpp
+    Options.hpp)
 
 target_sources(
   tftp_test
 
   PRIVATE
-    IntegerOptionTest.cpp
-    OptionTest.cpp
     OptionListTest.cpp
-    StringOptionTest.cpp)
+    OptionNegotiationTest.cpp)

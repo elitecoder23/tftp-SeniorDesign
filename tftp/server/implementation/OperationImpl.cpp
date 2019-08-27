@@ -74,18 +74,18 @@ OperationImpl::OperationImpl(
   const TftpServerInternal &tftpServer,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList &clientOptions,
+  const Options::Options &clientOptions,
   const boost::asio::ip::udp::endpoint &local)
 try:
-  completionHandler( completionHandler),
-  tftpServer( tftpServer),
-  optionsV( tftpServer.options().negotiateServer( clientOptions)),
-  maxReceivePacketSizeV( DefaultMaxPacketSize),
-  receiveTimeoutV( tftpServer.configuration().tftpTimeout),
-  socket( ioContext),
-  timer( ioContext),
-  transmitPacketType( PacketType::Invalid),
-  transmitCounter( 0)
+  completionHandler{ completionHandler},
+  tftpServer{ tftpServer},
+  optionsV{ tftpServer.options().negotiateServer( clientOptions)},
+  maxReceivePacketSizeV{ DefaultMaxPacketSize},
+  receiveTimeoutV{ tftpServer.configuration().tftpTimeout},
+  socket{ ioContext},
+  timer{ ioContext},
+  transmitPacketType{ PacketType::Invalid},
+  transmitCounter{ 0}
 {
   try
   {

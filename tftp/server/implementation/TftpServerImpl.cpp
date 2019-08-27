@@ -122,7 +122,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList &clientOptions,
+  const Options::Options &clientOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
@@ -139,7 +139,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList &clientOptions,
+  const Options::Options &clientOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
@@ -233,12 +233,12 @@ void TftpServerImpl::receiveHandler(
   // Check error
   if ( errorCode)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "receive error: " + errorCode.message();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "receive error: " + errorCode.message();
 
     //! @throw CommunicationException On communication failure.
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( errorCode.message()));
+    BOOST_THROW_EXCEPTION( CommunicationException()
+      << AdditionalInfo( errorCode.message()));
   }
 
   try

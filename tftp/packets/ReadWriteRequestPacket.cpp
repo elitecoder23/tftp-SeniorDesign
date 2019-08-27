@@ -14,6 +14,8 @@
 
 #include <tftp/packets/PacketException.hpp>
 
+#include <tftp/options/OptionList.hpp>
+
 #include <helper/Endianess.hpp>
 
 #include <algorithm>
@@ -103,46 +105,24 @@ void ReadWriteRequestPacket::mode( const TransferMode mode)
   modeValue = mode;
 }
 
-const Options::OptionList& ReadWriteRequestPacket::options() const
+const Options::Options& ReadWriteRequestPacket::options() const
 {
   return optionsValue;
 }
 
-Options::OptionList& ReadWriteRequestPacket::options()
+Options::Options& ReadWriteRequestPacket::options()
 {
   return optionsValue;
 }
 
-void ReadWriteRequestPacket::options( const Options::OptionList &options)
+void ReadWriteRequestPacket::options( const Options::Options &options)
 {
   optionsValue = options;
 }
 
-void ReadWriteRequestPacket::options( Options::OptionList &&options)
+void ReadWriteRequestPacket::options( Options::Options &&options)
 {
   optionsValue = std::move( options);
-}
-
-std::string ReadWriteRequestPacket::option(
-  std::string_view name) const
-{
-  auto  option{ optionsValue.get( name)};
-
-  return (option) ? static_cast< std::string>( *option) : std::string();
-}
-
-void ReadWriteRequestPacket::option(
-  std::string_view name,
-  std::string_view value)
-{
-  optionsValue.set( name, value);
-}
-
-void ReadWriteRequestPacket::option(
-  std::string &&name,
-  std::string &&value)
-{
-  optionsValue.set( std::move( name), std::move( value));
 }
 
 ReadWriteRequestPacket::operator std::string() const
@@ -151,14 +131,14 @@ ReadWriteRequestPacket::operator std::string() const
     Packet::operator std::string() %
     filenameValue %
     decodeMode( modeValue) %
-    optionsValue.toString()).str();
+    Options::OptionList::toString( optionsValue)).str();
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
   std::string_view filename,
   const TransferMode mode,
-  const Options::OptionList &options):
+  const Options::Options &options):
   Packet{ packetType},
   filenameValue{ filename},
   modeValue{ mode},
@@ -181,7 +161,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
   std::string &&filename,
   const TransferMode mode,
-  Options::OptionList &&options):
+  Options::Options &&options):
   Packet{ packetType},
   filenameValue{ std::move( filename)},
   modeValue{ mode},
@@ -224,7 +204,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
 {
   const auto mode{ decodeMode( modeValue)};
-  const auto rawOptions{ optionsValue.rawOptions()};
+  const auto rawOptions{ Options::OptionList::rawOptions( optionsValue)};
 
   RawTftpPacket rawPacket(
     HeaderSize +
@@ -293,7 +273,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
   packetIt = modeEnd + 1;
 
   // assign options
-  optionsValue = Options::OptionList( packetIt, rawPacket.end());
+  optionsValue = Options::OptionList::options( packetIt, rawPacket.end());
 }
 
 }

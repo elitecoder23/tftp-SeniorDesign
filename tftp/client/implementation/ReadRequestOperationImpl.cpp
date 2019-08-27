@@ -68,7 +68,7 @@ void ReadRequestOperationImpl::start()
 
     // send read request packet
     sendFirst(
-      Packets::ReadRequestPacket{ filename(), mode(), reqOptions});
+      Packets::ReadRequestPacket{ filename(), mode(), reqOptions.options()});
 
     // wait for answers
     OperationImpl::start();

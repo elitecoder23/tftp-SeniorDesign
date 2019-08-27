@@ -76,7 +76,7 @@ void WriteRequestOperationImpl::start()
     sendFirst( Packets::WriteRequestPacket{
       filename(),
       mode(),
-      reqOptions});
+      reqOptions.options()});
 
     // wait for answers
     OperationImpl::start();

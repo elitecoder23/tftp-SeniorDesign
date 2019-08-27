@@ -14,12 +14,10 @@
 #define TFTP_OPTIONS_OPTIONLIST_HPP
 
 #include <tftp/options/Options.hpp>
-#include <tftp/options/Option.hpp>
 
 #include <string>
 #include <string_view>
 #include <optional>
-#include <map>
 #include <vector>
 #include <limits>
 #include <memory>
@@ -40,32 +38,66 @@ namespace Tftp::Options {
 class OptionList
 {
   public:
-    //! Declaration of Option Map.
-    using Options = std::map< std::string, OptionPtr, std::less<>>;
-    //! Declaration of Raw Options.
+
+    //! Raw Options.
     using RawOptions = std::vector< uint8_t>;
 
     /**
-     * @brief Creates an empty option list
+     * @brief Returns the option string for the given option.
+     *
+     * @param[in] option
+     *   The TFTP option.
+     *
+     * @return Returns the option name.
      **/
-    OptionList() = default;
+    static std::string_view optionName( KnownOptions option) noexcept;
 
     /**
-     * @brief Loads the option list from the given raw data.
-     *
-     * All options are added as StringOption.
+     * @brief Decodes Options from the given raw data.
      *
      * @param[in] begin
      *   Begin of raw option list data
      * @param[in] end
      *   End of raw option list data
      *
+     * @return Decoded Options.
+     *
      * @throw InvalidPacketException
      *   On invalid input data
      **/
-    OptionList(
+    static Options options(
       RawOptions::const_iterator begin,
       RawOptions::const_iterator end);
+
+    /**
+     * @brief Returns the option list as raw data
+     *
+     * The raw option date is used to generate the option data within the
+     * TFTP packages.
+     *
+     * @param[in] options
+     *   The TFTP Options to convert.
+     *
+     * @return TFTP Options as raw data
+     **/
+    static RawOptions rawOptions( const Options &options);
+
+    /**
+     * @brief Returns a string, which describes the option list.
+     *
+     * This operation is used for debugging and information purposes.
+     *
+     * @param[in] options
+     *   TFTP Options.
+     *
+     * @return Option list description.
+     **/
+    static std::string toString( const Options &options);
+
+    /**
+     * @brief Creates an empty option list
+     **/
+    OptionList() = default;
 
     /**
      * @brief Returns, if any option is set.
@@ -80,31 +112,6 @@ class OptionList
      * @return Returns a constant reference to the options map.
      **/
     [[nodiscard]] const Options& options() const;
-
-    /**
-     * @brief Returns the option map.
-     *
-     * @return Returns a reference to the options map.
-     **/
-    Options& options();
-
-    /**
-     * @brief Replaces the own options by the given one.
-     *
-     * @param[in] options
-     *   The new options.
-     **/
-    void options( const Options &options);
-
-    /**
-     * @brief Returns the option list as raw data
-     *
-     * The raw option date is used to generate the option data within the
-     * TFTP packages.
-     *
-     * @return The option list as raw data
-     **/
-    [[nodiscard]] RawOptions rawOptions() const;
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -143,7 +150,7 @@ class OptionList
      * @return The value of the option.
      *   If the option is not set, an empty OptionPointer is returned.
      **/
-    [[nodiscard]] OptionPtr get( std::string_view name) const;
+    [[nodiscard]] std::string_view option( std::string_view name) const;
 
     /**
      * @brief Sets the given option to the given value.
@@ -155,24 +162,13 @@ class OptionList
      *   The name of the option.
      * @param[in] value
      *   The option value.
-     */
-    void set( std::string_view name, std::string_view value);
-
-    //! @copydoc set(std::string_view,std::string_view)
-    void set( const std::string &&name, const std::string &&value);
-
-    /**
-     * @brief Set the given option
-     *
-     * If the option is set in the current option list, it is removed
-     * firstly.
-     *
-     * @param[in] name
-     *   Name of the option.
-     * @param[in] option
-     *   The option
+     * @param[in] negotiateOption
+     *   The negotiation operation.
      **/
-    void set( std::string_view name, OptionPtr option);
+    void option(
+      std::string_view name,
+      std::string_view value,
+      NegotiateOption negotiateOption);
 
     /**
      * @brief Remove the option with the given name from the option list.
@@ -317,7 +313,7 @@ class OptionList
      *   The server should not send an OACK with an empty option list
      **/
     [[nodiscard]] OptionList negotiateServer(
-      const OptionList &clientOptions) const;
+      const Options &clientOptions) const;
 
     /**
      * @brief Performs the option negotiation on client side.
@@ -337,20 +333,13 @@ class OptionList
      *   is unacceptable.
      **/
     [[nodiscard]] OptionList negotiateClient(
-      const OptionList &serverOptions) const;
-
-    /**
-     * @brief Returns a string, which describes the option list.
-     *
-     * This operation is used for debugging and information purposes.
-     *
-     * @return Option list description.
-     **/
-    [[nodiscard]] std::string toString() const;
+      const Options &serverOptions) const;
 
   private:
     //! Options.
     Options optionsValue;
+    //! Options Negotiation
+    OptionsNegotiation optionsNegotiationValue;
 };
 
 }

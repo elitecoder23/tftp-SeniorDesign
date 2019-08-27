@@ -40,13 +40,13 @@ class ReadRequestPacket: public ReadWriteRequestPacket
     ReadRequestPacket(
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &options) noexcept;
+      const Options::Options &options) noexcept;
 
-    //! @copydoc ReadRequestPacket(std::string_view,TransferMode,const Options::OptionList&)
+    //! @copydoc ReadRequestPacket(std::string_view,TransferMode,const Options::Options&)
     ReadRequestPacket(
       std::string &&filename,
       TransferMode mode,
-      Options::OptionList &&options) noexcept;
+      Options::Options &&options) noexcept;
 
     /**
      * @brief Generates a TFTP Read Request packet from a data buffer

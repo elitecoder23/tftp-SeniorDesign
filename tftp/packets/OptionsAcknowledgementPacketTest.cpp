@@ -25,11 +25,7 @@ BOOST_AUTO_TEST_SUITE( TftpOptionsAcknowledgementPacket)
 
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Tftp::Options::OptionList options{};
-
-  using namespace std::literals::string_view_literals;
-  options.set( "blocksize"sv, "4096"sv);
-
+  Tftp::Options::Options options{  {"blocksize", "4096"}};
   OptionsAcknowledgementPacket oack{ options};
 
   RawTftpPacket raw{ oack};
@@ -39,8 +35,21 @@ BOOST_AUTO_TEST_CASE( constructor )
   OptionsAcknowledgementPacket oack2( raw);
 
   BOOST_CHECK( oack.packetType()         == oack2.packetType());
-  BOOST_CHECK( oack.option( "blocksize") == oack2.option( "blocksize"));
-  BOOST_CHECK( oack.option( "XXX")       == "");
+
+  auto options2{ oack.options()};
+  BOOST_CHECK( options2.size() == 1);
+  auto blocksizeOption1{ options.find( "blocksize")};
+  BOOST_CHECK( blocksizeOption1 != options2.end());
+
+  auto options3{ oack2.options()};
+  BOOST_CHECK( options3.size() == 1);
+  auto blocksizeOption2{ options.find( "blocksize")};
+  BOOST_CHECK( blocksizeOption2 != options3.end());
+
+  BOOST_CHECK( blocksizeOption1->first == blocksizeOption2->first);
+  BOOST_CHECK( blocksizeOption1->second == blocksizeOption2->second);
+  BOOST_CHECK( blocksizeOption1->second == "4096");
+  BOOST_CHECK( blocksizeOption2->second == "4096");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -30,19 +30,19 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList &clientOptions,
+  const Options::Options &clientOptions,
   const boost::asio::ip::udp::endpoint &local) :
-  OperationImpl(
+  OperationImpl{
     ioContext,
     tftpServer,
     completionHandler,
     remote,
     clientOptions,
-    local),
-  dataHandler( dataHandler),
-  transmitDataSize( DefaultDataSize),
-  lastDataPacketTransmitted( false),
-  lastTransmittedBlockNumber( 0)
+    local},
+  dataHandler{ dataHandler},
+  transmitDataSize{ DefaultDataSize},
+  lastDataPacketTransmitted{ false},
+  lastTransmittedBlockNumber{ 0}
 {
 }
 
@@ -107,7 +107,7 @@ void ReadRequestOperationImpl::start()
       if ( !options().empty())
       {
         // Send OACK
-        send( Packets::OptionsAcknowledgementPacket( options()));
+        send( Packets::OptionsAcknowledgementPacket( options().options()));
       }
       else
       {

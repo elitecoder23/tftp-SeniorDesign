@@ -83,7 +83,7 @@ class TftpServerImpl:
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &clientOptions,
+      const Options::Options &clientOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
     //! @copydoc TftpServer::writeRequestOperation
@@ -91,7 +91,7 @@ class TftpServerImpl:
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &clientOptions,
+      const Options::Options &clientOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
     //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)

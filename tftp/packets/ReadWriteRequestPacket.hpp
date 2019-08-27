@@ -15,7 +15,7 @@
 
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/Packet.hpp>
-#include <tftp/options/OptionList.hpp>
+#include <tftp/options/Options.hpp>
 
 #include <map>
 #include <string>
@@ -102,14 +102,14 @@ class ReadWriteRequestPacket: public Packet
      *
      * @return The TFTP options.
      **/
-    [[nodiscard]] const Options::OptionList& options() const;
+    [[nodiscard]] const Options::Options& options() const;
 
     /**
      * @brief Returns the set TFTP options.
      *
      * @return The TFTP options.
      **/
-    [[nodiscard]] Options::OptionList& options();
+    [[nodiscard]] Options::Options& options();
 
     /**
      * @brief Sets the TFTP options.
@@ -117,35 +117,10 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] options
      *   The TFTP options.
      **/
-    void options( const Options::OptionList &options);
+    void options( const Options::Options &options);
 
-    //! @copydoc options(const Options::OptionList&)
-    void options( Options::OptionList &&options);
-
-    /**
-     * @brief Returns the option value with the given name.
-     *
-     * @param[in] name
-     *   The option name.
-     *
-     * @return The option value.
-     * @retval std::string()
-     *   When the given option is not set.
-     **/
-    [[nodiscard]] std::string option( std::string_view name) const;
-
-    /**
-     * @brief set a option
-     *
-     * @param[in] name
-     *   The option name.
-     * @param[in] value
-     *   The option value.
-     **/
-    void option( std::string_view name, std::string_view value);
-
-    //! @copydoc option(std::string_view,std::string_view)
-    void option( std::string &&name, std::string &&value);
+    //! @copydoc options(const Options::Options&)
+    void options( Options::Options &&options);
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
@@ -170,14 +145,14 @@ class ReadWriteRequestPacket: public Packet
       PacketType packetType,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &options);
+      const Options::Options &options);
 
-    //! @copydoc ReadWriteRequestPacket(PacketType,std::string_view,TransferMode,const Options::OptionList&)
+    //! @copydoc ReadWriteRequestPacket(PacketType,std::string_view,TransferMode,const Options::Options&)
     ReadWriteRequestPacket(
       PacketType packetType,
       std::string &&filename,
       TransferMode mode,
-      Options::OptionList &&options);
+      Options::Options &&options);
 
     /**
      * @brief Generates a TFTP Read/ Write Request packet from a data buffer
@@ -217,7 +192,7 @@ class ReadWriteRequestPacket: public Packet
     //! stored transfer mode
     TransferMode modeValue;
     //! stored options
-    Options::OptionList optionsValue;
+    Options::Options optionsValue;
 };
 
 }
