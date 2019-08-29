@@ -18,9 +18,8 @@
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpConfiguration.hpp>
 #include <tftp/TftpException.hpp>
-#include <tftp/RequestTypeDescription.hpp>
 
-#include <tftp/options/OptionList.hpp>
+#include <tftp/RequestTypeDescription.hpp>
 
 #include <tftp/file/StreamFile.hpp>
 
@@ -124,7 +123,8 @@ int main( int argc, char * argv[])
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
-          Tftp::TransferMode::OCTET);
+          Tftp::TransferMode::OCTET,
+          configuration.clientOptions());
         break;
 
       case Tftp::RequestType::Write:
@@ -134,7 +134,8 @@ int main( int argc, char * argv[])
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
-          Tftp::TransferMode::OCTET);
+          Tftp::TransferMode::OCTET,
+          configuration.clientOptions());
         break;
 
       default:

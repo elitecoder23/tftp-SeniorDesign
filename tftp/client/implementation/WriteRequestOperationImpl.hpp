@@ -46,6 +46,22 @@ class WriteRequestOperationImpl : public OperationImpl
      *   Which file shall be requested
      * @param[in] mode
      *   The transfer mode
+     * @param[in] clientOptions
+     *   Client TFTP options used for option negotiation.
+     **/
+    WriteRequestOperationImpl(
+      boost::asio::io_context &ioContext,
+      TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const TftpClientInternal &tftpClient,
+      const boost::asio::ip::udp::endpoint &remote,
+      std::string_view filename,
+      TransferMode mode,
+      const Options::OptionList &clientOptions);
+
+    /**
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,TransmitDataHandlerPtr,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     *
      * @param[in] local
      *   Parameter to define the communication source
      **/
@@ -57,6 +73,7 @@ class WriteRequestOperationImpl : public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
+      const Options::OptionList &clientOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     /**

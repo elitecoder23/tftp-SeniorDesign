@@ -16,11 +16,9 @@
 
 namespace Tftp::Client {
 
-TftpClientPtr TftpClient::instance(
-  const TftpConfiguration &configuration,
-  const Options::OptionList& additionalOptions)
+TftpClientPtr TftpClient::instance( const TftpConfiguration &configuration)
 {
-  return std::make_shared< TftpClientImpl>( configuration, additionalOptions);
+  return std::make_shared< TftpClientImpl>( configuration);
 }
 
 }

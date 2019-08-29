@@ -47,6 +47,22 @@ class ReadRequestOperationImpl : public OperationImpl
      *   Which file shall be requested
      * @param[in] mode
      *   The transfer mode
+     * @param[in] clientOptions
+     *   Client TFTP options used for option negotiation.
+     **/
+    ReadRequestOperationImpl(
+      boost::asio::io_context &ioContext,
+      ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const TftpClientInternal &tftpClient,
+      const boost::asio::ip::udp::endpoint &remote,
+      std::string_view filename,
+      TransferMode mode,
+      const Options::OptionList &clientOptions);
+
+    /**
+     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,ReceiveDataHandlerPtr,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     *
      * @param[in] local
      *   communication source
      **/
@@ -58,6 +74,7 @@ class ReadRequestOperationImpl : public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
+      const Options::OptionList &clientOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     /**

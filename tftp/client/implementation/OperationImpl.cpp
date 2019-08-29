@@ -80,6 +80,54 @@ OperationImpl::OperationImpl(
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
+  const Options::OptionList &clientOptions)
+try :
+  completionHandler{ completionHandler},
+  tftpClient{ tftpClient},
+  remoteEndpoint{ remote},
+  filenameV{ filename},
+  modeV{ mode},
+  optionsV{ clientOptions},
+  maxReceivePacketSizeV{ DefaultMaxPacketSize},
+  receiveTimeoutV{ tftpClient.configuration().tftpTimeout},
+  socket{ ioContext},
+  timer{ ioContext},
+  transmitPacketType{ PacketType::Invalid},
+  transmitCounter{ 0}
+{
+  BOOST_LOG_FUNCTION()
+
+  try
+  {
+    // Open the socket
+    socket.open( remote.protocol());
+  }
+  catch ( boost::system::system_error &err)
+  {
+    // On error and if socket is opened - close it.
+    if ( socket.is_open())
+    {
+      socket.close();
+    }
+
+    BOOST_THROW_EXCEPTION( CommunicationException()
+      << AdditionalInfo( err.what()));
+  }
+}
+catch ( boost::system::system_error &err)
+{
+  BOOST_THROW_EXCEPTION( CommunicationException()
+    << AdditionalInfo( err.what()));
+}
+
+OperationImpl::OperationImpl(
+  boost::asio::io_context &ioContext,
+  OperationCompletedHandler completionHandler,
+  const TftpClientInternal &tftpClient,
+  const boost::asio::ip::udp::endpoint &remote,
+  std::string_view filename,
+  const TransferMode mode,
+  const Options::OptionList &clientOptions,
   const boost::asio::ip::udp::endpoint &local)
 try :
   completionHandler{ completionHandler},
@@ -87,7 +135,7 @@ try :
   remoteEndpoint{ remote},
   filenameV{ filename},
   modeV{ mode},
-  optionsV{ tftpClient.options()},
+  optionsV{ clientOptions},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpClient.configuration().tftpTimeout},
   socket{ ioContext},
@@ -113,16 +161,14 @@ try :
       socket.close();
     }
 
-    //! @throw CommunicationException Socket cannot be created or binded.
     BOOST_THROW_EXCEPTION( CommunicationException()
       << AdditionalInfo( err.what()));
   }
 }
 catch ( boost::system::system_error &err)
 {
-  //! @throw CommunicationException Error during initialisation of communication objects.
   BOOST_THROW_EXCEPTION( CommunicationException()
-    << AdditionalInfo( err.what()));
+   << AdditionalInfo( err.what()));
 }
 
 std::string_view OperationImpl::filename() const
@@ -229,7 +275,7 @@ void OperationImpl::receiveFirst()
         boost::asio::placeholders::bytes_transferred));
 
     // Set receive timeout
-    timer.expires_from_now( boost::posix_time::seconds( receiveTimeoutV));
+    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV});
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
@@ -264,7 +310,7 @@ void OperationImpl::receive()
         boost::asio::placeholders::bytes_transferred));
 
     // set receive timeout
-    timer.expires_from_now( boost::posix_time::seconds( receiveTimeoutV));
+    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV});
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
@@ -322,10 +368,9 @@ void OperationImpl::readRequestPacket(
     << "RX ERROR: " << static_cast< std::string>( readRequestPacket);
 
   // send error packet
-  using namespace std::literals::string_view_literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "RRQ not expected"sv};
+    "RRQ not expected"};
 
   send( errorPacket);
 
@@ -343,10 +388,9 @@ void OperationImpl::writeRequestPacket(
     << "RX ERROR: " << static_cast< std::string>( writeRequestPacket);
 
   // send error packet
-  using namespace std::literals::string_view_literals;
   Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
-    "WRQ not expected"sv);
+    "WRQ not expected");
 
   send( errorPacket);
 
@@ -396,10 +440,9 @@ void OperationImpl::invalidPacket(
     << "RX ERROR: INVALID Packet";
 
   // send error packet
-  using namespace std::literals::string_view_literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "Invalid packet not expected"sv};
+    "Invalid packet not expected"};
 
   send( errorPacket);
 
@@ -441,10 +484,9 @@ void OperationImpl::receiveFirstHandler(
     try
     {
       // send error packet
-      using namespace std::literals::string_view_literals;
       Packets::ErrorPacket err(
         ErrorCode::UnknownTransferId,
-        "Packet from wrong source"sv);
+        "Packet from wrong source");
 
       socket.send_to(
         boost::asio::buffer( static_cast< RawTftpPacket>( err)),

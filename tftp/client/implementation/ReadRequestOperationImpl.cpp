@@ -34,6 +34,30 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
+  const Options::OptionList &clientOptions) :
+  OperationImpl{
+    ioContext,
+    completionHandler,
+    tftpClient,
+    remote,
+    filename,
+    mode,
+    clientOptions},
+  dataHandler{ dataHandler},
+  receiveDataSize{ DefaultDataSize},
+  lastReceivedBlockNumber{ 0U}
+{
+}
+
+ReadRequestOperationImpl::ReadRequestOperationImpl(
+  boost::asio::io_context &ioContext,
+  ReceiveDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
+  const TftpClientInternal &tftpClient,
+  const boost::asio::ip::udp::endpoint &remote,
+  std::string_view filename,
+  const TransferMode mode,
+  const Options::OptionList &clientOptions,
   const boost::asio::ip::udp::endpoint &local) :
   OperationImpl{
     ioContext,
@@ -42,6 +66,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     remote,
     filename,
     mode,
+    clientOptions,
     local},
   dataHandler{ dataHandler},
   receiveDataSize{ DefaultDataSize},

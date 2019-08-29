@@ -92,6 +92,21 @@ class OperationImpl :
      *   Which file shall be requested
      * @param[in] mode
      *   The transfer mode
+     * @param[in] clientOptions
+     *   Client TFTP options used for option negotiation.
+     **/
+    OperationImpl(
+      boost::asio::io_context &ioContext,
+      OperationCompletedHandler completionHandler,
+      const TftpClientInternal &tftpClient,
+      const boost::asio::ip::udp::endpoint &remote,
+      std::string_view filename,
+      TransferMode mode,
+      const Options::OptionList &clientOptions);
+
+    /**
+     * @copydoc OperationImpl(boost::asio::io_context&,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     *
      * @param[in] local
      *   Parameter to define the communication source
      **/
@@ -102,6 +117,7 @@ class OperationImpl :
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
+      const Options::OptionList &clientOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     /**

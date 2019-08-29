@@ -36,12 +36,6 @@ class TftpClientInternal : public TftpClient
      **/
     [[nodiscard]] virtual const TftpConfiguration& configuration() const = 0;
 
-    /**
-     * @brief Returns the own options list.
-     *
-     * @return The options list.
-     **/
-    [[nodiscard]] virtual const Options::OptionList& options() const = 0;
 };
 
 }

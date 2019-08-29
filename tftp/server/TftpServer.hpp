@@ -112,7 +112,7 @@ class TftpServer
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
-      const Options::OptionList& serverOptions) = 0;
+      const Options::OptionList &serverOptions) = 0;
 
     /**
      * @copydoc readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
@@ -125,7 +125,7 @@ class TftpServer
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
-      const Options::OptionList& serverOptions,
+      const Options::OptionList &serverOptions,
       const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**
@@ -149,7 +149,7 @@ class TftpServer
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
-      const Options::OptionList& serverOptions) = 0;
+      const Options::OptionList &serverOptions) = 0;
 
     /**
      * @copydoc writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
@@ -162,7 +162,7 @@ class TftpServer
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
-      const Options::OptionList& serverOptions,
+      const Options::OptionList &serverOptions,
       const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**

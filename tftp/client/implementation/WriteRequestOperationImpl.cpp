@@ -33,6 +33,31 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
+  const Options::OptionList &clientOptions):
+  OperationImpl{
+    ioContext,
+    completionHandler,
+    tftpClient,
+    remote,
+    filename,
+    mode,
+    clientOptions},
+  dataHandler{ dataHandler},
+  transmitDataSize{ DefaultDataSize},
+  lastDataPacketTransmitted{ false},
+  lastTransmittedBlockNumber{ 0U}
+{
+}
+
+WriteRequestOperationImpl::WriteRequestOperationImpl(
+  boost::asio::io_context &ioContext,
+  TransmitDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
+  const TftpClientInternal &tftpClient,
+  const boost::asio::ip::udp::endpoint &remote,
+  std::string_view filename,
+  const TransferMode mode,
+  const Options::OptionList &clientOptions,
   const boost::asio::ip::udp::endpoint &local):
   OperationImpl{
     ioContext,
@@ -41,6 +66,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     remote,
     filename,
     mode,
+    clientOptions,
     local},
   dataHandler{ dataHandler},
   transmitDataSize{ DefaultDataSize},
