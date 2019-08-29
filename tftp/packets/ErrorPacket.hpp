@@ -46,7 +46,7 @@ class ErrorPacket: public Packet
      **/
     ErrorPacket(
       ErrorCode errorCode,
-      std::string_view errorMessage);
+      std::string_view errorMessage = {});
 
     /**
      * @brief Generates a TFTP error packet from a data buffer
