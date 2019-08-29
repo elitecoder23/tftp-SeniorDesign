@@ -60,17 +60,8 @@ class ErrorOperation: public Operation
       ErrorCode errorCode,
       std::string_view errorMessage);
 
-    //! @copydoc ErrorOperation(boost::asio::io_context&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
-    ErrorOperation(
-      boost::asio::io_context &ioContext,
-      OperationCompletedHandler completionHandler,
-      boost::asio::ip::udp::endpoint &&remote,
-      boost::asio::ip::udp::endpoint &&local,
-      ErrorCode errorCode,
-      std::string &&errorMessage);
-
     //! Destructor.
-    ~ErrorOperation() noexcept override;
+    ~ErrorOperation() noexcept final = default;
 
     /**
      * @copydoc Operation::start()
@@ -99,11 +90,11 @@ class ErrorOperation: public Operation
      **/
     void sendError( const Packets::ErrorPacket &error);
 
-    //! The completion handler
+    //! Completion handler
     OperationCompletedHandler completionHandler;
-    //! The communication socket
+    //! Communication socket
     boost::asio::ip::udp::socket socket;
-    //! The error code
+    //! Error code
     const ErrorInfo errorInfoV;
 };
 

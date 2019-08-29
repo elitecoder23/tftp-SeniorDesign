@@ -27,17 +27,17 @@
 #include <functional>
 
 /**
- * @brief TFTP Server Implementation.
+ * @brief TFTP %Server Implementation.
  *
  * The user of this library uses following interface classes to interact with
  * it:
  * @li \c TftpServer - The main entry point (is also an factory for all other
  *   classes,
- * @li \c NewRequestHandler - This interface must be implemented by the user
+ * @li \c ReceivedTftpRequestHandler - This interface must be implemented by the user
  *   of this library to handle new TFTP requests.
  * @li \c Operation - Class interface to execute the operations. The actual
  *   operations can be created by utilising the TftpServer class instances.
- * @li \c TftpReadOperationHandler and \c TftpWriteOperationHandler - This
+ * @li \c ReceiveDataHandler and \c TransmitDataHandler - This
  *   interface class must be implemented by the user of this library to make
  *   use of the TFTP server operations.
  **/
@@ -64,8 +64,8 @@ using OperationPtr = std::shared_ptr< Operation>;
  *   Filename
  * @param[in] mode
  *   Transfer Mode
- * @param[in] options
- *   TFTP Options
+ * @param[in] clientOptions
+ *   Received TFTP %Client %Options
  **/
 using ReceivedTftpRequestHandler =
   std::function< void(
@@ -73,7 +73,7 @@ using ReceivedTftpRequestHandler =
     RequestType requestType,
     std::string_view filename,
     TransferMode mode,
-    const Options::Options &options)>;
+    const Options::Options &clientOptions)>;
 
 }
 

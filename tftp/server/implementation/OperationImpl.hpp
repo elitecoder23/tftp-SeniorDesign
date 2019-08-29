@@ -72,6 +72,20 @@ class OperationImpl:
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
      *   Received option list from client.
+     * @param[in] serverOptions
+     *   Server TFTP options used for option negotiation.
+     **/
+    OperationImpl(
+      boost::asio::io_context &ioContext,
+      const TftpServerInternal &tftpServer,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      const Options::Options &clientOptions,
+      const Options::OptionList &serverOptions);
+
+    /**
+     * @copydoc OperationImpl(boost::asio::io_context&,const TftpServerInternal&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+     *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
@@ -81,6 +95,7 @@ class OperationImpl:
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
+      const Options::OptionList &serverOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     /**
@@ -130,7 +145,7 @@ class OperationImpl:
      *
      * @return The stored TFTP option list.
      **/
-    const Options::OptionList& options() const;
+    Options::OptionList& options();
 
     /**
      * @brief Updates the limit of maximum packet size for the receive
@@ -233,12 +248,12 @@ class OperationImpl:
     Options::OptionList optionsV;
     //! The maximum packet size, which can be received
     uint16_t maxReceivePacketSizeV;
-    //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
+    //! The receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
     uint8_t receiveTimeoutV;
 
-    //! The TFTP UDP socket
+    //! TFTP UDP socket
     boost::asio::ip::udp::socket socket;
-    //! The timeout timer
+    //! Timeout timer
     boost::asio::deadline_timer timer;
 
     //! stores the received packets

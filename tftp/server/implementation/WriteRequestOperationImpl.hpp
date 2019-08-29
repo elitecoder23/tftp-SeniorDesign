@@ -27,7 +27,7 @@
 namespace Tftp::Server {
 
 /**
- * @brief TFTP server read operation.
+ * @brief TFTP Server Read operation (TFTP WRQ).
  *
  * In this operation a client has requested to write a file, which is
  * transmitted form the client to the server.
@@ -52,6 +52,21 @@ class WriteRequestOperationImpl: public OperationImpl
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
      *   Received option list from client.
+     * @param[in] serverOptions
+     *   Server TFTP options used for option negotiation.
+     **/
+    WriteRequestOperationImpl(
+      boost::asio::io_context &ioContext,
+      const TftpServerInternal &tftpServer,
+      ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      const Options::Options &clientOptions,
+      const Options::OptionList &serverOptions);
+
+    /**
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,const TftpServerInternal&,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+     *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
@@ -62,6 +77,7 @@ class WriteRequestOperationImpl: public OperationImpl
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
+      const Options::OptionList &serverOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     /**

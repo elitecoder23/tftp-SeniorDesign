@@ -35,12 +35,10 @@ namespace Tftp::Server {
 TftpServerImpl::TftpServerImpl(
   ReceivedTftpRequestHandler handler,
   const TftpConfiguration &configuration,
-  const Options::OptionList& additionalOptions,
   const boost::asio::ip::udp::endpoint &serverAddress)
 try :
   handler{ handler},
   configurationV{ configuration},
-  optionsV{ configuration.serverOptions( additionalOptions)},
   serverAddress{ serverAddress},
   work{ ioContext},
   socket{ ioContext}
@@ -61,7 +59,6 @@ try :
       socket.close();
     }
 
-    //! @throw CommunicationException When socket operation fails.
     BOOST_THROW_EXCEPTION( CommunicationException()
       << AdditionalInfo( err.what())
       << TransferPhaseInfo( TransferPhase::Initialisation));
@@ -69,7 +66,6 @@ try :
 }
 catch ( boost::system::system_error &err)
 {
-  //! @throw CommunicationException When socket operation fails.
   BOOST_THROW_EXCEPTION( CommunicationException()
     << AdditionalInfo( err.what())
     << TransferPhaseInfo( TransferPhase::Initialisation));
@@ -123,6 +119,24 @@ OperationPtr TftpServerImpl::readRequestOperation(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const Options::Options &clientOptions,
+  const Options::OptionList& serverOptions)
+{
+  return std::make_shared< ReadRequestOperationImpl>(
+    ioContext,
+    *this,
+    dataHandler,
+    completionHandler,
+    remote,
+    clientOptions,
+    serverOptions);
+}
+
+OperationPtr TftpServerImpl::readRequestOperation(
+  TransmitDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
+  const boost::asio::ip::udp::endpoint &remote,
+  const Options::Options &clientOptions,
+  const Options::OptionList& serverOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
@@ -132,6 +146,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
     completionHandler,
     remote,
     clientOptions,
+    serverOptions,
     local);
 }
 
@@ -140,6 +155,24 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const Options::Options &clientOptions,
+  const Options::OptionList& serverOptions)
+{
+  return std::make_shared< WriteRequestOperationImpl>(
+    ioContext,
+    *this,
+    dataHandler,
+    completionHandler,
+    remote,
+    clientOptions,
+    serverOptions);
+}
+
+OperationPtr TftpServerImpl::writeRequestOperation(
+  ReceiveDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
+  const boost::asio::ip::udp::endpoint &remote,
+  const Options::Options &clientOptions,
+  const Options::OptionList& serverOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
@@ -149,6 +182,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
     completionHandler,
     remote,
     clientOptions,
+    serverOptions,
     local);
 }
 
@@ -168,30 +202,9 @@ OperationPtr TftpServerImpl::errorOperation(
     errorMessage);
 }
 
-OperationPtr TftpServerImpl::errorOperation(
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const boost::asio::ip::udp::endpoint &local,
-  const ErrorCode errorCode,
-  std::string &&errorMessage)
-{
-  return std::make_shared< ErrorOperation>(
-    ioContext,
-    completionHandler,
-    remote,
-    local,
-    errorCode,
-    std::move( errorMessage));
-}
-
 const Tftp::TftpConfiguration& TftpServerImpl::configuration() const
 {
   return configurationV;
-}
-
-const Options::OptionList& TftpServerImpl::options() const
-{
-  return optionsV;
 }
 
 void TftpServerImpl::receive()
@@ -214,9 +227,9 @@ void TftpServerImpl::receive()
   {
     ioContext.stop();
 
-    //! @throw CommunicationException on IO error.
-    BOOST_THROW_EXCEPTION(
-      CommunicationException() << AdditionalInfo( err.what()));
+    BOOST_THROW_EXCEPTION(CommunicationException()
+      << AdditionalInfo( err.what())
+      << TransferPhaseInfo( TransferPhase::Initialisation));
   }
 }
 
@@ -236,7 +249,6 @@ void TftpServerImpl::receiveHandler(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "receive error: " + errorCode.message();
 
-    //! @throw CommunicationException On communication failure.
     BOOST_THROW_EXCEPTION( CommunicationException()
       << AdditionalInfo( errorCode.message()));
   }

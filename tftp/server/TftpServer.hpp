@@ -46,14 +46,12 @@ class TftpServer
     static const boost::asio::ip::udp::endpoint DefaultLocalEndpoint;
 
     /**
-     * @brief Creates an instance of the TFTP server.
+     * @brief Creates a TFTP Server Instance.
      *
      * @param[in] handler
      *   The request handler.
      * @param[in] configuration
      *   The TFTP Configuration
-     * @param[in] additionalOptions
-     *   Additional Options, which shall be used as TFTP server option list.
      * @param[in] serverAddress
      *   Address where the FTP server should listen on.
      *
@@ -62,7 +60,6 @@ class TftpServer
     static TftpServerPtr instance(
       ReceivedTftpRequestHandler handler,
       const TftpConfiguration &configuration = {},
-      const Options::OptionList& additionalOptions = {},
       const boost::asio::ip::udp::endpoint &serverAddress = DefaultLocalEndpoint);
 
     //! Destructor
@@ -104,9 +101,9 @@ class TftpServer
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
-     *   Received option list from client.
-     * @param[in] local
-     *   local endpoint, where the server handles the request from.
+     *   Received TFTP options from client.
+     * @param[in] serverOptions
+     *   Server TFTP options used for option negotiation.
      *
      * @return The TFTP server write operation.
      **/
@@ -115,6 +112,20 @@ class TftpServer
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
+      const Options::OptionList& serverOptions) = 0;
+
+    /**
+     * @copydoc readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+     *
+     * @param[in] local
+     *   local endpoint, where the server handles the request from.
+     **/
+    virtual OperationPtr readRequestOperation(
+      TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      const Options::Options &clientOptions,
+      const Options::OptionList& serverOptions,
       const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**
@@ -127,9 +138,9 @@ class TftpServer
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
-     *   Received option list from client.
-     * @param[in] local
-     *   local endpoint, where the server handles the request from.
+     *   Received TFTP options from client.
+     * @param[in] serverOptions
+     *   Server TFTP options used for option negotiation.
      *
      * @return The TFTP server read operation.
      **/
@@ -138,6 +149,20 @@ class TftpServer
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
+      const Options::OptionList& serverOptions) = 0;
+
+    /**
+     * @copydoc writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+     *
+     * @param[in] local
+     *   local endpoint, where the server handles the request from.
+     **/
+    virtual OperationPtr writeRequestOperation(
+      ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      const Options::Options &clientOptions,
+      const Options::OptionList& serverOptions,
       const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**
@@ -161,15 +186,7 @@ class TftpServer
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
-      std::string_view errorMessage) = 0;
-
-    //! @copydoc errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
-    virtual OperationPtr errorOperation(
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const boost::asio::ip::udp::endpoint &local,
-      ErrorCode errorCode,
-      std::string &&errorMessage = {}) = 0;
+      std::string_view errorMessage = {}) = 0;
 
   protected:
     //! Constructor

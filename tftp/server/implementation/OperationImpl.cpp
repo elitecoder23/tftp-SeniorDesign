@@ -55,7 +55,7 @@ void OperationImpl::gracefulAbort(
 
 void OperationImpl::abort()
 {
-  BOOST_LOG_FUNCTION();
+  BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
     << "Abort requested";
@@ -75,11 +75,55 @@ OperationImpl::OperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const Options::Options &clientOptions,
+  const Options::OptionList& serverOptions)
+try:
+  completionHandler{ completionHandler},
+  tftpServer{ tftpServer},
+  optionsV{ serverOptions.negotiateServer( clientOptions)},
+  maxReceivePacketSizeV{ DefaultMaxPacketSize},
+  receiveTimeoutV{ tftpServer.configuration().tftpTimeout},
+  socket{ ioContext},
+  timer{ ioContext},
+  transmitPacketType{ PacketType::Invalid},
+  transmitCounter{ 0}
+{
+  try
+  {
+    // Open the socket
+    socket.open( remote.protocol());
+
+    // connect to client.
+    socket.connect( remote);
+  }
+  catch (boost::system::system_error &err)
+  {
+    if (socket.is_open())
+    {
+      socket.close();
+    }
+
+    BOOST_THROW_EXCEPTION( CommunicationException() <<
+      AdditionalInfo( err.what()));
+  }
+}
+catch (boost::system::system_error &err)
+{
+  BOOST_THROW_EXCEPTION( CommunicationException() <<
+    AdditionalInfo( err.what()));
+}
+
+OperationImpl::OperationImpl(
+  boost::asio::io_context &ioContext,
+  const TftpServerInternal &tftpServer,
+  OperationCompletedHandler completionHandler,
+  const boost::asio::ip::udp::endpoint &remote,
+  const Options::Options &clientOptions,
+  const Options::OptionList& serverOptions,
   const boost::asio::ip::udp::endpoint &local)
 try:
   completionHandler{ completionHandler},
   tftpServer{ tftpServer},
-  optionsV{ tftpServer.options().negotiateServer( clientOptions)},
+  optionsV{ serverOptions.negotiateServer( clientOptions)},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpServer.configuration().tftpTimeout},
   socket{ ioContext},
@@ -105,16 +149,14 @@ try:
       socket.close();
     }
 
-    //! @throw CommunicationException
-    BOOST_THROW_EXCEPTION( CommunicationException() <<
-      AdditionalInfo( err.what()));
+    BOOST_THROW_EXCEPTION( CommunicationException()
+      << AdditionalInfo( err.what()));
   }
 }
 catch (boost::system::system_error &err)
 {
-  //! @throw CommunicationException
-  BOOST_THROW_EXCEPTION( CommunicationException() <<
-    AdditionalInfo( err.what()));
+  BOOST_THROW_EXCEPTION( CommunicationException()
+    << AdditionalInfo( err.what()));
 }
 
 OperationImpl::~OperationImpl() noexcept
@@ -211,7 +253,7 @@ const TftpConfiguration& OperationImpl::configuration() const
   return tftpServer.configuration();
 }
 
-const Options::OptionList& OperationImpl::options() const
+Options::OptionList& OperationImpl::options()
 {
   return optionsV;
 }
@@ -378,8 +420,8 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
 
   if (errorCode)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "timer error: " << errorCode.message();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "timer error: " << errorCode.message();
 
     // Operation completed
     finished( TransferStatus::CommunicationError);
@@ -388,16 +430,16 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
 
   if (transmitCounter > tftpServer.configuration().tftpRetries)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "Retry counter exceeded ABORT";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "Retry counter exceeded ABORT";
 
     // Operation completed
     finished( TransferStatus::CommunicationError);
     return;
   }
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning) <<
-    "retransmit last packet";
+  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
+    << "retransmit last packet";
 
   try
   {
@@ -414,8 +456,8 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
   }
   catch (boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error) <<
-      "TX error: " << err.what();
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      << "TX error: " << err.what();
 
     // Operation completed
     finished( TransferStatus::CommunicationError);

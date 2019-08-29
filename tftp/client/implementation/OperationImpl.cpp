@@ -125,7 +125,7 @@ catch ( boost::system::system_error &err)
     << AdditionalInfo( err.what()));
 }
 
-std::string_view  OperationImpl::filename() const
+std::string_view OperationImpl::filename() const
 {
   return filenameV;
 }

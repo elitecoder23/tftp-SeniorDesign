@@ -54,47 +54,6 @@ catch ( boost::system::system_error &err)
     CommunicationException() << AdditionalInfo( err.what()));
 }
 
-ErrorOperation::ErrorOperation(
-  boost::asio::io_context &ioContext,
-  OperationCompletedHandler completionHandler,
-  boost::asio::ip::udp::endpoint &&remote,
-  boost::asio::ip::udp::endpoint &&local,
-  ErrorCode errorCode,
-  std::string &&errorMessage)
-try :
-  completionHandler{ completionHandler},
-  socket{ ioContext},
-  errorInfoV{ Packets::ErrorPacket{ errorCode, std::move( errorMessage)}}
-{
-  try
-  {
-    socket.open( remote.protocol());
-
-    socket.bind( local);
-
-    socket.connect( remote);
-  }
-  catch ( boost::system::system_error &err)
-  {
-    if ( socket.is_open())
-    {
-      socket.close();
-    }
-
-    BOOST_THROW_EXCEPTION( CommunicationException()
-      << AdditionalInfo( err.what()));
-  }
-}
-catch ( boost::system::system_error &err)
-{
-  BOOST_THROW_EXCEPTION( CommunicationException()
-    << AdditionalInfo( err.what()));
-}
-
-ErrorOperation::~ErrorOperation() noexcept
-{
-}
-
 void ErrorOperation::start()
 {
   assert( errorInfoV);

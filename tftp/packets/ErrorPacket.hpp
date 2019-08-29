@@ -48,11 +48,6 @@ class ErrorPacket: public Packet
       ErrorCode errorCode,
       std::string_view errorMessage);
 
-    //! @copydoc ErrorPacket(ErrorCode,std::string_view)
-    explicit ErrorPacket(
-      ErrorCode errorCode,
-      std::string &&errorMessage = {});
-
     /**
      * @brief Generates a TFTP error packet from a data buffer
      *
@@ -99,9 +94,6 @@ class ErrorPacket: public Packet
      *   The error message to set.
      **/
     void errorMessage( std::string_view errorMessage);
-
-    //! @copydoc errorMessage(std::string_view)
-    void errorMessage( std::string &&errorMessage);
 
   private:
     //! @copydoc Packet::encode()

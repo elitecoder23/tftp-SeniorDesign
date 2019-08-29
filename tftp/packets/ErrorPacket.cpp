@@ -28,15 +28,6 @@ ErrorPacket::ErrorPacket(
 {
 }
 
-ErrorPacket::ErrorPacket(
-  ErrorCode errorCode,
-  std::string &&errorMessage):
-  Packet{ PacketType::Error},
-  errorCodeValue{ errorCode},
-  errorMessageValue{ std::move( errorMessage)}
-{
-}
-
 ErrorPacket::ErrorPacket( const RawTftpPacket &rawPacket):
   Packet{ PacketType::Error, rawPacket},
   errorCodeValue{ ErrorCode::Invalid}
@@ -79,11 +70,6 @@ std::string_view ErrorPacket::errorMessage() const
 void ErrorPacket::errorMessage( std::string_view errorMessage)
 {
   errorMessageValue = errorMessage;
-}
-
-void ErrorPacket::errorMessage( std::string &&errorMessage)
-{
-  errorMessageValue = std::move( errorMessage);
 }
 
 Tftp::RawTftpPacket ErrorPacket::encode() const

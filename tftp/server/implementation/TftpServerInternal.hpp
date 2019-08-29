@@ -35,13 +35,6 @@ class TftpServerInternal : public TftpServer
      * @return The TFTP configuration.
      **/
     [[nodiscard]] virtual const TftpConfiguration& configuration() const = 0;
-
-    /**
-     * @brief Returns the configured TFTP Options.
-     *
-     * @return The configured TFTP Options.
-     **/
-    [[nodiscard]] virtual const Options::OptionList& options() const = 0;
 };
 
 }

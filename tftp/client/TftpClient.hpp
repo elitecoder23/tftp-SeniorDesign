@@ -33,12 +33,12 @@ class TftpClient
 {
   public:
     /**
-     * @brief Creates an instance of TFTP client.
+     * @brief Creates a TFTP %Client Instance.
      *
      * With the instance you can create any client operation instances.
      *
      * @param[in] configuration
-     *   The TFTP Configuration
+     *   TFTP Configuration
      * @param[in] additionalOptions
      *   Additional Options, which shall be used as TFTP client option list.
      *
@@ -46,7 +46,7 @@ class TftpClient
      **/
     static TftpClientPtr instance(
       const TftpConfiguration &configuration = {},
-      const Options::OptionList& additionalOptions = {});
+      const Options::OptionList &additionalOptions = {});
 
     //! Destructor
     virtual ~TftpClient() noexcept = default;
@@ -72,7 +72,7 @@ class TftpClient
     virtual void stop() = 0;
 
     /**
-     * @brief Initialises the operation.
+     * @brief Initialises the Operation.
      *
      * @param[in] dataHandler
      *   Handler for received data.

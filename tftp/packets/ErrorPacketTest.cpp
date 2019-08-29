@@ -24,8 +24,7 @@ BOOST_AUTO_TEST_SUITE( TftpErrorPacket)
 
 BOOST_AUTO_TEST_CASE( constructor1)
 {
-  using namespace std::literals::string_view_literals;
-  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"sv};
+  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"};
 
   RawTftpPacket raw{ error};
 

@@ -24,11 +24,11 @@
 namespace Tftp::Server {
 
 /**
- * @brief TFTP server write operation.
+ * @brief TFTP Server Write Operation (RRQ).
  *
  * In this operation a client has requested to read a file, which is
- * transmitted form the server to the client. Therefore the server performs
- * a write operation.
+ * transmitted form the server to the client.
+ * Therefore the server performs a write operation.
  *
  * This operation is initiated by a client TFTP read request (RRQ)
  **/
@@ -50,6 +50,21 @@ class ReadRequestOperationImpl: public OperationImpl
      *   Address of the remote endpoint (TFTP client).
      * @param[in] clientOptions
      *   Received option list from client.
+     * @param[in] serverOptions
+     *   Server TFTP options used for option negotiation.
+     **/
+    ReadRequestOperationImpl(
+      boost::asio::io_context &ioContext,
+      const TftpServerInternal &tftpServer,
+      TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      const Options::Options &clientOptions,
+      const Options::OptionList &serverOptions);
+
+    /**
+     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,const TftpServerInternal&,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+     *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
@@ -60,9 +75,10 @@ class ReadRequestOperationImpl: public OperationImpl
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
+      const Options::OptionList &serverOptions,
       const boost::asio::ip::udp::endpoint &local);
 
-    //! Desctructor
+    //! Destructor
     ~ReadRequestOperationImpl() noexcept override = default;
 
     /**

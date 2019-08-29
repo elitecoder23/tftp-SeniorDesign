@@ -50,18 +50,15 @@ class TftpServerImpl:
      *   The TFTP request received handler.
      * @param[in] configuration
      *   The TFTP Configuration
-     * @param[in] additionalOptions
-     *   Additional Options, which shall be used as TFTP server option list.
      * @param[in] serverAddress
      *   Address where the FTP server should listen on.
      *
-     * @throw TftpException
+     * @throw CommunicationException
      *   When a error occurs during socket initialisation.
      **/
     TftpServerImpl(
       ReceivedTftpRequestHandler handler,
       const TftpConfiguration &configuration,
-      const Options::OptionList& additionalOptions,
       const boost::asio::ip::udp::endpoint &serverAddress);
 
     /**
@@ -78,20 +75,38 @@ class TftpServerImpl:
     //! @copydoc TftpServer::stop
     void stop() final;
 
-    //! @copydoc TftpServer::readRequestOperation
+    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
     OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
+      const Options::OptionList &serverOptions) final;
+
+    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
+    OperationPtr readRequestOperation(
+      TransmitDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      const Options::Options &clientOptions,
+      const Options::OptionList& serverOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
-    //! @copydoc TftpServer::writeRequestOperation
+    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
     OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::Options &clientOptions,
+      const Options::OptionList &serverOptions) final;
+
+    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
+    OperationPtr writeRequestOperation(
+      ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      const Options::Options &clientOptions,
+      const Options::OptionList& serverOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
     //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
@@ -100,25 +115,17 @@ class TftpServerImpl:
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
-      std::string_view errorMessage) final;
-
-    //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string&&)
-    OperationPtr errorOperation(
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const boost::asio::ip::udp::endpoint &local,
-      ErrorCode errorCode,
-      std::string &&errorMessage = {}) final;
+      std::string_view errorMessage = {}) final;
 
     //! @copydoc TftpServerInternal::configuration
     [[nodiscard]] const TftpConfiguration& configuration() const final;
 
-    //! @copydoc TftpServerInternal::options
-    [[nodiscard]] const Options::OptionList& options() const final;
-
   private:
     /**
      * @brief Waits for an incoming response from the server.
+     *
+     * @throw CommunicationException
+     *   On IO error.
      **/
     void receive();
 
@@ -129,6 +136,9 @@ class TftpServerImpl:
      *   error status of operation.
      * @param[in] bytesTransferred
      *   Number of bytes transfered.
+     *
+     * @throw CommunicationException
+     *   On communication failure.
      **/
     void receiveHandler(
       const boost::system::error_code& errorCode,
@@ -207,13 +217,11 @@ class TftpServerImpl:
       const RawTftpPacket &rawPacket) final;
 
   private:
-    //! The registered handler
+    //! Registered request handler
     ReceivedTftpRequestHandler handler;
-    //! The TFTP configuration
+    //! TFTP Configuration
     const TftpConfiguration configurationV;
-    //! The Server option list.
-    const Options::OptionList optionsV;
-    //! the server address to listen on
+    //! Server address to listen on
     const boost::asio::ip::udp::endpoint serverAddress;
 
     //! TFTP server ASIO context

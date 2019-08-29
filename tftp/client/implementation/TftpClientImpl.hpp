@@ -25,7 +25,7 @@
 namespace Tftp::Client {
 
 /**
- * @brief Implementation of TFTP Client factory interface.
+ * @brief Implementation of TFTP %Client Factory Interface.
  *
  * This factory class creates on request the concrete client operations.
  **/
@@ -33,7 +33,7 @@ class TftpClientImpl : public TftpClientInternal
   {
   public:
     /**
-     * @brief Creates the concrete TFTP client.
+     * @brief Creates the concrete TFTP %Client.
      *
      * @param[in] configuration
      *   The TFTP Configuration

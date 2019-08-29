@@ -24,21 +24,22 @@
 #include <functional>
 
 /**
- * @brief TFTP Client Implementation.
+ * @brief TFTP %Client Implementation.
  *
  * The main entry point for users of this part of the TFTP library is the
- * class TftpClient. With an instance of this class the user can create
- * TFTP client read and write operations.
+ * class TftpClient.
+ * With an instance of this class the user can create TFTP client read and write
+ * operations.
  **/
 namespace Tftp::Client {
 
 class TftpClient;
 class Operation;
 
-//! TFTP Client Instance Pointer
+//! TFTP %Client Instance Pointer
 using TftpClientPtr = std::shared_ptr< TftpClient>;
 
-//! TFTP Client Operation Instance Pointer
+//! TFTP %Client %Operation Instance Pointer
 using OperationPtr = std::shared_ptr< Operation>;
 
 }

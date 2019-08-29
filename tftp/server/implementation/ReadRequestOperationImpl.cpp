@@ -31,6 +31,29 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const Options::Options &clientOptions,
+  const Options::OptionList &serverOptions) :
+  OperationImpl{
+    ioContext,
+    tftpServer,
+    completionHandler,
+    remote,
+    clientOptions,
+    serverOptions},
+  dataHandler{ dataHandler},
+  transmitDataSize{ DefaultDataSize},
+  lastDataPacketTransmitted{ false},
+  lastTransmittedBlockNumber{ 0}
+{
+}
+
+ReadRequestOperationImpl::ReadRequestOperationImpl(
+  boost::asio::io_context &ioContext,
+  const TftpServerInternal &tftpServer,
+  TransmitDataHandlerPtr dataHandler,
+  OperationCompletedHandler completionHandler,
+  const boost::asio::ip::udp::endpoint &remote,
+  const Options::Options &clientOptions,
+  const Options::OptionList &serverOptions,
   const boost::asio::ip::udp::endpoint &local) :
   OperationImpl{
     ioContext,
@@ -38,6 +61,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     completionHandler,
     remote,
     clientOptions,
+    serverOptions,
     local},
   dataHandler{ dataHandler},
   transmitDataSize{ DefaultDataSize},
@@ -50,7 +74,7 @@ void ReadRequestOperationImpl::start()
 {
   try
   {
-    auto respOptions{ options()};
+    auto &respOptions{ options()};
 
     // option negotiation leads to empty option list
     if ( respOptions.empty())
@@ -79,10 +103,9 @@ void ReadRequestOperationImpl::start()
           BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
             << "Received transfer size must be 0";
 
-          using namespace std::literals::string_view_literals;
-          Packets::ErrorPacket errorPacket(
+          Packets::ErrorPacket errorPacket{
             ErrorCode::TftpOptionRefused,
-            "transfer size must be 0"sv);
+            "transfer size must be 0"};
           send( errorPacket);
 
           // Operation completed

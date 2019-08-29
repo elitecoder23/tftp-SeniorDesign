@@ -14,12 +14,7 @@ find_package(
 
 add_executable( tftp_server)
 
-target_sources(
-  tftp_server
-
-  PRIVATE
-    tftp_server.cpp
-    TftpServerApplication.cpp)
+target_sources( tftp_server PRIVATE tftp_server.cpp)
 
 target_link_libraries(
   tftp_server
