@@ -118,8 +118,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::Options &clientOptions,
-  const Options::OptionList& serverOptions)
+  const Options::OptionList& negotiatedOptions)
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
@@ -127,16 +126,14 @@ OperationPtr TftpServerImpl::readRequestOperation(
     dataHandler,
     completionHandler,
     remote,
-    clientOptions,
-    serverOptions);
+    negotiatedOptions);
 }
 
 OperationPtr TftpServerImpl::readRequestOperation(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::Options &clientOptions,
-  const Options::OptionList& serverOptions,
+  const Options::OptionList& negotiatedOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< ReadRequestOperationImpl>(
@@ -145,8 +142,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
     dataHandler,
     completionHandler,
     remote,
-    clientOptions,
-    serverOptions,
+    negotiatedOptions,
     local);
 }
 
@@ -154,8 +150,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::Options &clientOptions,
-  const Options::OptionList& serverOptions)
+  const Options::OptionList& negotiatedOptions)
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
@@ -163,16 +158,14 @@ OperationPtr TftpServerImpl::writeRequestOperation(
     dataHandler,
     completionHandler,
     remote,
-    clientOptions,
-    serverOptions);
+    negotiatedOptions);
 }
 
 OperationPtr TftpServerImpl::writeRequestOperation(
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::Options &clientOptions,
-  const Options::OptionList& serverOptions,
+  const Options::OptionList& negotiatedOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
   return std::make_shared< WriteRequestOperationImpl>(
@@ -181,8 +174,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
     dataHandler,
     completionHandler,
     remote,
-    clientOptions,
-    serverOptions,
+    negotiatedOptions,
     local);
 }
 

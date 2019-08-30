@@ -75,38 +75,34 @@ class TftpServerImpl:
     //! @copydoc TftpServer::stop
     void stop() final;
 
-    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
     OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::Options &clientOptions,
-      const Options::OptionList &serverOptions) final;
+      const Options::OptionList &negotiatedOptions) final;
 
-    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
+    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
     OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::Options &clientOptions,
-      const Options::OptionList& serverOptions,
+      const Options::OptionList& negotiatedOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
-    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
     OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::Options &clientOptions,
-      const Options::OptionList &serverOptions) final;
+      const Options::OptionList &negotiatedOptions) final;
 
-    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
+    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
     OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::Options &clientOptions,
-      const Options::OptionList& serverOptions,
+      const Options::OptionList& negotiatedOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
     //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)

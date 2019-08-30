@@ -70,21 +70,18 @@ class OperationImpl:
      *   The handler which is called on completion of this operation.
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
-     * @param[in] clientOptions
-     *   Received option list from client.
-     * @param[in] serverOptions
-     *   Server TFTP options used for option negotiation.
+     * @param[in] negotiatedOptions
+     *   Negotiated TFTP options.
      **/
     OperationImpl(
       boost::asio::io_context &ioContext,
       const TftpServerInternal &tftpServer,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::Options &clientOptions,
-      const Options::OptionList &serverOptions);
+      const Options::OptionList &negotiatedOptions);
 
     /**
-     * @copydoc OperationImpl(boost::asio::io_context&,const TftpServerInternal&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+     * @copydoc OperationImpl(boost::asio::io_context&,const TftpServerInternal&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -94,8 +91,7 @@ class OperationImpl:
       const TftpServerInternal &tftpServer,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::Options &clientOptions,
-      const Options::OptionList &serverOptions,
+      const Options::OptionList &negotiatedOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     /**
@@ -239,19 +235,19 @@ class OperationImpl:
      **/
     void timeoutHandler( const boost::system::error_code& errorCode);
 
-    //! The operation completed handler
+    //! Operation Completed Handler
     OperationCompletedHandler completionHandler;
-    //! The internal TFTP server
+    //! Internal TFTP Server
     const TftpServerInternal &tftpServer;
 
-    //! The stored negotiated options
+    //! Stored negotiated options
     Options::OptionList optionsV;
-    //! The maximum packet size, which can be received
+    //! Maximum packet size, which can be received
     uint16_t maxReceivePacketSizeV;
-    //! The receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
+    //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
     uint8_t receiveTimeoutV;
 
-    //! TFTP UDP socket
+    //! TFTP UDP Socket
     boost::asio::ip::udp::socket socket;
     //! Timeout timer
     boost::asio::deadline_timer timer;

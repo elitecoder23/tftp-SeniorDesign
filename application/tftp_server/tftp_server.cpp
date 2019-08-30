@@ -359,8 +359,7 @@ void transmitFile(
         std::filesystem::file_size( filename)),
       {},
       remote,
-      clientOptions,
-      configuration.serverOptions())};
+      configuration.serverOptions().negotiateServer( clientOptions))};
 
   // executes the TFTP operation
   operation->start();
@@ -403,8 +402,7 @@ void receiveFile(
         std::filesystem::file_size( filename)),
       {},
       remote,
-      clientOptions,
-      configuration.serverOptions())};
+      configuration.serverOptions().negotiateServer( clientOptions))};
 
   // executes the TFTP operation
   operation->start();

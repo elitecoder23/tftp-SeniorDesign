@@ -50,9 +50,7 @@ class WriteRequestOperationImpl: public OperationImpl
      *   The handler which is called on completion of this operation.
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
-     * @param[in] clientOptions
-     *   Received option list from client.
-     * @param[in] serverOptions
+     * @param[in] negotiatedOptions
      *   Server TFTP options used for option negotiation.
      **/
     WriteRequestOperationImpl(
@@ -61,11 +59,10 @@ class WriteRequestOperationImpl: public OperationImpl
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::Options &clientOptions,
-      const Options::OptionList &serverOptions);
+      const Options::OptionList &negotiatedOptions);
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,const TftpServerInternal&,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::Options&,const Options::OptionList&)
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,const TftpServerInternal&,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -76,8 +73,7 @@ class WriteRequestOperationImpl: public OperationImpl
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::Options &clientOptions,
-      const Options::OptionList &serverOptions,
+      const Options::OptionList &negotiatedOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     /**

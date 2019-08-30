@@ -30,15 +30,13 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::Options &clientOptions,
-  const Options::OptionList &serverOptions) :
+  const Options::OptionList &negotiatedOptions) :
   OperationImpl{
     ioContext,
     tftpServer,
     completionHandler,
     remote,
-    clientOptions,
-    serverOptions},
+    negotiatedOptions},
   dataHandler{ dataHandler},
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
@@ -52,16 +50,14 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::Options &clientOptions,
-  const Options::OptionList &serverOptions,
+  const Options::OptionList &negotiatedOptions,
   const boost::asio::ip::udp::endpoint &local) :
   OperationImpl{
     ioContext,
     tftpServer,
     completionHandler,
     remote,
-    clientOptions,
-    serverOptions,
+    negotiatedOptions,
     local},
   dataHandler{ dataHandler},
   transmitDataSize{ DefaultDataSize},
