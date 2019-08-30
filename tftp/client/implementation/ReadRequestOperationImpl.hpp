@@ -35,6 +35,8 @@ class ReadRequestOperationImpl : public OperationImpl
      *
      * @param[in] ioContext
      *   The I/O context used for communication.
+     * @param[in] optionNegotiationHandler
+     *   Option negotiation handler.
      * @param[in] dataHandler
      *   Handler for received data.
      * @param[in] completionHandler
@@ -52,6 +54,7 @@ class ReadRequestOperationImpl : public OperationImpl
      **/
     ReadRequestOperationImpl(
       boost::asio::io_context &ioContext,
+      OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
@@ -61,13 +64,14 @@ class ReadRequestOperationImpl : public OperationImpl
       const Options::OptionList &clientOptions);
 
     /**
-     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,ReceiveDataHandlerPtr,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
      *
      * @param[in] local
      *   communication source
      **/
     ReadRequestOperationImpl(
       boost::asio::io_context &ioContext,
+      OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
@@ -121,8 +125,20 @@ class ReadRequestOperationImpl : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:
+    //! Option Negotiation Handler
+    OptionNegotiationHandler optionNegotiationHandler;
     //! Registered handler.
     ReceiveDataHandlerPtr dataHandler;
+
+    //! Filename of the transfer
+    const std::string filename;
+    //! Transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
+    const TransferMode mode;
+    //! Options for the transfer
+    Options::OptionList clientOptions;
+
+    //! flag to hold information if OACK has been received (used when first data packet is received)
+    bool oackReceived;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! last received block number.

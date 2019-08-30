@@ -49,6 +49,7 @@ void TftpClientImpl::stop()
 }
 
 OperationPtr TftpClientImpl::readRequestOperation(
+  OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
@@ -58,6 +59,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
+    optionNegotiationHandler,
     dataHandler,
     completionHandler,
     *this,
@@ -68,6 +70,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
 }
 
 OperationPtr TftpClientImpl::readRequestOperation(
+  OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
@@ -78,6 +81,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
+    optionNegotiationHandler,
     dataHandler,
     completionHandler,
     *this,
@@ -89,6 +93,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
 }
 
 OperationPtr TftpClientImpl::writeRequestOperation(
+  OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
@@ -98,6 +103,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
+    optionNegotiationHandler,
     dataHandler,
     completionHandler,
     *this,
@@ -108,6 +114,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
 }
 
 OperationPtr TftpClientImpl::writeRequestOperation(
+  OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
@@ -118,6 +125,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
+    optionNegotiationHandler,
     dataHandler,
     completionHandler,
     *this,

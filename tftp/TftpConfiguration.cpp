@@ -17,18 +17,18 @@
 namespace Tftp {
 
 TftpConfiguration::TftpConfiguration() :
-  tftpTimeout( DefaultTftpReceiveTimeout),
-  tftpRetries( DefaultTftpRetries),
-  tftpServerPort( DefaultTftpPort),
-  handleTransferSizeOption( false)
+  tftpTimeout{ DefaultTftpReceiveTimeout},
+  tftpRetries{ DefaultTftpRetries},
+  tftpServerPort{ DefaultTftpPort},
+  handleTransferSizeOption{ false}
 {
 }
 
 TftpConfiguration::TftpConfiguration(
   const boost::property_tree::ptree &config) :
-  tftpTimeout( config.get( "timeout", DefaultTftpReceiveTimeout)),
-  tftpRetries( config.get( "retries", DefaultTftpRetries)),
-  tftpServerPort( config.get( "port", DefaultTftpPort)),
+  tftpTimeout{ config.get( "timeout", DefaultTftpReceiveTimeout)},
+  tftpRetries{ config.get( "retries", DefaultTftpRetries)},
+  tftpServerPort{ config.get( "port", DefaultTftpPort)},
 
   handleTransferSizeOption( config.get( "option.transferSize", false)),
 

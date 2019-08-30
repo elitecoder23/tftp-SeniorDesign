@@ -34,6 +34,8 @@ class WriteRequestOperationImpl : public OperationImpl
      *
      * @param[in] ioContext
      *   The I/O context used for communication.
+     * @param[in] optionNegotiationHandler
+     *   Option negotiation handler.
      * @param[in] dataHandler
      *   Handler for data.
      * @param[in] completionHandler
@@ -51,6 +53,7 @@ class WriteRequestOperationImpl : public OperationImpl
      **/
     WriteRequestOperationImpl(
       boost::asio::io_context &ioContext,
+      OptionNegotiationHandler optionNegotiationHandler,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
@@ -60,13 +63,14 @@ class WriteRequestOperationImpl : public OperationImpl
       const Options::OptionList &clientOptions);
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,TransmitDataHandlerPtr,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
      *
      * @param[in] local
      *   Parameter to define the communication source
      **/
     WriteRequestOperationImpl(
       boost::asio::io_context &ioContext,
+      OptionNegotiationHandler optionNegotiationHandler,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
@@ -130,8 +134,18 @@ class WriteRequestOperationImpl : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:
-    //! The handler, which is called
+    //! Option Negotiation Handler
+    OptionNegotiationHandler optionNegotiationHandler;
+    //! Data Handler
     TransmitDataHandlerPtr dataHandler;
+
+    //! Filename of the transfer
+    const std::string filename;
+    //! Transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
+    const TransferMode mode;
+    //! Options for the transfer
+    Options::OptionList clientOptions;
+
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t transmitDataSize;
     //! Is set, when the last data packet has been transmitted

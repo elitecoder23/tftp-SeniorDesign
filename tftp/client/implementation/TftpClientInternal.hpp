@@ -35,7 +35,6 @@ class TftpClientInternal : public TftpClient
      * @return The TFTP configuration
      **/
     [[nodiscard]] virtual const TftpConfiguration& configuration() const = 0;
-
 };
 
 }

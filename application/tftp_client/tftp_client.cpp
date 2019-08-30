@@ -114,10 +114,16 @@ int main( int argc, char * argv[])
 
     Tftp::Client::OperationPtr tftpOperation;
 
+    auto optionNegotiation = [&configuration]( const Tftp::Options::Options &serverOptions) -> std::optional< Tftp::Options::OptionList>
+    {
+      return configuration.clientOptions().negotiateClient( serverOptions);
+    };
+
     switch ( requestType)
     {
       case Tftp::RequestType::Read:
         tftpOperation= tftpClient->readRequestOperation(
+          optionNegotiation,
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
             std::fstream( localFile, std::fstream::out | std::fstream::trunc)),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
@@ -129,6 +135,7 @@ int main( int argc, char * argv[])
 
       case Tftp::RequestType::Write:
         tftpOperation = tftpClient->writeRequestOperation(
+          optionNegotiation,
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
             std::fstream( localFile, std::fstream::in)),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),

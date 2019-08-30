@@ -38,7 +38,7 @@ class TftpClientImpl : public TftpClientInternal
      * @param[in] configuration
      *   The TFTP Configuration
      **/
-    TftpClientImpl( const TftpConfiguration &configuration);
+    explicit TftpClientImpl( const TftpConfiguration &configuration);
 
     //! @copydoc TftpClient::entry
     void entry() noexcept final;
@@ -46,8 +46,9 @@ class TftpClientImpl : public TftpClientInternal
     //! @copydoc TftpClient::stop
     void stop() final;
 
-    //! @copydoc TftpClient::readRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+    //! @copydoc TftpClient::readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
     OperationPtr readRequestOperation(
+      OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -55,8 +56,9 @@ class TftpClientImpl : public TftpClientInternal
       TransferMode mode,
       const Options::OptionList &clientOptions) final;
 
-    //! @copydoc TftpClient::readRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
+    //! @copydoc TftpClient::readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
     OperationPtr readRequestOperation(
+      OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -65,8 +67,9 @@ class TftpClientImpl : public TftpClientInternal
       const Options::OptionList &clientOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
-    //! @copydoc TftpClient::writeRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+    //! @copydoc TftpClient::writeRequestOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
     OperationPtr writeRequestOperation(
+      OptionNegotiationHandler optionNegotiationHandler,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -74,8 +77,9 @@ class TftpClientImpl : public TftpClientInternal
       TransferMode mode,
       const Options::OptionList &clientOptions) final;
 
-    //! @copydoc TftpClient::writeRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
+    //! @copydoc TftpClient::writeRequestOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
     OperationPtr writeRequestOperation(
+      OptionNegotiationHandler optionNegotiationHandler,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,

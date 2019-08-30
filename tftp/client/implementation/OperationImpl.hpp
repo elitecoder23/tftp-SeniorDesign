@@ -88,24 +88,15 @@ class OperationImpl :
      *   The TFTP client.
      * @param[in] remote
      *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   The transfer mode
-     * @param[in] clientOptions
-     *   Client TFTP options used for option negotiation.
      **/
     OperationImpl(
       boost::asio::io_context &ioContext,
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const Options::OptionList &clientOptions);
+      const boost::asio::ip::udp::endpoint &remote);
 
     /**
-     * @copydoc OperationImpl(boost::asio::io_context&,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     * @copydoc OperationImpl(boost::asio::io_context&,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&)
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -115,24 +106,7 @@ class OperationImpl :
       OperationCompletedHandler completionHandler,
       const TftpClientInternal &tftpClient,
       const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const Options::OptionList &clientOptions,
       const boost::asio::ip::udp::endpoint &local);
-
-    /**
-     * @brief Returns the request filename.
-     *
-     * @return The request filename.
-     **/
-    std::string_view filename() const;
-
-    /**
-     * @brief Returns the transfer mode.
-     *
-     * @return The transfer mode.
-     **/
-    TransferMode mode() const;
 
     /**
       * @brief Returns the TFTP configuration.
@@ -140,13 +114,6 @@ class OperationImpl :
       * @return The TFTP configuration.
       **/
     const TftpConfiguration& configuration() const;
-
-    /**
-     * @brief Returns the TFTP option list.
-     *
-     * @return The TFTP option list.
-     **/
-    const Options::OptionList& options() const;
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -308,12 +275,7 @@ class OperationImpl :
     const TftpClientInternal &tftpClient;
     //! TFTP Server Endpoint
     boost::asio::ip::udp::endpoint remoteEndpoint;
-    //! Filename of the transfer
-    const std::string filenameV;
-    //! Transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
-    const TransferMode modeV;
-    //! options for the transfer
-    Options::OptionList optionsV;
+
     /**
      * The maximum size of a received TFTP packet. Defaults to
      * TftpPacket::DEFAULT_MAX_PACKET_SIZE.

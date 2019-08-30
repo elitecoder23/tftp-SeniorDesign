@@ -121,10 +121,10 @@ enum class TransferStatus
 constexpr uint16_t DefaultTftpPort = 69U;
 
 //! The default TFTP receive timeout in seconds (2 seconds)
-constexpr unsigned int DefaultTftpReceiveTimeout = 2;
+constexpr uint8_t DefaultTftpReceiveTimeout = 2;
 
 //! Number of retries performed, when no ACK has been received
-constexpr unsigned int DefaultTftpRetries = 1;
+constexpr uint16_t DefaultTftpRetries = 1;
 
 /**
  * @brief TFTP Packet Types.
@@ -155,7 +155,7 @@ constexpr size_t DefaultTftpDataPacketHeaderSize = 4U;
 constexpr size_t DefaultMaxPacketSize =
   DefaultDataSize + DefaultTftpDataPacketHeaderSize;
 
-//! TFTP transfer modes.
+//! TFTP Transfer Modes.
 enum class TransferMode
 {
   OCTET,    //!< OCTET transfer mode (binary)

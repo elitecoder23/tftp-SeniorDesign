@@ -27,6 +27,7 @@ namespace Tftp::Client {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
+  OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
@@ -38,11 +39,12 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     ioContext,
     completionHandler,
     tftpClient,
-    remote,
-    filename,
-    mode,
-    clientOptions},
+    remote},
+  optionNegotiationHandler{optionNegotiationHandler},
   dataHandler{ dataHandler},
+  filename{ filename},
+  mode{ mode},
+  clientOptions{ clientOptions},
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
   lastTransmittedBlockNumber{ 0U}
@@ -51,6 +53,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
+  OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
@@ -64,11 +67,12 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     completionHandler,
     tftpClient,
     remote,
-    filename,
-    mode,
-    clientOptions,
     local},
+  optionNegotiationHandler{optionNegotiationHandler},
   dataHandler{ dataHandler},
+  filename{ filename},
+  mode{ mode},
+  clientOptions{ clientOptions},
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
   lastTransmittedBlockNumber{ 0U}
@@ -85,8 +89,6 @@ void WriteRequestOperationImpl::start()
     lastDataPacketTransmitted = false;
     lastTransmittedBlockNumber = 0;
 
-    Options::OptionList reqOptions{ options()};
-
     // Add transfer size option with size '0' if requested.
     if (configuration().handleTransferSizeOption)
     {
@@ -94,15 +96,15 @@ void WriteRequestOperationImpl::start()
       if ( auto transferSize{ dataHandler->requestedTransferSize()}; transferSize)
       {
         // set transfer size TFTP option
-        reqOptions.transferSizeOption( *transferSize);
+        clientOptions.transferSizeOption( *transferSize);
       }
     }
 
     // send write request packet
     sendFirst( Packets::WriteRequestPacket{
-      filename(),
-      mode(),
-      reqOptions.options()});
+      filename,
+      mode,
+      clientOptions.options()});
 
     // wait for answers
     OperationImpl::start();
@@ -149,10 +151,9 @@ void WriteRequestOperationImpl::dataPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
     << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
-  using namespace std::literals::string_view_literals;
   send( Packets::ErrorPacket(
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected"sv));
+    "DATA not expected"));
 
   // Operation completed
   finished( TransferStatus::TransferError);
@@ -183,13 +184,32 @@ void WriteRequestOperationImpl::acknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "Invalid block number received";
 
-    using namespace std::literals::string_view_literals;
-    send( Packets::ErrorPacket(
+    send( Packets::ErrorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Wrong block number"sv));
+      "Wrong block number"});
 
     finished( TransferStatus::TransferError);
     return;
+  }
+
+  // if blocknumber is 0 -> ACK of write without Options
+  if ( acknowledgementPacket.blockNumber() == static_cast< uint16_t >( 0U))
+  {
+    auto negotiatedOptions{ optionNegotiationHandler( {})};
+
+    // If empty options is returned - Abort Operation
+    if (!negotiatedOptions)
+    {
+      BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+        << "Option Negotiation failed";
+
+      send( Packets::ErrorPacket{
+        ErrorCode::TftpOptionRefused,
+        "Option Negotiation Failed"});
+
+      finished( TransferStatus::TransferError);
+      return;
+    }
   }
 
   // if ACK for last data packet - QUIT
@@ -224,10 +244,9 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "Received option list is empty";
 
-    using namespace std::literals::string_view_literals;
     Packets::ErrorPacket errorPacket(
       ErrorCode::IllegalTftpOperation,
-      "Empty OACK not allowed"sv);
+      "Empty OACK not allowed");
 
     send( errorPacket);
 
@@ -236,30 +255,29 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
   }
 
   // perform option negotiation
-  const auto negotiatedOptions{ options().negotiateClient( remoteOptions)};
+  const auto negotiatedOptions{ optionNegotiationHandler( remoteOptions)};
 
-  if (negotiatedOptions.empty())
+  if ( !negotiatedOptions)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "Option negotiation failed";
 
-    using namespace std::literals::string_view_literals;
     send( Packets::ErrorPacket(
       ErrorCode::TftpOptionRefused,
-      "Option negotiation failed"sv));
+      "Option negotiation failed"));
 
     finished( TransferStatus::OptionNegotiationError);
     return;
   }
 
   // check blocksize option
-  if (auto blocksize{ negotiatedOptions.blocksize()}; blocksize)
+  if (auto blocksize{ negotiatedOptions->blocksize()}; blocksize)
   {
     transmitDataSize = *blocksize;
   }
 
   // check timeout option
-  if ( auto timeoutOption{ negotiatedOptions.timeoutOption()}; timeoutOption)
+  if ( auto timeoutOption{ negotiatedOptions->timeoutOption()}; timeoutOption)
   {
     receiveTimeout( *timeoutOption);
   }

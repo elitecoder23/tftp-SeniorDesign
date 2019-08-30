@@ -77,17 +77,11 @@ OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
-  const boost::asio::ip::udp::endpoint &remote,
-  std::string_view filename,
-  const TransferMode mode,
-  const Options::OptionList &clientOptions)
+  const boost::asio::ip::udp::endpoint &remote)
 try :
   completionHandler{ completionHandler},
   tftpClient{ tftpClient},
   remoteEndpoint{ remote},
-  filenameV{ filename},
-  modeV{ mode},
-  optionsV{ clientOptions},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpClient.configuration().tftpTimeout},
   socket{ ioContext},
@@ -125,17 +119,11 @@ OperationImpl::OperationImpl(
   OperationCompletedHandler completionHandler,
   const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
-  std::string_view filename,
-  const TransferMode mode,
-  const Options::OptionList &clientOptions,
   const boost::asio::ip::udp::endpoint &local)
 try :
   completionHandler{ completionHandler},
   tftpClient{ tftpClient},
   remoteEndpoint{ remote},
-  filenameV{ filename},
-  modeV{ mode},
-  optionsV{ clientOptions},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpClient.configuration().tftpTimeout},
   socket{ ioContext},
@@ -171,24 +159,9 @@ catch ( boost::system::system_error &err)
    << AdditionalInfo( err.what()));
 }
 
-std::string_view OperationImpl::filename() const
-{
-  return filenameV;
-}
-
-TransferMode OperationImpl::mode() const
-{
-  return modeV;
-}
-
 const TftpConfiguration& OperationImpl::configuration() const
 {
   return tftpClient.configuration();
-}
-
-const Options::OptionList& OperationImpl::options() const
-{
-  return optionsV;
 }
 
 void OperationImpl::sendFirst( const Packets::Packet &packet)
