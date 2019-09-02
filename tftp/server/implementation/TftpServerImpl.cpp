@@ -14,7 +14,7 @@
 
 #include <tftp/server/implementation/ReadRequestOperationImpl.hpp>
 #include <tftp/server/implementation/WriteRequestOperationImpl.hpp>
-#include <tftp/server/implementation/ErrorOperation.hpp>
+#include <tftp/server/implementation/ErrorOperationImpl.hpp>
 
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
@@ -178,20 +178,34 @@ OperationPtr TftpServerImpl::writeRequestOperation(
     local);
 }
 
-OperationPtr TftpServerImpl::errorOperation(
-  OperationCompletedHandler completionHandler,
+TftpServerImpl::ErrorOperation TftpServerImpl::errorOperation(
+  const boost::asio::ip::udp::endpoint &remote,
+  const ErrorCode errorCode,
+  std::string_view errorMessage)
+{
+  auto operation{std::make_shared< ErrorOperationImpl>(
+    ioContext,
+    remote,
+    errorCode,
+    errorMessage)};
+
+  return std::bind( &ErrorOperationImpl::operator(), operation);
+}
+
+TftpServerImpl::ErrorOperation TftpServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local,
   const ErrorCode errorCode,
   std::string_view errorMessage)
 {
-  return std::make_shared< ErrorOperation>(
+  auto operation{std::make_shared< ErrorOperationImpl>(
     ioContext,
-    completionHandler,
     remote,
     local,
     errorCode,
-    errorMessage);
+    errorMessage)};
+
+  return std::bind( &ErrorOperationImpl::operator(), operation);
 }
 
 const Tftp::TftpConfiguration& TftpServerImpl::configuration() const
@@ -275,16 +289,14 @@ void TftpServerImpl::readRequestPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
       << "No registered handler - reject";
 
-    using namespace std::string_view_literals;
     auto operation( errorOperation(
-      {},
       remote,
       boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
       ErrorCode::FileNotFound,
-      "RRQ not accepted"sv));
+      "RRQ not accepted"));
 
     // execute error operation
-    operation->start();
+    operation();
   }
 
   // call the handler, which handles the received request
@@ -309,16 +321,14 @@ void TftpServerImpl::writeRequestPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
       << "No registered handler - reject";
 
-    using namespace std::string_view_literals;
     auto operation( errorOperation(
-      {},
       remote,
       boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
       ErrorCode::FileNotFound,
-      "WRQ"sv));
+      "WRQ"));
 
     // execute error operation
-    operation->start();
+    operation();
   }
 
   // call the handler, which handles the received request
@@ -337,16 +347,14 @@ void TftpServerImpl::dataPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
     << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
-  using namespace std::string_view_literals;
-  auto operation( errorOperation(
-    {},
+  auto operation{ errorOperation(
     remote,
     boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected"sv));
+    "DATA not expected")};
 
   // execute error operation
-  operation->start();
+  operation();
 }
 
 void TftpServerImpl::acknowledgementPacket(
@@ -356,16 +364,14 @@ void TftpServerImpl::acknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
     << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket);
 
-  using namespace std::string_view_literals;
   auto operation( errorOperation(
-    {},
     remote,
     boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
-    "ACK not expected"sv));
+    "ACK not expected"));
 
   // execute error operation
-  operation->start();
+  operation();
 }
 
 void TftpServerImpl::errorPacket(
@@ -375,16 +381,14 @@ void TftpServerImpl::errorPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
     << "RX ERROR: " << static_cast< std::string>( errorPacket);
 
-  using namespace std::string_view_literals;
   auto operation( errorOperation(
-    {},
     remote,
     boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
-    "ERROR not expected"sv));
+    "ERROR not expected"));
 
   // execute error operation
-  operation->start();
+  operation();
 }
 
 void TftpServerImpl::optionsAcknowledgementPacket(
@@ -394,16 +398,14 @@ void TftpServerImpl::optionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
     << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket);
 
-  using namespace std::string_view_literals;
   auto operation( errorOperation(
-    {},
     remote,
     boost::asio::ip::udp::endpoint{ serverAddress.address(), 0},
     ErrorCode::IllegalTftpOperation,
-    "OACK not expected"sv));
+    "OACK not expected"));
 
   // execute error operation
-  operation->start();
+  operation();
 }
 
 void TftpServerImpl::invalidPacket(

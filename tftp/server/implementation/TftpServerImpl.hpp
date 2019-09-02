@@ -105,9 +105,14 @@ class TftpServerImpl:
       const Options::OptionList& negotiatedOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
-    //! @copydoc TftpServer::errorOperation(OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
-    OperationPtr errorOperation(
-      OperationCompletedHandler completionHandler,
+    //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
+    ErrorOperation errorOperation(
+      const boost::asio::ip::udp::endpoint &remote,
+      ErrorCode errorCode,
+      std::string_view errorMessage = {}) final;
+
+    //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
+    ErrorOperation errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,

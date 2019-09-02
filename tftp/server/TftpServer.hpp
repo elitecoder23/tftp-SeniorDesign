@@ -20,6 +20,7 @@
 #include <tftp/options/Options.hpp>
 
 #include <string>
+#include <functional>
 
 namespace Tftp::Server {
 
@@ -37,6 +38,9 @@ namespace Tftp::Server {
 class TftpServer
 {
   public:
+    //! Error operation
+    using ErrorOperation = std::function< void()>;
+
     /**
      * @brief The default address, where the server listens.
      *
@@ -160,12 +164,8 @@ class TftpServer
     /**
      * @brief Creates a TFTP Error Operation.
      *
-     * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
      * @param[in] remote
      *   Where the error packet shall be transmitted to.
-     * @param[in] local
-     *   Optional parameter to define the communication source
      * @param[in] errorCode
      *   The error code of the error packet.
      * @param[in] errorMessage
@@ -173,8 +173,18 @@ class TftpServer
      *
      * @return The created TFTP Error operation.
      **/
-    virtual OperationPtr errorOperation(
-      OperationCompletedHandler completionHandler,
+    virtual ErrorOperation errorOperation(
+      const boost::asio::ip::udp::endpoint &remote,
+      ErrorCode errorCode,
+      std::string_view errorMessage = {}) = 0;
+
+    /**
+     * @copydoc errorOperation(const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
+     *
+     * @param[in] local
+     *   Communication source
+     **/
+    virtual ErrorOperation errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,

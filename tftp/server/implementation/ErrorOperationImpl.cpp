@@ -10,24 +10,56 @@
  * @brief Definition of Class Tftp::Server::ErrorOperation.
  **/
 
-#include "ErrorOperation.hpp"
+#include "ErrorOperationImpl.hpp"
 
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TftpException.hpp>
 
 namespace Tftp::Server {
 
-ErrorOperation::ErrorOperation(
+ErrorOperationImpl::ErrorOperationImpl(
   boost::asio::io_context &ioContext,
-  OperationCompletedHandler completionHandler,
+  const boost::asio::ip::udp::endpoint &remote,
+  const ErrorCode errorCode,
+  std::string_view errorMessage)
+try :
+  socket{ ioContext},
+  errorCode{ errorCode},
+  errorMessage{ errorMessage}
+{
+  try
+  {
+    socket.open( remote.protocol());
+
+    socket.connect( remote);
+  }
+  catch ( boost::system::system_error &err)
+  {
+    if ( socket.is_open())
+    {
+      socket.close();
+    }
+
+    BOOST_THROW_EXCEPTION(
+      CommunicationException() << AdditionalInfo( err.what()));
+  }
+}
+catch ( boost::system::system_error &err)
+{
+  BOOST_THROW_EXCEPTION(
+    CommunicationException() << AdditionalInfo( err.what()));
+}
+
+ErrorOperationImpl::ErrorOperationImpl(
+  boost::asio::io_context &ioContext,
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local,
   const ErrorCode errorCode,
   std::string_view errorMessage)
 try :
-  completionHandler{ completionHandler},
   socket{ ioContext},
-  errorInfoV{ Packets::ErrorPacket{ errorCode, errorMessage}}
+  errorCode{ errorCode},
+  errorMessage{ errorMessage}
 {
   try
   {
@@ -54,56 +86,25 @@ catch ( boost::system::system_error &err)
     CommunicationException() << AdditionalInfo( err.what()));
 }
 
-void ErrorOperation::start()
-{
-  assert( errorInfoV);
-
-  sendError( *errorInfoV);
-}
-
-void ErrorOperation::gracefulAbort(
-  const ErrorCode errorCode [[maybe_unused]],
-  std::string_view errorMessage [[maybe_unused]])
-{
-  // do nothing
-}
-
-void ErrorOperation::abort()
-{
-  // do nothing
-}
-
-const ErrorOperation::ErrorInfo& ErrorOperation::errorInfo() const
-{
-  return errorInfoV;
-}
-
-void ErrorOperation::sendError( const Packets::ErrorPacket &error)
+void ErrorOperationImpl::operator()()
 {
   BOOST_LOG_FUNCTION()
 
+  Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
+
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
-    << "TX: " << static_cast< std::string>( error);
+    << "TX: " << static_cast< std::string>( errorPacket);
 
   try
   {
-    socket.send( boost::asio::buffer( static_cast< RawTftpPacket>( error)));
-
-    if (completionHandler)
-    {
-      completionHandler( TransferStatus::Successful);
-    }
+    socket.send( boost::asio::buffer( static_cast< RawTftpPacket>( errorPacket)));
   }
   catch ( boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << err.what();
-
-    if (completionHandler)
-    {
-      completionHandler( TransferStatus::CommunicationError);
-    }
   }
 }
+
 
 }

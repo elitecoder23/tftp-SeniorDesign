@@ -22,6 +22,7 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
+#include <tftp/Version.hpp>
 
 #include <helper/Logger.hpp>
 
@@ -112,17 +113,20 @@ static void receiveFile(
   const std::filesystem::path &filename,
   const Tftp::Options::Options &clientOptions);
 
+//! TFTP Server Base Directory
 static std::filesystem::path baseDir{};
 
+//! TFTP Server Configuration
 static Tftp::TftpConfiguration configuration{};
 
+//! TFTP Server Instance
 static Tftp::Server::TftpServerPtr server{};
 
 int main( int argc, char * argv[])
 {
   initLogging();
 
-  std::cout << "TFTP Server\n";
+  std::cout << "TFTP Server - " << Tftp::Version::version() << "\n";
 
   boost::program_options::options_description optionsDescription{
     "TFTP server options"};
@@ -278,13 +282,11 @@ static void receivedRequest(
     std::cerr << "Wrong transfer mode\n";
 
     auto operation{ server->errorOperation(
-      {},
       remote,
-      {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::IllegalTftpOperation,
       "wrong transfer mode")};
 
-    operation->start();
+    operation();
 
     return;
   }
@@ -294,13 +296,11 @@ static void receivedRequest(
     std::cerr << "Error filename check\n";
 
     auto operation{ server->errorOperation(
-      {},
       remote,
-      {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::AccessViolation,
       "Illegal filename")};
 
-    operation->start();
+    operation();
 
     return;
   }
@@ -340,13 +340,11 @@ void transmitFile(
     std::cerr << "Error opening file\n";
 
     auto operation{ server->errorOperation(
-      {},
       remote,
-      {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::FileNotFound,
       "file not found")};
 
-    operation->start();
+    operation();
 
     return;
   }
@@ -384,12 +382,10 @@ void receiveFile(
     std::cerr << "Error opening file\n";
 
     auto operation{ server->errorOperation(
-      {},
       remote,
-      {boost::asio::ip::address_v4::any(), 0},
       Tftp::ErrorCode::AccessViolation)};
 
-    operation->start();
+    operation();
 
     return;
   }

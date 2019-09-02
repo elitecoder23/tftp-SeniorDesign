@@ -14,8 +14,8 @@ target_sources(
     Server.hpp
     TftpServer.hpp
     TftpServer.cpp
-    implementation/ErrorOperation.hpp
-    implementation/ErrorOperation.cpp
+    implementation/ErrorOperationImpl.hpp
+    implementation/ErrorOperationImpl.cpp
     implementation/OperationImpl.hpp
     implementation/OperationImpl.cpp
     implementation/ReadRequestOperationImpl.hpp
