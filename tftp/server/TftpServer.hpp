@@ -38,9 +38,6 @@ namespace Tftp::Server {
 class TftpServer
 {
   public:
-    //! Error operation
-    using ErrorOperation = std::function< void()>;
-
     /**
      * @brief The default address, where the server listens.
      *
@@ -162,7 +159,7 @@ class TftpServer
       const boost::asio::ip::udp::endpoint &local) = 0;
 
     /**
-     * @brief Creates a TFTP Error Operation.
+     * @brief Executes TFTP Error Operation.
      *
      * @param[in] remote
      *   Where the error packet shall be transmitted to.
@@ -170,10 +167,8 @@ class TftpServer
      *   The error code of the error packet.
      * @param[in] errorMessage
      *   The error message of the packet.
-     *
-     * @return The created TFTP Error operation.
      **/
-    virtual ErrorOperation errorOperation(
+    virtual void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       ErrorCode errorCode,
       std::string_view errorMessage = {}) = 0;
@@ -184,7 +179,7 @@ class TftpServer
      * @param[in] local
      *   Communication source
      **/
-    virtual ErrorOperation errorOperation(
+    virtual void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,

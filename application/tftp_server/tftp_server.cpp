@@ -281,12 +281,10 @@ static void receivedRequest(
   {
     std::cerr << "Wrong transfer mode\n";
 
-    auto operation{ server->errorOperation(
+    server->errorOperation(
       remote,
       Tftp::ErrorCode::IllegalTftpOperation,
-      "wrong transfer mode")};
-
-    operation();
+      "wrong transfer mode");
 
     return;
   }
@@ -295,12 +293,10 @@ static void receivedRequest(
   {
     std::cerr << "Error filename check\n";
 
-    auto operation{ server->errorOperation(
+    server->errorOperation(
       remote,
       Tftp::ErrorCode::AccessViolation,
-      "Illegal filename")};
-
-    operation();
+      "Illegal filename");
 
     return;
   }
@@ -339,12 +335,10 @@ void transmitFile(
   {
     std::cerr << "Error opening file\n";
 
-    auto operation{ server->errorOperation(
+    server->errorOperation(
       remote,
       Tftp::ErrorCode::FileNotFound,
-      "file not found")};
-
-    operation();
+      "file not found");
 
     return;
   }
@@ -381,11 +375,9 @@ void receiveFile(
   {
     std::cerr << "Error opening file\n";
 
-    auto operation{ server->errorOperation(
+    server->errorOperation(
       remote,
-      Tftp::ErrorCode::AccessViolation)};
-
-    operation();
+      Tftp::ErrorCode::AccessViolation);
 
     return;
   }
