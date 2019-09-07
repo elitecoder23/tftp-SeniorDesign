@@ -159,11 +159,11 @@ class OptionList
      * firstly.
      *
      * @param[in] name
-     *   The name of the option.
+     *   Option Name.
      * @param[in] value
-     *   The option value.
+     *   Option Value.
      * @param[in] negotiateOption
-     *   The negotiation operation.
+     *   Negotiation Operation.
      **/
     void option(
       std::string_view name,

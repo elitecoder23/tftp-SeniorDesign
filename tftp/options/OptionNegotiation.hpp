@@ -16,14 +16,15 @@
 #define TFTP_OPTIONS_OPTIONNEGOTIATION_HPP
 
 #include <tftp/options/Options.hpp>
+#include <tftp/TftpException.hpp>
 
 #include <helper/SafeCast.hpp>
 
-#include <boost/lexical_cast.hpp>
-
 #include <optional>
 #include <string_view>
+#include <charconv>
 #include <stdexcept>
+#include <boost/lexical_cast.hpp>
 
 namespace Tftp::Options {
 
@@ -86,7 +87,16 @@ inline std::string OptionNegotiation::toString( const uint64_t value)
 
 inline uint64_t OptionNegotiation::toInt( std::string_view value)
 {
-  return boost::lexical_cast< uint64_t>( value);
+  uint64_t intValue{};
+  auto result{ std::from_chars( value.begin(), value.end(), intValue)};
+
+  if (result.ec != std::errc{})
+  {
+    BOOST_THROW_EXCEPTION( OptionNegotiationException()
+      << AdditionalInfo( "Inter Conversion failed"));
+  }
+
+  return intValue;
 }
 
 inline std::string OptionNegotiation::negotiate( std::string_view optionValue) const

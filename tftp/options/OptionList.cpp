@@ -183,13 +183,24 @@ void OptionList::option(
 
   optionsNegotiationValue.emplace( std::make_pair(
     name,
-    negotiateOption));
+    std::move( negotiateOption)));
 }
 
 void OptionList::remove( std::string_view name)
 {
-  optionsValue.erase( std::string{ name}); //! @todo check implementation
-  optionsNegotiationValue.erase( std::string{ name}); //! @todo check implementation
+  // Find and remove options value
+  if ( auto pos{ optionsValue.find( name)}; pos != optionsValue.end())
+  {
+    optionsValue.erase( pos );
+  }
+
+  // Find and remove options negotiation
+  if (
+    auto pos{ optionsNegotiationValue.find( name)};
+    pos != optionsNegotiationValue.end())
+  {
+    optionsNegotiationValue.erase( pos );
+  }
 }
 
 void OptionList::remove( const KnownOptions option)
@@ -330,15 +341,15 @@ void OptionList::removeTransferSizeOption()
 
 std::optional< uint64_t> OptionList::transferSizeOption() const
 {
-  auto optionIt{ optionsValue.find( optionName( KnownOptions::TransferSize))};
+  auto pos{ optionsValue.find( optionName( KnownOptions::TransferSize))};
 
   // option not set
-  if (optionIt == optionsValue.end())
+  if ( pos == optionsValue.end())
   {
     return {};
   }
 
-  return static_cast< uint64_t >( OptionNegotiation::toInt( optionIt->second));
+  return static_cast< uint64_t >( OptionNegotiation::toInt( pos->second));
 }
 
 OptionList OptionList::negotiateServer( const Options &clientOptions) const
