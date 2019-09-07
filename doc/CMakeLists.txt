@@ -49,14 +49,14 @@ if (DOXYGEN_FOUND)
     @ONLY)
 
   install(
-    DIRECTORY ${CMAKE_BINARY_DIR}/${DOXYGEN_OUTPUT_DIRECTORY}
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${DOXYGEN_OUTPUT_DIRECTORY}
     COMPONENT documentation
     DESTINATION doc
     OPTIONAL)
 
 #  file(
 #    GENERATE
-#    OUTPUT ${CMAKE_BINARY_DIR}/CMakeGraphVizOptions.cmake
+#    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/CMakeGraphVizOptions.cmake
 #    CONTENT "\
 #cmake_minimum_required( VERSION 3.13)
 #set( GRAPHVIZ_EXTERNAL_LIBS FALSE)
@@ -65,7 +65,7 @@ if (DOXYGEN_FOUND)
 
 #  add_custom_target(
 #    doc_dep
-#    ${CMAKE_COMMAND} --graphviz=${CMAKE_CURRENT_BINARY_DIR}/doc_dep.dot ${CMAKE_SOURCE_DIR}
+#    ${CMAKE_COMMAND} --graphviz=${CMAKE_CURRENT_BINARY_DIR}/doc_dep.dot ${CMAKE_CURRENT_SOURCE_DIR}
 #    COMMAND ${DOXYGEN_DOT_EXECUTABLE} -Tpdf -O ${CMAKE_CURRENT_BINARY_DIR}/doc_dep.dot)
 
   #add_dependencies( doc doc_dep)
