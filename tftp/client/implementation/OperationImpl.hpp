@@ -120,7 +120,7 @@ class OperationImpl :
      *   endpoint.
      *
      * @param[in] packet
-     *   The TFTP packet to send.
+     *   TFTP packet to send.
      **/
     void sendFirst( const Packets::Packet &packet);
 
@@ -128,7 +128,7 @@ class OperationImpl :
      * @brief Sends the packet to the TFTP server.
      *
      * @param[in] packet
-     *   The TFTP packet to send.
+     *   TFTP packet to send.
      **/
     void send( const Packets::Packet &packet);
 
@@ -149,14 +149,14 @@ class OperationImpl :
     void receive();
 
     /**
-     * @brief Updates the maxReceivePacketSize value.
+     * @brief Updates the @p maxReceivePacketSize value.
      *
      * This value is used to resize the packet buffer before starting a
      * receive operation. This value could be modified, e.g. during option
      * negotiation.
      *
      * @param[in] maxReceivePacketSize
-     *   The new maxReceivePacketSize value.
+     *   New maxReceivePacketSize value.
      **/
     void maxReceivePacketSize( uint16_t maxReceivePacketSize) noexcept;
 
@@ -164,7 +164,7 @@ class OperationImpl :
      * @brief Update the receiveTimeout value.
      *
      * @param[in] receiveTimeout
-     *   The new receive timeout.
+     *   New receive timeout.
      **/
     void receiveTimeout( uint8_t receiveTimeout) noexcept;
 
@@ -277,24 +277,24 @@ class OperationImpl :
     boost::asio::ip::udp::endpoint remoteEndpoint;
 
     /**
-     * The maximum size of a received TFTP packet. Defaults to
-     * TftpPacket::DEFAULT_MAX_PACKET_SIZE.
+     * The maximum size of a received TFTP packet.
+     * Defaults to Tftp::DefaultMaxPacketSize.
      *
      * This value can be modified by calling setMaxReceivePacketSize(), e.g.
      * during option negotiation.
      **/
     uint16_t maxReceivePacketSizeV;
-    //! The receive timeout - is initialised to TFTP_DEFAULT_TIMEOUT
+    //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
     uint8_t receiveTimeoutV;
 
     //! TFTP socket
     boost::asio::ip::udp::socket socket;
-    //! The receive timeout timer
+    //! Receive timeout timer
     boost::asio::deadline_timer timer;
 
-    //! received packet data
+    //! Received packet data
     RawTftpPacket receivePacket;
-    //! remote address
+    //! Remote address
     boost::asio::ip::udp::endpoint receiveEndpoint;
     //! last transmitted packet
     RawTftpPacket transmitPacket;

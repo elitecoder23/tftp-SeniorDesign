@@ -36,7 +36,7 @@ class TftpClientImpl : public TftpClientInternal
      * @brief Creates the concrete TFTP %Client.
      *
      * @param[in] configuration
-     *   The TFTP Configuration
+     *   TFTP Configuration
      **/
     explicit TftpClientImpl( const TftpConfiguration &configuration);
 
@@ -92,9 +92,9 @@ class TftpClientImpl : public TftpClientInternal
     [[nodiscard]] const TftpConfiguration& configuration() const final;
 
   private:
-    //! The stored TFTP client configuration
+    //! Stored TFTP client configuration
     const TftpConfiguration configurationV;
-    //! The I/O context, which handles the asynchronous receive operation
+    //! I/O context, which handles the asynchronous receive operation
     boost::asio::io_context ioContext;
     //! I/O context dummy work to keep I/O context loops running
     boost::asio::io_context::work work;

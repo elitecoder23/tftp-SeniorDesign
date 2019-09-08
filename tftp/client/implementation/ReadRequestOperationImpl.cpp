@@ -185,11 +185,13 @@ void ReadRequestOperationImpl::dataPacket(
       BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
         << "Option Negotiation failed";
 
-      send( Packets::ErrorPacket{
+      Packets::ErrorPacket errorPacket{
         ErrorCode::TftpOptionRefused,
-        "Option Negotiation Failed"});
+        "Option Negotiation Failed" };
 
-      finished( TransferStatus::TransferError);
+      send( errorPacket);
+
+      finished( TransferStatus::TransferError, std::move( errorPacket));
       return;
     }
   }
@@ -226,9 +228,9 @@ void ReadRequestOperationImpl::acknowledgementPacket(
     << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket);
 
   // send Error
-  Packets::ErrorPacket errorPacket(
+  Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "ACK not expected");
+    "ACK not expected"};
 
   send( errorPacket);
 
@@ -268,15 +270,14 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   const auto negotiatedOptions{ optionNegotiationHandler( remoteOptions)};
 
   // Check empty options list
-  if (!negotiatedOptions)
+  if ( !negotiatedOptions)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "Option negotiation failed";
 
-    using namespace std::literals::string_view_literals;
-    Packets::ErrorPacket errorPacket(
+    Packets::ErrorPacket errorPacket{
       ErrorCode::TftpOptionRefused,
-      "Option negotiation failed"sv);
+      "Option negotiation failed"};
 
     send( errorPacket);
 

@@ -151,12 +151,14 @@ void WriteRequestOperationImpl::dataPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
     << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
-  send( Packets::ErrorPacket(
+  Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected"));
+    "DATA not expected"};
+
+  send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError);
+  finished( TransferStatus::TransferError, std::move( errorPacket));
 }
 
 void WriteRequestOperationImpl::acknowledgementPacket(
@@ -184,11 +186,13 @@ void WriteRequestOperationImpl::acknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "Invalid block number received";
 
-    send( Packets::ErrorPacket{
+    Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Wrong block number"});
+      "Wrong block number"};
 
-    finished( TransferStatus::TransferError);
+    send( errorPacket);
+
+    finished( TransferStatus::TransferError, std::move( errorPacket));
     return;
   }
 
@@ -203,11 +207,13 @@ void WriteRequestOperationImpl::acknowledgementPacket(
       BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
         << "Option Negotiation failed";
 
-      send( Packets::ErrorPacket{
+      Packets::ErrorPacket errorPacket{
         ErrorCode::TftpOptionRefused,
-        "Option Negotiation Failed"});
+        "Option Negotiation Failed"};
 
-      finished( TransferStatus::TransferError);
+      send( errorPacket);
+
+      finished( TransferStatus::TransferError, std::move( errorPacket));
       return;
     }
   }
@@ -216,7 +222,6 @@ void WriteRequestOperationImpl::acknowledgementPacket(
   if (lastDataPacketTransmitted)
   {
     finished( TransferStatus::Successful);
-
     return;
   }
 
@@ -244,9 +249,9 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "Received option list is empty";
 
-    Packets::ErrorPacket errorPacket(
+    Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Empty OACK not allowed");
+      "Empty OACK not allowed"};
 
     send( errorPacket);
 
@@ -262,16 +267,18 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "Option negotiation failed";
 
-    send( Packets::ErrorPacket(
+    Packets::ErrorPacket errorPacket{
       ErrorCode::TftpOptionRefused,
-      "Option negotiation failed"));
+      "Option negotiation failed"};
 
-    finished( TransferStatus::OptionNegotiationError);
+    send( errorPacket);
+
+    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket));
     return;
   }
 
   // check blocksize option
-  if (auto blocksize{ negotiatedOptions->blocksize()}; blocksize)
+  if ( auto blocksize{ negotiatedOptions->blocksize()}; blocksize)
   {
     transmitDataSize = *blocksize;
   }

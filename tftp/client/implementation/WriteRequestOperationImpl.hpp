@@ -150,7 +150,7 @@ class WriteRequestOperationImpl : public OperationImpl
     uint16_t transmitDataSize;
     //! Is set, when the last data packet has been transmitted
     bool lastDataPacketTransmitted;
-    //! The block number of the last transmitted data packet.
+    //! Block number of the last transmitted data packet.
     Packets::BlockNumber lastTransmittedBlockNumber;
 };
 

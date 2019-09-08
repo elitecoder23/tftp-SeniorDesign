@@ -26,7 +26,7 @@ namespace Tftp::Client {
 class TftpClientInternal : public TftpClient
 {
   public:
-    //! Default destructor
+    //! Destructor
     ~TftpClientInternal() override = default;
 
     /**
