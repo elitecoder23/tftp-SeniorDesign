@@ -24,10 +24,10 @@
 #include <iosfwd>
 
 /**
- * @brief TFTP File Implementation.
+ * @brief TFTP %File Handling.
  *
  * This namespace provides common handler of data which shall be received from
- * or transmitted to an other TFTP instance.
+ * or transmitted to another TFTP instance.
  *
  * Currently there are two implementations:
  * @li MemoryFile, which handles the data within a local std::vector, and

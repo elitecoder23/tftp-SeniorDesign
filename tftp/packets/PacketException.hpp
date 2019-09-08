@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration/ Definition of Class Tftp::Packets::PacketException.
+ * @brief Declaration/ Definition of Class Tftp::Packets::InvalidPacketException.
  **/
 
 #ifndef TFTP_PACKETS_PACKETEXCEPTION_HPP

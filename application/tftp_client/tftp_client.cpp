@@ -7,12 +7,12 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration/ Definition of TFTP Server Entry Point.
+ * @brief TFTP Client CLI Application.
  **/
 
 /**
  * @dir
- * @brief TFTP Client CLI Application
+ * @brief TFTP Client CLI Application.
  **/
 
 #include <tftp/Tftp.hpp>

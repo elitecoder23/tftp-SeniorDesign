@@ -25,17 +25,17 @@
 #include <cstdint>
 
 /**
- * @brief TFTP Protocol Implementation.
+ * @brief TFTP Protocol.
  *
- * This library implementation the TFTP protocol.
+ * This library implements the TFTP protocol.
  *
  * The library is divided into sections:
- * - Tftp - Contains the basic definitions.
- * - Tftp::Packets - Contains the implementation of all TFTP packet types
- * - Tftp::Options - Contains the implementation of the TFTP Option handling
- * - Tftp::Client - Base implementation of TFTP clients
- * - Tftp::Server - Base implementation of TFTP servers
- * - Tftp::File - Helper classes for file transfers
+ * - Tftp.
+ * - Tftp::Packets - TFTP Packets
+ * - Tftp::Options - TFTP Option Handling
+ * - Tftp::Client - TFTP Clients
+ * - Tftp::Server - TFTP Servers
+ * - Tftp::File - Helper Classes for file transfers
  *
  * @par Referenced Documents
  * - RFC 1350 The TFTP Protocol (Revision 2)<br>
@@ -49,7 +49,7 @@
  **/
 namespace Tftp {
 
-//! The Packet Type of Raw Data
+//! Raw TFTP Packet.
 using RawTftpPacket = std::vector< uint8_t>;
 
 //!  TFTP Version Information

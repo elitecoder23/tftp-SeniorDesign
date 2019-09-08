@@ -27,7 +27,7 @@
 #include <optional>
 
 /**
- * @brief TFTP %Client Implementation.
+ * @brief TFTP %Client.
  *
  * The main entry point for users of this part of the TFTP library is the
  * class TftpClient.

@@ -21,7 +21,7 @@
 #include <tftp/Tftp.hpp>
 
 /**
- * @brief TFTP Protocol Packet Implementation.
+ * @brief TFTP %Packets.
  *
  * The base for the packets is the class TftpPacket.
  * For raw-data to TFTP packet handling, the class PacketFactory with its

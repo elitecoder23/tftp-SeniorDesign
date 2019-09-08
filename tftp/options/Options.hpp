@@ -27,7 +27,7 @@
 #include <functional>
 
 /**
- * @brief TFTP Protocol Options Implementation (RFC 2348).
+ * @brief TFTP %Options (RFC 2348).
  **/
 namespace Tftp::Options {
 

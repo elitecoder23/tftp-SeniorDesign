@@ -8,8 +8,8 @@
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
  * @brief Declaration/ definition of classes Tftp::TftpException,
- *   Tftp::InvalidPacketException, Tftp::CommunicationException,
- *   Tftp::OptionNegotiationException, and Tftp::ErrorReceivedException.
+ *   Tftp::CommunicationException, Tftp::OptionNegotiationException, and
+ *   Tftp::ErrorReceivedException.
  **/
 
 #ifndef TFTP_TFTPEXCEPTION_HPP

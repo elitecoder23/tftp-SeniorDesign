@@ -7,12 +7,12 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration/ Definition of TFTP Unit Test Main Entry
+ * @brief TFTP Unit Test Application.
  **/
 
 /**
  * @dir
- * @brief TFTP Unit Test Application
+ * @brief TFTP Unit Test Application.
  **/
 
 //! Automatically Defines Unit Test Entry.
