@@ -33,7 +33,7 @@ class TftpConfiguration
 {
   public:
     //! Initialises the configuration with default values.
-    TftpConfiguration();
+    TftpConfiguration() noexcept;
 
     /**
      * @brief Loads the configuration via a boost::property_tree::ptree.

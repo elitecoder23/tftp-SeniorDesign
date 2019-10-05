@@ -16,7 +16,7 @@
 
 namespace Tftp {
 
-TftpConfiguration::TftpConfiguration() :
+TftpConfiguration::TftpConfiguration() noexcept :
   tftpTimeout{ DefaultTftpReceiveTimeout},
   tftpRetries{ DefaultTftpRetries},
   tftpServerPort{ DefaultTftpPort},
