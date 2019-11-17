@@ -62,7 +62,7 @@ class PacketHandler
      * @param[in] remote
      *   Source of the packet.
      * @param[in] readRequestPacket
-     *   The read request packet.
+     *   Read request packet.
      **/
     virtual void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -74,7 +74,7 @@ class PacketHandler
      * @param[in] remote
      *   Source of the packet.
      * @param[in] writeRequestPacket
-     *   The write request packet.
+     *   Write request packet.
      **/
     virtual void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -86,7 +86,7 @@ class PacketHandler
      * @param[in] remote
      *   Source of the packet.
      * @param[in] dataPacket
-     *   The data packet.
+     *   Data packet.
      **/
     virtual void dataPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -98,7 +98,7 @@ class PacketHandler
      * @param[in] remote
      *   Source of the packet.
      * @param[in] acknowledgementPacket
-     *   The acknowledgement packet.
+     *   Acknowledgement packet.
      **/
     virtual void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -110,7 +110,7 @@ class PacketHandler
      * @param[in] remote
      *   Source of the packet.
      * @param[in] errorPacket
-     *   The error packet.
+     *   Error packet.
      **/
     virtual void errorPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -122,7 +122,7 @@ class PacketHandler
      * @param[in] remote
      *   Source of the packet.
      * @param[in] optionsAcknowledgementPacket
-     *   The option acknowledgement packet.
+     *   Option acknowledgement packet.
      **/
     virtual void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -134,7 +134,7 @@ class PacketHandler
      * @param[in] remote
      *   Source of the packet.
      * @param[in] rawPacket
-     *   The invalid packet data.
+     *   Invalid packet data.
      **/
     virtual void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,

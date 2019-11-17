@@ -39,7 +39,7 @@ class TransmitDataHandler: public DataHandler
      * @retval {}
      *   If the transfer size of the data cannot be provided.
      **/
-    virtual std::optional< uint64_t> requestedTransferSize() = 0;
+    [[nodiscard]] virtual std::optional< uint64_t> requestedTransferSize() = 0;
 
     /**
      * @brief Request for data, which will be transmitted.
@@ -59,7 +59,7 @@ class TransmitDataHandler: public DataHandler
      *
      * @return The data, which will be transmitted.
      **/
-    virtual DataType sendData( std::size_t maxSize) noexcept = 0;
+    [[nodiscard]] virtual DataType sendData( std::size_t maxSize) noexcept = 0;
 };
 
 }

@@ -42,9 +42,10 @@ class ErrorPacket: public Packet
      * @param[in] errorCode
      *   Error code, which shall be set.
      * @param[in] errorMessage
-     *   Error message, which shall be set. By default empty.
+     *   Error message, which shall be set.
+     *   By default empty.
      **/
-    ErrorPacket(
+    explicit ErrorPacket(
       ErrorCode errorCode,
       std::string_view errorMessage = {});
 
@@ -63,7 +64,7 @@ class ErrorPacket: public Packet
     ErrorPacket& operator=( const RawTftpPacket &rawPacket) final;
 
     //! @copydoc Packet::operator std::string() const
-    operator std::string() const final;
+    explicit operator std::string() const final;
 
     /**
      * @brief Returns the error code.

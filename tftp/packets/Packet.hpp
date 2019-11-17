@@ -25,7 +25,7 @@ namespace Tftp::Packets {
 class Packet
 {
   public:
-    //! The minimum size is the Opcode field.
+    //! Minimum Size is the Opcode Field.
     static constexpr std::size_t HeaderSize = sizeof( uint16_t);
 
     /**

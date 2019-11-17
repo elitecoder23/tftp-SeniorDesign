@@ -78,7 +78,7 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return Option list (as reference)
      **/
-    Options::Options& options();
+    [[nodiscard]] Options::Options& options();
 
     /**
      * @brief Overwrite the options of this packet with the new one.

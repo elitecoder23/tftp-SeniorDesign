@@ -109,7 +109,7 @@ class DataPacket: public Packet
      *
      * @return The data as reference.
      **/
-    Data& data();
+    [[nodiscard]] Data& data();
 
     /**
      * @brief Sets the data of the packet.

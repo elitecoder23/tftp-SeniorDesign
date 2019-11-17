@@ -81,6 +81,7 @@ enum class RequestType
 
   Invalid
 };
+
 //! @brief Phases of TFTP Transfer
 enum class TransferPhase
 {
@@ -97,7 +98,7 @@ enum class TransferPhase
   Unknown
 };
 
-//! The TFTP Transfer Status
+//! TFTP Transfer Status
 enum class TransferStatus
 {
   //! Transfer completed successfully
@@ -166,7 +167,7 @@ enum class TransferMode
 };
 
 /**
- * @brief The TFTP Error Codes as Defined within the RFCs.
+ * @brief TFTP Error Codes as Defined within the RFCs.
  *
  * The error codes, except the ErrorCode::TftpOptionRefused (8) are
  * described within RFC 1350.
@@ -225,9 +226,9 @@ class DataHandler;
 class ReceiveDataHandler;
 class TransmitDataHandler;
 
-//! Receive data handler pointer
+//! Receive Data Handler Pointer
 using ReceiveDataHandlerPtr = std::shared_ptr< ReceiveDataHandler>;
-//! Transmit data handler pointer
+//! Transmit Data Handler Pointer
 using TransmitDataHandlerPtr =  std::shared_ptr< TransmitDataHandler>;
 
 //! Operation Completed handler, which indicates, if the transfer was successful

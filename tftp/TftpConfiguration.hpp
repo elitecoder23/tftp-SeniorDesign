@@ -57,7 +57,7 @@ class TftpConfiguration
      *
      * @return
      **/
-    boost::program_options::options_description options();
+    [[nodiscard]] boost::program_options::options_description options();
 
     /**
      * @brief Creates an option list (for TFTP clients) based on the actual
@@ -99,7 +99,7 @@ class TftpConfiguration
     [[nodiscard]] Options::OptionList serverOptions(
       const Options::OptionList &baseOptions = {}) const;
 
-    //! The TFTP timeout - The standard when no timeout option is negotiated in seconds.
+    //! TFTP timeout - The standard when no timeout option is negotiated in seconds.
     uint8_t tftpTimeout;
     //! Number of retries.
     uint16_t tftpRetries;
