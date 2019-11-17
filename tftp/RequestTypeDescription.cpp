@@ -18,19 +18,19 @@
 
 namespace Tftp {
 
+using namespace std::literals;
+
 RequestTypeDescription::RequestTypeDescription():
   Description{
-    {"Read",    RequestType::Read},
-    {"Write",   RequestType::Write},
-
-    {"Invalid", RequestType::Invalid}
+    {"Read"sv,  RequestType::Read},
+    {"Write"sv, RequestType::Write}
   }
 {
 }
 
 std::istream& operator>>( std::istream& st, RequestType& requestType)
 {
-  std::string requestTypeStr;
+  std::string requestTypeStr{};
 
   st >> requestTypeStr;
 
