@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.13)
+cmake_minimum_required( VERSION 3.15)
 
 add_subdirectory( tftp_unit_test)
 add_subdirectory( tftp_client)

@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.13)
+cmake_minimum_required( VERSION 3.15)
 
 project(
   tftp
@@ -33,8 +33,8 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_program(
   CLANG_TIDY_EXE
   NAMES
-  clang-tidy-8.0
-  clang-tidy-7.0
+  clang-tidy-9
+  clang-tidy-8
   clang-tidy)
 
 if( CLANG_TIDY_EXE)
