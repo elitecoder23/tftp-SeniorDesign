@@ -45,19 +45,6 @@ endif()
 enable_testing()
 
 
-find_package( Git)
-
-if (GIT_FOUND)
-  execute_process(
-    COMMAND ${GIT_EXECUTABLE} rev-parse --verify --short HEAD
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    OUTPUT_VARIABLE GIT_HASH
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  set( PROJECT_VERSION_ADDITION "${PROJECT_VERSION_ADDITION}-${GIT_HASH}")
-endif()
-
-
 include( FetchContent)
 
 # get dependencies
