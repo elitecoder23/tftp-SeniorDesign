@@ -16,6 +16,7 @@
 
 namespace Tftp::Packets {
 
+BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( TftpBlockNumber)
 
 //! Constructor test
@@ -92,6 +93,7 @@ BOOST_AUTO_TEST_CASE( compare )
   BOOST_CHECK( !(blockNumber5a != int5));
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 
 }

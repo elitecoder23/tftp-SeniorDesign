@@ -20,6 +20,7 @@
 
 namespace Tftp::Packets {
 
+BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( TftpErrorPacket)
 
 BOOST_AUTO_TEST_CASE( constructor1)
@@ -80,6 +81,7 @@ BOOST_AUTO_TEST_CASE( constructor3)
   BOOST_CHECK( error.errorMessage() == "ERROR");
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 
 }

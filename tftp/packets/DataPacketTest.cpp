@@ -21,6 +21,7 @@
 
 namespace Tftp::Packets {
 
+BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( TftpDataPacket)
 
 //! Constructor test
@@ -119,6 +120,7 @@ BOOST_AUTO_TEST_CASE( setBlockNumber )
   BOOST_CHECK( dp1Const.blockNumber() == BlockNumber{ 11});
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 
 }

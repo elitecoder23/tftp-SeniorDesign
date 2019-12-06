@@ -19,6 +19,7 @@
 
 namespace Tftp::Options {
 
+BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( OptionListTest)
 
 //! optionName test
@@ -121,6 +122,7 @@ BOOST_AUTO_TEST_CASE( clientNegotiation)
   BOOST_CHECK( negotiatedOptions.transferSizeOption() == 99);
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 
 }

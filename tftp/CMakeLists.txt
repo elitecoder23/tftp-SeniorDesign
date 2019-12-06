@@ -70,7 +70,8 @@ add_library( tftp_test OBJECT)
 target_sources(
   tftp_test
 
-  PRIVATE)
+  PRIVATE
+    VersionTest.cpp)
 
 target_compile_options(
   tftp_test

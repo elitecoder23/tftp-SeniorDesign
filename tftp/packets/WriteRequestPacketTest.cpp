@@ -20,6 +20,7 @@
 
 namespace Tftp::Packets {
 
+BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( TftpWriteRequestPacket)
 
 //! Constructor test
@@ -54,6 +55,7 @@ BOOST_AUTO_TEST_CASE( constructor )
   BOOST_CHECK( blocksizeOption2->second == "4096");
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 
 }

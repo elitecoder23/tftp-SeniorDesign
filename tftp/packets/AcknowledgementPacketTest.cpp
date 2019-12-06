@@ -20,6 +20,7 @@
 
 namespace Tftp::Packets {
 
+BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( AcknowledgementPacketTest)
 
 //! Constructor test
@@ -50,6 +51,7 @@ BOOST_AUTO_TEST_CASE( constructor2)
   BOOST_CHECK( ack.blockNumber() == BlockNumber( 4097U));
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 
 }

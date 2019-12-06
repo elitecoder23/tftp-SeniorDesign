@@ -17,6 +17,7 @@
 
 namespace Tftp::Options {
 
+BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( OptionNegotiationTest)
 
 //! negotiation min max test
@@ -69,6 +70,7 @@ BOOST_AUTO_TEST_CASE( negotiateAlwaysPass)
   BOOST_CHECK( "51" == negotiation.negotiate( "51"));
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 
 }
