@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE( version)
     << Version::Patch << "-"
     << Version::Addition << "\n";
 
-  std::cout << "Helper Version String: " << Version::version() << "\n";
+  std::cout << "TFTP Version String: " << Version::version() << "\n";
 }
 
 BOOST_AUTO_TEST_SUITE_END()
