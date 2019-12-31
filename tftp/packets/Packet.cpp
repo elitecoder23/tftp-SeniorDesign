@@ -138,6 +138,7 @@ Packet::operator RawTftpPacket() const
 
 void Packet::insertHeader( RawTftpPacket &rawPacket) const
 {
+  // keep assertion --> programming error of sub-classes.
   assert( rawPacket.size() >= HeaderSize);
 
   auto packetIt{ rawPacket.begin()};
@@ -158,7 +159,7 @@ void Packet::decodeHeader( const RawTftpPacket &rawPacket)
   auto packetIt{ rawPacket.begin()};
 
   // Check Opcode
-  uint16_t opcode;
+  uint16_t opcode{};
   getInt< uint16_t>( packetIt, opcode);
 
   if ( static_cast< PacketType>( opcode) != packetTypeValue)

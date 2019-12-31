@@ -21,6 +21,7 @@
 namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpTest)
+BOOST_AUTO_TEST_SUITE( PacketsTest)
 BOOST_AUTO_TEST_SUITE( TftpReadWriteRequestPacketTest)
 
 //! Decode string test
@@ -42,6 +43,7 @@ BOOST_AUTO_TEST_CASE( decodeModeEnum)
   BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::MAIL) == "MAIL");
 }
 
+BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 BOOST_AUTO_TEST_SUITE_END()
 

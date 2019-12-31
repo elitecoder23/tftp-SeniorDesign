@@ -152,6 +152,7 @@ class Packet
      * @brief Insert the header data to the raw packet.
      *
      * Can be used by child classes to assemble a raw packet.
+     * The size of @p rawPacket must be at least @p HeaderSize.
      *
      * @param[in,out] rawPacket
      *   The raw packet, which will be filled with the approbate data.
@@ -160,7 +161,7 @@ class Packet
 
   private:
     /**
-     * @brief Decodes the TFTP header.
+     * @brief Decodes the TFTP Header.
      *
      * Checks the packet size
      * Checks the packet type against the opcode.

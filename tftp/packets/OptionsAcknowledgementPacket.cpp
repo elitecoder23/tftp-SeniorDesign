@@ -81,7 +81,7 @@ Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
 {
   auto rawOptions{ Options::OptionList::rawOptions( optionsValue)};
 
-  RawTftpPacket rawPacket( 2 + rawOptions.size());
+  RawTftpPacket rawPacket( 2U + rawOptions.size());
 
   insertHeader( rawPacket);
 

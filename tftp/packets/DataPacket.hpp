@@ -32,6 +32,9 @@ namespace Tftp::Packets {
 class DataPacket: public Packet
 {
   public:
+    //! Minimum Header Size (Opcode + Block Number)
+    static constexpr size_t MinPacketSize = HeaderSize + 2U;
+
     //! Data Type
     using Data = std::vector< uint8_t>;
 

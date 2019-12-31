@@ -35,6 +35,9 @@ namespace Tftp::Packets {
 class ErrorPacket: public Packet
 {
   public:
+    //! Minimum Header Size ( Opcode, Error Code, Empty String)
+    static constexpr size_t MinPacketSize = HeaderSize + 2U + 1U;
+
     /**
      * @brief Generates a TFTP error packet with the given error code and
      *   error message.
@@ -116,9 +119,9 @@ class ErrorPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! Error Code
-    ErrorCode errorCodeValue;
+    ErrorCode errorCodeV;
     //! Error Message.
-    std::string errorMessageValue;
+    std::string errorMessageV;
 };
 
 }

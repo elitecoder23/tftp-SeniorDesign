@@ -32,6 +32,8 @@ namespace Tftp::Packets {
 class AcknowledgementPacket: public Packet
 {
   public:
+    static constexpr size_t PacketSize = HeaderSize + 2U;
+
     /**
      * @brief Creates the packet with the given block number.
      *
@@ -94,7 +96,7 @@ class AcknowledgementPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! Block Number of Packet
-    BlockNumber blockNumberValue;
+    BlockNumber blockNumberV;
 };
 
 }

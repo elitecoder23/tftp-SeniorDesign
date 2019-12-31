@@ -208,8 +208,8 @@ Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
 
   RawTftpPacket rawPacket(
     HeaderSize +
-    filenameValue.size() + 1 +
-    mode.size() + 1 +
+    filenameValue.size() + 1U +
+    mode.size() + 1U +
     rawOptions.size());
 
   insertHeader( rawPacket);

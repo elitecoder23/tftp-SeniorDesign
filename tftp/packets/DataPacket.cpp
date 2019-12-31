@@ -94,14 +94,14 @@ size_t DataPacket::dataSize() const
 
 DataPacket::operator std::string() const
 {
-  return (boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
+  return ( boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
     blockNumber() %
     dataSize()).str();
 }
 
 Tftp::RawTftpPacket DataPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4 + dataValue.size());
+  RawTftpPacket rawPacket( 4U + dataValue.size());
 
   insertHeader( rawPacket);
 
@@ -119,7 +119,7 @@ Tftp::RawTftpPacket DataPacket::encode() const
 void DataPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   // check size
-  if (rawPacket.size() < 4U)
+  if (rawPacket.size() < MinPacketSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << AdditionalInfo( "Invalid packet size of DATA packet"));
