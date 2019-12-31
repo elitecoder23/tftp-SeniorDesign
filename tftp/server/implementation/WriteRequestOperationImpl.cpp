@@ -38,7 +38,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     negotiatedOptions},
   dataHandler{ dataHandler},
   receiveDataSize{ DefaultDataSize},
-  lastReceivedBlockNumber{ 0}
+  lastReceivedBlockNumber{ 0U}
 {
 }
 
@@ -59,7 +59,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     local},
   dataHandler{ dataHandler},
   receiveDataSize{ DefaultDataSize},
-  lastReceivedBlockNumber{ 0}
+  lastReceivedBlockNumber{ 0U}
 {
 }
 
@@ -72,7 +72,7 @@ void WriteRequestOperationImpl::start()
     auto &respOptions{ options()};
 
     // option negotiation leads to empty option list
-    if (respOptions.empty())
+    if ( respOptions.empty())
     {
       // Then no OACK is sent back - a simple ACK is sent.
       send( Packets::AcknowledgementPacket{ Packets::BlockNumber{ 0U}});
@@ -101,8 +101,8 @@ void WriteRequestOperationImpl::start()
       }
 
       // check transfer size option
-       if ( auto transferSizeOption{ respOptions.transferSizeOption()})
-       {
+      if ( auto transferSizeOption{ respOptions.transferSizeOption()})
+      {
         if ( !dataHandler->receivedTransferSize( *transferSizeOption))
         {
           Packets::ErrorPacket errorPacket{
@@ -152,8 +152,8 @@ void WriteRequestOperationImpl::dataPacket(
   // Check retransmission
   if (dataPacket.blockNumber() == lastReceivedBlockNumber)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-      "Retransmission of last packet - only send ACK";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+      << "Retransmission of last packet - only send ACK";
 
     send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber});
 

@@ -40,7 +40,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   dataHandler{ dataHandler},
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
-  lastTransmittedBlockNumber{ 0}
+  lastTransmittedBlockNumber{ 0U}
 {
 }
 
@@ -62,7 +62,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   dataHandler{ dataHandler},
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
-  lastTransmittedBlockNumber{ 0}
+  lastTransmittedBlockNumber{ 0U}
 {
 }
 
@@ -185,7 +185,7 @@ void ReadRequestOperationImpl::dataPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
     << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
-  using namespace std::literals::string_view_literals;
+  using namespace std::literals;
   Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
     "DATA not expected"sv);
@@ -224,10 +224,10 @@ void ReadRequestOperationImpl::acknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "Invalid block number received";
 
-    using namespace std::literals::string_view_literals;
-    Packets::ErrorPacket errorPacket(
+    using namespace std::literals;
+    Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Block number not expected"sv);
+      "Block number not expected"sv};
 
     send( errorPacket);
 
@@ -240,8 +240,8 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   // if it was the last ACK of the last data packet - we are finished.
   if (lastDataPacketTransmitted)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info) <<
-      "Last acknowledgement received";
+    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+      << "Last acknowledgement received";
 
     finished( TransferStatus::Successful);
 

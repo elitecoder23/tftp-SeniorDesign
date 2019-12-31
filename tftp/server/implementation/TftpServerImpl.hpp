@@ -31,7 +31,7 @@ namespace Tftp::Server {
  * @brief TFTP server implementation.
  *
  * Waits on the specified port for a valid TFTP request and calls the
- * approbate call-back, which has to handle the request.
+ * appropriate call-back, which has to handle the request.
  *
  * If not expected packets or invalid packets are received a error is send
  * back to the sender.

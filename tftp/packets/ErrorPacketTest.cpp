@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 
 BOOST_AUTO_TEST_CASE( constructor2)
 {
-  using namespace std::literals::string_literals;
+  using namespace std::literals;
   ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"s};
 
   RawTftpPacket raw{ error};

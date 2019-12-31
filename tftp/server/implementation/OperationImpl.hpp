@@ -95,7 +95,7 @@ class OperationImpl:
       const boost::asio::ip::udp::endpoint &local);
 
     /**
-     * @brief default destructor.
+     * @brief Destructor.
      **/
     ~OperationImpl() noexcept override;
 

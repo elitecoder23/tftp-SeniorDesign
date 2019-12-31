@@ -47,9 +47,7 @@ void OperationImpl::gracefulAbort(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
     << "Graceful abort requested: " << errorCode << " '" << errorMessage << "'";
 
-  Packets::ErrorPacket errorPacket(
-    errorCode,
-    errorMessage);
+  Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
 
   send( errorPacket);
 
@@ -87,7 +85,7 @@ try :
   socket{ ioContext},
   timer{ ioContext},
   transmitPacketType{ PacketType::Invalid},
-  transmitCounter{ 0}
+  transmitCounter{ 0U}
 {
   BOOST_LOG_FUNCTION()
 
@@ -129,7 +127,7 @@ try :
   socket{ ioContext},
   timer{ ioContext},
   transmitPacketType{ PacketType::Invalid},
-  transmitCounter{ 0}
+  transmitCounter{ 0U}
 {
   BOOST_LOG_FUNCTION()
 
@@ -174,7 +172,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet)
   try
   {
     // Reset the transmit counter
-    transmitCounter = 1;
+    transmitCounter = 1U;
 
     // Store packet type
     transmitPacketType = packet.packetType();
@@ -207,7 +205,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   try
   {
     // Reset the transmit counter
-    transmitCounter = 1;
+    transmitCounter = 1U;
 
     // Store packet type
     transmitPacketType = packet.packetType();
@@ -361,9 +359,9 @@ void OperationImpl::writeRequestPacket(
     << "RX ERROR: " << static_cast< std::string>( writeRequestPacket);
 
   // send error packet
-  Packets::ErrorPacket errorPacket(
+  Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "WRQ not expected");
+    "WRQ not expected"};
 
   send( errorPacket);
 
@@ -457,9 +455,9 @@ void OperationImpl::receiveFirstHandler(
     try
     {
       // send error packet
-      Packets::ErrorPacket err(
+      Packets::ErrorPacket err{
         ErrorCode::UnknownTransferId,
-        "Packet from wrong source");
+        "Packet from wrong source"};
 
       socket.send_to(
         boost::asio::buffer( static_cast< RawTftpPacket>( err)),

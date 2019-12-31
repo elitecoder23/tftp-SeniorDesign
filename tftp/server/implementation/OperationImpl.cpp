@@ -175,7 +175,7 @@ void OperationImpl::finished(
   timer.cancel();
   socket.cancel();
 
-  if (completionHandler)
+  if ( completionHandler)
   {
     completionHandler( status);
   }
@@ -276,7 +276,7 @@ void OperationImpl::readRequestPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
     << "RX ERROR: " << static_cast< std::string>( readRequestPacket);
 
-  using namespace std::literals::string_view_literals;
+  using namespace std::literals;
   Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
     "RRQ not expected"sv);
@@ -294,7 +294,7 @@ void OperationImpl::writeRequestPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
     << "RX ERROR: " << static_cast< std::string>( writeRequestPacket);
 
-  using namespace std::literals::string_view_literals;
+  using namespace std::literals;
   Packets::ErrorPacket errorPacket(
     ErrorCode::IllegalTftpOperation,
     "WRQ not expected"sv);
@@ -345,10 +345,10 @@ void OperationImpl::optionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
     << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket);
 
-  using namespace std::literals::string_view_literals;
-  Packets::ErrorPacket errorPacket(
+  using namespace std::literals;
+  Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "OACK not expected"sv);
+    "OACK not expected"sv};
 
   send( errorPacket);
 
@@ -365,10 +365,10 @@ void OperationImpl::invalidPacket(
   BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
     << "RX: UNKNOWN";
 
-  using namespace std::literals::string_view_literals;
-  Packets::ErrorPacket errorPacket(
+  using namespace std::literals;
+  Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "Invalid packet not expected"sv);
+    "Invalid packet not expected"sv};
 
   send( errorPacket);
 
@@ -389,7 +389,7 @@ void OperationImpl::receiveHandler(
   }
 
   // Check error
-  if (errorCode)
+  if ( errorCode)
   {
     BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
       << "receive error: " << errorCode.message();
@@ -411,7 +411,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
   BOOST_LOG_FUNCTION()
 
   // handle abort
-  if (boost::asio::error::operation_aborted == errorCode)
+  if ( boost::asio::error::operation_aborted == errorCode)
   {
     return;
   }
