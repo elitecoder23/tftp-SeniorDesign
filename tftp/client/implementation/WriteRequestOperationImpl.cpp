@@ -148,7 +148,7 @@ void WriteRequestOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
   Packets::ErrorPacket errorPacket{
@@ -167,13 +167,13 @@ void WriteRequestOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX: " << static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
   if (acknowledgementPacket.blockNumber() == lastTransmittedBlockNumber.previous())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
       << "Received previous ACK packet: retry of last data package - "
          "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
@@ -183,7 +183,7 @@ void WriteRequestOperationImpl::acknowledgementPacket(
   // check invalid block number
   if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Invalid block number received";
 
     Packets::ErrorPacket errorPacket{
@@ -204,7 +204,7 @@ void WriteRequestOperationImpl::acknowledgementPacket(
     // If empty options is returned - Abort Operation
     if (!negotiatedOptions)
     {
-      BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
         << "Option Negotiation failed";
 
       Packets::ErrorPacket errorPacket{
@@ -238,7 +238,7 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket);
 
   const auto &remoteOptions{ optionsAcknowledgementPacket.options()};
@@ -246,7 +246,7 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
   // check empty options
   if (remoteOptions.empty())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Received option list is empty";
 
     Packets::ErrorPacket errorPacket{
@@ -264,7 +264,7 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
 
   if ( !negotiatedOptions)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Option negotiation failed";
 
     Packets::ErrorPacket errorPacket{

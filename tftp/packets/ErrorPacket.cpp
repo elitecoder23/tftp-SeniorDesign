@@ -81,7 +81,7 @@ Tftp::RawTftpPacket ErrorPacket::encode() const
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // error code
-  packetIt = setInt( packetIt, static_cast< uint16_t>( errorCodeV));
+  packetIt = Helper::setInt( packetIt, static_cast< uint16_t>( errorCodeV));
 
   // error message
   packetIt = std::copy(
@@ -99,21 +99,21 @@ void ErrorPacket::decodeBody( const RawTftpPacket &rawPacket)
   if (rawPacket.size() < MinPacketSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "Invalid packet size of ERROR packet"));
+      << Helper::AdditionalInfo( "Invalid packet size of ERROR packet"));
   }
 
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // decode error code
   uint16_t errorCodeInt{};
-  packetIt = getInt< uint16_t>( packetIt, errorCodeInt);
+  packetIt = Helper::getInt< uint16_t>( packetIt, errorCodeInt);
   errorCodeV = static_cast< ErrorCode>( errorCodeInt);
 
   // check terminating 0 character
   if ( rawPacket.back() != 0U)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "error message not 0-terminated"));
+      << Helper::AdditionalInfo( "error message not 0-terminated"));
   }
 
   errorMessageV = std::string{ packetIt, rawPacket.end()-1U};

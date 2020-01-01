@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   RawTftpPacket raw{ wrq};
 
-  std::cout << Dump( &(*raw.begin()), raw.size());
+  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
 
   WriteRequestPacket wrq2{ raw};
 

@@ -108,7 +108,7 @@ Tftp::RawTftpPacket DataPacket::encode() const
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // block number
-  packetIt = setInt( packetIt, static_cast< uint16_t>( blockNumberValue));
+  packetIt = Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberValue));
 
   // data
   std::copy( dataValue.begin(), dataValue.end(), packetIt);
@@ -122,13 +122,13 @@ void DataPacket::decodeBody( const RawTftpPacket &rawPacket)
   if (rawPacket.size() < MinPacketSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "Invalid packet size of DATA packet"));
+      << Helper::AdditionalInfo( "Invalid packet size of DATA packet"));
   }
 
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // decode block number
-  packetIt = getInt< uint16_t>( packetIt, blockNumberValue);
+  packetIt = Helper::getInt< uint16_t>( packetIt, blockNumberValue);
 
   // copy data
   dataValue.assign( packetIt, rawPacket.end());

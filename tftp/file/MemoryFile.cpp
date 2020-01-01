@@ -45,7 +45,7 @@ void MemoryFile::finished() noexcept
 
 bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "Received transfer size: " << transferSize;
 
   return true;

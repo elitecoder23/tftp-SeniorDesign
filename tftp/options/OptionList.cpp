@@ -57,7 +57,7 @@ Options OptionList::options(
     if (nameEnd==end)
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << AdditionalInfo( "Unexpected end of input data"));
+        << Helper::AdditionalInfo( "Unexpected end of input data"));
     }
 
     auto valueBegin{ nameEnd + 1};
@@ -65,7 +65,7 @@ Options OptionList::options(
     if (valueBegin == end)
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << AdditionalInfo( "Unexpected end of input data"));
+        << Helper::AdditionalInfo( "Unexpected end of input data"));
     }
 
     auto valueEnd{ std::find( valueBegin, end, 0)};
@@ -73,7 +73,7 @@ Options OptionList::options(
     if (valueEnd == end)
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << AdditionalInfo( "Unexpected end of input data"));
+        << Helper::AdditionalInfo( "Unexpected end of input data"));
     }
 
     options.emplace(
@@ -271,7 +271,7 @@ std::optional< uint16_t> OptionList::blocksize() const
     return {};
   }
 
-  return safeCast< uint16_t>( OptionNegotiation::toInt( optionIt->second));
+  return Helper::safeCast< uint16_t>( OptionNegotiation::toInt( optionIt->second));
 }
 
 void OptionList::timeoutOptionClient( const uint8_t timeout)
@@ -320,7 +320,7 @@ std::optional< uint8_t> OptionList::timeoutOption() const
     return {};
   }
 
-  return safeCast< uint8_t >( OptionNegotiation::toInt( optionIt->second));
+  return Helper::safeCast< uint8_t >( OptionNegotiation::toInt( optionIt->second));
 }
 
 void OptionList::transferSizeOption( const uint64_t transferSize)

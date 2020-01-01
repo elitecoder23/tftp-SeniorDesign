@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   RawTftpPacket raw{ oack};
 
-  std::cout << "OACK:\n" << Dump( &(*raw.begin()), raw.size()) << std::endl;
+  std::cout << "OACK:\n" << Helper::Dump( &(*raw.begin()), raw.size()) << "\n";
 
   OptionsAcknowledgementPacket oack2( raw);
 

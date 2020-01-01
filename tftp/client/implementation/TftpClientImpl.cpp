@@ -29,12 +29,12 @@ void TftpClientImpl::entry() noexcept
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "Start TFTP client I/O context";
 
   ioContext.run();
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "TFTP client I/O context finished";
 }
 
@@ -42,7 +42,7 @@ void TftpClientImpl::stop()
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "Stop TFTP client I/O context";
 
   ioContext.stop();

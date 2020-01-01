@@ -99,7 +99,7 @@ void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   if (rawPacket.size() <= HeaderSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "Invalid packet size of OACK packet"));
+      << Helper::AdditionalInfo( "Invalid packet size of OACK packet"));
   }
 
   auto packetIt{ rawPacket.begin() + HeaderSize};

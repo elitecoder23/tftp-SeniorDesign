@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 
   RawTftpPacket raw( data);
 
-  std::cout << Dump( &(*raw.begin()), raw.size());
+  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
   std::cout << static_cast< std::string>( data) << "\n";
 
   DataPacket data2( raw);

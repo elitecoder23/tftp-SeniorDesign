@@ -96,7 +96,7 @@ void ReadRequestOperationImpl::start()
       {
         if ( 0U != *transferSizeOption)
         {
-          BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+          BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
             << "Received transfer size must be 0";
 
           Packets::ErrorPacket errorPacket{
@@ -160,7 +160,7 @@ void ReadRequestOperationImpl::sendData()
 
   lastTransmittedBlockNumber++;
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "Send Data: " << lastTransmittedBlockNumber;
 
   Packets::DataPacket data(
@@ -182,7 +182,7 @@ void ReadRequestOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
     << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
   using namespace std::literals;
@@ -202,13 +202,13 @@ void ReadRequestOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX: " << static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
   if (acknowledgementPacket.blockNumber() == lastTransmittedBlockNumber.previous())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
       << "Received previous ACK packet: retry of last data package - "
          "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
@@ -221,7 +221,7 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   // check invalid block number
   if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Invalid block number received";
 
     using namespace std::literals;
@@ -240,7 +240,7 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   // if it was the last ACK of the last data packet - we are finished.
   if (lastDataPacketTransmitted)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
       << "Last acknowledgement received";
 
     finished( TransferStatus::Successful);

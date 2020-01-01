@@ -28,7 +28,7 @@ namespace Tftp {
 /**
  * @brief Base class for TFTP exceptions
  **/
-class TftpException: public virtual Exception
+class TftpException: public virtual Helper::Exception
 {
   public:
     /**
@@ -75,15 +75,15 @@ class ErrorReceivedException: public virtual TftpException
     }
 };
 
-//! Definition of the TFTP transfer phase.
+//! TFTP Transfer Phase.
 using TransferPhaseInfo =
   boost::error_info< struct TransferPhaseInfoTag, TransferPhase>;
 
-//! TFTP packet type information
+//! TFTP Packet Type Information
 using PacketTypeInfo =
   boost::error_info< struct PacketTypeInfoTag, PacketType>;
 
-//! TFTP error packet information
+//! TFTP Error Packet Information
 using ErrorPacketInfo =
   boost::error_info< struct ErrorPacketInfoTag, Packets::ErrorPacket>;
 

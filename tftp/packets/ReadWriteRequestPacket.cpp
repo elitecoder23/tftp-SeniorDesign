@@ -152,7 +152,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException()
-        << AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
+        << Helper::AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 }
@@ -175,7 +175,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException()
-        << AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
+        << Helper::AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 }
@@ -194,7 +194,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException()
-        << AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
+        << Helper::AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 
@@ -240,14 +240,14 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
   if (rawPacket.size() <= HeaderSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "Invalid packet size of RRQ/WRQ packet"));
+      << Helper::AdditionalInfo( "Invalid packet size of RRQ/WRQ packet"));
   }
 
   // check terminating 0 character
   if (rawPacket.back()!=0)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "RRQ/WRQ message not 0-terminated"));
+      << Helper::AdditionalInfo( "RRQ/WRQ message not 0-terminated"));
   }
 
   // filename
@@ -256,7 +256,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
   if (filenameEnd == rawPacket.end())
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "No 0-termination for filename found"));
+      << Helper::AdditionalInfo( "No 0-termination for filename found"));
   }
   filenameValue.assign( packetIt, filenameEnd);
   packetIt = filenameEnd + 1;
@@ -267,7 +267,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
   if (modeEnd == rawPacket.end())
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "No 0-termination for operation found"));
+      << Helper::AdditionalInfo( "No 0-termination for operation found"));
   }
   modeValue = decodeMode( std::string{ packetIt, modeEnd});
   packetIt = modeEnd + 1;

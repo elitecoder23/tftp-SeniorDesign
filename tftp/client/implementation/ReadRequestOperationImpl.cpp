@@ -125,13 +125,13 @@ void ReadRequestOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX: " << static_cast< std::string>( dataPacket);
 
   // check retransmission of last packet
   if (dataPacket.blockNumber() == lastReceivedBlockNumber)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
       << "Received last data package again. Re-ACK them";
 
     // Retransmit last ACK packet
@@ -143,7 +143,7 @@ void ReadRequestOperationImpl::dataPacket(
   // check unexpected block number
   if (dataPacket.blockNumber() != lastReceivedBlockNumber.next())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Wrong Data packet block number";
 
     // send error packet
@@ -160,7 +160,7 @@ void ReadRequestOperationImpl::dataPacket(
   // check for too much data
   if (dataPacket.dataSize() > receiveDataSize)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Too much data received";
 
     // send error packet
@@ -182,7 +182,7 @@ void ReadRequestOperationImpl::dataPacket(
     // If empty options is returned - Abort Operation
     if (!negotiatedOptions)
     {
-      BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
         << "Option Negotiation failed";
 
       Packets::ErrorPacket errorPacket{
@@ -224,7 +224,7 @@ void ReadRequestOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket);
 
   // send Error
@@ -244,7 +244,7 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket);
 
   const auto &remoteOptions{ optionsAcknowledgementPacket.options()};
@@ -252,7 +252,7 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   // check empty options
   if (remoteOptions.empty())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Received option list is empty";
 
     Packets::ErrorPacket errorPacket(
@@ -272,7 +272,7 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   // Check empty options list
   if ( !negotiatedOptions)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Option negotiation failed";
 
     Packets::ErrorPacket errorPacket{

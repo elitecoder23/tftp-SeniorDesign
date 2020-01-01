@@ -66,7 +66,7 @@ Tftp::RawTftpPacket AcknowledgementPacket::encode() const
   auto packetIt( rawPacket.begin() + HeaderSize);
 
   // Add block number
-  setInt( packetIt, static_cast< uint16_t>( blockNumberV));
+  Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV));
 
   return rawPacket;
 }
@@ -77,13 +77,13 @@ void AcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   if ( rawPacket.size() != PacketSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << AdditionalInfo( "Invalid packet size of ACK packet"));
+      << Helper::AdditionalInfo( "Invalid packet size of ACK packet"));
   }
 
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // decode block number
-  getInt< uint16_t>( packetIt, blockNumberV);
+  Helper::getInt< uint16_t>( packetIt, blockNumberV);
 }
 
 }

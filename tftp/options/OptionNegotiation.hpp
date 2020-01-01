@@ -93,7 +93,7 @@ inline uint64_t OptionNegotiation::toInt( std::string_view value)
   if (result.ec != std::errc{})
   {
     BOOST_THROW_EXCEPTION( OptionNegotiationException()
-      << AdditionalInfo( "Inter Conversion failed"));
+      << Helper::AdditionalInfo( "Inter Conversion failed"));
   }
 
   return intValue;

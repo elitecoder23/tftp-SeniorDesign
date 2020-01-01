@@ -59,7 +59,7 @@ int main( int argc, char * argv[])
   boost::asio::ip::address address;
   Tftp::TftpConfiguration configuration;
 
-  initLogging();
+  Helper::initLogging();
 
   boost::program_options::options_description optionsDescription{
     "TFTP Client Options"};
@@ -161,7 +161,7 @@ int main( int argc, char * argv[])
   }
   catch ( Tftp::TftpException &e)
   {
-    std::string const * info = boost::get_error_info< AdditionalInfo>( e);
+    std::string const * info = boost::get_error_info< Helper::AdditionalInfo>( e);
 
     std::cerr
       << "TFTP transfer failed: "

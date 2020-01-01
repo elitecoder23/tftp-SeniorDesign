@@ -22,7 +22,7 @@
 namespace Tftp {
 
 //! Description of TFTP Error Codes (ErrorCode)
-class ErrorCodeDescription : public Description<
+  class ErrorCodeDescription : public Helper::Description<
   ErrorCodeDescription,
   ErrorCode,
   ErrorCode::Invalid>

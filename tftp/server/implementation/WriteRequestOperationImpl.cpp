@@ -146,13 +146,13 @@ void WriteRequestOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX: " << static_cast< std::string>( dataPacket);
 
   // Check retransmission
   if (dataPacket.blockNumber() == lastReceivedBlockNumber)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
       << "Retransmission of last packet - only send ACK";
 
     send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber});
@@ -166,7 +166,7 @@ void WriteRequestOperationImpl::dataPacket(
   // check not expected block
   if (dataPacket.blockNumber() != lastReceivedBlockNumber.next())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Unexpected packet";
 
     Packets::ErrorPacket errorPacket{
@@ -184,7 +184,7 @@ void WriteRequestOperationImpl::dataPacket(
   // check for too much data
   if (dataPacket.dataSize() > receiveDataSize)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Too much data received";
 
     Packets::ErrorPacket errorPacket{
@@ -226,7 +226,7 @@ void WriteRequestOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
     << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket);
 
   Packets::ErrorPacket errorPacket{

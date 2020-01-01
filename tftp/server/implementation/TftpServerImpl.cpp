@@ -59,14 +59,14 @@ try :
     }
 
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << AdditionalInfo( err.what())
+      << Helper::AdditionalInfo( err.what())
       << TransferPhaseInfo( TransferPhase::Initialisation));
   }
 }
 catch ( boost::system::system_error &err)
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
-    << AdditionalInfo( err.what())
+    << Helper::AdditionalInfo( err.what())
     << TransferPhaseInfo( TransferPhase::Initialisation));
 }
 
@@ -78,7 +78,7 @@ void TftpServerImpl::entry() noexcept
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "Start TFTP server I/O context";
 
   try
@@ -87,11 +87,11 @@ void TftpServerImpl::entry() noexcept
   }
   catch (boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::fatal)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::fatal)
       << "IO error: " << err.what();
   }
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "TFTP server I/O context finished";
 }
 
@@ -186,7 +186,7 @@ void TftpServerImpl::errorOperation(
 
   Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "TX: " << static_cast< std::string>( errorPacket);
 
   try
@@ -201,7 +201,7 @@ void TftpServerImpl::errorOperation(
   }
   catch ( boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << err.what();
   }
 }
@@ -216,7 +216,7 @@ void TftpServerImpl::errorOperation(
 
   Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
 
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "TX: " << static_cast< std::string>( errorPacket);
 
   try
@@ -233,7 +233,7 @@ void TftpServerImpl::errorOperation(
   }
   catch ( boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << err.what();
   }
 }
@@ -264,7 +264,7 @@ void TftpServerImpl::receive()
     ioContext.stop();
 
     BOOST_THROW_EXCEPTION(CommunicationException()
-      << AdditionalInfo( err.what())
+      << Helper::AdditionalInfo( err.what())
       << TransferPhaseInfo( TransferPhase::Initialisation));
   }
 }
@@ -282,11 +282,11 @@ void TftpServerImpl::receiveHandler(
   // Check error
   if ( errorCode)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "receive error: " + errorCode.message();
 
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << AdditionalInfo( errorCode.message()));
+      << Helper::AdditionalInfo( errorCode.message()));
   }
 
   try
@@ -299,7 +299,7 @@ void TftpServerImpl::receiveHandler(
   }
   catch ( TftpException &e)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "TFTP exception: " << e.what();
   }
 
@@ -310,13 +310,13 @@ void TftpServerImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX: " << static_cast< std::string>( readRequestPacket);
 
   // check handler
   if (!handler)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
       << "No registered handler - reject";
 
     // execute error operation
@@ -339,13 +339,13 @@ void TftpServerImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "RX: " << static_cast< std::string>( writeRequestPacket);
 
   // check handler
   if (!handler)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
       << "No registered handler - reject";
 
     // execute error operation
@@ -368,7 +368,7 @@ void TftpServerImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
     << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
   // execute error operation
@@ -383,7 +383,7 @@ void TftpServerImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
     << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket);
 
   // execute error operation
@@ -398,7 +398,7 @@ void TftpServerImpl::errorPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ErrorPacket &errorPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
     << "RX ERROR: " << static_cast< std::string>( errorPacket);
 
   // execute error operation
@@ -413,7 +413,7 @@ void TftpServerImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
     << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket);
 
   // execute error operation
@@ -428,7 +428,7 @@ void TftpServerImpl::invalidPacket(
   const boost::asio::ip::udp::endpoint &,
   const RawTftpPacket &)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), severity_level::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
     << "RX: UNKNOWN: *ERROR* - IGNORE";
 }
 

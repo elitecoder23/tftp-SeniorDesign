@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 
   RawTftpPacket raw{ error};
 
-  std::cout << Dump( &(*raw.begin()), raw.size());
+  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
 
 
   BOOST_CHECK( error.packetType() == PacketType::Error);
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE( constructor2)
 
   RawTftpPacket raw{ error};
 
-  std::cout << Dump( &(*raw.begin()), raw.size());
+  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
 
 
   BOOST_CHECK( error.packetType() == PacketType::Error);
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE( constructor3)
     'E', 'R', 'R', 'O', 'R', 0x00U
   };
 
-  std::cout << Dump( &(*raw.begin()), raw.size());
+  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
 
   ErrorPacket error{ raw};
 

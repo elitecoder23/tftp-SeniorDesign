@@ -20,7 +20,7 @@
 namespace Tftp {
 
 //! Description of Request Type (RequestType)
-class RequestTypeDescription : public Description<
+class RequestTypeDescription : public Helper::Description<
   RequestTypeDescription,
   RequestType,
   RequestType::Invalid>

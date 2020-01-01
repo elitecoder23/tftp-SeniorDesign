@@ -42,7 +42,7 @@ void PacketHandler::packet(
       }
       catch ( Packets::InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
           << "Error decoding/ handling RRQ packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
@@ -57,7 +57,7 @@ void PacketHandler::packet(
       }
       catch ( Packets::InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
           << "Error decoding/ handling WRQ packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
@@ -70,7 +70,7 @@ void PacketHandler::packet(
       }
       catch ( Packets::InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
           << "Error decoding/ handling DATA packet: "<< e.what();
         invalidPacket( remote, rawPacket);
       }
@@ -85,7 +85,7 @@ void PacketHandler::packet(
       }
       catch ( Packets::InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
           << "Error decoding/ handling ACK packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
@@ -98,7 +98,7 @@ void PacketHandler::packet(
       }
       catch ( Packets::InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
           << "Error decoding/ handling ERR packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }
@@ -113,7 +113,7 @@ void PacketHandler::packet(
       }
       catch ( Packets::InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), severity_level::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
           << "Error decoding/ handling OACK packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }

@@ -124,7 +124,7 @@ static Tftp::Server::TftpServerPtr server{};
 
 int main( int argc, char * argv[])
 {
-  initLogging();
+  Helper::initLogging();
 
   std::cout << "TFTP Server - " << Tftp::Version::version() << "\n";
 
@@ -207,7 +207,7 @@ int main( int argc, char * argv[])
   }
   catch ( Tftp::TftpException &e)
   {
-    std::string const * info = boost::get_error_info < AdditionalInfo > (e);
+    std::string const * info = boost::get_error_info < Helper::AdditionalInfo > (e);
 
     std::cerr
       << "TFTP Server exited with failure: "
