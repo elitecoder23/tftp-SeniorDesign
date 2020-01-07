@@ -52,8 +52,6 @@ class Packet
      *
      * @param[in] other
      *   Other
-     *
-     * @return *this
      **/
     Packet( const Packet &other) = default;
 
@@ -62,8 +60,6 @@ class Packet
      *
      * @param[in] other
      *   Other
-     *
-     * @return *this
      **/
     Packet( Packet &&other) = default;
 
