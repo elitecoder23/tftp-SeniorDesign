@@ -54,10 +54,10 @@ int main( int argc, char * argv[]);
 int main( int argc, char * argv[])
 {
   Tftp::RequestType requestType{ Tftp::RequestType::Invalid};
-  std::string localFile;
-  std::string remoteFile;
-  boost::asio::ip::address address;
-  Tftp::TftpConfiguration configuration;
+  std::string localFile{};
+  std::string remoteFile{};
+  boost::asio::ip::address address{};
+  Tftp::TftpConfiguration configuration{};
 
   Helper::initLogging();
 
@@ -102,7 +102,7 @@ int main( int argc, char * argv[])
 
     if ( options.count( "help") != 0)
     {
-      std::cout << optionsDescription << std::endl;
+      std::cout << optionsDescription << "\n";
       return EXIT_FAILURE;
     }
 
@@ -114,7 +114,9 @@ int main( int argc, char * argv[])
 
     Tftp::Client::OperationPtr tftpOperation;
 
-    auto optionNegotiation = [&configuration]( const Tftp::Options::Options &serverOptions) -> std::optional< Tftp::Options::OptionList>
+    auto optionNegotiation = [&configuration](
+      const Tftp::Options::Options &serverOptions) ->
+        std::optional< Tftp::Options::OptionList>
     {
       return configuration.clientOptions().negotiateClient( serverOptions);
     };
@@ -125,7 +127,7 @@ int main( int argc, char * argv[])
         tftpOperation= tftpClient->readRequestOperation(
           optionNegotiation,
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
-            std::fstream( localFile, std::fstream::out | std::fstream::trunc)),
+            std::fstream{ localFile, std::fstream::out | std::fstream::trunc}),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
@@ -137,7 +139,7 @@ int main( int argc, char * argv[])
         tftpOperation = tftpClient->writeRequestOperation(
           optionNegotiation,
           std::make_shared< Tftp::File::StreamFile< std::fstream>>(
-            std::fstream( localFile, std::fstream::in)),
+            std::fstream{ localFile, std::fstream::in}),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
@@ -146,7 +148,7 @@ int main( int argc, char * argv[])
         break;
 
       default:
-        std::cerr << "Internal invalid operation" << std::endl;
+        std::cerr << "Internal invalid operation\n";
         return EXIT_FAILURE;
     }
 
@@ -156,30 +158,29 @@ int main( int argc, char * argv[])
   }
   catch ( boost::program_options::error &e)
   {
-    std::cout << e.what() << std::endl << optionsDescription << std::endl;
+    std::cout << e.what() << "\n" << optionsDescription << "\n";
     return EXIT_FAILURE;
   }
   catch ( Tftp::TftpException &e)
   {
-    std::string const * info = boost::get_error_info< Helper::AdditionalInfo>( e);
+    auto const * info = boost::get_error_info< Helper::AdditionalInfo>( e);
 
     std::cerr
       << "TFTP transfer failed: "
       //      typeid( e).name() << " - " <<
       << ((nullptr==info) ? "Unknown" : *info)
-      << std::endl;
+      << "\n";
     return EXIT_FAILURE;
   }
   catch ( boost::exception &e)
   {
     std::cerr
-      << "Error in TFTP client: " << boost::diagnostic_information( e)
-      << std::endl;
+      << "Error in TFTP client: " << boost::diagnostic_information( e) << "\n";
     return EXIT_FAILURE;
   }
   catch ( ...)
   {
-    std::cerr << "Error in TFTP client: UNKNOWN EXCEPTION" << std::endl;
+    std::cerr << "Error in TFTP client: UNKNOWN EXCEPTION\n";
     return EXIT_FAILURE;
   }
 
