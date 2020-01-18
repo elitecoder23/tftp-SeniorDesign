@@ -16,6 +16,7 @@ target_sources(
     OptionList.hpp
     OptionList.cpp
     OptionNegotiation.hpp
+    OptionNegotiation.ipp
     Options.hpp)
 
 target_sources(

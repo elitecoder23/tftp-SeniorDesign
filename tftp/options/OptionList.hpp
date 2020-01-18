@@ -337,9 +337,9 @@ class OptionList
 
   private:
     //! Options.
-    Options optionsValue;
+    Options optionsV;
     //! Options Negotiation
-    OptionsNegotiation optionsNegotiationValue;
+    OptionsNegotiation optionsNegotiationV;
 };
 
 }

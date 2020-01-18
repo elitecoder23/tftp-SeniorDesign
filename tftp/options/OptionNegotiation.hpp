@@ -8,8 +8,6 @@
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
  * @brief Declaration/ Definition of Class Tftp::Options::OptionNegotiation.
- *
- * Additional named types are generated for the well-known TFTP options.
  **/
 
 #ifndef TFTP_OPTIONS_OPTIONNEGOTIATION_HPP
@@ -79,31 +77,6 @@ class OptionNegotiation
     [[nodiscard]] virtual std::string negotiateInt( uint64_t optionValue) const = 0;
 };
 
-
-inline std::string OptionNegotiation::toString( const uint64_t value)
-{
-  return std::to_string( value);
-}
-
-inline uint64_t OptionNegotiation::toInt( std::string_view value)
-{
-  uint64_t intValue{};
-  auto result{ std::from_chars( value.begin(), value.end(), intValue)};
-
-  if (result.ec != std::errc{})
-  {
-    BOOST_THROW_EXCEPTION( OptionNegotiationException()
-      << Helper::AdditionalInfo( "Inter Conversion failed"));
-  }
-
-  return intValue;
-}
-
-inline std::string OptionNegotiation::negotiate( std::string_view optionValue) const
-{
-  return negotiateInt( toInt( optionValue));
-}
-
 /**
  * @brief Negotiation Handler which checks the value against a range and
  *   performs upper-cut down.
@@ -145,7 +118,7 @@ class NegotiateMinMaxSmaller : public OptionNegotiation
      **/
     [[nodiscard]] std::string negotiateInt( const uint64_t value) const final
     {
-      // If value is smaller then min -> option negotiation fails
+      // If value is smaller than min -> option negotiation fails
       if (value < minValue)
       {
         return {};
@@ -284,38 +257,8 @@ class NegotiateAlwaysPass : public OptionNegotiation
     }
 };
 
-#if 0
-
-//! Blocksize Option base class
-using BlockSizeOptionBase = BaseIntegerOption< uint16_t>;
-
-//! Blocksize option on server side - Negotiates in range with cut down to max
-using BlockSizeOptionServer =
-  IntegerOption< uint16_t, NegotiateMinMaxSmaller< uint16_t>>;
-
-//! Blocksize option on client side - Negotiates in range.
-using BlockSizeOptionClient =
-  IntegerOption< uint16_t, NegotiateMinMaxRange< uint16_t>>;
-
-//! Timeout Option base class
-using TimeoutOptionBase = BaseIntegerOption< uint8_t>;
-
-//! Timeout option on server side - Negotiates in range.
-using TimeoutOptionServer =
-  IntegerOption< uint8_t, NegotiateMinMaxRange< uint8_t>>;
-
-//! Timeout option on client side - Negotiates exact value.
-using TimeoutOptionClient =
-  IntegerOption< uint8_t, NegotiateExactValue< uint8_t>>;
-
-//! Transfer size option base class
-using TransferSizeOptionBase = BaseIntegerOption< uint64_t>;
-
-//! Transfer size option on client and server side - accepts every value.
-using TransferSizeOptionServerClient =
-  IntegerOption< uint64_t, NegotiateAlwaysPass< uint64_t>>;
-#endif
-
 }
+
+#include "OptionNegotiation.ipp"
 
 #endif

@@ -13,12 +13,10 @@
 #include "OptionList.hpp"
 
 #include <tftp/options/OptionNegotiation.hpp>
+#include <tftp/TftpException.hpp>
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <tftp/TftpLogger.hpp>
-
-#include <helper/Logger.hpp>
 #include <helper/SafeCast.hpp>
 
 #include <algorithm>
@@ -49,31 +47,31 @@ Options OptionList::options(
 {
   Options options{};
 
-  while (begin != end)
+  while ( begin != end)
   {
     auto nameBegin{ begin};
     auto nameEnd{ std::find( nameBegin, end, 0)};
 
-    if (nameEnd==end)
+    if ( nameEnd == end)
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo( "Unexpected end of input data"));
+        << Helper::AdditionalInfo{ "Unexpected end of input data"});
     }
 
-    auto valueBegin{ nameEnd + 1};
+    auto valueBegin{ nameEnd + 1U};
 
-    if (valueBegin == end)
+    if ( valueBegin == end)
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo( "Unexpected end of input data"));
+        << Helper::AdditionalInfo{ "Unexpected end of input data"});
     }
 
     auto valueEnd{ std::find( valueBegin, end, 0)};
 
-    if (valueEnd == end)
+    if ( valueEnd == end)
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo( "Unexpected end of input data"));
+        << Helper::AdditionalInfo{ "Unexpected end of input data"});
     }
 
     options.emplace(
@@ -132,17 +130,17 @@ std::string OptionList::toString( const Options &options)
 
 bool OptionList::empty() const
 {
-  return optionsValue.empty();
+  return optionsV.empty();
 }
 
 const Options& OptionList::options() const
 {
-  return optionsValue;
+  return optionsV;
 }
 
 bool OptionList::has( std::string_view name) const
 {
-  return optionsValue.count( name) >= 1;
+  return optionsV.count( name) >= 1;
 }
 
 bool OptionList::has( const KnownOptions option) const
@@ -157,11 +155,11 @@ bool OptionList::has( const KnownOptions option) const
   return has( optionN);
 }
 
-std::string_view OptionList::option(  std::string_view name) const
+std::string_view OptionList::option( std::string_view name) const
 {
-  auto it{ optionsValue.find( name)};
+  auto it{ optionsV.find( name)};
 
-  return (it != optionsValue.end()) ?
+  return (it != optionsV.end()) ?
     it->second : std::string_view{};
 }
 
@@ -171,62 +169,59 @@ void OptionList::option(
   NegotiateOption negotiateOption)
 {
   // If option already exists remove it first
-  if (has( name))
+  if ( has( name))
   {
     remove( name);
   }
 
   // Add option
-  optionsValue.emplace( std::make_pair(
-    name,
-    value));
-
-  optionsNegotiationValue.emplace( std::make_pair(
-    name,
-    std::move( negotiateOption)));
+  optionsV.emplace( name, value);
+  optionsNegotiationV.emplace( name, std::move( negotiateOption));
 }
 
 void OptionList::remove( std::string_view name)
 {
   // Find and remove options value
-  if ( auto pos{ optionsValue.find( name)}; pos != optionsValue.end())
+  if ( auto pos{ optionsV.find( name)}; pos != optionsV.end())
   {
-    optionsValue.erase( pos );
+    optionsV.erase( pos );
   }
 
   // Find and remove options negotiation
   if (
-    auto pos{ optionsNegotiationValue.find( name)};
-    pos != optionsNegotiationValue.end())
+    auto pos{ optionsNegotiationV.find( name)};
+    pos != optionsNegotiationV.end())
   {
-    optionsNegotiationValue.erase( pos );
+    optionsNegotiationV.erase( pos );
   }
 }
 
 void OptionList::remove( const KnownOptions option)
 {
-  auto optionN{ optionName( option)};
+  const auto optionN{ optionName( option)};
 
-  if (!optionN.empty())
+  if ( !optionN.empty())
   {
     remove( optionN);
   }
 }
 
 void OptionList::blocksizeClient(
-  uint16_t requestedBlocksize,
-  uint16_t minBlocksize)
+  const uint16_t requestedBlocksize,
+  const uint16_t minBlocksize)
 {
-  //! @todo change assertion to exception throw
-  assert(
-    (requestedBlocksize >= BlocksizeOptionMin) &&
-    (requestedBlocksize <= BlocksizeOptionMax));
-
-  assert(
-    (minBlocksize >= BlocksizeOptionMin) &&
-    (minBlocksize <= BlocksizeOptionMax));
-
-  assert( minBlocksize <= requestedBlocksize);
+  if (
+      ((requestedBlocksize < BlocksizeOptionMin)
+        || (requestedBlocksize > BlocksizeOptionMax))
+    ||
+      ((minBlocksize < BlocksizeOptionMin)
+        || (minBlocksize > BlocksizeOptionMax))
+    ||
+      (minBlocksize > requestedBlocksize))
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Invalid Parameters"));
+  }
 
   option(
     optionName( KnownOptions::BlockSize),
@@ -241,16 +236,18 @@ void OptionList::blocksizeServer(
   const uint16_t minBlocksize,
   const uint16_t maxBlocksize)
 {
-  //! @todo change assertion to exception throw
-  assert(
-    (minBlocksize >= BlocksizeOptionMin) &&
-    (minBlocksize <= BlocksizeOptionMax));
-
-  assert(
-    (maxBlocksize >= BlocksizeOptionMin) &&
-    (maxBlocksize <= BlocksizeOptionMax));
-
-  assert( minBlocksize <= maxBlocksize);
+  if (
+      ((minBlocksize < BlocksizeOptionMin)
+      || (minBlocksize > BlocksizeOptionMax))
+    ||
+      ((maxBlocksize < BlocksizeOptionMin)
+        || (maxBlocksize > BlocksizeOptionMax))
+    ||
+      (minBlocksize > maxBlocksize))
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Invalid Parameters"));
+  }
 
   option(
     optionName( KnownOptions::BlockSize),
@@ -263,10 +260,10 @@ void OptionList::blocksizeServer(
 
 std::optional< uint16_t> OptionList::blocksize() const
 {
-  auto optionIt{ optionsValue.find( optionName( KnownOptions::BlockSize))};
+  auto optionIt{ optionsV.find( optionName( KnownOptions::BlockSize))};
 
   // option not set
-  if (optionIt == optionsValue.end())
+  if (optionIt == optionsV.end())
   {
     return {};
   }
@@ -276,9 +273,12 @@ std::optional< uint16_t> OptionList::blocksize() const
 
 void OptionList::timeoutOptionClient( const uint8_t timeout)
 {
-  //! @todo change assertion to exception throw
   // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
-  assert( timeout >= TimeoutOptionMin);
+  if ( timeout < TimeoutOptionMin)
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Invalid Parameters"));
+  }
 
   option(
     optionName( KnownOptions::Timeout),
@@ -293,13 +293,14 @@ void OptionList::timeoutOptionServer(
   const uint8_t minTimeout,
   const uint8_t maxTimeout)
 {
-  //! @todo change assertion to exception throw
   // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
-  assert( minTimeout >= TimeoutOptionMin);
-
-  assert( maxTimeout >= TimeoutOptionMin);
-
-  assert( (minTimeout <= maxTimeout));
+  if ( ( minTimeout < TimeoutOptionMin)
+    || ( maxTimeout < TimeoutOptionMin)
+    || ( minTimeout > maxTimeout))
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Invalid Parameters"));
+  }
 
   option(
     optionName( KnownOptions::Timeout),
@@ -312,10 +313,10 @@ void OptionList::timeoutOptionServer(
 
 std::optional< uint8_t> OptionList::timeoutOption() const
 {
-  auto optionIt{ optionsValue.find( optionName( KnownOptions::Timeout))};
+  auto optionIt{ optionsV.find( optionName( KnownOptions::Timeout))};
 
   // option not set
-  if (optionIt == optionsValue.end())
+  if (optionIt == optionsV.end())
   {
     return {};
   }
@@ -341,10 +342,10 @@ void OptionList::removeTransferSizeOption()
 
 std::optional< uint64_t> OptionList::transferSizeOption() const
 {
-  auto pos{ optionsValue.find( optionName( KnownOptions::TransferSize))};
+  auto pos{ optionsV.find( optionName( KnownOptions::TransferSize))};
 
   // option not set
-  if ( pos == optionsValue.end())
+  if ( pos == optionsV.end())
   {
     return {};
   }
@@ -359,12 +360,12 @@ OptionList OptionList::negotiateServer( const Options &clientOptions) const
   // iterate over each received option
   for ( const auto & [clientOptionName, clientOptionValue] : clientOptions)
   {
-    auto serverOption{ optionsValue.find( clientOptionName)};
-    auto optionNegotiation{ optionsNegotiationValue.find( clientOptionName)};
+    auto serverOption{ optionsV.find( clientOptionName)};
+    auto optionNegotiation{ optionsNegotiationV.find( clientOptionName)};
 
     // not found -> ignore option
-    if ((serverOption == optionsValue.end()
-      || (optionNegotiation == optionsNegotiationValue.end())))
+    if ((serverOption == optionsV.end()
+      || (optionNegotiation == optionsNegotiationV.end())))
     {
       continue;
     }
@@ -388,8 +389,9 @@ OptionList OptionList::negotiateServer( const Options &clientOptions) const
 OptionList OptionList::negotiateClient( const Options &serverOptions) const
 {
   // we make sure, that the received options are not empty
-  if (serverOptions.empty())
+  if ( serverOptions.empty())
   {
+    // normally this should not happen. Empty result is error anyway.
     return {};
   }
 
@@ -399,24 +401,24 @@ OptionList OptionList::negotiateClient( const Options &serverOptions) const
   for ( const auto & [serverOptionName, serverOptionValue] : serverOptions)
   {
     // find negotiation entry
-    auto clientOption{ optionsValue.find( serverOptionName)};
-    auto optionNegotiation{ optionsNegotiationValue.find( serverOptionName)};
+    auto clientOption{ optionsV.find( serverOptionName)};
+    auto optionNegotiation{ optionsNegotiationV.find( serverOptionName)};
 
     // not found -> server sent an option, which cannot come from us
-    if ((clientOption == optionsValue.end()
-      || (optionNegotiation == optionsNegotiationValue.end())))
+    if ((clientOption == optionsV.end()
+      || (optionNegotiation == optionsNegotiationV.end())))
     {
-      return OptionList();
+      return {};
     }
 
     // negotiate option, if failed also fail on top level
     auto newOptionValue{ optionNegotiation->second( serverOptionValue)};
 
     // check negotiation result
-    if (newOptionValue.empty())
+    if ( newOptionValue.empty())
     {
       // negotiation failed -> return immediately
-      return OptionList();
+      return {};
     }
 
     // negotiation has returned a value -> copy option to output list
