@@ -14,7 +14,7 @@
 #define TFTP_CLIENT_TFTPCLIENTIMPL_HPP
 
 #include <tftp/client/Client.hpp>
-#include <tftp/client/implementation/TftpClientInternal.hpp>
+#include <tftp/client/TftpClient.hpp>
 
 #include <tftp/options/OptionList.hpp>
 
@@ -29,7 +29,7 @@ namespace Tftp::Client {
  *
  * This factory class creates on request the concrete client operations.
  **/
-class TftpClientImpl : public TftpClientInternal
+class TftpClientImpl : public TftpClient
   {
   public:
     /**
@@ -87,9 +87,6 @@ class TftpClientImpl : public TftpClientInternal
       TransferMode mode,
       const Options::OptionList &clientOptions,
       const boost::asio::ip::udp::endpoint &local) final;
-
-    //! @copydoc TftpClientInternal::configuration
-    [[nodiscard]] const TftpConfiguration& configuration() const final;
 
   private:
     //! Stored TFTP client configuration

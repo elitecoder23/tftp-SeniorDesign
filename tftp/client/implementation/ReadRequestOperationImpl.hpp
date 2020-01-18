@@ -35,14 +35,16 @@ class ReadRequestOperationImpl : public OperationImpl
      *
      * @param[in] ioContext
      *   The I/O context used for communication.
+     * @param[in] tftpTimeout
+     *   TFTP Timeout, when no timeout option is negotiated in seconds.
+     * @param[in] tftpRetries
+     *   Number of retries.
      * @param[in] optionNegotiationHandler
      *   Option negotiation handler.
      * @param[in] dataHandler
      *   Handler for received data.
      * @param[in] completionHandler
      *   The handler which is called on completion of this operation.
-     * @param[in] tftpClient
-     *   The TFTP client.
      * @param[in] remote
      *   Where the connection should be established to.
      * @param[in] filename
@@ -54,10 +56,12 @@ class ReadRequestOperationImpl : public OperationImpl
      **/
     ReadRequestOperationImpl(
       boost::asio::io_context &ioContext,
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries,
+      bool handleTransferSizeOption,
       OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const TftpClientInternal &tftpClient,
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
@@ -71,10 +75,12 @@ class ReadRequestOperationImpl : public OperationImpl
      **/
     ReadRequestOperationImpl(
       boost::asio::io_context &ioContext,
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries,
+      bool handleTransferSizeOption,
       OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
-      const TftpClientInternal &tftpClient,
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
@@ -125,6 +131,8 @@ class ReadRequestOperationImpl : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:
+    //! Indicates if the TFTP Transfer Size Option shall be used
+    const bool handleTransferSizeOption;
     //! Option Negotiation Handler
     OptionNegotiationHandler optionNegotiationHandler;
     //! Registered handler.

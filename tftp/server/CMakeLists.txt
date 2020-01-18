@@ -20,7 +20,6 @@ target_sources(
     implementation/ReadRequestOperationImpl.cpp
     implementation/TftpServerImpl.hpp
     implementation/TftpServerImpl.cpp
-    implementation/TftpServerInternal.hpp
     implementation/WriteRequestOperationImpl.hpp
     implementation/WriteRequestOperationImpl.cpp)
 

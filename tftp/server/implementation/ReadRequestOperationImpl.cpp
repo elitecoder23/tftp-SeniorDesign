@@ -26,14 +26,16 @@ namespace Tftp::Server {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_context &ioContext,
-  const TftpServerInternal &tftpServer,
+  uint8_t tftpTimeout,
+  uint16_t tftpRetries,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList &negotiatedOptions) :
   OperationImpl{
     ioContext,
-    tftpServer,
+    tftpTimeout,
+    tftpRetries,
     completionHandler,
     remote,
     negotiatedOptions},
@@ -46,7 +48,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_context &ioContext,
-  const TftpServerInternal &tftpServer,
+  uint8_t tftpTimeout,
+  uint16_t tftpRetries,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
@@ -54,7 +57,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &local) :
   OperationImpl{
     ioContext,
-    tftpServer,
+    tftpTimeout,
+    tftpRetries,
     completionHandler,
     remote,
     negotiatedOptions,
@@ -79,13 +83,13 @@ void ReadRequestOperationImpl::start()
     }
     else
     {
-      // check blocksize option
+      // check blocksize option - if set use it
       if ( auto blocksize{ respOptions.blocksize()}; blocksize)
       {
         transmitDataSize = *blocksize;
       }
 
-      // check timeout option
+      // check timeout option - if set use it
       if ( auto timeoutOption{ respOptions.timeoutOption()}; timeoutOption)
       {
         receiveTimeout( *timeoutOption);
@@ -163,9 +167,9 @@ void ReadRequestOperationImpl::sendData()
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "Send Data: " << lastTransmittedBlockNumber;
 
-  Packets::DataPacket data(
+  Packets::DataPacket data{
     lastTransmittedBlockNumber,
-    dataHandler->sendData( transmitDataSize));
+    dataHandler->sendData( transmitDataSize)};
 
   if ( data.dataSize() < transmitDataSize)
   {
@@ -186,9 +190,9 @@ void ReadRequestOperationImpl::dataPacket(
     << "RX ERROR: " << static_cast< std::string>( dataPacket);
 
   using namespace std::literals;
-  Packets::ErrorPacket errorPacket(
+  Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected"sv);
+    "DATA not expected"sv};
 
   send( errorPacket);
 
@@ -238,7 +242,7 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   }
 
   // if it was the last ACK of the last data packet - we are finished.
-  if (lastDataPacketTransmitted)
+  if ( lastDataPacketTransmitted)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
       << "Last acknowledgement received";

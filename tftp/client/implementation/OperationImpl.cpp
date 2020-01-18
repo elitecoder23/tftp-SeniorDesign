@@ -13,15 +13,12 @@
 #include "OperationImpl.hpp"
 
 #include <tftp/TftpException.hpp>
-#include <tftp/TftpConfiguration.hpp>
 #include <tftp/TftpLogger.hpp>
 #include <tftp/ErrorCodeDescription.hpp>
 
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
-
-#include <tftp/client/implementation/TftpClientInternal.hpp>
 
 #include <boost/bind.hpp>
 
@@ -73,15 +70,16 @@ const OperationImpl::ErrorInfo& OperationImpl::errorInfo() const
 
 OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
-  const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote)
 try :
   completionHandler{ completionHandler},
-  tftpClient{ tftpClient},
   remoteEndpoint{ remote},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
-  receiveTimeoutV{ tftpClient.configuration().tftpTimeout},
+  receiveTimeoutV{ tftpTimeout},
+  tftpRetries{ tftpRetries},
   socket{ ioContext},
   timer{ ioContext},
   transmitPacketType{ PacketType::Invalid},
@@ -114,16 +112,17 @@ catch ( boost::system::system_error &err)
 
 OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
-  const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local)
 try :
   completionHandler{ completionHandler},
-  tftpClient{ tftpClient},
   remoteEndpoint{ remote},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
-  receiveTimeoutV{ tftpClient.configuration().tftpTimeout},
+  receiveTimeoutV{ tftpTimeout},
+  tftpRetries{ tftpRetries},
   socket{ ioContext},
   timer{ ioContext},
   transmitPacketType{ PacketType::Invalid},
@@ -155,11 +154,6 @@ catch ( boost::system::system_error &err)
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
    << Helper::AdditionalInfo( err.what()));
-}
-
-const TftpConfiguration& OperationImpl::configuration() const
-{
-  return tftpClient.configuration();
 }
 
 void OperationImpl::sendFirst( const Packets::Packet &packet)
@@ -379,7 +373,7 @@ void OperationImpl::errorPacket(
     << "RX ERROR: " << static_cast< std::string>( errorPacket);
 
   // Operation completed
-  switch (transmitPacketType)
+  switch ( transmitPacketType)
   {
     case PacketType::ReadRequest:
     case PacketType::WriteRequest:
@@ -504,8 +498,8 @@ void OperationImpl::receiveFirstHandler(
   }
   catch ( boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error) <<
-      "Connect: " << err.what();
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+      << "Connect: " << err.what();
 
     finished( TransferStatus::CommunicationError);
     return;
@@ -566,7 +560,7 @@ void OperationImpl::timeoutFirstHandler(
   }
 
   // if maximum retries exceeded -> abort receive operation
-  if (transmitCounter > tftpClient.configuration().tftpRetries)
+  if ( transmitCounter > tftpRetries)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Retry counter exceeded ABORT";
@@ -624,7 +618,7 @@ void OperationImpl::timeoutHandler(
   }
 
   // if maximum retries exceeded -> abort receive operation
-  if (transmitCounter > tftpClient.configuration().tftpRetries)
+  if (transmitCounter > tftpRetries)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Retry counter exceeded ABORT";

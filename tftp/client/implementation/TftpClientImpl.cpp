@@ -59,10 +59,12 @@ OperationPtr TftpClientImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
+    configurationV.handleTransferSizeOption,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
-    *this,
     remote,
     filename,
     mode,
@@ -81,10 +83,12 @@ OperationPtr TftpClientImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
+    configurationV.handleTransferSizeOption,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
-    *this,
     remote,
     filename,
     mode,
@@ -103,10 +107,12 @@ OperationPtr TftpClientImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
+    configurationV.handleTransferSizeOption,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
-    *this,
     remote,
     filename,
     mode,
@@ -125,20 +131,17 @@ OperationPtr TftpClientImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
+    configurationV.handleTransferSizeOption,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
-    *this,
     remote,
     filename,
     mode,
     clientOptions,
     local);
-}
-
-const Tftp::TftpConfiguration& TftpClientImpl::configuration() const
-{
-  return configurationV;
 }
 
 }

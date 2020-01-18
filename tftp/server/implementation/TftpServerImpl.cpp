@@ -121,7 +121,8 @@ OperationPtr TftpServerImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
-    *this,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -137,7 +138,8 @@ OperationPtr TftpServerImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
-    *this,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -153,7 +155,8 @@ OperationPtr TftpServerImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
-    *this,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -169,7 +172,8 @@ OperationPtr TftpServerImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
-    *this,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -236,11 +240,6 @@ void TftpServerImpl::errorOperation(
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << err.what();
   }
-}
-
-const Tftp::TftpConfiguration& TftpServerImpl::configuration() const
-{
-  return configurationV;
 }
 
 void TftpServerImpl::receive()

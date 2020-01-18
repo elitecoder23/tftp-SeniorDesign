@@ -64,8 +64,10 @@ class OperationImpl:
      *
      * @param[in] ioContext
      *   The I/O context used for communication.
-     * @param[in] tftpServer
-     *   The TFTP internal server.
+     * @param[in] tftpTimeout
+     *   TFTP Timeout, when no timeout option is negotiated in seconds.
+     * @param[in] tftpRetries
+     *   Number of retries.
      * @param[in] completionHandler
      *   The handler which is called on completion of this operation.
      * @param[in] remote
@@ -75,20 +77,22 @@ class OperationImpl:
      **/
     OperationImpl(
       boost::asio::io_context &ioContext,
-      const TftpServerInternal &tftpServer,
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &negotiatedOptions);
 
     /**
-     * @copydoc OperationImpl(boost::asio::io_context&,const TftpServerInternal&,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
+     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
     OperationImpl(
       boost::asio::io_context &ioContext,
-      const TftpServerInternal &tftpServer,
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &negotiatedOptions,
@@ -128,13 +132,6 @@ class OperationImpl:
      * @brief receives a packet and calls the packet handlers
      **/
     void receive();
-
-    /**
-      * @brief Returns the TFTP configuration.
-      *
-      * @return The TFTP configuration.
-      **/
-    const TftpConfiguration& configuration() const;
 
     /**
      * @brief Returns the stored TFTP option list.
@@ -237,8 +234,6 @@ class OperationImpl:
 
     //! Operation Completed Handler
     OperationCompletedHandler completionHandler;
-    //! Internal TFTP Server
-    const TftpServerInternal &tftpServer;
 
     //! Stored negotiated options
     Options::OptionList optionsV;
@@ -246,6 +241,8 @@ class OperationImpl:
     uint16_t maxReceivePacketSizeV;
     //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
     uint8_t receiveTimeoutV;
+    //! TFTP Retries
+    const uint16_t tftpRetries;
 
     //! TFTP UDP Socket
     boost::asio::ip::udp::socket socket;

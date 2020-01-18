@@ -25,14 +25,16 @@ namespace Tftp::Server {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
-  const TftpServerInternal &tftpServer,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList &negotiatedOptions) :
   OperationImpl{
     ioContext,
-    tftpServer,
+    tftpTimeout,
+    tftpRetries,
     completionHandler,
     remote,
     negotiatedOptions},
@@ -44,7 +46,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
-  const TftpServerInternal &tftpServer,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
@@ -52,7 +55,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &local) :
   OperationImpl{
     ioContext,
-    tftpServer,
+    tftpTimeout,
+    tftpRetries,
     completionHandler,
     remote,
     negotiatedOptions,

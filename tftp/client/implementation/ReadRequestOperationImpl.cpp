@@ -28,20 +28,24 @@ namespace Tftp::Client {
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_context &ioContext,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
+  const bool handleTransferSizeOption,
   OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
   const Options::OptionList &clientOptions) :
   OperationImpl{
     ioContext,
+    tftpTimeout,
+    tftpRetries,
     completionHandler,
-    tftpClient,
     remote},
-  optionNegotiationHandler{optionNegotiationHandler},
+  handleTransferSizeOption{ handleTransferSizeOption},
+  optionNegotiationHandler{ optionNegotiationHandler},
   dataHandler{ dataHandler},
   filename{ filename},
   mode{ mode},
@@ -54,10 +58,12 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_context &ioContext,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
+  const bool handleTransferSizeOption,
   OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
@@ -65,10 +71,12 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &local) :
   OperationImpl{
     ioContext,
+    tftpTimeout,
+    tftpRetries,
     completionHandler,
-    tftpClient,
     remote,
     local},
+  handleTransferSizeOption{ handleTransferSizeOption},
   optionNegotiationHandler{optionNegotiationHandler},
   dataHandler{ dataHandler},
   filename{ filename},
@@ -90,7 +98,7 @@ void ReadRequestOperationImpl::start()
     lastReceivedBlockNumber = 0U;
 
     // Add transfer size option with size '0' if requested.
-    if ( configuration().handleTransferSizeOption)
+    if ( handleTransferSizeOption)
     {
       clientOptions.transferSizeOption( 0U);
     }

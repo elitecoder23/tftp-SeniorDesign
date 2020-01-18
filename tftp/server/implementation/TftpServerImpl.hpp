@@ -14,7 +14,7 @@
 #define TFTP_SERVER_TFTPSERVERIMPL_HPP
 
 #include <tftp/server/Server.hpp>
-#include <tftp/server/implementation/TftpServerInternal.hpp>
+#include <tftp/server/TftpServer.hpp>
 
 #include <tftp/options/OptionList.hpp>
 
@@ -39,7 +39,7 @@ namespace Tftp::Server {
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
 class TftpServerImpl:
-  public TftpServerInternal,
+  public TftpServer,
   private PacketHandler
 {
   public:
@@ -117,9 +117,6 @@ class TftpServerImpl:
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
       std::string_view errorMessage = {}) final;
-
-    //! @copydoc TftpServerInternal::configuration
-    [[nodiscard]] const TftpConfiguration& configuration() const final;
 
   private:
     /**

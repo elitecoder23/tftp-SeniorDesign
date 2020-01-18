@@ -42,8 +42,10 @@ class WriteRequestOperationImpl: public OperationImpl
      *
      * @param[in] ioContext
      *   The I/O context used for communication.
-     * @param[in] tftpServer
-     *   The TFTP internal server.
+     * @param[in] tftpTimeout
+     *   TFTP Timeout, when no timeout option is negotiated in seconds.
+     * @param[in] tftpRetries
+     *   Number of retries.
      * @param[in] dataHandler
      *   Handler, which will be called on various events.
      * @param[in] completionHandler
@@ -55,21 +57,23 @@ class WriteRequestOperationImpl: public OperationImpl
      **/
     WriteRequestOperationImpl(
       boost::asio::io_context &ioContext,
-      const TftpServerInternal &tftpServer,
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const Options::OptionList &negotiatedOptions);
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,const TftpServerInternal&,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
     WriteRequestOperationImpl(
       boost::asio::io_context &ioContext,
-      const TftpServerInternal &tftpServer,
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,

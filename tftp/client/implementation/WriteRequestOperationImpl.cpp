@@ -27,19 +27,23 @@ namespace Tftp::Client {
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
+  bool handleTransferSizeOption,
   OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
   const Options::OptionList &clientOptions):
   OperationImpl{
     ioContext,
+    tftpTimeout,
+    tftpRetries,
     completionHandler,
-    tftpClient,
     remote},
+  handleTransferSizeOption{ handleTransferSizeOption},
   optionNegotiationHandler{optionNegotiationHandler},
   dataHandler{ dataHandler},
   filename{ filename},
@@ -53,10 +57,12 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
+  bool handleTransferSizeOption,
   OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
-  const TftpClientInternal &tftpClient,
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
@@ -64,10 +70,12 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &local):
   OperationImpl{
     ioContext,
+    tftpTimeout,
+    tftpRetries,
     completionHandler,
-    tftpClient,
     remote,
     local},
+  handleTransferSizeOption{ handleTransferSizeOption},
   optionNegotiationHandler{optionNegotiationHandler},
   dataHandler{ dataHandler},
   filename{ filename},
@@ -90,7 +98,7 @@ void WriteRequestOperationImpl::start()
     lastTransmittedBlockNumber = 0;
 
     // Add transfer size option with size '0' if requested.
-    if (configuration().handleTransferSizeOption)
+    if ( handleTransferSizeOption)
     {
       // If the handler supplies a transfer size
       if ( auto transferSize{ dataHandler->requestedTransferSize()}; transferSize)

@@ -14,15 +14,12 @@
 
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TftpException.hpp>
-#include <tftp/TftpConfiguration.hpp>
 #include <tftp/ErrorCodeDescription.hpp>
 
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
-
-#include <tftp/server/implementation/TftpServerInternal.hpp>
 
 #include <boost/bind.hpp>
 
@@ -71,16 +68,17 @@ const OperationImpl::ErrorInfo& OperationImpl::errorInfo() const
 
 OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
-  const TftpServerInternal &tftpServer,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList& negotiatedOptions)
 try:
   completionHandler{ completionHandler},
-  tftpServer{ tftpServer},
   optionsV{ negotiatedOptions},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
-  receiveTimeoutV{ tftpServer.configuration().tftpTimeout},
+  receiveTimeoutV{ tftpTimeout},
+  tftpRetries{ tftpRetries},
   socket{ ioContext},
   timer{ ioContext},
   transmitPacketType{ PacketType::Invalid},
@@ -113,17 +111,18 @@ catch (boost::system::system_error &err)
 
 OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
-  const TftpServerInternal &tftpServer,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList& negotiatedOptions,
   const boost::asio::ip::udp::endpoint &local)
 try:
   completionHandler{ completionHandler},
-  tftpServer{ tftpServer},
   optionsV{ negotiatedOptions},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
-  receiveTimeoutV{ tftpServer.configuration().tftpTimeout},
+  receiveTimeoutV{ tftpTimeout},
+  tftpRetries{ tftpRetries},
   socket{ ioContext},
   timer{ ioContext},
   transmitPacketType{ PacketType::Invalid},
@@ -188,7 +187,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "TX: " << static_cast< std::string>( packet);
 
-  // Reset the transmit counter
+  // Reset the transmit-counter
   transmitCounter = 1;
 
   // Store packet type
@@ -246,11 +245,6 @@ void OperationImpl::receive()
   }
 }
 
-const TftpConfiguration& OperationImpl::configuration() const
-{
-  return tftpServer.configuration();
-}
-
 Options::OptionList& OperationImpl::options()
 {
   return optionsV;
@@ -277,9 +271,9 @@ void OperationImpl::readRequestPacket(
     << "RX ERROR: " << static_cast< std::string>( readRequestPacket);
 
   using namespace std::literals;
-  Packets::ErrorPacket errorPacket(
+  Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "RRQ not expected"sv);
+    "RRQ not expected"sv};
 
   send( errorPacket);
 
@@ -295,9 +289,9 @@ void OperationImpl::writeRequestPacket(
     << "RX ERROR: " << static_cast< std::string>( writeRequestPacket);
 
   using namespace std::literals;
-  Packets::ErrorPacket errorPacket(
+  Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "WRQ not expected"sv);
+    "WRQ not expected"sv};
 
   send( errorPacket);
 
@@ -315,7 +309,7 @@ void OperationImpl::errorPacket(
     << "RX ERROR: " << static_cast< std::string>( errorPacket);
 
   // Operation completed
-  switch (transmitPacketType)
+  switch ( transmitPacketType)
   {
     case PacketType::OptionsAcknowledgement:
       switch (errorPacket.errorCode())
@@ -426,7 +420,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
     return;
   }
 
-  if (transmitCounter > tftpServer.configuration().tftpRetries)
+  if ( transmitCounter > tftpRetries)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Retry counter exceeded ABORT";
@@ -452,7 +446,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
       shared_from_this(),
       boost::asio::placeholders::error));
   }
-  catch (boost::system::system_error &err)
+  catch ( boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "TX error: " << err.what();
