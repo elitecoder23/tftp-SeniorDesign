@@ -22,6 +22,7 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
+#include <tftp/TransferStatusDescription.hpp>
 #include <tftp/Version.hpp>
 
 #include <helper/Logger.hpp>
@@ -350,7 +351,10 @@ void transmitFile(
       std::make_shared< Tftp::File::StreamFile< std::fstream>>(
         std::move( fileStream),
         std::filesystem::file_size( filename)),
-      {},
+      []( const Tftp::TransferStatus transferStatus)
+      {
+        std::cout << "Transfer Completed: " << transferStatus << "\n";
+      },
       remote,
       configuration.serverOptions().negotiateServer( clientOptions))};
 

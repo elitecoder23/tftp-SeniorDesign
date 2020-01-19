@@ -33,6 +33,8 @@ target_sources(
     TftpConfiguration.cpp
     TftpException.hpp
     TftpLogger.hpp
+    TransferStatusDescription.hpp
+    TransferStatusDescription.cpp
     TransmitDataHandler.hpp
     Version.hpp
     ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp)
