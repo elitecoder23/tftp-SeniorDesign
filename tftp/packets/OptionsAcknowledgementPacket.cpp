@@ -96,7 +96,7 @@ Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
 void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   // check size
-  if (rawPacket.size() <= HeaderSize)
+  if ( rawPacket.size() <= HeaderSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo( "Invalid packet size of OACK packet"));

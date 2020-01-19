@@ -188,11 +188,11 @@ class ReadWriteRequestPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket);
 
     //! stored request filename
-    std::string filenameValue;
+    std::string filenameV;
     //! stored transfer mode
-    TransferMode modeValue;
+    TransferMode modeV;
     //! stored options
-    Options::Options optionsValue;
+    Options::Options optionsV;
 };
 
 }

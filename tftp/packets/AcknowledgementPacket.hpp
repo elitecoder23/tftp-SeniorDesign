@@ -32,6 +32,7 @@ namespace Tftp::Packets {
 class AcknowledgementPacket: public Packet
 {
   public:
+    //! Packet Size ( Opcode + Block Number)
     static constexpr size_t PacketSize = HeaderSize + 2U;
 
     /**
