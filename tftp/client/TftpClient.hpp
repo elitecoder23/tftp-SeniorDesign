@@ -13,8 +13,8 @@
 #ifndef TFTP_CLIENT_TFTPCLIENT_HPP
 #define TFTP_CLIENT_TFTPCLIENT_HPP
 
-#include <tftp/TftpConfiguration.hpp>
 #include <tftp/client/Client.hpp>
+
 #include <tftp/options/Options.hpp>
 
 #include <boost/asio/ip/udp.hpp>
@@ -37,12 +37,16 @@ class TftpClient
      *
      * With the instance you can create any client operation instances.
      *
-     * @param[in] configuration
-     *   TFTP Configuration
+     * @param[in] tftpTimeout
+     *   TFTP Timeout, when no timeout option is negotiated in seconds.
+     * @param[in] tftpRetries
+     *   Number of retries.
      *
      * @return Created TFTP Client Instance.
      **/
-    static TftpClientPtr instance( const TftpConfiguration &configuration = {});
+    static TftpClientPtr instance(
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries );
 
     //! Destructor
     virtual ~TftpClient() noexcept = default;

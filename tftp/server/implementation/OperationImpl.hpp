@@ -72,19 +72,16 @@ class OperationImpl:
      *   The handler which is called on completion of this operation.
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
-     * @param[in] negotiatedOptions
-     *   Negotiated TFTP options.
      **/
     OperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
       OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &negotiatedOptions);
+      const boost::asio::ip::udp::endpoint &remote);
 
     /**
-     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
+     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -95,7 +92,6 @@ class OperationImpl:
       uint16_t tftpRetries,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &negotiatedOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     /**
@@ -132,13 +128,6 @@ class OperationImpl:
      * @brief receives a packet and calls the packet handlers
      **/
     void receive();
-
-    /**
-     * @brief Returns the stored TFTP option list.
-     *
-     * @return The stored TFTP option list.
-     **/
-    Options::OptionList& options();
 
     /**
      * @brief Updates the limit of maximum packet size for the receive
@@ -235,8 +224,6 @@ class OperationImpl:
     //! Operation Completed Handler
     OperationCompletedHandler completionHandler;
 
-    //! Stored negotiated options
-    Options::OptionList optionsV;
     //! Maximum packet size, which can be received
     uint16_t maxReceivePacketSizeV;
     //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout

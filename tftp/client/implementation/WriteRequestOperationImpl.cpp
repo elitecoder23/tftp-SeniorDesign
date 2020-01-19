@@ -29,7 +29,6 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
-  bool handleTransferSizeOption,
   OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
@@ -43,7 +42,6 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     tftpRetries,
     completionHandler,
     remote},
-  handleTransferSizeOption{ handleTransferSizeOption},
   optionNegotiationHandler{optionNegotiationHandler},
   dataHandler{ dataHandler},
   filename{ filename},
@@ -59,7 +57,6 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
-  bool handleTransferSizeOption,
   OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
@@ -75,7 +72,6 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     completionHandler,
     remote,
     local},
-  handleTransferSizeOption{ handleTransferSizeOption},
   optionNegotiationHandler{optionNegotiationHandler},
   dataHandler{ dataHandler},
   filename{ filename},
@@ -97,8 +93,8 @@ void WriteRequestOperationImpl::start()
     lastDataPacketTransmitted = false;
     lastTransmittedBlockNumber = 0;
 
-    // Add transfer size option with size '0' if requested.
-    if ( handleTransferSizeOption)
+    // Add transfer size option if requested.
+    if ( clientOptions.transferSizeOption())
     {
       // If the handler supplies a transfer size
       if ( auto transferSize{ dataHandler->requestedTransferSize()}; transferSize)
@@ -189,7 +185,7 @@ void WriteRequestOperationImpl::acknowledgementPacket(
   }
 
   // check invalid block number
-  if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
+  if ( acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Invalid block number received";
@@ -204,7 +200,7 @@ void WriteRequestOperationImpl::acknowledgementPacket(
     return;
   }
 
-  // if blocknumber is 0 -> ACK of write without Options
+  // if block number is 0 -> ACK of write without Options
   if ( acknowledgementPacket.blockNumber() == static_cast< uint16_t >( 0U))
   {
     auto negotiatedOptions{ optionNegotiationHandler( {})};
@@ -227,7 +223,7 @@ void WriteRequestOperationImpl::acknowledgementPacket(
   }
 
   // if ACK for last data packet - QUIT
-  if (lastDataPacketTransmitted)
+  if ( lastDataPacketTransmitted)
   {
     finished( TransferStatus::Successful);
     return;

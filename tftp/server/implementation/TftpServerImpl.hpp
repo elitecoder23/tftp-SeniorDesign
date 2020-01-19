@@ -28,7 +28,7 @@
 namespace Tftp::Server {
 
 /**
- * @brief TFTP server implementation.
+ * @brief TFTP Server Implementation.
  *
  * Waits on the specified port for a valid TFTP request and calls the
  * appropriate call-back, which has to handle the request.
@@ -44,12 +44,14 @@ class TftpServerImpl:
 {
   public:
     /**
-     * @brief Creates an instance of the TFTP server.
+     * @brief Creates an instance of the TFTP Server.
      *
      * @param[in] handler
      *   The TFTP request received handler.
-     * @param[in] configuration
-     *   The TFTP Configuration
+     * @param[in] tftpTimeout
+     *   TFTP Timeout, when no timeout option is negotiated in seconds.
+     * @param[in] tftpRetries
+     *   Number of retries.
      * @param[in] serverAddress
      *   Address where the FTP server should listen on.
      *
@@ -58,7 +60,8 @@ class TftpServerImpl:
      **/
     TftpServerImpl(
       ReceivedTftpRequestHandler handler,
-      const TftpConfiguration &configuration,
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries,
       const boost::asio::ip::udp::endpoint &serverAddress);
 
     /**
@@ -217,8 +220,10 @@ class TftpServerImpl:
   private:
     //! Registered request handler
     ReceivedTftpRequestHandler handler;
-    //! TFTP Configuration
-    const TftpConfiguration configurationV;
+    //! TFTP Receive Timeout
+    const uint8_t tftpTimeout;
+    //! TFTP Retries
+    const uint16_t tftpRetries;
     //! Server address to listen on
     const boost::asio::ip::udp::endpoint serverAddress;
 

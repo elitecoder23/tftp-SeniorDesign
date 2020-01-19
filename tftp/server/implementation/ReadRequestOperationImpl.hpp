@@ -51,7 +51,7 @@ class ReadRequestOperationImpl: public OperationImpl
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] negotiatedOptions
-     *   Server TFTP options used for option negotiation.
+     *   Server TFTP options used for operation.
      **/
     ReadRequestOperationImpl(
       boost::asio::io_context &ioContext,
@@ -125,6 +125,8 @@ class ReadRequestOperationImpl: public OperationImpl
   private:
     //! The handler which is called during operation.
     TransmitDataHandlerPtr dataHandler;
+    //! Options for the transfer
+    Options::OptionList negotiatedOptions;
     //! contains the negotiated blocksize option.
     uint16_t transmitDataSize;
     //! indicates, if the last data packet has been transmitted (closing).

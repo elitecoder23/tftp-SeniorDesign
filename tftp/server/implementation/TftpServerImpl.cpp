@@ -33,11 +33,13 @@ namespace Tftp::Server {
 
 TftpServerImpl::TftpServerImpl(
   ReceivedTftpRequestHandler handler,
-  const TftpConfiguration &configuration,
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries,
   const boost::asio::ip::udp::endpoint &serverAddress)
 try :
   handler{ handler},
-  configurationV{ configuration},
+  tftpTimeout{ tftpTimeout},
+  tftpRetries{ tftpRetries},
   serverAddress{ serverAddress},
   work{ ioContext},
   socket{ ioContext}
@@ -107,7 +109,6 @@ void TftpServerImpl::stop()
 {
   // cancel receive operation
   socket.cancel();
-  //! @todo cancel TFTP server operations.
 
   // stop handler
   ioContext.stop();
@@ -121,8 +122,8 @@ OperationPtr TftpServerImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
+    tftpTimeout,
+    tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -138,8 +139,8 @@ OperationPtr TftpServerImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
+    tftpTimeout,
+    tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -155,8 +156,8 @@ OperationPtr TftpServerImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
+    tftpTimeout,
+    tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -172,8 +173,8 @@ OperationPtr TftpServerImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
+    tftpTimeout,
+    tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -313,7 +314,7 @@ void TftpServerImpl::readRequestPacket(
     << "RX: " << static_cast< std::string>( readRequestPacket);
 
   // check handler
-  if (!handler)
+  if ( !handler)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
       << "No registered handler - reject";
@@ -342,7 +343,7 @@ void TftpServerImpl::writeRequestPacket(
     << "RX: " << static_cast< std::string>( writeRequestPacket);
 
   // check handler
-  if (!handler)
+  if ( !handler)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
       << "No registered handler - reject";

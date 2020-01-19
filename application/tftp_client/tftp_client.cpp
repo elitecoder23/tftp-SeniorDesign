@@ -110,9 +110,11 @@ int main( int argc, char * argv[])
 
     // Assemble TFTP configuration
 
-    auto tftpClient{ Tftp::Client::TftpClient::instance( configuration)};
+    auto tftpClient{ Tftp::Client::TftpClient::instance(
+      configuration.tftpTimeout,
+      configuration.tftpRetries)};
 
-    Tftp::Client::OperationPtr tftpOperation;
+    Tftp::Client::OperationPtr tftpOperation{};
 
     auto optionNegotiation = [&configuration](
       const Tftp::Options::Options &serverOptions) ->

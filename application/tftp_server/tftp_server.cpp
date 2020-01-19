@@ -184,7 +184,8 @@ int main( int argc, char * argv[])
         std::placeholders::_3,
         std::placeholders::_4,
         std::placeholders::_5),
-      configuration,
+      configuration.tftpTimeout,
+      configuration.tftpRetries,
       boost::asio::ip::udp::endpoint{
         boost::asio::ip::address_v4::any(),
         configuration.tftpServerPort});
@@ -289,7 +290,7 @@ static void receivedRequest(
     return;
   }
 
-  if (!checkFilename( (baseDir / filename).lexically_normal()))
+  if ( !checkFilename( (baseDir / filename).lexically_normal()))
   {
     std::cerr << "Error filename check\n";
 

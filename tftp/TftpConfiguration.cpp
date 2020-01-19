@@ -105,6 +105,11 @@ Options::OptionList TftpConfiguration::clientOptions(
     options.timeoutOptionClient( timeoutOption.get());
   }
 
+  if ( handleTransferSizeOption)
+  {
+    options.transferSizeOption( 0U);
+  }
+
   return options;
 }
 
@@ -125,6 +130,11 @@ Options::OptionList TftpConfiguration::serverOptions(
     options.timeoutOptionServer(
       TimeoutOptionMin,
       timeoutOption.get());
+  }
+
+  if ( handleTransferSizeOption)
+  {
+    options.transferSizeOption( 0U);
   }
 
   return options;

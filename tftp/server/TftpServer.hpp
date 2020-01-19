@@ -16,7 +16,6 @@
 #define TFTP_SERVER_TFTPSERVER_HPP
 
 #include <tftp/server/Server.hpp>
-#include <tftp/TftpConfiguration.hpp>
 #include <tftp/options/Options.hpp>
 
 #include <string>
@@ -51,8 +50,10 @@ class TftpServer
      *
      * @param[in] handler
      *   The request handler.
-     * @param[in] configuration
-     *   The TFTP Configuration
+     * @param[in] tftpTimeout
+     *   TFTP Timeout, when no timeout option is negotiated in seconds.
+     * @param[in] tftpRetries
+     *   Number of retries.
      * @param[in] serverAddress
      *   Address where the FTP server should listen on.
      *
@@ -60,7 +61,8 @@ class TftpServer
      **/
     static TftpServerPtr instance(
       ReceivedTftpRequestHandler handler,
-      const TftpConfiguration &configuration = {},
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries,
       const boost::asio::ip::udp::endpoint &serverAddress = DefaultLocalEndpoint);
 
     //! Destructor
@@ -89,6 +91,9 @@ class TftpServer
 
     /**
      * @brief Stops the TFTP Server.
+     *
+     * This operation does not stop TFTP Server transfers.
+     * This must be handled by the caller.
      **/
     virtual void stop() = 0;
 
@@ -100,9 +105,9 @@ class TftpServer
      * @param[in] completionHandler
      *   The handler which is called on completion of the operation.
      * @param[in] remote
-     *   Address of the remote endpoint (TFTP client).
+     *   Address of the remote endpoint (TFTP Client).
      * @param[in] negotiatedOptions
-     *   Server TFTP options used for option negotiation.
+     *   Server TFTP options used for operation.
      *
      * @return The TFTP server write operation.
      **/
@@ -135,7 +140,7 @@ class TftpServer
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] negotiatedOptions
-     *   Server TFTP options used for option negotiation.
+     *   Server TFTP options used for operation.
      *
      * @return The TFTP server read operation.
      **/

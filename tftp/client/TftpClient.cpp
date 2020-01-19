@@ -16,9 +16,11 @@
 
 namespace Tftp::Client {
 
-TftpClientPtr TftpClient::instance( const TftpConfiguration &configuration)
+TftpClientPtr TftpClient::instance(
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries )
 {
-  return std::make_shared< TftpClientImpl>( configuration);
+  return std::make_shared< TftpClientImpl>( tftpTimeout, tftpRetries);
 }
 
 }

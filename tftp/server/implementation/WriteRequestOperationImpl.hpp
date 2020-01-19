@@ -53,7 +53,7 @@ class WriteRequestOperationImpl: public OperationImpl
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      * @param[in] negotiatedOptions
-     *   Server TFTP options used for option negotiation.
+     *   Server TFTP options used for operation.
      **/
     WriteRequestOperationImpl(
       boost::asio::io_context &ioContext,
@@ -120,6 +120,8 @@ class WriteRequestOperationImpl: public OperationImpl
   private:
     //! Handler which will be called on various events.
     ReceiveDataHandlerPtr dataHandler;
+    //! Options for the transfer
+    Options::OptionList negotiatedOptions;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! Holds the last received block number.

@@ -71,11 +71,9 @@ OperationImpl::OperationImpl(
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList& negotiatedOptions)
+  const boost::asio::ip::udp::endpoint &remote)
 try:
   completionHandler{ completionHandler},
-  optionsV{ negotiatedOptions},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpTimeout},
   tftpRetries{ tftpRetries},
@@ -115,11 +113,9 @@ OperationImpl::OperationImpl(
   const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList& negotiatedOptions,
   const boost::asio::ip::udp::endpoint &local)
 try:
   completionHandler{ completionHandler},
-  optionsV{ negotiatedOptions},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpTimeout},
   tftpRetries{ tftpRetries},
@@ -243,11 +239,6 @@ void OperationImpl::receive()
     finished( TransferStatus::CommunicationError);
     return;
   }
-}
-
-Options::OptionList& OperationImpl::options()
-{
-  return optionsV;
 }
 
 void OperationImpl::maxReceivePacketSize(

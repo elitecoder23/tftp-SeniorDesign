@@ -36,9 +36,9 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     tftpTimeout,
     tftpRetries,
     completionHandler,
-    remote,
-    negotiatedOptions},
+    remote},
   dataHandler{ dataHandler},
+  negotiatedOptions{ negotiatedOptions},
   receiveDataSize{ DefaultDataSize},
   lastReceivedBlockNumber{ 0U}
 {
@@ -59,9 +59,9 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     tftpRetries,
     completionHandler,
     remote,
-    negotiatedOptions,
     local},
   dataHandler{ dataHandler},
+  negotiatedOptions{ negotiatedOptions},
   receiveDataSize{ DefaultDataSize},
   lastReceivedBlockNumber{ 0U}
 {
@@ -73,10 +73,8 @@ void WriteRequestOperationImpl::start()
 
   try
   {
-    auto &respOptions{ options()};
-
     // option negotiation leads to empty option list
-    if ( respOptions.empty())
+    if ( negotiatedOptions.empty())
     {
       // Then no OACK is sent back - a simple ACK is sent.
       send( Packets::AcknowledgementPacket{ Packets::BlockNumber{ 0U}});
@@ -86,7 +84,7 @@ void WriteRequestOperationImpl::start()
       //validate received options
 
       // check blocksize option
-      if ( auto blocksize{ respOptions.blocksize()}; blocksize)
+      if ( auto blocksize{ negotiatedOptions.blocksize()}; blocksize)
       {
         receiveDataSize = *blocksize;
 
@@ -99,13 +97,13 @@ void WriteRequestOperationImpl::start()
       }
 
       // check timeout option
-      if ( auto timeoutOption{ respOptions.timeoutOption()}; timeoutOption)
+      if ( auto timeoutOption{ negotiatedOptions.timeoutOption()}; timeoutOption)
       {
         receiveTimeout( *timeoutOption);
       }
 
       // check transfer size option
-      if ( auto transferSizeOption{ respOptions.transferSizeOption()})
+      if ( auto transferSizeOption{ negotiatedOptions.transferSizeOption()})
       {
         if ( !dataHandler->receivedTransferSize( *transferSizeOption))
         {
@@ -122,7 +120,7 @@ void WriteRequestOperationImpl::start()
       }
 
       // send OACK
-      send( Packets::OptionsAcknowledgementPacket{ respOptions.options()});
+      send( Packets::OptionsAcknowledgementPacket{ negotiatedOptions.options()});
     }
 
     // start receive loop

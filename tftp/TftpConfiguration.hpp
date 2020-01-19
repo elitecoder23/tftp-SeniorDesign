@@ -64,11 +64,12 @@ class TftpConfiguration
      *   configuration and the supplied base options.
      *
      * This operation handles:
-     * * blocksize option and
-     * * timeout option.
+     * - block size option,
+     * - timeout option, and
+     * - transfer size option.
      *
-     * The transfer size option must be handled manually, due to the different
-     * handling on RRG/ WRQ.
+     * The transfer size option must is handled in a special way.
+     * It is set to '0' to be checked by RRQ/ WRQ operations.
      *
      * @param[in] baseOptions
      *   Base options, which shall be used for creation of this option list.
@@ -84,11 +85,12 @@ class TftpConfiguration
      *   configuration and the supplied base options.
      *
      * This operation handles:
-     * * blocksize option and
-     * * timeout option.
+     * - block size option,
+     * - timeout option, and
+     * - transfer size option.
      *
-     * The transfer size option must be handled manually, due to the different
-     * handling on RRG/ WRQ.
+     * The transfer size option must is handled in a special way.
+     * It is set to '0' to be checked by RRQ/ WRQ operations.
      *
      * @param[in] baseOptions
      *   Base options, which shall be used for creation of this option list.
@@ -101,10 +103,10 @@ class TftpConfiguration
 
     //! TFTP timeout - The standard when no timeout option is negotiated in seconds.
     uint8_t tftpTimeout;
-    //! Number of retries.
+    //! Number of Retries.
     uint16_t tftpRetries;
 
-    //! The port used for TFTP communication.
+    //! UDP Port used for TFTP Communication.
     uint16_t tftpServerPort;
 
     //! If set, the client/ server shall handle the "Transfer Size" option

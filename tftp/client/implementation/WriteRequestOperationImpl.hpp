@@ -57,7 +57,6 @@ class WriteRequestOperationImpl : public OperationImpl
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
-      bool handleTransferSizeOption,
       OptionNegotiationHandler optionNegotiationHandler,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -67,7 +66,7 @@ class WriteRequestOperationImpl : public OperationImpl
       const Options::OptionList &clientOptions);
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const TftpClientInternal&,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -76,7 +75,6 @@ class WriteRequestOperationImpl : public OperationImpl
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
-      bool handleTransferSizeOption,
       OptionNegotiationHandler optionNegotiationHandler,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -140,9 +138,6 @@ class WriteRequestOperationImpl : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:
-    //! Indicates if the TFTP Transfer Size Option shall be used
-    const bool handleTransferSizeOption;
-
     //! Option Negotiation Handler
     OptionNegotiationHandler optionNegotiationHandler;
     //! Data Handler

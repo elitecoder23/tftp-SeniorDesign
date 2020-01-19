@@ -15,7 +15,6 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TransmitDataHandler.hpp>
-#include <tftp/TftpConfiguration.hpp>
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
@@ -37,9 +36,9 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     tftpTimeout,
     tftpRetries,
     completionHandler,
-    remote,
-    negotiatedOptions},
+    remote},
   dataHandler{ dataHandler},
+  negotiatedOptions{ negotiatedOptions},
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
   lastTransmittedBlockNumber{ 0U}
@@ -61,9 +60,9 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     tftpRetries,
     completionHandler,
     remote,
-    negotiatedOptions,
     local},
   dataHandler{ dataHandler},
+  negotiatedOptions{ negotiatedOptions},
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
   lastTransmittedBlockNumber{ 0U}
@@ -74,29 +73,27 @@ void ReadRequestOperationImpl::start()
 {
   try
   {
-    auto &respOptions{ options()};
-
     // option negotiation leads to empty option list
-    if ( respOptions.empty())
+    if ( negotiatedOptions.empty())
     {
       sendData();
     }
     else
     {
       // check blocksize option - if set use it
-      if ( auto blocksize{ respOptions.blocksize()}; blocksize)
+      if ( auto blocksize{ negotiatedOptions.blocksize()}; blocksize)
       {
         transmitDataSize = *blocksize;
       }
 
       // check timeout option - if set use it
-      if ( auto timeoutOption{ respOptions.timeoutOption()}; timeoutOption)
+      if ( auto timeoutOption{ negotiatedOptions.timeoutOption()}; timeoutOption)
       {
         receiveTimeout( *timeoutOption);
       }
 
       // check transfer size option
-      if ( auto transferSizeOption{ respOptions.transferSizeOption()})
+      if ( auto transferSizeOption{ negotiatedOptions.transferSizeOption()})
       {
         if ( 0U != *transferSizeOption)
         {
@@ -117,20 +114,20 @@ void ReadRequestOperationImpl::start()
         // add transfer size to answer only, if handler supply it.
         if ( auto transferSize{ dataHandler->requestedTransferSize()}; transferSize)
         {
-          respOptions.transferSizeOption( *transferSize);
+          negotiatedOptions.transferSizeOption( *transferSize);
         }
         else
         {
-          respOptions.removeTransferSizeOption();
+          negotiatedOptions.removeTransferSizeOption();
         }
       }
 
       // if transfer size option is the only option requested, but the handler
       // does not supply it -> empty OACK is not sent but data directly
-      if ( !options().empty())
+      if ( !negotiatedOptions.empty())
       {
         // Send OACK
-        send( Packets::OptionsAcknowledgementPacket( options().options()));
+        send( Packets::OptionsAcknowledgementPacket{ negotiatedOptions.options()});
       }
       else
       {

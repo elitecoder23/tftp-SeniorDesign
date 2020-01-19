@@ -20,7 +20,6 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
 #include <tftp/ReceiveDataHandler.hpp>
-#include <tftp/TftpConfiguration.hpp>
 
 #include <helper/Dump.hpp>
 
@@ -30,7 +29,6 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
-  const bool handleTransferSizeOption,
   OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
@@ -44,7 +42,6 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     tftpRetries,
     completionHandler,
     remote},
-  handleTransferSizeOption{ handleTransferSizeOption},
   optionNegotiationHandler{ optionNegotiationHandler},
   dataHandler{ dataHandler},
   filename{ filename},
@@ -60,7 +57,6 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
-  const bool handleTransferSizeOption,
   OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
@@ -76,7 +72,6 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     completionHandler,
     remote,
     local},
-  handleTransferSizeOption{ handleTransferSizeOption},
   optionNegotiationHandler{optionNegotiationHandler},
   dataHandler{ dataHandler},
   filename{ filename},
@@ -98,8 +93,9 @@ void ReadRequestOperationImpl::start()
     lastReceivedBlockNumber = 0U;
 
     // Add transfer size option with size '0' if requested.
-    if ( handleTransferSizeOption)
+    if ( clientOptions.transferSizeOption())
     {
+      // assure that transfer size is set to zero for read request
       clientOptions.transferSizeOption( 0U);
     }
 
@@ -258,7 +254,7 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   const auto &remoteOptions{ optionsAcknowledgementPacket.options()};
 
   // check empty options
-  if (remoteOptions.empty())
+  if ( remoteOptions.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Received option list is empty";

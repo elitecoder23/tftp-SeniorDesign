@@ -19,8 +19,11 @@
 
 namespace Tftp::Client {
 
-TftpClientImpl::TftpClientImpl( const TftpConfiguration &configuration):
-  configurationV{ configuration},
+TftpClientImpl::TftpClientImpl(
+  const uint8_t tftpTimeout,
+  const uint16_t tftpRetries ):
+  tftpTimeout{ tftpTimeout},
+  tftpRetries{ tftpRetries},
   work{ ioContext}
 {
 }
@@ -59,9 +62,8 @@ OperationPtr TftpClientImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
-    configurationV.handleTransferSizeOption,
+    tftpTimeout,
+    tftpRetries,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
@@ -83,9 +85,8 @@ OperationPtr TftpClientImpl::readRequestOperation(
 {
   return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
-    configurationV.handleTransferSizeOption,
+    tftpTimeout,
+    tftpRetries,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
@@ -107,9 +108,8 @@ OperationPtr TftpClientImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
-    configurationV.handleTransferSizeOption,
+    tftpTimeout,
+    tftpRetries,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
@@ -131,9 +131,8 @@ OperationPtr TftpClientImpl::writeRequestOperation(
 {
   return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
-    configurationV.handleTransferSizeOption,
+    tftpTimeout,
+    tftpRetries,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,

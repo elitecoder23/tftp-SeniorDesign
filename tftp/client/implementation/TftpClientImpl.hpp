@@ -18,8 +18,6 @@
 
 #include <tftp/options/OptionList.hpp>
 
-#include <tftp/TftpConfiguration.hpp>
-
 #include <boost/asio.hpp>
 
 namespace Tftp::Client {
@@ -35,10 +33,14 @@ class TftpClientImpl : public TftpClient
     /**
      * @brief Creates the concrete TFTP %Client.
      *
-     * @param[in] configuration
-     *   TFTP Configuration
+     * @param[in] tftpTimeout
+     *   TFTP Timeout, when no timeout option is negotiated in seconds.
+     * @param[in] tftpRetries
+     *   Number of retries.
      **/
-    explicit TftpClientImpl( const TftpConfiguration &configuration);
+    explicit TftpClientImpl(
+      uint8_t tftpTimeout,
+      uint16_t tftpRetries );
 
     //! @copydoc TftpClient::entry
     void entry() noexcept final;
@@ -89,8 +91,10 @@ class TftpClientImpl : public TftpClient
       const boost::asio::ip::udp::endpoint &local) final;
 
   private:
-    //! Stored TFTP client configuration
-    const TftpConfiguration configurationV;
+    //! TFTP Receive Timeout
+    const uint8_t tftpTimeout;
+    //! TFTP Retries
+    const uint16_t tftpRetries;
     //! I/O context, which handles the asynchronous receive operation
     boost::asio::io_context ioContext;
     //! I/O context dummy work to keep I/O context loops running
