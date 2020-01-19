@@ -38,7 +38,7 @@ class PacketHandler
      * @brief The handler of all received packets.
      *
      * This handler tries to decode the received packet as TFTP packet and calls
-     * the approbate handler method.
+     * the suitable handler method.
      *
      * If the packet cannot be decoded handleInvalidPacket() is called.
      *

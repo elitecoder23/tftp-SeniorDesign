@@ -89,7 +89,7 @@ class MemoryFile: public TftpFile
 
   private:
     //! data
-    DataType dataValue;
+    DataType dataV;
     //! current read position
     DataType::const_iterator dataPtr;
 };

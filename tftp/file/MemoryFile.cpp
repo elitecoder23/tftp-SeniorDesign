@@ -17,30 +17,30 @@
 namespace Tftp::File {
 
 MemoryFile::MemoryFile():
-  dataPtr{ dataValue.begin()}
+  dataPtr{ dataV.begin()}
 {
 }
 
 MemoryFile::MemoryFile( const DataType &data):
-  dataValue{ data},
-  dataPtr{ dataValue.begin()}
+  dataV{ data},
+  dataPtr{ dataV.begin()}
 {
 }
 
 MemoryFile::MemoryFile( DataType &&data):
-  dataValue{ data},
-  dataPtr{ dataValue.begin()}
+  dataV{ std::move( data)},
+  dataPtr{ dataV.begin()}
 {
 }
 
 const MemoryFile::DataType& MemoryFile::data() const noexcept
 {
-  return dataValue;
+  return dataV;
 }
 
 void MemoryFile::finished() noexcept
 {
-  dataPtr = dataValue.begin();
+  dataPtr = dataV.begin();
 }
 
 bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
@@ -53,17 +53,17 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
 
 void MemoryFile::receivedData( const DataType &data) noexcept
 {
-  dataValue.insert(
-    dataValue.end(),
+  dataV.insert(
+    dataV.end(),
     data.begin(),
     data.end());
 
-  dataPtr = dataValue.begin();
+  dataPtr = dataV.begin();
 }
 
 std::optional< uint64_t> MemoryFile::requestedTransferSize()
 {
-  return dataValue.size();
+  return dataV.size();
 }
 
 MemoryFile::DataType MemoryFile::sendData( const size_t maxSize) noexcept
@@ -74,9 +74,9 @@ MemoryFile::DataType MemoryFile::sendData( const size_t maxSize) noexcept
   if ( static_cast< unsigned int>(
     std::distance< DataType::const_iterator>(
       startPtr,
-      dataValue.end())) <= maxSize)
+      dataV.end())) <= maxSize)
   {
-    endPtr = dataValue.end();
+    endPtr = dataV.end();
   }
   else
   {
