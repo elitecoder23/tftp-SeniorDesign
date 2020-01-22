@@ -44,9 +44,6 @@ class OperationImpl:
   protected PacketHandler
 {
   public:
-    //! @copydoc Operation::start()
-    void start() override;
-
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,

@@ -86,9 +86,11 @@ class WriteRequestOperationImpl: public OperationImpl
     ~WriteRequestOperationImpl() noexcept override = default;
 
     /**
-     * @brief Executes the operation.
+     * @brief executes the operation.
+     *
+     * Sends response to read request and waits for asnwers.
      **/
-    void start() final;
+    void start();
 
   private:
     //! @copydoc OperationImpl::finished()

@@ -37,15 +37,6 @@ class Operation
     virtual ~Operation() noexcept = default;
 
     /**
-     * @brief Executes the TFTP client operation.
-     *
-     * This routines starts the client communication.
-     *
-     * It returns immediately after sending the request.
-     **/
-    virtual void start() = 0;
-
-    /**
      * @brief Aborts the operation gracefully.
      *
      * Sends an error packet at next possible time point.

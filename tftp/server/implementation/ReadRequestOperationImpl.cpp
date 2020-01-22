@@ -137,7 +137,7 @@ void ReadRequestOperationImpl::start()
     }
 
     // start receive loop
-    OperationImpl::start();
+    receive();
   }
   catch ( ...)
   {

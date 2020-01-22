@@ -120,14 +120,18 @@ OperationPtr TftpServerImpl::readRequestOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList& negotiatedOptions)
 {
-  return std::make_shared< ReadRequestOperationImpl>(
+  auto operation{ std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
     dataHandler,
     completionHandler,
     remote,
-    negotiatedOptions);
+    negotiatedOptions)};
+
+  operation->start();
+
+  return operation;
 }
 
 OperationPtr TftpServerImpl::readRequestOperation(
@@ -137,7 +141,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
   const Options::OptionList& negotiatedOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
-  return std::make_shared< ReadRequestOperationImpl>(
+  auto operation{ std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -145,7 +149,11 @@ OperationPtr TftpServerImpl::readRequestOperation(
     completionHandler,
     remote,
     negotiatedOptions,
-    local);
+    local)};
+
+  operation->start();
+
+  return operation;
 }
 
 OperationPtr TftpServerImpl::writeRequestOperation(
@@ -154,14 +162,18 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const Options::OptionList& negotiatedOptions)
 {
-  return std::make_shared< WriteRequestOperationImpl>(
+  auto operation{ std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
     dataHandler,
     completionHandler,
     remote,
-    negotiatedOptions);
+    negotiatedOptions)};
+
+  operation->start();
+
+  return operation;
 }
 
 OperationPtr TftpServerImpl::writeRequestOperation(
@@ -171,7 +183,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   const Options::OptionList& negotiatedOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
-  return std::make_shared< WriteRequestOperationImpl>(
+  auto operation{ std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -179,7 +191,11 @@ OperationPtr TftpServerImpl::writeRequestOperation(
     completionHandler,
     remote,
     negotiatedOptions,
-    local);
+    local)};
+
+  operation->start();
+
+  return operation;
 }
 
 void TftpServerImpl::errorOperation(

@@ -124,7 +124,7 @@ void WriteRequestOperationImpl::start()
     }
 
     // start receive loop
-    OperationImpl::start();
+    receive();
   }
   catch ( ...)
   {

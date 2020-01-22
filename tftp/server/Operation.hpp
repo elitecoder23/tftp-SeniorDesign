@@ -37,13 +37,6 @@ class Operation
     virtual ~Operation() noexcept = default;
 
     /**
-     * @brief Executes the TFTP Server Operation.
-     *
-     * This routines starts the server communication loop.
-     **/
-    virtual void start() = 0;
-
-    /**
      * @brief Aborts the Operation Gracefully.
      *
      * @param[in] errorCode

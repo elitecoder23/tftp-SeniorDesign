@@ -53,18 +53,6 @@ class OperationImpl :
      **/
     ~OperationImpl() noexcept override;
 
-    /**
-     * @brief Operation execution
-     *
-     * This operation executes the TFTP operation.
-     *
-     * The implementation on this level starts the receive operation.
-     *
-     * A child class inheriting from this class must override this operation,
-     * sending the request package and then calling this method.
-     **/
-    void start() override;
-
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,

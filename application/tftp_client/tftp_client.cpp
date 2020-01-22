@@ -155,7 +155,6 @@ int main( int argc, char * argv[])
     }
 
     // Start client and its operations
-    tftpOperation->start();
     tftpClient->entry();
   }
   catch ( boost::program_options::error &e)

@@ -25,12 +25,6 @@
 
 namespace Tftp::Server {
 
-void OperationImpl::start()
-{
-  // start first receive operation
-  receive();
-}
-
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
   std::string_view errorMessage)
@@ -196,7 +190,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   {
     socket.send( boost::asio::buffer( transmitPacket));
   }
-  catch (boost::system::system_error &err)
+  catch ( boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "TX ERROR: " << err.what();
@@ -230,7 +224,7 @@ void OperationImpl::receive()
       shared_from_this(),
       boost::asio::placeholders::error));
   }
-  catch (boost::system::system_error &err)
+  catch ( boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "RX ERROR: " << err.what();

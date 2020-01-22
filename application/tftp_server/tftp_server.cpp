@@ -357,9 +357,6 @@ void transmitFile(
       },
       remote,
       configuration.serverOptions().negotiateServer( clientOptions))};
-
-  // executes the TFTP operation
-  operation->start();
 }
 
 void receiveFile(
@@ -393,10 +390,10 @@ void receiveFile(
       std::make_shared< Tftp::File::StreamFile< std::fstream>>(
         std::move( fileStream),
         std::filesystem::file_size( filename)),
-      {},
+      []( const Tftp::TransferStatus transferStatus)
+      {
+        std::cout << "Transfer Completed: " << transferStatus << "\n";
+      },
       remote,
       configuration.serverOptions().negotiateServer( clientOptions))};
-
-  // executes the TFTP operation
-  operation->start();
 }

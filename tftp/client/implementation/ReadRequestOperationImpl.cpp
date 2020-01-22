@@ -83,7 +83,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 {
 }
 
-void ReadRequestOperationImpl::start()
+void ReadRequestOperationImpl::request()
 {
   BOOST_LOG_FUNCTION()
 
@@ -104,7 +104,7 @@ void ReadRequestOperationImpl::start()
       Packets::ReadRequestPacket{ filename, mode, clientOptions.options()});
 
     // wait for answers
-    OperationImpl::start();
+    receiveFirst();
   }
   catch ( ...)
   {

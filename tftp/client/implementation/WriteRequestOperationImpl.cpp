@@ -83,7 +83,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
 {
 }
 
-void WriteRequestOperationImpl::start()
+void WriteRequestOperationImpl::request()
 {
   BOOST_LOG_FUNCTION()
 
@@ -111,7 +111,7 @@ void WriteRequestOperationImpl::start()
       clientOptions.options()});
 
     // wait for answers
-    OperationImpl::start();
+    receiveFirst();
   }
   catch (...)
   {

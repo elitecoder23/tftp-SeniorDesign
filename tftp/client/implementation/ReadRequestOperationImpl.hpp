@@ -86,11 +86,14 @@ class ReadRequestOperationImpl : public OperationImpl
       const boost::asio::ip::udp::endpoint &local);
 
     /**
-     * @copybrief OperationImpl::start()
+     * @brief Executes the TFTP client operation.
      *
+     * This routines starts the client communication.
      * Assembles and transmit TFTP RRQ packet and start parent receive loop.
+     *
+     * It returns immediately after sending the request.
      **/
-    void start() final;
+    void request();
 
   protected:
     //! @copydoc OperationImpl::finished

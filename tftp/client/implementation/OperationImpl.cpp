@@ -29,12 +29,6 @@ OperationImpl::~OperationImpl() noexcept
   BOOST_LOG_FUNCTION()
 }
 
-void OperationImpl::start()
-{
-  // start first receive operation
-  receiveFirst();
-}
-
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
   std::string_view errorMessage)

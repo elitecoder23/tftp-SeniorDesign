@@ -60,7 +60,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const TransferMode mode,
   const Options::OptionList &clientOptions)
 {
-  return std::make_shared< ReadRequestOperationImpl>(
+  auto operation{ std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -70,7 +70,11 @@ OperationPtr TftpClientImpl::readRequestOperation(
     remote,
     filename,
     mode,
-    clientOptions);
+    clientOptions) };
+
+  operation->request();
+
+  return operation;
 }
 
 OperationPtr TftpClientImpl::readRequestOperation(
@@ -83,7 +87,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const Options::OptionList &clientOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
-  return std::make_shared< ReadRequestOperationImpl>(
+  auto operation{ std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -94,7 +98,11 @@ OperationPtr TftpClientImpl::readRequestOperation(
     filename,
     mode,
     clientOptions,
-    local);
+    local)};
+
+  operation->request();
+
+  return operation;
 }
 
 OperationPtr TftpClientImpl::writeRequestOperation(
@@ -106,7 +114,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   const TransferMode mode,
   const Options::OptionList &clientOptions)
 {
-  return std::make_shared< WriteRequestOperationImpl>(
+  auto operation{ std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -116,7 +124,11 @@ OperationPtr TftpClientImpl::writeRequestOperation(
     remote,
     filename,
     mode,
-    clientOptions);
+    clientOptions)};
+
+  operation->request();
+
+  return operation;
 }
 
 OperationPtr TftpClientImpl::writeRequestOperation(
@@ -129,7 +141,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   const Options::OptionList &clientOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
-  return std::make_shared< WriteRequestOperationImpl>(
+  auto operation{ std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -140,7 +152,11 @@ OperationPtr TftpClientImpl::writeRequestOperation(
     filename,
     mode,
     clientOptions,
-    local);
+    local)};
+
+  operation->request();
+
+  return operation;
 }
 
 }
