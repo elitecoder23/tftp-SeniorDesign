@@ -37,7 +37,7 @@ class Operation
     virtual ~Operation() noexcept = default;
 
     /**
-     * @brief Aborts the operation gracefully.
+     * @brief Aborts the Operation Gracefully.
      *
      * Sends an error packet at next possible time point.
      *
@@ -51,7 +51,7 @@ class Operation
       std::string_view errorMessage = {}) = 0;
 
     /**
-     * @brief Immediately cancels the transfer.
+     * @brief Immediately Cancels the Transfer.
      **/
     virtual void abort() = 0;
 

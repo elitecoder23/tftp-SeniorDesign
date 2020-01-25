@@ -33,7 +33,7 @@ class TransferStatusDescription : public Helper::Description<
 };
 
 /**
- * @brief Outputs the error code to the stream.
+ * @brief Outputs the Error Code to the stream.
  *
  * @param[in] stream
  *   The output stream.

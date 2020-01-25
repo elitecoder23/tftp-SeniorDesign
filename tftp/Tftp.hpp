@@ -119,13 +119,13 @@ enum class TransferStatus
 };
 
 //! Default TFTP Port.
-constexpr uint16_t DefaultTftpPort = 69U;
+constexpr uint16_t DefaultTftpPort{ 69U};
 
 //! The default TFTP receive timeout in seconds (2 seconds)
-constexpr uint8_t DefaultTftpReceiveTimeout = 2;
+constexpr uint8_t DefaultTftpReceiveTimeout{ 2};
 
 //! Number of retries performed, when no ACK has been received
-constexpr uint16_t DefaultTftpRetries = 1;
+constexpr uint16_t DefaultTftpRetries{ 1U};
 
 /**
  * @brief TFTP Packet Types.
@@ -147,14 +147,14 @@ enum class PacketType : uint16_t
 };
 
 //! Maximum size of data field in data package (without blksize option)
-constexpr size_t DefaultDataSize = 512U;
+constexpr size_t DefaultDataSize{ 512U};
 
 //! Size of TFTP header in data package (Opcode + Blocknumber)
-constexpr size_t DefaultTftpDataPacketHeaderSize = 4U;
+constexpr size_t DefaultTftpDataPacketHeaderSize{ 4U};
 
 //! Maximum size of TFTP package (without blksize option)
-constexpr size_t DefaultMaxPacketSize =
-  DefaultDataSize + DefaultTftpDataPacketHeaderSize;
+constexpr size_t DefaultMaxPacketSize{
+  DefaultDataSize + DefaultTftpDataPacketHeaderSize};
 
 //! TFTP Transfer Modes.
 enum class TransferMode
@@ -210,14 +210,14 @@ enum class KnownOptions
 };
 
 //! Minimum TFTP block size option as defined within RFC 2348
-constexpr uint16_t BlocksizeOptionMin = 8U;
+constexpr uint16_t BlocksizeOptionMin{ 8U};
 //! Maximum TFTP block size option as defined within RFC 2348
-constexpr uint16_t BlocksizeOptionMax = 65464U;
+constexpr uint16_t BlocksizeOptionMax{ 65464U};
 
 //! Minimum TFTP timeout option as defined within RFC 2349
-constexpr uint8_t TimeoutOptionMin = 1U;
+constexpr uint8_t TimeoutOptionMin{ 1U};
 //! maximum TFTP timeout option as defined within RFC 2349
-constexpr uint8_t TimeoutOptionMax = 255U;
+constexpr uint8_t TimeoutOptionMax{ 255U};
 
 // Forward declarations
 class TftpConfiguration;
