@@ -37,7 +37,7 @@
 #include <cstdlib>
 #include <memory>
 #include <string>
-#include <fstream>
+#include <iostream>
 
 /**
  * @brief Program Entry Point
@@ -128,8 +128,9 @@ int main( int argc, char * argv[])
       case Tftp::RequestType::Read:
         tftpOperation= tftpClient->readRequestOperation(
           optionNegotiation,
-          std::make_shared< Tftp::File::StreamFile< std::fstream>>(
-            std::fstream{ localFile, std::fstream::out | std::fstream::trunc}),
+          std::make_shared< Tftp::File::StreamFile>(
+            Tftp::File::TftpFile::Operation::Receive,
+            localFile),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
@@ -140,8 +141,10 @@ int main( int argc, char * argv[])
       case Tftp::RequestType::Write:
         tftpOperation = tftpClient->writeRequestOperation(
           optionNegotiation,
-          std::make_shared< Tftp::File::StreamFile< std::fstream>>(
-            std::fstream{ localFile, std::fstream::in}),
+          std::make_shared< Tftp::File::StreamFile>(
+            Tftp::File::TftpFile::Operation::Transmit,
+            localFile,
+            std::filesystem::file_size( localFile)),
           std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,

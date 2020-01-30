@@ -26,16 +26,24 @@ namespace Tftp {
 class DataHandler
 {
   public:
-    //! The data type is used for the inherited classes.
+    //! Data Type.
     using DataType = std::vector< uint8_t>;
 
     /**
-     * @brief Default destructor.
+     * @brief Destructor.
      **/
     virtual ~DataHandler() noexcept = default;
 
     /**
-     * @brief Called, when the operation has been finished
+     * @brief Data Handler Reset Request.
+     *
+     * Is called once before any data is requested or provided.
+     * Should reset the fata handler.
+     **/
+    virtual void reset() = 0;
+
+    /**
+     * @brief Called, when the operation has been finished.
      **/
     virtual void finished() noexcept = 0;
 };

@@ -15,7 +15,7 @@ target_sources(
     MemoryFile.hpp
     MemoryFile.cpp
     StreamFile.hpp
-    StreamFile.ipp
+    StreamFile.cpp
     NullSinkFile.hpp
     NullSinkFile.cpp)
 

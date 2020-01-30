@@ -19,6 +19,10 @@ NullSinkFile::NullSinkFile( std::optional< uint64_t> size):
 {
 }
 
+void NullSinkFile::reset()
+{
+}
+
 bool NullSinkFile::receivedTransferSize( const uint64_t transferSize)
 {
   // If no size is provided

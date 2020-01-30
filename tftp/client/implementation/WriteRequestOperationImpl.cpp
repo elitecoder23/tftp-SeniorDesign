@@ -89,9 +89,12 @@ void WriteRequestOperationImpl::request()
 
   try
   {
+    // Reset data handler
+    dataHandler->reset();
+
     transmitDataSize = DefaultDataSize;
     lastDataPacketTransmitted = false;
-    lastTransmittedBlockNumber = 0;
+    lastTransmittedBlockNumber = 0U;
 
     // Add transfer size option if requested.
     if ( clientOptions.transferSizeOption())

@@ -45,6 +45,12 @@ class NullSinkFile : public ReceiveDataHandler
     explicit NullSinkFile( std::optional< uint64_t> size = {});
 
     /**
+     * @copydoc ReceiveDataHandler::reset
+     *
+     **/
+    void reset() final;
+
+    /**
      * @copydoc ReceiveDataHandler::receivedTransferSize
      *
      * If size is given on constructing this file, handle it.

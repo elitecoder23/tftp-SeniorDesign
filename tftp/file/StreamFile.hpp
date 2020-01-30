@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Template Class Tftp::File::StreamFile.
+ * @brief Declaration of Class Tftp::File::StreamFile.
  **/
 
 #ifndef TFTP_FILE_STREAMFILE_HPP
@@ -15,8 +15,8 @@
 
 #include <tftp/file/TftpFile.hpp>
 
-#include <iostream>
-#include <type_traits>
+#include <fstream>
+#include <filesystem>
 
 namespace Tftp::File {
 
@@ -24,27 +24,18 @@ namespace Tftp::File {
  * @brief File implementation, which uses an std::iostream for file I/O
  *   handling.
  **/
-template< typename StreamT>
 class StreamFile: public TftpFile
 {
   public:
-    static_assert(
-      std::is_base_of< std::iostream, StreamT>::value,
-      "StreamT must be a std::iostream");
-
-    //! Stream Type
-    using StreamType = StreamT;
-
-    //! Constructor
-    StreamFile() = default;
-
     /**
      * @brief Creates the StreamFile with the given stream as in/ output.
      *
      * @param[in] stream
      *   The data stream - The stream is moved.
      **/
-    explicit StreamFile( StreamType &&stream);
+    explicit StreamFile(
+      Operation operation,
+      const std::filesystem::path &filename);
 
     /**
      * @brief Creates the StreamFile with the given stream as in/ output and
@@ -55,39 +46,16 @@ class StreamFile: public TftpFile
      * @param[in] size
      *   The size of the stream (e.g. file stream)
      **/
-    StreamFile( StreamType &&stream, size_t size);
+    StreamFile(
+      Operation operation,
+      const std::filesystem::path &fileName,
+      size_t size);
 
     /**
-     * @brief Assigns a new stream to the file.
+     * @copydoc TftpFile::reset
      *
-     * @param[in] stream
-     *   The data stream - The stream is moved.
-     *
-     * @return *this
      **/
-    StreamFile& operator=( StreamType &&stream);
-
-    /**
-     * @brief Returns the stream object.
-     *
-     * @return The stream object
-     **/
-    const StreamType& stream() const;
-
-    /**
-     * @brief Returns the stream object.
-     *
-     * @return The stream object
-     **/
-    StreamType& stream();
-
-    /**
-     * @brief updates the file size info.
-     *
-     * @param[in] size
-     *   The new size information
-     **/
-    void size( size_t size) noexcept;
+    void reset() final;
 
     /**
      * @copydoc TftpFile::finished()
@@ -117,14 +85,14 @@ class StreamFile: public TftpFile
     DataType sendData( size_t maxSize) noexcept final;
 
   private:
+    const Operation operationV;
+    const std::filesystem::path filenameV;
     //! Data Stream
-    StreamType streamV;
+    std::fstream streamV;
     //! File Size
     std::optional< size_t> sizeV;
 };
 
 }
-
-#include "StreamFile.ipp"
 
 #endif

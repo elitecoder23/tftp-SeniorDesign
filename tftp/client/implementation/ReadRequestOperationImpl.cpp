@@ -89,6 +89,9 @@ void ReadRequestOperationImpl::request()
 
   try
   {
+    // Reset data handler
+    dataHandler->reset();
+
     receiveDataSize = DefaultDataSize;
     lastReceivedBlockNumber = 0U;
 

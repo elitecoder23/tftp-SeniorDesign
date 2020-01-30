@@ -17,20 +17,33 @@
 namespace Tftp::File {
 
 MemoryFile::MemoryFile():
+  operationV{ Operation::Receive},
   dataPtr{ dataV.begin()}
 {
 }
 
 MemoryFile::MemoryFile( const DataType &data):
+  operationV{ Operation::Transmit},
   dataV{ data},
   dataPtr{ dataV.begin()}
 {
 }
 
 MemoryFile::MemoryFile( DataType &&data):
+  operationV{ Operation::Transmit},
   dataV{ std::move( data)},
   dataPtr{ dataV.begin()}
 {
+}
+
+void MemoryFile::reset()
+{
+  if ( Operation::Receive == operationV)
+  {
+    dataV.clear();
+  }
+
+  dataPtr = dataV.begin();
 }
 
 const MemoryFile::DataType& MemoryFile::data() const noexcept

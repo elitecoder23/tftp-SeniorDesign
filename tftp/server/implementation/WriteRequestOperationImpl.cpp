@@ -73,6 +73,9 @@ void WriteRequestOperationImpl::start()
 
   try
   {
+    // Reset data handler
+    dataHandler->reset();
+
     // option negotiation leads to empty option list
     if ( negotiatedOptions.empty())
     {

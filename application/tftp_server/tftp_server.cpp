@@ -348,8 +348,9 @@ void transmitFile(
   // initiate TFTP operation
   auto operation{
     server->readRequestOperation(
-      std::make_shared< Tftp::File::StreamFile< std::fstream>>(
-        std::move( fileStream),
+      std::make_shared< Tftp::File::StreamFile>(
+        Tftp::File::TftpFile::Operation::Transmit,
+        filename,
         std::filesystem::file_size( filename)),
       []( const Tftp::TransferStatus transferStatus)
       {
@@ -387,8 +388,9 @@ void receiveFile(
   // initiate TFTP operation
   auto operation{
     server->writeRequestOperation(
-      std::make_shared< Tftp::File::StreamFile< std::fstream>>(
-        std::move( fileStream),
+      std::make_shared< Tftp::File::StreamFile>(
+        Tftp::File::TftpFile::Operation::Receive,
+        filename,
         std::filesystem::file_size( filename)),
       []( const Tftp::TransferStatus transferStatus)
       {

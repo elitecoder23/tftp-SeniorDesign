@@ -50,6 +50,8 @@ class MemoryFile: public TftpFile
      **/
     explicit MemoryFile( DataType &&data);
 
+    void reset() final;
+
     /**
      * @brief Returns a reference to the locally stored data.
      *
@@ -88,9 +90,11 @@ class MemoryFile: public TftpFile
     DataType sendData( size_t maxSize) noexcept final;
 
   private:
-    //! data
+    //! Operation Type
+    const Operation operationV;
+    //! Data
     DataType dataV;
-    //! current read position
+    //! Current Read Position
     DataType::const_iterator dataPtr;
 };
 

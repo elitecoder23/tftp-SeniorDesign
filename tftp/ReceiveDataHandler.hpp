@@ -24,7 +24,7 @@ namespace Tftp {
  * Class interface, which must be implemented by an class, which wants to
  * receive data from a TFTP operation (TFTP client RRQ or TFTP server WRQ)
  **/
-class ReceiveDataHandler: public DataHandler
+class ReceiveDataHandler: public virtual DataHandler
 {
   public:
     /**
