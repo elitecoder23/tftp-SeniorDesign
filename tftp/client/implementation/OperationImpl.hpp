@@ -281,10 +281,8 @@ class OperationImpl :
     RawTftpPacket receivePacket;
     //! Remote address
     boost::asio::ip::udp::endpoint receiveEndpoint;
-    //! last transmitted packet
+    //! Last transmitted Packet ( used for retries)
     RawTftpPacket transmitPacket;
-    //! Packet Type of last transmitted packet
-    PacketType transmitPacketType;
     //! Re-transmission counter
     unsigned int transmitCounter;
     //! Error info

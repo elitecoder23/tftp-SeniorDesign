@@ -23,17 +23,17 @@ namespace Tftp::Packets {
 PacketType Packet::packetType( const RawTftpPacket &rawPacket) noexcept
 {
   // check minimum data size.
-  if (rawPacket.size() < HeaderSize)
+  if ( rawPacket.size() < HeaderSize)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Packet to small";
     return PacketType::Invalid;
   }
 
-  RawTftpPacket::const_iterator it = rawPacket.begin();
+  auto it{ rawPacket.begin() };
 
   // decode opcode value
-  uint16_t opcode;
+  uint16_t opcode{};
   Helper::getInt< uint16_t>( it, opcode);
 
   // check valid opcodes

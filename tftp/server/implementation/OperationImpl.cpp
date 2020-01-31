@@ -67,13 +67,12 @@ OperationImpl::OperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote)
 try:
-  completionHandler{ completionHandler},
+  completionHandler{ std::move( completionHandler)},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpTimeout},
   tftpRetries{ tftpRetries},
   socket{ ioContext},
   timer{ ioContext},
-  transmitPacketType{ PacketType::Invalid},
   transmitCounter{ 0}
 {
   try
@@ -109,13 +108,12 @@ OperationImpl::OperationImpl(
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local)
 try:
-  completionHandler{ completionHandler},
+  completionHandler{ std::move( completionHandler) },
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpTimeout},
   tftpRetries{ tftpRetries},
   socket{ ioContext},
   timer{ ioContext},
-  transmitPacketType{ PacketType::Invalid},
   transmitCounter{ 0}
 {
   try
@@ -129,7 +127,7 @@ try:
     // connect to client.
     socket.connect( remote);
   }
-  catch (boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
     if (socket.is_open())
     {
@@ -156,7 +154,7 @@ void OperationImpl::finished(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "Operation finished";
 
   errorInfoV = std::move( errorInfo);
@@ -178,10 +176,7 @@ void OperationImpl::send( const Packets::Packet &packet)
     << "TX: " << static_cast< std::string>( packet);
 
   // Reset the transmit-counter
-  transmitCounter = 1;
-
-  // Store packet type
-  transmitPacketType = packet.packetType();
+  transmitCounter = 1U;
 
   // Encode raw packet
   transmitPacket = static_cast< RawTftpPacket>( packet);
@@ -190,7 +185,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   {
     socket.send( boost::asio::buffer( transmitPacket));
   }
-  catch ( boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "TX ERROR: " << err.what();
@@ -252,7 +247,7 @@ void OperationImpl::readRequestPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( readRequestPacket);
 
   using namespace std::literals;
@@ -270,23 +265,23 @@ void OperationImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
-    << "RX ERROR: " << static_cast< std::string>( writeRequestPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    << "RX ERROR: " << static_cast< std::string>( writeRequestPacket );
 
   using namespace std::literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "WRQ not expected"sv};
+    "WRQ not expected"sv };
 
   send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket));
+  finished( TransferStatus::TransferError, std::move( errorPacket) );
 }
 
 void OperationImpl::errorPacket(
   const boost::asio::ip::udp::endpoint &,
-  const Packets::ErrorPacket &errorPacket)
+  const Packets::ErrorPacket &errorPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -294,7 +289,7 @@ void OperationImpl::errorPacket(
     << "RX ERROR: " << static_cast< std::string>( errorPacket);
 
   // Operation completed
-  switch ( transmitPacketType)
+  switch ( Packets::Packet::packetType( transmitPacket) )
   {
     case PacketType::OptionsAcknowledgement:
       switch (errorPacket.errorCode())

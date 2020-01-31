@@ -121,7 +121,7 @@ enum class TransferStatus
 //! Default TFTP Port.
 constexpr uint16_t DefaultTftpPort{ 69U};
 
-//! The default TFTP receive timeout in seconds (2 seconds)
+//! Default TFTP Receive Timeout in Seconds (2 seconds)
 constexpr uint8_t DefaultTftpReceiveTimeout{ 2};
 
 //! Number of retries performed, when no ACK has been received
@@ -136,14 +136,14 @@ constexpr uint16_t DefaultTftpRetries{ 1U};
  **/
 enum class PacketType : uint16_t
 {
-  ReadRequest            = 1, //!< Read request (RRQ)
-  WriteRequest           = 2, //!< Write request (WRQ)
-  Data                   = 3, //!< Data (DATA)
-  Acknowledgement        = 4, //!< Acknowledgement (ACK)
-  Error                  = 5, //!< Error (ERROR)
-  OptionsAcknowledgement = 6, //!< Options Acknowledgement (OACK)
+  ReadRequest            = 1U,   //!< Read request (RRQ)
+  WriteRequest           = 2U,   //!< Write request (WRQ)
+  Data                   = 3U,   //!< Data (DATA)
+  Acknowledgement        = 4U,   //!< Acknowledgement (ACK)
+  Error                  = 5U,   //!< Error (ERROR)
+  OptionsAcknowledgement = 6U,   //!< Options Acknowledgement (OACK)
 
-  Invalid                     //!< Invalid value
+  Invalid                = 0xFFU //!< Invalid value
 };
 
 //! Maximum size of data field in data package (without blksize option)

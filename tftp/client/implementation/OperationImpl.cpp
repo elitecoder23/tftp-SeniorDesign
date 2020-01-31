@@ -69,14 +69,13 @@ OperationImpl::OperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote)
 try :
-  completionHandler{ completionHandler},
+  completionHandler{ std::move( completionHandler) },
   remoteEndpoint{ remote},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpTimeout},
   tftpRetries{ tftpRetries},
   socket{ ioContext},
   timer{ ioContext},
-  transmitPacketType{ PacketType::Invalid},
   transmitCounter{ 0U}
 {
   BOOST_LOG_FUNCTION()
@@ -112,14 +111,13 @@ OperationImpl::OperationImpl(
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local)
 try :
-  completionHandler{ completionHandler},
+  completionHandler{ std::move( completionHandler)},
   remoteEndpoint{ remote},
   maxReceivePacketSizeV{ DefaultMaxPacketSize},
   receiveTimeoutV{ tftpTimeout},
   tftpRetries{ tftpRetries},
   socket{ ioContext},
   timer{ ioContext},
-  transmitPacketType{ PacketType::Invalid},
   transmitCounter{ 0U}
 {
   BOOST_LOG_FUNCTION()
@@ -159,11 +157,8 @@ void OperationImpl::sendFirst( const Packets::Packet &packet)
 
   try
   {
-    // Reset the transmit counter
+    // Reset transmit counter
     transmitCounter = 1U;
-
-    // Store packet type
-    transmitPacketType = packet.packetType();
 
     // Encode raw packet
     transmitPacket = static_cast< RawTftpPacket>( packet);
@@ -192,11 +187,8 @@ void OperationImpl::send( const Packets::Packet &packet)
 
   try
   {
-    // Reset the transmit counter
+    // Reset transmit counter
     transmitCounter = 1U;
-
-    // Store packet type
-    transmitPacketType = packet.packetType();
 
     // Encode raw packet
     transmitPacket = static_cast< RawTftpPacket>( packet);
@@ -367,23 +359,26 @@ void OperationImpl::errorPacket(
     << "RX ERROR: " << static_cast< std::string>( errorPacket);
 
   // Operation completed
-  switch ( transmitPacketType)
+  switch ( Packets::Packet::packetType( transmitPacket))
   {
     case PacketType::ReadRequest:
     case PacketType::WriteRequest:
-      switch (errorPacket.errorCode())
+      switch ( errorPacket.errorCode())
       {
         case ErrorCode::TftpOptionRefused:
+          // TFTP Option negotiation refused
           finished( TransferStatus::OptionNegotiationError, errorPacket);
           break;
 
         default:
+          // RRQ/ WRQ response with error
           finished( TransferStatus::RequestError, errorPacket);
           break;
       }
       break;
 
     default:
+      // error for other package
       finished( TransferStatus::TransferError, errorPacket);
       break;
   }
@@ -416,13 +411,13 @@ void OperationImpl::receiveFirstHandler(
   BOOST_LOG_FUNCTION()
 
   // operation has been aborted (maybe timeout)
-  if (boost::asio::error::operation_aborted == errorCode)
+  if ( boost::asio::error::operation_aborted == errorCode)
   {
     return;
   }
 
   // (internal) receive error occurred
-  if (errorCode)
+  if ( errorCode)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Error when receiving message: " << errorCode.message();
@@ -433,7 +428,7 @@ void OperationImpl::receiveFirstHandler(
 
   // check, if packet has been received from not expected source
   // send error packet and ignore it.
-  if (remoteEndpoint.address() != receiveEndpoint.address())
+  if ( remoteEndpoint.address() != receiveEndpoint.address())
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Received packed from wrong source: "
@@ -512,13 +507,13 @@ void OperationImpl::receiveHandler(
 
   // operation has been aborted (maybe timeout)
   // error is not handled here.
-  if (boost::asio::error::operation_aborted == errorCode)
+  if ( boost::asio::error::operation_aborted == errorCode)
   {
     return;
   }
 
   // (internal) receive error occurred
-  if (errorCode)
+  if ( errorCode)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Error when receiving message: " << errorCode.message();
@@ -538,13 +533,13 @@ void OperationImpl::timeoutFirstHandler(
   BOOST_LOG_FUNCTION()
 
   // operation aborted (packet received)
-  if (boost::asio::error::operation_aborted == errorCode)
+  if ( boost::asio::error::operation_aborted == errorCode)
   {
     return;
   }
 
   // internal (timer) error occurred
-  if (errorCode)
+  if ( errorCode)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "timer error: " + errorCode.message();

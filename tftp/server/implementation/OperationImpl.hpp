@@ -237,8 +237,6 @@ class OperationImpl:
     RawTftpPacket receivePacket;
     //! the transmitted packet is stored for retries
     RawTftpPacket transmitPacket;
-    //! Packet Type of last transmitted packet
-    PacketType transmitPacketType;
     //! counter to store how often the same packet has been transmitted (retries)
     unsigned int transmitCounter;
     //! Error info

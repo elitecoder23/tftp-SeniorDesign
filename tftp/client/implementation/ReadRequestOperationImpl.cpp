@@ -148,7 +148,7 @@ void ReadRequestOperationImpl::dataPacket(
   }
 
   // check unexpected block number
-  if (dataPacket.blockNumber() != lastReceivedBlockNumber.next())
+  if ( dataPacket.blockNumber() != lastReceivedBlockNumber.next())
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Wrong Data packet block number";
@@ -165,7 +165,7 @@ void ReadRequestOperationImpl::dataPacket(
   }
 
   // check for too much data
-  if (dataPacket.dataSize() > receiveDataSize)
+  if ( dataPacket.dataSize() > receiveDataSize)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Too much data received";
@@ -262,9 +262,9 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Received option list is empty";
 
-    Packets::ErrorPacket errorPacket(
+    Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Empty OACK not allowed");
+      "Empty OACK not allowed" };
 
     send( errorPacket);
 
