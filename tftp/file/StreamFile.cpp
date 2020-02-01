@@ -36,11 +36,13 @@ void StreamFile::reset()
 {
   if ( Operation::Receive == operationV)
   {
-    streamV.open( filenameV, std::ios::in | std::ios::trunc);
+    streamV.open( filenameV, std::ios::in | std::ios::binary);
   }
   else
   {
-    streamV.open( filenameV, std::ios::out);
+    streamV.open(
+      filenameV,
+      std::ios::out | std::ios::trunc | std::ios::binary);
   }
 }
 
@@ -59,7 +61,7 @@ bool StreamFile::receivedTransferSize( const uint64_t transferSize)
   }
 
   // Accept file if size is matching the maximum allowed one.
-  return (transferSize <= sizeV);
+  return ( transferSize <= sizeV);
 }
 
 void StreamFile::receivedData( const DataType &data) noexcept
