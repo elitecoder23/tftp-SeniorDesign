@@ -22,7 +22,7 @@ namespace Tftp::File {
 
 /**
  * @brief Base class for a TFTP file operation handler, which can be used to
- * transfer files
+ *   transfer files
  **/
 class TftpFile:
   public ReceiveDataHandler,

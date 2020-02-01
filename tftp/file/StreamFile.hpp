@@ -54,6 +54,7 @@ class StreamFile: public TftpFile
     /**
      * @copydoc TftpFile::reset
      *
+     * Reopens the file depending on @p operationV.
      **/
     void reset() final;
 
@@ -85,7 +86,9 @@ class StreamFile: public TftpFile
     DataType sendData( size_t maxSize) noexcept final;
 
   private:
+    //! Actual Operation
     const Operation operationV;
+    //! Filename
     const std::filesystem::path filenameV;
     //! Data Stream
     std::fstream streamV;
