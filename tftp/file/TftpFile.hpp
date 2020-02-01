@@ -29,9 +29,12 @@ class TftpFile:
   public TransmitDataHandler
 {
   public:
+    //! Type of Operation
     enum class Operation
     {
+      //! Receive Operation
       Receive,
+      //! Transmit Operation
       Transmit
     };
 };

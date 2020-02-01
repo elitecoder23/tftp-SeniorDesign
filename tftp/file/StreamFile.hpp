@@ -30,8 +30,10 @@ class StreamFile: public TftpFile
     /**
      * @brief Creates the StreamFile with the given stream as in/ output.
      *
-     * @param[in] stream
-     *   The data stream - The stream is moved.
+     * @param[in] operation
+     *   Receive or Transmit Operation.
+     * @param[in] filename
+     *   Filename to open/ create
      **/
     explicit StreamFile(
       Operation operation,
@@ -41,14 +43,18 @@ class StreamFile: public TftpFile
      * @brief Creates the StreamFile with the given stream as in/ output and
      *  the size information provided.
      *
-     * @param[in] stream
-     *   The data stream - The stream is moved.
+     * @param[in] operation
+     *   Receive or Transmit Operation.
+     * @param[in] filename
+     *   Filename to open/ create
      * @param[in] size
-     *   The size of the stream (e.g. file stream)
+     *   Size of the file.
+     *   In Receive Operation, the transfer is reject if size is to big.
+     *   On Transmit Operation this size is provided.
      **/
     StreamFile(
       Operation operation,
-      const std::filesystem::path &fileName,
+      const std::filesystem::path &filename,
       size_t size);
 
     /**
