@@ -13,6 +13,8 @@
 #ifndef TFTP_FILE_TFTPFILE_HPP
 #define TFTP_FILE_TFTPFILE_HPP
 
+#include <tftp/file/File.hpp>
+
 #include <tftp/ReceiveDataHandler.hpp>
 #include <tftp/TransmitDataHandler.hpp>
 

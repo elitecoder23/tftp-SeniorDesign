@@ -41,7 +41,6 @@ namespace Tftp::File {
 
 class TftpFile;
 class MemoryFile;
-template< typename StreamT>
 class StreamFile;
 class NullSinkFile;
 
@@ -49,7 +48,7 @@ class NullSinkFile;
 using MemoryFilePtr = std::shared_ptr< MemoryFile>;
 
 //! Stream File Pointer
-using FileStreamFilePtr = std::shared_ptr< StreamFile< std::fstream> >;
+using FileStreamFilePtr = std::shared_ptr< StreamFile >;
 
 }
 

@@ -13,6 +13,7 @@
 #ifndef TFTP_FILE_MEMORYFILE_HPP
 #define TFTP_FILE_MEMORYFILE_HPP
 
+#include <tftp/file/File.hpp>
 #include <tftp/file/TftpFile.hpp>
 
 namespace Tftp::File {

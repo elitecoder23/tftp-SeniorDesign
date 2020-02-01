@@ -13,6 +13,7 @@
 #ifndef TFTP_FILE_STREAMFILE_HPP
 #define TFTP_FILE_STREAMFILE_HPP
 
+#include <tftp/file/File.hpp>
 #include <tftp/file/TftpFile.hpp>
 
 #include <fstream>
