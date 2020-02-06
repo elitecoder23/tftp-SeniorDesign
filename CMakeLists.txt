@@ -16,7 +16,7 @@ set( PROJECT_VERSION_ADDITION "dev")
 
 find_package( Git)
 
-if (GIT_FOUND)
+if( GIT_FOUND)
   execute_process(
     COMMAND ${GIT_EXECUTABLE} rev-parse --verify --short HEAD
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
@@ -33,6 +33,7 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_program(
   CLANG_TIDY_EXE
   NAMES
+  clang-tidy-10
   clang-tidy-9
   clang-tidy-8
   clang-tidy)

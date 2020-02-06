@@ -165,10 +165,10 @@ void OperationImpl::sendFirst( const Packets::Packet &packet)
 
     // Send the packet to the remote server
     socket.send_to(
-      boost::asio::buffer( transmitPacket),
+      boost::asio::buffer( transmitPacket ),
       remoteEndpoint);
   }
-  catch (boost::system::system_error &err)
+  catch ( boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "TX Error: " << err.what();
@@ -196,7 +196,7 @@ void OperationImpl::send( const Packets::Packet &packet)
     // Send the packet to the remote server
     socket.send( boost::asio::buffer( transmitPacket));
   }
-  catch (boost::system::system_error &err)
+  catch ( boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "TX Error: " << err.what();
@@ -226,20 +226,20 @@ void OperationImpl::receiveFirst()
         boost::asio::placeholders::bytes_transferred));
 
     // Set receive timeout
-    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV});
+    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV} );
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutFirstHandler,
       shared_from_this(),
-      boost::asio::placeholders::error));
+      boost::asio::placeholders::error ));
   }
   catch (boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "RX Error: " << err.what();
 
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
   }
 }
 
@@ -315,8 +315,8 @@ void OperationImpl::readRequestPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
-    << "RX ERROR: " << static_cast< std::string>( readRequestPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    << "RX ERROR: " << static_cast< std::string>( readRequestPacket );
 
   // send error packet
   Packets::ErrorPacket errorPacket{
@@ -341,7 +341,7 @@ void OperationImpl::writeRequestPacket(
   // send error packet
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "WRQ not expected"};
+    "WRQ not expected" };
 
   send( errorPacket);
 
@@ -355,8 +355,8 @@ void OperationImpl::errorPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
-    << "RX ERROR: " << static_cast< std::string>( errorPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    << "RX ERROR: " << static_cast< std::string>( errorPacket );
 
   // Operation completed
   switch ( Packets::Packet::packetType( transmitPacket))
