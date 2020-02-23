@@ -51,6 +51,14 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   lastDataPacketTransmitted{ false},
   lastTransmittedBlockNumber{ 0U}
 {
+  BOOST_LOG_FUNCTION()
+
+  if ( !optionNegotiationHandler || !dataHandler || !completionHandler)
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Parameter Invalid")
+      << TransferPhaseInfo( TransferPhase::Initialisation));
+  }
 }
 
 WriteRequestOperationImpl::WriteRequestOperationImpl(
@@ -81,6 +89,14 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   lastDataPacketTransmitted{ false},
   lastTransmittedBlockNumber{ 0U}
 {
+  BOOST_LOG_FUNCTION()
+
+  if ( !optionNegotiationHandler || !dataHandler || !completionHandler)
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Parameter Invalid")
+      << TransferPhaseInfo( TransferPhase::Initialisation));
+  }
 }
 
 void WriteRequestOperationImpl::request()
@@ -251,7 +267,7 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
   const auto &remoteOptions{ optionsAcknowledgementPacket.options()};
 
   // check empty options
-  if (remoteOptions.empty())
+  if ( remoteOptions.empty())
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Received option list is empty";

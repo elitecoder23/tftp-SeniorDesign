@@ -51,6 +51,14 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   receiveDataSize{ DefaultDataSize},
   lastReceivedBlockNumber{ 0U}
 {
+  BOOST_LOG_FUNCTION()
+
+  if ( !optionNegotiationHandler || !dataHandler || !completionHandler)
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Parameter Invalid")
+      << TransferPhaseInfo( TransferPhase::Initialisation));
+  }
 }
 
 ReadRequestOperationImpl::ReadRequestOperationImpl(
@@ -81,6 +89,14 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   receiveDataSize{ DefaultDataSize},
   lastReceivedBlockNumber{ 0U}
 {
+  BOOST_LOG_FUNCTION()
+
+  if ( !optionNegotiationHandler || !dataHandler || !completionHandler)
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Parameter Invalid")
+      << TransferPhaseInfo( TransferPhase::Initialisation));
+  }
 }
 
 void ReadRequestOperationImpl::request()
