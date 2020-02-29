@@ -71,6 +71,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
 
 void ReadRequestOperationImpl::start()
 {
+  BOOST_LOG_FUNCTION()
+
   try
   {
     // Reset data handler
@@ -141,6 +143,11 @@ void ReadRequestOperationImpl::start()
 
     // start receive loop
     receive();
+  }
+  catch ( TftpException &e)
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+      << "Error during Operation: " << e.what();
   }
   catch ( ...)
   {

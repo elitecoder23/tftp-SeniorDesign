@@ -12,6 +12,8 @@
 
 #include "StreamFile.hpp"
 
+#include <tftp/TftpException.hpp>
+
 namespace Tftp::File {
 
 StreamFile::StreamFile(
@@ -34,21 +36,34 @@ StreamFile::StreamFile(
 
 void StreamFile::reset()
 {
-  if ( Operation::Receive == operationV)
+  switch ( operationV)
   {
-    streamV.open( filenameV, std::ios::in | std::ios::binary);
+    case TftpFile::Operation::Receive:
+      streamV.open( filenameV, std::ios::out | std::ios::trunc | std::ios::binary);
+      break;
+
+    case TftpFile::Operation::Transmit:
+      streamV.open(
+        filenameV,
+        std::ios::in | std::ios::binary);
+      break;
+
+    default:
+      BOOST_THROW_EXCEPTION( TftpException()
+        << Helper::AdditionalInfo( "Invalid File Mode"));
   }
-  else
+
+  if (!streamV)
   {
-    streamV.open(
-      filenameV,
-      std::ios::out | std::ios::trunc | std::ios::binary);
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo( "Error opening file"));
   }
 }
 
 void StreamFile::finished() noexcept
 {
   streamV.flush();
+  streamV.close();
 }
 
 bool StreamFile::receivedTransferSize( const uint64_t transferSize)

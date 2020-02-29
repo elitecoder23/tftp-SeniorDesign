@@ -129,6 +129,11 @@ void WriteRequestOperationImpl::start()
     // start receive loop
     receive();
   }
+  catch ( TftpException &e)
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+      << "Error during Operation: " << e.what();
+  }
   catch ( ...)
   {
     finished( TransferStatus::CommunicationError);
