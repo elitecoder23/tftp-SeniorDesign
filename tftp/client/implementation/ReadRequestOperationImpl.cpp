@@ -329,7 +329,9 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   }
 
   // check transfer size option
-  if ( auto transferSizeOption{ negotiatedOptions->transferSizeOption()}; transferSizeOption)
+  if (
+    auto transferSizeOption{ negotiatedOptions->transferSizeOption()};
+    transferSizeOption)
   {
     if ( !dataHandler->receivedTransferSize( *transferSizeOption))
     {
