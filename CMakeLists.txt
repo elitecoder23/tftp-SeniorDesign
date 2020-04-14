@@ -35,8 +35,7 @@ find_program(
   NAMES
   clang-tidy-10
   clang-tidy-9
-  clang-tidy-8
-  clang-tidy)
+  clang-tidy )
 
 if( CLANG_TIDY_EXE)
   set( CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE})
