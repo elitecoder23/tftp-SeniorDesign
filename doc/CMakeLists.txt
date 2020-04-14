@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.15)
+cmake_minimum_required( VERSION 3.16 )
 
 find_package( Doxygen)
 
@@ -58,7 +58,7 @@ if (DOXYGEN_FOUND)
 #    GENERATE
 #    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/CMakeGraphVizOptions.cmake
 #    CONTENT "\
-#cmake_minimum_required( VERSION 3.15)
+#cmake_minimum_required( VERSION 3.16 )
 #set( GRAPHVIZ_EXTERNAL_LIBS FALSE)
 #set( GRAPHVIZ_GENERATE_PER_TARGET FALSE)
 #set( GRAPHVIZ_GENERATE_DEPENDERS FALSE)")
