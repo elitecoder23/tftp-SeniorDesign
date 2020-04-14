@@ -21,7 +21,7 @@
 #include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
 namespace Tftp::Server {
 

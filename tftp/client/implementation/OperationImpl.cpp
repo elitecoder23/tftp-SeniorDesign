@@ -20,7 +20,7 @@
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
 namespace Tftp::Client {
 

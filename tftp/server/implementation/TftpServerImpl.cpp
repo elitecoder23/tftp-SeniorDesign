@@ -24,7 +24,7 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
 
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 
 #include <vector>
 #include <cstdint>
