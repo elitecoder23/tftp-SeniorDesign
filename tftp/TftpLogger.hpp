@@ -25,7 +25,7 @@ namespace Tftp {
 BOOST_LOG_INLINE_GLOBAL_LOGGER_CTOR_ARGS(
   TftpLogger,
   Helper::ChannelSeverityLoggerMt,
-  (boost::log::keywords::channel = "tftp"))
+  ( boost::log::keywords::channel = "Tftp" ))
 
 }
 
