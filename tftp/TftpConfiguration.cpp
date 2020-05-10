@@ -63,7 +63,7 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
 
 boost::program_options::options_description TftpConfiguration::options()
 {
-  boost::program_options::options_description options{ "TFTP options"};
+  boost::program_options::options_description options{ "TFTP Options"};
 
   options.add_options()
   (
@@ -91,21 +91,23 @@ boost::program_options::options_description TftpConfiguration::options()
   return options;
 }
 
-Options::OptionList TftpConfiguration::clientOptions(
-  const Options::OptionList &baseOptions) const
+Options::OptionList TftpConfiguration::clientOptions() const
 {
-  Options::OptionList options{ baseOptions};
+  Options::OptionList options{};
 
+  // block size option configuration requested
   if ( blockSizeOption)
   {
     options.blocksizeClient( blockSizeOption.get());
   }
 
+  // timeout option configuration requested
   if ( timeoutOption)
   {
     options.timeoutOptionClient( timeoutOption.get());
   }
 
+  // transfer size option configuration requested
   if ( handleTransferSizeOption)
   {
     options.transferSizeOption( 0U);
@@ -114,11 +116,11 @@ Options::OptionList TftpConfiguration::clientOptions(
   return options;
 }
 
-Options::OptionList TftpConfiguration::serverOptions(
-  const Options::OptionList &baseOptions) const
+Options::OptionList TftpConfiguration::serverOptions() const
 {
-  Options::OptionList options{ baseOptions};
+  Options::OptionList options{};
 
+  // block size option configuration requested
   if ( blockSizeOption)
   {
     options.blocksizeServer(
@@ -126,6 +128,7 @@ Options::OptionList TftpConfiguration::serverOptions(
       blockSizeOption.get());
   }
 
+  // timeout option configuration requested
   if ( timeoutOption)
   {
     options.timeoutOptionServer(
@@ -133,6 +136,7 @@ Options::OptionList TftpConfiguration::serverOptions(
       timeoutOption.get());
   }
 
+  // transfer size option configuration requested
   if ( handleTransferSizeOption)
   {
     options.transferSizeOption( 0U);

@@ -71,14 +71,10 @@ class TftpConfiguration
      * The transfer size option must is handled in a special way.
      * It is set to '0' to be checked by RRQ/ WRQ operations.
      *
-     * @param[in] baseOptions
-     *   Base options, which shall be used for creation of this option list.
-     *
      * @return Option list (for TFTP clients) based on the actual
      *   configuration and the supplied base options.
      **/
-    [[nodiscard]] Options::OptionList clientOptions(
-      const Options::OptionList &baseOptions = {}) const;
+    [[nodiscard]] Options::OptionList clientOptions() const;
 
     /**
      * @brief Creates an option list (for TFTP servers) based on the actual
@@ -98,8 +94,7 @@ class TftpConfiguration
      * @return Option list (for TFTP servers) based on the actual
      *   configuration and the supplied base options.
      **/
-    [[nodiscard]] Options::OptionList serverOptions(
-      const Options::OptionList &baseOptions = {}) const;
+    [[nodiscard]] Options::OptionList serverOptions() const;
 
     //! TFTP timeout - The standard when no timeout option is negotiated in seconds.
     uint8_t tftpTimeout;
