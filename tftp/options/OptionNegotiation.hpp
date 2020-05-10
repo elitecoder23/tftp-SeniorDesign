@@ -62,7 +62,7 @@ class OptionNegotiation
      * @retval std::string{}
      *   If Negotiation fails.
      **/
-    [[nodiscard]] std::string negotiate( std::string_view optionValue) const;
+    [[nodiscard]] std::string negotiate( std::string_view optionValue ) const;
 
     /**
      * @brief Negotiates the given option value.
@@ -74,7 +74,8 @@ class OptionNegotiation
      * @retval std::string{}
      *   If Negotiation fails.
      **/
-    [[nodiscard]] virtual std::string negotiateInt( uint64_t optionValue) const = 0;
+    [[nodiscard]] virtual std::string negotiateInt(
+      uint64_t optionValue ) const = 0;
 };
 
 /**
