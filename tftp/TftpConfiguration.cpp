@@ -66,7 +66,8 @@ boost::program_options::options_description TftpConfiguration::options()
   boost::program_options::options_description options{ "TFTP options"};
 
   options.add_options()
-  ("server-port",
+  (
+    "server-port",
     boost::program_options::value( &tftpServerPort)->default_value(
       tftpServerPort)->value_name( "port"),
     "UDP port, where the server is listen."
