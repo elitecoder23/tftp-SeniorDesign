@@ -6,6 +6,6 @@
 
 cmake_minimum_required( VERSION 3.16 )
 
-add_subdirectory( tftp_unit_test)
-add_subdirectory( tftp_client)
-add_subdirectory( tftp_server)
+add_subdirectory( tftp_unit_test )
+add_subdirectory( tftp_client )
+add_subdirectory( tftp_server )

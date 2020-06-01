@@ -6,15 +6,15 @@
 
 cmake_minimum_required( VERSION 3.16 )
 
-find_package( Boost REQUIRED COMPONENTS program_options)
+find_package( Boost REQUIRED COMPONENTS program_options )
 
 # prepare Version.cpp
 configure_file(
   Version.cpp.in
-  Version.cpp)
+  Version.cpp )
 
 
-add_library( tftp)
+add_library( tftp )
 
 target_sources(
   tftp
@@ -37,11 +37,11 @@ target_sources(
     TransferStatusDescription.cpp
     TransmitDataHandler.hpp
     Version.hpp
-    ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp)
+    ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp )
 
 target_include_directories(
   tftp
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>)
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..> )
 
 target_compile_options(
   tftp
@@ -60,20 +60,20 @@ target_compile_definitions(
 
   PRIVATE
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING>)
+    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
-target_link_libraries( tftp helper Boost::program_options)
+target_link_libraries( tftp helper Boost::program_options )
 
-target_compile_features( tftp PUBLIC cxx_std_17)
+target_compile_features( tftp PUBLIC cxx_std_17 )
 
 
-add_library( tftp_test OBJECT)
+add_library( tftp_test OBJECT )
 
 target_sources(
   tftp_test
 
   PRIVATE
-    VersionTest.cpp)
+    VersionTest.cpp )
 
 target_compile_options(
   tftp_test
@@ -87,25 +87,25 @@ target_compile_options(
 
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra>
-    $<$<CXX_COMPILER_ID:Clang>:-Werror>)
+    $<$<CXX_COMPILER_ID:Clang>:-Werror> )
 
 target_compile_definitions(
   tftp_test
 
   PRIVATE
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING>)
+    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
-target_compile_features( tftp_test PUBLIC cxx_std_17)
+target_compile_features( tftp_test PUBLIC cxx_std_17 )
 
-target_link_libraries( tftp_test PUBLIC tftp)
+target_link_libraries( tftp_test PUBLIC tftp )
 
 
-add_subdirectory( file)
-add_subdirectory( packets)
-add_subdirectory( options)
-add_subdirectory( client)
-add_subdirectory( server)
+add_subdirectory( file )
+add_subdirectory( packets )
+add_subdirectory( options )
+add_subdirectory( client )
+add_subdirectory( server )
 
 # INSTALL
 include( GNUInstallDirs)
@@ -114,9 +114,9 @@ install(
   TARGETS tftp
   COMPONENT runtime
   EXPORT tftp-config
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} )
 
 install(
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
@@ -125,9 +125,9 @@ install(
   FILES_MATCHING
   PATTERN "*.hpp"
   PATTERN "*Test.*" EXCLUDE
-  PATTERN "implementation" EXCLUDE)
+  PATTERN "implementation" EXCLUDE )
 
 install(
   EXPORT tftp-config
   COMPONENT development
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake )

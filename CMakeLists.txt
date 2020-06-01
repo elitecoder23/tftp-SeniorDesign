@@ -9,12 +9,12 @@ cmake_minimum_required( VERSION 3.16 )
 project(
   tftp
   VERSION 1.0.0.0
-  DESCRIPTION "TFTP C++ Library"
+  DESCRIPTION "TFTP Protocol Library and Applications"
   HOMEPAGE_URL "https://git.thomas-vogt.de/Thomas-Vogt/tftp" )
 
 set( PROJECT_VERSION_ADDITION "dev" )
 
-find_package( Git)
+find_package( Git )
 
 if( GIT_FOUND )
   execute_process(
@@ -24,10 +24,10 @@ if( GIT_FOUND )
     OUTPUT_STRIP_TRAILING_WHITESPACE )
 
   set( PROJECT_VERSION_ADDITION "${PROJECT_VERSION_ADDITION}-${GIT_HASH}" )
-endif()
+endif( GIT_FOUND )
 
 
-set( CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
 # find clang-tidy and add options to execute
 find_program(
@@ -39,7 +39,7 @@ find_program(
 
 if( CLANG_TIDY_EXE )
   set( CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} )
-endif()
+endif( CLANG_TIDY_EXE )
 
 # enable testing
 enable_testing()
@@ -64,19 +64,19 @@ if( NOT cmake_common_POPULATED )
   FetchContent_Populate( cmake_common )
   # Add own CMake scripts to module path
   list( APPEND CMAKE_MODULE_PATH "${cmake_common_SOURCE_DIR}" )
-endif()
+endif( NOT cmake_common_POPULATED )
 
 FetchContent_GetProperties( helper )
 if( NOT helper_POPULATED )
   FetchContent_Populate( helper )
   add_subdirectory( ${helper_SOURCE_DIR} ${helper_BINARY_DIR} )
-endif()
+endif( NOT helper_POPULATED )
 
 
 add_subdirectory( tftp )
 add_subdirectory( application )
 
-add_subdirectory( doc )
+add_subdirectory( tftp_api_doc )
 
 
 set( CPACK_GENERATOR ZIP )

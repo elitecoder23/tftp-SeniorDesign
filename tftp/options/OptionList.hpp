@@ -199,7 +199,7 @@ class OptionList
      **/
     void blocksizeClient(
       uint16_t requestedBlocksize,
-      uint16_t minBlocksize = BlocksizeOptionMin);
+      uint16_t minBlocksize = BlocksizeOptionMin );
 
     /**
      * @brief Adds the Blocksize option to the option list.
@@ -217,7 +217,7 @@ class OptionList
      **/
     void blocksizeServer(
       uint16_t minBlocksize = BlocksizeOptionMin,
-      uint16_t maxBlocksize = BlocksizeOptionMax);
+      uint16_t maxBlocksize = BlocksizeOptionMax );
 
     /**
      * @brief Returns the set blocksize option value.

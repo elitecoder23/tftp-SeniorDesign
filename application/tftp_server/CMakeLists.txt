@@ -10,11 +10,11 @@ find_package(
   Boost
   REQUIRED
   COMPONENTS
-    thread)
+    thread )
 
-add_executable( tftp_server)
+add_executable( tftp_server )
 
-target_sources( tftp_server PRIVATE tftp_server.cpp)
+target_sources( tftp_server PRIVATE tftp_server.cpp )
 
 target_link_libraries(
   tftp_server
@@ -22,23 +22,19 @@ target_link_libraries(
   PRIVATE
     tftp
     helper
-
-    $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>
-    $<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,7.0>>:stdc++fs>
-
-    Boost::thread)
+    Boost::thread )
 
 target_compile_definitions(
   tftp_server
 
   PRIVATE
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING>)
+    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
 # INSTALL
-include( GNUInstallDirs)
+include( GNUInstallDirs )
 
 install(
   TARGETS tftp_server
   COMPONENT runtime
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )

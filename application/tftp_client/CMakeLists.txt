@@ -13,11 +13,11 @@ find_package(
     program_options
     filesystem
     thread
-    chrono)
+    chrono )
 
-add_executable( tftp_client)
+add_executable( tftp_client )
 
-target_sources( tftp_client PRIVATE tftp_client.cpp)
+target_sources( tftp_client PRIVATE tftp_client.cpp )
 
 target_link_libraries(
   tftp_client
@@ -30,7 +30,7 @@ target_link_libraries(
     Boost::program_options
     Boost::filesystem
     Boost::thread
-    Boost::chrono)
+    Boost::chrono )
 
 target_compile_definitions(
   tftp_client
@@ -40,9 +40,9 @@ target_compile_definitions(
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING>)
 
 # INSTALL
-include( GNUInstallDirs)
+include( GNUInstallDirs )
 
 install(
   TARGETS tftp_client
   COMPONENT runtime
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
