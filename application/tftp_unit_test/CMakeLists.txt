@@ -28,3 +28,11 @@ target_link_libraries(
     Boost::boost)
 
 add_test( NAME tftp_unit_test COMMAND tftp_unit_test )
+
+# INSTALL
+include( GNUInstallDirs )
+
+install(
+  TARGETS tftp_unit_test
+  COMPONENT runtime
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
