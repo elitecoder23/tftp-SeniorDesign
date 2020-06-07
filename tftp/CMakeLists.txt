@@ -53,7 +53,7 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
 
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
-    $<$<CXX_COMPILER_ID:Clang>:-Wextra>)
+    $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
 
 target_compile_definitions(
   tftp
@@ -62,7 +62,14 @@ target_compile_definitions(
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
-target_link_libraries( tftp helper Boost::program_options )
+target_link_libraries(
+  tftp
+  PUBLIC
+    helper
+    Boost::program_options
+  PRIVATE
+    # Windows Socket must be explicitly linked in MinGW
+    $<$<PLATFORM_ID:Windows>:ws2_32> )
 
 target_compile_features( tftp PUBLIC cxx_std_17 )
 
