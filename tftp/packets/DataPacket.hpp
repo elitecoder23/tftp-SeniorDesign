@@ -23,7 +23,7 @@
 namespace Tftp::Packets {
 
 /**
- * @brief TFTP Data packet (DATA).
+ * @brief TFTP Data %Packet (DATA).
  *
  * | DATA | Block # | Data 1 |
  * |:----:|:-------:|:------:|

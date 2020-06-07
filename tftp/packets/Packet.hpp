@@ -20,7 +20,7 @@
 namespace Tftp::Packets {
 
 /**
- * @brief Base-class of all TFTP packets.
+ * @brief TFTP %Packet.
  **/
 class Packet
 {

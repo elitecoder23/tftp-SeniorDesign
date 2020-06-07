@@ -22,7 +22,7 @@
 namespace Tftp::Packets {
 
 /**
- * @brief TFTP Read Request packet (RRQ).
+ * @brief TFTP Read Request %Packet (RRQ).
  **/
 class ReadRequestPacket: public ReadWriteRequestPacket
 {

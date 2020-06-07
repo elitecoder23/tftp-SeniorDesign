@@ -33,7 +33,7 @@ namespace Tftp::Server {
 class TftpServerInternal;
 
 /**
- * @brief Base class for TFTP server operations.
+ * @brief TFTP %Server %Operation.
  *
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).

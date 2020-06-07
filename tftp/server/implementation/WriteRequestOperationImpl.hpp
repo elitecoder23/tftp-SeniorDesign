@@ -27,7 +27,7 @@
 namespace Tftp::Server {
 
 /**
- * @brief TFTP Server Read operation (TFTP WRQ).
+ * @brief TFTP %Server Write Request %Operation (TFTP WRQ).
  *
  * In this operation a client has requested to write a file, which is
  * transmitted form the client to the server.

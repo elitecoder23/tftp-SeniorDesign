@@ -19,7 +19,7 @@
 namespace Tftp::Packets {
 
 /**
- * @brief Represents a Block Number in TFTP Data and Acknowledgement Packets.
+ * @brief Block Number in TFTP Data and Acknowledgement %Packet.
  *
  * Block numbers are used within the TFTP Data and TFTP Acknowledgement
  * packet. A block number is an 16 Bit integer, which has a special meaning

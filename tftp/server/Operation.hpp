@@ -22,7 +22,7 @@
 namespace Tftp::Server {
 
 /**
- * @brief TFTP Server Operations Base Class.
+ * @brief TFTP %Server %Operation.
  *
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).

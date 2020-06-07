@@ -23,7 +23,7 @@ namespace Tftp::Packets {
 
 
 /**
- * @brief TFTP Option Acknowledgement packet (ACK).
+ * @brief TFTP Option Acknowledgement %Packet (ACK).
  *
  * This package is only sent from the TFTP server in response to an RRQ or
  * WRQ packet from the client, a TFTP option is transmitted within the request

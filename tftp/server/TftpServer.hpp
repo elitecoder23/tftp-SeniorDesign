@@ -24,7 +24,7 @@
 namespace Tftp::Server {
 
 /**
- * @brief Public Interface of TFTP Servers.
+ * @brief TFTP %Server.
  *
  * Waits on the specified port for a valid TFTP request and calls the
  * approbate call-back, which has to handle the request.

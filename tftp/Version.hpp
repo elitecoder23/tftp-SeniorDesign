@@ -21,7 +21,7 @@
 
 namespace Tftp {
 
-//! TFTP C++ Library Version Information
+//! TFTP C++ Library %Version Information.
 class Version
 {
   public:

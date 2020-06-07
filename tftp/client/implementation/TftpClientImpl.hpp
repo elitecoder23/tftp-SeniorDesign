@@ -23,7 +23,7 @@
 namespace Tftp::Client {
 
 /**
- * @brief Implementation of TFTP %Client Factory Interface.
+ * @brief TFTP %Client.
  *
  * This factory class creates on request the concrete client operations.
  **/

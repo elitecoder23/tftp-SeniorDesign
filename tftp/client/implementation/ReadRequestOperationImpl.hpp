@@ -20,7 +20,7 @@
 namespace Tftp::Client {
 
 /**
- * @brief Class which handles a TFTP Read Request on client side.
+ * @brief TFTP %Client Read Request %Operation (TFTP RRQ).
  *
  * After executed, the class sends the TFTP RRQ packet to the destination and
  * waits for answer.

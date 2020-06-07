@@ -27,7 +27,7 @@ if( DOXYGEN_FOUND )
     DOXYGEN_EXCLUDE_PATTERNS
 
     *Test.*
-    implementation/* )
+    */implementation/* )
 
   set(
     DOXYGEN_STRIP_FROM_PATH

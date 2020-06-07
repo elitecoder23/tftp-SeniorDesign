@@ -21,7 +21,7 @@
 namespace Tftp::File {
 
 /**
- * @brief NULL Sink File.
+ * @brief NULL Sink %File.
  *
  * This class provides an receive data handler, which drops every received
  * data package.

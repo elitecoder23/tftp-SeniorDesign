@@ -24,7 +24,7 @@
 namespace Tftp::Client {
 
 /**
- * @brief TFTP Client.
+ * @brief TFTP %Client.
  *
  * This class acts as factory for creating client operations, like read
  * requests or write requests.

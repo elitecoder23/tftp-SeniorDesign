@@ -20,7 +20,7 @@
 namespace Tftp::Client {
 
 /**
- * @brief Class which handles a TFTP Write Request on client side.
+ * @brief TFTP %Client Write Request %Operation (TFTP WRQ).
  *
  * After executed, the class sends the TFTP WRQ packet to the destination
  * and waits for answer.

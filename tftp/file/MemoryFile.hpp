@@ -19,7 +19,9 @@
 namespace Tftp::File {
 
 /**
- * @brief File implementation, which holds all data in memory.
+ * @brief Memory %File.
+ *
+ * File implementation, which holds all data in memory.
  **/
 class MemoryFile: public TftpFile
 {

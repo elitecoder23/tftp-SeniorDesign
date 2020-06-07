@@ -24,7 +24,7 @@
 namespace Tftp::Packets {
 
 /**
- * @brief Base class for TFTP Read-/ Write- Request packet.
+ * @brief TFTP Read-/ Write- Request %Packet.
  *
  * | RRQ/WRQ | FName |  0  | Mode |  0  | Opt 1 |  0  | OptV 1 |  0  | ... | Opt N |  0  | OptV N |  0  |
  * |:-------:|:-----:|:---:|:----:|:---:|:-----:|:---:|:------:|:---:|:---:|:-----:|:---:|:------:|:---:|

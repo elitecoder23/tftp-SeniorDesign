@@ -22,7 +22,7 @@
 namespace Tftp::Packets {
 
 /**
- * @brief TFTP Error packet (ERR).
+ * @brief TFTP Error %Packet (ERR).
  *
  * A TFTP error code consists of an error code and a user readable error
  * message.

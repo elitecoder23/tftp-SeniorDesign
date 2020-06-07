@@ -21,8 +21,10 @@
 namespace Tftp::File {
 
 /**
- * @brief Base class for a TFTP file operation handler, which can be used to
- *   transfer files
+ * @brief TFTP %File.
+ *
+ * Base class for a TFTP file operation handler, which can be used to transfer
+ * files
  **/
 class TftpFile:
   public ReceiveDataHandler,

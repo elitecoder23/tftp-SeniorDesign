@@ -35,7 +35,7 @@ namespace Tftp::Client {
 class TftpClientInternal;
 
 /**
- * @brief base class for TFTP client operations.
+ * @brief TFTP %Client %Operation.
  *
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).

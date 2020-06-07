@@ -20,7 +20,7 @@
 namespace Tftp::Packets {
 
 /**
- * @brief TFTP Acknowledgement package (ACK).
+ * @brief TFTP Acknowledgement %Package (ACK).
  *
  * The TFTP Acknowledgement packet acknowledges a received WRQ packet without
  * options negotiation or an data packet.

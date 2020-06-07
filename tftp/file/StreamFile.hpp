@@ -22,7 +22,9 @@
 namespace Tftp::File {
 
 /**
- * @brief File implementation, which uses an std::fstream for file I/O handling.
+ * @brief Stream %File.
+ *
+ * File implementation, which uses an std::fstream for file I/O handling.
  **/
 class StreamFile: public TftpFile
 {

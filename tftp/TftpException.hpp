@@ -26,7 +26,7 @@
 namespace Tftp {
 
 /**
- * @brief Base class for TFTP exceptions
+ * @brief TFTP Exception.
  **/
 class TftpException: public virtual Helper::Exception
 {
@@ -42,7 +42,7 @@ class TftpException: public virtual Helper::Exception
     }
 };
 
-//! Exception occurred during TFTP communication.
+//! TFTP Communication Exception.
 class CommunicationException: public virtual TftpException
 {
   public:
@@ -53,7 +53,7 @@ class CommunicationException: public virtual TftpException
     }
 };
 
-//! Exception occurred during TFTP option negotiation.
+//! TFTP Option Negotiation Exception.
 class OptionNegotiationException: public virtual TftpException
 {
   public:
@@ -64,7 +64,7 @@ class OptionNegotiationException: public virtual TftpException
     }
 };
 
-//! Exception thrown, when a TFTP ERR packet has been received
+//! TFTP Error Packet Received Exception.
 class ErrorReceivedException: public virtual TftpException
 {
   public:
@@ -79,11 +79,11 @@ class ErrorReceivedException: public virtual TftpException
 using TransferPhaseInfo =
   boost::error_info< struct TransferPhaseInfoTag, TransferPhase>;
 
-//! TFTP Packet Type Information
+//! TFTP Packet Type Information.
 using PacketTypeInfo =
   boost::error_info< struct PacketTypeInfoTag, PacketType>;
 
-//! TFTP Error Packet Information
+//! TFTP Error Packet Information.
 using ErrorPacketInfo =
   boost::error_info< struct ErrorPacketInfoTag, Packets::ErrorPacket>;
 
