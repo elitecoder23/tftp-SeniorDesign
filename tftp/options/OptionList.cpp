@@ -260,15 +260,15 @@ void OptionList::blocksizeServer(
 
 std::optional< uint16_t> OptionList::blocksize() const
 {
-  auto optionIt{ optionsV.find( optionName( KnownOptions::BlockSize))};
+  auto optionIt{ optionsV.find( optionName( KnownOptions::BlockSize ))};
 
   // option not set
-  if (optionIt == optionsV.end())
+  if ( optionIt == optionsV.end() )
   {
     return {};
   }
 
-  return Helper::safeCast< uint16_t>( OptionNegotiation::toInt( optionIt->second));
+  return Helper::safeCast< uint16_t >( OptionNegotiation::toInt( optionIt->second ));
 }
 
 void OptionList::timeoutOptionClient( const uint8_t timeout)
