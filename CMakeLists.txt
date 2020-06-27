@@ -45,19 +45,17 @@ endif( CLANG_TIDY_EXE )
 enable_testing()
 
 
+# get dependencies
 include( FetchContent )
 
-# get dependencies
 FetchContent_Declare(
   cmake_common
   GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/cmake_common.git
   GIT_TAG        master )
 
-FetchContent_Declare(
-  helper
-  GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/helper.git
-  GIT_TAG        master )
-
+if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
+  set( FETCHCONTENT_SOURCE_DIR_CMAKE_COMMON ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
+endif( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
 
 FetchContent_GetProperties( cmake_common )
 if( NOT cmake_common_POPULATED )
@@ -66,11 +64,17 @@ if( NOT cmake_common_POPULATED )
   list( APPEND CMAKE_MODULE_PATH "${cmake_common_SOURCE_DIR}" )
 endif( NOT cmake_common_POPULATED )
 
-FetchContent_GetProperties( helper )
-if( NOT helper_POPULATED )
-  FetchContent_Populate( helper )
-  add_subdirectory( ${helper_SOURCE_DIR} ${helper_BINARY_DIR} )
-endif( NOT helper_POPULATED )
+
+FetchContent_Declare(
+  helper
+  GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/helper.git
+  GIT_TAG        master )
+
+if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/helper )
+  set( FETCHCONTENT_SOURCE_DIR_HELPER ${CMAKE_CURRENT_SOURCE_DIR}/helper )
+endif( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/helper )
+
+FetchContent_MakeAvailable( helper )
 
 
 add_subdirectory( tftp )
