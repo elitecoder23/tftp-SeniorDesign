@@ -65,28 +65,33 @@ int main( int argc, char * argv[])
     "TFTP Client Options"};
 
   optionsDescription.add_options()
-    ("help",
-     "print this help screen")
-
-    ("request-type",
-     boost::program_options::value( &requestType)->required(),
-     "the desired operation (\"Read\"|\"Write\")"
+    (
+      "help",
+      "print this help screen"
     )
-    ("local-file",
-     boost::program_options::value( &localFile),
-     "filename of local file"
+    (
+      "request-type",
+      boost::program_options::value( &requestType)->required(),
+      "the desired operation (\"Read\"|\"Write\")"
     )
-    ("remote-file",
-     boost::program_options::value( &remoteFile)->required(),
-     "filename of remote file"
+    (
+      "local-file",
+      boost::program_options::value( &localFile),
+      "filename of local file"
     )
-    ("address",
-     boost::program_options::value( &address)->required(),
-     "remote address"
+    (
+      "remote-file",
+      boost::program_options::value( &remoteFile)->required(),
+      "filename of remote file"
+    )
+    (
+      "address",
+      boost::program_options::value( &address)->required(),
+      "remote address"
     );
 
   // Add common TFTP options
-  optionsDescription.add( configuration.options());
+  optionsDescription.add( configuration.options() );
 
   try
   {
@@ -100,19 +105,19 @@ int main( int argc, char * argv[])
         optionsDescription),
       options);
 
-    if ( options.count( "help") != 0)
+    if ( options.count( "help" ) != 0)
     {
       std::cout << optionsDescription << "\n";
       return EXIT_FAILURE;
     }
 
-    boost::program_options::notify( options);
+    boost::program_options::notify( options );
 
     // Assemble TFTP configuration
 
     auto tftpClient{ Tftp::Client::TftpClient::instance(
       configuration.tftpTimeout,
-      configuration.tftpRetries)};
+      configuration.tftpRetries )};
 
     Tftp::Client::OperationPtr tftpOperation{};
 

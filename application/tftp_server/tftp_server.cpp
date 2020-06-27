@@ -50,9 +50,6 @@
  **/
 int main( int argc, char * argv[]);
 
-//! Shutdowns the TFTP Server.
-static void stop();
-
 /**
  * @brief Performs Validity Check of supplied Filename.
  *
@@ -61,7 +58,7 @@ static void stop();
  *
  * @return If filename is valid.
  **/
-static bool checkFilename( const std::filesystem::path &filename);
+static bool checkFilename( const std::filesystem::path &filename );
 
 /**
  * @brief Handler for Recevifed TFTP Requests.
@@ -82,7 +79,7 @@ static void receivedRequest(
   Tftp::RequestType requestType,
   std::string_view filename,
   Tftp::TransferMode mode,
-  const Tftp::Options::Options &clientOptions);
+  const Tftp::Options::Options &clientOptions );
 
 /**
  * @brief Transmits a requested file (RRQ).
@@ -97,7 +94,7 @@ static void receivedRequest(
 static void transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::Options &clientOptions);
+  const Tftp::Options::Options &clientOptions );
 
 /**
  * @brief Receives a requested file (WRQ).
@@ -112,7 +109,7 @@ static void transmitFile(
 static void receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::Options &clientOptions);
+  const Tftp::Options::Options &clientOptions );
 
 //! TFTP Server Base Directory
 static std::filesystem::path baseDir{};
@@ -130,14 +127,13 @@ int main( int argc, char * argv[])
   std::cout << "TFTP Server - " << Tftp::Version::version() << "\n";
 
   boost::program_options::options_description optionsDescription{
-    "TFTP server options"};
+    "TFTP server options" };
 
   optionsDescription.add_options()
     (
       "help",
       "print this help screen"
     )
-
     (
       "server-root",
       boost::program_options::value( &baseDir)->default_value(
@@ -146,7 +142,7 @@ int main( int argc, char * argv[])
     );
 
   // Add TFTP options
-  optionsDescription.add( configuration.options());
+  optionsDescription.add( configuration.options() );
 
   boost::asio::io_context ioContext;
   boost::asio::signal_set signals{ ioContext, SIGINT, SIGTERM};
@@ -159,11 +155,11 @@ int main( int argc, char * argv[])
         argc,
         argv,
         optionsDescription),
-      options);
+      options );
 
     if ( options.count( "help") != 0)
     {
-      std::cout << optionsDescription << std::endl;
+      std::cout << optionsDescription << "\n";
       return EXIT_FAILURE;
     }
 
@@ -193,10 +189,19 @@ int main( int argc, char * argv[])
 
     server->start();
 
-    std::thread serverThread{ std::bind( &Tftp::Server::TftpServer::entry, server)};
+    std::thread serverThread{ []()
+    {
+      server->entry();
+    }};
 
     // connect to SIGINT and SIGTERM
-    signals.async_wait( boost::bind( &stop));
+    signals.async_wait( [](
+      const boost::system::error_code& error [[maybe_unused]],
+      int signal_number [[maybe_unused]])
+    {
+      std::cout << "Termination request\n";
+      server->stop();
+    });
 
     ioContext.run();
 
@@ -230,13 +235,6 @@ int main( int argc, char * argv[])
   }
 
   return EXIT_SUCCESS;
-}
-
-static void stop()
-{
-  std::cout << "Termination request" << std::endl;
-
-  server->stop();
 }
 
 bool checkFilename( const std::filesystem::path &filename)
@@ -276,7 +274,7 @@ static void receivedRequest(
   const Tftp::RequestType requestType,
   std::string_view filename,
   const Tftp::TransferMode mode,
-  const Tftp::Options::Options &clientOptions)
+  const Tftp::Options::Options &clientOptions )
 {
   // Check transfer mode
   if ( mode != Tftp::TransferMode::OCTET)
