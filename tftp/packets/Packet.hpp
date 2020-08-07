@@ -26,7 +26,7 @@ class Packet
 {
   public:
     //! Minimum Size is the Opcode Field.
-    static constexpr std::size_t HeaderSize = sizeof( uint16_t);
+    static constexpr std::size_t HeaderSize{ sizeof( uint16_t )};
 
     /**
      * @brief Decodes the packet type of a raw buffer.
@@ -38,7 +38,7 @@ class Packet
      * @retval PacketType::INVALID
      *   If packet is to small or invalid opcode value.
      **/
-    static PacketType packetType( const RawTftpPacket &rawPacket) noexcept;
+    static PacketType packetType( const RawTftpPacket &rawPacket ) noexcept;
 
     /**
      * @brief Return the packet type of the TFTP Packet.
@@ -51,17 +51,17 @@ class Packet
      * @brief Copy Constructor
      *
      * @param[in] other
-     *   Other
+     *   Other Packet
      **/
-    Packet( const Packet &other) = default;
+    Packet( const Packet &other ) = default;
 
     /**
      * @brief Move Constructor
      *
      * @param[in] other
-     *   Other
+     *   Other Packet
      **/
-    Packet( Packet &&other) = default;
+    Packet( Packet &&other ) = default;
 
     //! Destructor
     virtual ~Packet() noexcept = default;
@@ -70,21 +70,21 @@ class Packet
      * @brief Copy assignment operator
      *
      * @param[in] other
-     *   Other
+     *   Other Packet
      *
      * @return *this
      **/
-    Packet& operator=( const Packet &other);
+    Packet& operator=( const Packet &other );
 
     /**
      * @brief Move assignment operator
      *
      * @param[in] other
-     *   Other
+     *   Other Packet
      *
      * @return *this
      **/
-    Packet& operator=( Packet &&other);
+    Packet& operator=( Packet &&other );
 
     /**
      * @brief Assigns a raw packet to this packet.
@@ -94,7 +94,7 @@ class Packet
      *
      * @return *this
      **/
-    virtual Packet& operator=( const RawTftpPacket &rawPacket);
+    virtual Packet& operator=( const RawTftpPacket &rawPacket );
 
     /**
      * @brief Get the binary representation of the packet.
@@ -121,7 +121,7 @@ class Packet
      * @param[in] packetType
      *   The packet type of the packet.
      **/
-    explicit Packet( PacketType packetType) noexcept;
+    explicit Packet( PacketType packetType ) noexcept;
 
     /**
      * @brief Generates a basic TFTP packet from a data buffer
@@ -133,7 +133,7 @@ class Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    Packet( PacketType packetType, const RawTftpPacket &rawPacket);
+    Packet( PacketType packetType, const RawTftpPacket &rawPacket );
 
     /**
      * @brief Get the binary representation of the packet.
@@ -151,9 +151,9 @@ class Packet
      * The size of @p rawPacket must be at least @p HeaderSize.
      *
      * @param[in,out] rawPacket
-     *   The raw packet, which will be filled with the approbate data.
+     *   The raw packet, which will be filled with the appropriate data.
      **/
-    void insertHeader( RawTftpPacket &rawPacket) const;
+    void insertHeader( RawTftpPacket &rawPacket ) const;
 
   private:
     /**

@@ -45,11 +45,11 @@ class OptionsAcknowledgementPacket: public Packet
      *   TFTP Options List.
      **/
     explicit OptionsAcknowledgementPacket(
-      const Options::Options &options) noexcept;
+      const Options::Options &options ) noexcept;
 
     //! @copydoc OptionsAcknowledgementPacket(const Options::Options&) noexcept
     explicit OptionsAcknowledgementPacket(
-      Options::Options &&options) noexcept;
+      Options::Options &&options ) noexcept;
 
     /**
      * @brief Generates a TFTP Options Acknowledgement packet from a data buffer
@@ -60,11 +60,11 @@ class OptionsAcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit OptionsAcknowledgementPacket( const RawTftpPacket &rawPacket);
+    explicit OptionsAcknowledgementPacket( const RawTftpPacket &rawPacket );
 
     //! @copydoc Packet::operator=(const RawTftpPacket&)
     OptionsAcknowledgementPacket& operator=(
-      const RawTftpPacket &rawPacket) final;
+      const RawTftpPacket &rawPacket ) final;
 
     /**
      * @brief Returns the options within the packet (const reference)
@@ -86,10 +86,10 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] options
      *   New option list, which shall be used.
      **/
-    void options( const Options::Options &options);
+    void options( const Options::Options &options );
 
     //! @copydoc options(const Options::Options&)
-    void options( Options::Options &&options);
+    void options( Options::Options &&options );
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
@@ -109,10 +109,10 @@ class OptionsAcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacket &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket );
 
-    //! Stored options.
-    Options::Options optionsValue;
+    //! Stored Options.
+    Options::Options optionsV;
 };
 
 }

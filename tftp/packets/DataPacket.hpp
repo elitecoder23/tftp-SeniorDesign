@@ -33,7 +33,7 @@ class DataPacket: public Packet
 {
   public:
     //! Minimum Header Size (Opcode + Block Number)
-    static constexpr size_t MinPacketSize = HeaderSize + 2U;
+    static constexpr size_t MinPacketSize{ HeaderSize + 2U };
 
     //! Data Type
     using Data = std::vector< uint8_t>;
@@ -53,12 +53,12 @@ class DataPacket: public Packet
      **/
     DataPacket(
       BlockNumber blockNumber,
-      const Data &data) noexcept;
+      const Data &data ) noexcept;
 
     //! @copydoc DataPacket(BlockNumber,const Data&)
     explicit DataPacket(
       BlockNumber blockNumber = {},
-      Data &&data = {}) noexcept;
+      Data &&data = {} ) noexcept;
 
     /**
      * @brief Generates a TFTP Data packet from a data buffer.
@@ -69,10 +69,10 @@ class DataPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit DataPacket( const RawTftpPacket &rawPacket);
+    explicit DataPacket( const RawTftpPacket &rawPacket );
 
     //! @copydoc Packet::operator=(const RawTftpPacket&)
-    DataPacket& operator=( const RawTftpPacket &rawPacket) final;
+    DataPacket& operator=( const RawTftpPacket &rawPacket ) final;
 
     /**
      * @brief Returns the block number.
@@ -94,7 +94,7 @@ class DataPacket: public Packet
      * @param[in] blockNumber
      *   Block number of packet.
      **/
-    void blockNumber( BlockNumber blockNumber);
+    void blockNumber( BlockNumber blockNumber );
 
     /**
      * @brief Returns the data as const reference.
@@ -122,7 +122,7 @@ class DataPacket: public Packet
      * @param[in] data
      *   The data to set.
      **/
-    void data( const Data &data);
+    void data( const Data &data );
 
     /**
      * @brief Sets the data of the packet by moving the content of [data].
@@ -132,7 +132,7 @@ class DataPacket: public Packet
      * @param[in] data
      *   The data to set.
      **/
-    void data( Data &&data);
+    void data( Data &&data );
 
     /**
      * @brief Returns the data size.
@@ -157,12 +157,12 @@ class DataPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacket &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket );
 
-    //! Block number of the packet.
-    BlockNumber blockNumberValue;
-    //! Data of the packet.
-    Data dataValue;
+    //! Block Number of Packet.
+    BlockNumber blockNumberV;
+    //! Data of Packet.
+    Data dataV;
 };
 
 }

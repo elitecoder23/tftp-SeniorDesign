@@ -38,7 +38,7 @@ class DataHandler
      * @brief Data Handler Reset Request.
      *
      * Is called once before any data is requested or provided.
-     * Should reset the fata handler.
+     * Should reset the data handler.
      **/
     virtual void reset() = 0;
 

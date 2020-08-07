@@ -43,7 +43,7 @@ class BlockNumber
      * @param[in] blockNumber
      *   Base block number.
      **/
-    explicit BlockNumber( uint16_t blockNumber) noexcept;
+    explicit BlockNumber( uint16_t blockNumber ) noexcept;
 
     //! Destructor
     ~BlockNumber() noexcept = default;
@@ -86,7 +86,7 @@ class BlockNumber
      *
      * @return The class itself.
      **/
-    BlockNumber& operator=( uint16_t blockNumber);
+    BlockNumber& operator=( uint16_t blockNumber );
 
     /**
      * @brief Pre-Increment of the block number.
@@ -101,7 +101,7 @@ class BlockNumber
      * @return The class itself
      **/
 
-    const BlockNumber operator++( int);
+    const BlockNumber operator++( int );
 
     /**
      * @brief Pre-Decrement of the block number.
@@ -115,7 +115,7 @@ class BlockNumber
      *
      * @return The class itself.
      **/
-    const BlockNumber operator--( int);
+    const BlockNumber operator--( int );
 
     /**
      * @brief Comparison operator of block number class.
@@ -125,7 +125,7 @@ class BlockNumber
      *
      * @return Equality of the block numbers.
      **/
-    bool operator==( const BlockNumber &rhs) const;
+    bool operator==( const BlockNumber &rhs ) const;
 
     /**
      * @brief Comparison operator of block number class.
@@ -135,7 +135,7 @@ class BlockNumber
      *
      * @return Equality of the block numbers.
      **/
-    bool operator==( uint16_t rhs) const;
+    bool operator==( uint16_t rhs ) const;
 
     /**
      * @brief Comparison operator of block number class.
@@ -145,7 +145,7 @@ class BlockNumber
      *
      * @return In-Equality of the block numbers.
      **/
-    bool operator!=( const BlockNumber &rhs) const;
+    bool operator!=( const BlockNumber &rhs ) const;
 
     /**
      * @brief Comparison operator of block number class.
@@ -155,11 +155,11 @@ class BlockNumber
      *
      * @return In-Equality of the block numbers.
      **/
-    bool operator!=( uint16_t rhs) const;
+    bool operator!=( uint16_t rhs ) const;
 
   private:
     //! Block Number Value
-    uint16_t blockNumberValue;
+    uint16_t blockNumberV;
 };
 
 }

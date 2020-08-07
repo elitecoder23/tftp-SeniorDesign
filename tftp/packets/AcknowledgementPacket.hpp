@@ -33,7 +33,7 @@ class AcknowledgementPacket: public Packet
 {
   public:
     //! Packet Size ( Opcode + Block Number)
-    static constexpr size_t PacketSize = HeaderSize + 2U;
+    static constexpr size_t PacketSize{ HeaderSize + 2U };
 
     /**
      * @brief Creates the packet with the given block number.
@@ -45,7 +45,7 @@ class AcknowledgementPacket: public Packet
      *   Block number of packet. Defaults to the BlockNumber default
      *   constructor.
      **/
-    explicit AcknowledgementPacket( BlockNumber blockNumber = {}) noexcept;
+    explicit AcknowledgementPacket( BlockNumber blockNumber = {} ) noexcept;
 
     /**
      * @brief Generates a TFTP acknowledgement packet from a data buffer.
@@ -56,10 +56,10 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit AcknowledgementPacket( const RawTftpPacket &rawPacket);
+    explicit AcknowledgementPacket( const RawTftpPacket &rawPacket );
 
     //! @copydoc Packet::operator=(const RawTftpPacket&)
-    AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket) final;
+    AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket ) final;
 
     /**
      * @brief Returns the Block Number.
@@ -94,7 +94,7 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When packet size is invalid
      **/
-    void decodeBody( const RawTftpPacket &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket );
 
     //! Block Number of Packet
     BlockNumber blockNumberV;

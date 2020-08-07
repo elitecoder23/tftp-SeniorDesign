@@ -17,11 +17,11 @@ target_sources(
     OptionList.cpp
     OptionNegotiation.hpp
     OptionNegotiation.ipp
-    Options.hpp)
+    Options.hpp )
 
 target_sources(
   tftp_test
 
   PRIVATE
     OptionListTest.cpp
-    OptionNegotiationTest.cpp)
+    OptionNegotiationTest.cpp )

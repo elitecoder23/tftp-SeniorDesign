@@ -23,14 +23,14 @@ namespace Tftp::Packets {
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   const Options::Options &options) noexcept:
   Packet{ PacketType::OptionsAcknowledgement},
-  optionsValue{ options}
+  optionsV{ options}
 {
 }
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
   Options::Options &&options) noexcept:
   Packet{ PacketType::OptionsAcknowledgement},
-  optionsValue{ std::move( options)}
+  optionsV{ std::move( options)}
 {
 }
 
@@ -53,33 +53,33 @@ OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
 
 const Options::Options& OptionsAcknowledgementPacket::options() const
 {
-  return optionsValue;
+  return optionsV;
 }
 
 Options::Options& OptionsAcknowledgementPacket::options()
 {
-  return optionsValue;
+  return optionsV;
 }
 
 void OptionsAcknowledgementPacket::options( const Options::Options &options)
 {
-  optionsValue = options;
+  optionsV = options;
 }
 
 void OptionsAcknowledgementPacket::options( Options::Options &&options)
 {
-  optionsValue = std::move( options);
+  optionsV = std::move( options);
 }
 
 OptionsAcknowledgementPacket::operator std::string() const
 {
   return (boost::format( "OACK: OPT: \"%s\"") %
-    Options::OptionList::toString( optionsValue)).str();
+    Options::OptionList::toString( optionsV )).str();
 }
 
 Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
 {
-  auto rawOptions{ Options::OptionList::rawOptions( optionsValue)};
+  auto rawOptions{ Options::OptionList::rawOptions( optionsV )};
 
   RawTftpPacket rawPacket( 2U + rawOptions.size());
 
@@ -105,7 +105,7 @@ void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // assign options
-  optionsValue = Options::OptionList::options( packetIt, rawPacket.end());
+  optionsV = Options::OptionList::options( packetIt, rawPacket.end());
 }
 
 }

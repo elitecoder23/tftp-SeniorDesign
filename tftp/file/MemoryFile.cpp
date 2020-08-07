@@ -17,28 +17,28 @@
 namespace Tftp::File {
 
 MemoryFile::MemoryFile():
-  operationV{ Operation::Receive},
-  dataPtr{ dataV.begin()}
+  operationV{ Operation::Receive },
+  dataPtr{ dataV.begin() }
 {
 }
 
-MemoryFile::MemoryFile( const DataType &data):
-  operationV{ Operation::Transmit},
-  dataV{ data},
-  dataPtr{ dataV.begin()}
+MemoryFile::MemoryFile( const DataType &data ) :
+  operationV{ Operation::Transmit },
+  dataV{ data },
+  dataPtr{ dataV.begin() }
 {
 }
 
-MemoryFile::MemoryFile( DataType &&data):
-  operationV{ Operation::Transmit},
-  dataV{ std::move( data)},
-  dataPtr{ dataV.begin()}
+MemoryFile::MemoryFile( DataType &&data ):
+  operationV{ Operation::Transmit },
+  dataV{ std::move( data )},
+  dataPtr{ dataV.begin() }
 {
 }
 
 void MemoryFile::reset()
 {
-  if ( Operation::Receive == operationV)
+  if ( Operation::Receive == operationV )
   {
     dataV.clear();
   }
@@ -56,9 +56,9 @@ void MemoryFile::finished() noexcept
   dataPtr = dataV.begin();
 }
 
-bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
+bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
 {
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "Received transfer size: " << transferSize;
 
   return true;
@@ -66,10 +66,7 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize)
 
 void MemoryFile::receivedData( const DataType &data) noexcept
 {
-  dataV.insert(
-    dataV.end(),
-    data.begin(),
-    data.end());
+  dataV.insert( dataV.end(), data.begin(), data.end() );
 
   dataPtr = dataV.begin();
 }
@@ -79,15 +76,15 @@ std::optional< uint64_t> MemoryFile::requestedTransferSize()
   return dataV.size();
 }
 
-MemoryFile::DataType MemoryFile::sendData( const size_t maxSize) noexcept
+MemoryFile::DataType MemoryFile::sendData( const size_t maxSize ) noexcept
 {
-  DataType::const_iterator startPtr = dataPtr;
+  DataType::const_iterator startPtr{ dataPtr };
   DataType::const_iterator endPtr;
 
   if ( static_cast< unsigned int>(
     std::distance< DataType::const_iterator>(
       startPtr,
-      dataV.end())) <= maxSize)
+      dataV.end())) <= maxSize )
   {
     endPtr = dataV.end();
   }
@@ -98,7 +95,7 @@ MemoryFile::DataType MemoryFile::sendData( const size_t maxSize) noexcept
 
   dataPtr=endPtr;
 
-  return DataType( startPtr, endPtr);
+  return DataType( startPtr, endPtr );
 }
 
 }

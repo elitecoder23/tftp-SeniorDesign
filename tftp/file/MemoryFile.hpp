@@ -53,6 +53,13 @@ class MemoryFile: public TftpFile
      **/
     explicit MemoryFile( DataType &&data);
 
+    /**
+     * @copydoc TftpFile::reset
+     *
+     * If the file is received for receiving data, the content is cleared.
+     * For write operation, the read pointer is reset to the beginning of the
+     * file.
+     **/
     void reset() final;
 
     /**

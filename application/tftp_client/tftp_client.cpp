@@ -49,11 +49,11 @@
  *
  * @return The success state of this operation.
  **/
-int main( int argc, char * argv[]);
+int main( int argc, char *argv[] );
 
-int main( int argc, char * argv[])
+int main( int argc, char *argv[] )
 {
-  Tftp::RequestType requestType{ Tftp::RequestType::Invalid};
+  Tftp::RequestType requestType{ Tftp::RequestType::Invalid };
   std::string localFile{};
   std::string remoteFile{};
   boost::asio::ip::address address{};
@@ -62,7 +62,7 @@ int main( int argc, char * argv[])
   Helper::initLogging();
 
   boost::program_options::options_description optionsDescription{
-    "TFTP Client Options"};
+    "TFTP Client Options" };
 
   optionsDescription.add_options()
     (
@@ -103,7 +103,7 @@ int main( int argc, char * argv[])
         argc,
         argv,
         optionsDescription),
-      options);
+      options );
 
     if ( options.count( "help" ) != 0)
     {

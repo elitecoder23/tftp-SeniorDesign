@@ -31,9 +31,9 @@ namespace Tftp::Options {
  * A TFTP option is a name - value pair.
  *
  * The option list also contains handler of common TFTP options like:
- * @li blocksize option (RFC 2348)
- * @li timeout option (RFC 2349)
- * @li transfer size option (RFC 2349)
+ * - blocksize option (RFC 2348)
+ * - timeout option (RFC 2349)
+ * - transfer size option (RFC 2349)
  **/
 class OptionList
 {
@@ -67,7 +67,7 @@ class OptionList
      **/
     static Options options(
       RawOptions::const_iterator begin,
-      RawOptions::const_iterator end);
+      RawOptions::const_iterator end );
 
     /**
      * @brief Returns the option list as raw data
@@ -80,7 +80,7 @@ class OptionList
      *
      * @return TFTP Options as raw data
      **/
-    static RawOptions rawOptions( const Options &options);
+    static RawOptions rawOptions( const Options &options );
 
     /**
      * @brief Returns a string, which describes the option list.
@@ -92,7 +92,7 @@ class OptionList
      *
      * @return Option list description.
      **/
-    static std::string toString( const Options &options);
+    static std::string toString( const Options &options );
 
     /**
      * @brief Creates an empty option list
@@ -125,7 +125,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    [[nodiscard]] bool has( std::string_view name) const;
+    [[nodiscard]] bool has( std::string_view name ) const;
 
     /**
      * @brief Return if the specified option is set within the option list.
@@ -139,7 +139,7 @@ class OptionList
      * @retval true
      *   The option is set.
      **/
-    [[nodiscard]] bool has( KnownOptions option) const;
+    [[nodiscard]] bool has( KnownOptions option ) const;
 
     /**
      * @brief Obtain for option with the given name
@@ -150,7 +150,7 @@ class OptionList
      * @return The value of the option.
      *   If the option is not set, an empty OptionPointer is returned.
      **/
-    [[nodiscard]] std::string_view option( std::string_view name) const;
+    [[nodiscard]] std::string_view option( std::string_view name ) const;
 
     /**
      * @brief Sets the given option to the given value.
@@ -168,7 +168,7 @@ class OptionList
     void option(
       std::string_view name,
       std::string_view value,
-      NegotiateOption negotiateOption);
+      NegotiateOption negotiateOption );
 
     /**
      * @brief Remove the option with the given name from the option list.
@@ -176,7 +176,7 @@ class OptionList
      * @param[in] name
      *   Name of the option.
      **/
-    void remove( std::string_view name);
+    void remove( std::string_view name );
 
     /**
      * @brief Remove the given option from the option list.
@@ -184,7 +184,7 @@ class OptionList
      * @param[in] option
      *   Option
      **/
-    void remove( KnownOptions option);
+    void remove( KnownOptions option );
 
     /**
      * @brief Adds the Blocksize option to the option list.
@@ -236,7 +236,7 @@ class OptionList
      * @param[in] timeout
      *   The requested timeout.
      **/
-    void timeoutOptionClient( uint8_t timeout);
+    void timeoutOptionClient( uint8_t timeout );
 
     /**
      * @brief Adds the timeout option to the option list.
@@ -254,7 +254,7 @@ class OptionList
      **/
     void timeoutOptionServer(
       uint8_t minTimeout = TimeoutOptionMin,
-      uint8_t maxTimeout = TimeoutOptionMax);
+      uint8_t maxTimeout = TimeoutOptionMax );
 
     /**
      * @brief Returns the value of the timeout option.
@@ -281,7 +281,7 @@ class OptionList
      *   The transfer size option value.
      *   Set to '0' when in Read Request.
      **/
-    void transferSizeOption( uint64_t transferSize);
+    void transferSizeOption( uint64_t transferSize );
 
     /**
      * @brief Returns the value of the transfer size option.
@@ -313,7 +313,7 @@ class OptionList
      *   The server should not send an OACK with an empty option list
      **/
     [[nodiscard]] OptionList negotiateServer(
-      const Options &clientOptions) const;
+      const Options &clientOptions ) const;
 
     /**
      * @brief Performs the option negotiation on client side.
@@ -333,7 +333,7 @@ class OptionList
      *   is unacceptable.
      **/
     [[nodiscard]] OptionList negotiateClient(
-      const Options &serverOptions) const;
+      const Options &serverOptions ) const;
 
   private:
     //! Options.

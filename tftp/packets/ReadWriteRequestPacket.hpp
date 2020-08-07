@@ -44,22 +44,22 @@ class ReadWriteRequestPacket: public Packet
      * @retval string()
      *   When [mode] is not a valid transfer mode.
      **/
-    static std::string_view decodeMode( TransferMode mode);
+    static std::string_view decodeMode( TransferMode mode );
 
     /**
-     * @brief Converts the mode string to the corresponding enumeration.
+     * @brief Converts the Mode String to the Corresponding Enumeration.
      *
      * @param[in] mode
-     *   Transfer mode.
+     *   Transfer Mode.
      *
      * @return The corresponding mode.
      * @retval TransferMode::Invalid
-     *   When [mode] is not a valid transfer mode.
+     *   When @p mode is not a valid transfer mode.
      **/
-    static TransferMode decodeMode( std::string_view mode);
+    static TransferMode decodeMode( std::string_view mode );
 
     //! @copydoc Packet::operator=(const RawTftpPacket&)
-    ReadWriteRequestPacket& operator=( const RawTftpPacket &rawPacket) final;
+    ReadWriteRequestPacket& operator=( const RawTftpPacket &rawPacket ) final;
 
     /**
      * @brief Returns the request filename.
@@ -74,10 +74,10 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] filename
      *   The new filename.
      **/
-    void filename( std::string_view filename);
+    void filename( std::string_view filename );
 
     //! @copydoc filename(std::string_view)
-    void filename( std::string &&filename);
+    void filename( std::string &&filename );
 
     /**
      * @brief Returns the transfer mode.
@@ -95,7 +95,7 @@ class ReadWriteRequestPacket: public Packet
      * @throw TftpPacketException
      *   When mode is not a valid transfer mode.
      **/
-    void mode( TransferMode mode);
+    void mode( TransferMode mode );
 
     /**
      * @brief Returns the set TFTP options.
@@ -117,10 +117,10 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] options
      *   The TFTP options.
      **/
-    void options( const Options::Options &options);
+    void options( const Options::Options &options );
 
     //! @copydoc options(const Options::Options&)
-    void options( Options::Options &&options);
+    void options( Options::Options &&options );
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
@@ -145,14 +145,14 @@ class ReadWriteRequestPacket: public Packet
       PacketType packetType,
       std::string_view filename,
       TransferMode mode,
-      const Options::Options &options);
+      const Options::Options &options );
 
     //! @copydoc ReadWriteRequestPacket(PacketType,std::string_view,TransferMode,const Options::Options&)
     ReadWriteRequestPacket(
       PacketType packetType,
       std::string &&filename,
       TransferMode mode,
-      Options::Options &&options);
+      Options::Options &&options );
 
     /**
      * @brief Generates a TFTP Read/ Write Request packet from a data buffer
@@ -168,7 +168,7 @@ class ReadWriteRequestPacket: public Packet
      **/
     ReadWriteRequestPacket(
       PacketType packetType,
-      const RawTftpPacket &rawPacket);
+      const RawTftpPacket &rawPacket );
 
   private:
     /**
@@ -185,7 +185,7 @@ class ReadWriteRequestPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacket &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket );
 
     //! stored request filename
     std::string filenameV;

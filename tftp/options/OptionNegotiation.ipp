@@ -20,28 +20,29 @@
 
 namespace Tftp::Options {
 
-inline std::string OptionNegotiation::toString( const uint64_t value)
+inline std::string OptionNegotiation::toString( const uint64_t value )
 {
-  return std::to_string( value);
+  return std::to_string( value );
 }
 
-inline uint64_t OptionNegotiation::toInt( std::string_view value)
+inline uint64_t OptionNegotiation::toInt( std::string_view value )
 {
   uint64_t intValue{};
-  auto result{ std::from_chars( value.begin(), value.end(), intValue)};
+  auto result{ std::from_chars( value.begin(), value.end(), intValue )};
 
   if ( result.ec != std::errc{})
   {
     BOOST_THROW_EXCEPTION( OptionNegotiationException()
-      << Helper::AdditionalInfo( "Integer Conversion failed"));
+      << Helper::AdditionalInfo( "Integer Conversion failed" ));
   }
 
   return intValue;
 }
 
-inline std::string OptionNegotiation::negotiate( std::string_view optionValue) const
+inline std::string OptionNegotiation::negotiate(
+  std::string_view optionValue ) const
 {
-  return negotiateInt( toInt( optionValue));
+  return negotiateInt( toInt( optionValue ));
 }
 
 }

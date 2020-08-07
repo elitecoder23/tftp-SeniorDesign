@@ -36,7 +36,7 @@ class ErrorPacket: public Packet
 {
   public:
     //! Minimum Header Size ( Opcode, Error Code, Empty String)
-    static constexpr size_t MinPacketSize = HeaderSize + 2U + 1U;
+    static constexpr size_t MinPacketSize{ HeaderSize + 2U + 1U };
 
     /**
      * @brief Generates a TFTP error packet with the given error code and
@@ -50,7 +50,7 @@ class ErrorPacket: public Packet
      **/
     explicit ErrorPacket(
       ErrorCode errorCode,
-      std::string_view errorMessage = {});
+      std::string_view errorMessage = {} );
 
     /**
      * @brief Generates a TFTP error packet from a data buffer
@@ -82,7 +82,7 @@ class ErrorPacket: public Packet
      * @param[in] errorCode
      *   The error code to set
      **/
-    void errorCode( ErrorCode errorCode) noexcept;
+    void errorCode( ErrorCode errorCode ) noexcept;
 
     /**
      * @brief Returns the error message of this packet.
@@ -97,7 +97,7 @@ class ErrorPacket: public Packet
      * @param[in] errorMessage
      *   The error message to set.
      **/
-    void errorMessage( std::string_view errorMessage);
+    void errorMessage( std::string_view errorMessage );
 
   private:
     //! @copydoc Packet::encode()
@@ -116,7 +116,7 @@ class ErrorPacket: public Packet
      * @throw InvalidPacketException
      *   When the error message is not 0-terminated.
      **/
-    void decodeBody( const RawTftpPacket &rawPacket);
+    void decodeBody( const RawTftpPacket &rawPacket );
 
     //! Error Code
     ErrorCode errorCodeV;
