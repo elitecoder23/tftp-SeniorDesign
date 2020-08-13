@@ -28,7 +28,7 @@ inline std::string OptionNegotiation::toString( const uint64_t value )
 inline uint64_t OptionNegotiation::toInt( std::string_view value )
 {
   uint64_t intValue{};
-  auto result{ std::from_chars( value.begin(), value.end(), intValue )};
+  auto result{ std::from_chars( value.data(), value.data() + value.size(), intValue )};
 
   if ( result.ec != std::errc{})
   {

@@ -271,7 +271,7 @@ std::optional< uint16_t> OptionList::blocksize() const
   return Helper::safeCast< uint16_t >( OptionNegotiation::toInt( optionIt->second ));
 }
 
-void OptionList::timeoutOptionClient( const uint8_t timeout)
+void OptionList::timeoutOptionClient( const uint8_t timeout )
 {
   // satisfy TFTP spec (MAX is not checked because this is the maximum range of uint8_t)
   if ( timeout < TimeoutOptionMin)
