@@ -12,6 +12,8 @@
 
 #include "TftpConfiguration.hpp"
 
+#include <helper/SafeCast.hpp>
+
 #include <boost/property_tree/ptree.hpp>
 
 namespace Tftp {
@@ -102,13 +104,14 @@ Options::OptionList TftpConfiguration::clientOptions() const
   }
 
   // timeout option configuration requested
-  if ( timeoutOption)
+  if ( timeoutOption )
   {
-    options.timeoutOptionClient( timeoutOption.get());
+    options.timeoutOptionClient(
+      Helper::safeCast< uint8_t>( timeoutOption.get()));
   }
 
   // transfer size option configuration requested
-  if ( handleTransferSizeOption)
+  if ( handleTransferSizeOption )
   {
     options.transferSizeOption( 0U);
   }
@@ -133,7 +136,7 @@ Options::OptionList TftpConfiguration::serverOptions() const
   {
     options.timeoutOptionServer(
       TimeoutOptionMin,
-      timeoutOption.get());
+      Helper::safeCast< uint8_t>( timeoutOption.get()));
   }
 
   // transfer size option configuration requested
