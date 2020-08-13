@@ -42,7 +42,7 @@ class NullSinkFile : public ReceiveDataHandler
      * @param[in] size
      *   The maximum allowed size.
      **/
-    explicit NullSinkFile( std::optional< uint64_t> size = {});
+    explicit NullSinkFile( std::optional< uint64_t> size = {} );
 
     /**
      * @copydoc ReceiveDataHandler::reset
