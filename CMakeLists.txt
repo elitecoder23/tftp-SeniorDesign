@@ -24,7 +24,7 @@ if( GIT_FOUND )
     OUTPUT_STRIP_TRAILING_WHITESPACE )
 
   set( PROJECT_VERSION_ADDITION "${PROJECT_VERSION_ADDITION}-${GIT_HASH}" )
-endif( GIT_FOUND )
+endif()
 
 
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
@@ -39,7 +39,7 @@ find_program(
 
 if( CLANG_TIDY_EXE )
   set( CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} )
-endif( CLANG_TIDY_EXE )
+endif()
 
 # enable testing
 enable_testing()
@@ -55,14 +55,14 @@ FetchContent_Declare(
 
 if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
   set( FETCHCONTENT_SOURCE_DIR_CMAKE_COMMON ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
-endif( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
+endif()
 
 FetchContent_GetProperties( cmake_common )
 if( NOT cmake_common_POPULATED )
   FetchContent_Populate( cmake_common )
   # Add own CMake scripts to module path
   list( APPEND CMAKE_MODULE_PATH "${cmake_common_SOURCE_DIR}" )
-endif( NOT cmake_common_POPULATED )
+endif()
 
 
 FetchContent_Declare(
@@ -72,7 +72,7 @@ FetchContent_Declare(
 
 if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/helper )
   set( FETCHCONTENT_SOURCE_DIR_HELPER ${CMAKE_CURRENT_SOURCE_DIR}/helper )
-endif( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/helper )
+endif()
 
 FetchContent_MakeAvailable( helper )
 
