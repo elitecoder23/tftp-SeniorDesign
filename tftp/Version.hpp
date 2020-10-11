@@ -36,14 +36,10 @@ class Version
     static const uint32_t Patch;
 
     //! Additional Version Information
-    static std::string_view Addition;
+    static const std::string_view Addition;
 
-    /**
-     * @brief Returns the Version as String.
-     *
-     * @return The version as string.
-     **/
-    static std::string version();
+    //! Version Information as String.
+    static const std::string_view VersionInformation;
 };
 
 }

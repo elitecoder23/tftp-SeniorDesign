@@ -124,7 +124,7 @@ int main( int argc, char * argv[])
 {
   Helper::initLogging();
 
-  std::cout << "TFTP Server - " << Tftp::Version::version() << "\n";
+  std::cout << "TFTP Server - " << Tftp::Version::VersionInformation << "\n";
 
   boost::program_options::options_description optionsDescription{
     "TFTP server options" };
@@ -237,7 +237,7 @@ int main( int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-bool checkFilename( const std::filesystem::path &filename)
+static bool checkFilename( const std::filesystem::path &filename)
 {
   if ( filename.is_relative())
   {
@@ -316,10 +316,9 @@ static void receivedRequest(
     default:
       return;
   }
-
 }
 
-void transmitFile(
+static void transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
   const Tftp::Options::Options &clientOptions)
@@ -358,7 +357,7 @@ void transmitFile(
       configuration.serverOptions().negotiateServer( clientOptions))};
 }
 
-void receiveFile(
+static void receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
   const Tftp::Options::Options &clientOptions)

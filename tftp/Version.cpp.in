@@ -14,27 +14,15 @@
 
 namespace Tftp {
 
-const uint32_t Version::Major{ ${PROJECT_VERSION_MAJOR} +0U};
+const uint32_t Version::Major{ ${PROJECT_VERSION_MAJOR} +0U };
 
-const uint32_t Version::Minor{ ${PROJECT_VERSION_MINOR} +0U};
+const uint32_t Version::Minor{ ${PROJECT_VERSION_MINOR} +0U };
 
-const uint32_t Version::Patch{ ${PROJECT_VERSION_PATCH} +0U};
+const uint32_t Version::Patch{ ${PROJECT_VERSION_PATCH} +0U };
 
-std::string_view Version::Addition{ "${PROJECT_VERSION_ADDITION}"};
+const std::string_view Version::Addition{ "${PROJECT_VERSION_ADDITION}" };
 
-std::string Version::version()
-{
-  std::string versionString{
-    std::to_string( Major) + "." +
-    std::to_string( Minor) + "." +
-    std::to_string( Patch)};
-
-  if ( !Addition.empty())
-  {
-    versionString += "-" + std::string{ Addition};
-  }
-
-  return versionString;
-}
+const std::string_view Version::VersionInformation{
+  "${PROJECT_DESCRIPTION} - ${PROJECT_VERSION} (${PROJECT_VERSION_ADDITION})" };
 
 }

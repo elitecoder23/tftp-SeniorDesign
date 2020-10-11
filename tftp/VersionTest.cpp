@@ -18,11 +18,11 @@
 
 namespace Tftp {
 
-BOOST_AUTO_TEST_SUITE( TftpTest)
-BOOST_AUTO_TEST_SUITE( VersionTest)
+BOOST_AUTO_TEST_SUITE( TftpTest )
+BOOST_AUTO_TEST_SUITE( VersionTest )
 
 //! Version Test
-BOOST_AUTO_TEST_CASE( version)
+BOOST_AUTO_TEST_CASE( version )
 {
   std::cout
     << "TFTP Version: "
@@ -31,7 +31,8 @@ BOOST_AUTO_TEST_CASE( version)
     << Version::Patch << "-"
     << Version::Addition << "\n";
 
-  std::cout << "TFTP Version String: " << Version::version() << "\n";
+  std::cout
+    << "TFTP Version Information: " << Version::VersionInformation << "\n";
 }
 
 BOOST_AUTO_TEST_SUITE_END()

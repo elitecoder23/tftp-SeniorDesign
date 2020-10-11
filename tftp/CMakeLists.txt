@@ -9,10 +9,7 @@ cmake_minimum_required( VERSION 3.18 )
 find_package( Boost REQUIRED COMPONENTS program_options )
 
 # prepare Version.cpp
-configure_file(
-  Version.cpp.in
-  Version.cpp )
-
+configure_file( Version.cpp.in Version.cpp )
 
 add_library( tftp )
 
@@ -114,16 +111,12 @@ add_subdirectory( options )
 add_subdirectory( client )
 add_subdirectory( server )
 
-# INSTALL
-include( GNUInstallDirs)
-
 install(
   TARGETS tftp
-  COMPONENT runtime
   EXPORT tftp-config
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} )
+  RUNTIME COMPONENT runtime DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY COMPONENT runtime DESTINATION ${CMAKE_INSTALL_BINDIR}
+  ARCHIVE COMPONENT development DESTINATION ${CMAKE_INSTALL_LIBDIR} )
 
 install(
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
