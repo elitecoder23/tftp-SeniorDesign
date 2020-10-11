@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.16 )
+cmake_minimum_required( VERSION 3.18 )
 
 project(
   tftp
@@ -33,16 +33,18 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 find_program(
   CLANG_TIDY_EXE
   NAMES
-  clang-tidy-10
-  clang-tidy-9
-  clang-tidy )
+    clang-tidy-10
+    clang-tidy-9
+    clang-tidy )
 
 if( CLANG_TIDY_EXE )
   set( CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} )
 endif()
 
-# enable testing
 enable_testing()
+
+# Install Configuration
+include( GNUInstallDirs )
 
 
 # get dependencies
