@@ -20,7 +20,7 @@ TftpClientPtr TftpClient::instance(
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries )
 {
-  return std::make_shared< TftpClientImpl>( tftpTimeout, tftpRetries);
+  return std::make_shared< TftpClientImpl>( tftpTimeout, tftpRetries );
 }
 
 }

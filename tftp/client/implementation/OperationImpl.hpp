@@ -84,7 +84,7 @@ class OperationImpl :
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
       OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote);
+      const boost::asio::ip::udp::endpoint &remote );
 
     /**
      * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
@@ -98,7 +98,7 @@ class OperationImpl :
       uint16_t tftpRetries,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const boost::asio::ip::udp::endpoint &local);
+      const boost::asio::ip::udp::endpoint &local );
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -107,7 +107,7 @@ class OperationImpl :
      * @param[in] packet
      *   TFTP packet to send.
      **/
-    void sendFirst( const Packets::Packet &packet);
+    void sendFirst( const Packets::Packet &packet );
 
     /**
      * @brief Sends the packet to the TFTP server.
@@ -115,7 +115,7 @@ class OperationImpl :
      * @param[in] packet
      *   TFTP packet to send.
      **/
-    void send( const Packets::Packet &packet);
+    void send( const Packets::Packet &packet );
 
     /**
      * @brief Waits for an incoming response from the server.
@@ -143,7 +143,7 @@ class OperationImpl :
      * @param[in] maxReceivePacketSize
      *   New maxReceivePacketSize value.
      **/
-    void maxReceivePacketSize( uint16_t maxReceivePacketSize) noexcept;
+    void maxReceivePacketSize( uint16_t maxReceivePacketSize ) noexcept;
 
     /**
      * @brief Update the receiveTimeout value.
@@ -151,7 +151,7 @@ class OperationImpl :
      * @param[in] receiveTimeout
      *   New receive timeout.
      **/
-    void receiveTimeout( uint8_t receiveTimeout) noexcept;
+    void receiveTimeout( uint8_t receiveTimeout ) noexcept;
 
     /**
      * @brief Sets the finished flag.
@@ -163,43 +163,43 @@ class OperationImpl :
      **/
     virtual void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept;
+      ErrorInfo &&errorInfo = {} ) noexcept;
 
     /**
      * @copydoc PacketHandler::readRequestPacket()
      *
-     * A read request packet is handled as failure. A error packet is sent
-     * to the origin and the finished flag is set
+     * A read request packet is handled as failure.
+     * A error packet is sent to the origin and the finished flag is set.
      *
      * This operation always throws an CommunicationException.
      **/
     void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ReadRequestPacket &readRequestPacket) final;
+      const Packets::ReadRequestPacket &readRequestPacket ) final;
 
     /**
      * @copydoc PacketHandler::writeRequestPacket()
      *
-     * A write request packet is handled as failure. A error packet is sent
-     * to the origin and the finished flag is set
+     * A write request packet is handled as failure.
+     * A error packet is sent to the origin and the finished flag is set.
      **/
     void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::WriteRequestPacket &writeRequestPacket) final;
+      const Packets::WriteRequestPacket &writeRequestPacket ) final;
 
     /**
      * @copydoc PacketHandler::errorPacket()
      **/
     void errorPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ErrorPacket &errorPacket) final;
+      const Packets::ErrorPacket &errorPacket ) final;
 
     /**
      * @copydoc PacketHandler::invalidPacket()
      **/
     void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const RawTftpPacket &rawPacket) final;
+      const RawTftpPacket &rawPacket ) final;
 
   private:
     /**

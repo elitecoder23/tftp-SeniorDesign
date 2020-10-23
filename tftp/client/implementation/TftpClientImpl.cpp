@@ -28,13 +28,14 @@ TftpClientImpl::TftpClientImpl(
 {
 }
 
-void TftpClientImpl::entry() noexcept
+void TftpClientImpl::entry()
 {
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
     << "Start TFTP client I/O context";
 
+  // may throw
   ioContext.run();
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)

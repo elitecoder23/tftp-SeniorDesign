@@ -43,7 +43,7 @@ class TftpClientImpl : public TftpClient
       uint16_t tftpRetries );
 
     //! @copydoc TftpClient::entry
-    void entry() noexcept final;
+    void entry() final;
 
     //! @copydoc TftpClient::stop
     void stop() final;

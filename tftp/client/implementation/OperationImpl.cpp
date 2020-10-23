@@ -291,7 +291,7 @@ void OperationImpl::receiveTimeout( const uint8_t receiveTimeout) noexcept
 
 void OperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo) noexcept
+  ErrorInfo &&errorInfo ) noexcept
 {
   BOOST_LOG_FUNCTION()
 

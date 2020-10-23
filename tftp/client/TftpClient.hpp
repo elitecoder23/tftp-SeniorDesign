@@ -55,15 +55,16 @@ class TftpClient
      * @brief Entry of the TFTP Client.
      *
      * This routines enters the IO loop.
-     * The start routine will be leaved, when an FATAL error occurred or
+     * The start routine will be left, when an FATAL error occurred or
      * the server has been stopped by calling stop().
      *
-     * This entry can be called multiple time to allow parallel transfer handling
+     * This entry can be called multiple time to allow parallel transfer
+     * handling.
      **/
-    virtual void entry() noexcept = 0;
+    virtual void entry() = 0;
 
     /**
-     * @brief Starts the TFTP Client.
+     * @brief Stops the TFTP Client.
      *
      * This routine returns immediately.
      *
@@ -98,7 +99,7 @@ class TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions) = 0;
+      const Options::OptionList &clientOptions ) = 0;
 
     /**
      * @copydoc readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
@@ -114,7 +115,7 @@ class TftpClient
       std::string_view filename,
       TransferMode mode,
       const Options::OptionList &clientOptions,
-      const boost::asio::ip::udp::endpoint &local) = 0;
+      const boost::asio::ip::udp::endpoint &local ) = 0;
 
     /**
      * @brief Creates an write request operation (TFTP WRQ).
@@ -143,7 +144,7 @@ class TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions) = 0;
+      const Options::OptionList &clientOptions ) = 0;
 
     /**
      * @copydoc writeRequestOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
@@ -159,7 +160,7 @@ class TftpClient
       std::string_view filename,
       TransferMode mode,
       const Options::OptionList &clientOptions,
-      const boost::asio::ip::udp::endpoint &local) = 0;
+      const boost::asio::ip::udp::endpoint &local ) = 0;
 
   protected:
     //! Constructor.
