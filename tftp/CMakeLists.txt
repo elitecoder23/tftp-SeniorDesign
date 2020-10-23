@@ -40,6 +40,15 @@ target_include_directories(
   tftp
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..> )
 
+target_compile_features( tftp PUBLIC cxx_std_17 )
+
+target_compile_definitions(
+  tftp
+
+  PRIVATE
+  # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+  $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
+
 target_compile_options(
   tftp
 
@@ -52,13 +61,6 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
 
-target_compile_definitions(
-  tftp
-
-  PRIVATE
-    # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
-
 target_link_libraries(
   tftp
   PUBLIC
@@ -68,8 +70,6 @@ target_link_libraries(
     # Windows Socket must be explicitly linked in MinGW
     $<$<PLATFORM_ID:Windows>:ws2_32> )
 
-target_compile_features( tftp PUBLIC cxx_std_17 )
-
 
 add_library( tftp_test OBJECT )
 
@@ -78,6 +78,15 @@ target_sources(
 
   PRIVATE
     VersionTest.cpp )
+
+target_compile_features( tftp_test PUBLIC cxx_std_17 )
+
+target_compile_definitions(
+  tftp_test
+
+  PRIVATE
+  # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+  $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
 target_compile_options(
   tftp_test
@@ -92,15 +101,6 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra>
     $<$<CXX_COMPILER_ID:Clang>:-Werror> )
-
-target_compile_definitions(
-  tftp_test
-
-  PRIVATE
-    # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
-
-target_compile_features( tftp_test PUBLIC cxx_std_17 )
 
 target_link_libraries( tftp_test PUBLIC tftp )
 

@@ -33,8 +33,8 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 find_program(
   CLANG_TIDY_EXE
   NAMES
+    clang-tidy-11
     clang-tidy-10
-    clang-tidy-9
     clang-tidy )
 
 if( CLANG_TIDY_EXE )
