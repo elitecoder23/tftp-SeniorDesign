@@ -67,7 +67,7 @@ class BlockNumber
      *
      * @return The block number as uint16_t.
      **/
-    operator uint16_t() const;
+    explicit operator uint16_t() const;
 
     /**
      * @brief Cast operator of the block number class to an uint16_t&.
@@ -76,7 +76,7 @@ class BlockNumber
      *
      * @return The block number as uint16_t&.
      **/
-    operator uint16_t&();
+    explicit operator uint16_t&();
 
     /**
      * @brief Assignment Operator to the Block Number.
@@ -118,7 +118,7 @@ class BlockNumber
     const BlockNumber operator--( int );
 
     /**
-     * @brief Comparison operator of block number class.
+     * @brief Un-equality Comparison to Block Number.
      *
      * @param[in] rhs
      *   The block number to compare to.
@@ -128,7 +128,7 @@ class BlockNumber
     bool operator==( const BlockNumber &rhs ) const;
 
     /**
-     * @brief Comparison operator of block number class.
+     * @brief Equality Comparison to uint16_t Block Number.
      *
      * @param[in] rhs
      *   The block number to compare to.
@@ -138,7 +138,7 @@ class BlockNumber
     bool operator==( uint16_t rhs ) const;
 
     /**
-     * @brief Comparison operator of block number class.
+     * @brief Un-equality Comparison to Block Number.
      *
      * @param[in] rhs
      *   The block number to compare to.
@@ -148,7 +148,7 @@ class BlockNumber
     bool operator!=( const BlockNumber &rhs ) const;
 
     /**
-     * @brief Comparison operator of block number class.
+     * @brief Un-equality Comparison to uint16_t Block Number.
      *
      * @param[in] rhs
      *   The block number to compare to.
@@ -161,6 +161,33 @@ class BlockNumber
     //! Block Number Value
     uint16_t blockNumberV;
 };
+
+/**
+ * @brief Equality Comparison of uint16_t Block Number and Block Number Class.
+ *
+ * @param[in] lhs
+ *   Block Number (uint16_t representation).
+ * @param[in] rhs
+ *   Block Number.
+ *
+ * @return Equality of the block numbers.
+ *
+ * @return
+ */
+bool operator==( uint16_t lhs, const BlockNumber &rhs );
+
+/**
+ * @brief Un-equality Comparison of uint16_t Block Number and Block Number
+ *   Class.
+ *
+ * @param[in] lhs
+ *   Block Number (uint16_t representation).
+ * @param[in] rhs
+ *   Block Number.
+ *
+ * @return Un-Equality of the block numbers.
+ **/
+bool operator!=( uint16_t lhs, const BlockNumber &rhs );
 
 }
 

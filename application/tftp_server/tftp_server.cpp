@@ -321,7 +321,7 @@ static void receivedRequest(
 static void transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::Options &clientOptions)
+  const Tftp::Options::Options &clientOptions )
 {
   std::cout
     << "RRQ: " << filename << " from: " << remote.address().to_string() << "\n";
@@ -360,7 +360,7 @@ static void transmitFile(
 static void receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::Options &clientOptions)
+  const Tftp::Options::Options &clientOptions )
 {
   std::cout
     << "WRQ: " << filename << " from: " << remote.address().to_string() << "\n";

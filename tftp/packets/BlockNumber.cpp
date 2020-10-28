@@ -107,4 +107,14 @@ bool BlockNumber::operator !=( const uint16_t rhs ) const
   return blockNumberV != rhs;
 }
 
+bool operator==( uint16_t lhs, const BlockNumber &rhs )
+{
+  return lhs == static_cast< uint16_t>( rhs);
+}
+
+bool operator!=( uint16_t lhs, const BlockNumber &rhs )
+{
+  return lhs != static_cast< uint16_t>( rhs);
+}
+
 }

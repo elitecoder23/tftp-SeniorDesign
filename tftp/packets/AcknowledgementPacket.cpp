@@ -53,7 +53,8 @@ void AcknowledgementPacket::blockNumber( const BlockNumber blockNumber)
 
 AcknowledgementPacket::operator std::string() const
 {
-  return ( boost::format( "ACK: BLOCKNO: %d") % blockNumber()).str();
+  return ( boost::format( "ACK: BLOCKNO: %d") %
+    static_cast< uint16_t>( blockNumber())).str();
 }
 
 Tftp::RawTftpPacket AcknowledgementPacket::encode() const
@@ -83,7 +84,7 @@ void AcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // decode block number
-  Helper::getInt< uint16_t>( packetIt, blockNumberV);
+  Helper::getInt< uint16_t>( packetIt, static_cast< uint16_t&>( blockNumberV ));
 }
 
 }

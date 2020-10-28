@@ -11,11 +11,12 @@ find_package( Boost )
 
 if( NOT TARGET doc )
   add_custom_target( doc COMMENT "Generate Documentation" )
-endif( NOT TARGET doc )
+endif()
 
 if( DOXYGEN_FOUND )
   set( DOXYGEN_PROJECT_NAME "${tftp_DESCRIPTION}" )
   set( DOXYGEN_PROJECT_BRIEF "${tftp_DESCRIPTION}" )
+  set( DOXYGEN_PROJECT_NUMBER "${tftp_VERSION}" )
   set( DOXYGEN_BUILTIN_STL_SUPPORT YES )
   set( DOXYGEN_EXTRACT_PRIVATE YES )
   set( DOXYGEN_EXTRACT_PACKAGE YES )
@@ -74,20 +75,4 @@ if( DOXYGEN_FOUND )
     COMPONENT documentation
     DESTINATION ${CMAKE_INSTALL_DOCDIR}/tftp_api_doc
     OPTIONAL )
-
-#  file(
-#    GENERATE
-#    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/CMakeGraphVizOptions.cmake
-#    CONTENT "\
-#cmake_minimum_required( VERSION 3.18 )
-#set( GRAPHVIZ_EXTERNAL_LIBS FALSE)
-#set( GRAPHVIZ_GENERATE_PER_TARGET FALSE)
-#set( GRAPHVIZ_GENERATE_DEPENDERS FALSE)")
-
-#  add_custom_target(
-#    doc_dep
-#    ${CMAKE_COMMAND} --graphviz=${CMAKE_CURRENT_BINARY_DIR}/doc_dep.dot ${CMAKE_CURRENT_SOURCE_DIR}
-#    COMMAND ${DOXYGEN_DOT_EXECUTABLE} -Tpdf -O ${CMAKE_CURRENT_BINARY_DIR}/doc_dep.dot)
-
-  #add_dependencies( doc doc_dep)
 endif()

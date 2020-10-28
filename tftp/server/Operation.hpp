@@ -63,7 +63,6 @@ class Operation
      *   When operation has no error.
      **/
     [[nodiscard]] virtual const ErrorInfo& errorInfo() const = 0;
-
 };
 
 }

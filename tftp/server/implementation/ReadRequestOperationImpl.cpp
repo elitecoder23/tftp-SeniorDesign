@@ -172,7 +172,7 @@ void ReadRequestOperationImpl::sendData()
   lastTransmittedBlockNumber++;
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
-    << "Send Data: " << lastTransmittedBlockNumber;
+    << "Send Data: " << static_cast< uint16_t >( lastTransmittedBlockNumber);
 
   Packets::DataPacket data{
     lastTransmittedBlockNumber,

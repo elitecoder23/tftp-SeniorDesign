@@ -150,7 +150,7 @@ OperationImpl::~OperationImpl() noexcept
 
 void OperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo) noexcept
+  ErrorInfo &&errorInfo )
 {
   BOOST_LOG_FUNCTION()
 

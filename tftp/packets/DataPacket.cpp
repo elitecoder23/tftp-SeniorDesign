@@ -91,7 +91,7 @@ size_t DataPacket::dataSize() const
 DataPacket::operator std::string() const
 {
   return ( boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
-    blockNumber() %
+    static_cast< uint16_t>( blockNumber()) %
     dataSize()).str();
 }
 
@@ -124,7 +124,9 @@ void DataPacket::decodeBody( const RawTftpPacket &rawPacket)
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // decode block number
-  packetIt = Helper::getInt< uint16_t>( packetIt, blockNumberV );
+  packetIt = Helper::getInt< uint16_t>(
+    packetIt,
+    static_cast< uint16_t&>( blockNumberV ));
 
   // copy data
   dataV.assign( packetIt, rawPacket.end());

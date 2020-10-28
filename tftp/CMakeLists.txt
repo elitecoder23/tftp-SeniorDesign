@@ -40,14 +40,14 @@ target_include_directories(
   tftp
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..> )
 
-target_compile_features( tftp PUBLIC cxx_std_17 )
+target_compile_features( tftp PUBLIC cxx_std_20 )
 
 target_compile_definitions(
   tftp
 
   PRIVATE
-  # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-  $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
+   # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
 target_compile_options(
   tftp
@@ -79,7 +79,7 @@ target_sources(
   PRIVATE
     VersionTest.cpp )
 
-target_compile_features( tftp_test PUBLIC cxx_std_17 )
+target_compile_features( tftp_test PUBLIC cxx_std_20 )
 
 target_compile_definitions(
   tftp_test
