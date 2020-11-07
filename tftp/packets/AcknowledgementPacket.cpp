@@ -34,9 +34,7 @@ AcknowledgementPacket::AcknowledgementPacket( const RawTftpPacket &rawPacket) :
 AcknowledgementPacket& AcknowledgementPacket::operator=(
   const RawTftpPacket &rawPacket)
 {
-  // call inherited operator
-  Packet::operator =( rawPacket);
-  // decode body
+  decodeHeader( rawPacket);
   decodeBody( rawPacket);
   return *this;
 }

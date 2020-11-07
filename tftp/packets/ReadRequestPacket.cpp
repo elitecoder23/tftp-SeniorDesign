@@ -43,4 +43,12 @@ ReadRequestPacket::ReadRequestPacket( const RawTftpPacket &rawPacket):
 {
 }
 
+ReadRequestPacket& ReadRequestPacket::operator=(
+  const RawTftpPacket &rawPacket)
+{
+  decodeHeader( rawPacket);
+  decodeBody( rawPacket);
+  return *this;
+}
+
 }

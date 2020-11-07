@@ -71,8 +71,15 @@ class DataPacket: public Packet
      **/
     explicit DataPacket( const RawTftpPacket &rawPacket );
 
-    //! @copydoc Packet::operator=(const RawTftpPacket&)
-    DataPacket& operator=( const RawTftpPacket &rawPacket ) final;
+    /**
+     * @brief Assigns a Raw Packet to this Packet.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @return *this
+     **/
+    DataPacket& operator=( const RawTftpPacket &rawPacket );
 
     /**
      * @brief Returns the block number.

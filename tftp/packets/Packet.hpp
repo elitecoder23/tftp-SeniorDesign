@@ -47,54 +47,8 @@ class Packet
      **/
     [[nodiscard]] PacketType packetType() const noexcept;
 
-    /**
-     * @brief Copy Constructor
-     *
-     * @param[in] other
-     *   Other Packet
-     **/
-    Packet( const Packet &other ) = default;
-
-    /**
-     * @brief Move Constructor
-     *
-     * @param[in] other
-     *   Other Packet
-     **/
-    Packet( Packet &&other ) = default;
-
     //! Destructor
     virtual ~Packet() noexcept = default;
-
-    /**
-     * @brief Copy assignment operator
-     *
-     * @param[in] other
-     *   Other Packet
-     *
-     * @return *this
-     **/
-    Packet& operator=( const Packet &other );
-
-    /**
-     * @brief Move assignment operator
-     *
-     * @param[in] other
-     *   Other Packet
-     *
-     * @return *this
-     **/
-    Packet& operator=( Packet &&other );
-
-    /**
-     * @brief Assigns a raw packet to this packet.
-     *
-     * @param[in] rawPacket
-     *   Packet, which shall be decoded.
-     *
-     * @return *this
-     **/
-    virtual Packet& operator=( const RawTftpPacket &rawPacket );
 
     /**
      * @brief Get the binary representation of the packet.
@@ -135,6 +89,32 @@ class Packet
      **/
     Packet( PacketType packetType, const RawTftpPacket &rawPacket );
 
+    // Defaulted Copy Constructor
+    Packet( const Packet &other ) = default;
+
+    // Defaulted Move Constructor
+    Packet( Packet &&other ) = default;
+
+    /**
+     * @brief Copy Assignment Operator
+     *
+     * @param[in] other
+     *   Other Packet
+     *
+     * @return *this
+     **/
+    Packet& operator=( const Packet &other ) noexcept;
+
+    /**
+     * @brief Move Assignment Operator
+     *
+     * @param[in] other
+     *   Other Packet
+     *
+     * @return *this
+     **/
+    Packet& operator=( Packet &&other ) noexcept;
+
     /**
      * @brief Get the binary representation of the packet.
      *
@@ -155,7 +135,6 @@ class Packet
      **/
     void insertHeader( RawTftpPacket &rawPacket ) const;
 
-  private:
     /**
      * @brief Decodes the TFTP Header.
      *
@@ -167,6 +146,7 @@ class Packet
      **/
     void decodeHeader( const RawTftpPacket &rawPacket);
 
+  private:
     //! TFTP Packet Type
     const PacketType packetTypeValue;
 };

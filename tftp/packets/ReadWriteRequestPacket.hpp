@@ -58,9 +58,6 @@ class ReadWriteRequestPacket: public Packet
      **/
     static TransferMode decodeMode( std::string_view mode );
 
-    //! @copydoc Packet::operator=(const RawTftpPacket&)
-    ReadWriteRequestPacket& operator=( const RawTftpPacket &rawPacket ) final;
-
     /**
      * @brief Returns the request filename.
      *
@@ -170,12 +167,6 @@ class ReadWriteRequestPacket: public Packet
       PacketType packetType,
       const RawTftpPacket &rawPacket );
 
-  private:
-    /**
-     * @copydoc Packet::encode()
-     **/
-    [[nodiscard]] RawTftpPacket encode() const final;
-
     /**
      * @brief Decodes the TFTP body.
      *
@@ -186,6 +177,12 @@ class ReadWriteRequestPacket: public Packet
      *   If data or packet is invalid.
      **/
     void decodeBody( const RawTftpPacket &rawPacket );
+
+  private:
+    /**
+     * @copydoc Packet::encode()
+     **/
+    [[nodiscard]] RawTftpPacket encode() const final;
 
     //! stored request filename
     std::string filenameV;

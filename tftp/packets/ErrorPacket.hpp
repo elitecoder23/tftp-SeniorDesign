@@ -63,8 +63,15 @@ class ErrorPacket: public Packet
      **/
     explicit ErrorPacket( const RawTftpPacket &rawPacket);
 
-    //! @copydoc Packet::operator=(const RawTftpPacket&)
-    ErrorPacket& operator=( const RawTftpPacket &rawPacket) final;
+    /**
+     * @brief Assigns a Raw Packet to this Packet.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @return *this
+     **/
+    ErrorPacket& operator=( const RawTftpPacket &rawPacket);
 
     //! @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;

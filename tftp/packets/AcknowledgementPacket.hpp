@@ -58,8 +58,15 @@ class AcknowledgementPacket: public Packet
      **/
     explicit AcknowledgementPacket( const RawTftpPacket &rawPacket );
 
-    //! @copydoc Packet::operator=(const RawTftpPacket&)
-    AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket ) final;
+    /**
+     * @brief Assigns a Raw Packet to this Packet.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @return *this
+     **/
+    AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket );
 
     /**
      * @brief Returns the Block Number.

@@ -58,6 +58,16 @@ class ReadRequestPacket: public ReadWriteRequestPacket
      *   When rawPacket is not an valid packet.
      **/
     explicit ReadRequestPacket( const RawTftpPacket &rawPacket );
+
+    /**
+     * @brief Assigns a Raw Packet to this Packet.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @return *this
+     **/
+    ReadRequestPacket& operator=( const RawTftpPacket &rawPacket );
 };
 
 }

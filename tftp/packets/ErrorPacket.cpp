@@ -38,8 +38,7 @@ ErrorPacket::ErrorPacket( const RawTftpPacket &rawPacket):
 ErrorPacket& ErrorPacket::operator=(
   const RawTftpPacket &rawPacket)
 {
-  // call inherited operator
-  Packet::operator =( rawPacket);
+  decodeHeader( rawPacket);
   decodeBody( rawPacket);
   return *this;
 }

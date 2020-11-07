@@ -70,16 +70,6 @@ TransferMode ReadWriteRequestPacket::decodeMode( std::string_view mode)
   return TransferMode::Invalid;
 }
 
-ReadWriteRequestPacket& ReadWriteRequestPacket::operator=(
-  const RawTftpPacket &rawPacket)
-{
-  // call inherited operator
-  Packet::operator =( rawPacket);
-  // decode body
-  decodeBody( rawPacket);
-  return *this;
-}
-
 std::string_view ReadWriteRequestPacket::filename() const
 {
   return filenameV;
@@ -201,37 +191,6 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   decodeBody( rawPacket);
 }
 
-Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
-{
-  const auto mode{ decodeMode( modeV)};
-  const auto rawOptions{ Options::OptionList::rawOptions( optionsV)};
-
-  RawTftpPacket rawPacket(
-    HeaderSize +
-    filenameV.size() + 1U +
-    mode.size() + 1U +
-    rawOptions.size());
-
-  insertHeader( rawPacket);
-
-  auto packetIt{ rawPacket.begin() + HeaderSize};
-
-  // encode filename
-  packetIt = std::copy( filenameV.begin(), filenameV.end(), packetIt);
-  *packetIt = 0;
-  ++packetIt;
-
-  // encode transfer mode
-  packetIt = std::copy( mode.begin(), mode.end(), packetIt);
-  *packetIt = 0;
-  ++packetIt;
-
-  // encode options
-  std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
-
-  return rawPacket;
-}
-
 void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
 {
   auto packetIt{ rawPacket.begin() + HeaderSize};
@@ -274,6 +233,37 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
 
   // assign options
   optionsV = Options::OptionList::options( packetIt, rawPacket.end());
+}
+
+Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
+{
+  const auto mode{ decodeMode( modeV)};
+  const auto rawOptions{ Options::OptionList::rawOptions( optionsV)};
+
+  RawTftpPacket rawPacket(
+    HeaderSize +
+    filenameV.size() + 1U +
+    mode.size() + 1U +
+    rawOptions.size());
+
+  insertHeader( rawPacket);
+
+  auto packetIt{ rawPacket.begin() + HeaderSize};
+
+  // encode filename
+  packetIt = std::copy( filenameV.begin(), filenameV.end(), packetIt);
+  *packetIt = 0;
+  ++packetIt;
+
+  // encode transfer mode
+  packetIt = std::copy( mode.begin(), mode.end(), packetIt);
+  *packetIt = 0;
+  ++packetIt;
+
+  // encode options
+  std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
+
+  return rawPacket;
 }
 
 }

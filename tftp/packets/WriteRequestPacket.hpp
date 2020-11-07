@@ -55,6 +55,16 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      *   When the raw data does not represent a valid write request packet
      **/
     explicit WriteRequestPacket( const RawTftpPacket &rawPacket );
+
+    /**
+     * @brief Assigns a Raw Packet to this Packet.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @return *this
+     **/
+    WriteRequestPacket& operator=( const RawTftpPacket &rawPacket );
 };
 
 }

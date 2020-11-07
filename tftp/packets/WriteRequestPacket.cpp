@@ -43,4 +43,12 @@ WriteRequestPacket::WriteRequestPacket( const RawTftpPacket &rawPacket):
 {
 }
 
+WriteRequestPacket& WriteRequestPacket::operator=(
+  const RawTftpPacket &rawPacket)
+{
+  decodeHeader( rawPacket);
+  decodeBody( rawPacket);
+  return *this;
+}
+
 }

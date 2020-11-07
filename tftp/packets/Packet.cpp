@@ -103,37 +103,23 @@ Packet::Packet(
   decodeHeader( rawPacket);
 }
 
-Packet& Packet::operator=( const Packet &other)
-{
-  if (packetTypeValue != other.packetTypeValue)
-  {
-    BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "Packet types are not same"));
-  }
-
-  return *this;
-}
-
-Packet& Packet::operator=( Packet &&other)
-{
-  if (packetTypeValue != other.packetTypeValue)
-  {
-    BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "Packet types are not same"));
-  }
-
-  return *this;
-}
-
-Packet& Packet::operator=( const RawTftpPacket &rawPacket)
-{
-  decodeHeader( rawPacket);
-  return *this;
-}
-
 Packet::operator RawTftpPacket() const
 {
   return encode();
+}
+
+Packet& Packet::operator=( const Packet &other) noexcept
+{
+  // assure same packet type
+  assert( packetTypeValue == other.packetTypeValue );
+  return *this;
+}
+
+Packet& Packet::operator=( Packet &&other) noexcept
+{
+  // assure same packet type
+  assert( packetTypeValue == other.packetTypeValue );
+  return *this;
 }
 
 void Packet::insertHeader( RawTftpPacket &rawPacket) const
@@ -147,7 +133,7 @@ void Packet::insertHeader( RawTftpPacket &rawPacket) const
   Helper::setInt( packetIt, static_cast< uint16_t>( packetTypeValue));
 }
 
-void Packet::decodeHeader( const RawTftpPacket &rawPacket)
+void Packet::decodeHeader( const RawTftpPacket &rawPacket )
 {
   // check size
   if (rawPacket.size() < HeaderSize)

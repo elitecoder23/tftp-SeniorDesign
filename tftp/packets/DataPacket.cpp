@@ -41,9 +41,7 @@ DataPacket::DataPacket( const RawTftpPacket &rawPacket) :
 
 DataPacket& DataPacket::operator=( const RawTftpPacket &rawPacket)
 {
-  // inherited operator
-  Packet::operator =( rawPacket);
-  // decode body
+  decodeHeader( rawPacket);
   decodeBody( rawPacket);
   return *this;
 }

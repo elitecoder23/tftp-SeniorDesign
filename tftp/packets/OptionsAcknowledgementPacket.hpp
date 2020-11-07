@@ -62,9 +62,16 @@ class OptionsAcknowledgementPacket: public Packet
      **/
     explicit OptionsAcknowledgementPacket( const RawTftpPacket &rawPacket );
 
-    //! @copydoc Packet::operator=(const RawTftpPacket&)
+    /**
+     * @brief Assigns a Raw Packet to this Packet.
+     *
+     * @param[in] rawPacket
+     *   Packet, which shall be decoded.
+     *
+     * @return *this
+     **/
     OptionsAcknowledgementPacket& operator=(
-      const RawTftpPacket &rawPacket ) final;
+      const RawTftpPacket &rawPacket );
 
     /**
      * @brief Returns the options within the packet (const reference)
