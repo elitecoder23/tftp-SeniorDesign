@@ -89,10 +89,20 @@ class Packet
      **/
     Packet( PacketType packetType, const RawTftpPacket &rawPacket );
 
-    // Defaulted Copy Constructor
+    /**
+     * @brief Copy Constructor
+     *
+     * @param[in] other
+     *   Other Packet
+     **/
     Packet( const Packet &other ) = default;
 
-    // Defaulted Move Constructor
+    /**
+     * @brief Move Constructor
+     *
+     * @param[in] other
+     *   Other Packet
+     **/
     Packet( Packet &&other ) = default;
 
     /**
@@ -144,7 +154,7 @@ class Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    void decodeHeader( const RawTftpPacket &rawPacket);
+    void decodeHeader( const RawTftpPacket &rawPacket );
 
   private:
     //! TFTP Packet Type
