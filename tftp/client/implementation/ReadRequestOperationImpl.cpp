@@ -148,17 +148,17 @@ void ReadRequestOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
-    << "RX: " << static_cast< std::string>( dataPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    << "RX: " << static_cast< std::string>( dataPacket );
 
   // check retransmission of last packet
-  if (dataPacket.blockNumber() == lastReceivedBlockNumber)
+  if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
       << "Received last data package again. Re-ACK them";
 
     // Retransmit last ACK packet
-    send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber});
+    send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber });
 
     return;
   }
@@ -166,17 +166,17 @@ void ReadRequestOperationImpl::dataPacket(
   // check unexpected block number
   if ( dataPacket.blockNumber() != lastReceivedBlockNumber.next())
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Wrong Data packet block number";
 
     // send error packet
     Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
       "Block Number not expected"};
-    send( errorPacket);
+    send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket));
+    finished( TransferStatus::TransferError, std::move( errorPacket ));
     return;
   }
 

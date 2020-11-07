@@ -163,7 +163,7 @@ class OperationImpl :
      **/
     virtual void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {} ) noexcept;
+      ErrorInfo &&errorInfo = {} );
 
     /**
      * @copydoc PacketHandler::readRequestPacket()

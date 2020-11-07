@@ -291,7 +291,7 @@ void OperationImpl::receiveTimeout( const uint8_t receiveTimeout) noexcept
 
 void OperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo ) noexcept
+  ErrorInfo &&errorInfo )
 {
   BOOST_LOG_FUNCTION()
 
@@ -303,7 +303,7 @@ void OperationImpl::finished(
   timer.cancel();
   socket.cancel();
 
-  if (completionHandler)
+  if ( completionHandler)
   {
     completionHandler( status);
   }
@@ -321,17 +321,17 @@ void OperationImpl::readRequestPacket(
   // send error packet
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "RRQ not expected"};
+    "RRQ not expected" };
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket));
+  finished( TransferStatus::TransferError, std::move( errorPacket ));
 }
 
 void OperationImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &,
-  const Packets::WriteRequestPacket &writeRequestPacket)
+  const Packets::WriteRequestPacket &writeRequestPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -351,7 +351,7 @@ void OperationImpl::writeRequestPacket(
 
 void OperationImpl::errorPacket(
   const boost::asio::ip::udp::endpoint &,
-  const Packets::ErrorPacket &errorPacket)
+  const Packets::ErrorPacket &errorPacket )
 {
   BOOST_LOG_FUNCTION()
 
