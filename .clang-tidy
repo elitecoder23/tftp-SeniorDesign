@@ -1,7 +1,8 @@
 Checks:          'clang-diagnostic-*,
                   clang-analyzer-*,
                   bugprone-*,
-                  readability-inconsistent-declaration-parameter-name'
+                  readability-inconsistent-declaration-parameter-name,
+                  -llvmlibc-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
