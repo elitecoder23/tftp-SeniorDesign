@@ -277,40 +277,40 @@ static void receivedRequest(
   const Tftp::Options::Options &clientOptions )
 {
   // Check transfer mode
-  if ( mode != Tftp::TransferMode::OCTET)
+  if ( mode != Tftp::TransferMode::OCTET )
   {
     std::cerr << "Wrong transfer mode\n";
 
     server->errorOperation(
       remote,
       Tftp::ErrorCode::IllegalTftpOperation,
-      "wrong transfer mode");
+      "wrong transfer mode" );
 
     return;
   }
 
-  if ( !checkFilename( (baseDir / filename).lexically_normal()))
+  if ( !checkFilename( ( baseDir / filename ).lexically_normal() ) )
   {
     std::cerr << "Error filename check\n";
 
     server->errorOperation(
       remote,
       Tftp::ErrorCode::AccessViolation,
-      "Illegal filename");
+      "Illegal filename" );
 
     return;
   }
 
-  switch (requestType)
+  switch ( requestType )
   {
     case Tftp::RequestType::Read:
       // we are on server side and transmit the data on RRQ
-      transmitFile( remote, baseDir / filename, clientOptions);
+      transmitFile( remote, baseDir / filename, clientOptions );
       break;
 
     case Tftp::RequestType::Write:
       // we are on server side and receive the data on WRQ
-      receiveFile( remote, baseDir /  filename, clientOptions);
+      receiveFile( remote, baseDir /  filename, clientOptions );
       break;
 
     default:
@@ -327,17 +327,17 @@ static void transmitFile(
     << "RRQ: " << filename << " from: " << remote.address().to_string() << "\n";
 
   // open requested file
-  std::fstream fileStream{ filename.c_str(), std::fstream::in};
+  std::fstream fileStream{ filename.c_str(), std::fstream::in };
 
   // check that file was opened successfully
-  if ( !fileStream.good())
+  if ( !fileStream.good() )
   {
     std::cerr << "Error opening file\n";
 
     server->errorOperation(
       remote,
       Tftp::ErrorCode::FileNotFound,
-      "file not found");
+      "file not found" );
 
     return;
   }
@@ -368,16 +368,16 @@ static void receiveFile(
   // open requested file
   std::fstream fileStream(
     filename.c_str(),
-    std::fstream::out | std::fstream::trunc);
+    std::fstream::out | std::fstream::trunc );
 
   // check that file was opened successfully
-  if ( !fileStream.good())
+  if ( !fileStream.good() )
   {
     std::cerr << "Error opening file\n";
 
     server->errorOperation(
       remote,
-      Tftp::ErrorCode::AccessViolation);
+      Tftp::ErrorCode::AccessViolation );
 
     return;
   }
