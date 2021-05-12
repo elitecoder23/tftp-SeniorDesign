@@ -41,18 +41,18 @@ void OperationImpl::gracefulAbort(
   send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::Aborted, std::move( errorPacket));
+  finished( TransferStatus::Aborted, std::move( errorPacket ));
 }
 
 void OperationImpl::abort()
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "Abort requested";
 
   // Operation completed
-  finished( TransferStatus::Aborted);
+  finished( TransferStatus::Aborted );
 }
 
 const OperationImpl::ErrorInfo& OperationImpl::errorInfo() const
@@ -146,6 +146,13 @@ catch (boost::system::system_error &err)
 
 OperationImpl::~OperationImpl() noexcept
 {
+  BOOST_LOG_FUNCTION()
+
+  boost::system::error_code ec;
+  // close socket and cancel all possible asynchronous operations.
+  socket.close( ec );
+  // cancel timer
+  timer.cancel( ec );
 }
 
 void OperationImpl::finished(
@@ -157,14 +164,14 @@ void OperationImpl::finished(
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "Operation finished";
 
-  errorInfoV = std::move( errorInfo);
+  errorInfoV = std::move( errorInfo );
 
   timer.cancel();
   socket.cancel();
 
-  if ( completionHandler)
+  if ( completionHandler )
   {
-    completionHandler( status);
+    completionHandler( status );
   }
 }
 

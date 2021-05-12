@@ -109,7 +109,7 @@ class OperationImpl:
      **/
     virtual void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {});
+      ErrorInfo &&errorInfo = {} );
 
     /**
      * @brief Sends the given packet to the client.

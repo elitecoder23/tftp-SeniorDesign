@@ -39,6 +39,9 @@ class Operation
     /**
      * @brief Aborts the Operation Gracefully.
      *
+     * With an graceful abort the transfer is canceled by sending an error
+     * packet to the client, signalling the abort of the transfer.
+     *
      * @param[in] errorCode
      *   Abort error code.
      * @param errorMessage
@@ -46,7 +49,7 @@ class Operation
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      std::string_view errorMessage = {}) = 0;
+      std::string_view errorMessage = {} ) = 0;
 
     /**
      * @brief Aborts the Operation Immediately.

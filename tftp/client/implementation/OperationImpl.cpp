@@ -27,11 +27,17 @@ namespace Tftp::Client {
 OperationImpl::~OperationImpl() noexcept
 {
   BOOST_LOG_FUNCTION()
+
+  boost::system::error_code ec;
+  // close socket and cancel all possible asynchronous operations.
+  socket.close( ec );
+  // cancel timer
+  timer.cancel( ec );
 }
 
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
-  std::string_view errorMessage)
+  std::string_view errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
@@ -40,21 +46,21 @@ void OperationImpl::gracefulAbort(
 
   Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::Aborted, std::move( errorPacket));
+  finished( TransferStatus::Aborted, std::move( errorPacket ) );
 }
 
 void OperationImpl::abort()
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "Abort requested";
 
   // Operation completed
-  finished( TransferStatus::Aborted);
+  finished( TransferStatus::Aborted );
 }
 
 const OperationImpl::ErrorInfo& OperationImpl::errorInfo() const
@@ -261,30 +267,30 @@ void OperationImpl::receive()
         boost::asio::placeholders::bytes_transferred));
 
     // set receive timeout
-    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV});
+    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV } );
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,
       shared_from_this(),
-      boost::asio::placeholders::error));
+      boost::asio::placeholders::error ) );
   }
-  catch (boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "RX Error: " << err.what();
 
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
   }
 }
 
 void OperationImpl::maxReceivePacketSize(
-  const uint16_t maxReceivePacketSize) noexcept
+  const uint16_t maxReceivePacketSize ) noexcept
 {
   maxReceivePacketSizeV = maxReceivePacketSize;
 }
 
-void OperationImpl::receiveTimeout( const uint8_t receiveTimeout) noexcept
+void OperationImpl::receiveTimeout( const uint8_t receiveTimeout ) noexcept
 {
   receiveTimeoutV = receiveTimeout;
 }
@@ -586,12 +592,12 @@ void OperationImpl::timeoutFirstHandler(
 }
 
 void OperationImpl::timeoutHandler(
-  const boost::system::error_code& errorCode)
+  const boost::system::error_code& errorCode )
 {
   BOOST_LOG_FUNCTION()
 
   // operation aborted (packet received)
-  if (boost::asio::error::operation_aborted == errorCode)
+  if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;
   }
@@ -599,10 +605,10 @@ void OperationImpl::timeoutHandler(
   // internal (timer) error occurred
   if (errorCode)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "timer error: " << errorCode.message();
 
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
     return;
   }
 

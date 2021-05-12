@@ -250,7 +250,7 @@ void TftpServerImpl::errorOperation(
 
     errSocket.connect( remote);
 
-    errSocket.send( boost::asio::buffer( static_cast< RawTftpPacket>( errorPacket)));
+    errSocket.send( boost::asio::buffer( static_cast< RawTftpPacket>( errorPacket ) ) );
   }
   catch ( boost::system::system_error &err)
   {
