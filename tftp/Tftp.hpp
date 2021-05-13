@@ -119,13 +119,13 @@ enum class TransferStatus
 };
 
 //! Default TFTP Port.
-constexpr uint16_t DefaultTftpPort{ 69U};
+constexpr uint16_t DefaultTftpPort{ 69U };
 
 //! Default TFTP Receive Timeout in Seconds (2 seconds)
-constexpr uint8_t DefaultTftpReceiveTimeout{ 2};
+constexpr uint8_t DefaultTftpReceiveTimeout{ 2U };
 
 //! Number of retries performed, when no ACK has been received
-constexpr uint16_t DefaultTftpRetries{ 1U};
+constexpr uint16_t DefaultTftpRetries{ 1U };
 
 /**
  * @brief TFTP Packet Types.

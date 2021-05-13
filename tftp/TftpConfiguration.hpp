@@ -32,16 +32,25 @@ namespace Tftp {
 class TftpConfiguration
 {
   public:
-    //! Initialises the configuration with default values.
-    TftpConfiguration() noexcept;
+    /**
+     * @brief Initialises the Configuration with Default Values.
+     *
+     * @param[in] defaultTftpPort
+     *   Default TFTP Port used for Configuration
+     **/
+    TftpConfiguration( uint16_t defaultTftpPort = DefaultTftpPort ) noexcept;
 
     /**
      * @brief Loads the configuration via a boost::property_tree::ptree.
      *
      * @param[in] config
-     *   The stored configuration.
+     *   Stored configuration.
+     * @param[in] defaultTftpPort
+     *   Default TFTP Port used for Configuration
      **/
-    explicit TftpConfiguration( const boost::property_tree::ptree &config);
+    explicit TftpConfiguration(
+      const boost::property_tree::ptree &config,
+      uint16_t defaultTftpPort = DefaultTftpPort );
 
     /**
      * @brief Converts the configuration values to a
