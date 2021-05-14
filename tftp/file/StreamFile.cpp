@@ -86,7 +86,9 @@ bool StreamFile::receivedTransferSize( const uint64_t transferSize )
 
 void StreamFile::receivedData( const DataType &data) noexcept
 {
-  streamV.write( reinterpret_cast< const char * >( &data[0] ), data.size() );
+  streamV.write(
+    reinterpret_cast< const char * >( &data[0] ),
+    static_cast< std::streamsize >( data.size() ) );
 }
 
 std::optional< uint64_t> StreamFile::requestedTransferSize()
@@ -98,7 +100,9 @@ StreamFile::DataType StreamFile::sendData( const size_t maxSize ) noexcept
 {
   DataType data( maxSize );
 
-  streamV.read( reinterpret_cast< char*>( &data[0]), maxSize );
+  streamV.read(
+    reinterpret_cast< char*>( &data[0] ),
+    static_cast< std::streamsize >( maxSize ) );
 
   data.resize( streamV.gcount() );
 

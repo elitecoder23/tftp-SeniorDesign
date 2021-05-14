@@ -64,7 +64,7 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
   return true;
 }
 
-void MemoryFile::receivedData( const DataType &data) noexcept
+void MemoryFile::receivedData( const DataType &data ) noexcept
 {
   dataV.insert( dataV.end(), data.begin(), data.end() );
 
@@ -90,7 +90,7 @@ MemoryFile::DataType MemoryFile::sendData( const size_t maxSize ) noexcept
   }
   else
   {
-    endPtr = dataPtr+maxSize;
+    endPtr = dataPtr + static_cast< ptrdiff_t >( maxSize );
   }
 
   dataPtr=endPtr;
