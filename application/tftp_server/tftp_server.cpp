@@ -61,7 +61,7 @@ int main( int argc, char * argv[]);
 static bool checkFilename( const std::filesystem::path &filename );
 
 /**
- * @brief Handler for Recevifed TFTP Requests.
+ * @brief Handler for Received TFTP Requests.
  *
  * @param[in] remote
  *   Remote address.

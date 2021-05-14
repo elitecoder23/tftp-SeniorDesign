@@ -34,10 +34,10 @@ namespace Tftp::Options {
 class OptionList;
 
 //! TFTP Options (Maps Option Name to Option Value)
-using Options = std::map< std::string, std::string, std::less<>>;
+using Options = std::map< std::string, std::string, std::less< > >;
 
 /**
- * @brief %Option negotiation.
+ * @brief %Option Negotiation.
  *
  * This function is called, when the TFTP server receives options within
  * RRQ/ WRQ packets.
@@ -56,10 +56,10 @@ using Options = std::map< std::string, std::string, std::less<>>;
  *   If the option value is not acceptable.
  **/
 using NegotiateOption = std::function< std::string(
-  std::string_view optionValue)>;
+  std::string_view optionValue ) >;
 
 //! TFTP Options Negotiation (Maps Option Name to Negotiation Function)
-using OptionsNegotiation = std::map< std::string, NegotiateOption, std::less<>>;
+using OptionsNegotiation = std::map< std::string, NegotiateOption, std::less< > >;
 
 }
 
