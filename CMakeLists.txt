@@ -84,6 +84,10 @@ add_subdirectory( application )
 
 add_subdirectory( tftp_api_doc )
 
+install(
+  FILES LICENSE
+  TYPE DOC
+  RENAME ${PROJECT_NAME}.LICENSE )
 
 set( CPACK_GENERATOR ZIP )
 set( CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_DESCRIPTION} )
