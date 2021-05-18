@@ -28,22 +28,22 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      * @brief Creates a write request packet with the given data.
      *
      * @param[in] filename
-     *   The filename, which will be requested
+     *   Filename, which will be requested
      * @param[in] mode
-     *   The transfer mode
+     *   Transfer mode
      * @param[in] options
-     *   The options, which are set
+     *   Options, which are set
      **/
     WriteRequestPacket(
       std::string_view filename,
       TransferMode mode,
-      const Options::Options &options ) noexcept;
+      const Options &options ) noexcept;
 
-    //! @copydoc WriteRequestPacket(std::string_view,TransferMode,const Options::Options&)
+    //! @copydoc WriteRequestPacket(std::string_view,TransferMode,const Options&)
     WriteRequestPacket(
       std::string &&filename,
       TransferMode mode,
-      Options::Options &&options ) noexcept;
+      Options &&options ) noexcept;
 
     /**
      * @brief Generates a TFTP Write Request packet from a data buffer

@@ -19,8 +19,6 @@
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
-#include <tftp/options/OptionList.hpp>
-
 #include <tftp/PacketHandler.hpp>
 
 #include <boost/asio.hpp>
@@ -66,7 +64,7 @@ class OperationImpl:
      * @param[in] tftpRetries
      *   Number of retries.
      * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
+     *   Handler which is called on completion of this operation.
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
      **/
@@ -75,7 +73,7 @@ class OperationImpl:
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
       OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote);
+      const boost::asio::ip::udp::endpoint &remote );
 
     /**
      * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
@@ -89,12 +87,30 @@ class OperationImpl:
       uint16_t tftpRetries,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const boost::asio::ip::udp::endpoint &local);
+      const boost::asio::ip::udp::endpoint &local );
 
     /**
      * @brief Destructor.
      **/
     ~OperationImpl() noexcept override;
+
+    /**
+     * @brief Returns the set blocksize option value.
+     *
+     * @return The set blocksize option value.
+     * @retval {}
+     *   If blocksize option has not been added to this option list.
+     **/
+    [[nodiscard]] std::optional< uint16_t> blockSizeOption(
+      const Options &options,
+      uint16_t minAcceptedBlockSize,
+      uint16_t maxAcceptedBlockSize ) const;
+
+    [[nodiscard]] std::optional< uint8_t> timeoutOption(
+      const Options &options ) const;
+
+    [[nodiscard]] std::optional< uint64_t> transferSizeOption(
+      const Options &options ) const;
 
     /**
      * @brief Sets the Finished flag.
@@ -147,7 +163,7 @@ class OperationImpl:
      * @param[in] receiveTimeout
      *   The new receive timeout.
      **/
-    void receiveTimeout( uint8_t receiveTimeout) noexcept;
+    void receiveTimeout( uint8_t receiveTimeout ) noexcept;
 
     /**
      * @copydoc PacketHandler::readRequestPacket
@@ -157,7 +173,7 @@ class OperationImpl:
      **/
     void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ReadRequestPacket &readRequestPacket) final;
+      const Packets::ReadRequestPacket &readRequestPacket ) final;
 
     /**
      * @copydoc PacketHandler::writeRequestPacket
@@ -167,7 +183,7 @@ class OperationImpl:
      **/
     void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::WriteRequestPacket &writeRequestPacket) final;
+      const Packets::WriteRequestPacket &writeRequestPacket ) final;
 
     /**
      * @copydoc PacketHandler::errorPacket()
@@ -186,7 +202,7 @@ class OperationImpl:
      **/
      void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) final;
 
     /**
      * @copydoc PacketHandler::invalidPacket()
@@ -195,7 +211,7 @@ class OperationImpl:
      **/
     void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const RawTftpPacket &rawPacket) final;
+      const RawTftpPacket &rawPacket ) final;
 
   private:
     /**
@@ -216,7 +232,7 @@ class OperationImpl:
      * @param[in] errorCode
      *   When handler is called with error, errorCode is set
      **/
-    void timeoutHandler( const boost::system::error_code& errorCode);
+    void timeoutHandler( const boost::system::error_code& errorCode );
 
     //! Operation Completed Handler
     OperationCompletedHandler completionHandler;
@@ -235,7 +251,7 @@ class OperationImpl:
 
     //! stores the received packets
     RawTftpPacket receivePacket;
-    //! the transmitted packet is stored for retries
+    //! transmitted packet is stored for retries
     RawTftpPacket transmitPacket;
     //! counter to store how often the same packet has been transmitted (retries)
     unsigned int transmitCounter;

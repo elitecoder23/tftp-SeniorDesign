@@ -14,9 +14,8 @@
 #define TFTP_CLIENT_TFTPCLIENTIMPL_HPP
 
 #include <tftp/client/Client.hpp>
-#include <tftp/client/TftpClient.hpp>
 
-#include <tftp/options/OptionList.hpp>
+#include <tftp/client/TftpClient.hpp>
 
 #include <boost/asio.hpp>
 
@@ -56,7 +55,8 @@ class TftpClientImpl : public TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions) final;
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions ) final;
 
     //! @copydoc TftpClient::readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
     OperationPtr readRequestOperation(
@@ -66,7 +66,8 @@ class TftpClientImpl : public TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions,
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions,
       const boost::asio::ip::udp::endpoint &local) final;
 
     //! @copydoc TftpClient::writeRequestOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
@@ -77,7 +78,8 @@ class TftpClientImpl : public TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions) final;
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions ) final;
 
     //! @copydoc TftpClient::writeRequestOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&,const boost::asio::ip::udp::endpoint&)
     OperationPtr writeRequestOperation(
@@ -87,8 +89,9 @@ class TftpClientImpl : public TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions,
-      const boost::asio::ip::udp::endpoint &local) final;
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions,
+      const boost::asio::ip::udp::endpoint &local ) final;
 
   private:
     //! TFTP Receive Timeout

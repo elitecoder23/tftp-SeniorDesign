@@ -19,7 +19,6 @@
 #define TFTP_SERVER_SERVER_HPP
 
 #include <tftp/Tftp.hpp>
-#include <tftp/options/Options.hpp>
 
 #include <boost/asio/ip/udp.hpp>
 
@@ -47,11 +46,11 @@ namespace Tftp::Server {
 class TftpServer;
 
 //! TFTP Server Instance Pointer
-using TftpServerPtr = std::shared_ptr< TftpServer>;
+using TftpServerPtr = std::shared_ptr< TftpServer >;
 
 class Operation;
 //! TFTP Server Operation Instance Pointer
-using OperationPtr = std::shared_ptr< Operation>;
+using OperationPtr = std::shared_ptr< Operation >;
 
 /**
  * @brief Function Handler Definition.
@@ -73,7 +72,7 @@ using ReceivedTftpRequestHandler =
     RequestType requestType,
     std::string_view filename,
     TransferMode mode,
-    const Options::Options &clientOptions)>;
+    const Options &clientOptions ) >;
 
 }
 

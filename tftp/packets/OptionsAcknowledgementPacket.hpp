@@ -15,7 +15,6 @@
 
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/Packet.hpp>
-#include <tftp/options/Options.hpp>
 
 #include <map>
 
@@ -45,11 +44,11 @@ class OptionsAcknowledgementPacket: public Packet
      *   TFTP Options List.
      **/
     explicit OptionsAcknowledgementPacket(
-      const Options::Options &options ) noexcept;
+      const Options &options ) noexcept;
 
-    //! @copydoc OptionsAcknowledgementPacket(const Options::Options&) noexcept
+    //! @copydoc OptionsAcknowledgementPacket(const Options&) noexcept
     explicit OptionsAcknowledgementPacket(
-      Options::Options &&options ) noexcept;
+      Options &&options ) noexcept;
 
     /**
      * @brief Generates a TFTP Options Acknowledgement packet from a data buffer
@@ -78,14 +77,14 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return Option list (as const reference)
      **/
-    [[nodiscard]] const Options::Options& options() const;
+    [[nodiscard]] const Options& options() const;
 
     /**
      * @brief Returns the options within the packet (as reference)
      *
      * @return Option list (as reference)
      **/
-    [[nodiscard]] Options::Options& options();
+    [[nodiscard]] Options& options();
 
     /**
      * @brief Overwrite the options of this packet with the new one.
@@ -93,10 +92,10 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] options
      *   New option list, which shall be used.
      **/
-    void options( const Options::Options &options );
+    void options( const Options &options );
 
-    //! @copydoc options(const Options::Options&)
-    void options( Options::Options &&options );
+    //! @copydoc options(const Options&)
+    void options( Options &&options );
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
@@ -119,7 +118,7 @@ class OptionsAcknowledgementPacket: public Packet
     void decodeBody( const RawTftpPacket &rawPacket );
 
     //! Stored Options.
-    Options::Options optionsV;
+    Options optionsV;
 };
 
 }

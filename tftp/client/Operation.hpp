@@ -14,6 +14,7 @@
 #define TFTP_CLIENT_OPERATION_HPP
 
 #include <tftp/client/Client.hpp>
+
 #include <tftp/packets/Packets.hpp>
 
 #include <string>

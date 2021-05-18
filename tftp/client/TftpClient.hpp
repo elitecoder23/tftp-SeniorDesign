@@ -15,8 +15,6 @@
 
 #include <tftp/client/Client.hpp>
 
-#include <tftp/options/Options.hpp>
-
 #include <boost/asio/ip/udp.hpp>
 
 #include <string_view>
@@ -86,9 +84,11 @@ class TftpClient
      * @param[in] filename
      *   Which file shall be requested
      * @param[in] mode
-     *   The transfer mode
-     * @param[in] clientOptions
-     *   Client TFTP options used for option negotiation.
+     *   Transfer Mode
+     * @param[in] optionsConfiguration
+     *   TFTP Options Configuration.
+     * @param[in] additionalOptions
+     *   Additional TFTP options sent to the server.
      *
      * @return The client operation instance.
      **/
@@ -99,10 +99,11 @@ class TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions ) = 0;
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions ) = 0;
 
     /**
-     * @copydoc readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     * @copydoc readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -114,7 +115,8 @@ class TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions,
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions,
       const boost::asio::ip::udp::endpoint &local ) = 0;
 
     /**
@@ -125,15 +127,17 @@ class TftpClient
      * @param[in] dataHandler
      *   Handler for data.
      * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
+     *   Handler which is called on completion of the operation.
      * @param[in] remote
      *   Where the connection should be established to.
      * @param[in] filename
      *   Which file shall be requested
      * @param[in] mode
-     *   The transfer mode
-     * @param[in] clientOptions
-     *   Client TFTP options used for option negotiation.
+     *   Transfer Mode
+     * @param[in] optionsConfiguration
+     *   TFTP Options Configuration.
+     * @param[in] additionalOptions
+     *   Additional TFTP options sent to the server.
      *
      * @return The client operation instance.
      **/
@@ -144,10 +148,11 @@ class TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions ) = 0;
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions ) = 0;
 
     /**
-     * @copydoc writeRequestOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     * @copydoc writeRequestOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -159,7 +164,8 @@ class TftpClient
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions,
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions,
       const boost::asio::ip::udp::endpoint &local ) = 0;
 
   protected:

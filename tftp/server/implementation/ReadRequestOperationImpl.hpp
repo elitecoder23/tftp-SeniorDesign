@@ -14,8 +14,12 @@
 #define TFTP_SERVER_READREQUESTOPERATIONIMPL_HPP
 
 #include <tftp/Tftp.hpp>
+
 #include <tftp/server/implementation/OperationImpl.hpp>
+
 #include <tftp/packets/BlockNumber.hpp>
+
+#include <tftp/TftpOptionsConfiguration.hpp>
 
 #include <boost/asio.hpp>
 
@@ -39,7 +43,7 @@ class ReadRequestOperationImpl: public OperationImpl
      * @brief Initialises the TFTP server write operation instance.
      *
      * @param[in] ioContext
-     *   The I/O context used for communication.
+     *   I/O context used for communication.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
@@ -47,10 +51,12 @@ class ReadRequestOperationImpl: public OperationImpl
      * @param[in] dataHandler
      *   Handler, which will be called on various events.
      * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
+     *   Handler which is called on completion of this operation.
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
-     * @param[in] negotiatedOptions
+     * @param[in] optionsConfiguration
+     *   TFTP Options Configuration.
+     * @param[in] clientOptions
      *   Server TFTP options used for operation.
      **/
     ReadRequestOperationImpl(
@@ -60,10 +66,11 @@ class ReadRequestOperationImpl: public OperationImpl
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &negotiatedOptions);
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &clientOptions );
 
     /**
-     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
+     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -75,8 +82,9 @@ class ReadRequestOperationImpl: public OperationImpl
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &negotiatedOptions,
-      const boost::asio::ip::udp::endpoint &local);
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &clientOptions,
+      const boost::asio::ip::udp::endpoint &local );
 
     //! Destructor
     ~ReadRequestOperationImpl() noexcept final = default;
@@ -100,7 +108,7 @@ class ReadRequestOperationImpl: public OperationImpl
      * The Data packet is assembled by calling the registered handler
      * operation TftpWriteOperationHandler::sendData().
      * If the last data packet will be sent, the internal flag will be set
-     * approbate.
+     * appropriate.
      **/
     void sendData();
 
@@ -125,15 +133,17 @@ class ReadRequestOperationImpl: public OperationImpl
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
   private:
-    //! The handler which is called during operation.
+    //! Handler which is called during operation.
     TransmitDataHandlerPtr dataHandler;
+    //! TFTP Options Configuration
+    TftpOptionsConfiguration optionsConfiguration;
     //! Options for the transfer
-    Options::OptionList negotiatedOptions;
-    //! contains the negotiated blocksize option.
+    Options clientOptions;
+    //! Contains the negotiated block size option.
     uint16_t transmitDataSize;
-    //! indicates, if the last data packet has been transmitted (closing).
+    //! Indicates, if the last data packet has been transmitted (closing).
     bool lastDataPacketTransmitted;
-    //! The stored last transmitted block number.
+    //! Stored last transmitted block number.
     Packets::BlockNumber lastTransmittedBlockNumber;
 };
 

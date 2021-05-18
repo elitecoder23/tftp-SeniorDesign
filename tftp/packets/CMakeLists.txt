@@ -24,6 +24,8 @@ target_sources(
     Packet.cpp
     PacketException.hpp
     Packets.hpp
+    Packets.cpp
+    PacketsTest.cpp
     ReadRequestPacket.hpp
     ReadRequestPacket.cpp
     ReadWriteRequestPacket.hpp

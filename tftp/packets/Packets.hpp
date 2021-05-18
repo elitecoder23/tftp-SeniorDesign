@@ -38,6 +38,52 @@ class ErrorPacket;
 class OptionsAcknowledgementPacket;
 
 class BlockNumber;
+
+//! Raw Options.
+using RawOptions = std::vector< uint8_t>;
+
+/**
+ * @brief Returns a string, which describes the option list.
+ *
+ * This operation is used for debugging and information purposes.
+ *
+ * @param[in] options
+ *   TFTP Options.
+ *
+ * @return Option list description.
+ **/
+std::string TftpOptions_toString( const Options &options );
+
+/**
+ * @brief Decodes Options from the given raw data.
+ *
+ * @param[in] begin
+ *   Begin of raw option list data
+ * @param[in] end
+ *   End of raw option list data
+ *
+ * @return Decoded Options.
+ *
+ * @throw InvalidPacketException
+ *   On invalid input data
+ **/
+Options TftpOptions_options(
+  RawOptions::const_iterator begin,
+  RawOptions::const_iterator end );
+
+/**
+ * @brief Returns the option list as raw data
+ *
+ * The raw option date is used to generate the option data within the
+ * TFTP packages.
+ *
+ * @param[in] options
+ *   The TFTP Options to convert.
+ *
+ * @return TFTP Options as raw data
+ **/
+RawOptions TftpOptions_rawOptions( const Options &options );
+
 }
 
 #endif

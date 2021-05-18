@@ -20,6 +20,8 @@
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
+#include <tftp/TftpOptionsConfiguration.hpp>
+
 #include <boost/asio.hpp>
 
 #include <string>
@@ -52,7 +54,9 @@ class WriteRequestOperationImpl: public OperationImpl
      *   The handler which is called on completion of this operation.
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
-     * @param[in] negotiatedOptions
+     * @param[in] optionsConfiguration
+     *   TFTP Options Configuration.
+     * @param[in] clientOptions
      *   Server TFTP options used for operation.
      **/
     WriteRequestOperationImpl(
@@ -62,10 +66,11 @@ class WriteRequestOperationImpl: public OperationImpl
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &negotiatedOptions);
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &clientOptions );
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options::OptionList&)
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -77,8 +82,9 @@ class WriteRequestOperationImpl: public OperationImpl
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const Options::OptionList &negotiatedOptions,
-      const boost::asio::ip::udp::endpoint &local);
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &clientOptions,
+      const boost::asio::ip::udp::endpoint &local );
 
     /**
      * @brief Standard destructor.
@@ -88,7 +94,7 @@ class WriteRequestOperationImpl: public OperationImpl
     /**
      * @brief executes the operation.
      *
-     * Sends response to read request and waits for asnwers.
+     * Sends response to read request and waits for answers.
      **/
     void start();
 
@@ -102,12 +108,12 @@ class WriteRequestOperationImpl: public OperationImpl
      * @copydoc PacketHandler::dataPacket
      *
      * The received data packet is checked and the
-     * TftpReadOperationHandler::receviedData() operation of the registered
+     * TftpReadOperationHandler::receivedData() operation of the registered
      * handler is called.
      **/
     void dataPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket) final;
+      const Packets::DataPacket &dataPacket ) final;
 
     /**
      * @copydoc PacketHandler::acknowledgementPacket
@@ -117,13 +123,14 @@ class WriteRequestOperationImpl: public OperationImpl
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket ) final;
 
-  private:
     //! Handler which will be called on various events.
     ReceiveDataHandlerPtr dataHandler;
+    //! TFTP Options Configuration
+    TftpOptionsConfiguration optionsConfiguration;
     //! Options for the transfer
-    Options::OptionList negotiatedOptions;
+    Options clientOptions;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! Holds the last received block number.

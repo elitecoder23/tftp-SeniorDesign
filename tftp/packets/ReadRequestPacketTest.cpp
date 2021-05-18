@@ -26,9 +26,7 @@ BOOST_AUTO_TEST_SUITE( TftpReadRequestPacket)
 
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Tftp::Options::Options options{};
-
-  options.emplace( "blocksize", "4096");
+  Options options{ { "blocksize", "4096" } };
 
   ReadRequestPacket rrq{ "testfile.bin", TransferMode::OCTET, options};
 

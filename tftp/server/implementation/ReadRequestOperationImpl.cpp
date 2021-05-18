@@ -30,7 +30,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList &negotiatedOptions ) :
+  const TftpOptionsConfiguration &optionsConfiguration,
+  const Options &clientOptions ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
@@ -38,7 +39,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     completionHandler,
     remote},
   dataHandler{ dataHandler },
-  negotiatedOptions{ negotiatedOptions },
+  optionsConfiguration{ optionsConfiguration },
+  clientOptions{ clientOptions },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
   lastTransmittedBlockNumber{ 0U }
@@ -52,7 +54,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const Options::OptionList &negotiatedOptions,
+  const TftpOptionsConfiguration &optionsConfiguration,
+  const Options &clientOptions,
   const boost::asio::ip::udp::endpoint &local ) :
   OperationImpl{
     ioContext,
@@ -60,12 +63,13 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     tftpRetries,
     completionHandler,
     remote,
-    local},
-  dataHandler{ dataHandler},
-  negotiatedOptions{ negotiatedOptions},
-  transmitDataSize{ DefaultDataSize},
-  lastDataPacketTransmitted{ false},
-  lastTransmittedBlockNumber{ 0U}
+    local },
+  dataHandler{ dataHandler },
+  optionsConfiguration{ optionsConfiguration },
+  clientOptions{ clientOptions },
+  transmitDataSize{ DefaultDataSize },
+  lastDataPacketTransmitted{ false },
+  lastTransmittedBlockNumber{ 0U }
 {
 }
 
@@ -79,60 +83,86 @@ void ReadRequestOperationImpl::start()
     dataHandler->reset();
 
     // option negotiation leads to empty option list
-    if ( negotiatedOptions.empty())
+    if ( clientOptions.empty())
     {
       sendData();
     }
     else
     {
-      // check blocksize option - if set use it
-      if ( auto blocksize{ negotiatedOptions.blocksize()}; blocksize)
+      auto serverOptions{ clientOptions };
+
+      // check block size option - if set use it
+      if ( optionsConfiguration.blockSizeOption )
       {
-        transmitDataSize = *blocksize;
+        const auto blockSize{
+          blockSizeOption( clientOptions, BlockSizeOptionMin, *optionsConfiguration.blockSizeOption ) };
+
+        if ( blockSize )
+        {
+          transmitDataSize = *blockSize;
+        }
+
+        // respond option string
+        serverOptions.emplace(
+          TftpOptionsConfiguration::optionName( KnownOptions::BlockSize),
+          std::to_string( *blockSize ) );
       }
 
       // check timeout option - if set use it
-      if ( auto timeoutOption{ negotiatedOptions.timeoutOption()}; timeoutOption)
+      if ( optionsConfiguration.timeoutOption )
       {
-        receiveTimeout( *timeoutOption);
+        const auto timeoutOptionV{ timeoutOption( clientOptions ) };
+
+        if ( timeoutOptionV )
+        {
+          receiveTimeout( *timeoutOptionV );
+        }
+
+        // respond option string
+        serverOptions.emplace(
+          TftpOptionsConfiguration::optionName( KnownOptions::Timeout ),
+          std::to_string( *timeoutOptionV ) );
       }
 
       // check transfer size option
-      if ( auto transferSizeOption{ negotiatedOptions.transferSizeOption()})
+      if ( optionsConfiguration.handleTransferSizeOption )
       {
-        if ( 0U != *transferSizeOption)
+        auto transferSize{ transferSizeOption( clientOptions ) };
+
+        if ( transferSize )
         {
-          BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
-            << "Received transfer size must be 0";
+          if ( 0U != *transferSize )
+          {
+            BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+              << "Received transfer size must be 0";
 
-          Packets::ErrorPacket errorPacket{
-            ErrorCode::TftpOptionRefused,
-            "transfer size must be 0"};
-          send( errorPacket);
+            Packets::ErrorPacket errorPacket{
+              ErrorCode::TftpOptionRefused,
+              "transfer size must be 0"};
+            send( errorPacket);
 
-          // Operation completed
-          finished( TransferStatus::TransferError, std::move( errorPacket));
+            // Operation completed
+            finished( TransferStatus::TransferError, std::move( errorPacket));
 
-          return;
-        }
+            return;
+          }
 
-        // add transfer size to answer only, if handler supply it.
-        if ( auto transferSize{ dataHandler->requestedTransferSize()}; transferSize)
-        {
-          negotiatedOptions.transferSizeOption( *transferSize);
-        }
-        else
-        {
-          negotiatedOptions.removeTransferSizeOption();
+          if ( transferSize = dataHandler->requestedTransferSize() ; transferSize )
+          {
+            // respond option string
+            serverOptions.emplace(
+              TftpOptionsConfiguration::optionName( KnownOptions::TransferSize ),
+              std::to_string( *transferSize ) );
+          }
         }
       }
 
       // if transfer size option is the only option requested, but the handler
       // does not supply it -> empty OACK is not sent but data directly
-      if ( !negotiatedOptions.empty())
+      if ( !serverOptions.empty())
       {
         // Send OACK
-        send( Packets::OptionsAcknowledgementPacket{ negotiatedOptions.options()});
+        send( Packets::OptionsAcknowledgementPacket{ serverOptions } );
       }
       else
       {

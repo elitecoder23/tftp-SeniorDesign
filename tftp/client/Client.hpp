@@ -20,8 +20,6 @@
 
 #include <tftp/Tftp.hpp>
 
-#include <tftp/options/Options.hpp>
-
 #include <memory>
 #include <functional>
 #include <optional>
@@ -47,7 +45,7 @@ using OperationPtr = std::shared_ptr< Operation>;
 
 //! TFTP Client Option Negotiation Handler
 using OptionNegotiationHandler = std::function<
-  std::optional< Options::OptionList>( const Options::Options &serverOptions)>;
+  bool( const Options &serverOptions ) >;
 }
 
 #endif

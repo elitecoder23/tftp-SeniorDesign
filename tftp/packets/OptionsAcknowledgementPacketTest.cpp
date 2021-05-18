@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_SUITE( TftpOptionsAcknowledgementPacket)
 
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Tftp::Options::Options options{  {"blocksize", "4096"}};
+  Options options{  {"blocksize", "4096"} };
   OptionsAcknowledgementPacket oack{ options};
 
   RawTftpPacket raw{ oack};

@@ -20,6 +20,10 @@
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
+#include <tftp/TftpOptionsConfiguration.hpp>
+
+#include <helper/SafeCast.hpp>
+
 #include <boost/bind/bind.hpp>
 
 namespace Tftp::Client {
@@ -154,11 +158,87 @@ catch ( boost::system::system_error &err)
    << Helper::AdditionalInfo( err.what()));
 }
 
-void OperationImpl::sendFirst( const Packets::Packet &packet)
+std::pair< std::string, std::string > OperationImpl::blockSizeOption(
+  const uint16_t requestedBlockSize )
+{
+  return {
+    std::string{ TftpOptionsConfiguration::optionName( KnownOptions::BlockSize ) },
+    std::to_string( requestedBlockSize ) };
+}
+
+std::pair< bool, std::optional< uint16_t> > OperationImpl::blockSizeOption(
+  const Options &options,
+  uint16_t requestedBlockSize ) const
+{
+  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::BlockSize ) ) };
+
+  // option not set
+  if ( optionIt == options.end() )
+  {
+    return { true, {} };
+  }
+
+  const auto blockSizeOption{
+    Helper::safeCast< uint16_t>( std::stoull( optionIt->second ) ) };
+
+  return { blockSizeOption <= requestedBlockSize, blockSizeOption };
+}
+
+std::pair< std::string, std::string > OperationImpl::timeoutOption(
+  const uint8_t timeout )
+{
+  return {
+    std::string{ TftpOptionsConfiguration::optionName( KnownOptions::Timeout ) },
+    std::to_string( timeout ) };
+}
+
+std::pair< bool, std::optional< uint8_t> > OperationImpl::timeoutOption(
+  const Options &options,
+  uint16_t requestedTimeout ) const
+{
+  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::Timeout ) ) };
+
+  // option not set
+  if ( optionIt == options.end() )
+  {
+    return { true, {} };
+  }
+
+  const auto timeoutOption{
+    Helper::safeCast< uint8_t>( std::stoull( optionIt->second ) ) };
+
+  return { timeoutOption == requestedTimeout, timeoutOption };
+}
+
+std::pair< std::string, std::string > OperationImpl::transferSizeOption(
+  const uint64_t transferSize )
+{
+  return {
+    std::string{ TftpOptionsConfiguration::optionName( KnownOptions::TransferSize ) },
+    std::to_string( transferSize ) };
+}
+
+std::pair< bool, std::optional< uint64_t> > OperationImpl::transferSizeOption(
+  const Options &options ) const
+{
+  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::TransferSize ) ) };
+
+  // option not set
+  if ( optionIt == options.end() )
+  {
+    return { true, {} };
+  }
+
+  const auto timeoutOption{ std::stoull( optionIt->second ) };
+
+  return { true, timeoutOption };
+}
+
+void OperationImpl::sendFirst( const Packets::Packet &packet )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( packet);
 
   try

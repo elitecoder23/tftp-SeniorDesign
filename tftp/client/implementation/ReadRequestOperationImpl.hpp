@@ -14,8 +14,12 @@
 #define TFTP_CLIENT_READREQUESTOPERATIONIMPL_HPP
 
 #include <tftp/client/Client.hpp>
+
 #include <tftp/client/implementation/OperationImpl.hpp>
+
 #include <tftp/packets/BlockNumber.hpp>
+
+#include <tftp/TftpOptionsConfiguration.hpp>
 
 namespace Tftp::Client {
 
@@ -34,7 +38,7 @@ class ReadRequestOperationImpl : public OperationImpl
      * @brief Initialises the operation.
      *
      * @param[in] ioContext
-     *   The I/O context used for communication.
+     *   I/O context used for communication.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
@@ -50,9 +54,11 @@ class ReadRequestOperationImpl : public OperationImpl
      * @param[in] filename
      *   Which file shall be requested
      * @param[in] mode
-     *   The transfer mode
-     * @param[in] clientOptions
-     *   Client TFTP options used for option negotiation.
+     *   Transfer Mode
+     * @param[in] optionsConfiguration
+     *   TFTP Options Configuration.
+     * @param[in] additionalOptions
+     *   Additional TFTP options sent to the server.
      **/
     ReadRequestOperationImpl(
       boost::asio::io_context &ioContext,
@@ -64,7 +70,8 @@ class ReadRequestOperationImpl : public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions);
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions );
 
     /**
      * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
@@ -82,8 +89,9 @@ class ReadRequestOperationImpl : public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       std::string_view filename,
       TransferMode mode,
-      const Options::OptionList &clientOptions,
-      const boost::asio::ip::udp::endpoint &local);
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions,
+      const boost::asio::ip::udp::endpoint &local );
 
     /**
      * @brief Executes the TFTP client operation.
@@ -141,8 +149,10 @@ class ReadRequestOperationImpl : public OperationImpl
     const std::string filename;
     //! Transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
     const TransferMode mode;
-    //! Options for the transfer
-    Options::OptionList clientOptions;
+    //! TFTP Options Configuration
+    TftpOptionsConfiguration optionsConfiguration;
+    //! Additional Options for the transfer
+    Options additionalOptions;
 
     //! flag to hold information if OACK has been received (used when first data packet is received)
     bool oackReceived;

@@ -30,6 +30,8 @@ target_sources(
     TftpConfiguration.cpp
     TftpException.hpp
     TftpLogger.hpp
+    TftpOptionsConfiguration.hpp
+    TftpOptionsConfiguration.cpp
     TransferStatusDescription.hpp
     TransferStatusDescription.cpp
     TransmitDataHandler.hpp
@@ -46,8 +48,17 @@ target_compile_definitions(
   tftp
 
   PRIVATE
-   # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+    # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
+
+target_compile_features( tftp PUBLIC cxx_std_17 )
+
+target_compile_definitions(
+  tftp
+
+  PRIVATE
+  # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+  $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
 target_compile_options(
   tftp
@@ -77,6 +88,7 @@ target_sources(
   tftp_test
 
   PRIVATE
+    TftpOptionsConfigurationTest.cpp
     VersionTest.cpp )
 
 target_compile_features( tftp_test PUBLIC cxx_std_20 )
@@ -107,7 +119,6 @@ target_link_libraries( tftp_test PUBLIC tftp )
 
 add_subdirectory( file )
 add_subdirectory( packets )
-add_subdirectory( options )
 add_subdirectory( client )
 add_subdirectory( server )
 

@@ -14,21 +14,19 @@
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <tftp/options/OptionList.hpp>
-
 #include <helper/Endianess.hpp>
 
 namespace Tftp::Packets {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  const Options::Options &options) noexcept:
+  const Options &options) noexcept:
   Packet{ PacketType::OptionsAcknowledgement},
   optionsV{ options}
 {
 }
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  Options::Options &&options) noexcept:
+  Options &&options) noexcept:
   Packet{ PacketType::OptionsAcknowledgement},
   optionsV{ std::move( options)}
 {
@@ -49,22 +47,22 @@ OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
   return *this;
 }
 
-const Options::Options& OptionsAcknowledgementPacket::options() const
+const Options& OptionsAcknowledgementPacket::options() const
 {
   return optionsV;
 }
 
-Options::Options& OptionsAcknowledgementPacket::options()
+Options& OptionsAcknowledgementPacket::options()
 {
   return optionsV;
 }
 
-void OptionsAcknowledgementPacket::options( const Options::Options &options)
+void OptionsAcknowledgementPacket::options( const Options &options)
 {
   optionsV = options;
 }
 
-void OptionsAcknowledgementPacket::options( Options::Options &&options)
+void OptionsAcknowledgementPacket::options( Options &&options)
 {
   optionsV = std::move( options);
 }
@@ -72,12 +70,12 @@ void OptionsAcknowledgementPacket::options( Options::Options &&options)
 OptionsAcknowledgementPacket::operator std::string() const
 {
   return (boost::format( "OACK: OPT: \"%s\"") %
-    Options::OptionList::toString( optionsV )).str();
+    TftpOptions_toString( optionsV )).str();
 }
 
 Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
 {
-  auto rawOptions{ Options::OptionList::rawOptions( optionsV )};
+  auto rawOptions{ TftpOptions_rawOptions( optionsV ) };
 
   RawTftpPacket rawPacket( 2U + rawOptions.size());
 
@@ -103,7 +101,7 @@ void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // assign options
-  optionsV = Options::OptionList::options( packetIt, rawPacket.end());
+  optionsV = TftpOptions_options( packetIt, rawPacket.end());
 }
 
 }

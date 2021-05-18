@@ -14,8 +14,6 @@
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <tftp/options/OptionList.hpp>
-
 #include <helper/Endianess.hpp>
 
 #include <algorithm>
@@ -95,22 +93,22 @@ void ReadWriteRequestPacket::mode( const TransferMode mode)
   modeV = mode;
 }
 
-const Options::Options& ReadWriteRequestPacket::options() const
+const Options& ReadWriteRequestPacket::options() const
 {
   return optionsV;
 }
 
-Options::Options& ReadWriteRequestPacket::options()
+Options& ReadWriteRequestPacket::options()
 {
   return optionsV;
 }
 
-void ReadWriteRequestPacket::options( const Options::Options &options)
+void ReadWriteRequestPacket::options( const Options &options)
 {
   optionsV = options;
 }
 
-void ReadWriteRequestPacket::options( Options::Options &&options)
+void ReadWriteRequestPacket::options( Options &&options)
 {
   optionsV = std::move( options);
 }
@@ -121,14 +119,14 @@ ReadWriteRequestPacket::operator std::string() const
     Packet::operator std::string() %
     filenameV %
     decodeMode( modeV) %
-    Options::OptionList::toString( optionsV)).str();
+    TftpOptions_toString( optionsV ) ).str();
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
   std::string_view filename,
   const TransferMode mode,
-  const Options::Options &options):
+  const Options &options ):
   Packet{ packetType},
   filenameV{ filename},
   modeV{ mode},
@@ -151,7 +149,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
   std::string &&filename,
   const TransferMode mode,
-  Options::Options &&options):
+  Options &&options):
   Packet{ packetType},
   filenameV{ std::move( filename)},
   modeV{ mode},
@@ -232,13 +230,13 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
   packetIt = modeEnd + 1U;
 
   // assign options
-  optionsV = Options::OptionList::options( packetIt, rawPacket.end());
+  optionsV = TftpOptions_options( packetIt, rawPacket.end());
 }
 
 Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
 {
   const auto mode{ decodeMode( modeV)};
-  const auto rawOptions{ Options::OptionList::rawOptions( optionsV)};
+  const auto rawOptions{ TftpOptions_rawOptions( optionsV)};
 
   RawTftpPacket rawPacket(
     HeaderSize +

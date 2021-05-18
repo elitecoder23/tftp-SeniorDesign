@@ -19,6 +19,7 @@
 #define TFTP_TFTP_HPP
 
 #include <string>
+#include <map>
 #include <vector>
 #include <memory>
 #include <functional>
@@ -210,17 +211,21 @@ enum class KnownOptions
 };
 
 //! Minimum TFTP block size option as defined within RFC 2348
-constexpr uint16_t BlocksizeOptionMin{ 8U};
+constexpr uint16_t BlockSizeOptionMin{ 8U};
 //! Maximum TFTP block size option as defined within RFC 2348
-constexpr uint16_t BlocksizeOptionMax{ 65464U};
+constexpr uint16_t BlockSizeOptionMax{ 65464U};
 
 //! Minimum TFTP timeout option as defined within RFC 2349
 constexpr uint8_t TimeoutOptionMin{ 1U};
 //! maximum TFTP timeout option as defined within RFC 2349
 constexpr uint8_t TimeoutOptionMax{ 255U};
 
+//! TFTP Options (Maps Option Name to Option Value)
+using Options = std::map< std::string, std::string, std::less< > >;
+
 // Forward declarations
 class TftpConfiguration;
+class TftpOptionsConfiguration;
 
 class DataHandler;
 class ReceiveDataHandler;

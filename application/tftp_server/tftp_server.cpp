@@ -79,7 +79,7 @@ static void receivedRequest(
   Tftp::RequestType requestType,
   std::string_view filename,
   Tftp::TransferMode mode,
-  const Tftp::Options::Options &clientOptions );
+  const Tftp::Options &clientOptions );
 
 /**
  * @brief Transmits a requested file (RRQ).
@@ -94,7 +94,7 @@ static void receivedRequest(
 static void transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::Options &clientOptions );
+  const Tftp::Options &clientOptions );
 
 /**
  * @brief Receives a requested file (WRQ).
@@ -109,7 +109,7 @@ static void transmitFile(
 static void receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::Options &clientOptions );
+  const Tftp::Options &clientOptions );
 
 //! TFTP Server Base Directory
 static std::filesystem::path baseDir{};
@@ -274,7 +274,7 @@ static void receivedRequest(
   const Tftp::RequestType requestType,
   std::string_view filename,
   const Tftp::TransferMode mode,
-  const Tftp::Options::Options &clientOptions )
+  const Tftp::Options &clientOptions )
 {
   // Check transfer mode
   if ( mode != Tftp::TransferMode::OCTET )
@@ -321,7 +321,7 @@ static void receivedRequest(
 static void transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::Options &clientOptions )
+  const Tftp::Options &clientOptions )
 {
   std::cout
     << "RRQ: " << filename << " from: " << remote.address().to_string() << "\n";
@@ -348,19 +348,20 @@ static void transmitFile(
       std::make_shared< Tftp::File::StreamFile>(
         Tftp::File::TftpFile::Operation::Transmit,
         filename,
-        std::filesystem::file_size( filename)),
-      []( const Tftp::TransferStatus transferStatus)
+        std::filesystem::file_size( filename) ),
+      []( const Tftp::TransferStatus transferStatus )
       {
         std::cout << "Transfer Completed: " << transferStatus << "\n";
       },
       remote,
-      configuration.serverOptions().negotiateServer( clientOptions))};
+      configuration.optionsConfiguration,
+      clientOptions ) };
 }
 
 static void receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options::Options &clientOptions )
+  const Tftp::Options &clientOptions )
 {
   std::cout
     << "WRQ: " << filename << " from: " << remote.address().to_string() << "\n";
@@ -394,5 +395,6 @@ static void receiveFile(
         std::cout << "Transfer Completed: " << transferStatus << "\n";
       },
       remote,
-      configuration.serverOptions().negotiateServer( clientOptions))};
+      configuration.optionsConfiguration,
+      clientOptions ) };
 }

@@ -121,11 +121,10 @@ int main( int argc, char *argv[] )
 
     Tftp::Client::OperationPtr tftpOperation{};
 
-    auto optionNegotiation = [&configuration](
-      const Tftp::Options::Options &serverOptions) ->
-        std::optional< Tftp::Options::OptionList>
+    auto optionNegotiation = [](
+      const Tftp::Options &serverOptions ) -> bool
     {
-      return configuration.clientOptions().negotiateClient( serverOptions);
+      return true;
     };
 
     switch ( requestType)
@@ -140,7 +139,8 @@ int main( int argc, char *argv[] )
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
           Tftp::TransferMode::OCTET,
-          configuration.clientOptions());
+          configuration.optionsConfiguration,
+          {} );
         break;
 
       case Tftp::RequestType::Write:
@@ -154,7 +154,8 @@ int main( int argc, char *argv[] )
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
           Tftp::TransferMode::OCTET,
-          configuration.clientOptions());
+          configuration.optionsConfiguration,
+          {} );
         break;
 
       default:

@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_SUITE( TftpWriteRequestPacket)
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Options::Options options{ {"blocksize", "4096"}};
+  Options options{ {"blocksize", "4096"} };
   WriteRequestPacket wrq{ "testfile.bin", TransferMode::OCTET, options};
 
   RawTftpPacket raw{ wrq};

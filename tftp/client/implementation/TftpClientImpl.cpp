@@ -32,13 +32,13 @@ void TftpClientImpl::entry()
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "Start TFTP client I/O context";
 
   // may throw
   ioContext.run();
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TFTP client I/O context finished";
 }
 
@@ -46,7 +46,7 @@ void TftpClientImpl::stop()
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "Stop TFTP client I/O context";
 
   ioContext.stop();
@@ -59,7 +59,8 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
-  const Options::OptionList &clientOptions)
+  const TftpOptionsConfiguration &optionsConfiguration,
+  const Options &additionalOptions )
 {
   auto operation{ std::make_shared< ReadRequestOperationImpl>(
     ioContext,
@@ -71,7 +72,8 @@ OperationPtr TftpClientImpl::readRequestOperation(
     remote,
     filename,
     mode,
-    clientOptions) };
+    optionsConfiguration,
+    additionalOptions ) };
 
   operation->request();
 
@@ -85,7 +87,8 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
-  const Options::OptionList &clientOptions,
+  const TftpOptionsConfiguration &optionsConfiguration,
+  const Options &additionalOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
   auto operation{ std::make_shared< ReadRequestOperationImpl>(
@@ -98,8 +101,9 @@ OperationPtr TftpClientImpl::readRequestOperation(
     remote,
     filename,
     mode,
-    clientOptions,
-    local)};
+    optionsConfiguration,
+    additionalOptions,
+    local ) };
 
   operation->request();
 
@@ -113,7 +117,8 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
-  const Options::OptionList &clientOptions)
+  const TftpOptionsConfiguration &optionsConfiguration,
+  const Options &additionalOptions )
 {
   auto operation{ std::make_shared< WriteRequestOperationImpl>(
     ioContext,
@@ -125,7 +130,8 @@ OperationPtr TftpClientImpl::writeRequestOperation(
     remote,
     filename,
     mode,
-    clientOptions)};
+    optionsConfiguration,
+    additionalOptions ) };
 
   operation->request();
 
@@ -139,7 +145,8 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
   const TransferMode mode,
-  const Options::OptionList &clientOptions,
+  const TftpOptionsConfiguration &optionsConfiguration,
+  const Options &additionalOptions,
   const boost::asio::ip::udp::endpoint &local)
 {
   auto operation{ std::make_shared< WriteRequestOperationImpl>(
@@ -152,8 +159,9 @@ OperationPtr TftpClientImpl::writeRequestOperation(
     remote,
     filename,
     mode,
-    clientOptions,
-    local)};
+    optionsConfiguration,
+    additionalOptions,
+    local ) };
 
   operation->request();
 

@@ -21,6 +21,10 @@
 #include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
+#include <tftp/TftpOptionsConfiguration.hpp>
+
+#include <helper/SafeCast.hpp>
+
 #include <boost/bind/bind.hpp>
 
 namespace Tftp::Server {
@@ -153,6 +157,63 @@ OperationImpl::~OperationImpl() noexcept
   socket.close( ec );
   // cancel timer
   timer.cancel( ec );
+}
+
+std::optional< uint16_t> OperationImpl::blockSizeOption(
+  const Options &options,
+  const uint16_t minAcceptedBlockSize,
+  const uint16_t maxAcceptedBlockSize ) const
+{
+  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::BlockSize ) ) };
+
+  // option not set
+  if ( optionIt == options.end() )
+  {
+    return {};
+  }
+
+  const auto blockSizeOption{
+    Helper::safeCast< uint16_t>( std::stoull( optionIt->second ) ) };
+
+  if ( ( blockSizeOption < minAcceptedBlockSize ) || ( blockSizeOption > maxAcceptedBlockSize ) )
+  {
+    return {};
+  }
+
+  return blockSizeOption;
+}
+
+std::optional< uint8_t> OperationImpl::timeoutOption(
+  const Options &options ) const
+{
+  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::Timeout ) ) };
+
+  // option not set
+  if ( optionIt == options.end() )
+  {
+    return {};
+  }
+
+  const auto timeoutOption{
+    Helper::safeCast< uint8_t>( std::stoull( optionIt->second ) ) };
+
+  return timeoutOption;
+}
+
+std::optional< uint64_t> OperationImpl::transferSizeOption(
+  const Options &options ) const
+{
+  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::TransferSize ) ) };
+
+  // option not set
+  if ( optionIt == options.end() )
+  {
+    return {};
+  }
+
+  const auto timeoutOption{ std::stoull( optionIt->second ) };
+
+  return timeoutOption;
 }
 
 void OperationImpl::finished(
