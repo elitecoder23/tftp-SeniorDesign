@@ -288,6 +288,8 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket );
 
+  // @todo check OACK comes directly after RRQ (last received blockNumber)
+
   const auto &remoteOptions{ optionsAcknowledgementPacket.options() };
 
   // check empty options
