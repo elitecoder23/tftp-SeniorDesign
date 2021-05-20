@@ -286,7 +286,21 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket );
 
-  //! @todo check OACK has been received direct after WRQ (lastRxBlocknumber)
+  if ( lastReceivedBlockNumber != Packets::BlockNumber{ 0xFFFFU } )
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "OACK Out of order";
+
+    Packets::ErrorPacket errorPacket{
+      ErrorCode::IllegalTftpOperation,
+      "OACK not allowed here" };
+
+    send( errorPacket );
+
+    // Operation completed
+    finished( TransferStatus::TransferError, std::move( errorPacket ) );
+    return;
+  }
 
   const auto &remoteOptions{ optionsAcknowledgementPacket.options() };
 
