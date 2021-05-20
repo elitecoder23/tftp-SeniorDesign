@@ -52,25 +52,6 @@ BOOST_AUTO_TEST_CASE( increment )
   BOOST_CHECK( 1 == blockNumber.next());
 }
 
-//! decrement test
-BOOST_AUTO_TEST_CASE( decrement )
-{
-  BlockNumber blockNumber{ 10};
-
-  BOOST_CHECK( 10 == blockNumber);
-
-  BOOST_CHECK( 9 == blockNumber.previous());
-  BOOST_CHECK( 10 == blockNumber--);
-  BOOST_CHECK( 9 == blockNumber);
-
-  BOOST_CHECK( 8 == --blockNumber);
-  BOOST_CHECK( 8 == blockNumber);
-
-  blockNumber = 1;
-  BOOST_CHECK( 1 == blockNumber);
-  BOOST_CHECK( 0xFFFFU == blockNumber.previous());
-}
-
 //! Comparison test
 BOOST_AUTO_TEST_CASE( compare )
 {

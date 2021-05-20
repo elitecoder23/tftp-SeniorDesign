@@ -22,8 +22,9 @@ namespace Tftp::Packets {
  * @brief Block Number in TFTP Data and Acknowledgement %Packet.
  *
  * Block numbers are used within the TFTP Data and TFTP Acknowledgement
- * packet. A block number is an 16 Bit integer, which has a special meaning
- * of the 0-value.
+ * packet.
+ * A block number is an 16 Bit integer, which has a special meaning of the
+ * 0-value.
  * This 0-value handling is implemented within this class.
  *
  * @sa DataPacket
@@ -51,16 +52,9 @@ class BlockNumber
     /**
      * @brief Returns the next block number.
      *
-     * @return The next block number.
+     * @return Next block number.
      **/
     [[nodiscard]] uint16_t next() const;
-
-    /**
-     * @brief Returns the previous block number.
-     *
-     * @return The next block number.
-     **/
-    [[nodiscard]] uint16_t previous() const;
 
     /**
      * @brief Cast operator of the block number class to an uint16_t.
@@ -102,20 +96,6 @@ class BlockNumber
      **/
 
     const BlockNumber operator++( int );
-
-    /**
-     * @brief Pre-Decrement of the block number.
-     *
-     * @return The class itself
-     **/
-    BlockNumber& operator--();
-
-    /**
-     * @brief Post-Decrement of the block number.
-     *
-     * @return The class itself.
-     **/
-    const BlockNumber operator--( int );
 
     /**
      * @brief Un-equality Comparison to Block Number.

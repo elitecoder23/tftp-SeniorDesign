@@ -43,7 +43,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   clientOptions{ clientOptions },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
-  lastTransmittedBlockNumber{ 0U }
+  lastTransmittedBlockNumber{ 0U },
+  lastReceivedBlockNumber{ 0U }
 {
 }
 
@@ -69,7 +70,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   clientOptions{ clientOptions },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
-  lastTransmittedBlockNumber{ 0U }
+  lastTransmittedBlockNumber{ 0U },
+  lastReceivedBlockNumber{ 0U }
 {
 }
 
@@ -159,9 +161,12 @@ void ReadRequestOperationImpl::start()
 
       // if transfer size option is the only option requested, but the handler
       // does not supply it -> empty OACK is not sent but data directly
-      if ( !serverOptions.empty())
+      if ( !serverOptions.empty() )
       {
         // Send OACK
+        // Update last received block - number to handle OACK Acknowledgment
+        // correctly
+        lastReceivedBlockNumber = 0xFFFFU;
         send( Packets::OptionsAcknowledgementPacket{ serverOptions } );
       }
       else
@@ -176,12 +181,12 @@ void ReadRequestOperationImpl::start()
   }
   catch ( TftpException &e)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Error during Operation: " << e.what();
   }
   catch ( ...)
   {
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
   }
 }
 
@@ -191,7 +196,7 @@ void ReadRequestOperationImpl::finished(
 {
   BOOST_LOG_FUNCTION()
 
-  OperationImpl::finished( status, std::move( errorInfo));
+  OperationImpl::finished( status, std::move( errorInfo ) );
   dataHandler->finished();
 }
 
@@ -202,7 +207,7 @@ void ReadRequestOperationImpl::sendData()
   lastTransmittedBlockNumber++;
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
-    << "Send Data: " << static_cast< uint16_t >( lastTransmittedBlockNumber);
+    << "Send Data: " << static_cast< uint16_t >( lastTransmittedBlockNumber );
 
   Packets::DataPacket data{
     lastTransmittedBlockNumber,
@@ -243,11 +248,11 @@ void ReadRequestOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "RX: " << static_cast< std::string>( acknowledgementPacket);
 
   // check retransmission
-  if (acknowledgementPacket.blockNumber() == lastTransmittedBlockNumber.previous())
+  if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
       << "Received previous ACK packet: retry of last data package - "
@@ -273,18 +278,20 @@ void ReadRequestOperationImpl::acknowledgementPacket(
     send( errorPacket);
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket));
+    finished( TransferStatus::TransferError, std::move( errorPacket ) );
 
     return;
   }
 
+  lastReceivedBlockNumber = acknowledgementPacket.blockNumber();
+
   // if it was the last ACK of the last data packet - we are finished.
-  if ( lastDataPacketTransmitted)
+  if ( lastDataPacketTransmitted )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
       << "Last acknowledgement received";
 
-    finished( TransferStatus::Successful);
+    finished( TransferStatus::Successful );
 
     return;
   }

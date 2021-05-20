@@ -34,17 +34,6 @@ uint16_t BlockNumber::next() const
   return blockNumberV + 1U;
 }
 
-uint16_t BlockNumber::previous() const
-{
-  // roll-over handling
-  if ( blockNumberV == 1U )
-  {
-    return 0xFFFFU;
-  }
-
-  return blockNumberV - 1U;
-}
-
 BlockNumber::operator uint16_t() const
 {
   return blockNumberV;
@@ -71,19 +60,6 @@ const BlockNumber BlockNumber::operator++( int )
 {
   const BlockNumber old{ blockNumberV };
   blockNumberV = next();
-  return old;
-}
-
-BlockNumber& BlockNumber::operator--()
-{
-  blockNumberV = previous();
-  return *this;
-}
-
-const BlockNumber BlockNumber::operator--( int )
-{
-  const BlockNumber old{ blockNumberV };
-  blockNumberV = previous();
   return old;
 }
 

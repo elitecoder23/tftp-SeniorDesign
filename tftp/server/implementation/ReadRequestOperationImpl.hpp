@@ -145,6 +145,8 @@ class ReadRequestOperationImpl: public OperationImpl
     bool lastDataPacketTransmitted;
     //! Stored last transmitted block number.
     Packets::BlockNumber lastTransmittedBlockNumber;
+    //! Stored last received block number.
+    Packets::BlockNumber lastReceivedBlockNumber;
 };
 
 }

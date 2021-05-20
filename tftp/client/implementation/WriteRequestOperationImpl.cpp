@@ -51,7 +51,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   additionalOptions{ additionalOptions },
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
-  lastTransmittedBlockNumber{ 0U}
+  lastTransmittedBlockNumber{ 0U},
+  lastReceivedBlockNumber{ 0U }
 {
   BOOST_LOG_FUNCTION()
 
@@ -91,7 +92,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   additionalOptions{ additionalOptions },
   transmitDataSize{ DefaultDataSize},
   lastDataPacketTransmitted{ false},
-  lastTransmittedBlockNumber{ 0U }
+  lastTransmittedBlockNumber{ 0U },
+  lastReceivedBlockNumber{ 0U }
 {
   BOOST_LOG_FUNCTION()
 
@@ -115,6 +117,7 @@ void WriteRequestOperationImpl::request()
     transmitDataSize = DefaultDataSize;
     lastDataPacketTransmitted = false;
     lastTransmittedBlockNumber = 0U;
+    lastReceivedBlockNumber = 0xFFFFU;
 
     // initialise Options with additional options
     Options options{ additionalOptions };
@@ -213,7 +216,7 @@ void WriteRequestOperationImpl::acknowledgementPacket(
     << "RX: " << static_cast< std::string>( acknowledgementPacket );
 
   // check retransmission
-  if ( acknowledgementPacket.blockNumber() == lastTransmittedBlockNumber.previous() )
+  if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
       << "Received previous ACK packet: retry of last data package - "
@@ -238,8 +241,10 @@ void WriteRequestOperationImpl::acknowledgementPacket(
     return;
   }
 
+  lastReceivedBlockNumber = acknowledgementPacket.blockNumber();
+
   // if block number is 0 -> ACK of write without Options
-  if ( acknowledgementPacket.blockNumber() == static_cast< uint16_t >( 0U ) )
+  if ( acknowledgementPacket.blockNumber() == Packets::BlockNumber{ 0U } )
   {
     // If empty options is returned - Abort Operation
     if ( !optionNegotiationHandler( {} ) )
@@ -280,6 +285,8 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket );
+
+  //! @todo check OACK has been received direct after WRQ (lastRxBlocknumber)
 
   const auto &remoteOptions{ optionsAcknowledgementPacket.options() };
 

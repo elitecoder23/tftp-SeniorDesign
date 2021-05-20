@@ -169,6 +169,8 @@ class WriteRequestOperationImpl : public OperationImpl
     bool lastDataPacketTransmitted;
     //! Block number of the last transmitted data packet.
     Packets::BlockNumber lastTransmittedBlockNumber;
+    //! Stored last received block number.
+    Packets::BlockNumber lastReceivedBlockNumber;
     //! Transfer Size obtained from Data Handler
     std::optional< uint64_t > transferSize;
 };
