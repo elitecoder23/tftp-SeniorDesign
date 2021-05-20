@@ -33,13 +33,13 @@ DataPacket::DataPacket(
 {
 }
 
-DataPacket::DataPacket( const RawTftpPacket &rawPacket) :
+DataPacket::DataPacket( RawTftpPacketSpan rawPacket) :
   Packet{ PacketType::Data, rawPacket}
 {
   decodeBody( rawPacket);
 }
 
-DataPacket& DataPacket::operator=( const RawTftpPacket &rawPacket)
+DataPacket& DataPacket::operator=( RawTftpPacketSpan rawPacket)
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);
@@ -110,7 +110,7 @@ Tftp::RawTftpPacket DataPacket::encode() const
   return rawPacket;
 }
 
-void DataPacket::decodeBody( const RawTftpPacket &rawPacket)
+void DataPacket::decodeBody( RawTftpPacketSpan rawPacket )
 {
   // check size
   if (rawPacket.size() < MinPacketSize)

@@ -25,14 +25,14 @@ AcknowledgementPacket::AcknowledgementPacket(
 {
 }
 
-AcknowledgementPacket::AcknowledgementPacket( const RawTftpPacket &rawPacket) :
+AcknowledgementPacket::AcknowledgementPacket( RawTftpPacketSpan rawPacket ) :
   Packet{ PacketType::Acknowledgement, rawPacket}
 {
   decodeBody( rawPacket);
 }
 
 AcknowledgementPacket& AcknowledgementPacket::operator=(
-  const RawTftpPacket &rawPacket)
+  RawTftpPacketSpan rawPacket)
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);
@@ -70,7 +70,7 @@ Tftp::RawTftpPacket AcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-void AcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
+void AcknowledgementPacket::decodeBody( RawTftpPacketSpan rawPacket)
 {
   // check size
   if ( rawPacket.size() != PacketSize)

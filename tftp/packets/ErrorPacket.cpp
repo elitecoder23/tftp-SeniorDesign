@@ -28,7 +28,7 @@ ErrorPacket::ErrorPacket(
 {
 }
 
-ErrorPacket::ErrorPacket( const RawTftpPacket &rawPacket):
+ErrorPacket::ErrorPacket( RawTftpPacketSpan rawPacket):
   Packet{ PacketType::Error, rawPacket},
   errorCodeV{ ErrorCode::Invalid}
 {
@@ -36,7 +36,7 @@ ErrorPacket::ErrorPacket( const RawTftpPacket &rawPacket):
 }
 
 ErrorPacket& ErrorPacket::operator=(
-  const RawTftpPacket &rawPacket)
+  RawTftpPacketSpan rawPacket)
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);
@@ -92,7 +92,7 @@ Tftp::RawTftpPacket ErrorPacket::encode() const
   return rawPacket;
 }
 
-void ErrorPacket::decodeBody( const RawTftpPacket &rawPacket)
+void ErrorPacket::decodeBody( RawTftpPacketSpan rawPacket)
 {
   // check size
   if (rawPacket.size() < MinPacketSize)

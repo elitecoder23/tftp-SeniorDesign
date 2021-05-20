@@ -24,6 +24,7 @@
 #include <memory>
 #include <functional>
 #include <cstdint>
+#include <span>
 
 /**
  * @brief TFTP Protocol.
@@ -52,6 +53,7 @@ namespace Tftp {
 
 //! Raw TFTP Packet.
 using RawTftpPacket = std::vector< uint8_t>;
+using RawTftpPacketSpan = std::span< const uint8_t>;
 
 //!  TFTP Version Information
 enum class TftpVersion

@@ -56,7 +56,7 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit AcknowledgementPacket( const RawTftpPacket &rawPacket );
+    explicit AcknowledgementPacket( RawTftpPacketSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -66,7 +66,7 @@ class AcknowledgementPacket: public Packet
      *
      * @return *this
      **/
-    AcknowledgementPacket& operator=( const RawTftpPacket &rawPacket );
+    AcknowledgementPacket& operator=( RawTftpPacketSpan rawPacket );
 
     /**
      * @brief Returns the Block Number.
@@ -101,7 +101,7 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When packet size is invalid
      **/
-    void decodeBody( const RawTftpPacket &rawPacket );
+    void decodeBody( RawTftpPacketSpan rawPacket );
 
     //! Block Number of Packet
     BlockNumber blockNumberV;

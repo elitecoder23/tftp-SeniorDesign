@@ -36,18 +36,16 @@ std::string TftpOptions_toString( const Options &options )
 
   return result;
 }
-Options TftpOptions_options(
-  RawOptions::const_iterator begin,
-  RawOptions::const_iterator end )
+Options TftpOptions_options( RawOptionsSpan rawOptions )
 {
   Options options{};
 
-  while ( begin != end)
+  for( auto begin = rawOptions.begin(); begin != rawOptions.end(); )
   {
     auto nameBegin{ begin};
-    auto nameEnd{ std::find( nameBegin, end, 0)};
+    auto nameEnd{ std::find( nameBegin, rawOptions.end(), 0)};
 
-    if ( nameEnd == end)
+    if ( nameEnd == rawOptions.end())
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
         << Helper::AdditionalInfo{ "Unexpected end of input data"});
@@ -55,15 +53,15 @@ Options TftpOptions_options(
 
     auto valueBegin{ nameEnd + 1U};
 
-    if ( valueBegin == end)
+    if ( valueBegin == rawOptions.end())
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
         << Helper::AdditionalInfo{ "Unexpected end of input data"});
     }
 
-    auto valueEnd{ std::find( valueBegin, end, 0)};
+    auto valueEnd{ std::find( valueBegin, rawOptions.end(), 0)};
 
-    if ( valueEnd == end)
+    if ( valueEnd == rawOptions.end())
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
         << Helper::AdditionalInfo{ "Unexpected end of input data"});
@@ -89,13 +87,13 @@ RawOptions TftpOptions_rawOptions( const Options &options )
     rawOptions.insert( rawOptions.end(), name.begin(), name.end());
 
     // name value divider
-    rawOptions.push_back( 0);
+    rawOptions.push_back( 0 );
 
     // option value
     rawOptions.insert( rawOptions.end(), option.begin(), option.end());
 
     // option terminator
-    rawOptions.push_back( 0);
+    rawOptions.push_back( 0 );
   }
 
   return rawOptions;

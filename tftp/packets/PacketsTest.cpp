@@ -36,26 +36,26 @@ BOOST_AUTO_TEST_CASE( toString)
 BOOST_AUTO_TEST_CASE( optionsDecode)
 {
   RawOptions emptyRawOptions{};
-  BOOST_CHECK( TftpOptions_options( emptyRawOptions.begin(), emptyRawOptions.end()) == Options{});
+  BOOST_CHECK( TftpOptions_options( RawOptions{} ) == Options{} ) ;
 
   RawOptions rawOptions{
     'O', 'P', 'T', 'I', 'O', 'N', '1', 0x00, 'V', 'A', 'L', 'U', 'E', '1', 0x00,
     'O', 'P', 'T', 'I', 'O', 'N', '2', 0x00, 'V', 'A', 'L', 'U', 'E', '2', 0x00
   };
-  Options options{ TftpOptions_options( rawOptions.begin(), rawOptions.end())};
+  auto options{ TftpOptions_options( RawOptions{ rawOptions.begin(), rawOptions.end() } ) };
 
   BOOST_CHECK( !options.empty());
   BOOST_CHECK( options.size() == 2);
   BOOST_CHECK( ( options == Options{ { "OPTION1", "VALUE1"}, { "OPTION2", "VALUE2"}}));
 
   BOOST_CHECK_THROW(
-    TftpOptions_options( rawOptions.begin(), rawOptions.begin()+7U),
+    TftpOptions_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+7U } ),
     TftpException);
   BOOST_CHECK_THROW(
-    TftpOptions_options( rawOptions.begin(), rawOptions.begin()+8U),
+    TftpOptions_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+8U } ),
     TftpException);
   BOOST_CHECK_THROW(
-    TftpOptions_options( rawOptions.begin(), rawOptions.begin()+14U),
+    TftpOptions_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+14U } ),
     TftpException);
 }
 

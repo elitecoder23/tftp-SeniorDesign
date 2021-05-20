@@ -38,7 +38,7 @@ class Packet
      * @retval PacketType::INVALID
      *   If packet is to small or invalid opcode value.
      **/
-    static PacketType packetType( const RawTftpPacket &rawPacket ) noexcept;
+    static PacketType packetType( RawTftpPacketSpan rawPacket ) noexcept;
 
     /**
      * @brief Return the packet type of the TFTP Packet.
@@ -87,7 +87,7 @@ class Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    Packet( PacketType packetType, const RawTftpPacket &rawPacket );
+    Packet( PacketType packetType, RawTftpPacketSpan rawPacket );
 
     /**
      * @brief Copy Constructor
@@ -154,11 +154,11 @@ class Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    void decodeHeader( const RawTftpPacket &rawPacket );
+    void decodeHeader( RawTftpPacketSpan rawPacket );
 
   private:
     //! TFTP Packet Type
-    const PacketType packetTypeValue;
+    const PacketType packetTypeV;
 };
 
 }

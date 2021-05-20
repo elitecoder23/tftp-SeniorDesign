@@ -61,7 +61,7 @@ class ErrorPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit ErrorPacket( const RawTftpPacket &rawPacket);
+    explicit ErrorPacket( RawTftpPacketSpan rawPacket);
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -71,7 +71,7 @@ class ErrorPacket: public Packet
      *
      * @return *this
      **/
-    ErrorPacket& operator=( const RawTftpPacket &rawPacket);
+    ErrorPacket& operator=( RawTftpPacketSpan rawPacket);
 
     //! @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
@@ -123,7 +123,7 @@ class ErrorPacket: public Packet
      * @throw InvalidPacketException
      *   When the error message is not 0-terminated.
      **/
-    void decodeBody( const RawTftpPacket &rawPacket );
+    void decodeBody( RawTftpPacketSpan rawPacket );
 
     //! Error Code
     ErrorCode errorCodeV;

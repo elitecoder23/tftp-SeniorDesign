@@ -69,7 +69,7 @@ class DataPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit DataPacket( const RawTftpPacket &rawPacket );
+    explicit DataPacket( RawTftpPacketSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -79,7 +79,7 @@ class DataPacket: public Packet
      *
      * @return *this
      **/
-    DataPacket& operator=( const RawTftpPacket &rawPacket );
+    DataPacket& operator=( RawTftpPacketSpan rawPacket );
 
     /**
      * @brief Returns the block number.
@@ -164,7 +164,7 @@ class DataPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacket &rawPacket );
+    void decodeBody( RawTftpPacketSpan rawPacket );
 
     //! Block Number of Packet.
     BlockNumber blockNumberV;

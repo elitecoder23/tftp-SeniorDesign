@@ -170,8 +170,8 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
-  const RawTftpPacket &rawPacket):
-  Packet{ packetType, rawPacket},
+  RawTftpPacketSpan rawPacket ):
+  Packet{ packetType, rawPacket },
   modeV{}
 {
   switch (packetType)
@@ -189,7 +189,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   decodeBody( rawPacket);
 }
 
-void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
+void ReadWriteRequestPacket::decodeBody( RawTftpPacketSpan rawPacket)
 {
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
@@ -230,7 +230,7 @@ void ReadWriteRequestPacket::decodeBody( const RawTftpPacket &rawPacket)
   packetIt = modeEnd + 1U;
 
   // assign options
-  optionsV = TftpOptions_options( packetIt, rawPacket.end());
+  optionsV = TftpOptions_options( RawOptionsSpan{ packetIt, rawPacket.end() } );
 }
 
 Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const

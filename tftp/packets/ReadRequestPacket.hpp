@@ -57,7 +57,7 @@ class ReadRequestPacket: public ReadWriteRequestPacket
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit ReadRequestPacket( const RawTftpPacket &rawPacket );
+    explicit ReadRequestPacket( RawTftpPacketSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -67,7 +67,7 @@ class ReadRequestPacket: public ReadWriteRequestPacket
      *
      * @return *this
      **/
-    ReadRequestPacket& operator=( const RawTftpPacket &rawPacket );
+    ReadRequestPacket& operator=( RawTftpPacketSpan rawPacket );
 };
 
 }

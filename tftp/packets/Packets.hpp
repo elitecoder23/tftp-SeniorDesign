@@ -41,6 +41,8 @@ class BlockNumber;
 
 //! Raw Options.
 using RawOptions = std::vector< uint8_t>;
+using RawOptionsSpan = std::span< const uint8_t>;
+
 
 /**
  * @brief Returns a string, which describes the option list.
@@ -57,19 +59,15 @@ std::string TftpOptions_toString( const Options &options );
 /**
  * @brief Decodes Options from the given raw data.
  *
- * @param[in] begin
- *   Begin of raw option list data
- * @param[in] end
- *   End of raw option list data
+ * @param[in] rawOptions
+ *   Raw Options
  *
  * @return Decoded Options.
  *
  * @throw InvalidPacketException
  *   On invalid input data
  **/
-Options TftpOptions_options(
-  RawOptions::const_iterator begin,
-  RawOptions::const_iterator end );
+Options TftpOptions_options( RawOptionsSpan rawOptions );
 
 /**
  * @brief Returns the option list as raw data

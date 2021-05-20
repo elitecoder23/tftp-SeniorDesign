@@ -33,14 +33,14 @@ OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
 }
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  const RawTftpPacket &rawPacket):
+  RawTftpPacketSpan rawPacket):
   Packet{ PacketType::OptionsAcknowledgement, rawPacket}
 {
   decodeBody( rawPacket);
 }
 
 OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
-  const RawTftpPacket &rawPacket)
+  RawTftpPacketSpan rawPacket)
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);
@@ -89,7 +89,7 @@ Tftp::RawTftpPacket OptionsAcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
+void OptionsAcknowledgementPacket::decodeBody( RawTftpPacketSpan rawPacket)
 {
   // check size
   if ( rawPacket.size() <= HeaderSize)
@@ -101,7 +101,7 @@ void OptionsAcknowledgementPacket::decodeBody( const RawTftpPacket &rawPacket)
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // assign options
-  optionsV = TftpOptions_options( packetIt, rawPacket.end());
+  optionsV = TftpOptions_options( RawOptionsSpan{ packetIt, rawPacket.end() } );
 }
 
 }

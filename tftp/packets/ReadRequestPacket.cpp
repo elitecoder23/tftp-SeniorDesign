@@ -38,13 +38,13 @@ ReadRequestPacket::ReadRequestPacket(
 {
 }
 
-ReadRequestPacket::ReadRequestPacket( const RawTftpPacket &rawPacket):
+ReadRequestPacket::ReadRequestPacket( RawTftpPacketSpan rawPacket):
   ReadWriteRequestPacket( PacketType::ReadRequest, rawPacket)
 {
 }
 
 ReadRequestPacket& ReadRequestPacket::operator=(
-  const RawTftpPacket &rawPacket)
+  RawTftpPacketSpan rawPacket)
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);

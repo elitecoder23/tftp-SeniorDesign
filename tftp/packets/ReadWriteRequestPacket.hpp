@@ -164,7 +164,7 @@ class ReadWriteRequestPacket: public Packet
      **/
     ReadWriteRequestPacket(
       PacketType packetType,
-      const RawTftpPacket &rawPacket );
+      RawTftpPacketSpan rawPacket );
 
     /**
      * @brief Decodes the TFTP body.
@@ -175,7 +175,7 @@ class ReadWriteRequestPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( const RawTftpPacket &rawPacket );
+    void decodeBody( RawTftpPacketSpan rawPacket );
 
   private:
     /**
