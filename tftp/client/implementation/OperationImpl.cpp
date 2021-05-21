@@ -79,38 +79,38 @@ OperationImpl::OperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote)
 try :
-  completionHandler{ std::move( completionHandler) },
-  remoteEndpoint{ remote},
-  maxReceivePacketSizeV{ DefaultMaxPacketSize},
-  receiveTimeoutV{ tftpTimeout},
-  tftpRetries{ tftpRetries},
-  socket{ ioContext},
-  timer{ ioContext},
-  transmitCounter{ 0U}
+  completionHandler{ std::move( completionHandler ) },
+  remoteEndpoint{ remote },
+  maxReceivePacketSizeV{ DefaultMaxPacketSize },
+  receiveTimeoutV{ tftpTimeout },
+  tftpRetries{ tftpRetries },
+  socket{ ioContext },
+  timer{ ioContext },
+  transmitCounter{ 0U }
 {
   BOOST_LOG_FUNCTION()
 
   try
   {
     // Open the socket
-    socket.open( remote.protocol());
+    socket.open( remote.protocol() );
   }
-  catch ( boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
     // On error and if socket is opened - close it.
-    if ( socket.is_open())
+    if ( socket.is_open() )
     {
       socket.close();
     }
 
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( err.what()));
+      << Helper::AdditionalInfo( err.what() ) );
   }
 }
-catch ( boost::system::system_error &err)
+catch ( boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
-    << Helper::AdditionalInfo( err.what()));
+    << Helper::AdditionalInfo( err.what() ) );
 }
 
 OperationImpl::OperationImpl(
@@ -119,43 +119,43 @@ OperationImpl::OperationImpl(
   const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const boost::asio::ip::udp::endpoint &local)
+  const boost::asio::ip::udp::endpoint &local )
 try :
-  completionHandler{ std::move( completionHandler)},
-  remoteEndpoint{ remote},
-  maxReceivePacketSizeV{ DefaultMaxPacketSize},
-  receiveTimeoutV{ tftpTimeout},
-  tftpRetries{ tftpRetries},
-  socket{ ioContext},
-  timer{ ioContext},
-  transmitCounter{ 0U}
+  completionHandler{ std::move( completionHandler ) },
+  remoteEndpoint{ remote },
+  maxReceivePacketSizeV{ DefaultMaxPacketSize },
+  receiveTimeoutV{ tftpTimeout },
+  tftpRetries{ tftpRetries },
+  socket{ ioContext },
+  timer{ ioContext },
+  transmitCounter{ 0U }
 {
   BOOST_LOG_FUNCTION()
 
   try
   {
     // Open the socket
-    socket.open( remote.protocol());
+    socket.open( remote.protocol() );
 
     // Bind socket to source address (from)
-    socket.bind( local);
+    socket.bind( local );
   }
-  catch ( boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
     // On error and if socket is opened - close it.
-    if ( socket.is_open())
+    if ( socket.is_open() )
     {
       socket.close();
     }
 
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( err.what()));
+      << Helper::AdditionalInfo( err.what() ) );
   }
 }
-catch ( boost::system::system_error &err)
+catch ( boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
-   << Helper::AdditionalInfo( err.what()));
+   << Helper::AdditionalInfo( err.what() ) );
 }
 
 void OperationImpl::sendFirst( const Packets::Packet &packet )
@@ -180,11 +180,11 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
   }
   catch ( boost::system::system_error &err)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TX Error: " << err.what();
 
     // Operation finished
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
   }
 }
 
@@ -305,17 +305,17 @@ void OperationImpl::finished(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "Operation finished";
 
-  errorInfoV = std::move( errorInfo);
+  errorInfoV = std::move( errorInfo );
 
   timer.cancel();
   socket.cancel();
 
-  if ( completionHandler)
+  if ( completionHandler )
   {
-    completionHandler( status);
+    completionHandler( status );
   }
 }
 
@@ -532,9 +532,9 @@ void OperationImpl::receiveHandler(
     return;
   }
 
-  receivePacket.resize( bytesTransferred );
-
-  packet( remoteEndpoint, receivePacket );
+  packet(
+    remoteEndpoint,
+    Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
 void OperationImpl::timeoutFirstHandler(

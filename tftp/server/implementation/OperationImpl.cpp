@@ -383,11 +383,10 @@ void OperationImpl::receiveHandler(
     return;
   }
 
-  // resize the received packet
-  receivePacket.resize( bytesTransferred);
-
   // handle the received packet
-  packet( socket.remote_endpoint(), receivePacket);
+  packet(
+    socket.remote_endpoint(),
+    Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
 void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)

@@ -323,11 +323,10 @@ void TftpServerImpl::receiveHandler(
 
   try
   {
-    // resize buffer to actual size
-    receivePacket.resize( bytesTransferred);
-
     // handle the received packet (decode it and call the appropriate handler)
-    packet( remoteEndpoint, receivePacket);
+    packet(
+      remoteEndpoint,
+      Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
   }
   catch ( TftpException &e)
   {
