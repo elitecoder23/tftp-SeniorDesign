@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE( optionsDecode)
 
   BOOST_CHECK( !options.empty());
   BOOST_CHECK( options.size() == 2);
-  BOOST_CHECK( ( options == Options{ { "OPTION1", "VALUE1"}, { "OPTION2", "VALUE2"}}));
+  BOOST_CHECK( ( options == Options{ { "OPTION1", "VALUE1"}, { "OPTION2", "VALUE2" } } ) );
 
   BOOST_CHECK_THROW(
     TftpOptions_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+7U } ),
@@ -57,6 +57,16 @@ BOOST_AUTO_TEST_CASE( optionsDecode)
   BOOST_CHECK_THROW(
     TftpOptions_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+14U } ),
     TftpException);
+}
+
+//! optionName test
+BOOST_AUTO_TEST_CASE( optionName )
+{
+  BOOST_CHECK( TftpOptions_name( KnownOptions::BlockSize ) == "blksize" );
+  BOOST_CHECK( TftpOptions_name( KnownOptions::Timeout ) == "timeout" );
+  BOOST_CHECK( TftpOptions_name( KnownOptions::TransferSize ) == "tsize" );
+  BOOST_CHECK( TftpOptions_name( static_cast< KnownOptions >( 99 ) )
+    == std::string{} );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

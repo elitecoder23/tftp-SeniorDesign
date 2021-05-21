@@ -16,20 +16,4 @@
 
 namespace Tftp {
 
-BOOST_AUTO_TEST_SUITE( TftpTest )
-BOOST_AUTO_TEST_SUITE( TftpOptionsConfigurationTest )
-
-//! optionName test
-BOOST_AUTO_TEST_CASE( optionName )
-{
-  BOOST_CHECK( TftpOptionsConfiguration::optionName( KnownOptions::BlockSize ) == "blksize" );
-  BOOST_CHECK( TftpOptionsConfiguration::optionName( KnownOptions::Timeout ) == "timeout" );
-  BOOST_CHECK( TftpOptionsConfiguration::optionName( KnownOptions::TransferSize ) == "tsize" );
-  BOOST_CHECK( TftpOptionsConfiguration::optionName( static_cast< KnownOptions >( 99 ) )
-    == std::string{} );
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-BOOST_AUTO_TEST_SUITE_END()
-
 }

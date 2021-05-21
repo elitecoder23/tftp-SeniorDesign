@@ -164,7 +164,7 @@ class ReadWriteRequestPacket: public Packet
      **/
     ReadWriteRequestPacket(
       PacketType packetType,
-      RawTftpPacketSpan rawPacket );
+      ConstRawTftpPacketSpan rawPacket );
 
     /**
      * @brief Decodes the TFTP body.
@@ -175,7 +175,7 @@ class ReadWriteRequestPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( RawTftpPacketSpan rawPacket );
+    void decodeBody( ConstRawTftpPacketSpan rawPacket );
 
   private:
     /**
@@ -183,11 +183,11 @@ class ReadWriteRequestPacket: public Packet
      **/
     [[nodiscard]] RawTftpPacket encode() const final;
 
-    //! stored request filename
+    //! Filename
     std::string filenameV;
-    //! stored transfer mode
+    //! Transfer Mode
     TransferMode modeV;
-    //! stored options
+    //! Stored Options
     Options optionsV;
 };
 

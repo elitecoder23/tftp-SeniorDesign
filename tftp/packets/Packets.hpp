@@ -20,6 +20,11 @@
 
 #include <tftp/Tftp.hpp>
 
+#include <vector>
+#include <span>
+#include <limits>
+#include <cstdint>
+
 /**
  * @brief TFTP %Packets.
  *
@@ -39,10 +44,29 @@ class OptionsAcknowledgementPacket;
 
 class BlockNumber;
 
+class PacketHandler;
+
+//! Raw TFTP Packet.
+using RawTftpPacket = std::vector< uint8_t>;
+//! Raw TFTP Packet as std::span
+using RawTftpPacketSpan = std::span< uint8_t>;
+//! Constant Raw TFTP Packet as std::span
+using ConstRawTftpPacketSpan = std::span< const uint8_t>;
+
 //! Raw Options.
 using RawOptions = std::vector< uint8_t>;
+//! Constant Raw TFTP Options as std::span
 using RawOptionsSpan = std::span< const uint8_t>;
 
+/**
+ * @brief Returns the option string for the given option.
+ *
+ * @param[in] option
+ *   The TFTP option.
+ *
+ * @return Returns the option name.
+ **/
+std::string_view TftpOptions_name( KnownOptions option ) noexcept;
 
 /**
  * @brief Returns a string, which describes the option list.
@@ -81,6 +105,76 @@ Options TftpOptions_options( RawOptionsSpan rawOptions );
  * @return TFTP Options as raw data
  **/
 RawOptions TftpOptions_rawOptions( const Options &options );
+
+/**
+ * @brief Get the Named Option with given Value.
+ *
+ * @tparam IntT
+ *   Integer Type.
+ *
+ * @param[in] option
+ *   Option Name
+ * @param value
+ *   Option Value
+ *
+ * @return Named Option
+ **/
+template< typename IntT >
+Options::value_type TftpOptions_setOption(
+  KnownOptions option,
+  IntT value );
+
+/**
+ * @brief Decodes the Namd Option
+ *
+ * @tparam IntT
+ *   Integer Type.
+ *
+ * @param[in] options
+ *   TFTP Options
+ * @param[in] option
+ *   Option Name
+ *
+ * @return std::pair Option was valid (not present or decoded correctly) and
+ *   Option Value
+ */
+template< typename IntT >
+std::pair< bool, std::optional< IntT > > TftpOptions_getOption(
+  const Options &options,
+  KnownOptions option );
+
+template< typename IntT >
+Options::value_type TftpOptions_setOption(
+  KnownOptions option,
+  IntT value )
+{
+  return {
+    std::string{ TftpOptions_name( option ) },
+    std::to_string( value ) };
+}
+
+template< typename IntT >
+std::pair< bool, std::optional< IntT > > TftpOptions_getOption(
+  const Options &options,
+  KnownOptions option )
+{
+  auto optionIt{ options.find( TftpOptions_name( option ) ) };
+
+  // option not set
+  if ( optionIt == options.end() )
+  {
+    return { true, {} };
+  }
+
+  const auto optionValue{ std::stoull( optionIt->second ) };
+
+  if ( optionValue > std::numeric_limits< IntT>::max() )
+  {
+    return { false, {} };
+  }
+
+  return { true, static_cast< IntT >( optionValue ) };
+}
 
 }
 

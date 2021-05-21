@@ -28,15 +28,14 @@ ErrorPacket::ErrorPacket(
 {
 }
 
-ErrorPacket::ErrorPacket( RawTftpPacketSpan rawPacket):
+ErrorPacket::ErrorPacket( ConstRawTftpPacketSpan rawPacket):
   Packet{ PacketType::Error, rawPacket},
   errorCodeV{ ErrorCode::Invalid}
 {
   decodeBody( rawPacket);
 }
 
-ErrorPacket& ErrorPacket::operator=(
-  RawTftpPacketSpan rawPacket)
+ErrorPacket& ErrorPacket::operator=( ConstRawTftpPacketSpan rawPacket)
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);
@@ -71,7 +70,7 @@ void ErrorPacket::errorMessage( std::string_view errorMessage)
   errorMessageV = errorMessage;
 }
 
-Tftp::RawTftpPacket ErrorPacket::encode() const
+RawTftpPacket ErrorPacket::encode() const
 {
   RawTftpPacket rawPacket( 4U + errorMessageV.length() + 1U);
 
@@ -92,7 +91,7 @@ Tftp::RawTftpPacket ErrorPacket::encode() const
   return rawPacket;
 }
 
-void ErrorPacket::decodeBody( RawTftpPacketSpan rawPacket)
+void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
 {
   // check size
   if (rawPacket.size() < MinPacketSize)

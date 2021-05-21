@@ -16,7 +16,7 @@
 #include <tftp/server/Server.hpp>
 #include <tftp/server/TftpServer.hpp>
 
-#include <tftp/PacketHandler.hpp>
+#include <tftp/packets/PacketHandler.hpp>
 
 #include <boost/asio.hpp>
 
@@ -38,7 +38,7 @@ namespace Tftp::Server {
  **/
 class TftpServerImpl:
   public TftpServer,
-  private PacketHandler
+  private Packets::PacketHandler
 {
   public:
     /**
@@ -82,7 +82,8 @@ class TftpServerImpl:
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions ) final;
+      const Options &clientOptions,
+      const Options &additionalNegotiatedOptions ) final;
 
     //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&,const boost::asio::ip::udp::endpoint&)
     OperationPtr readRequestOperation(
@@ -91,6 +92,7 @@ class TftpServerImpl:
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
+      const Options &additionalNegotiatedOptions,
       const boost::asio::ip::udp::endpoint &local ) final;
 
     //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
@@ -99,7 +101,8 @@ class TftpServerImpl:
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions ) final;
+      const Options &clientOptions,
+      const Options &additionalNegotiatedOptions ) final;
 
     //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&,const boost::asio::ip::udp::endpoint&)
     OperationPtr writeRequestOperation(
@@ -108,6 +111,7 @@ class TftpServerImpl:
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
+      const Options &additionalNegotiatedOptions,
       const boost::asio::ip::udp::endpoint &local ) final;
 
     //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
@@ -217,7 +221,7 @@ class TftpServerImpl:
      **/
     void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const RawTftpPacket &rawPacket) final;
+      Packets::ConstRawTftpPacketSpan rawPacket ) final;
 
   private:
     //! Registered request handler
@@ -237,7 +241,7 @@ class TftpServerImpl:
     boost::asio::ip::udp::socket socket;
 
     //! Buffer, which holds the received TFTP packet.
-    RawTftpPacket receivePacket;
+    Packets::RawTftpPacket receivePacket;
     //! The remote endpoint on receive.
     boost::asio::ip::udp::endpoint remoteEndpoint;
 };

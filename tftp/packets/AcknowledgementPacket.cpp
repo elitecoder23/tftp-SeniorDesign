@@ -25,14 +25,14 @@ AcknowledgementPacket::AcknowledgementPacket(
 {
 }
 
-AcknowledgementPacket::AcknowledgementPacket( RawTftpPacketSpan rawPacket ) :
+AcknowledgementPacket::AcknowledgementPacket(
+  ConstRawTftpPacketSpan rawPacket ) :
   Packet{ PacketType::Acknowledgement, rawPacket}
 {
   decodeBody( rawPacket);
 }
 
-AcknowledgementPacket& AcknowledgementPacket::operator=(
-  RawTftpPacketSpan rawPacket)
+AcknowledgementPacket& AcknowledgementPacket::operator=( ConstRawTftpPacketSpan rawPacket)
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);
@@ -55,7 +55,7 @@ AcknowledgementPacket::operator std::string() const
     static_cast< uint16_t>( blockNumber())).str();
 }
 
-Tftp::RawTftpPacket AcknowledgementPacket::encode() const
+RawTftpPacket AcknowledgementPacket::encode() const
 {
   RawTftpPacket rawPacket( 4U);
 
@@ -65,12 +65,12 @@ Tftp::RawTftpPacket AcknowledgementPacket::encode() const
   auto packetIt( rawPacket.begin() + HeaderSize);
 
   // Add block number
-  Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV));
+  Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV ) );
 
   return rawPacket;
 }
 
-void AcknowledgementPacket::decodeBody( RawTftpPacketSpan rawPacket)
+void AcknowledgementPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
 {
   // check size
   if ( rawPacket.size() != PacketSize)

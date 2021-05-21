@@ -12,16 +12,15 @@
 
 #include "OperationImpl.hpp"
 
-#include <tftp/TftpLogger.hpp>
-#include <tftp/TftpException.hpp>
-#include <tftp/ErrorCodeDescription.hpp>
-
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
+#include <tftp/ErrorCodeDescription.hpp>
 #include <tftp/TftpOptionsConfiguration.hpp>
+#include <tftp/TftpLogger.hpp>
+#include <tftp/TftpException.hpp>
 
 #include <helper/SafeCast.hpp>
 
@@ -31,11 +30,11 @@ namespace Tftp::Server {
 
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
-  std::string_view errorMessage)
+  std::string_view errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "Graceful abort requested: " << errorCode << " '" << errorMessage << "'";
 
   Packets::ErrorPacket errorPacket{
@@ -45,7 +44,7 @@ void OperationImpl::gracefulAbort(
   send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::Aborted, std::move( errorPacket ));
+  finished( TransferStatus::Aborted, std::move( errorPacket ) );
 }
 
 void OperationImpl::abort()
@@ -69,39 +68,39 @@ OperationImpl::OperationImpl(
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote)
+  const boost::asio::ip::udp::endpoint &remote )
 try:
-  completionHandler{ std::move( completionHandler)},
-  maxReceivePacketSizeV{ DefaultMaxPacketSize},
-  receiveTimeoutV{ tftpTimeout},
-  tftpRetries{ tftpRetries},
-  socket{ ioContext},
-  timer{ ioContext},
-  transmitCounter{ 0}
+  completionHandler{ std::move( completionHandler ) },
+  maxReceivePacketSizeV{ DefaultMaxPacketSize },
+  receiveTimeoutV{ tftpTimeout },
+  tftpRetries{ tftpRetries },
+  socket{ ioContext },
+  timer{ ioContext },
+  transmitCounter{ 0 }
 {
   try
   {
     // Open the socket
-    socket.open( remote.protocol());
+    socket.open( remote.protocol() );
 
     // connect to client.
-    socket.connect( remote);
+    socket.connect( remote );
   }
-  catch (boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
-    if (socket.is_open())
+    if ( socket.is_open() )
     {
       socket.close();
     }
 
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( err.what()));
+      << Helper::AdditionalInfo( err.what() ) );
   }
 }
-catch (boost::system::system_error &err)
+catch (boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
-    << Helper::AdditionalInfo( err.what()));
+    << Helper::AdditionalInfo( err.what() ) );
 }
 
 OperationImpl::OperationImpl(
@@ -110,15 +109,15 @@ OperationImpl::OperationImpl(
   const uint16_t tftpRetries,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const boost::asio::ip::udp::endpoint &local)
+  const boost::asio::ip::udp::endpoint &local )
 try:
-  completionHandler{ std::move( completionHandler) },
-  maxReceivePacketSizeV{ DefaultMaxPacketSize},
-  receiveTimeoutV{ tftpTimeout},
-  tftpRetries{ tftpRetries},
-  socket{ ioContext},
-  timer{ ioContext},
-  transmitCounter{ 0}
+  completionHandler{ std::move( completionHandler ) },
+  maxReceivePacketSizeV{ DefaultMaxPacketSize },
+  receiveTimeoutV{ tftpTimeout },
+  tftpRetries{ tftpRetries },
+  socket{ ioContext },
+  timer{ ioContext },
+  transmitCounter{ 0 }
 {
   try
   {
@@ -159,63 +158,6 @@ OperationImpl::~OperationImpl() noexcept
   timer.cancel( ec );
 }
 
-std::optional< uint16_t> OperationImpl::blockSizeOption(
-  const Options &options,
-  const uint16_t minAcceptedBlockSize,
-  const uint16_t maxAcceptedBlockSize ) const
-{
-  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::BlockSize ) ) };
-
-  // option not set
-  if ( optionIt == options.end() )
-  {
-    return {};
-  }
-
-  const auto blockSizeOption{
-    Helper::safeCast< uint16_t>( std::stoull( optionIt->second ) ) };
-
-  if ( ( blockSizeOption < minAcceptedBlockSize ) || ( blockSizeOption > maxAcceptedBlockSize ) )
-  {
-    return {};
-  }
-
-  return blockSizeOption;
-}
-
-std::optional< uint8_t> OperationImpl::timeoutOption(
-  const Options &options ) const
-{
-  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::Timeout ) ) };
-
-  // option not set
-  if ( optionIt == options.end() )
-  {
-    return {};
-  }
-
-  const auto timeoutOption{
-    Helper::safeCast< uint8_t>( std::stoull( optionIt->second ) ) };
-
-  return timeoutOption;
-}
-
-std::optional< uint64_t> OperationImpl::transferSizeOption(
-  const Options &options ) const
-{
-  auto optionIt{ options.find( TftpOptionsConfiguration::optionName( KnownOptions::TransferSize ) ) };
-
-  // option not set
-  if ( optionIt == options.end() )
-  {
-    return {};
-  }
-
-  const auto timeoutOption{ std::stoull( optionIt->second ) };
-
-  return timeoutOption;
-}
-
 void OperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo )
@@ -247,7 +189,7 @@ void OperationImpl::send( const Packets::Packet &packet)
   transmitCounter = 1U;
 
   // Encode raw packet
-  transmitPacket = static_cast< RawTftpPacket>( packet);
+  transmitPacket = static_cast< Packets::RawTftpPacket>( packet);
 
   try
   {
@@ -400,22 +342,22 @@ void OperationImpl::optionsAcknowledgementPacket(
 
 void OperationImpl::invalidPacket(
   const boost::asio::ip::udp::endpoint &,
-  const RawTftpPacket &)
+  Packets::ConstRawTftpPacketSpan )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
     << "RX: UNKNOWN";
 
   using namespace std::literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "Invalid packet not expected"sv};
+    "Invalid packet not expected"sv };
 
   send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket));
+  finished( TransferStatus::TransferError, std::move( errorPacket ) );
 }
 
 void OperationImpl::receiveHandler(
@@ -425,7 +367,7 @@ void OperationImpl::receiveHandler(
   BOOST_LOG_FUNCTION()
 
   // handle abort
-  if (boost::asio::error::operation_aborted == errorCode)
+  if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;
   }

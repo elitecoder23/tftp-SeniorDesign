@@ -31,7 +31,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions ) :
+  const Options &clientOptions,
+  const Options &additionalNegotiatedOptions ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
@@ -41,6 +42,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   dataHandler{ dataHandler },
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
+  additionalNegotiatedOptions{ additionalNegotiatedOptions },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
   lastTransmittedBlockNumber{ 0U },
@@ -57,6 +59,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &clientOptions,
+  const Options &additionalNegotiatedOptions,
   const boost::asio::ip::udp::endpoint &local ) :
   OperationImpl{
     ioContext,
@@ -68,6 +71,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   dataHandler{ dataHandler },
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
+  additionalNegotiatedOptions{ additionalNegotiatedOptions },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
   lastTransmittedBlockNumber{ 0U },
@@ -85,51 +89,57 @@ void ReadRequestOperationImpl::start()
     dataHandler->reset();
 
     // option negotiation leads to empty option list
-    if ( clientOptions.empty())
+    if ( clientOptions.empty() && additionalNegotiatedOptions.empty() )
     {
       sendData();
     }
     else
     {
-      auto serverOptions{ clientOptions };
+      Options serverOptions{ additionalNegotiatedOptions };
 
       // check block size option - if set use it
       if ( optionsConfiguration.blockSizeOption )
       {
-        const auto blockSize{
-          blockSizeOption( clientOptions, BlockSizeOptionMin, *optionsConfiguration.blockSizeOption ) };
+        const auto [blockSizeValid, blockSize] =
+          Packets::TftpOptions_getOption< uint16_t >(
+            clientOptions,
+            KnownOptions::BlockSize );
 
         if ( blockSize )
         {
-          transmitDataSize = *blockSize;
+          // respond option string
+          serverOptions.emplace( Packets::TftpOptions_setOption(
+            KnownOptions::BlockSize,
+            std::min( *blockSize, *optionsConfiguration.blockSizeOption ) ) );
         }
-
-        // respond option string
-        serverOptions.emplace(
-          TftpOptionsConfiguration::optionName( KnownOptions::BlockSize),
-          std::to_string( *blockSize ) );
       }
 
       // check timeout option - if set use it
       if ( optionsConfiguration.timeoutOption )
       {
-        const auto timeoutOptionV{ timeoutOption( clientOptions ) };
+        const auto [timeoutValid, timeout] =
+        Packets::TftpOptions_getOption< uint8_t >(
+          clientOptions,
+          KnownOptions::Timeout );
 
-        if ( timeoutOptionV )
+        if ( timeout )
         {
-          receiveTimeout( *timeoutOptionV );
+          receiveTimeout( *timeout );
         }
 
         // respond option string
-        serverOptions.emplace(
-          TftpOptionsConfiguration::optionName( KnownOptions::Timeout ),
-          std::to_string( *timeoutOptionV ) );
+        serverOptions.emplace( Packets::TftpOptions_setOption(
+          KnownOptions::Timeout,
+          *timeout ) );
       }
 
       // check transfer size option
       if ( optionsConfiguration.handleTransferSizeOption )
       {
-        auto transferSize{ transferSizeOption( clientOptions ) };
+        const auto [transferSizeValid, transferSize] =
+        Packets::TftpOptions_getOption< uint64_t >(
+          clientOptions,
+          KnownOptions::TransferSize );
 
         if ( transferSize )
         {
@@ -144,17 +154,19 @@ void ReadRequestOperationImpl::start()
             send( errorPacket);
 
             // Operation completed
-            finished( TransferStatus::TransferError, std::move( errorPacket));
+            finished( TransferStatus::TransferError, std::move( errorPacket ) );
 
             return;
           }
 
-          if ( transferSize = dataHandler->requestedTransferSize() ; transferSize )
+          if (
+            auto newTransferSize = dataHandler->requestedTransferSize();
+            newTransferSize )
           {
             // respond option string
-            serverOptions.emplace(
-              TftpOptionsConfiguration::optionName( KnownOptions::TransferSize ),
-              std::to_string( *transferSize ) );
+            serverOptions.emplace( Packets::TftpOptions_setOption(
+              KnownOptions::TransferSize,
+              *newTransferSize ) );
           }
         }
       }
@@ -275,7 +287,7 @@ void ReadRequestOperationImpl::acknowledgementPacket(
       ErrorCode::IllegalTftpOperation,
       "Block number not expected"sv};
 
-    send( errorPacket);
+    send( errorPacket );
 
     // Operation completed
     finished( TransferStatus::TransferError, std::move( errorPacket ) );

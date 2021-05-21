@@ -16,6 +16,24 @@
 
 namespace Tftp::Packets {
 
+std::string_view TftpOptions_name( KnownOptions option ) noexcept
+{
+  switch ( option )
+  {
+    case KnownOptions::BlockSize:
+      return "blksize";
+
+    case KnownOptions::Timeout:
+      return "timeout";
+
+    case KnownOptions::TransferSize:
+      return "tsize";
+
+    default:
+      return {};
+  }
+}
+
 std::string TftpOptions_toString( const Options &options )
 {
   if ( options.empty() )

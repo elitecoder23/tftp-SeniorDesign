@@ -13,7 +13,7 @@
 #ifndef TFTP_CLIENT_OPERATIONIMPL_HPP
 #define TFTP_CLIENT_OPERATIONIMPL_HPP
 
-#include <tftp/PacketHandler.hpp>
+#include <tftp/packets/PacketHandler.hpp>
 
 #include <tftp/client/Client.hpp>
 #include <tftp/client/Operation.hpp>
@@ -39,9 +39,9 @@ class TftpClientInternal;
  * (Read Operation, Write Operation).
  **/
 class OperationImpl :
-  public std::enable_shared_from_this< OperationImpl>,
+  public std::enable_shared_from_this< OperationImpl >,
   public Operation,
-  protected PacketHandler
+  protected Packets::PacketHandler
 {
   public:
     /**
@@ -54,7 +54,7 @@ class OperationImpl :
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      std::string_view errorMessage = {}) final;
+      std::string_view errorMessage = {} ) final;
 
     //! @copydoc Operation::abort
     void abort() final;
@@ -97,67 +97,6 @@ class OperationImpl :
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local );
-
-    /**
-     * @brief Adds the Block Size option to the option list.
-     *
-     * This operation is used on client side to request a specific block size.
-     * Additionally the client defines the minimal allowed reduced blocksize.
-     *
-     * @param[in] requestedBlocksize
-     *   The requested blocksize option value.
-     * @param[in] minBlocksize
-     *   The minimal accepted blocksize option value.
-     **/
-    std::pair< std::string, std::string > blockSizeOption(
-      uint16_t requestedBlocksize );
-
-    /**
-     * @brief Returns the set blocksize option value.
-     *
-     * @return The set blocksize option value.
-     * @retval {}
-     *   If blocksize option has not been added to this option list.
-     **/
-    [[nodiscard]] std::pair< bool, std::optional< uint16_t> > blockSizeOption(
-      const Options &options,
-      uint16_t requestedBlockSize ) const;
-
-    /**
-     * @brief Adds the timeout option to the option list.
-     *
-     * This operation is used to set the intended timeout value on client side.
-     *
-     * @param[in] timeout
-     *   The requested timeout.
-     **/
-    std::pair< std::string, std::string > timeoutOption( uint8_t timeout );
-
-    std::pair< bool, std::optional< uint8_t> > timeoutOption(
-      const Options &options,
-      uint16_t requestedTimeout ) const;
-
-    /**
-     * @brief Add the transfer size option with the given transfer size.
-     *
-     * In Read Request packets, a size of "0" is specified in the request
-     * and the size of the file, in octets, is returned in the OACK.
-     * If the file is too large for the client to handle, it may abort the
-     * transfer with an Error packet (error code 3).
-     * In Write Request packets, the size of the file, in octets, is specified
-     * in the request and echoed back in the OACK.
-     * If the file is too large for the server to handle, it may abort the
-     * transfer with an Error packet (error code 3).
-     *
-     * @param[in] transferSize
-     *   The transfer size option value.
-     *   Set to '0' when in Read Request.
-     **/
-    std::pair< std::string, std::string > transferSizeOption(
-      uint64_t transferSize );
-
-    std::pair< bool, std::optional< uint64_t> > transferSizeOption(
-      const Options &options ) const;
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -258,7 +197,7 @@ class OperationImpl :
      **/
     void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const RawTftpPacket &rawPacket ) final;
+      Packets::ConstRawTftpPacketSpan rawPacket ) final;
 
   private:
     /**
@@ -337,11 +276,11 @@ class OperationImpl :
     boost::asio::deadline_timer timer;
 
     //! Received packet data
-    RawTftpPacket receivePacket;
+    Packets::RawTftpPacket receivePacket;
     //! Remote address
     boost::asio::ip::udp::endpoint receiveEndpoint;
     //! Last transmitted Packet ( used for retries)
-    RawTftpPacket transmitPacket;
+    Packets::RawTftpPacket transmitPacket;
     //! Re-transmission counter
     unsigned int transmitCounter;
     //! Error info

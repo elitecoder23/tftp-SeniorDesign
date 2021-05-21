@@ -54,7 +54,7 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      * @throw InvalidPacketException
      *   When the raw data does not represent a valid write request packet
      **/
-    explicit WriteRequestPacket( RawTftpPacketSpan rawPacket );
+    explicit WriteRequestPacket( ConstRawTftpPacketSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -64,7 +64,7 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      *
      * @return *this
      **/
-    WriteRequestPacket& operator=( RawTftpPacketSpan rawPacket );
+    WriteRequestPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 };
 
 }

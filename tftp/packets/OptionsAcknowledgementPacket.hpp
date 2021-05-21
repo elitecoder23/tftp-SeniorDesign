@@ -59,7 +59,7 @@ class OptionsAcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit OptionsAcknowledgementPacket( RawTftpPacketSpan rawPacket );
+    explicit OptionsAcknowledgementPacket( ConstRawTftpPacketSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -69,7 +69,7 @@ class OptionsAcknowledgementPacket: public Packet
      *
      * @return *this
      **/
-    OptionsAcknowledgementPacket& operator=( RawTftpPacketSpan rawPacket );
+    OptionsAcknowledgementPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 
     /**
      * @brief Returns the options within the packet (const reference)
@@ -114,7 +114,7 @@ class OptionsAcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( RawTftpPacketSpan rawPacket );
+    void decodeBody( ConstRawTftpPacketSpan rawPacket );
 
     //! Stored Options.
     Options optionsV;

@@ -33,13 +33,13 @@ DataPacket::DataPacket(
 {
 }
 
-DataPacket::DataPacket( RawTftpPacketSpan rawPacket) :
+DataPacket::DataPacket( ConstRawTftpPacketSpan rawPacket) :
   Packet{ PacketType::Data, rawPacket}
 {
   decodeBody( rawPacket);
 }
 
-DataPacket& DataPacket::operator=( RawTftpPacketSpan rawPacket)
+DataPacket& DataPacket::operator=( ConstRawTftpPacketSpan rawPacket)
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);
@@ -93,11 +93,11 @@ DataPacket::operator std::string() const
     dataSize()).str();
 }
 
-Tftp::RawTftpPacket DataPacket::encode() const
+RawTftpPacket DataPacket::encode() const
 {
   RawTftpPacket rawPacket( 4U + dataV.size());
 
-  insertHeader( rawPacket);
+  insertHeader( rawPacket );
 
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
@@ -110,7 +110,7 @@ Tftp::RawTftpPacket DataPacket::encode() const
   return rawPacket;
 }
 
-void DataPacket::decodeBody( RawTftpPacketSpan rawPacket )
+void DataPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
 {
   // check size
   if (rawPacket.size() < MinPacketSize)

@@ -40,8 +40,8 @@ BOOST_AUTO_TEST_CASE( constructor1 )
   BOOST_CHECK( dp2.blockNumber() == BlockNumber());
   BOOST_CHECK( dp2.dataSize() == 5);
   BOOST_CHECK( !dp2.data().empty());
-  BOOST_CHECK( (dp2.data() == Tftp::RawTftpPacket{'H', 'E', 'L', 'L', 'O' }));
-  BOOST_CHECK( (const_cast< const DataPacket&>( dp2).data() == Tftp::RawTftpPacket{'H', 'E', 'L', 'L', 'O' }));
+  BOOST_CHECK( (dp2.data() == RawTftpPacket{ 'H', 'E', 'L', 'L', 'O' }));
+  BOOST_CHECK( (const_cast< const DataPacket&>( dp2).data() == RawTftpPacket{'H', 'E', 'L', 'L', 'O' }));
 
   DataPacket dp3( BlockNumber{55}, {'H', 'E', 'L', 'L', 'O' });
   BOOST_CHECK( dp3.packetType() == PacketType::Data);
@@ -115,14 +115,14 @@ BOOST_AUTO_TEST_CASE( constructor2 )
   // invalid opcode
   BOOST_CHECK_THROW(
     (DataPacket{
-      Tftp::RawTftpPacket{
+      RawTftpPacket{
         // Opcode
         0x00, 0x03}
     }),
     Packets::InvalidPacketException);
 }
 
-//! set blocknumber test
+//! set block number test
 BOOST_AUTO_TEST_CASE( setBlockNumber )
 {
   DataPacket dp1;

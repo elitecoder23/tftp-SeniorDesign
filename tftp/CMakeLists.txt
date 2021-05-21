@@ -20,8 +20,6 @@ target_sources(
     DataHandler.hpp
     ErrorCodeDescription.hpp
     ErrorCodeDescription.cpp
-    PacketHandler.hpp
-    PacketHandler.cpp
     ReceiveDataHandler.hpp
     RequestTypeDescription.hpp
     RequestTypeDescription.cpp

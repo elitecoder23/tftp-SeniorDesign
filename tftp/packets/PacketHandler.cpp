@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::PacketHandler.
+ * @brief Definition of Class Tftp::Packets::PacketHandler.
  **/
 
 #include "PacketHandler.hpp"
@@ -23,26 +23,26 @@
 
 #include <tftp/TftpLogger.hpp>
 
-namespace Tftp {
+namespace Tftp::Packets {
 
 void PacketHandler::packet(
   const boost::asio::ip::udp::endpoint &remote,
-  const RawTftpPacket &rawPacket)
+  ConstRawTftpPacketSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 
-  switch ( Packets::Packet::packetType( rawPacket))
+  switch ( Packets::Packet::packetType( rawPacket ) )
   {
     case PacketType::ReadRequest:
       try
       {
         readRequestPacket(
           remote,
-          Packets::ReadRequestPacket{ rawPacket});
+          Packets::ReadRequestPacket{ rawPacket } );
       }
       catch ( Packets::InvalidPacketException &e)
       {
-        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Error decoding/ handling RRQ packet: " << e.what();
         invalidPacket( remote, rawPacket);
       }

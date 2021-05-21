@@ -31,7 +31,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions ) :
+  const Options &clientOptions,
+  const Options &additionalNegotiatedOptions ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
@@ -41,6 +42,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   dataHandler{ dataHandler},
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
+  additionalNegotiatedOptions{ additionalNegotiatedOptions },
   receiveDataSize{ DefaultDataSize},
   lastReceivedBlockNumber{ 0U}
 {
@@ -55,6 +57,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &clientOptions,
+  const Options &additionalNegotiatedOptions,
   const boost::asio::ip::udp::endpoint &local ) :
   OperationImpl{
     ioContext,
@@ -62,12 +65,13 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     tftpRetries,
     completionHandler,
     remote,
-    local},
+    local },
   dataHandler{ dataHandler},
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
-  receiveDataSize{ DefaultDataSize},
-  lastReceivedBlockNumber{ 0U}
+  additionalNegotiatedOptions{ additionalNegotiatedOptions },
+  receiveDataSize{ DefaultDataSize },
+  lastReceivedBlockNumber{ 0U }
 {
 }
 
@@ -81,59 +85,58 @@ void WriteRequestOperationImpl::start()
     dataHandler->reset();
 
     // option negotiation leads to empty option list
-    if ( clientOptions.empty() )
+    if ( clientOptions.empty() && additionalNegotiatedOptions.empty() )
     {
       // Then no OACK is sent back - a simple ACK is sent.
       send( Packets::AcknowledgementPacket{ Packets::BlockNumber{ 0U } } );
     }
     else
     {
-      auto serverOptions{ clientOptions };
+      Options serverOptions{ additionalNegotiatedOptions };
 
       // check block size option - if set use it
       if ( optionsConfiguration.blockSizeOption )
       {
-        const auto blockSize{
-          blockSizeOption( clientOptions, BlockSizeOptionMin, *optionsConfiguration.blockSizeOption ) };
+        const auto [blockSizeValid, blockSize] =
+          Packets::TftpOptions_getOption< uint16_t >(
+            clientOptions,
+            KnownOptions::BlockSize );
 
         if ( blockSize )
         {
-          receiveDataSize = *blockSize;
+          // respond option string
+          serverOptions.emplace( Packets::TftpOptions_setOption(
+            KnownOptions::BlockSize,
+            std::min( *blockSize, *optionsConfiguration.blockSizeOption ) ) );
         }
-
-        // set receive data size if necessary
-        if ( receiveDataSize > DefaultDataSize)
-        {
-          maxReceivePacketSize(
-            receiveDataSize + DefaultTftpDataPacketHeaderSize );
-        }
-
-        // respond option string
-        serverOptions.emplace(
-          TftpOptionsConfiguration::optionName( KnownOptions::BlockSize),
-          std::to_string( *blockSize ) );
       }
 
       // check timeout option - if set use it
       if ( optionsConfiguration.timeoutOption )
       {
-        const auto timeoutOptionV{ timeoutOption( clientOptions ) };
+        const auto [timeoutValid, timeout] =
+        Packets::TftpOptions_getOption< uint8_t >(
+          clientOptions,
+          KnownOptions::Timeout );
 
-        if ( timeoutOptionV )
+        if ( timeout )
         {
-          receiveTimeout( *timeoutOptionV );
+          receiveTimeout( *timeout );
         }
 
         // respond option string
-        serverOptions.emplace(
-          TftpOptionsConfiguration::optionName( KnownOptions::Timeout ),
-          std::to_string( *timeoutOptionV ) );
+        serverOptions.emplace( Packets::TftpOptions_setOption(
+          KnownOptions::Timeout,
+          *timeout ) );
       }
 
       // check transfer size option
       if ( optionsConfiguration.handleTransferSizeOption )
       {
-        auto transferSize{ transferSizeOption( clientOptions ) };
+        const auto [transferSizeValid, transferSize] =
+        Packets::TftpOptions_getOption< uint64_t >(
+          clientOptions,
+          KnownOptions::TransferSize );
 
         if ( transferSize )
         {
@@ -145,20 +148,29 @@ void WriteRequestOperationImpl::start()
 
             send( errorPacket);
 
-            // send transfer error to be in sync with TFTP client
-            finished( TransferStatus::TransferError, std::move( errorPacket));
+            // Operation completed
+            finished( TransferStatus::TransferError, std::move( errorPacket ) );
+
             return;
           }
 
           // respond option string
-          serverOptions.emplace(
-            TftpOptionsConfiguration::optionName( KnownOptions::TransferSize ),
-            std::to_string( *transferSize ) );
+          serverOptions.emplace( Packets::TftpOptions_setOption(
+            KnownOptions::TransferSize,
+            *transferSize ) );
         }
       }
 
-      // send OACK
-      send( Packets::OptionsAcknowledgementPacket{ clientOptions } );
+      if ( !serverOptions.empty() )
+      {
+        // send OACK
+        send( Packets::OptionsAcknowledgementPacket{ clientOptions } );
+      }
+      else
+      {
+        // Send OACK instead of ACK
+        send( Packets::AcknowledgementPacket{ Packets::BlockNumber{ 0U } } );
+      }
     }
 
     // start receive loop
@@ -166,12 +178,12 @@ void WriteRequestOperationImpl::start()
   }
   catch ( TftpException &e)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Error during Operation: " << e.what();
   }
   catch ( ...)
   {
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
   }
 }
 
@@ -181,7 +193,7 @@ void WriteRequestOperationImpl::finished(
 {
   BOOST_LOG_FUNCTION()
 
-  OperationImpl::finished( status, std::move( errorInfo));
+  OperationImpl::finished( status, std::move( errorInfo ) );
   dataHandler->finished();
 }
 
@@ -191,8 +203,8 @@ void WriteRequestOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
-    << "RX: " << static_cast< std::string>( dataPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    << "RX: " << static_cast< std::string>( dataPacket );
 
   // Check retransmission
   if (dataPacket.blockNumber() == lastReceivedBlockNumber)
@@ -216,30 +228,31 @@ void WriteRequestOperationImpl::dataPacket(
 
     Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Wrong block number"};
+      "Wrong block number" };
 
-    send( errorPacket);
+    send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket));
+    finished( TransferStatus::TransferError, std::move( errorPacket ) );
 
     return;
   }
 
   // check for too much data
-  if (dataPacket.dataSize() > receiveDataSize)
+  if ( dataPacket.dataSize() > receiveDataSize )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Too much data received";
 
+    using namespace std::literals;
     Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Too much data"};
+      "Too much data"sv };
 
-    send( errorPacket);
+    send( errorPacket );
 
-   // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket));
+    // Operation completed
+    finished( TransferStatus::TransferError, std::move( errorPacket ) );
 
     return;
   }

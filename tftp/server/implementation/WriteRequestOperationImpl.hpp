@@ -67,7 +67,8 @@ class WriteRequestOperationImpl: public OperationImpl
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions );
+      const Options &clientOptions,
+      const Options &additionalNegotiatedOptions );
 
     /**
      * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
@@ -84,6 +85,7 @@ class WriteRequestOperationImpl: public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
+      const Options &additionalNegotiatedOptions,
       const boost::asio::ip::udp::endpoint &local );
 
     /**
@@ -131,6 +133,8 @@ class WriteRequestOperationImpl: public OperationImpl
     TftpOptionsConfiguration optionsConfiguration;
     //! Options for the transfer
     Options clientOptions;
+    //! Additional Negotiated Options
+    Options additionalNegotiatedOptions;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! Holds the last received block number.

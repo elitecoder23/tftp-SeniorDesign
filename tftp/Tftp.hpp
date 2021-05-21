@@ -20,11 +20,9 @@
 
 #include <string>
 #include <map>
-#include <vector>
 #include <memory>
 #include <functional>
 #include <cstdint>
-#include <span>
 
 /**
  * @brief TFTP Protocol.
@@ -50,10 +48,6 @@
  *   http://tools.ietf.org/html/rfc2349
  **/
 namespace Tftp {
-
-//! Raw TFTP Packet.
-using RawTftpPacket = std::vector< uint8_t>;
-using RawTftpPacketSpan = std::span< const uint8_t>;
 
 //!  TFTP Version Information
 enum class TftpVersion
@@ -150,14 +144,14 @@ enum class PacketType : uint16_t
 };
 
 //! Maximum size of data field in data package (without blksize option)
-constexpr size_t DefaultDataSize{ 512U};
+constexpr size_t DefaultDataSize{ 512U };
 
-//! Size of TFTP header in data package (Opcode + Blocknumber)
-constexpr size_t DefaultTftpDataPacketHeaderSize{ 4U};
+//! Size of TFTP header in data package (Opcode + Block Number)
+constexpr size_t DefaultTftpDataPacketHeaderSize{ 4U };
 
 //! Maximum size of TFTP package (without blksize option)
 constexpr size_t DefaultMaxPacketSize{
-  DefaultDataSize + DefaultTftpDataPacketHeaderSize};
+  DefaultDataSize + DefaultTftpDataPacketHeaderSize };
 
 //! TFTP Transfer Modes.
 enum class TransferMode
@@ -213,14 +207,14 @@ enum class KnownOptions
 };
 
 //! Minimum TFTP block size option as defined within RFC 2348
-constexpr uint16_t BlockSizeOptionMin{ 8U};
+constexpr uint16_t BlockSizeOptionMin{ 8U };
 //! Maximum TFTP block size option as defined within RFC 2348
-constexpr uint16_t BlockSizeOptionMax{ 65464U};
+constexpr uint16_t BlockSizeOptionMax{ 65464U };
 
 //! Minimum TFTP timeout option as defined within RFC 2349
-constexpr uint8_t TimeoutOptionMin{ 1U};
+constexpr uint8_t TimeoutOptionMin{ 1U };
 //! maximum TFTP timeout option as defined within RFC 2349
-constexpr uint8_t TimeoutOptionMax{ 255U};
+constexpr uint8_t TimeoutOptionMax{ 255U };
 
 //! TFTP Options (Maps Option Name to Option Value)
 using Options = std::map< std::string, std::string, std::less< > >;
@@ -240,8 +234,6 @@ using TransmitDataHandlerPtr =  std::shared_ptr< TransmitDataHandler>;
 
 //! Operation Completed handler, which indicates, if the transfer was successful
 using OperationCompletedHandler = std::function< void( TransferStatus)>;
-
-class PacketHandler;
 
 class Version;
 }

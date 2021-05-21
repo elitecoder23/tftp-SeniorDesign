@@ -38,12 +38,12 @@ WriteRequestPacket::WriteRequestPacket(
 {
 }
 
-WriteRequestPacket::WriteRequestPacket( RawTftpPacketSpan rawPacket ):
+WriteRequestPacket::WriteRequestPacket( ConstRawTftpPacketSpan rawPacket ):
   ReadWriteRequestPacket{ PacketType::WriteRequest, rawPacket }
 {
 }
 
-WriteRequestPacket& WriteRequestPacket::operator=( RawTftpPacketSpan rawPacket )
+WriteRequestPacket& WriteRequestPacket::operator=( ConstRawTftpPacketSpan rawPacket )
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);

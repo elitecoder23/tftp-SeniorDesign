@@ -42,8 +42,8 @@ class AcknowledgementPacket: public Packet
      * chosen.
      *
      * @param[in] blockNumber
-     *   Block number of packet. Defaults to the BlockNumber default
-     *   constructor.
+     *   Block number of packet.
+     *   Defaults to the BlockNumber default constructor.
      **/
     explicit AcknowledgementPacket( BlockNumber blockNumber = {} ) noexcept;
 
@@ -56,7 +56,7 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit AcknowledgementPacket( RawTftpPacketSpan rawPacket );
+    explicit AcknowledgementPacket( ConstRawTftpPacketSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -66,7 +66,7 @@ class AcknowledgementPacket: public Packet
      *
      * @return *this
      **/
-    AcknowledgementPacket& operator=( RawTftpPacketSpan rawPacket );
+    AcknowledgementPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 
     /**
      * @brief Returns the Block Number.
@@ -101,7 +101,7 @@ class AcknowledgementPacket: public Packet
      * @throw InvalidPacketException
      *   When packet size is invalid
      **/
-    void decodeBody( RawTftpPacketSpan rawPacket );
+    void decodeBody( ConstRawTftpPacketSpan rawPacket );
 
     //! Block Number of Packet
     BlockNumber blockNumberV;

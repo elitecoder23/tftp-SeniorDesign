@@ -23,6 +23,8 @@ target_sources(
     Packet.hpp
     Packet.cpp
     PacketException.hpp
+    PacketHandler.hpp
+    PacketHandler.cpp
     Packets.hpp
     Packets.cpp
     PacketsTest.cpp

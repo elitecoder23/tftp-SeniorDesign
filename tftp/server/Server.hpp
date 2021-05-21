@@ -64,7 +64,10 @@ using OperationPtr = std::shared_ptr< Operation >;
  * @param[in] mode
  *   Transfer Mode
  * @param[in] clientOptions
- *   Received TFTP %Client %Options
+ *   Received TFTP %Client %Options (TFTP specific)
+ * @param[in] additionalClientOptions
+ *   Received TFTP %Client %Options (All Others).
+ *   For additional Option Negotiation.
  **/
 using ReceivedTftpRequestHandler =
   std::function< void(
@@ -72,7 +75,8 @@ using ReceivedTftpRequestHandler =
     RequestType requestType,
     std::string_view filename,
     TransferMode mode,
-    const Options &clientOptions ) >;
+    const Options &clientOptions,
+    const Options &additionalClientOptions ) >;
 
 }
 

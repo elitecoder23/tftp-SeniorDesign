@@ -18,8 +18,7 @@
 
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
-
-#include <tftp/PacketHandler.hpp>
+#include <tftp/packets/PacketHandler.hpp>
 
 #include <boost/asio.hpp>
 
@@ -39,7 +38,7 @@ class TftpServerInternal;
 class OperationImpl:
   public std::enable_shared_from_this< OperationImpl>,
   public Operation,
-  protected PacketHandler
+  protected Packets::PacketHandler
 {
   public:
     //! @copydoc Operation::gracefulAbort
@@ -58,7 +57,7 @@ class OperationImpl:
      * @brief Initialises the TFTP server operation.
      *
      * @param[in] ioContext
-     *   The I/O context used for communication.
+     *   I/O context used for communication.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
@@ -93,24 +92,6 @@ class OperationImpl:
      * @brief Destructor.
      **/
     ~OperationImpl() noexcept override;
-
-    /**
-     * @brief Returns the set blocksize option value.
-     *
-     * @return The set blocksize option value.
-     * @retval {}
-     *   If blocksize option has not been added to this option list.
-     **/
-    [[nodiscard]] std::optional< uint16_t> blockSizeOption(
-      const Options &options,
-      uint16_t minAcceptedBlockSize,
-      uint16_t maxAcceptedBlockSize ) const;
-
-    [[nodiscard]] std::optional< uint8_t> timeoutOption(
-      const Options &options ) const;
-
-    [[nodiscard]] std::optional< uint64_t> transferSizeOption(
-      const Options &options ) const;
 
     /**
      * @brief Sets the Finished flag.
@@ -211,7 +192,7 @@ class OperationImpl:
      **/
     void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const RawTftpPacket &rawPacket ) final;
+      Packets::ConstRawTftpPacketSpan rawPacket ) final;
 
   private:
     /**
@@ -250,9 +231,9 @@ class OperationImpl:
     boost::asio::deadline_timer timer;
 
     //! stores the received packets
-    RawTftpPacket receivePacket;
+    Packets::RawTftpPacket receivePacket;
     //! transmitted packet is stored for retries
-    RawTftpPacket transmitPacket;
+    Packets::RawTftpPacket transmitPacket;
     //! counter to store how often the same packet has been transmitted (retries)
     unsigned int transmitCounter;
     //! Error info

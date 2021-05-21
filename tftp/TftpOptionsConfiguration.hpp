@@ -33,16 +33,6 @@ class TftpOptionsConfiguration
 {
   public:
     /**
-     * @brief Returns the option string for the given option.
-     *
-     * @param[in] option
-     *   The TFTP option.
-     *
-     * @return Returns the option name.
-     **/
-    static std::string_view optionName( KnownOptions option) noexcept;
-
-    /**
      * @brief Creates an option list (for TFTP clients) based on the actual
      *   configuration and the supplied base options.
      *

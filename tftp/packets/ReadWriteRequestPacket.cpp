@@ -170,7 +170,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
-  RawTftpPacketSpan rawPacket ):
+  ConstRawTftpPacketSpan rawPacket ):
   Packet{ packetType, rawPacket },
   modeV{}
 {
@@ -189,7 +189,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   decodeBody( rawPacket);
 }
 
-void ReadWriteRequestPacket::decodeBody( RawTftpPacketSpan rawPacket)
+void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
 {
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
@@ -233,23 +233,23 @@ void ReadWriteRequestPacket::decodeBody( RawTftpPacketSpan rawPacket)
   optionsV = TftpOptions_options( RawOptionsSpan{ packetIt, rawPacket.end() } );
 }
 
-Tftp::RawTftpPacket ReadWriteRequestPacket::encode() const
+RawTftpPacket ReadWriteRequestPacket::encode() const
 {
-  const auto mode{ decodeMode( modeV)};
-  const auto rawOptions{ TftpOptions_rawOptions( optionsV)};
+  const auto mode{ decodeMode( modeV ) };
+  const auto rawOptions{ TftpOptions_rawOptions( optionsV ) };
 
   RawTftpPacket rawPacket(
     HeaderSize +
     filenameV.size() + 1U +
     mode.size() + 1U +
-    rawOptions.size());
+    rawOptions.size() );
 
   insertHeader( rawPacket);
 
   auto packetIt{ rawPacket.begin() + HeaderSize};
 
   // encode filename
-  packetIt = std::copy( filenameV.begin(), filenameV.end(), packetIt);
+  packetIt = std::copy( filenameV.begin(), filenameV.end(), packetIt );
   *packetIt = 0;
   ++packetIt;
 

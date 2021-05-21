@@ -67,7 +67,8 @@ class ReadRequestOperationImpl: public OperationImpl
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions );
+      const Options &clientOptions,
+      const Options &additionalNegotiatedOptions );
 
     /**
      * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
@@ -84,6 +85,7 @@ class ReadRequestOperationImpl: public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
+      const Options &additionalNegotiatedOptions,
       const boost::asio::ip::udp::endpoint &local );
 
     //! Destructor
@@ -92,7 +94,7 @@ class ReadRequestOperationImpl: public OperationImpl
     /**
      * @brief executes the operation.
      *
-     * Sends response to read request and waits for asnwers.
+     * Sends response to read request and waits for answers.
      **/
     void start();
 
@@ -100,7 +102,7 @@ class ReadRequestOperationImpl: public OperationImpl
     //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept final;
+      ErrorInfo &&errorInfo = {} ) noexcept final;
 
     /**
      * @brief Sends a data packet to the client.
@@ -139,6 +141,8 @@ class ReadRequestOperationImpl: public OperationImpl
     TftpOptionsConfiguration optionsConfiguration;
     //! Options for the transfer
     Options clientOptions;
+    //! Additional Negotiated Options
+    Options additionalNegotiatedOptions;
     //! Contains the negotiated block size option.
     uint16_t transmitDataSize;
     //! Indicates, if the last data packet has been transmitted (closing).

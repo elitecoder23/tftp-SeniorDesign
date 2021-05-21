@@ -14,23 +14,4 @@
 
 namespace Tftp {
 
-std::string_view TftpOptionsConfiguration::optionName(
-  const KnownOptions option ) noexcept
-{
-  switch ( option )
-  {
-    case KnownOptions::BlockSize:
-      return "blksize";
-
-    case KnownOptions::Timeout:
-      return "timeout";
-
-    case KnownOptions::TransferSize:
-      return "tsize";
-
-    default:
-      return {};
-  }
-}
-
 }
