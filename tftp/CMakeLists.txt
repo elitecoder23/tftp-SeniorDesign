@@ -49,7 +49,7 @@ target_compile_definitions(
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
-target_compile_features( tftp PUBLIC cxx_std_17 )
+target_compile_features( tftp PUBLIC cxx_std_20 )
 
 target_compile_definitions(
   tftp
@@ -75,10 +75,10 @@ target_link_libraries(
   PUBLIC
     helper
     Boost::program_options
-  PRIVATE
-    # Windows Socket must be explicitly linked in MinGW
-    $<$<PLATFORM_ID:Windows>:ws2_32> )
 
+    # Windows Socket must be explicitly linked in MinGW
+    $<$<PLATFORM_ID:Windows>:wsock32>
+    $<$<PLATFORM_ID:Windows>:ws2_32> )
 
 add_library( tftp_test OBJECT )
 

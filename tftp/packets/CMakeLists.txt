@@ -27,7 +27,6 @@ target_sources(
     PacketHandler.cpp
     Packets.hpp
     Packets.cpp
-    PacketsTest.cpp
     ReadRequestPacket.hpp
     ReadRequestPacket.cpp
     ReadWriteRequestPacket.hpp
@@ -44,6 +43,7 @@ target_sources(
     DataPacketTest.cpp
     ErrorPacketTest.cpp
     OptionsAcknowledgementPacketTest.cpp
+    PacketsTest.cpp
     ReadRequestPacketTest.cpp
     ReadWriteRequestPacketTest.cpp
-    WriteRequestPacketTest.cpp)
+    WriteRequestPacketTest.cpp )
