@@ -41,6 +41,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
+      + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
     completionHandler,
     remote },
   optionNegotiationHandler{ optionNegotiationHandler },
@@ -80,6 +82,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
+      + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
     completionHandler,
     remote,
     local},
@@ -372,13 +376,6 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
       }
 
       receiveDataSize = *blockSizeValue;
-
-      // set maximum receive data size if necessary
-      if ( receiveDataSize > DefaultDataSize)
-      {
-        maxReceivePacketSize(
-          receiveDataSize + DefaultTftpDataPacketHeaderSize );
-      }
     }
   }
   remoteOptions.erase( std::string{ Packets::TftpOptions_name( KnownOptions::BlockSize ) } );

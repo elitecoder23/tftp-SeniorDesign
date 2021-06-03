@@ -37,12 +37,13 @@ TftpServerImpl::TftpServerImpl(
   const uint16_t tftpRetries,
   const boost::asio::ip::udp::endpoint &serverAddress )
 try :
-  handler{ handler},
-  tftpTimeout{ tftpTimeout},
-  tftpRetries{ tftpRetries},
-  serverAddress{ serverAddress},
-  work{ ioContext},
-  socket{ ioContext}
+  handler{ handler },
+  tftpTimeout{ tftpTimeout },
+  tftpRetries{ tftpRetries },
+  serverAddress{ serverAddress },
+  work{ ioContext },
+  socket{ ioContext },
+  receivePacket( DefaultMaxPacketSize )
 {
   try
   {
@@ -217,18 +218,18 @@ OperationPtr TftpServerImpl::writeRequestOperation(
 void TftpServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const ErrorCode errorCode,
-  std::string_view errorMessage)
+  std::string_view errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
-  Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
+  Packets::ErrorPacket errorPacket{ errorCode, errorMessage };
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( errorPacket);
 
   try
   {
-    boost::asio::ip::udp::socket errSocket{ ioContext};
+    boost::asio::ip::udp::socket errSocket{ ioContext };
 
     errSocket.open( remote.protocol());
 
@@ -247,7 +248,7 @@ void TftpServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local,
   const ErrorCode errorCode,
-  std::string_view errorMessage)
+  std::string_view errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
@@ -279,8 +280,6 @@ void TftpServerImpl::receive()
 {
   try
   {
-    receivePacket.resize( DefaultMaxPacketSize);
-
     // wait for incoming packet
     socket.async_receive_from(
       boost::asio::buffer( receivePacket),
@@ -345,7 +344,7 @@ void TftpServerImpl::readRequestPacket(
     << "RX: " << static_cast< std::string>( readRequestPacket );
 
   // check handler
-  if ( !handler)
+  if ( !handler )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
       << "No registered handler - reject";

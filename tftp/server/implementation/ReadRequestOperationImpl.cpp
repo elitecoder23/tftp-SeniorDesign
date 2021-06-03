@@ -37,8 +37,9 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    DefaultMaxPacketSize,
     completionHandler,
-    remote},
+    remote },
   dataHandler{ dataHandler },
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
@@ -65,6 +66,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    DefaultMaxPacketSize,
     completionHandler,
     remote,
     local },
@@ -150,7 +152,7 @@ void ReadRequestOperationImpl::start()
 
             Packets::ErrorPacket errorPacket{
               ErrorCode::TftpOptionRefused,
-              "transfer size must be 0"};
+              "transfer size must be 0" };
             send( errorPacket);
 
             // Operation completed
@@ -236,22 +238,22 @@ void ReadRequestOperationImpl::sendData()
 
 void ReadRequestOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
-  const Packets::DataPacket &dataPacket)
+  const Packets::DataPacket &dataPacket )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
-    << "RX ERROR: " << static_cast< std::string>( dataPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    << "RX ERROR: " << static_cast< std::string>( dataPacket );
 
   using namespace std::literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected"sv};
+    "DATA not expected"sv };
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket));
+  finished( TransferStatus::TransferError, std::move( errorPacket ) );
 }
 
 void ReadRequestOperationImpl::acknowledgementPacket(
@@ -261,12 +263,12 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "RX: " << static_cast< std::string>( acknowledgementPacket);
+    << "RX: " << static_cast< std::string>( acknowledgementPacket );
 
   // check retransmission
   if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
       << "Received previous ACK packet: retry of last data package - "
          "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
@@ -277,15 +279,15 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   }
 
   // check invalid block number
-  if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber)
+  if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Invalid block number received";
 
     using namespace std::literals;
     Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Block number not expected"sv};
+      "Block number not expected"sv };
 
     send( errorPacket );
 

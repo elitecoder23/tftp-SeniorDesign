@@ -44,7 +44,7 @@ class OperationImpl:
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      std::string_view errorMessage) final;
+      std::string_view errorMessage ) final;
 
     //! @copydoc Operation::abort
     void abort() final;
@@ -62,6 +62,8 @@ class OperationImpl:
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
+     * @param[in] maxReceivePacketSize
+     *   Maximum packet size for receive operation.
      * @param[in] completionHandler
      *   Handler which is called on completion of this operation.
      * @param[in] remote
@@ -71,6 +73,7 @@ class OperationImpl:
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
+      uint16_t maxReceivePacketSize,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote );
 
@@ -84,6 +87,7 @@ class OperationImpl:
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
+      uint16_t maxReceivePacketSize,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local );
@@ -122,21 +126,6 @@ class OperationImpl:
      * @brief receives a packet and calls the packet handlers
      **/
     void receive();
-
-    /**
-     * @brief Updates the limit of maximum packet size for the receive
-     *   operation.
-     *
-     * This operation must be used to vary the receive buffer, when the
-     * option negotiation results in a modified packet size.
-     *
-     * The set maximum packet size is not forced when a packet is sent to
-     * the client.
-     *
-     * @param[in] maxReceivePacketSize
-     *   The new maximum packet size for receive operation.
-     **/
-    void maxReceivePacketSize( uint16_t maxReceivePacketSize);
 
     /**
      * @brief Update the receiveTimeout value.
@@ -218,8 +207,6 @@ class OperationImpl:
     //! Operation Completed Handler
     OperationCompletedHandler completionHandler;
 
-    //! Maximum packet size, which can be received
-    uint16_t maxReceivePacketSizeV;
     //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
     uint8_t receiveTimeoutV;
     //! TFTP Retries

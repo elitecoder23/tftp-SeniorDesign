@@ -45,10 +45,10 @@ void OperationImpl::gracefulAbort(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "Graceful abort requested: " << errorCode << " '" << errorMessage << "'";
 
-  Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
+  Packets::ErrorPacket errorPacket{ errorCode, errorMessage };
 
   send( errorPacket );
 
@@ -76,16 +76,17 @@ OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
+  const uint16_t maxReceivePacketSize,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote)
 try :
   completionHandler{ std::move( completionHandler ) },
   remoteEndpoint{ remote },
-  maxReceivePacketSizeV{ DefaultMaxPacketSize },
   receiveTimeoutV{ tftpTimeout },
   tftpRetries{ tftpRetries },
   socket{ ioContext },
   timer{ ioContext },
+  receivePacket( maxReceivePacketSize ),
   transmitCounter{ 0U }
 {
   BOOST_LOG_FUNCTION()
@@ -117,17 +118,18 @@ OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
+  const uint16_t maxReceivePacketSize,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local )
 try :
   completionHandler{ std::move( completionHandler ) },
   remoteEndpoint{ remote },
-  maxReceivePacketSizeV{ DefaultMaxPacketSize },
   receiveTimeoutV{ tftpTimeout },
   tftpRetries{ tftpRetries },
   socket{ ioContext },
   timer{ ioContext },
+  receivePacket( maxReceivePacketSize ),
   transmitCounter{ 0U }
 {
   BOOST_LOG_FUNCTION()
@@ -221,9 +223,6 @@ void OperationImpl::receiveFirst()
 
   try
   {
-    // Resize the receive buffer to the allowed packet size
-    receivePacket.resize( maxReceivePacketSizeV );
-
     // the first time, we make receive_from (answer is not sent from destination)
     // Start the receive operation
     socket.async_receive_from(
@@ -244,7 +243,7 @@ void OperationImpl::receiveFirst()
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch (boost::system::system_error &err )
+  catch ( boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "RX Error: " << err.what();
@@ -259,8 +258,6 @@ void OperationImpl::receive()
 
   try
   {
-    receivePacket.resize( maxReceivePacketSizeV );
-
     // start receive operation
     socket.async_receive(
       boost::asio::buffer( receivePacket ),
@@ -286,12 +283,6 @@ void OperationImpl::receive()
 
     finished( TransferStatus::CommunicationError );
   }
-}
-
-void OperationImpl::maxReceivePacketSize(
-  const uint16_t maxReceivePacketSize ) noexcept
-{
-  maxReceivePacketSizeV = maxReceivePacketSize;
 }
 
 void OperationImpl::receiveTimeout( const uint8_t receiveTimeout ) noexcept
@@ -504,9 +495,9 @@ void OperationImpl::receiveFirstHandler(
     return;
   }
 
-  receivePacket.resize( bytesTransferred );
-
-  packet( receiveEndpoint, receivePacket );
+  packet(
+    receiveEndpoint,
+    Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
 void OperationImpl::receiveHandler(
@@ -586,7 +577,7 @@ void OperationImpl::timeoutFirstHandler(
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch (boost::system::system_error &err )
+  catch ( boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Re-TX error: " << err.what();
@@ -635,7 +626,7 @@ void OperationImpl::timeoutHandler(
 
     ++transmitCounter;
 
-    timer.expires_from_now( boost::posix_time::seconds( receiveTimeoutV ) );
+    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV } );
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,

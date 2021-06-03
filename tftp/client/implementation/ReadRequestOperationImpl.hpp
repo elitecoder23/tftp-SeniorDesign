@@ -107,7 +107,7 @@ class ReadRequestOperationImpl : public OperationImpl
     //! @copydoc OperationImpl::finished
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept final;
+      ErrorInfo &&errorInfo = {} ) noexcept final;
 
     /**
      * @copydoc PacketHandler::dataPacket()

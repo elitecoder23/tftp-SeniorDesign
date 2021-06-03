@@ -73,12 +73,12 @@ class TftpOptionsConfiguration
     bool handleTransferSizeOption;
 
     //! If handleBlockSizeOption is set, this value is used for option negotiation
-    boost::optional< uint16_t> blockSizeOption;
+    boost::optional< uint16_t > blockSizeOption;
 
     /** If handleTimeoutOption is set, this value is used for option negotiation
      * @note Even if timeout is only uint8_t we make it 16bit for parsing.
      **/
-    boost::optional< uint16_t> timeoutOption;
+    boost::optional< uint16_t > timeoutOption;
 
 };
 

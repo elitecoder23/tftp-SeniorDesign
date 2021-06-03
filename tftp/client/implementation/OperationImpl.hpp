@@ -72,6 +72,8 @@ class OperationImpl :
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
+     * @param[in] maxReceivePacketSize
+     *   Maximum Receive Packet Size (defined by Block Size Option).
      * @param[in] completionHandler
      *   The handler which is called on completion of this operation.
      * @param[in] remote
@@ -81,6 +83,7 @@ class OperationImpl :
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
+      uint16_t maxReceivePacketSize,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote );
 
@@ -94,6 +97,7 @@ class OperationImpl :
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
+      uint16_t maxReceivePacketSize,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local );
@@ -130,18 +134,6 @@ class OperationImpl :
      * @sa timeoutHandler
      **/
     void receive();
-
-    /**
-     * @brief Updates the @p maxReceivePacketSize value.
-     *
-     * This value is used to resize the packet buffer before starting a
-     * receive operation. This value could be modified, e.g. during option
-     * negotiation.
-     *
-     * @param[in] maxReceivePacketSize
-     *   New maxReceivePacketSize value.
-     **/
-    void maxReceivePacketSize( uint16_t maxReceivePacketSize ) noexcept;
 
     /**
      * @brief Update the receiveTimeout value.
@@ -216,7 +208,7 @@ class OperationImpl :
      **/
     void receiveFirstHandler(
       const boost::system::error_code& errorCode,
-      std::size_t bytesTransferred);
+      std::size_t bytesTransferred );
 
     /**
      * @brief Called, when data is received.
@@ -224,11 +216,11 @@ class OperationImpl :
      * @param[in] errorCode
      *   error status of operation.
      * @param[in] bytesTransferred
-     *   Number of bytes transfered.
+     *   Number of bytes transferred.
      **/
     void receiveHandler(
       const boost::system::error_code& errorCode,
-      std::size_t bytesTransferred);
+      std::size_t bytesTransferred );
 
     /**
      * @brief Called when no data is received for the first sent packet.
@@ -239,7 +231,7 @@ class OperationImpl :
      * @param[in] errorCode
      *   error status of operation.
      **/
-    void timeoutFirstHandler( const boost::system::error_code &errorCode);
+    void timeoutFirstHandler( const boost::system::error_code &errorCode );
 
     /**
      * @brief Called when no data is received for the sent packet.
@@ -250,21 +242,13 @@ class OperationImpl :
      * @param[in] errorCode
      *   error status of operation.
      **/
-    void timeoutHandler( const boost::system::error_code &errorCode);
+    void timeoutHandler( const boost::system::error_code &errorCode );
 
     //! Completion Handler
     OperationCompletedHandler completionHandler;
     //! TFTP Server Endpoint
     boost::asio::ip::udp::endpoint remoteEndpoint;
 
-    /**
-     * The maximum size of a received TFTP packet.
-     * Defaults to Tftp::DefaultMaxPacketSize.
-     *
-     * This value can be modified by calling setMaxReceivePacketSize(), e.g.
-     * during option negotiation.
-     **/
-    uint16_t maxReceivePacketSizeV;
     //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
     uint8_t receiveTimeoutV;
     //! TFTP Retries
@@ -275,9 +259,9 @@ class OperationImpl :
     //! Receive timeout timer
     boost::asio::deadline_timer timer;
 
-    //! Received packet data
+    //! Received Packet Data
     Packets::RawTftpPacket receivePacket;
-    //! Remote address
+    //! Remote Address
     boost::asio::ip::udp::endpoint receiveEndpoint;
     //! Last transmitted Packet ( used for retries)
     Packets::RawTftpPacket transmitPacket;

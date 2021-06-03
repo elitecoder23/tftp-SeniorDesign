@@ -144,13 +144,13 @@ enum class PacketType : uint16_t
 };
 
 //! Maximum size of data field in data package (without blksize option)
-constexpr size_t DefaultDataSize{ 512U };
+constexpr uint16_t DefaultDataSize{ 512U };
 
 //! Size of TFTP header in data package (Opcode + Block Number)
-constexpr size_t DefaultTftpDataPacketHeaderSize{ 4U };
+constexpr uint16_t DefaultTftpDataPacketHeaderSize{ 4U };
 
 //! Maximum size of TFTP package (without blksize option)
-constexpr size_t DefaultMaxPacketSize{
+constexpr uint16_t DefaultMaxPacketSize{
   DefaultDataSize + DefaultTftpDataPacketHeaderSize };
 
 //! TFTP Transfer Modes.

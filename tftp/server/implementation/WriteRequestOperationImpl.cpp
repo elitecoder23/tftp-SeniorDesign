@@ -37,14 +37,16 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
+      + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
     completionHandler,
-    remote},
-  dataHandler{ dataHandler},
+    remote },
+  dataHandler{ dataHandler },
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
   additionalNegotiatedOptions{ additionalNegotiatedOptions },
-  receiveDataSize{ DefaultDataSize},
-  lastReceivedBlockNumber{ 0U}
+  receiveDataSize{ DefaultDataSize },
+  lastReceivedBlockNumber{ 0U }
 {
 }
 
@@ -63,6 +65,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
+      + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
     completionHandler,
     remote,
     local },
