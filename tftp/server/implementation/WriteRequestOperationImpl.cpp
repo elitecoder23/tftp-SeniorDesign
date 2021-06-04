@@ -112,6 +112,8 @@ void WriteRequestOperationImpl::start()
           serverOptions.emplace( Packets::TftpOptions_setOption(
             KnownOptions::BlockSize,
             std::min( *blockSize, *optionsConfiguration.blockSizeOption ) ) );
+
+          receiveDataSize = *blockSize;
         }
       }
 
@@ -245,7 +247,7 @@ void WriteRequestOperationImpl::dataPacket(
   // check for too much data
   if ( dataPacket.dataSize() > receiveDataSize )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Too much data received";
 
     using namespace std::literals;
