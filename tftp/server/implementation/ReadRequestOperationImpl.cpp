@@ -109,12 +109,13 @@ void ReadRequestOperationImpl::start()
 
         if ( blockSize )
         {
+          transmitDataSize =
+            std::min( *blockSize, *optionsConfiguration.blockSizeOption );
+
           // respond option string
           serverOptions.emplace( Packets::TftpOptions_setOption(
             KnownOptions::BlockSize,
-            std::min( *blockSize, *optionsConfiguration.blockSizeOption ) ) );
-
-          transmitDataSize = *blockSize;
+            transmitDataSize ) );
         }
       }
 

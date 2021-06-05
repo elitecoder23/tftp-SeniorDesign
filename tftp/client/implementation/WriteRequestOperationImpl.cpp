@@ -349,7 +349,7 @@ void WriteRequestOperationImpl::optionsAcknowledgementPacket(
         ErrorCode::TftpOptionRefused,
         "Block size Option negotiation failed" };
 
-      send( errorPacket);
+      send( errorPacket );
 
       // Operation completed
       finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
