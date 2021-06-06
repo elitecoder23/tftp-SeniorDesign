@@ -196,7 +196,7 @@ void ReadRequestOperationImpl::start()
     // start receive loop
     receive();
   }
-  catch ( TftpException &e)
+  catch ( TftpException &e )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Error during Operation: " << e.what();
@@ -223,14 +223,14 @@ void ReadRequestOperationImpl::sendData()
 
   lastTransmittedBlockNumber++;
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "Send Data: " << static_cast< uint16_t >( lastTransmittedBlockNumber );
 
   Packets::DataPacket data{
     lastTransmittedBlockNumber,
-    dataHandler->sendData( transmitDataSize)};
+    dataHandler->sendData( transmitDataSize ) };
 
-  if ( data.dataSize() < transmitDataSize)
+  if ( data.dataSize() < transmitDataSize )
   {
     lastDataPacketTransmitted = true;
   }
@@ -261,7 +261,7 @@ void ReadRequestOperationImpl::dataPacket(
 
 void ReadRequestOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
-  const Packets::AcknowledgementPacket &acknowledgementPacket)
+  const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
   BOOST_LOG_FUNCTION()
 

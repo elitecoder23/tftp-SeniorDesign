@@ -171,7 +171,7 @@ void WriteRequestOperationImpl::start()
       if ( !serverOptions.empty() )
       {
         // send OACK
-        send( Packets::OptionsAcknowledgementPacket{ clientOptions } );
+        send( Packets::OptionsAcknowledgementPacket{ serverOptions } );
       }
       else
       {

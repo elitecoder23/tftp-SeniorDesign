@@ -131,8 +131,8 @@ OperationPtr TftpServerImpl::readRequestOperation(
     completionHandler,
     remote,
     optionsConfiguration,
-    additionalNegotiatedOptions,
-    clientOptions ) };
+    clientOptions,
+    additionalNegotiatedOptions ) };
 
   operation->start();
 
@@ -181,8 +181,8 @@ OperationPtr TftpServerImpl::writeRequestOperation(
     completionHandler,
     remote,
     optionsConfiguration,
-    additionalNegotiatedOptions,
-    clientOptions ) };
+    clientOptions,
+    additionalNegotiatedOptions ) };
 
   operation->start();
 
@@ -254,12 +254,12 @@ void TftpServerImpl::errorOperation(
 
   Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
-    << "TX: " << static_cast< std::string>( errorPacket);
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    << "TX: " << static_cast< std::string>( errorPacket );
 
   try
   {
-    boost::asio::ip::udp::socket errSocket{ ioContext};
+    boost::asio::ip::udp::socket errSocket{ ioContext };
 
     errSocket.open( remote.protocol());
 
@@ -269,9 +269,9 @@ void TftpServerImpl::errorOperation(
 
     errSocket.send( boost::asio::buffer( static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
   }
-  catch ( boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << err.what();
   }
 }
@@ -282,21 +282,21 @@ void TftpServerImpl::receive()
   {
     // wait for incoming packet
     socket.async_receive_from(
-      boost::asio::buffer( receivePacket),
+      boost::asio::buffer( receivePacket ),
       remoteEndpoint,
       boost::bind(
         &TftpServerImpl::receiveHandler,
         this,
         boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred));
+        boost::asio::placeholders::bytes_transferred ) );
   }
-  catch ( boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
     ioContext.stop();
 
     BOOST_THROW_EXCEPTION(CommunicationException()
-      << Helper::AdditionalInfo( err.what())
-      << TransferPhaseInfo( TransferPhase::Initialisation));
+      << Helper::AdditionalInfo( err.what() )
+      << TransferPhaseInfo( TransferPhase::Initialisation ) );
   }
 }
 
