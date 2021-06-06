@@ -16,6 +16,8 @@
 #include <tftp/Tftp.hpp>
 
 #include <boost/optional.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
+#include <boost/program_options/options_description.hpp>
 
 namespace Tftp {
 
@@ -33,41 +35,34 @@ class TftpOptionsConfiguration
 {
   public:
     /**
-     * @brief Creates an option list (for TFTP clients) based on the actual
-     *   configuration and the supplied base options.
-     *
-     * This operation handles:
-     * - block size option,
-     * - timeout option, and
-     * - transfer size option.
-     *
-     * The transfer size option must is handled in a special way.
-     * It is set to '0' to be checked by RRQ/ WRQ operations.
-     *
-     * @return Option list (for TFTP clients) based on the actual
-     *   configuration and the supplied base options.
+     * @brief Initialises the Configuration with Default Values.
      **/
-    [[nodiscard]] Options clientOptions() const;
+    TftpOptionsConfiguration() noexcept;
 
     /**
-     * @brief Creates an option list (for TFTP servers) based on the actual
-     *   configuration and the supplied base options.
+     * @brief Loads the configuration via a boost::property_tree::ptree.
      *
-     * This operation handles:
-     * - block size option,
-     * - timeout option, and
-     * - transfer size option.
-     *
-     * The transfer size option must is handled in a special way.
-     * It is set to '0' to be checked by RRQ/ WRQ operations.
-     *
-     * @param[in] baseOptions
-     *   Base options, which shall be used for creation of this option list.
-     *
-     * @return Option list (for TFTP servers) based on the actual
-     *   configuration and the supplied base options.
+     * @param[in] config
+     *   Stored configuration.
      **/
-    [[nodiscard]] Options serverOptions() const;
+    explicit TftpOptionsConfiguration(
+      const boost::property_tree::ptree &config );
+
+    /**
+     * @brief Converts the configuration values to a
+     *   boost::property_tree::ptree.
+     *
+     * @return The boost::property_tree::ptree.
+     **/
+    [[nodiscard]] boost::property_tree::ptree toProperties() const;
+
+    /**
+     * @brief Returns an option description, which can be used to parse a
+     *   command line.
+     *
+     * @return
+     **/
+    [[nodiscard]] boost::program_options::options_description options();
 
     //! If set, the client/ server shall handle the "Transfer Size" option
     bool handleTransferSizeOption;
@@ -79,7 +74,6 @@ class TftpOptionsConfiguration
      * @note Even if timeout is only uint8_t we make it 16bit for parsing.
      **/
     boost::optional< uint16_t > timeoutOption;
-
 };
 
 }

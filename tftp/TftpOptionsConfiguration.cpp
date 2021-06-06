@@ -12,6 +12,64 @@
 
 #include "TftpOptionsConfiguration.hpp"
 
+#include <boost/property_tree/ptree.hpp>
+
 namespace Tftp {
+
+TftpOptionsConfiguration::TftpOptionsConfiguration() noexcept :
+  handleTransferSizeOption{ false}
+{
+}
+
+TftpOptionsConfiguration::TftpOptionsConfiguration(
+  const boost::property_tree::ptree &config ) :
+  handleTransferSizeOption{ config.get( "transferSize", false ) },
+  blockSizeOption{ config.get_optional< uint16_t>( "blockSize.value" ) },
+  timeoutOption{ config.get_optional< uint16_t>( "timeout.value" ) }
+{
+}
+
+boost::property_tree::ptree TftpOptionsConfiguration::toProperties() const
+{
+  boost::property_tree::ptree properties{};
+
+  properties.add( "transferSize", handleTransferSizeOption );
+
+  if ( blockSizeOption )
+  {
+    properties.add( "blockSize.value", blockSizeOption );
+  }
+
+  if ( timeoutOption )
+  {
+    properties.add( "timeout.value", timeoutOption );
+  }
+
+  return properties;
+}
+
+boost::program_options::options_description TftpOptionsConfiguration::options()
+{
+  boost::program_options::options_description options{ "TFTP Option Negotiation Options" };
+
+  options.add_options()
+  (
+    "blocksize-option",
+    boost::program_options::value( &blockSizeOption )->value_name( "blocksize" ),
+    "blocksize of transfers to use."
+  )
+  (
+    "timeout-option",
+    boost::program_options::value( &timeoutOption )->value_name( "timeout" ),
+    "If set handles the timeout option negotiation (seconds)."
+  )
+  (
+    "handle-transfer-size-option",
+    boost::program_options::bool_switch( &handleTransferSizeOption ),
+    "If set handles the transfer size option negotiation."
+  );
+
+  return options;
+}
 
 }
