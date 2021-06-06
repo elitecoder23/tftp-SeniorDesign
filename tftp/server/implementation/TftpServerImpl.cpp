@@ -353,7 +353,7 @@ void TftpServerImpl::readRequestPacket(
     errorOperation(
       remote,
       ErrorCode::FileNotFound,
-      "RRQ not accepted");
+      "RRQ not accepted" );
   }
 
   // extract known TFTP Options

@@ -58,6 +58,8 @@ class WriteRequestOperationImpl: public OperationImpl
      *   TFTP Options Configuration.
      * @param[in] clientOptions
      *   Server TFTP options used for operation.
+     * @param[in] additionalNegotiatedOptions
+     *   Additional Options, which have been already negotiated.
      **/
     WriteRequestOperationImpl(
       boost::asio::io_context &ioContext,

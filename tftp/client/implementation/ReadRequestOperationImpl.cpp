@@ -86,7 +86,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
       + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
     completionHandler,
     remote,
-    local},
+    local },
   optionNegotiationHandler{ optionNegotiationHandler },
   dataHandler{ dataHandler },
   filename{ filename },
@@ -231,7 +231,7 @@ void ReadRequestOperationImpl::dataPacket(
     && ( !oackReceived ) )
   {
     // If options negotiation is aborted by callback - Abort Operation
-    if (!optionNegotiationHandler( {} ) )
+    if ( !optionNegotiationHandler( {} ) )
     {
       BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
         << "Option Negotiation failed";

@@ -147,7 +147,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions,
-  const boost::asio::ip::udp::endpoint &local)
+  const boost::asio::ip::udp::endpoint &local )
 {
   auto operation{ std::make_shared< WriteRequestOperationImpl>(
     ioContext,

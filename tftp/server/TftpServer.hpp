@@ -99,6 +99,8 @@ class TftpServer
     /**
      * @brief Creates a TFTP Server Write Operation (TFTP RRQ)
      *
+     * Data is obtained from @p dataHandler and transmitted to TFTP Client.
+     *
      * @param[in] dataHandler
      *   Handler, which will be called on various events.
      * @param[in] completionHandler
@@ -107,6 +109,7 @@ class TftpServer
      *   Address of the remote endpoint (TFTP Client).
      * @param[in] optionsConfiguration
      *   TFTP Options Configuration.
+     *   Will be used for Options Negotiation.
      * @param[in] clientOptions
      *   TFTP Client Options.
      *   Will be negotiated within Server
@@ -141,6 +144,8 @@ class TftpServer
     /**
      * @brief Creates a TFTP Server Read Operation (TFTP WRQ)
      *
+     * Data is received form the client and written to @p dataHandler.
+     *
      * @param[in] dataHandler
      *   Handler, which will be called on various events.
      * @param[in] completionHandler
@@ -149,6 +154,7 @@ class TftpServer
      *   Address of the remote endpoint (TFTP client).
      * @param[in] optionsConfiguration
      *   TFTP Options Configuration.
+     *   Will be used for Options Negotiation.
      * @param[in] clientOptions
      *   TFTP Client Options.
      *   Will be negotiated within Server

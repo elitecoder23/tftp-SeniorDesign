@@ -36,7 +36,7 @@ namespace Tftp::Server {
  *
  * This operation is initiated by a client TFTP read request (RRQ)
  **/
-class ReadRequestOperationImpl: public OperationImpl
+class ReadRequestOperationImpl final : public OperationImpl
 {
   public:
     /**
@@ -58,6 +58,8 @@ class ReadRequestOperationImpl: public OperationImpl
      *   TFTP Options Configuration.
      * @param[in] clientOptions
      *   Server TFTP options used for operation.
+     * @param[in] additionalNegotiatedOptions
+     *   Additional Options, which have been already negotiated.
      **/
     ReadRequestOperationImpl(
       boost::asio::io_context &ioContext,
