@@ -139,7 +139,7 @@ class TftpClient
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.
      *
-     * @return The client operation instance.
+     * @return TFTP Client Operation Instance.
      **/
     virtual OperationPtr writeRequestOperation(
       OptionNegotiationHandler optionNegotiationHandler,

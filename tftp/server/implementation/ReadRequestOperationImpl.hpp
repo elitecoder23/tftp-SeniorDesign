@@ -73,7 +73,7 @@ class ReadRequestOperationImpl final : public OperationImpl
       const Options &additionalNegotiatedOptions );
 
     /**
-     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
+     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -117,7 +117,7 @@ class ReadRequestOperationImpl final : public OperationImpl
     void sendData();
 
     /**
-     * @copydoc PacketHandler::dataPacket
+     * @copydoc Packets::PacketHandler::dataPacket
      *
      * Data packets are not expected and handled as invalid.
      * An error is sent back and the operation is cancelled.
@@ -127,7 +127,7 @@ class ReadRequestOperationImpl final : public OperationImpl
       const Packets::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc PacketHandler::acknowledgementPacket
+     * @copydoc Packets::PacketHandler::acknowledgementPacket
      *
      * The acknowledgement packet is checked and the next data sequence is
      * handled.

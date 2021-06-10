@@ -78,7 +78,7 @@ class OperationImpl:
       const boost::asio::ip::udp::endpoint &remote );
 
     /**
-     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
+     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -136,7 +136,7 @@ class OperationImpl:
     void receiveTimeout( uint8_t receiveTimeout ) noexcept;
 
     /**
-     * @copydoc PacketHandler::readRequestPacket
+     * @copydoc Packets::PacketHandler::readRequestPacket
      *
      * A RRQ packet is not expected - therefore send an error packet an
      * terminate connection.
@@ -146,7 +146,7 @@ class OperationImpl:
       const Packets::ReadRequestPacket &readRequestPacket ) final;
 
     /**
-     * @copydoc PacketHandler::writeRequestPacket
+     * @copydoc Packets::PacketHandler::writeRequestPacket
      *
      * A WRQ packet is not expected - therefore send an error packet an
      * terminate connection.
@@ -156,7 +156,7 @@ class OperationImpl:
       const Packets::WriteRequestPacket &writeRequestPacket ) final;
 
     /**
-     * @copydoc PacketHandler::errorPacket()
+     * @copydoc Packets::PacketHandler::errorPacket()
      *
      * Terminate connection.
      **/
@@ -165,7 +165,7 @@ class OperationImpl:
       const Packets::ErrorPacket &errorPacket) final;
 
     /**
-     * @copydoc PacketHandler::optionsAcknowledgementPacket()
+     * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket()
      *
      * A OACK packet is not expected - therefore send an error packet an
      * terminate connection.
@@ -175,7 +175,7 @@ class OperationImpl:
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) final;
 
     /**
-     * @copydoc PacketHandler::invalidPacket()
+     * @copydoc Packets::PacketHandler::invalidPacket()
      *
      * Send error packet and terminate connection.
      **/

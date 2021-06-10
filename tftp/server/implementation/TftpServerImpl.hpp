@@ -76,7 +76,7 @@ class TftpServerImpl:
     //! @copydoc TftpServer::stop
     void stop() final;
 
-    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
+    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
     OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -85,7 +85,7 @@ class TftpServerImpl:
       const Options &clientOptions,
       const Options &additionalNegotiatedOptions ) final;
 
-    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&,const boost::asio::ip::udp::endpoint&)
+    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,const boost::asio::ip::udp::endpoint&)
     OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -95,7 +95,7 @@ class TftpServerImpl:
       const Options &additionalNegotiatedOptions,
       const boost::asio::ip::udp::endpoint &local ) final;
 
-    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
+    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
     OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -104,7 +104,7 @@ class TftpServerImpl:
       const Options &clientOptions,
       const Options &additionalNegotiatedOptions ) final;
 
-    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&,const boost::asio::ip::udp::endpoint&)
+    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,const boost::asio::ip::udp::endpoint&)
     OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -152,7 +152,7 @@ class TftpServerImpl:
       std::size_t bytesTransferred);
 
     /**
-     * @copydoc PacketHandler::readRequestPacket
+     * @copydoc Packets::PacketHandler::readRequestPacket
      *
      * The packet is decoded, and when valid the handler
      * NewRequestHandler::receviedReadRequest() is called, which actually
@@ -163,7 +163,7 @@ class TftpServerImpl:
       const Packets::ReadRequestPacket &readRequestPacket) final;
 
     /**
-     * @copydoc PacketHandler::writeRequestPacket
+     * @copydoc Packets::PacketHandler::writeRequestPacket
      *
      * The packet is decoded, and when valid the handler
      * NewRequestHandler::receviedWriteRequest() is called, which actually
@@ -174,7 +174,7 @@ class TftpServerImpl:
       const Packets::WriteRequestPacket &writeRequestPacket) final;
 
     /**
-     * @copydoc PacketHandler::dataPacket
+     * @copydoc Packets::PacketHandler::dataPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
@@ -184,7 +184,7 @@ class TftpServerImpl:
       const Packets::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc PacketHandler::acknowledgementPacket
+     * @copydoc Packets::PacketHandler::acknowledgementPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
@@ -194,7 +194,7 @@ class TftpServerImpl:
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
-     * @copydoc PacketHandler::errorPacket
+     * @copydoc Packets::PacketHandler::errorPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
@@ -204,7 +204,7 @@ class TftpServerImpl:
       const Packets::ErrorPacket &errorPacket) final;
 
     /**
-     * @copydoc PacketHandler::optionsAcknowledgementPacket
+     * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket
      *
      * The TFTP server does not expect this packet. This packet is responded
      * with an TFTP Error Packet.
@@ -214,7 +214,7 @@ class TftpServerImpl:
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
     /**
-     * @copydoc PacketHandler::invalidPacket
+     * @copydoc Packets::PacketHandler::invalidPacket
      *
      * The TFTP server does not expect this packet.
      * This packet is ignored.

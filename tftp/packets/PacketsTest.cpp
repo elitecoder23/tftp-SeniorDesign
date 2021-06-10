@@ -20,10 +20,11 @@
 
 namespace Tftp::Packets {
 
-BOOST_AUTO_TEST_SUITE( TftpTest)
-BOOST_AUTO_TEST_SUITE( PacketsTest)
+BOOST_AUTO_TEST_SUITE( TftpTest )
+BOOST_AUTO_TEST_SUITE( PacketsTest )
 
-BOOST_AUTO_TEST_CASE( toString)
+//! TftpOptions_options tests
+BOOST_AUTO_TEST_CASE( toString )
 {
   Options options{};
   BOOST_CHECK_NO_THROW( TftpOptions_toString( options ) );
@@ -32,7 +33,7 @@ BOOST_AUTO_TEST_CASE( toString)
   BOOST_CHECK_NO_THROW( TftpOptions_toString( options ) );
 }
 
-
+//! TftpOptions_options tests
 BOOST_AUTO_TEST_CASE( optionsDecode)
 {
   RawOptions emptyRawOptions{};

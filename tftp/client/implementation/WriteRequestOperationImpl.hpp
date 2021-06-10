@@ -73,7 +73,7 @@ class WriteRequestOperationImpl : public OperationImpl
       const Options &additionalOptions );
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -117,7 +117,7 @@ class WriteRequestOperationImpl : public OperationImpl
     void sendData();
 
     /**
-     * @copydoc PacketHandler::dataPacket()
+     * @copydoc Packets::PacketHandler::dataPacket()
      *
      * @throw InvalidPacketException
      *   Always, because an this packet is invalid.
@@ -127,7 +127,7 @@ class WriteRequestOperationImpl : public OperationImpl
       const Packets::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc PacketHandler::acknowledgementPacket()
+     * @copydoc Packets::PacketHandler::acknowledgementPacket()
      *
      * @throw InvalidPacketException
      *   Invalid block number
@@ -137,7 +137,7 @@ class WriteRequestOperationImpl : public OperationImpl
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
     /**
-     * @copydoc PacketHandler::optionsAcknowledgementPacket()
+     * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket()
      *
      * @throw InvalidPacketException
      *   Empty option list

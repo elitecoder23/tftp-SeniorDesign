@@ -74,7 +74,7 @@ class ReadRequestOperationImpl : public OperationImpl
       const Options &additionalOptions );
 
     /**
-     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const Options::OptionList&)
+     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
      *
      * @param[in] local
      *   communication source
@@ -110,7 +110,7 @@ class ReadRequestOperationImpl : public OperationImpl
       ErrorInfo &&errorInfo = {} ) noexcept final;
 
     /**
-     * @copydoc PacketHandler::dataPacket()
+     * @copydoc Packets::PacketHandler::dataPacket()
      *
      * The TFTP DATA packet is decoded and checked.
      * If everything is fine, handler is called with extracted data and the
@@ -121,23 +121,23 @@ class ReadRequestOperationImpl : public OperationImpl
       const Packets::DataPacket &dataPacket) final;
 
     /**
-     * @copydoc PacketHandler::acknowledgementPacket()
+     * @copydoc Packets::PacketHandler::acknowledgementPacket()
      *
      * ACK packets are not expected for this operation.
      * They are rejected by error transmission
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket ) final;
 
     /**
-     * @copydoc PacketHandler::optionsAcknowledgementPacket()
+     * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket()
      *
      * Checks received Options for validity and finalises the option negotiation.
      **/
     void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) final;
 
   private:
     //! Option Negotiation Handler

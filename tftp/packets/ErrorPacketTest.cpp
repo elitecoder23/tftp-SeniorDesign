@@ -24,6 +24,7 @@ BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( PacketsTest)
 BOOST_AUTO_TEST_SUITE( TftpErrorPacket)
 
+//! ErrorPacket Constructor Test
 BOOST_AUTO_TEST_CASE( constructor1)
 {
   ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"};
@@ -44,6 +45,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
   }));
 }
 
+//! ErrorPacket Constructor Test
 BOOST_AUTO_TEST_CASE( constructor2)
 {
   using namespace std::literals;
@@ -65,6 +67,7 @@ BOOST_AUTO_TEST_CASE( constructor2)
   }));
 }
 
+//! ErrorPacket Constructor Test
 BOOST_AUTO_TEST_CASE( constructor3)
 {
   RawTftpPacket raw{

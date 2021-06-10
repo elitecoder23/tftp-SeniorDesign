@@ -36,7 +36,7 @@ namespace Tftp::Server {
  *
  * This operation is initiated by a client TFTP write request (WRQ)
  **/
-class WriteRequestOperationImpl: public OperationImpl
+class WriteRequestOperationImpl : public OperationImpl
 {
   public:
     /**
@@ -73,7 +73,7 @@ class WriteRequestOperationImpl: public OperationImpl
       const Options &additionalNegotiatedOptions );
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const Options&)
+     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -109,7 +109,7 @@ class WriteRequestOperationImpl: public OperationImpl
       ErrorInfo &&errorInfo = {}) noexcept final;
 
     /**
-     * @copydoc PacketHandler::dataPacket
+     * @copydoc Packets::PacketHandler::dataPacket
      *
      * The received data packet is checked and the
      * TftpReadOperationHandler::receivedData() operation of the registered
@@ -120,10 +120,10 @@ class WriteRequestOperationImpl: public OperationImpl
       const Packets::DataPacket &dataPacket ) final;
 
     /**
-     * @copydoc PacketHandler::acknowledgementPacket
+     * @copydoc Packets::PacketHandler::acknowledgementPacket
      *
      * Acknowledgement packets are not expected and handled as invalid.
-     * An error is sent back and the operation is cancelled.
+     * An error is sent back, and the operation is cancelled.
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,

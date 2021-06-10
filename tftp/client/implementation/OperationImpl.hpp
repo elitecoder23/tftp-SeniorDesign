@@ -88,7 +88,7 @@ class OperationImpl :
       const boost::asio::ip::udp::endpoint &remote );
 
     /**
-     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
+     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -147,7 +147,7 @@ class OperationImpl :
      * @brief Sets the finished flag.
      *
      * @param[in] status
-     *   If the operation was successful or an error occurred.
+     *   If the operation was successful, or an error occurred.
      * @param[in] errorInfo
      *   In error case, this information is set accordingly.
      **/
@@ -156,7 +156,7 @@ class OperationImpl :
       ErrorInfo &&errorInfo = {} );
 
     /**
-     * @copydoc PacketHandler::readRequestPacket()
+     * @copydoc Packets::PacketHandler::readRequestPacket()
      *
      * A read request packet is handled as failure.
      * A error packet is sent to the origin and the finished flag is set.
@@ -168,7 +168,7 @@ class OperationImpl :
       const Packets::ReadRequestPacket &readRequestPacket ) final;
 
     /**
-     * @copydoc PacketHandler::writeRequestPacket()
+     * @copydoc Packets::PacketHandler::writeRequestPacket()
      *
      * A write request packet is handled as failure.
      * A error packet is sent to the origin and the finished flag is set.
@@ -178,14 +178,14 @@ class OperationImpl :
       const Packets::WriteRequestPacket &writeRequestPacket ) final;
 
     /**
-     * @copydoc PacketHandler::errorPacket()
+     * @copydoc Packets::PacketHandler::errorPacket()
      **/
     void errorPacket(
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::ErrorPacket &errorPacket ) final;
 
     /**
-     * @copydoc PacketHandler::invalidPacket()
+     * @copydoc Packets::PacketHandler::invalidPacket()
      **/
     void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
