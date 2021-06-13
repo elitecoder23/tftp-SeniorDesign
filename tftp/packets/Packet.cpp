@@ -108,14 +108,14 @@ Packet::operator RawTftpPacket() const
   return encode();
 }
 
-Packet& Packet::operator=( const Packet &other) noexcept
+Packet& Packet::operator=( const Packet &other [[maybe_unused]] ) noexcept
 {
   // assure same packet type
   assert( packetTypeV == other.packetTypeV );
   return *this;
 }
 
-Packet& Packet::operator=( Packet &&other) noexcept
+Packet& Packet::operator=( Packet &&other [[maybe_unused]] ) noexcept
 {
   // assure same packet type
   assert( packetTypeV == other.packetTypeV );
