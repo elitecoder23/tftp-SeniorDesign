@@ -69,12 +69,10 @@ configure_file(
 install(
   DIRECTORY
     ${CMAKE_CURRENT_BINARY_DIR}/html
-  COMPONENT documentation
   DESTINATION ${CMAKE_INSTALL_DOCDIR}/tftp_api_doc
   OPTIONAL )
 
 install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/index.html
-  COMPONENT documentation
   DESTINATION ${CMAKE_INSTALL_DOCDIR}/tftp_api_doc
   OPTIONAL )

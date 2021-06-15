@@ -31,10 +31,5 @@ target_compile_definitions(
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
-# INSTALL
-include( GNUInstallDirs )
 
-install(
-  TARGETS tftp_server
-  COMPONENT runtime
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} )
+install( TARGETS tftp_server )
