@@ -136,22 +136,22 @@ void Packet::insertHeader( RawTftpPacketSpan rawPacket ) const
 void Packet::decodeHeader( ConstRawTftpPacketSpan rawPacket )
 {
   // check size
-  if (rawPacket.size() < HeaderSize)
+  if ( rawPacket.size() < HeaderSize )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "Invalid packet size (<HEADER SIZE)"));
+      << Helper::AdditionalInfo{ "Invalid packet size (HEADER SIZE)" } );
   }
 
-  auto packetIt{ rawPacket.begin()};
+  auto packetIt{ rawPacket.begin() };
 
   // Check Opcode
   uint16_t opcode{};
-  Helper::getInt< uint16_t>( packetIt, opcode);
+  Helper::getInt< uint16_t>( packetIt, opcode );
 
   if ( static_cast< PacketType>( opcode) != packetTypeV )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "Invalid opcode"));
+      << Helper::AdditionalInfo{ "Invalid opcode" } );
   }
 }
 
