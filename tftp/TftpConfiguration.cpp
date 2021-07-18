@@ -33,7 +33,7 @@ TftpConfiguration::TftpConfiguration(
   tftpTimeout{ config.get( "timeout", DefaultTftpReceiveTimeout ) },
   tftpRetries{ config.get( "retries", DefaultTftpRetries ) },
   tftpServerPort{ config.get( "port", defaultTftpPort ) },
-  optionsConfiguration{ config.get_child( "option", {} ) }
+  optionsConfiguration{ config.get_child( "options", {} ) }
 {
 }
 
@@ -45,7 +45,7 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
   properties.add( "retries", tftpRetries );
   properties.add( "port", tftpServerPort );
 
-  properties.add_child( "option", optionsConfiguration.toProperties() );
+  properties.add_child( "options", optionsConfiguration.toProperties() );
 
   return properties;
 }
