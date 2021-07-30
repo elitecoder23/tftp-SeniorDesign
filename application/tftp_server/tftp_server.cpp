@@ -362,9 +362,9 @@ static void transmitFile(
         std::cout << "Transfer Completed: " << transferStatus << "\n";
       },
       remote,
-      configuration.optionsConfiguration,
+      configuration.tftpOptions,
       clientOptions,
-      {} ) };
+      {} /* no additional options */ ) };
 }
 
 static void receiveFile(
@@ -405,7 +405,7 @@ static void receiveFile(
         std::cout << "Transfer Completed: " << transferStatus << "\n";
       },
       remote,
-      configuration.optionsConfiguration,
+      configuration.tftpOptions,
       clientOptions,
-      {} ) };
+      {} /* no additional options */ ) };
 }

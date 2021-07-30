@@ -76,7 +76,7 @@ class TftpConfiguration
     uint16_t tftpServerPort;
 
     //! Options Configuration
-    TftpOptionsConfiguration optionsConfiguration;
+    TftpOptionsConfiguration tftpOptions;
 };
 
 }

@@ -23,7 +23,7 @@ TftpConfiguration::TftpConfiguration(
   tftpTimeout{ DefaultTftpReceiveTimeout },
   tftpRetries{ DefaultTftpRetries },
   tftpServerPort{ defaultTftpPort },
-  optionsConfiguration{}
+  tftpOptions{}
 {
 }
 
@@ -33,7 +33,7 @@ TftpConfiguration::TftpConfiguration(
   tftpTimeout{ config.get( "timeout", DefaultTftpReceiveTimeout ) },
   tftpRetries{ config.get( "retries", DefaultTftpRetries ) },
   tftpServerPort{ config.get( "port", defaultTftpPort ) },
-  optionsConfiguration{ config.get_child( "options", {} ) }
+  tftpOptions{ config.get_child( "options", {} ) }
 {
 }
 
@@ -45,7 +45,7 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
   properties.add( "retries", tftpRetries );
   properties.add( "port", tftpServerPort );
 
-  properties.add_child( "options", optionsConfiguration.toProperties() );
+  properties.add_child( "options", tftpOptions.toProperties() );
 
   return properties;
 }
@@ -62,7 +62,7 @@ boost::program_options::options_description TftpConfiguration::options()
     "UDP port, where the server is listen."
   );
 
-  options.add( optionsConfiguration.options() );
+  options.add( tftpOptions.options() );
 
   return options;
 }

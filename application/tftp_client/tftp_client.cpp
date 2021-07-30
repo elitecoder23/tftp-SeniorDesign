@@ -139,8 +139,8 @@ int main( int argc, char *argv[] )
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
           Tftp::TransferMode::OCTET,
-          configuration.optionsConfiguration,
-          {} );
+          configuration.tftpOptions,
+          {} /* no additional options */ );
         break;
 
       case Tftp::RequestType::Write:
@@ -154,8 +154,8 @@ int main( int argc, char *argv[] )
           boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
           remoteFile,
           Tftp::TransferMode::OCTET,
-          configuration.optionsConfiguration,
-          {} );
+          configuration.tftpOptions,
+          {} /* no additional options */ );
         break;
 
       default:

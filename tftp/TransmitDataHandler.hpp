@@ -35,7 +35,7 @@ class TransmitDataHandler: public virtual DataHandler
      *
      * The call to this call-back is optional.
      *
-     * @return The transfer size, if it can be priveded
+     * @return The transfer size, if it can be provided
      * @retval {}
      *   If the transfer size of the data cannot be provided.
      **/
