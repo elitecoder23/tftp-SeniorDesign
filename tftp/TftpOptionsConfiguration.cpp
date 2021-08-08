@@ -22,11 +22,17 @@ TftpOptionsConfiguration::TftpOptionsConfiguration() noexcept :
 }
 
 TftpOptionsConfiguration::TftpOptionsConfiguration(
-  const boost::property_tree::ptree &config ) :
-  handleTransferSizeOption{ config.get( "transferSize", false ) },
-  blockSizeOption{ config.get_optional< uint16_t>( "blockSize" ) },
-  timeoutOption{ config.get_optional< uint16_t>( "timeout" ) }
+  const boost::property_tree::ptree &ptree )
 {
+  fromProperties( ptree );
+}
+
+void TftpOptionsConfiguration::fromProperties(
+  const boost::property_tree::ptree &ptree )
+{
+  handleTransferSizeOption = ptree.get( "transferSize", false );
+  blockSizeOption = ptree.get_optional< uint16_t>( "blockSize" );
+  timeoutOption = ptree.get_optional< uint16_t>( "timeout" );
 }
 
 boost::property_tree::ptree TftpOptionsConfiguration::toProperties() const

@@ -40,13 +40,21 @@ class TftpOptionsConfiguration
     TftpOptionsConfiguration() noexcept;
 
     /**
-     * @brief Loads the configuration via a boost::property_tree::ptree.
+     * @brief Loads the Configuration via a boost::property_tree::ptree.
      *
-     * @param[in] config
+     * @param[in] ptree
      *   Stored configuration.
      **/
     explicit TftpOptionsConfiguration(
-      const boost::property_tree::ptree &config );
+      const boost::property_tree::ptree &ptree );
+
+    /**
+     * @brief Load Configuration from given Property Tree.
+     *
+     * @param[in] ptree
+     *   Configuration as Property Tree
+     **/
+    void fromProperties( const boost::property_tree::ptree &ptree );
 
     /**
      * @brief Converts the configuration values to a
@@ -60,7 +68,7 @@ class TftpOptionsConfiguration
      * @brief Returns an option description, which can be used to parse a
      *   command line.
      *
-     * @return
+     * @return TFTP Options Configuration
      **/
     [[nodiscard]] boost::program_options::options_description options();
 

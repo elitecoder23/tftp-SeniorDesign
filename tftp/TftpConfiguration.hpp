@@ -42,14 +42,22 @@ class TftpConfiguration
     /**
      * @brief Loads the configuration via a boost::property_tree::ptree.
      *
-     * @param[in] config
-     *   Stored configuration.
+     * @param[in] ptree
+     *   Stored Configuration.
      * @param[in] defaultTftpPort
      *   Default TFTP Port used for Configuration
      **/
     explicit TftpConfiguration(
-      const boost::property_tree::ptree &config,
+      const boost::property_tree::ptree &ptree,
       uint16_t defaultTftpPort = DefaultTftpPort );
+
+    /**
+     * @brief Load Configuration from given Property Tree.
+     *
+     * @param[in] ptree
+     *   Configuration as Property Tree
+     **/
+    void fromProperties( const boost::property_tree::ptree &ptree );
 
     /**
      * @brief Converts the configuration values to a
@@ -63,9 +71,12 @@ class TftpConfiguration
      * @brief Returns an option description, which can be used to parse a
      *   command line.
      *
-     * @return
+     * @return TFTP Configuration Options Description.
      **/
     [[nodiscard]] boost::program_options::options_description options();
+
+    //! Default TFTP Port ( can be overridden by configuration)
+    const uint16_t defaultTftpPort;
 
     //! TFTP timeout - The standard when no timeout option is negotiated in seconds.
     uint8_t tftpTimeout;

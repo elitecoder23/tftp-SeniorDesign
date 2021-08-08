@@ -20,6 +20,7 @@ namespace Tftp {
 
 TftpConfiguration::TftpConfiguration(
   const uint16_t defaultTftpPort ) noexcept :
+  defaultTftpPort{ defaultTftpPort },
   tftpTimeout{ DefaultTftpReceiveTimeout },
   tftpRetries{ DefaultTftpRetries },
   tftpServerPort{ defaultTftpPort },
@@ -28,13 +29,20 @@ TftpConfiguration::TftpConfiguration(
 }
 
 TftpConfiguration::TftpConfiguration(
-  const boost::property_tree::ptree &config,
+  const boost::property_tree::ptree &ptree,
   const uint16_t defaultTftpPort ) :
-  tftpTimeout{ config.get( "timeout", DefaultTftpReceiveTimeout ) },
-  tftpRetries{ config.get( "retries", DefaultTftpRetries ) },
-  tftpServerPort{ config.get( "port", defaultTftpPort ) },
-  tftpOptions{ config.get_child( "options", {} ) }
+  defaultTftpPort{ defaultTftpPort }
 {
+  fromProperties( ptree );
+}
+
+void TftpConfiguration::fromProperties(
+  const boost::property_tree::ptree &ptree )
+{
+  tftpTimeout = ptree.get( "timeout", DefaultTftpReceiveTimeout );
+  tftpRetries = ptree.get( "retries", DefaultTftpRetries ) ;
+  tftpServerPort = ptree.get( "port", defaultTftpPort );
+  tftpOptions.fromProperties( ptree.get_child( "options", {} ) );
 }
 
 boost::property_tree::ptree TftpConfiguration::toProperties() const
