@@ -186,7 +186,7 @@ enum class ErrorCode : uint16_t
   //! Unknown transfer ID.
   UnknownTransferId           = 5U,
   //! File already exists.
-  FileAllreadyExists          = 6U,
+  FileAlreadyExists           = 6U,
   //! No such user.
   NoSuchUser                  = 7U,
   //! TFTP options refused during option negotiation
