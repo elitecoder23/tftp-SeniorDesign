@@ -53,7 +53,7 @@ include( FetchContent )
 FetchContent_Declare(
   cmake_common
   GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/cmake_common.git
-  GIT_TAG        master )
+  GIT_TAG        main )
 
 if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
   set( FETCHCONTENT_SOURCE_DIR_CMAKE_COMMON ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
@@ -70,7 +70,7 @@ endif()
 FetchContent_Declare(
   helper
   GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/helper.git
-  GIT_TAG        master )
+  GIT_TAG        main )
 
 if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/helper )
   set( FETCHCONTENT_SOURCE_DIR_HELPER ${CMAKE_CURRENT_SOURCE_DIR}/helper )
