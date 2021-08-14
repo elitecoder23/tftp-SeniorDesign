@@ -34,10 +34,10 @@ PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket) noexcept
 
   // decode opcode value
   uint16_t opcode{};
-  Helper::getInt< uint16_t>( it, opcode);
+  Helper::getInt< uint16_t>( it, opcode );
 
   // check valid opcodes
-  switch ( static_cast< PacketType>( opcode))
+  switch ( static_cast< PacketType>( opcode ) )
   {
     case PacketType::ReadRequest:
     case PacketType::WriteRequest:
@@ -45,12 +45,12 @@ PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket) noexcept
     case PacketType::Acknowledgement:
     case PacketType::Error:
     case PacketType::OptionsAcknowledgement:
-      // this are valid opcodes.
+      // these are valid opcodes.
       break;
 
     default:
       // return INVALID for invalid values
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
         << "Invalid opcode " << std::hex << opcode;
       return PacketType::Invalid;
   }
@@ -90,17 +90,17 @@ Packet::operator std::string() const
   }
 }
 
-Packet::Packet( const PacketType packetType) noexcept:
-  packetTypeV( packetType)
+Packet::Packet( const PacketType packetType ) noexcept:
+  packetTypeV{ packetType }
 {
 }
 
 Packet::Packet(
   const PacketType packetType,
-  ConstRawTftpPacketSpan rawPacket):
+  ConstRawTftpPacketSpan rawPacket ):
   packetTypeV{ packetType }
 {
-  decodeHeader( rawPacket);
+  decodeHeader( rawPacket );
 }
 
 Packet::operator RawTftpPacket() const

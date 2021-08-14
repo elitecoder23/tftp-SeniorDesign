@@ -73,7 +73,7 @@ class Packet
      * @brief Constructs a TFTP package with the given packet type.
      *
      * @param[in] packetType
-     *   The packet type of the packet.
+Fo     *   Packet type of the packet.
      **/
     explicit Packet( PacketType packetType ) noexcept;
 
@@ -83,7 +83,7 @@ class Packet
      * Only decodes TFTP header.
      *
      * @param[in] packetType
-     *   The packet type of the packet.
+     *   Packet type of the packet.
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
@@ -141,7 +141,7 @@ class Packet
      * The size of @p rawPacket must be at least @p HeaderSize.
      *
      * @param[in,out] rawPacket
-     *   The raw packet, which will be filled with the appropriate data.
+     *   Raw packet, which will be filled with the appropriate data.
      **/
     void insertHeader( RawTftpPacketSpan rawPacket ) const;
 
