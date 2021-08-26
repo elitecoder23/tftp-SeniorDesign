@@ -148,7 +148,7 @@ class DataPacket: public Packet
      **/
     [[nodiscard]] size_t dataSize() const;
 
-    // @copydoc Packet::operator std::string() const
+    //! @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
 
   private:

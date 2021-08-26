@@ -78,7 +78,7 @@ OperationImpl::OperationImpl(
   const uint16_t tftpRetries,
   const uint16_t maxReceivePacketSize,
   OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote)
+  const boost::asio::ip::udp::endpoint &remote )
 try :
   completionHandler{ std::move( completionHandler ) },
   remoteEndpoint{ remote },
@@ -96,7 +96,7 @@ try :
     // Open the socket
     socket.open( remote.protocol() );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     // On error and if socket is opened - close it.
     if ( socket.is_open() )
@@ -108,7 +108,7 @@ try :
       << Helper::AdditionalInfo( err.what() ) );
   }
 }
-catch ( boost::system::system_error &err )
+catch ( const boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
     << Helper::AdditionalInfo( err.what() ) );
@@ -142,7 +142,7 @@ try :
     // Bind socket to source address (from)
     socket.bind( local );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     // On error and if socket is opened - close it.
     if ( socket.is_open() )
@@ -154,7 +154,7 @@ try :
       << Helper::AdditionalInfo( err.what() ) );
   }
 }
-catch ( boost::system::system_error &err )
+catch ( const boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
    << Helper::AdditionalInfo( err.what() ) );
@@ -180,7 +180,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
       boost::asio::buffer( transmitPacket ),
       remoteEndpoint);
   }
-  catch ( boost::system::system_error &err)
+  catch ( const boost::system::system_error &err)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TX Error: " << err.what();
@@ -208,7 +208,7 @@ void OperationImpl::send( const Packets::Packet &packet )
     // Send the packet to the remote server
     socket.send( boost::asio::buffer( transmitPacket ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TX Error: " << err.what();
@@ -243,7 +243,7 @@ void OperationImpl::receiveFirst()
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "RX Error: " << err.what();
@@ -276,7 +276,7 @@ void OperationImpl::receive()
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "RX Error: " << err.what();
@@ -447,7 +447,7 @@ void OperationImpl::receiveFirstHandler(
         boost::asio::buffer( static_cast< Packets::RawTftpPacket>( err ) ),
         receiveEndpoint );
     }
-    catch ( boost::system::system_error &err)
+    catch ( const boost::system::system_error &err)
     {
       // ignore send error to unknown partner
       BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
@@ -468,7 +468,7 @@ void OperationImpl::receiveFirstHandler(
 
       return;
     }
-    catch ( boost::system::system_error &err )
+    catch ( const boost::system::system_error &err )
     {
       BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
         << "Start Receive: " << err.what();
@@ -486,7 +486,7 @@ void OperationImpl::receiveFirstHandler(
     // connect to the server port
     socket.connect( receiveEndpoint );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Connect: " << err.what();
@@ -577,7 +577,7 @@ void OperationImpl::timeoutFirstHandler(
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Re-TX error: " << err.what();
@@ -633,7 +633,7 @@ void OperationImpl::timeoutHandler(
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch (boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Re-TX error: " << err.what();

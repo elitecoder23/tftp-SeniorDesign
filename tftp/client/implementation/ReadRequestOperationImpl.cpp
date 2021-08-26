@@ -256,7 +256,7 @@ void ReadRequestOperationImpl::dataPacket(
   // send ACK
   send( Packets::AcknowledgementPacket( lastReceivedBlockNumber ) );
 
-  // if received data size is smaller then the expected
+  // if received data size is smaller than the expected
   if ( dataPacket.dataSize() < receiveDataSize )
   {
     // last packet has been received and operation is finished
@@ -264,7 +264,7 @@ void ReadRequestOperationImpl::dataPacket(
   }
   else
   {
-    // otherwise wait for next data package
+    // otherwise, wait for next data package
     receive();
   }
 }

@@ -30,7 +30,7 @@ namespace Tftp::Packets {
 class PacketHandler
 {
   public:
-    //! Destructur
+    //! Destructor
     virtual ~PacketHandler() noexcept = default;
 
     /**

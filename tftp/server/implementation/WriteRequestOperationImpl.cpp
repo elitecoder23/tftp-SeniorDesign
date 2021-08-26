@@ -183,7 +183,7 @@ void WriteRequestOperationImpl::start()
     // start receive loop
     receive();
   }
-  catch ( TftpException &e)
+  catch ( const TftpException &e )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Error during Operation: " << e.what();
@@ -272,7 +272,7 @@ void WriteRequestOperationImpl::dataPacket(
 
   send( Packets::AcknowledgementPacket( lastReceivedBlockNumber));
 
-  // if received data size is smaller then the expected -> last packet has been
+  // if received data size is smaller than the expected -> last packet has been
   // received
   if (dataPacket.dataSize() < receiveDataSize)
   {

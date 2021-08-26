@@ -22,9 +22,9 @@ namespace Tftp::Client {
 TftpClientImpl::TftpClientImpl(
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries ):
-  tftpTimeout{ tftpTimeout},
-  tftpRetries{ tftpRetries},
-  work{ ioContext}
+  tftpTimeout{ tftpTimeout },
+  tftpRetries{ tftpRetries },
+  work{ ioContext }
 {
 }
 

@@ -51,7 +51,7 @@ void AcknowledgementPacket::blockNumber( const BlockNumber blockNumber)
 
 AcknowledgementPacket::operator std::string() const
 {
-  return ( boost::format( "ACK: BLOCKNO: %d") %
+  return ( boost::format( "ACK: BLOCK NO: %d") %
     static_cast< uint16_t>( blockNumber())).str();
 }
 

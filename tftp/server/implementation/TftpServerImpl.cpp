@@ -26,7 +26,6 @@
 
 #include <boost/bind/bind.hpp>
 
-#include <vector>
 #include <cstdint>
 
 namespace Tftp::Server {
@@ -53,7 +52,7 @@ try :
     // bind to the local address
     socket.bind( serverAddress);
   }
-  catch ( boost::system::system_error &err)
+  catch ( const boost::system::system_error &err )
   {
     // close socket when opened
     if ( socket.is_open())
@@ -66,7 +65,7 @@ try :
       << TransferPhaseInfo( TransferPhase::Initialisation ) );
   }
 }
-catch ( boost::system::system_error &err)
+catch ( const boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
     << Helper::AdditionalInfo( err.what())
@@ -88,13 +87,13 @@ void TftpServerImpl::entry() noexcept
   {
     ioContext.run();
   }
-  catch (boost::system::system_error &err)
+  catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::fatal)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::fatal )
       << "IO error: " << err.what();
   }
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TFTP server I/O context finished";
 }
 
@@ -237,9 +236,9 @@ void TftpServerImpl::errorOperation(
 
     errSocket.send( boost::asio::buffer( static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
   }
-  catch ( boost::system::system_error &err)
+  catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << err.what();
   }
 }
@@ -269,7 +268,7 @@ void TftpServerImpl::errorOperation(
 
     errSocket.send( boost::asio::buffer( static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << err.what();
@@ -290,7 +289,7 @@ void TftpServerImpl::receive()
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     ioContext.stop();
 
@@ -327,7 +326,7 @@ void TftpServerImpl::receiveHandler(
       remoteEndpoint,
       Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
   }
-  catch ( TftpException &e)
+  catch ( const TftpException &e)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TFTP exception: " << e.what();

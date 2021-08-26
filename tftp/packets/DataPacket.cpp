@@ -88,7 +88,7 @@ size_t DataPacket::dataSize() const
 
 DataPacket::operator std::string() const
 {
-  return ( boost::format( "DATA: BLOCKNO: %d DATA: %d bytes") %
+  return ( boost::format( "DATA: BLOCK NO: %d DATA: %d bytes") %
     static_cast< uint16_t>( blockNumber()) %
     dataSize()).str();
 }
@@ -116,7 +116,7 @@ void DataPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
   if (rawPacket.size() < MinPacketSize)
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "Invalid packet size of DATA packet"));
+      << Helper::AdditionalInfo{ "Invalid packet size of DATA packet" } );
   }
 
   auto packetIt{ rawPacket.begin() + HeaderSize};

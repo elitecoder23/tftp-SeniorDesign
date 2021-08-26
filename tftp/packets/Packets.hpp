@@ -125,7 +125,7 @@ Options::value_type TftpOptions_setOption(
   IntT value );
 
 /**
- * @brief Decodes the Namd Option
+ * @brief Decodes the Named Option.
  *
  * @tparam IntT
  *   Integer Type.

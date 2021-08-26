@@ -7,7 +7,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Vlass Tftp::Server::TftpServer.
+ * @brief Declaration of Class Tftp::Server::TftpServer.
  *
  * The class TftpServer is the main entry for a TFTP server application.
  **/
@@ -26,7 +26,7 @@ namespace Tftp::Server {
  * @brief TFTP %Server.
  *
  * Waits on the specified port for a valid TFTP request and calls the
- * approbate call-back, which has to handle the request.
+ * appropriate call-back, which has to handle the request.
  *
  * If not expected packets or invalid packets are received a error is send
  * back to the sender.
