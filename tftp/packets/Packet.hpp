@@ -73,7 +73,7 @@ class Packet
      * @brief Constructs a TFTP package with the given packet type.
      *
      * @param[in] packetType
-Fo     *   Packet type of the packet.
+     *   Packet type of the packet.
      **/
     explicit Packet( PacketType packetType ) noexcept;
 
