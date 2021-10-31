@@ -36,7 +36,8 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   std::string_view filename,
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &additionalOptions ):
+  const Options &additionalOptions,
+  const bool dally ):
   OperationImpl{
     ioContext,
     tftpTimeout,
@@ -51,6 +52,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   mode{ mode },
   optionsConfiguration{ optionsConfiguration },
   additionalOptions{ additionalOptions },
+  dally{ dally },
   oackReceived{ false },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
@@ -77,6 +79,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions,
+  const bool dally,
   const boost::asio::ip::udp::endpoint &local ):
   OperationImpl{
     ioContext,
@@ -93,6 +96,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   mode{ mode },
   optionsConfiguration{ optionsConfiguration },
   additionalOptions{ additionalOptions },
+  dally{ dally },
   oackReceived{ false },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
@@ -148,8 +152,7 @@ void ReadRequestOperationImpl::request()
     }
 
     // send read request packet
-    sendFirst(
-      Packets::ReadRequestPacket{ filename, mode, options } );
+    sendFirst( Packets::ReadRequestPacket{ filename, mode, options } );
 
     // wait for answers
     receiveFirst();
@@ -165,7 +168,7 @@ void ReadRequestOperationImpl::finished(
   ErrorInfo &&errorInfo) noexcept
 {
   // inform base class
-  OperationImpl::finished( status, std::move( errorInfo));
+  OperationImpl::finished( status, std::move( errorInfo) );
 
   // Inform data handler
   dataHandler->finished();
@@ -189,6 +192,26 @@ void ReadRequestOperationImpl::dataPacket(
     // Retransmit last ACK packet
     send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
+    // if received data size is smaller than the expected
+    if ( dataPacket.dataSize() < receiveDataSize )
+    {
+      // last packet has been received and operation is finished
+      if ( dally )
+      {
+        // wait for potential retry of Data.
+        receiveDally();
+      }
+      else
+      {
+        finished( TransferStatus::Successful );
+      }
+    }
+    else
+    {
+      // otherwise, wait for next data package
+      receive();
+    }
+
     return;
   }
 
@@ -205,7 +228,7 @@ void ReadRequestOperationImpl::dataPacket(
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket ));
+    finished( TransferStatus::TransferError, std::move( errorPacket ) );
     return;
   }
 
@@ -260,7 +283,15 @@ void ReadRequestOperationImpl::dataPacket(
   if ( dataPacket.dataSize() < receiveDataSize )
   {
     // last packet has been received and operation is finished
-    finished( TransferStatus::Successful );
+    if ( dally )
+    {
+      // wait for potential retry of Data.
+      receiveDally();
+    }
+    else
+    {
+      finished( TransferStatus::Successful );
+    }
   }
   else
   {

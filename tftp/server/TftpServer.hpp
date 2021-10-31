@@ -160,8 +160,11 @@ class TftpServer
      *   Will be negotiated within Server
      * @param[in] additionalNegotiatedOptions
      *   Additional Options, which have been already negotiated.
+     * @param[in] dally
+     *   If set to true, wait after transmission of the final ACK for potential
+     *   retries.
      *
-     * @return TFTP server read operation.
+     * @return TFTP Server Read Operation.
      **/
     virtual OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
@@ -169,10 +172,11 @@ class TftpServer
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
-      const Options &additionalNegotiatedOptions ) = 0;
+      const Options &additionalNegotiatedOptions,
+      bool dally ) = 0;
 
     /**
-     * @copydoc writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
+     * @copydoc writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,bool)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -184,6 +188,7 @@ class TftpServer
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
       const Options &additionalNegotiatedOptions,
+      bool dally,
       const boost::asio::ip::udp::endpoint &local ) = 0;
 
     /**

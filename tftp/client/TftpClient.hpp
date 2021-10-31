@@ -89,8 +89,11 @@ class TftpClient
      *   TFTP Options Configuration.
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.
+     * @param[in] dally
+     *   If set to true, wait after transmission of the final ACK for potential
+     *   retries.
      *
-     * @return The client operation instance.
+     * @return Client Operation Instance.
      **/
     virtual OperationPtr readRequestOperation(
       OptionNegotiationHandler optionNegotiationHandler,
@@ -100,10 +103,11 @@ class TftpClient
       std::string_view filename,
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions ) = 0;
+      const Options &additionalOptions,
+      bool dally ) = 0;
 
     /**
-     * @copydoc readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
+     * @copydoc readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&,bool)
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -117,6 +121,7 @@ class TftpClient
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &additionalOptions,
+      bool dally,
       const boost::asio::ip::udp::endpoint &local ) = 0;
 
     /**

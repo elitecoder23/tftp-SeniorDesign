@@ -285,6 +285,39 @@ void OperationImpl::receive()
   }
 }
 
+void OperationImpl::receiveDally()
+{
+  BOOST_LOG_FUNCTION()
+
+  try
+  {
+    // start receive operation
+    socket.async_receive(
+      boost::asio::buffer( receivePacket ),
+      boost::bind(
+        &OperationImpl::receiveHandler,
+        shared_from_this(),
+        boost::asio::placeholders::error,
+        boost::asio::placeholders::bytes_transferred ) );
+
+    // set receive timeout
+    timer.expires_from_now( boost::posix_time::seconds{ 2U * receiveTimeoutV } );
+
+    // start waiting for receive timeout
+    timer.async_wait( boost::bind(
+      &OperationImpl::timeoutDallyHandler,
+      shared_from_this(),
+      boost::asio::placeholders::error ) );
+  }
+  catch ( const boost::system::system_error &err )
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "RX Error: " << err.what();
+
+    finished( TransferStatus::CommunicationError );
+  }
+}
+
 void OperationImpl::receiveTimeout( const uint8_t receiveTimeout ) noexcept
 {
   receiveTimeoutV = receiveTimeout;
@@ -514,7 +547,7 @@ void OperationImpl::receiveHandler(
   }
 
   // (internal) receive error occurred
-  if ( errorCode)
+  if ( errorCode )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Error when receiving message: " << errorCode.message();
@@ -640,6 +673,33 @@ void OperationImpl::timeoutHandler(
 
     finished( TransferStatus::CommunicationError );
   }
+}
+
+void OperationImpl::timeoutDallyHandler(
+  const boost::system::error_code &errorCode )
+{
+  BOOST_LOG_FUNCTION()
+
+  // operation aborted (packet received)
+  if ( boost::asio::error::operation_aborted == errorCode )
+  {
+    return;
+  }
+
+  // internal (timer) error occurred
+  if ( errorCode )
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "timer error: " << errorCode.message();
+
+    finished( TransferStatus::CommunicationError );
+    return;
+  }
+
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    << "Dally Timeout Completed - Finish";
+
+  finished( TransferStatus::Successful );
 }
 
 }

@@ -407,5 +407,6 @@ static void receiveFile(
       remote,
       configuration.tftpOptions,
       clientOptions,
-      {} /* no additional options */ ) };
+      {}, /* no additional options */
+      configuration.dally ) };
 }

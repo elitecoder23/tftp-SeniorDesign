@@ -240,6 +240,38 @@ void OperationImpl::receive()
   }
 }
 
+void OperationImpl::receiveDally()
+{
+  BOOST_LOG_FUNCTION()
+
+  try
+  {
+    socket.async_receive(
+      boost::asio::buffer( receivePacket),
+      boost::bind(
+        &OperationImpl::receiveHandler,
+        shared_from_this(),
+        boost::asio::placeholders::error,
+        boost::asio::placeholders::bytes_transferred));
+
+    timer.expires_from_now( boost::posix_time::seconds( 2U * receiveTimeoutV ) );
+
+    timer.async_wait( boost::bind(
+      &OperationImpl::timeoutDallyHandler,
+      shared_from_this(),
+      boost::asio::placeholders::error ) );
+  }
+  catch ( boost::system::system_error &err )
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "RX ERROR: " << err.what();
+
+    // Operation completed
+    finished( TransferStatus::CommunicationError );
+    return;
+  }
+}
+
 void OperationImpl::receiveTimeout( const uint8_t receiveTimeout ) noexcept
 {
   receiveTimeoutV = receiveTimeout;
@@ -438,6 +470,33 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
     finished( TransferStatus::CommunicationError);
     return;
   }
+}
+
+void OperationImpl::timeoutDallyHandler(
+  const boost::system::error_code& errorCode )
+{
+  BOOST_LOG_FUNCTION()
+
+  // handle abort
+  if ( boost::asio::error::operation_aborted == errorCode )
+  {
+    return;
+  }
+
+  if ( errorCode )
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "timer error: " << errorCode.message();
+
+    // Operation completed
+    finished( TransferStatus::CommunicationError );
+    return;
+  }
+
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    << "Dally Timeout Completed - Finish";
+
+  finished( TransferStatus::Successful );
 }
 
 }

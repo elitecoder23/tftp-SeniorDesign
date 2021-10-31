@@ -60,7 +60,8 @@ OperationPtr TftpClientImpl::readRequestOperation(
   std::string_view filename,
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &additionalOptions )
+  const Options &additionalOptions,
+  const bool dally )
 {
   auto operation{ std::make_shared< ReadRequestOperationImpl>(
     ioContext,
@@ -73,7 +74,8 @@ OperationPtr TftpClientImpl::readRequestOperation(
     filename,
     mode,
     optionsConfiguration,
-    additionalOptions ) };
+    additionalOptions,
+    dally ) };
 
   operation->request();
 
@@ -89,6 +91,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions,
+  const bool dally,
   const boost::asio::ip::udp::endpoint &local)
 {
   auto operation{ std::make_shared< ReadRequestOperationImpl>(
@@ -103,6 +106,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
     mode,
     optionsConfiguration,
     additionalOptions,
+    dally,
     local ) };
 
   operation->request();

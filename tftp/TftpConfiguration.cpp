@@ -24,7 +24,8 @@ TftpConfiguration::TftpConfiguration(
   tftpTimeout{ DefaultTftpReceiveTimeout },
   tftpRetries{ DefaultTftpRetries },
   tftpServerPort{ defaultTftpPort },
-  tftpOptions{}
+  tftpOptions{},
+  dally{ false }
 {
 }
 
@@ -43,6 +44,7 @@ void TftpConfiguration::fromProperties(
   tftpRetries = ptree.get( "retries", DefaultTftpRetries ) ;
   tftpServerPort = ptree.get( "port", defaultTftpPort );
   tftpOptions.fromProperties( ptree.get_child( "options", {} ) );
+  dally = ptree.get( "dally", false ) ;
 }
 
 boost::property_tree::ptree TftpConfiguration::toProperties() const
@@ -54,6 +56,8 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
   properties.add( "port", tftpServerPort );
 
   properties.add_child( "options", tftpOptions.toProperties() );
+
+  properties.add( "dally", dally );
 
   return properties;
 }
@@ -68,6 +72,11 @@ boost::program_options::options_description TftpConfiguration::options()
     boost::program_options::value( &tftpServerPort )->default_value(
       tftpServerPort )->value_name( "port" ),
     "UDP port, where the server is listen."
+  )
+  (
+    "dally",
+    boost::program_options::bool_switch( &dally ),
+    "Dally Option"
   );
 
   options.add( tftpOptions.options() );

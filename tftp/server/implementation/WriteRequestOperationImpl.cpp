@@ -32,7 +32,8 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &clientOptions,
-  const Options &additionalNegotiatedOptions ) :
+  const Options &additionalNegotiatedOptions,
+  const bool dally ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
@@ -45,6 +46,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
   additionalNegotiatedOptions{ additionalNegotiatedOptions },
+  dally{ dally },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
 {
@@ -60,6 +62,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &clientOptions,
   const Options &additionalNegotiatedOptions,
+  const bool dally,
   const boost::asio::ip::udp::endpoint &local ) :
   OperationImpl{
     ioContext,
@@ -74,6 +77,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
   additionalNegotiatedOptions{ additionalNegotiatedOptions },
+  dally{ dally },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
 {
@@ -214,23 +218,40 @@ void WriteRequestOperationImpl::dataPacket(
     << "RX: " << static_cast< std::string>( dataPacket );
 
   // Check retransmission
-  if (dataPacket.blockNumber() == lastReceivedBlockNumber)
+  if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
       << "Retransmission of last packet - only send ACK";
 
-    send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber});
+    send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
-    // receive next packet
-    receive();
+    // if received data size is smaller than the expected -> last packet has been
+    // received
+    if ( dataPacket.dataSize() < receiveDataSize )
+    {
+      if ( dally )
+      {
+        // wait for potential retry of Data.
+        receiveDally();
+      }
+      else
+      {
+        finished( TransferStatus::Successful );
+      }
+    }
+    else
+    {
+      // receive next packet
+      receive();
+    }
 
     return;
   }
 
   // check not expected block
-  if (dataPacket.blockNumber() != lastReceivedBlockNumber.next())
+  if ( dataPacket.blockNumber() != lastReceivedBlockNumber.next() )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Unexpected packet";
 
     Packets::ErrorPacket errorPacket{
@@ -274,9 +295,17 @@ void WriteRequestOperationImpl::dataPacket(
 
   // if received data size is smaller than the expected -> last packet has been
   // received
-  if (dataPacket.dataSize() < receiveDataSize)
+  if ( dataPacket.dataSize() < receiveDataSize )
   {
-    finished( TransferStatus::Successful);
+    if ( dally )
+    {
+      // wait for potential retry of Data.
+      receiveDally();
+    }
+    else
+    {
+      finished( TransferStatus::Successful );
+    }
   }
   else
   {

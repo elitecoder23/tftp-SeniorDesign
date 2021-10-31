@@ -136,6 +136,18 @@ class OperationImpl :
     void receive();
 
     /**
+     * @brief Final Wait for possible resend of last package, when final ACK was
+     *   lost.
+     *
+     * Receive is handled as normal.
+     * If timeout has occurred, operation is finished successfully.
+     *
+     * @sa receiveHandler
+     * @sa timeoutDallyHandler
+     **/
+    void receiveDally();
+
+    /**
      * @brief Update the receiveTimeout value.
      *
      * @param[in] receiveTimeout
@@ -243,6 +255,16 @@ class OperationImpl :
      *   error status of operation.
      **/
     void timeoutHandler( const boost::system::error_code &errorCode );
+
+    /**
+     * @brief Called when no data is received for the last sent ACK.
+     *
+     * The operation is finished successfully.
+     *
+     * @param[in] errorCode
+     *   error status of operation.
+     **/
+    void timeoutDallyHandler( const boost::system::error_code &errorCode );
 
     //! Completion Handler
     OperationCompletedHandler completionHandler;

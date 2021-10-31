@@ -37,7 +37,8 @@ class TftpConfiguration
      * @param[in] defaultTftpPort
      *   Default TFTP Port used for Configuration
      **/
-    TftpConfiguration( uint16_t defaultTftpPort = DefaultTftpPort ) noexcept;
+    explicit TftpConfiguration(
+      uint16_t defaultTftpPort = DefaultTftpPort ) noexcept;
 
     /**
      * @brief Loads the configuration via a boost::property_tree::ptree.
@@ -88,6 +89,9 @@ class TftpConfiguration
 
     //! Options Configuration
     TftpOptionsConfiguration tftpOptions;
+
+    //! Dally Option
+    bool dally;
 };
 
 }

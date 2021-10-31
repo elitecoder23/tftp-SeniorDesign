@@ -140,7 +140,8 @@ int main( int argc, char *argv[] )
           remoteFile,
           Tftp::TransferMode::OCTET,
           configuration.tftpOptions,
-          {} /* no additional options */ );
+          {}, /* no additional options */
+          configuration.dally );
         break;
 
       case Tftp::RequestType::Write:
@@ -166,14 +167,14 @@ int main( int argc, char *argv[] )
     // Start client and its operations
     tftpClient->entry();
   }
-  catch ( boost::program_options::error &e)
+  catch ( boost::program_options::error &e )
   {
     std::cout << e.what() << "\n" << optionsDescription << "\n";
     return EXIT_FAILURE;
   }
   catch ( Tftp::TftpException &e)
   {
-    auto const * info = boost::get_error_info< Helper::AdditionalInfo>( e);
+    auto const * const info = boost::get_error_info< Helper::AdditionalInfo>( e );
 
     std::cerr
       << "TFTP transfer failed: "

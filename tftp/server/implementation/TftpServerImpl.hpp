@@ -95,16 +95,7 @@ class TftpServerImpl:
       const Options &additionalNegotiatedOptions,
       const boost::asio::ip::udp::endpoint &local ) final;
 
-    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
-    OperationPtr writeRequestOperation(
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions,
-      const Options &additionalNegotiatedOptions ) final;
-
-    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,const boost::asio::ip::udp::endpoint&)
+    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,bool)
     OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -112,6 +103,17 @@ class TftpServerImpl:
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
       const Options &additionalNegotiatedOptions,
+      bool dally ) final;
+
+    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,bool,const boost::asio::ip::udp::endpoint&)
+    OperationPtr writeRequestOperation(
+      ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &clientOptions,
+      const Options &additionalNegotiatedOptions,
+      bool dally,
       const boost::asio::ip::udp::endpoint &local ) final;
 
     //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
