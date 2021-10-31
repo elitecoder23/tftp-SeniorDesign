@@ -24,7 +24,7 @@
 #include <span>
 #include <limits>
 #include <cstdint>
-
+#include <optional>
 /**
  * @brief TFTP %Packets.
  *
