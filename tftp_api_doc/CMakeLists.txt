@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.18 )
+cmake_minimum_required( VERSION 3.21 )
 
 find_package( Doxygen )
 find_package( Boost )
