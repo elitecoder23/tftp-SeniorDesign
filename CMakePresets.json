@@ -1,0 +1,152 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "binaryDir": "cmake-build-${presetName}",
+      "installDir": "cmake-install-${presetName}"
+    },
+    {
+      "name": "gcc-base",
+      "hidden": true,
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER" : "gcc",
+        "CMAKE_CXX_COMPILER" : "g++"
+      }
+    },
+    {
+      "name": "clang-base",
+      "hidden": true,
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER" : "clang",
+        "CMAKE_CXX_COMPILER" : "clang++"
+      }
+    },
+    {
+      "name": "gcc-static-debug",
+      "displayName": "GCC Static Debug",
+      "description": "GCC Static Debug",
+      "inherits": "gcc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Debug"
+      }
+    },
+    {
+      "name": "gcc-static-release",
+      "displayName": "GCC Static Release",
+      "description": "GCC Static Release",
+      "inherits": "gcc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Release"
+      }
+    },
+    {
+      "name": "gcc-shared-debug",
+      "displayName": "GCC Shared Debug",
+      "description": "GCC Shared Debug",
+      "inherits": "gcc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Debug",
+        "BUILD_SHARED_LIBS" : true
+      }
+    },
+    {
+      "name": "gcc-shared-release",
+      "displayName": "GCC Shared Release",
+      "description": "GCC Shared Release",
+      "inherits": "gcc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Release",
+        "BUILD_SHARED_LIBS" : true
+      }
+    },
+    {
+      "name": "clang-static-debug",
+      "displayName": "CLang Static Debug",
+      "description": "CLang Static Debug",
+      "inherits": "clang-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Debug"
+      }
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "CLang Static Release",
+      "description": "CLang Static Release",
+      "inherits": "clang-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Release"
+      }
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "CLang Shared Debug",
+      "description": "CLang Shared Debug",
+      "inherits": "clang-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Debug",
+        "BUILD_SHARED_LIBS" : true
+      }
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "CLang Shared Release",
+      "description": "CLang Shared Release",
+      "inherits": "clang-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Release",
+        "BUILD_SHARED_LIBS" : true
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "gcc-static-debug",
+      "displayName": "GCC Static Debug",
+      "configurePreset": "gcc-static-debug"
+    },
+    {
+      "name": "gcc-static-release",
+      "displayName": "GCC Release Debug",
+      "configurePreset": "gcc-static-release"
+    },
+    {
+      "name": "gcc-shared-debug",
+      "displayName": "GCC Shared Debug",
+      "configurePreset": "gcc-shared-debug"
+    },
+    {
+      "name": "gcc-shared-release",
+      "displayName": "GCC Shared Debug",
+      "configurePreset": "gcc-shared-release"
+    },
+    {
+      "name": "clang-static-debug",
+      "displayName": "CLang Static Debug",
+      "configurePreset": "clang-static-debug"
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "CLang Release Debug",
+      "configurePreset": "clang-static-release"
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "CLang Shared Debug",
+      "configurePreset": "clang-shared-debug"
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "CLang Shared Debug",
+      "configurePreset": "clang-shared-release"
+    }
+  ]
+}
