@@ -1,6 +1,7 @@
 Checks:          'clang-diagnostic-*,
                   clang-analyzer-*,
                   bugprone-*,
+                  -bugprone-easily-swappable-parameters,
                   readability-inconsistent-declaration-parameter-name,
                   -llvmlibc-*'
 WarningsAsErrors: ''
