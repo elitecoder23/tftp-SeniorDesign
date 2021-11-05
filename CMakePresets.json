@@ -115,7 +115,7 @@
     },
     {
       "name": "gcc-static-release",
-      "displayName": "GCC Release Debug",
+      "displayName": "GCC Static Release",
       "configurePreset": "gcc-static-release"
     },
     {
@@ -125,7 +125,7 @@
     },
     {
       "name": "gcc-shared-release",
-      "displayName": "GCC Shared Debug",
+      "displayName": "GCC Shared Release",
       "configurePreset": "gcc-shared-release"
     },
     {
@@ -135,7 +135,7 @@
     },
     {
       "name": "clang-static-release",
-      "displayName": "CLang Release Debug",
+      "displayName": "CLang Static Release",
       "configurePreset": "clang-static-release"
     },
     {
@@ -145,7 +145,7 @@
     },
     {
       "name": "clang-shared-release",
-      "displayName": "CLang Shared Debug",
+      "displayName": "CLang Shared Release",
       "configurePreset": "clang-shared-release"
     }
   ]
