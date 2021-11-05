@@ -1,0 +1,59 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: GCC Static Debug
+    image: infohoschie/build-gcc-clang-cmake:latest
+    pull: never
+    commands:
+      - cmake --preset gcc-static-debug
+      - cmake --build --preset gcc-static-debug -j 4
+  - name: GCC Static Release
+    image: infohoschie/build-gcc-clang-cmake:latest
+    pull: never
+    commands:
+      - cmake --preset gcc-static-release
+      - cmake --build --preset gcc-static-release -j 4
+  - name: GCC Shared Debug
+    image: infohoschie/build-gcc-clang-cmake:latest
+    pull: never
+    commands:
+      - cmake --preset gcc-shared-debug
+      - cmake --build --preset gcc-shared-debug -j 4
+  - name: GCC Shared Release
+    image: infohoschie/build-gcc-clang-cmake:latest
+    pull: never
+    commands:
+      - cmake --preset gcc-shared-release
+      - cmake --build --preset gcc-shared-release -j 4
+
+  - name: CLang Static Debug
+    image: infohoschie/build-gcc-clang-cmake:latest
+    pull: never
+    commands:
+      - cmake --preset clang-static-debug
+      - cmake --build --preset clang-static-debug -j 4
+  - name: CLang Static Release
+    image: infohoschie/build-gcc-clang-cmake:latest
+    pull: never
+    commands:
+      - cmake --preset clang-static-release
+      - cmake --build --preset clang-static-release -j 4
+  - name: CLang Shared Debug
+    image: infohoschie/build-gcc-clang-cmake:latest
+    pull: never
+    commands:
+      - cmake --preset clang-shared-debug
+      - cmake --build --preset clang-shared-debug -j 4
+  - name: CLang Shared Release
+    image: infohoschie/build-gcc-clang-cmake:latest
+    pull: never
+    commands:
+      - cmake --preset clang-shared-release
+      - cmake --build --preset clang-shared-release -j 4
