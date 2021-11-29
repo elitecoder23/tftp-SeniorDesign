@@ -21,6 +21,7 @@ const boost::asio::ip::udp::endpoint TftpServer::DefaultLocalEndpoint{
   DefaultTftpPort};
 
 TftpServerPtr TftpServer::instance(
+  boost::asio::io_context &ioContext,
   ReceivedTftpRequestHandler handler,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
@@ -28,10 +29,11 @@ TftpServerPtr TftpServer::instance(
 {
   // create and return the real TFTP server
   return std::make_shared< TftpServerImpl>(
-    handler,
+    ioContext,
+    std::move( handler ),
     tftpTimeout,
     tftpRetries,
-    serverAddress);
+    serverAddress );
 }
 
 }

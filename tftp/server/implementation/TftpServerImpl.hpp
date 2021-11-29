@@ -44,8 +44,10 @@ class TftpServerImpl:
     /**
      * @brief Creates an instance of the TFTP Server.
      *
+     * @param[in] ioContext
+     *   I/O context used for communication.
      * @param[in] handler
-     *   The TFTP request received handler.
+     *   TFTP Request Received Handler.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
@@ -57,6 +59,7 @@ class TftpServerImpl:
      *   When a error occurs during socket initialisation.
      **/
     TftpServerImpl(
+      boost::asio::io_context &ioContext,
       ReceivedTftpRequestHandler handler,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -66,9 +69,6 @@ class TftpServerImpl:
      * @brief Destructor
      **/
     ~TftpServerImpl() noexcept override;
-
-    //! @copydoc TftpServer::entry()
-    void entry() noexcept final;
 
     //! @copydoc TftpServer::start()
     void start() final;
@@ -236,9 +236,7 @@ class TftpServerImpl:
     const boost::asio::ip::udp::endpoint serverAddress;
 
     //! TFTP server ASIO context
-    boost::asio::io_context ioContext;
-    //! TFTP server dummy work to prevent I/O context from exiting.
-    boost::asio::io_context::work work;
+    boost::asio::io_context &ioContext;
     //! TFTP well known socket
     boost::asio::ip::udp::socket socket;
 

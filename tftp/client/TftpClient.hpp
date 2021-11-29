@@ -15,6 +15,7 @@
 
 #include <tftp/client/Client.hpp>
 
+#include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/udp.hpp>
 
 #include <string_view>
@@ -35,6 +36,8 @@ class TftpClient
      *
      * With the instance you can create any client operation instances.
      *
+     * @param[in] ioContext
+     *   The I/O context used for communication.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
@@ -43,32 +46,12 @@ class TftpClient
      * @return Created TFTP Client Instance.
      **/
     static TftpClientPtr instance(
+      boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries );
 
     //! Destructor
     virtual ~TftpClient() noexcept = default;
-
-    /**
-     * @brief Entry of the TFTP Client.
-     *
-     * This routines enters the IO loop.
-     * The start routine will be left, when an FATAL error occurred or
-     * the server has been stopped by calling stop().
-     *
-     * This entry can be called multiple time to allow parallel transfer
-     * handling.
-     **/
-    virtual void entry() = 0;
-
-    /**
-     * @brief Stops the TFTP Client.
-     *
-     * This routine returns immediately.
-     *
-     * It can be called before entry() is called.
-     **/
-    virtual void stop() = 0;
 
     /**
      * @brief Initialises the Operation.

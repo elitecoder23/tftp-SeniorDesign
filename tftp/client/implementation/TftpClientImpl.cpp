@@ -20,36 +20,13 @@
 namespace Tftp::Client {
 
 TftpClientImpl::TftpClientImpl(
+  boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries ):
   tftpTimeout{ tftpTimeout },
   tftpRetries{ tftpRetries },
-  work{ ioContext }
+  ioContext{ ioContext }
 {
-}
-
-void TftpClientImpl::entry()
-{
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "Start TFTP client I/O context";
-
-  // may throw
-  ioContext.run();
-
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "TFTP client I/O context finished";
-}
-
-void TftpClientImpl::stop()
-{
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "Stop TFTP client I/O context";
-
-  ioContext.stop();
 }
 
 OperationPtr TftpClientImpl::readRequestOperation(

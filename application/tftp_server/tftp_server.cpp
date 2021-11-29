@@ -179,6 +179,7 @@ int main( int argc, char * argv[])
 
     // The TFTP server instance
     server = Tftp::Server::TftpServer::instance(
+      ioContext,
       std::bind(
         &receivedRequest,
         std::placeholders::_1,
@@ -191,14 +192,9 @@ int main( int argc, char * argv[])
       configuration.tftpRetries,
       boost::asio::ip::udp::endpoint{
         boost::asio::ip::address_v4::any(),
-        configuration.tftpServerPort});
+        configuration.tftpServerPort } );
 
     server->start();
-
-    std::thread serverThread{ []()
-    {
-      server->entry();
-    }};
 
     // connect to SIGINT and SIGTERM
     signals.async_wait( [](
@@ -210,8 +206,6 @@ int main( int argc, char * argv[])
     });
 
     ioContext.run();
-
-    serverThread.join();
   }
   catch ( boost::program_options::error &e)
   {

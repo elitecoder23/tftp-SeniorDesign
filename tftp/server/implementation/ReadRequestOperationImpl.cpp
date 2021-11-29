@@ -70,7 +70,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     completionHandler,
     remote,
     local },
-  dataHandler{ dataHandler },
+  dataHandler{ std::move( dataHandler ) },
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
   additionalNegotiatedOptions{ additionalNegotiatedOptions },

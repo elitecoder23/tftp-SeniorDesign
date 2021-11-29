@@ -114,10 +114,12 @@ int main( int argc, char *argv[] )
     boost::program_options::notify( options );
 
     // Assemble TFTP configuration
+    boost::asio::io_context ioContext;
 
     auto tftpClient{ Tftp::Client::TftpClient::instance(
+      ioContext,
       configuration.tftpTimeout,
-      configuration.tftpRetries )};
+      configuration.tftpRetries ) };
 
     Tftp::Client::OperationPtr tftpOperation{};
 
@@ -134,9 +136,9 @@ int main( int argc, char *argv[] )
           optionNegotiation,
           std::make_shared< Tftp::File::StreamFile>(
             Tftp::File::TftpFile::Operation::Receive,
-            localFile),
-          std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
-          boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
+            localFile ),
+          std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ),
+          boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort },
           remoteFile,
           Tftp::TransferMode::OCTET,
           configuration.tftpOptions,
@@ -151,8 +153,8 @@ int main( int argc, char *argv[] )
             Tftp::File::TftpFile::Operation::Transmit,
             localFile,
             std::filesystem::file_size( localFile)),
-          std::bind( &Tftp::Client::TftpClient::stop, tftpClient),
-          boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort},
+          std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ),
+          boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort },
           remoteFile,
           Tftp::TransferMode::OCTET,
           configuration.tftpOptions,
@@ -165,7 +167,7 @@ int main( int argc, char *argv[] )
     }
 
     // Start client and its operations
-    tftpClient->entry();
+    ioContext.run();
   }
   catch ( boost::program_options::error &e )
   {

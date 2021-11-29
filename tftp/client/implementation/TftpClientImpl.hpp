@@ -27,25 +27,22 @@ namespace Tftp::Client {
  * This factory class creates on request the concrete client operations.
  **/
 class TftpClientImpl : public TftpClient
-  {
+{
   public:
     /**
      * @brief Creates the concrete TFTP %Client.
      *
+     * @param[in] ioContext
+     *   The I/O context used for communication.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
      **/
     explicit TftpClientImpl(
+      boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries );
-
-    //! @copydoc TftpClient::entry
-    void entry() final;
-
-    //! @copydoc TftpClient::stop
-    void stop() final;
 
     //! @copydoc TftpClient::readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&,bool)
     OperationPtr readRequestOperation(
@@ -101,9 +98,7 @@ class TftpClientImpl : public TftpClient
     //! TFTP Retries
     const uint16_t tftpRetries;
     //! I/O context, which handles the asynchronous receive operation
-    boost::asio::io_context ioContext;
-    //! I/O context dummy work to keep I/O context loops running
-    boost::asio::io_context::work work;
+    boost::asio::io_context &ioContext;
 };
 
 }

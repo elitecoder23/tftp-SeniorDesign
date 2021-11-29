@@ -31,16 +31,17 @@
 namespace Tftp::Server {
 
 TftpServerImpl::TftpServerImpl(
+  boost::asio::io_context &ioContext,
   ReceivedTftpRequestHandler handler,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
   const boost::asio::ip::udp::endpoint &serverAddress )
 try :
-  handler{ handler },
+  handler{ std::move( handler ) },
   tftpTimeout{ tftpTimeout },
   tftpRetries{ tftpRetries },
   serverAddress{ serverAddress },
-  work{ ioContext },
+  ioContext{ ioContext },
   socket{ ioContext },
   receivePacket( DefaultMaxPacketSize )
 {
@@ -76,27 +77,6 @@ TftpServerImpl::~TftpServerImpl() noexcept
 {
 }
 
-void TftpServerImpl::entry() noexcept
-{
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
-    << "Start TFTP server I/O context";
-
-  try
-  {
-    ioContext.run();
-  }
-  catch ( const boost::system::system_error &err )
-  {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::fatal )
-      << "IO error: " << err.what();
-  }
-
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "TFTP server I/O context finished";
-}
-
 void TftpServerImpl::start()
 {
   BOOST_LOG_FUNCTION()
@@ -109,9 +89,6 @@ void TftpServerImpl::stop()
 {
   // cancel receive operation
   socket.cancel();
-
-  // stop handler
-  ioContext.stop();
 }
 
 OperationPtr TftpServerImpl::readRequestOperation(

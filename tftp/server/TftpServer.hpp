@@ -17,6 +17,9 @@
 
 #include <tftp/server/Server.hpp>
 
+#include <boost/asio/io_context.hpp>
+#include <boost/asio/ip/udp.hpp>
+
 #include <string>
 #include <functional>
 
@@ -47,6 +50,8 @@ class TftpServer
     /**
      * @brief Creates a TFTP Server Instance.
      *
+     * @param[in] ioContext
+     *   The I/O context used for communication.
      * @param[in] handler
      *   The request handler.
      * @param[in] tftpTimeout
@@ -59,6 +64,7 @@ class TftpServer
      * @return Created TFTP Server Instance.
      **/
     static TftpServerPtr instance(
+      boost::asio::io_context &ioContext,
       ReceivedTftpRequestHandler handler,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -66,17 +72,6 @@ class TftpServer
 
     //! Destructor
     virtual ~TftpServer() noexcept = default;
-
-    /**
-     * @brief Entry of TFTP Server.
-     *
-     * This routines enters the I/O context loop.
-     * The start routine will be left, when an FATAL error occurred or
-     * the server has been stopped by calling stop().
-     *
-     * This entry can be called multiple time to allow parallel transfer handling
-     **/
-    virtual void entry() noexcept = 0;
 
     /**
      * @brief Starts the TFTP Server.
