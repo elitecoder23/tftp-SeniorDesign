@@ -51,9 +51,9 @@ class TftpServer
      * @brief Creates a TFTP Server Instance.
      *
      * @param[in] ioContext
-     *   The I/O context used for communication.
+     *   I/O context used for communication.
      * @param[in] handler
-     *   The request handler.
+     *   Request Handler.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
