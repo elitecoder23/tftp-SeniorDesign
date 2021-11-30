@@ -272,9 +272,7 @@ void TftpServerImpl::receive()
   }
   catch ( const boost::system::system_error &err )
   {
-    ioContext.stop();
-
-    BOOST_THROW_EXCEPTION(CommunicationException()
+    BOOST_THROW_EXCEPTION( CommunicationException()
       << Helper::AdditionalInfo( err.what() )
       << TransferPhaseInfo( TransferPhase::Initialisation ) );
   }
