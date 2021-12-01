@@ -34,25 +34,24 @@ class ReceiveDataHandler: public virtual DataHandler
      * The call to this call-back is optional.
      *
      * @param[in] transferSize
-     *   The received transfer size.
+     *   Received transfer size.
      *
      * @return If the handler can handle this amount of data
      * @retval true
-     *   The received amount of data can be handled - operation should be
-     *   continued.
+     *   Received amount of data can be handled - operation should be continued.
      * @retval false
-     *   The received amount of data cannot be handled - the operation should
-     *   be aborted.
+     *   Received amount of data cannot be handled - the operation should be
+     *   aborted.
      **/
-    virtual bool receivedTransferSize( uint64_t transferSize) = 0;
+    virtual bool receivedTransferSize( uint64_t transferSize ) = 0;
 
     /**
      * @brief Data has been received and must be processed.
      *
      * @param[in] data
-     *   The received data.
+     *   Received data.
      **/
-    virtual void receivedData( const DataType &data) noexcept = 0;
+    virtual void receivedData( const DataType &data ) noexcept = 0;
 };
 
 }

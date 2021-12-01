@@ -291,7 +291,7 @@ void WriteRequestOperationImpl::dataPacket(
   // increment block number
   lastReceivedBlockNumber++;
 
-  send( Packets::AcknowledgementPacket( lastReceivedBlockNumber));
+  send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
   // if received data size is smaller than the expected -> last packet has been
   // received

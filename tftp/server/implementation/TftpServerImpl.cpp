@@ -232,7 +232,7 @@ void TftpServerImpl::errorOperation(
 {
   BOOST_LOG_FUNCTION()
 
-  Packets::ErrorPacket errorPacket{ errorCode, errorMessage};
+  Packets::ErrorPacket errorPacket{ errorCode, errorMessage };
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( errorPacket );
@@ -241,13 +241,14 @@ void TftpServerImpl::errorOperation(
   {
     boost::asio::ip::udp::socket errSocket{ ioContext };
 
-    errSocket.open( remote.protocol());
+    errSocket.open( remote.protocol() );
 
-    errSocket.bind( local);
+    errSocket.bind( local );
 
-    errSocket.connect( remote);
+    errSocket.connect( remote );
 
-    errSocket.send( boost::asio::buffer( static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
+    errSocket.send( boost::asio::buffer(
+      static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -273,17 +274,17 @@ void TftpServerImpl::receive()
   catch ( const boost::system::system_error &err )
   {
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( err.what() )
-      << TransferPhaseInfo( TransferPhase::Initialisation ) );
+      << Helper::AdditionalInfo{ err.what() }
+      << TransferPhaseInfo{ TransferPhase::Initialisation } );
   }
 }
 
 void TftpServerImpl::receiveHandler(
   const boost::system::error_code& errorCode,
-  const std::size_t bytesTransferred)
+  const std::size_t bytesTransferred )
 {
   // handle abort
-  if ( boost::asio::error::operation_aborted == errorCode)
+  if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;
   }
@@ -295,7 +296,7 @@ void TftpServerImpl::receiveHandler(
       << "receive error: " + errorCode.message();
 
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( errorCode.message()));
+      << Helper::AdditionalInfo{ errorCode.message() } );
   }
 
   try
@@ -305,7 +306,7 @@ void TftpServerImpl::receiveHandler(
       remoteEndpoint,
       Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
   }
-  catch ( const TftpException &e)
+  catch ( const TftpException &e )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TFTP exception: " << e.what();
@@ -316,7 +317,7 @@ void TftpServerImpl::receiveHandler(
 
 void TftpServerImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
-  const Packets::ReadRequestPacket &readRequestPacket)
+  const Packets::ReadRequestPacket &readRequestPacket )
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "RX: " << static_cast< std::string>( readRequestPacket );
@@ -359,19 +360,19 @@ void TftpServerImpl::writeRequestPacket(
   const Packets::WriteRequestPacket &writeRequestPacket )
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
-    << "RX: " << static_cast< std::string>( writeRequestPacket);
+    << "RX: " << static_cast< std::string>( writeRequestPacket );
 
   // check handler
   if ( !handler)
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
       << "No registered handler - reject";
 
     // execute error operation
     errorOperation(
       remote,
       ErrorCode::FileNotFound,
-      "WRQ");
+      "WRQ" );
   }
 
   // extract known TFTP Options
@@ -426,7 +427,7 @@ void TftpServerImpl::acknowledgementPacket(
 
 void TftpServerImpl::errorPacket(
   const boost::asio::ip::udp::endpoint &remote,
-  const Packets::ErrorPacket &errorPacket)
+  const Packets::ErrorPacket &errorPacket )
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string>( errorPacket );

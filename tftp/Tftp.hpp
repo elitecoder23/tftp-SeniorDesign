@@ -233,7 +233,7 @@ using ReceiveDataHandlerPtr = std::shared_ptr< ReceiveDataHandler>;
 using TransmitDataHandlerPtr =  std::shared_ptr< TransmitDataHandler>;
 
 //! Operation Completed handler, which indicates, if the transfer was successful
-using OperationCompletedHandler = std::function< void( TransferStatus)>;
+using OperationCompletedHandler = std::function< void( TransferStatus ) >;
 
 class Version;
 }
