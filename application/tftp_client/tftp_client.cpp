@@ -119,7 +119,8 @@ int main( int argc, char *argv[] )
     auto tftpClient{ Tftp::Client::TftpClient::instance(
       ioContext,
       configuration.tftpTimeout,
-      configuration.tftpRetries ) };
+      configuration.tftpRetries,
+      configuration.dally ) };
 
     Tftp::Client::OperationPtr tftpOperation{};
 
@@ -142,8 +143,7 @@ int main( int argc, char *argv[] )
           remoteFile,
           Tftp::TransferMode::OCTET,
           configuration.tftpOptions,
-          {}, /* no additional options */
-          configuration.dally );
+          {} /* no additional options */ );
         break;
 
       case Tftp::RequestType::Write:

@@ -190,6 +190,7 @@ int main( int argc, char * argv[])
         std::placeholders::_6 ),
       configuration.tftpTimeout,
       configuration.tftpRetries,
+      configuration.dally,
       boost::asio::ip::udp::endpoint{
         boost::asio::ip::address_v4::any(),
         configuration.tftpServerPort } );
@@ -401,6 +402,5 @@ static void receiveFile(
       remote,
       configuration.tftpOptions,
       clientOptions,
-      {}, /* no additional options */
-      configuration.dally ) };
+      {} /* no additional options */ ) };
 }

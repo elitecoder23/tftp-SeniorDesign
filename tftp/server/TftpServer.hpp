@@ -51,15 +51,19 @@ class TftpServer
      * @brief Creates a TFTP Server Instance.
      *
      * @param[in] ioContext
-     *   I/O context used for communication.
+     *   I/O context used for Communication.
      * @param[in] handler
-     *   Request Handler.
+     *   TFTP Request Received Handler.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
+     * @param[in] dally
+     *   If set to true, wait after transmission of the final ACK for potential
+     *   retries.
+     *   Is used for TFTP WRQ Operations
      * @param[in] serverAddress
-     *   Address where the FTP server should listen on.
+     *   Address where the TFTP server should listen on.
      *
      * @return Created TFTP Server Instance.
      **/
@@ -68,6 +72,7 @@ class TftpServer
       ReceivedTftpRequestHandler handler,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
+      bool dally,
       const boost::asio::ip::udp::endpoint &serverAddress = DefaultLocalEndpoint );
 
     //! Destructor
@@ -99,15 +104,15 @@ class TftpServer
      * @param[in] dataHandler
      *   Handler, which will be called on various events.
      * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
+     *   Handler which is called on completion of the operation.
      * @param[in] remote
      *   Address of the remote endpoint (TFTP Client).
      * @param[in] optionsConfiguration
      *   TFTP Options Configuration.
-     *   Will be used for Options Negotiation.
+     *   Will be used for TFTP Options Negotiation.
      * @param[in] clientOptions
      *   TFTP Client Options.
-     *   Will be negotiated within Server
+     *   Will be negotiated within TFTP Server Request Operation
      * @param[in] additionalNegotiatedOptions
      *   Additional Options, which have been already negotiated.
      *
@@ -149,15 +154,12 @@ class TftpServer
      *   Address of the remote endpoint (TFTP client).
      * @param[in] optionsConfiguration
      *   TFTP Options Configuration.
-     *   Will be used for Options Negotiation.
+     *   Will be used for TFTP Options Negotiation.
      * @param[in] clientOptions
      *   TFTP Client Options.
-     *   Will be negotiated within Server
+     *   Will be negotiated within TFTP Server Request Operation
      * @param[in] additionalNegotiatedOptions
      *   Additional Options, which have been already negotiated.
-     * @param[in] dally
-     *   If set to true, wait after transmission of the final ACK for potential
-     *   retries.
      *
      * @return TFTP Server Read Operation.
      **/
@@ -167,11 +169,10 @@ class TftpServer
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
-      const Options &additionalNegotiatedOptions,
-      bool dally ) = 0;
+      const Options &additionalNegotiatedOptions ) = 0;
 
     /**
-     * @copydoc writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,bool)
+     * @copydoc writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
@@ -183,7 +184,6 @@ class TftpServer
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &clientOptions,
       const Options &additionalNegotiatedOptions,
-      bool dally,
       const boost::asio::ip::udp::endpoint &local ) = 0;
 
     /**

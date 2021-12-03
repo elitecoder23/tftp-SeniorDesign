@@ -35,11 +35,13 @@ TftpServerImpl::TftpServerImpl(
   ReceivedTftpRequestHandler handler,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
+  const bool dally,
   const boost::asio::ip::udp::endpoint &serverAddress )
 try :
   handler{ std::move( handler ) },
   tftpTimeout{ tftpTimeout },
   tftpRetries{ tftpRetries },
+  dally{ dally },
   serverAddress{ serverAddress },
   ioContext{ ioContext },
   socket{ ioContext },
@@ -147,20 +149,19 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &clientOptions,
-  const Options &additionalNegotiatedOptions,
-  const bool dally )
+  const Options &additionalNegotiatedOptions )
 {
   auto operation{ std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    dally,
     dataHandler,
     completionHandler,
     remote,
     optionsConfiguration,
     clientOptions,
-    additionalNegotiatedOptions,
-    dally ) };
+    additionalNegotiatedOptions ) };
 
   operation->start();
 
@@ -174,20 +175,19 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &clientOptions,
   const Options &additionalNegotiatedOptions,
-  const bool dally,
   const boost::asio::ip::udp::endpoint &local )
 {
   auto operation{ std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    dally,
     dataHandler,
     completionHandler,
     remote,
     optionsConfiguration,
     clientOptions,
     additionalNegotiatedOptions,
-    dally,
     local ) };
 
   operation->start();

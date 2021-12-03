@@ -29,6 +29,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
+  const bool dally,
   OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
@@ -36,8 +37,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   std::string_view filename,
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &additionalOptions,
-  const bool dally ):
+  const Options &additionalOptions ):
   OperationImpl{
     ioContext,
     tftpTimeout,
@@ -46,13 +46,13 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
       + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
     completionHandler,
     remote },
+  dally{ dally },
   optionNegotiationHandler{ optionNegotiationHandler },
   dataHandler{ dataHandler },
   filename{ filename },
   mode{ mode },
   optionsConfiguration{ optionsConfiguration },
   additionalOptions{ additionalOptions },
-  dally{ dally },
   oackReceived{ false },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
@@ -71,6 +71,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
+  const bool dally,
   OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
@@ -79,7 +80,6 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions,
-  const bool dally,
   const boost::asio::ip::udp::endpoint &local ):
   OperationImpl{
     ioContext,
@@ -90,13 +90,13 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
     completionHandler,
     remote,
     local },
+  dally{ dally },
   optionNegotiationHandler{ optionNegotiationHandler },
   dataHandler{ dataHandler },
   filename{ filename },
   mode{ mode },
   optionsConfiguration{ optionsConfiguration },
   additionalOptions{ additionalOptions },
-  dally{ dally },
   oackReceived{ false },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
@@ -327,7 +327,7 @@ void ReadRequestOperationImpl::optionsAcknowledgementPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket );
+    << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket );
 
   if ( lastReceivedBlockNumber != Packets::BlockNumber{ 0U } )
   {

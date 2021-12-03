@@ -27,13 +27,13 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
+  const bool dally,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &clientOptions,
-  const Options &additionalNegotiatedOptions,
-  const bool dally ) :
+  const Options &additionalNegotiatedOptions ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
@@ -42,11 +42,11 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
       + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
     completionHandler,
     remote },
+  dally{ dally },
   dataHandler{ dataHandler },
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
   additionalNegotiatedOptions{ additionalNegotiatedOptions },
-  dally{ dally },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
 {
@@ -56,13 +56,13 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
+  const bool dally,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &clientOptions,
   const Options &additionalNegotiatedOptions,
-  const bool dally,
   const boost::asio::ip::udp::endpoint &local ) :
   OperationImpl{
     ioContext,
@@ -73,11 +73,11 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
     completionHandler,
     remote,
     local },
+  dally{ dally },
   dataHandler{ dataHandler},
   optionsConfiguration{ optionsConfiguration },
   clientOptions{ clientOptions },
   additionalNegotiatedOptions{ additionalNegotiatedOptions },
-  dally{ dally },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
 {
@@ -105,7 +105,7 @@ void WriteRequestOperationImpl::start()
       // check block size option - if set use it
       if ( optionsConfiguration.blockSizeOption )
       {
-        const auto [blockSizeValid, blockSize] =
+        const auto [ blockSizeValid, blockSize ] =
           Packets::TftpOptions_getOption< uint16_t >(
             clientOptions,
             KnownOptions::BlockSize );

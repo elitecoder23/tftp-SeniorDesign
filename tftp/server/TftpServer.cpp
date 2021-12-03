@@ -25,6 +25,7 @@ TftpServerPtr TftpServer::instance(
   ReceivedTftpRequestHandler handler,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
+  bool dally,
   const boost::asio::ip::udp::endpoint &serverAddress )
 {
   // create and return the real TFTP server
@@ -33,6 +34,7 @@ TftpServerPtr TftpServer::instance(
     std::move( handler ),
     tftpTimeout,
     tftpRetries,
+    dally,
     serverAddress );
 }
 

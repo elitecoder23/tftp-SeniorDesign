@@ -43,6 +43,9 @@ class ReadRequestOperationImpl : public OperationImpl
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
+     * @param[in] dally
+     *   If set to true, wait after transmission of the final ACK for potential
+     *   retries.
      * @param[in] optionNegotiationHandler
      *   Option negotiation handler.
      * @param[in] dataHandler
@@ -59,14 +62,12 @@ class ReadRequestOperationImpl : public OperationImpl
      *   TFTP Options Configuration.
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.
-     * @param[in] dally
-     *   If set to true, wait after transmission of the final ACK for potential
-     *   retries.
      **/
     ReadRequestOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
+      bool dally,
       OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -74,11 +75,10 @@ class ReadRequestOperationImpl : public OperationImpl
       std::string_view filename,
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions,
-      bool dally );
+      const Options &additionalOptions );
 
     /**
-     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&,bool)
+     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
      *
      * @param[in] local
      *   communication source
@@ -87,6 +87,7 @@ class ReadRequestOperationImpl : public OperationImpl
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
+      bool dally,
       OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -95,7 +96,6 @@ class ReadRequestOperationImpl : public OperationImpl
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &additionalOptions,
-      bool dally,
       const boost::asio::ip::udp::endpoint &local );
 
     /**
@@ -145,6 +145,9 @@ class ReadRequestOperationImpl : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) final;
 
   private:
+    //! Dally Option
+    const bool dally;
+
     //! Option Negotiation Handler
     OptionNegotiationHandler optionNegotiationHandler;
     //! Registered handler
@@ -158,8 +161,6 @@ class ReadRequestOperationImpl : public OperationImpl
     TftpOptionsConfiguration optionsConfiguration;
     //! Additional Options for the transfer
     Options additionalOptions;
-    //! Dally Option
-    const bool dally;
 
     //! flag to hold information if OACK has been received (used when first data packet is received)
     bool oackReceived;

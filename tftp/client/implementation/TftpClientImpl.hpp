@@ -38,13 +38,29 @@ class TftpClientImpl : public TftpClient
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
+     * @param[in] dally
+     *   If set to true, wait after transmission of the final ACK for potential
+     *   retries.
+     *   Used by TFTP RRQ Operation
      **/
     explicit TftpClientImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
-      uint16_t tftpRetries );
+      uint16_t tftpRetries,
+      bool dally );
 
-    //! @copydoc TftpClient::readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&,bool)
+    //! @copydoc TftpClient::readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
+    OperationPtr readRequestOperation(
+      OptionNegotiationHandler optionNegotiationHandler,
+      ReceiveDataHandlerPtr dataHandler,
+      OperationCompletedHandler completionHandler,
+      const boost::asio::ip::udp::endpoint &remote,
+      std::string_view filename,
+      TransferMode mode,
+      const TftpOptionsConfiguration &optionsConfiguration,
+      const Options &additionalOptions ) final;
+
+    //! @copydoc TftpClient::readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&,const boost::asio::ip::udp::endpoint&)
     OperationPtr readRequestOperation(
       OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
@@ -54,19 +70,6 @@ class TftpClientImpl : public TftpClient
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &additionalOptions,
-      bool dally ) final;
-
-    //! @copydoc TftpClient::readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&,bool,const boost::asio::ip::udp::endpoint&)
-    OperationPtr readRequestOperation(
-      OptionNegotiationHandler optionNegotiationHandler,
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions,
-      bool dally,
       const boost::asio::ip::udp::endpoint &local ) final;
 
     //! @copydoc TftpClient::writeRequestOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
@@ -93,12 +96,14 @@ class TftpClientImpl : public TftpClient
       const boost::asio::ip::udp::endpoint &local ) final;
 
   private:
+    //! I/O context, which handles the asynchronous receive operation
+    boost::asio::io_context &ioContext;
     //! TFTP Receive Timeout
     const uint8_t tftpTimeout;
     //! TFTP Retries
     const uint16_t tftpRetries;
-    //! I/O context, which handles the asynchronous receive operation
-    boost::asio::io_context &ioContext;
+    //! TFTP Dally Option
+    const bool dally;
 };
 
 }

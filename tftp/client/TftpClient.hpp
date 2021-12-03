@@ -42,13 +42,18 @@ class TftpClient
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
+     * @param[in] dally
+     *   If set to true, wait after transmission of the final ACK for potential
+     *   retries.
+     *   Used by TFTP RRQ Operation
      *
      * @return Created TFTP Client Instance.
      **/
     static TftpClientPtr instance(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
-      uint16_t tftpRetries );
+      uint16_t tftpRetries,
+      bool dally );
 
     //! Destructor
     virtual ~TftpClient() noexcept = default;
@@ -72,9 +77,6 @@ class TftpClient
      *   TFTP Options Configuration.
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.
-     * @param[in] dally
-     *   If set to true, wait after transmission of the final ACK for potential
-     *   retries.
      *
      * @return Client Operation Instance.
      **/
@@ -86,11 +88,10 @@ class TftpClient
       std::string_view filename,
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions,
-      bool dally ) = 0;
+      const Options &additionalOptions ) = 0;
 
     /**
-     * @copydoc readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&,bool)
+     * @copydoc readRequestOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -104,7 +105,6 @@ class TftpClient
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
       const Options &additionalOptions,
-      bool dally,
       const boost::asio::ip::udp::endpoint &local ) = 0;
 
     /**

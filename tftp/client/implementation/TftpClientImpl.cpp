@@ -22,10 +22,12 @@ namespace Tftp::Client {
 TftpClientImpl::TftpClientImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
-  const uint16_t tftpRetries ):
+  const uint16_t tftpRetries,
+  const bool dally ):
+  ioContext{ ioContext },
   tftpTimeout{ tftpTimeout },
   tftpRetries{ tftpRetries },
-  ioContext{ ioContext }
+  dally{ dally }
 {
 }
 
@@ -37,13 +39,13 @@ OperationPtr TftpClientImpl::readRequestOperation(
   std::string_view filename,
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &additionalOptions,
-  const bool dally )
+  const Options &additionalOptions )
 {
   auto operation{ std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    dally,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
@@ -51,8 +53,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
     filename,
     mode,
     optionsConfiguration,
-    additionalOptions,
-    dally ) };
+    additionalOptions ) };
 
   operation->request();
 
@@ -68,13 +69,13 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions,
-  const bool dally,
-  const boost::asio::ip::udp::endpoint &local)
+  const boost::asio::ip::udp::endpoint &local )
 {
   auto operation{ std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
+    dally,
     optionNegotiationHandler,
     dataHandler,
     completionHandler,
@@ -83,7 +84,6 @@ OperationPtr TftpClientImpl::readRequestOperation(
     mode,
     optionsConfiguration,
     additionalOptions,
-    dally,
     local ) };
 
   operation->request();
