@@ -120,14 +120,22 @@ add_subdirectory( packets )
 add_subdirectory( client )
 add_subdirectory( server )
 
-install( TARGETS tftp EXPORT tftp-config )
+install(
+  TARGETS tftp
+  EXPORT tftp-config
+  COMPONENT runtime
+  ARCHIVE COMPONENT development )
 
 install(
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   TYPE INCLUDE
+  COMPONENT development
   FILES_MATCHING
-  PATTERN "*.hpp"
-  PATTERN "*Test.*" EXCLUDE
-  PATTERN "implementation" EXCLUDE )
+    PATTERN "*.hpp"
+    PATTERN "*Test.*" EXCLUDE
+    PATTERN "implementation" EXCLUDE )
 
-install( EXPORT tftp-config DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake )
+install(
+  EXPORT tftp-config
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+  COMPONENT development )

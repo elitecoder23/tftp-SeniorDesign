@@ -32,4 +32,4 @@ target_compile_definitions(
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
 
-install( TARGETS tftp_server )
+install( TARGETS tftp_server COMPONENT runtime )

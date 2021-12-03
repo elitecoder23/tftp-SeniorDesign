@@ -43,9 +43,7 @@ endif()
 
 enable_testing()
 
-# Install Configuration
 include( GNUInstallDirs )
-
 
 # get dependencies
 include( FetchContent )
@@ -84,7 +82,11 @@ add_subdirectory( application )
 
 add_subdirectory( tftp_api_doc )
 
-install( FILES LICENSE TYPE DOC RENAME ${PROJECT_NAME}.LICENSE )
+install(
+  FILES LICENSE
+  RENAME ${PROJECT_NAME}.LICENSE
+  TYPE DOC
+  COMPONENT runtime )
 
 set( CPACK_GENERATOR ZIP )
 set( CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_DESCRIPTION} )

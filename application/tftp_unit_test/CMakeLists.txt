@@ -21,4 +21,4 @@ target_link_libraries( tftp_unit_test PRIVATE tftp_test helper_test )
 
 add_test( NAME tftp_unit_test COMMAND tftp_unit_test )
 
-install( TARGETS tftp_unit_test )
+install( TARGETS tftp_unit_test COMPONENT runtime )
