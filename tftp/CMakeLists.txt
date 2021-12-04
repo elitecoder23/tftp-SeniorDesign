@@ -122,6 +122,7 @@ add_subdirectory( server )
 
 install(
   TARGETS tftp
+  RUNTIME_DEPENDENCY_SET runtime-libs
   EXPORT tftp-config
   COMPONENT runtime
   ARCHIVE COMPONENT development )
