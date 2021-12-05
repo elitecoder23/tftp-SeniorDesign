@@ -39,7 +39,7 @@ std::string_view ReadWriteRequestPacket::decodeMode(
   }
 }
 
-TransferMode ReadWriteRequestPacket::decodeMode( std::string_view mode)
+TransferMode ReadWriteRequestPacket::decodeMode( std::string_view mode )
 {
   //! @todo check implementation of transform
   std::string upperMode{ mode};
@@ -48,7 +48,7 @@ TransferMode ReadWriteRequestPacket::decodeMode( std::string_view mode)
     upperMode.begin(),
     upperMode.end(),
     upperMode.begin(),
-    toupper);
+    toupper );
 
   if ( upperMode == "OCTET" )
   {
@@ -73,12 +73,12 @@ std::string_view ReadWriteRequestPacket::filename() const
   return filenameV;
 }
 
-void ReadWriteRequestPacket::filename( std::string_view filename)
+void ReadWriteRequestPacket::filename( std::string_view filename )
 {
   filenameV = filename;
 }
 
-void ReadWriteRequestPacket::filename( std::string &&filename)
+void ReadWriteRequestPacket::filename( std::string &&filename )
 {
   filenameV = std::move( filename);
 }
@@ -88,7 +88,7 @@ Tftp::TransferMode ReadWriteRequestPacket::mode() const
   return modeV;
 }
 
-void ReadWriteRequestPacket::mode( const TransferMode mode)
+void ReadWriteRequestPacket::mode( const TransferMode mode )
 {
   modeV = mode;
 }
@@ -103,19 +103,19 @@ Options& ReadWriteRequestPacket::options()
   return optionsV;
 }
 
-void ReadWriteRequestPacket::options( const Options &options)
+void ReadWriteRequestPacket::options( const Options &options )
 {
   optionsV = options;
 }
 
-void ReadWriteRequestPacket::options( Options &&options)
+void ReadWriteRequestPacket::options( Options &&options )
 {
   optionsV = std::move( options);
 }
 
 ReadWriteRequestPacket::operator std::string() const
 {
-  return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"") %
+  return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"" ) %
     Packet::operator std::string() %
     filenameV %
     decodeMode( modeV) %
@@ -127,12 +127,12 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   std::string_view filename,
   const TransferMode mode,
   const Options &options ):
-  Packet{ packetType},
-  filenameV{ filename},
-  modeV{ mode},
-  optionsV{ options}
+  Packet{ packetType },
+  filenameV{ filename },
+  modeV{ mode },
+  optionsV{ options }
 {
-  switch ( packetType)
+  switch ( packetType )
   {
     case PacketType::ReadRequest:
     case PacketType::WriteRequest:
@@ -140,7 +140,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException()
-        << Helper::AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
+        << Helper::AdditionalInfo{ "Wrong packet type supplied only RRQ/WRW allowed" } );
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 }
@@ -149,13 +149,13 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
   std::string &&filename,
   const TransferMode mode,
-  Options &&options):
-  Packet{ packetType},
-  filenameV{ std::move( filename)},
-  modeV{ mode},
-  optionsV{ std::move( options)}
+  Options &&options ):
+  Packet{ packetType },
+  filenameV{ std::move( filename ) },
+  modeV{ mode },
+  optionsV{ std::move( options ) }
 {
-  switch ( packetType)
+  switch ( packetType )
   {
     case PacketType::ReadRequest:
     case PacketType::WriteRequest:
