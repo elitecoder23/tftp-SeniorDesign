@@ -28,7 +28,9 @@ namespace Tftp {
 /**
  * @brief TFTP Exception.
  **/
-class TftpException: public virtual Helper::Exception
+class TftpException :
+  public std::exception,
+  public boost::exception
 {
   public:
     /**
@@ -43,7 +45,7 @@ class TftpException: public virtual Helper::Exception
 };
 
 //! TFTP Communication Exception.
-class CommunicationException: public virtual TftpException
+class CommunicationException : public TftpException
 {
   public:
     //! @copydoc TftpException::what() const
@@ -54,7 +56,7 @@ class CommunicationException: public virtual TftpException
 };
 
 //! TFTP Option Negotiation Exception.
-class OptionNegotiationException: public virtual TftpException
+class OptionNegotiationException: public TftpException
 {
   public:
     //! @copydoc TftpException::what() const
@@ -65,7 +67,7 @@ class OptionNegotiationException: public virtual TftpException
 };
 
 //! TFTP Error Packet Received Exception.
-class ErrorReceivedException: public virtual TftpException
+class ErrorReceivedException: public TftpException
 {
   public:
     //! @copydoc TftpException::what() const
@@ -77,15 +79,15 @@ class ErrorReceivedException: public virtual TftpException
 
 //! TFTP Transfer Phase.
 using TransferPhaseInfo =
-  boost::error_info< struct TransferPhaseInfoTag, TransferPhase>;
+  boost::error_info< struct TransferPhaseInfoTag, TransferPhase >;
 
 //! TFTP Packet Type Information.
 using PacketTypeInfo =
-  boost::error_info< struct PacketTypeInfoTag, PacketType>;
+  boost::error_info< struct PacketTypeInfoTag, PacketType >;
 
 //! TFTP Error Packet Information.
 using ErrorPacketInfo =
-  boost::error_info< struct ErrorPacketInfoTag, Packets::ErrorPacket>;
+  boost::error_info< struct ErrorPacketInfoTag, Packets::ErrorPacket >;
 
 }
 
