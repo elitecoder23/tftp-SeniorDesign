@@ -148,7 +148,7 @@ void Packet::decodeHeader( ConstRawTftpPacketSpan rawPacket )
   uint16_t opcode{};
   Helper::getInt< uint16_t>( packetIt, opcode );
 
-  if ( static_cast< PacketType>( opcode) != packetTypeV )
+  if ( static_cast< PacketType >( opcode ) != packetTypeV )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "Invalid opcode" } );
