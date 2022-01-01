@@ -148,5 +148,47 @@
       "displayName": "CLang Shared Release",
       "configurePreset": "clang-shared-release"
     }
+  ],
+  "testPresets": [
+    {
+      "name": "gcc-static-debug",
+      "displayName": "GCC Static Debug",
+      "configurePreset": "gcc-static-debug"
+    },
+    {
+      "name": "gcc-static-release",
+      "displayName": "GCC Static Release",
+      "configurePreset": "gcc-static-release"
+    },
+    {
+      "name": "gcc-shared-debug",
+      "displayName": "GCC Shared Debug",
+      "configurePreset": "gcc-shared-debug"
+    },
+    {
+      "name": "gcc-shared-release",
+      "displayName": "GCC Shared Release",
+      "configurePreset": "gcc-shared-release"
+    },
+    {
+      "name": "clang-static-debug",
+      "displayName": "CLang Static Debug",
+      "configurePreset": "clang-static-debug"
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "CLang Static Release",
+      "configurePreset": "clang-static-release"
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "CLang Shared Debug",
+      "configurePreset": "clang-shared-debug"
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "CLang Shared Release",
+      "configurePreset": "clang-shared-release"
+    }
   ]
 }
