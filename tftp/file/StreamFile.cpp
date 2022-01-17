@@ -86,7 +86,7 @@ bool StreamFile::receivedTransferSize( const uint64_t transferSize )
 
 void StreamFile::receivedData( const DataType &data ) noexcept
 {
-  if ( data.size() > 0U )
+  if ( !data.empty() )
   {
     streamV.write(
       reinterpret_cast< const char * >( std::data( data ) ),

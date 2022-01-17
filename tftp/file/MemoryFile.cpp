@@ -31,7 +31,7 @@ MemoryFile::MemoryFile( const DataType &data ) :
 
 MemoryFile::MemoryFile( DataType &&data ):
   operationV{ Operation::Transmit },
-  dataV{ std::move( data )},
+  dataV{ std::move( data ) },
   dataPtr{ dataV.begin() }
 {
 }
@@ -66,9 +66,12 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
 
 void MemoryFile::receivedData( const DataType &data ) noexcept
 {
-  dataV.insert( dataV.end(), data.begin(), data.end() );
+  if ( !data.empty() )
+  {
+    dataV.insert( dataV.end(), data.begin(), data.end() );
 
-  dataPtr = dataV.begin();
+    dataPtr = dataV.begin();
+  }
 }
 
 std::optional< uint64_t> MemoryFile::requestedTransferSize()
@@ -81,10 +84,10 @@ MemoryFile::DataType MemoryFile::sendData( const size_t maxSize ) noexcept
   DataType::const_iterator startPtr{ dataPtr };
   DataType::const_iterator endPtr;
 
-  if ( static_cast< unsigned int>(
+  if ( static_cast< size_t >(
     std::distance< DataType::const_iterator>(
       startPtr,
-      dataV.end())) <= maxSize )
+      dataV.end() ) ) <= maxSize )
   {
     endPtr = dataV.end();
   }
