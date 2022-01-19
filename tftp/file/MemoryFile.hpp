@@ -39,9 +39,9 @@ class MemoryFile: public TftpFile
      * The data is copied to an internal data structure.
      *
      * @param[in] data
-     *   The initial data.
+     *   Initial data.
      **/
-    explicit MemoryFile( const DataType &data );
+    explicit MemoryFile( DataSpan data );
 
     /**
      * @brief Move constructor.
@@ -51,7 +51,7 @@ class MemoryFile: public TftpFile
      * @param[in] data
      *   Data of memory file.
      **/
-    explicit MemoryFile( DataType &&data );
+    explicit MemoryFile( Data &&data );
 
     /**
      * @copydoc TftpFile::reset
@@ -67,7 +67,7 @@ class MemoryFile: public TftpFile
      *
      * @return The locally stored data
      **/
-    [[nodiscard]] const DataType& data() const noexcept;
+    [[nodiscard]] DataSpan data() const noexcept;
 
     /**
      * @copydoc TftpFile::finished()
@@ -87,7 +87,7 @@ class MemoryFile: public TftpFile
     /**
      * @copydoc TftpFile::receivedData()
      **/
-    void receivedData( const DataType &data ) noexcept final;
+    void receivedData( DataSpan data ) noexcept final;
 
     /**
      * @copydoc TftpFile::requestedTransferSize()
@@ -97,15 +97,15 @@ class MemoryFile: public TftpFile
     /**
      * @copydoc TftpFile::sendData()
      **/
-    DataType sendData( size_t maxSize ) noexcept final;
+    Data sendData( size_t maxSize ) noexcept final;
 
   private:
     //! Operation Type
     const Operation operationV;
     //! Data
-    DataType dataV;
+    Data dataV;
     //! Current Read Position
-    DataType::const_iterator dataPtr;
+    Data::const_iterator dataPtr;
 };
 
 }

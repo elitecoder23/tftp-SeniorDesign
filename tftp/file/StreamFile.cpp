@@ -14,23 +14,24 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
+#include <utility>
 
 namespace Tftp::File {
 
 StreamFile::StreamFile(
   const Operation operation,
-  const std::filesystem::path &filename ) :
+  std::filesystem::path filename ) :
   operationV{ operation },
-  filenameV{ filename }
+  filenameV{ std::move( filename ) }
 {
 }
 
 StreamFile::StreamFile(
   const Operation operation,
-  const std::filesystem::path &filename,
+  std::filesystem::path filename,
   const size_t size ) :
   operationV{ operation },
-  filenameV{ filename },
+  filenameV{ std::move( filename ) },
   sizeV{ size }
 {
 }
@@ -55,13 +56,13 @@ void StreamFile::reset()
 
     default:
       BOOST_THROW_EXCEPTION( TftpException()
-        << Helper::AdditionalInfo( "Invalid File Mode" ));
+        << Helper::AdditionalInfo{ "Invalid File Mode" } );
   }
 
   if ( !streamV )
   {
     BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo( "Error opening file" ));
+      << Helper::AdditionalInfo{ "Error opening file" } );
   }
 }
 
@@ -74,17 +75,17 @@ void StreamFile::finished() noexcept
 bool StreamFile::receivedTransferSize( const uint64_t transferSize )
 {
   // If no size is provided
-  if ( !sizeV)
+  if ( !sizeV )
   {
     // Always accept file based on size
     return true;
   }
 
   // Accept file if size is matching the maximum allowed one.
-  return ( transferSize <= sizeV);
+  return ( transferSize <= sizeV );
 }
 
-void StreamFile::receivedData( const DataType &data ) noexcept
+void StreamFile::receivedData( DataSpan data ) noexcept
 {
   if ( !data.empty() )
   {
@@ -99,9 +100,9 @@ std::optional< uint64_t> StreamFile::requestedTransferSize()
   return sizeV;
 }
 
-StreamFile::DataType StreamFile::sendData( const size_t maxSize ) noexcept
+StreamFile::Data StreamFile::sendData( const size_t maxSize ) noexcept
 {
-  DataType data( maxSize );
+  Data data( maxSize );
 
   streamV.read(
     reinterpret_cast< char*>( std::data( data ) ),

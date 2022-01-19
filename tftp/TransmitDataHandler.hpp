@@ -26,7 +26,7 @@ namespace Tftp {
  * Class interface, which must be implemented by an class, which wants to
  * transmit data for a TFTP operation (TFTP client WRQ or TFTP server RRQ)
  **/
-class TransmitDataHandler: public virtual DataHandler
+class TransmitDataHandler : public virtual DataHandler
 {
   public:
     /**
@@ -59,7 +59,7 @@ class TransmitDataHandler: public virtual DataHandler
      *
      * @return The data, which will be transmitted.
      **/
-    [[nodiscard]] virtual DataType sendData( std::size_t maxSize) noexcept = 0;
+    [[nodiscard]] virtual Data sendData( std::size_t maxSize ) noexcept = 0;
 };
 
 }

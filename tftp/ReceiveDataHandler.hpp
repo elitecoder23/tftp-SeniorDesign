@@ -24,7 +24,7 @@ namespace Tftp {
  * Class interface, which must be implemented by an class, which wants to
  * receive data from a TFTP operation (TFTP client RRQ or TFTP server WRQ)
  **/
-class ReceiveDataHandler: public virtual DataHandler
+class ReceiveDataHandler : public virtual DataHandler
 {
   public:
     /**
@@ -51,7 +51,7 @@ class ReceiveDataHandler: public virtual DataHandler
      * @param[in] data
      *   Received data.
      **/
-    virtual void receivedData( const DataType &data ) noexcept = 0;
+    virtual void receivedData( DataSpan data ) noexcept = 0;
 };
 
 }

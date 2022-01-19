@@ -16,6 +16,7 @@
 #include <tftp/Tftp.hpp>
 
 #include <vector>
+#include <span>
 #include <cstdint>
 
 namespace Tftp {
@@ -27,7 +28,9 @@ class DataHandler
 {
   public:
     //! Data Type.
-    using DataType = std::vector< uint8_t>;
+    using Data = std::vector< uint8_t>;
+    //! Data Span.
+    using DataSpan = std::span< const uint8_t >;
 
     /**
      * @brief Destructor.

@@ -15,7 +15,7 @@
 namespace Tftp::File {
 
 NullSinkFile::NullSinkFile( std::optional< uint64_t> size ):
-  size{ size}
+  size{ size }
 {
 }
 
@@ -37,7 +37,7 @@ bool NullSinkFile::receivedTransferSize( const uint64_t transferSize )
 }
 
 void NullSinkFile::receivedData(
-  [[maybe_unused]] const DataType &data ) noexcept
+  [[maybe_unused]] DataSpan data ) noexcept
 {
   // Do nothing
 }

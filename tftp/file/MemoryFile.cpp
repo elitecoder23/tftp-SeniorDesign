@@ -22,14 +22,14 @@ MemoryFile::MemoryFile():
 {
 }
 
-MemoryFile::MemoryFile( const DataType &data ) :
+MemoryFile::MemoryFile( DataSpan data ) :
   operationV{ Operation::Transmit },
-  dataV{ data },
+  dataV{ data.begin(), data.end() },
   dataPtr{ dataV.begin() }
 {
 }
 
-MemoryFile::MemoryFile( DataType &&data ):
+MemoryFile::MemoryFile( Data &&data ):
   operationV{ Operation::Transmit },
   dataV{ std::move( data ) },
   dataPtr{ dataV.begin() }
@@ -46,7 +46,7 @@ void MemoryFile::reset()
   dataPtr = dataV.begin();
 }
 
-const MemoryFile::DataType& MemoryFile::data() const noexcept
+MemoryFile::DataSpan MemoryFile::data() const noexcept
 {
   return dataV;
 }
@@ -64,7 +64,7 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
   return true;
 }
 
-void MemoryFile::receivedData( const DataType &data ) noexcept
+void MemoryFile::receivedData( DataSpan data ) noexcept
 {
   if ( !data.empty() )
   {
@@ -79,13 +79,13 @@ std::optional< uint64_t> MemoryFile::requestedTransferSize()
   return dataV.size();
 }
 
-MemoryFile::DataType MemoryFile::sendData( const size_t maxSize ) noexcept
+MemoryFile::Data MemoryFile::sendData( const size_t maxSize ) noexcept
 {
-  DataType::const_iterator startPtr{ dataPtr };
-  DataType::const_iterator endPtr;
+  Data::const_iterator startPtr{ dataPtr };
+  Data::const_iterator endPtr;
 
   if ( static_cast< size_t >(
-    std::distance< DataType::const_iterator>(
+    std::distance< Data::const_iterator>(
       startPtr,
       dataV.end() ) ) <= maxSize )
   {
@@ -96,9 +96,9 @@ MemoryFile::DataType MemoryFile::sendData( const size_t maxSize ) noexcept
     endPtr = dataPtr + static_cast< ptrdiff_t >( maxSize );
   }
 
-  dataPtr=endPtr;
+  dataPtr = endPtr;
 
-  return DataType( startPtr, endPtr );
+  return { startPtr, endPtr };
 }
 
 }

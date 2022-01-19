@@ -39,7 +39,7 @@ class StreamFile: public TftpFile
      **/
     explicit StreamFile(
       Operation operation,
-      const std::filesystem::path &filename );
+      std::filesystem::path filename );
 
     /**
      * @brief Creates the StreamFile with the given stream as in/ output and
@@ -56,7 +56,7 @@ class StreamFile: public TftpFile
      **/
     StreamFile(
       Operation operation,
-      const std::filesystem::path &filename,
+      std::filesystem::path filename,
       size_t size );
 
     /**
@@ -81,7 +81,7 @@ class StreamFile: public TftpFile
     /**
      * @copydoc TftpFile::receivedData()
      **/
-    void receivedData( const DataType &data ) noexcept final;
+    void receivedData( DataSpan data ) noexcept final;
 
     /**
      * @copydoc TftpFile::requestedTransferSize()
@@ -91,7 +91,7 @@ class StreamFile: public TftpFile
     /**
      * @copydoc TftpFile::sendData()
      **/
-    DataType sendData( size_t maxSize ) noexcept final;
+    Data sendData( size_t maxSize ) noexcept final;
 
   private:
     //! Actual Operation
