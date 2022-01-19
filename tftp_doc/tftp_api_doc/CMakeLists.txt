@@ -9,10 +9,6 @@ cmake_minimum_required( VERSION 3.21 )
 find_package( Doxygen )
 find_package( Boost )
 
-if( NOT TARGET doc )
-  add_custom_target( doc COMMENT "Generate Documentation" )
-endif()
-
 if( NOT DOXYGEN_FOUND )
   return()
 endif()
@@ -50,7 +46,7 @@ set(
 doxygen_add_docs(
   tftp_api_doc
 
-  Mainpage.md
+  ../Mainpage.md
   ${helper_SOURCE_DIR}/helper
 
   ${tftp_SOURCE_DIR}/tftp

@@ -80,7 +80,7 @@ FetchContent_MakeAvailable( helper )
 add_subdirectory( tftp )
 add_subdirectory( application )
 
-add_subdirectory( tftp_api_doc )
+add_subdirectory( tftp_doc )
 
 install(
   FILES LICENSE
