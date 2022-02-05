@@ -43,7 +43,7 @@ class ReadWriteRequestPacket: public Packet
      * @retval string()
      *   When [mode] is not a valid transfer mode.
      **/
-    static std::string_view decodeMode( TransferMode mode );
+    [[nodiscard]] static std::string_view decodeMode( TransferMode mode );
 
     /**
      * @brief Converts the Mode String to the Corresponding Enumeration.
@@ -55,7 +55,7 @@ class ReadWriteRequestPacket: public Packet
      * @retval TransferMode::Invalid
      *   When @p mode is not a valid transfer mode.
      **/
-    static TransferMode decodeMode( std::string_view mode );
+    [[nodiscard]] static TransferMode decodeMode( std::string_view mode );
 
     /**
      * @brief Returns the request filename.

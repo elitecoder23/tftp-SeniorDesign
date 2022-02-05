@@ -36,7 +36,7 @@ class DataPacket: public Packet
     static constexpr size_t MinPacketSize{ HeaderSize + 2U };
 
     //! Data Type
-    using Data = std::vector< uint8_t>;
+    using Data = std::vector< uint8_t >;
 
     /**
      * @brief Generates a TFTP Data Packet with the given block number and data.
@@ -84,16 +84,16 @@ class DataPacket: public Packet
     /**
      * @brief Returns the block number.
      *
-     * @return The current block number.
+     * @return Current block number.
      **/
     [[nodiscard]] BlockNumber blockNumber() const;
 
     /**
      * @brief Returns the block number.
      *
-     * @return The current block number (modifiable).
+     * @return Current block number (modifiable).
      **/
-    BlockNumber& blockNumber();
+    [[nodiscard]] BlockNumber& blockNumber();
 
     /**
      * @brief Sets the block number of the packet.

@@ -82,7 +82,7 @@ class MemoryFile: public TftpFile
      * Value supplied is ignored.
      * @return Always true.
      **/
-    bool receivedTransferSize( uint64_t transferSize ) final;
+    [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) final;
 
     /**
      * @copydoc TftpFile::receivedData()
@@ -92,12 +92,12 @@ class MemoryFile: public TftpFile
     /**
      * @copydoc TftpFile::requestedTransferSize()
      **/
-    std::optional< uint64_t> requestedTransferSize() final;
+    [[nodiscard]] std::optional< uint64_t> requestedTransferSize() final;
 
     /**
      * @copydoc TftpFile::sendData()
      **/
-    Data sendData( size_t maxSize ) noexcept final;
+    [[nodiscard]] Data sendData( size_t maxSize ) noexcept final;
 
   private:
     //! Operation Type

@@ -43,7 +43,8 @@ class ReceiveDataHandler : public virtual DataHandler
      *   Received amount of data cannot be handled - the operation should be
      *   aborted.
      **/
-    virtual bool receivedTransferSize( uint64_t transferSize ) = 0;
+    [[nodiscard]] virtual bool receivedTransferSize(
+      uint64_t transferSize ) = 0;
 
     /**
      * @brief Data has been received and must be processed.

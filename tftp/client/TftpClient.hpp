@@ -49,7 +49,7 @@ class TftpClient
      *
      * @return Created TFTP Client Instance.
      **/
-    static TftpClientPtr instance(
+    [[nodiscard]] static TftpClientPtr instance(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -80,7 +80,7 @@ class TftpClient
      *
      * @return Client Operation Instance.
      **/
-    virtual OperationPtr readRequestOperation(
+    [[nodiscard]] virtual OperationPtr readRequestOperation(
       OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -96,7 +96,7 @@ class TftpClient
      * @param[in] local
      *   Parameter to define the communication source
      **/
-    virtual OperationPtr readRequestOperation(
+    [[nodiscard]] virtual OperationPtr readRequestOperation(
       OptionNegotiationHandler optionNegotiationHandler,
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -129,7 +129,7 @@ class TftpClient
      *
      * @return TFTP Client Operation Instance.
      **/
-    virtual OperationPtr writeRequestOperation(
+    [[nodiscard]] virtual OperationPtr writeRequestOperation(
       OptionNegotiationHandler optionNegotiationHandler,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
@@ -145,7 +145,7 @@ class TftpClient
      * @param[in] local
      *   Parameter to define the communication source
      **/
-    virtual OperationPtr writeRequestOperation(
+    [[nodiscard]] virtual OperationPtr writeRequestOperation(
       OptionNegotiationHandler optionNegotiationHandler,
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,

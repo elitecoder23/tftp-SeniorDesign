@@ -76,7 +76,7 @@ class StreamFile : public TftpFile
     /**
      * @copydoc TftpFile::receivedTransferSize()
      **/
-    bool receivedTransferSize( uint64_t transferSize ) final;
+    [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) final;
 
     /**
      * @copydoc TftpFile::receivedData()
@@ -86,12 +86,12 @@ class StreamFile : public TftpFile
     /**
      * @copydoc TftpFile::requestedTransferSize()
      **/
-    std::optional< uint64_t> requestedTransferSize() final;
+    [[nodiscard]] std::optional< uint64_t> requestedTransferSize() final;
 
     /**
      * @copydoc TftpFile::sendData()
      **/
-    Data sendData( size_t maxSize ) noexcept final;
+    [[nodiscard]] Data sendData( size_t maxSize ) noexcept final;
 
   private:
     //! Actual Operation

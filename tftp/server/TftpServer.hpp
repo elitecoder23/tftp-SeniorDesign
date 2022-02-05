@@ -67,7 +67,7 @@ class TftpServer
      *
      * @return Created TFTP Server Instance.
      **/
-    static TftpServerPtr instance(
+    [[nodiscard]] static TftpServerPtr instance(
       boost::asio::io_context &ioContext,
       ReceivedTftpRequestHandler handler,
       uint8_t tftpTimeout,
@@ -118,7 +118,7 @@ class TftpServer
      *
      * @return TFTP server write operation.
      **/
-    virtual OperationPtr readRequestOperation(
+    [[nodiscard]] virtual OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -132,7 +132,7 @@ class TftpServer
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
-    virtual OperationPtr readRequestOperation(
+    [[nodiscard]] virtual OperationPtr readRequestOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -163,7 +163,7 @@ class TftpServer
      *
      * @return TFTP Server Read Operation.
      **/
-    virtual OperationPtr writeRequestOperation(
+    [[nodiscard]] virtual OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -177,7 +177,7 @@ class TftpServer
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
-    virtual OperationPtr writeRequestOperation(
+    [[nodiscard]] virtual OperationPtr writeRequestOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
