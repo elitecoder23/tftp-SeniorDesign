@@ -166,6 +166,9 @@ int main( int argc, char *argv[] )
         return EXIT_FAILURE;
     }
 
+    // start request
+    tftpOperation->request();
+
     // Start client and its operations
     ioContext.run();
   }

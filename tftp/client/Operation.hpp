@@ -38,6 +38,16 @@ class Operation
     virtual ~Operation() noexcept = default;
 
     /**
+     * @brief Executes the TFTP Client Operation.
+     *
+     * It prepares the FTP Request Packet, sends it to the remote endpoint and
+     * start the receive loop.
+     *
+     * It returns immediately after sending the request.
+     **/
+    virtual void request() = 0;
+
+    /**
      * @brief Aborts the Operation Gracefully.
      *
      * Sends an error packet at next possible time point.

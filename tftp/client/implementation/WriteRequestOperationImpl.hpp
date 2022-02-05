@@ -92,15 +92,8 @@ class WriteRequestOperationImpl : public OperationImpl
       const Options &additionalOptions,
       const boost::asio::ip::udp::endpoint &local);
 
-    /**
-     * @brief Executes the TFTP client operation.
-     *
-     * This routines starts the client communication.
-     * Assembles and transmit TFTP WRQ packet and start parent receive loop.
-     *
-     * It returns immediately after sending the request.
-     **/
-    void request();
+    //! @copydoc OperationImpl::request
+    void request() final;
 
   protected:
     //! @copydoc OperationImpl::finished

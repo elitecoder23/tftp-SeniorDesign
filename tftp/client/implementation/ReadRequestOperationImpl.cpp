@@ -157,18 +157,21 @@ void ReadRequestOperationImpl::request()
     // wait for answers
     receiveFirst();
   }
-  catch ( ... )
+  catch ( boost::exception &e )
   {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "Exception during request " << boost::diagnostic_information( e );
+
     finished( TransferStatus::CommunicationError );
   }
 }
 
 void ReadRequestOperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo) noexcept
+  ErrorInfo &&errorInfo ) noexcept
 {
   // inform base class
-  OperationImpl::finished( status, std::move( errorInfo) );
+  OperationImpl::finished( status, std::move( errorInfo ) );
 
   // Inform data handler
   dataHandler->finished();

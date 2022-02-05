@@ -41,7 +41,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions )
 {
-  auto operation{ std::make_shared< ReadRequestOperationImpl>(
+  return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -53,11 +53,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
     filename,
     mode,
     optionsConfiguration,
-    additionalOptions ) };
-
-  operation->request();
-
-  return operation;
+    additionalOptions );
 }
 
 OperationPtr TftpClientImpl::readRequestOperation(
@@ -71,7 +67,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
   const Options &additionalOptions,
   const boost::asio::ip::udp::endpoint &local )
 {
-  auto operation{ std::make_shared< ReadRequestOperationImpl>(
+  return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -84,11 +80,7 @@ OperationPtr TftpClientImpl::readRequestOperation(
     mode,
     optionsConfiguration,
     additionalOptions,
-    local ) };
-
-  operation->request();
-
-  return operation;
+    local );
 }
 
 OperationPtr TftpClientImpl::writeRequestOperation(
@@ -101,7 +93,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions )
 {
-  auto operation{ std::make_shared< WriteRequestOperationImpl>(
+  return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -112,11 +104,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
     filename,
     mode,
     optionsConfiguration,
-    additionalOptions ) };
-
-  operation->request();
-
-  return operation;
+    additionalOptions );
 }
 
 OperationPtr TftpClientImpl::writeRequestOperation(
@@ -130,7 +118,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
   const Options &additionalOptions,
   const boost::asio::ip::udp::endpoint &local )
 {
-  auto operation{ std::make_shared< WriteRequestOperationImpl>(
+  return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -142,11 +130,7 @@ OperationPtr TftpClientImpl::writeRequestOperation(
     mode,
     optionsConfiguration,
     additionalOptions,
-    local ) };
-
-  operation->request();
-
-  return operation;
+    local );
 }
 
 }

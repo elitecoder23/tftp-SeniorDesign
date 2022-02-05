@@ -160,8 +160,11 @@ void WriteRequestOperationImpl::request()
     // wait for answers
     receiveFirst();
   }
-  catch ( ... )
+  catch ( boost::exception &e )
   {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "Exception during request " << boost::diagnostic_information( e );
+
     finished( TransferStatus::CommunicationError );
   }
 }
