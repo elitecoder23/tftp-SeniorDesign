@@ -51,13 +51,29 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
 {
   boost::property_tree::ptree properties{};
 
-  properties.add( "timeout", tftpTimeout );
-  properties.add( "retries", tftpRetries );
-  properties.add( "port", tftpServerPort );
+  if ( tftpTimeout != DefaultTftpReceiveTimeout )
+  {
+    properties.add( "timeout", tftpTimeout );
+  }
+  if ( tftpRetries != DefaultTftpRetries )
+  {
+    properties.add( "retries", tftpRetries );
+  }
+  if ( tftpServerPort != defaultTftpPort )
+  {
+    properties.add( "port", tftpServerPort );
+  }
 
-  properties.add_child( "options", tftpOptions.toProperties() );
+  const auto tftpOptionsPtree{ tftpOptions.toProperties() };
+  if ( !tftpOptionsPtree.empty() )
+  {
+    properties.add_child( "options", tftpOptionsPtree );
+  }
 
-  properties.add( "dally", dally );
+  if ( dally )
+  {
+    properties.add( "dally", dally );
+  }
 
   return properties;
 }

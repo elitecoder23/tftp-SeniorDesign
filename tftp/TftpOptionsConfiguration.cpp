@@ -39,7 +39,10 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties() const
 {
   boost::property_tree::ptree properties{};
 
-  properties.add( "transferSize", handleTransferSizeOption );
+  if ( handleTransferSizeOption )
+  {
+    properties.add( "transferSize", handleTransferSizeOption );
+  }
 
   if ( blockSizeOption )
   {
