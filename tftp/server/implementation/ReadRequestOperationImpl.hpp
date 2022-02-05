@@ -93,12 +93,8 @@ class ReadRequestOperationImpl final : public OperationImpl
     //! Destructor
     ~ReadRequestOperationImpl() noexcept final = default;
 
-    /**
-     * @brief executes the operation.
-     *
-     * Sends response to read request and waits for answers.
-     **/
-    void start();
+    //! @copydoc OperationImpl::start()
+    void start() final;
 
   private:
     //! @copydoc OperationImpl::finished()

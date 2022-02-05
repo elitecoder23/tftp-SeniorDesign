@@ -37,6 +37,13 @@ class Operation
     virtual ~Operation() noexcept = default;
 
     /**
+     * @brief Executes the TFTP Server Operation.
+     *
+     * Sends response to request and waits for answers.
+     **/
+    virtual void start() = 0;
+
+    /**
      * @brief Aborts the Operation Gracefully.
      *
      * With an graceful abort the transfer is canceled by sending an error

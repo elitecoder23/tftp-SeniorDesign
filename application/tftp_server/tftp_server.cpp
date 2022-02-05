@@ -48,7 +48,7 @@
  *
  * @return The success state of this operation.
  **/
-int main( int argc, char * argv[]);
+int main( int argc, char * argv[] );
 
 /**
  * @brief Performs Validity Check of supplied Filename.
@@ -125,7 +125,7 @@ static Tftp::TftpConfiguration configuration{};
 //! TFTP Server Instance
 static Tftp::Server::TftpServerPtr server{};
 
-int main( int argc, char * argv[])
+int main( int argc, char * argv[] )
 {
   Helper::initLogging();
 
@@ -150,7 +150,7 @@ int main( int argc, char * argv[])
   optionsDescription.add( configuration.options() );
 
   boost::asio::io_context ioContext;
-  boost::asio::signal_set signals{ ioContext, SIGINT, SIGTERM};
+  boost::asio::signal_set signals{ ioContext, SIGINT, SIGTERM };
 
   try
   {
@@ -162,16 +162,16 @@ int main( int argc, char * argv[])
         optionsDescription),
       options );
 
-    if ( options.count( "help") != 0)
+    if ( options.count( "help" ) != 0 )
     {
       std::cout << optionsDescription << "\n";
       return EXIT_FAILURE;
     }
 
-    boost::program_options::notify( options);
+    boost::program_options::notify( options );
 
     // make a absolute path
-    baseDir = std::filesystem::canonical( baseDir);
+    baseDir = std::filesystem::canonical( baseDir );
 
     std::cout
       << "Starting TFTP server in " << baseDir.string()
@@ -208,22 +208,22 @@ int main( int argc, char * argv[])
 
     ioContext.run();
   }
-  catch ( boost::program_options::error &e)
+  catch ( boost::program_options::error &e )
   {
-    std::cout << e.what() << std::endl << optionsDescription << std::endl;
+    std::cout << e.what() << std::endl << optionsDescription << "\n";
     return EXIT_FAILURE;
   }
-  catch ( Tftp::TftpException &e)
+  catch ( Tftp::TftpException &e )
   {
-    std::string const * info = boost::get_error_info < Helper::AdditionalInfo > (e);
+    std::string const * info = boost::get_error_info < Helper::AdditionalInfo >( e );
 
     std::cerr
       << "TFTP Server exited with failure: "
-      << ((nullptr == info) ? "Unknown" : *info) << "\n";
+      << ( ( nullptr == info ) ? "Unknown" : *info ) << "\n";
 
     return EXIT_FAILURE;
   }
-  catch ( boost::exception &e)
+  catch ( boost::exception &e )
   {
     std::cerr
       << "Error in TFTP server: " << boost::diagnostic_information( e) << "\n";
@@ -238,23 +238,23 @@ int main( int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-static bool checkFilename( const std::filesystem::path &filename)
+static bool checkFilename( const std::filesystem::path &filename )
 {
   if ( filename.is_relative())
   {
     return false;
   }
 
-  if ( std::filesystem::is_directory( filename))
+  if ( std::filesystem::is_directory( filename ) )
   {
     return false;
   }
 
   auto fileIt{ filename.begin()};
 
-  for (const auto& pathItem : baseDir)
+  for ( const auto& pathItem : baseDir )
   {
-    if ( fileIt == filename.end())
+    if ( fileIt == filename.end() )
     {
       return false;
     }
@@ -351,7 +351,7 @@ static void transmitFile(
       std::make_shared< Tftp::File::StreamFile>(
         Tftp::File::TftpFile::Operation::Transmit,
         filename,
-        std::filesystem::file_size( filename) ),
+        std::filesystem::file_size( filename ) ),
       []( const Tftp::TransferStatus transferStatus )
       {
         std::cout << "Transfer Completed: " << transferStatus << "\n";
@@ -360,6 +360,8 @@ static void transmitFile(
       configuration.tftpOptions,
       clientOptions,
       {} /* no additional options */ ) };
+
+  operation->start();
 }
 
 static void receiveFile(
@@ -394,8 +396,8 @@ static void receiveFile(
       std::make_shared< Tftp::File::StreamFile>(
         Tftp::File::TftpFile::Operation::Receive,
         filename,
-        std::filesystem::file_size( filename)),
-      []( const Tftp::TransferStatus transferStatus)
+        std::filesystem::file_size( filename ) ),
+      []( const Tftp::TransferStatus transferStatus )
       {
         std::cout << "Transfer Completed: " << transferStatus << "\n";
       },
@@ -403,4 +405,6 @@ static void receiveFile(
       configuration.tftpOptions,
       clientOptions,
       {} /* no additional options */ ) };
+
+  operation->start();
 }

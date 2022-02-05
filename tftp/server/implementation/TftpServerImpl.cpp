@@ -50,7 +50,7 @@ try :
   try
   {
     // open the socket
-    socket.open( serverAddress.protocol());
+    socket.open( serverAddress.protocol() );
 
     // bind to the local address
     socket.bind( serverAddress);
@@ -58,21 +58,21 @@ try :
   catch ( const boost::system::system_error &err )
   {
     // close socket when opened
-    if ( socket.is_open())
+    if ( socket.is_open() )
     {
       socket.close();
     }
 
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( err.what())
-      << TransferPhaseInfo( TransferPhase::Initialisation ) );
+      << Helper::AdditionalInfo{ err.what() }
+      << TransferPhaseInfo{ TransferPhase::Initialisation } );
   }
 }
 catch ( const boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
-    << Helper::AdditionalInfo( err.what())
-    << TransferPhaseInfo( TransferPhase::Initialisation ) );
+    << Helper::AdditionalInfo{ err.what() }
+    << TransferPhaseInfo{ TransferPhase::Initialisation } );
 }
 
 TftpServerImpl::~TftpServerImpl() noexcept
@@ -101,7 +101,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
   const Options &clientOptions,
   const Options &additionalNegotiatedOptions )
 {
-  auto operation{ std::make_shared< ReadRequestOperationImpl>(
+  return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -110,11 +110,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
     remote,
     optionsConfiguration,
     clientOptions,
-    additionalNegotiatedOptions ) };
-
-  operation->start();
-
-  return operation;
+    additionalNegotiatedOptions );
 }
 
 OperationPtr TftpServerImpl::readRequestOperation(
@@ -126,7 +122,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
   const Options &additionalNegotiatedOptions,
   const boost::asio::ip::udp::endpoint &local )
 {
-  auto operation{ std::make_shared< ReadRequestOperationImpl>(
+  return std::make_shared< ReadRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -136,11 +132,7 @@ OperationPtr TftpServerImpl::readRequestOperation(
     optionsConfiguration,
     clientOptions,
     additionalNegotiatedOptions,
-    local ) };
-
-  operation->start();
-
-  return operation;
+    local );
 }
 
 OperationPtr TftpServerImpl::writeRequestOperation(
@@ -151,7 +143,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   const Options &clientOptions,
   const Options &additionalNegotiatedOptions )
 {
-  auto operation{ std::make_shared< WriteRequestOperationImpl>(
+  return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -161,11 +153,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
     remote,
     optionsConfiguration,
     clientOptions,
-    additionalNegotiatedOptions ) };
-
-  operation->start();
-
-  return operation;
+    additionalNegotiatedOptions );
 }
 
 OperationPtr TftpServerImpl::writeRequestOperation(
@@ -177,7 +165,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
   const Options &additionalNegotiatedOptions,
   const boost::asio::ip::udp::endpoint &local )
 {
-  auto operation{ std::make_shared< WriteRequestOperationImpl>(
+  return std::make_shared< WriteRequestOperationImpl>(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -188,11 +176,7 @@ OperationPtr TftpServerImpl::writeRequestOperation(
     optionsConfiguration,
     clientOptions,
     additionalNegotiatedOptions,
-    local ) };
-
-  operation->start();
-
-  return operation;
+    local );
 }
 
 void TftpServerImpl::errorOperation(
@@ -205,17 +189,18 @@ void TftpServerImpl::errorOperation(
   Packets::ErrorPacket errorPacket{ errorCode, errorMessage };
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "TX: " << static_cast< std::string>( errorPacket);
+    << "TX: " << static_cast< std::string>( errorPacket );
 
   try
   {
     boost::asio::ip::udp::socket errSocket{ ioContext };
 
-    errSocket.open( remote.protocol());
+    errSocket.open( remote.protocol() );
 
     errSocket.connect( remote);
 
-    errSocket.send( boost::asio::buffer( static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
+    errSocket.send( boost::asio::buffer(
+      static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
   }
   catch ( const boost::system::system_error &err )
   {
