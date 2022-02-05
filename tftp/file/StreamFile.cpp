@@ -56,13 +56,15 @@ void StreamFile::reset()
 
     default:
       BOOST_THROW_EXCEPTION( TftpException()
-        << Helper::AdditionalInfo{ "Invalid File Mode" } );
+        << Helper::AdditionalInfo{ "Invalid File Mode" }
+        << boost::errinfo_file_name{ filenameV.string() } );
   }
 
   if ( !streamV )
   {
     BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo{ "Error opening file" } );
+      << Helper::AdditionalInfo{ "Error opening file" }
+      << boost::errinfo_file_name{ filenameV.string() } );
   }
 }
 
