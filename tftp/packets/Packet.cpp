@@ -124,7 +124,7 @@ Packet& Packet::operator=( Packet &&other [[maybe_unused]] ) noexcept
 
 void Packet::insertHeader( RawTftpPacketSpan rawPacket ) const
 {
-  // keep assertion --> programming error of sub-classes.
+  // keep assertion --> programming error of subclasses.
   assert( rawPacket.size() >= HeaderSize );
 
   auto packetIt{ rawPacket.begin() };
