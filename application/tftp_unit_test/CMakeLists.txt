@@ -21,4 +21,9 @@ target_link_libraries( tftp_unit_test PRIVATE tftp_test helper_test )
 
 add_test( NAME tftp_unit_test COMMAND tftp_unit_test )
 
+set_property(
+  DIRECTORY ${PROJECT_SOURCE_DIR}
+  APPEND
+  PROPERTY DOC_PATHS ${CMAKE_CURRENT_SOURCE_DIR} )
+
 install( TARGETS tftp_unit_test COMPONENT runtime )

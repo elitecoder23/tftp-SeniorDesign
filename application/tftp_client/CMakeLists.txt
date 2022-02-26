@@ -39,5 +39,9 @@ target_compile_definitions(
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
+set_property(
+  DIRECTORY ${PROJECT_SOURCE_DIR}
+  APPEND
+  PROPERTY DOC_PATHS ${CMAKE_CURRENT_SOURCE_DIR} )
 
 install( TARGETS tftp_client COMPONENT runtime )

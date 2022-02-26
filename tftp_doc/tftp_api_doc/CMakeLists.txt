@@ -13,6 +13,16 @@ if( NOT DOXYGEN_FOUND )
   return()
 endif()
 
+get_property(
+  HELPER_DOC_PATHS
+  DIRECTORY ${helper_SOURCE_DIR}
+  PROPERTY DOC_PATHS )
+
+get_property(
+  TFTP_DOC_PATHS
+  DIRECTORY ${tftp_SOURCE_DIR}
+  PROPERTY DOC_PATHS )
+
 set( DOXYGEN_PROJECT_NAME "${tftp_DESCRIPTION}" )
 set( DOXYGEN_PROJECT_BRIEF "${tftp_DESCRIPTION}" )
 set( DOXYGEN_PROJECT_NUMBER "${tftp_VERSION}" )
@@ -47,12 +57,9 @@ doxygen_add_docs(
   tftp_api_doc
 
   ../Mainpage.md
-  ${helper_SOURCE_DIR}/helper
 
-  ${tftp_SOURCE_DIR}/tftp
-  ${tftp_SOURCE_DIR}/application/tftp_client
-  ${tftp_SOURCE_DIR}/application/tftp_server
-  ${tftp_SOURCE_DIR}/application/tftp_unit_test )
+  ${HELPER_DOC_PATHS}
+  ${TFTP_DOC_PATHS} )
 
 add_dependencies( doc tftp_api_doc )
 

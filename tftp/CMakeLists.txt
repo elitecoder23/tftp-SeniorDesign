@@ -120,6 +120,11 @@ add_subdirectory( packets )
 add_subdirectory( client )
 add_subdirectory( server )
 
+set_property(
+  DIRECTORY ${PROJECT_SOURCE_DIR}
+  APPEND
+  PROPERTY DOC_PATHS ${CMAKE_CURRENT_SOURCE_DIR} )
+
 install(
   TARGETS tftp
   RUNTIME_DEPENDENCY_SET runtime-libs
