@@ -1,0 +1,50 @@
+default:
+  image: infohoschie/build-gcc-clang-cmake:latest
+
+.cmake_build:
+  stage: build
+  script:
+    - cmake --preset ${CMAKE_PRESET}
+    - cmake --build --preset ${CMAKE_PRESET} --parallel
+    - cmake --build --preset ${CMAKE_PRESET} --parallel --target doc
+    - ctest --preset ${CMAKE_PRESET}
+
+GCC Static Debug:
+  extends: .cmake_build
+  variables:
+    CMAKE_PRESET: "gcc-static-debug"
+
+GCC Static Release:
+  extends: .cmake_build
+  variables:
+    CMAKE_PRESET: "gcc-static-release"
+
+GCC Shared Debug:
+  extends: .cmake_build
+  variables:
+    CMAKE_PRESET: "gcc-shared-debug"
+
+GCC Shared Release:
+  extends: .cmake_build
+  variables:
+    CMAKE_PRESET: "gcc-shared-release"
+
+CLang Static Debug:
+  extends: .cmake_build
+  variables:
+    CMAKE_PRESET: "clang-static-debug"
+
+CLang Static Release:
+  extends: .cmake_build
+  variables:
+    CMAKE_PRESET: "clang-static-release"
+
+CLang Shared Debug:
+  extends: .cmake_build
+  variables:
+    CMAKE_PRESET: "clang-shared-debug"
+
+CLang Shared Release:
+  extends: .cmake_build
+  variables:
+    CMAKE_PRESET: "clang-shared-release"
