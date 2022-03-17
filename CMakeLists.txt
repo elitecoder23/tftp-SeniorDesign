@@ -10,7 +10,7 @@ project(
   tftp
   VERSION 1.0.0.0
   DESCRIPTION "TFTP Protocol Library and Applications"
-  HOMEPAGE_URL "https://git.thomas-vogt.de/Thomas-Vogt/tftp" )
+  HOMEPAGE_URL "https://git.thomas-vogt.de/thomas-vogt/tftp" )
 
 set( PROJECT_VERSION_ADDITION "dev" )
 
@@ -50,7 +50,7 @@ include( FetchContent )
 
 FetchContent_Declare(
   cmake_common
-  GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/cmake_common.git
+  GIT_REPOSITORY https://git.thomas-vogt.de/thomas-vogt/cmake_common.git
   GIT_TAG        main )
 
 if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
@@ -67,7 +67,7 @@ endif()
 
 FetchContent_Declare(
   helper
-  GIT_REPOSITORY https://git.thomas-vogt.de/Thomas-Vogt/helper.git
+  GIT_REPOSITORY https://git.thomas-vogt.de/thomas-vogt/helper.git
   GIT_TAG        main )
 
 if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/helper )
