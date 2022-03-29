@@ -5,8 +5,8 @@ default:
   stage: build
   script:
     - cmake --preset ${CMAKE_PRESET}
-    - cmake --build --preset ${CMAKE_PRESET} --parallel
-    - cmake --build --preset ${CMAKE_PRESET} --parallel --target doc
+    - cmake --build --preset ${CMAKE_PRESET}
+    - cmake --build --preset ${CMAKE_PRESET} --target doc
     - ctest --preset ${CMAKE_PRESET}
 
 GCC Static Debug:
