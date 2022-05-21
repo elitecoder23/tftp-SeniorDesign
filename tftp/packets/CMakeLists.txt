@@ -27,6 +27,7 @@ target_sources(
     PacketHandler.cpp
     Packets.hpp
     Packets.cpp
+    Packets.ipp
     ReadRequestPacket.hpp
     ReadRequestPacket.cpp
     ReadWriteRequestPacket.hpp

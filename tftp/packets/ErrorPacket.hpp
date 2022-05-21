@@ -77,6 +77,11 @@ class ErrorPacket: public Packet
     explicit operator std::string() const final;
 
     /**
+     * @name Error Code
+     * @{
+     **/
+
+    /**
      * @brief Returns the error code.
      *
      * @return The error code.
@@ -90,6 +95,13 @@ class ErrorPacket: public Packet
      *   The error code to set
      **/
     void errorCode( ErrorCode errorCode ) noexcept;
+
+    //! @}
+
+    /**
+     * @name Error Message
+     * @{
+     **/
 
     /**
      * @brief Returns the error message of this packet.
@@ -105,6 +117,8 @@ class ErrorPacket: public Packet
      *   The error message to set.
      **/
     void errorMessage( std::string_view errorMessage );
+
+    //! @}
 
   private:
     //! @copydoc Packet::encode()

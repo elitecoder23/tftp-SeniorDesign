@@ -128,8 +128,9 @@ constexpr uint16_t DefaultTftpRetries{ 1U };
  * @brief TFTP Packet Types.
  *
  * All packet types, except TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6), are
- * defined within RFC 1350. The packet type
- * TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6) is described within RFC 2347.
+ * defined within RFC 1350.
+ * The packet type TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6) is described within
+ * RFC 2347.
  **/
 enum class PacketType : uint16_t
 {

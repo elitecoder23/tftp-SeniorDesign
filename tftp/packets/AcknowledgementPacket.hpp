@@ -23,7 +23,7 @@ namespace Tftp::Packets {
  * @brief TFTP Acknowledgement %Package (ACK).
  *
  * The TFTP Acknowledgement packet acknowledges a received WRQ packet without
- * options negotiation or an data packet.
+ * options negotiation or a data packet.
  *
  * | ACK | Block # |
  * |:---:|:-------:|
@@ -69,6 +69,11 @@ class AcknowledgementPacket: public Packet
     AcknowledgementPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 
     /**
+     * @name Block Number
+     * @{
+     **/
+
+    /**
      * @brief Returns the Block Number.
      *
      * @return The block number.
@@ -81,7 +86,9 @@ class AcknowledgementPacket: public Packet
      * @param[in] blockNumber
      *   Block number of packet.
      **/
-    void blockNumber( BlockNumber blockNumber);
+    void blockNumber( BlockNumber blockNumber );
+
+    //! @}
 
     //! @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;

@@ -37,7 +37,7 @@ class ReadWriteRequestPacket: public Packet
      *   string.
      *
      * @param[in] mode
-     *   The transfer mode.
+     *   Transfer mode.
      *
      * @return The corresponding string representation.
      * @retval string()
@@ -58,6 +58,12 @@ class ReadWriteRequestPacket: public Packet
     [[nodiscard]] static TransferMode decodeMode( std::string_view mode );
 
     /**
+     * @name Filename
+     *
+     * @{
+     **/
+
+    /**
      * @brief Returns the request filename.
      *
      * @return The filename
@@ -75,23 +81,37 @@ class ReadWriteRequestPacket: public Packet
     //! @copydoc filename(std::string_view)
     void filename( std::string &&filename );
 
+    /** @} **/
+
     /**
-     * @brief Returns the transfer mode.
+     * @name Transfer Mode
+     * @{
+     **/
+
+    /**
+     * @brief Returns the Transfer Mode.
      *
-     * @return The transfer mode.
+     * @return Transfer Mode.
      **/
     [[nodiscard]] TransferMode mode() const;
 
     /**
-     * @brief Sets the transfer mode.
+     * @brief Sets the Transfer Mode.
      *
      * @param[in] mode
-     *   The new transfer mode.
+     *   New transfer mode.
      *
      * @throw TftpPacketException
      *   When mode is not a valid transfer mode.
      **/
     void mode( TransferMode mode );
+
+    /** @} **/
+
+    /**
+     * @name TFTP Options
+     * @{
+     **/
 
     /**
      * @brief Returns the set TFTP options.
@@ -117,6 +137,8 @@ class ReadWriteRequestPacket: public Packet
 
     //! @copydoc options(const Options&)
     void options( Options &&options );
+
+    /** @} **/
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;

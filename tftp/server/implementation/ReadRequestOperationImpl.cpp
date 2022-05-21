@@ -97,12 +97,13 @@ void ReadRequestOperationImpl::start()
     }
     else
     {
+      // initialise server options with additional negotiated options
       Options serverOptions{ additionalNegotiatedOptions };
 
       // check block size option - if set use it
       if ( optionsConfiguration.blockSizeOption )
       {
-        const auto [blockSizeValid, blockSize] =
+        const auto [ blockSizeValid, blockSize ] =
           Packets::TftpOptions_getOption< uint16_t >(
             clientOptions,
             KnownOptions::BlockSize );
@@ -150,13 +151,13 @@ void ReadRequestOperationImpl::start()
         {
           if ( 0U != *transferSize )
           {
-            BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+            BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
               << "Received transfer size must be 0";
 
             Packets::ErrorPacket errorPacket{
               ErrorCode::TftpOptionRefused,
               "transfer size must be 0" };
-            send( errorPacket);
+            send( errorPacket );
 
             // Operation completed
             finished( TransferStatus::TransferError, std::move( errorPacket ) );

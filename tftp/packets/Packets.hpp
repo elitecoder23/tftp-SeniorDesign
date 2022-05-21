@@ -22,9 +22,10 @@
 
 #include <vector>
 #include <span>
-#include <limits>
 #include <cstdint>
 #include <optional>
+#include <concepts>
+
 /**
  * @brief TFTP %Packets.
  *
@@ -59,10 +60,10 @@ using RawOptions = std::vector< uint8_t>;
 using RawOptionsSpan = std::span< const uint8_t>;
 
 /**
- * @brief Returns the option string for the given option.
+ * @brief Returns the Option Name String for the given Option.
  *
  * @param[in] option
- *   The TFTP option.
+ *   TFTP known Option.
  *
  * @return Returns the option name.
  **/
@@ -73,15 +74,19 @@ std::string_view TftpOptions_name( KnownOptions option ) noexcept;
  *
  * This operation is used for debugging and information purposes.
  *
+ * The format is `{Name:Value};`.
+ *
  * @param[in] options
  *   TFTP Options.
  *
- * @return Option list description.
+ * @return Options Description.
+ * @retval `(NONE)`
+ *   When @p options is empty.
  **/
 std::string TftpOptions_toString( const Options &options );
 
 /**
- * @brief Decodes Options from the given raw data.
+ * @brief Decodes Options from the given Raw Data.
  *
  * @param[in] rawOptions
  *   Raw Options
@@ -89,12 +94,14 @@ std::string TftpOptions_toString( const Options &options );
  * @return Decoded Options.
  *
  * @throw InvalidPacketException
- *   On invalid input data
+ *   On invalid input data.
+ *
+ * @sa TftpOptions_rawOptions()
  **/
 Options TftpOptions_options( RawOptionsSpan rawOptions );
 
 /**
- * @brief Returns the option list as raw data
+ * @brief Returns the Option List as Raw Data.
  *
  * The raw option date is used to generate the option data within the
  * TFTP packages.
@@ -103,6 +110,8 @@ Options TftpOptions_options( RawOptionsSpan rawOptions );
  *   The TFTP Options to convert.
  *
  * @return TFTP Options as raw data
+ *
+ * @sa TftpOptions_options()
  **/
 RawOptions TftpOptions_rawOptions( const Options &options );
 
@@ -110,7 +119,7 @@ RawOptions TftpOptions_rawOptions( const Options &options );
  * @brief Get the Named Option with given Value.
  *
  * @tparam IntT
- *   Integer Type.
+ *   Unsigned Integer Type.
  *
  * @param[in] option
  *   Option Name
@@ -119,7 +128,7 @@ RawOptions TftpOptions_rawOptions( const Options &options );
  *
  * @return Named Option
  **/
-template< typename IntT >
+template< std::unsigned_integral IntT >
 Options::value_type TftpOptions_setOption(
   KnownOptions option,
   IntT value );
@@ -128,7 +137,7 @@ Options::value_type TftpOptions_setOption(
  * @brief Decodes the Named Option.
  *
  * @tparam IntT
- *   Integer Type.
+ *   Unsigned Integer Type.
  *
  * @param[in] options
  *   TFTP Options
@@ -138,44 +147,13 @@ Options::value_type TftpOptions_setOption(
  * @return std::pair Option was valid (not present or decoded correctly) and
  *   Option Value
  */
-template< typename IntT >
+template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > > TftpOptions_getOption(
   const Options &options,
   KnownOptions option );
 
-template< typename IntT >
-Options::value_type TftpOptions_setOption(
-  KnownOptions option,
-  IntT value )
-{
-  return {
-    std::string{ TftpOptions_name( option ) },
-    std::to_string( value ) };
 }
 
-template< typename IntT >
-std::pair< bool, std::optional< IntT > > TftpOptions_getOption(
-  const Options &options,
-  KnownOptions option )
-{
-  auto optionIt{ options.find( TftpOptions_name( option ) ) };
-
-  // option not set
-  if ( optionIt == options.end() )
-  {
-    return { true, {} };
-  }
-
-  const auto optionValue{ std::stoull( optionIt->second ) };
-
-  if ( optionValue > std::numeric_limits< IntT>::max() )
-  {
-    return { false, {} };
-  }
-
-  return { true, static_cast< IntT >( optionValue ) };
-}
-
-}
+#include <tftp/packets/Packets.ipp>
 
 #endif

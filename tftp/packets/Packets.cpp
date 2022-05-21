@@ -44,11 +44,11 @@ std::string TftpOptions_toString( const Options &options )
   std::string result{};
 
   // iterate over all options
-  for ( const auto &[name, option] : options )
+  for ( const auto &[ name, value ] : options )
   {
     result += name;
     result += ":";
-    result += option;
+    result += value;
     result += ";";
   }
 
@@ -60,34 +60,37 @@ Options TftpOptions_options( RawOptionsSpan rawOptions )
 
   for( auto begin = rawOptions.begin(); begin != rawOptions.end(); )
   {
-    auto nameBegin{ begin};
-    auto nameEnd{ std::find( nameBegin, rawOptions.end(), 0)};
+    auto nameBegin{ begin };
 
-    if ( nameEnd == rawOptions.end())
+    // Option Name is delimited by "\0" character
+    auto nameEnd{ std::find( nameBegin, rawOptions.end(), 0 ) };
+
+    if ( nameEnd == rawOptions.end() )
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo{ "Unexpected end of input data"});
+        << Helper::AdditionalInfo{ "Unexpected end of input data" } );
     }
 
-    auto valueBegin{ nameEnd + 1U};
+    auto valueBegin{ nameEnd + 1U };
 
-    if ( valueBegin == rawOptions.end())
+    if ( valueBegin == rawOptions.end() )
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo{ "Unexpected end of input data"});
+        << Helper::AdditionalInfo{ "Unexpected end of input data"} );
     }
 
-    auto valueEnd{ std::find( valueBegin, rawOptions.end(), 0)};
+    // Option Value is delimited by "\0" character
+    auto valueEnd{ std::find( valueBegin, rawOptions.end(), 0 ) };
 
-    if ( valueEnd == rawOptions.end())
+    if ( valueEnd == rawOptions.end() )
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo{ "Unexpected end of input data"});
+        << Helper::AdditionalInfo{ "Unexpected end of input data" } );
     }
 
     options.emplace(
-      std::string{ nameBegin, nameEnd},
-      std::string{ valueBegin, valueEnd});
+      std::string{ nameBegin, nameEnd },
+      std::string{ valueBegin, valueEnd } );
 
     begin = valueEnd + 1U;
   }
@@ -99,16 +102,16 @@ RawOptions TftpOptions_rawOptions( const Options &options )
   RawOptions rawOptions{};
 
   // copy options
-  for ( const auto &[name, option] : options)
+  for ( const auto &[ name, option ] : options )
   {
     // option name
-    rawOptions.insert( rawOptions.end(), name.begin(), name.end());
+    rawOptions.insert( rawOptions.end(), name.begin(), name.end() );
 
     // name value divider
     rawOptions.push_back( 0 );
 
     // option value
-    rawOptions.insert( rawOptions.end(), option.begin(), option.end());
+    rawOptions.insert( rawOptions.end(), option.begin(), option.end() );
 
     // option terminator
     rawOptions.push_back( 0 );

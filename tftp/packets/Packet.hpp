@@ -26,17 +26,17 @@ class Packet
 {
   public:
     //! Minimum Size is the Opcode Field.
-    static constexpr std::size_t HeaderSize{ sizeof( uint16_t )};
+    static constexpr std::size_t HeaderSize{ sizeof( uint16_t ) };
 
     /**
-     * @brief Decodes the packet type of a raw buffer.
+     * @brief Decodes the packet type of raw buffer.
      *
      * @param[in] rawPacket
      *   Raw buffer of received packet.
      *
-     * @return The TFTP packet type of the raw buffer.
+     * @return TFTP packet type of the raw buffer.
      * @retval PacketType::INVALID
-     *   If packet is to small or invalid opcode value.
+     *   If packet is too small or invalid opcode value.
      **/
     static PacketType packetType( ConstRawTftpPacketSpan rawPacket ) noexcept;
 

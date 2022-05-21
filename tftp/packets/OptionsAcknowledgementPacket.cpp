@@ -68,19 +68,19 @@ void OptionsAcknowledgementPacket::options( Options &&options)
 
 OptionsAcknowledgementPacket::operator std::string() const
 {
-  return (boost::format( "OACK: OPT: \"%s\"") %
-    TftpOptions_toString( optionsV )).str();
+  return (boost::format( "OACK: OPT: \"%s\"" ) %
+    TftpOptions_toString( optionsV ) ).str();
 }
 
 RawTftpPacket OptionsAcknowledgementPacket::encode() const
 {
   auto rawOptions{ TftpOptions_rawOptions( optionsV ) };
 
-  RawTftpPacket rawPacket( 2U + rawOptions.size());
+  RawTftpPacket rawPacket( HeaderSize + rawOptions.size() );
 
-  insertHeader( rawPacket);
+  insertHeader( rawPacket );
 
-  auto packetIt{ rawPacket.begin() + HeaderSize};
+  auto packetIt{ rawPacket.begin() + HeaderSize };
 
   // options
   std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
@@ -95,7 +95,7 @@ void OptionsAcknowledgementPacket::decodeBody(
   if ( rawPacket.size() <= HeaderSize )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "Invalid packet size of OACK packet" ) );
+      << Helper::AdditionalInfo{ "Invalid packet size of OACK packet" } );
   }
 
   auto packetIt{ rawPacket.begin() + HeaderSize };

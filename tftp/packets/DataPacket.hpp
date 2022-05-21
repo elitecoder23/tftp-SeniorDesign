@@ -82,6 +82,11 @@ class DataPacket: public Packet
     DataPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 
     /**
+     * @name Block Number
+     * @{
+     **/
+
+    /**
      * @brief Returns the block number.
      *
      * @return Current block number.
@@ -102,6 +107,13 @@ class DataPacket: public Packet
      *   Block number of packet.
      **/
     void blockNumber( BlockNumber blockNumber );
+
+    //! @}
+
+    /**
+     * @name Data
+     * @{
+     **/
 
     /**
      * @brief Returns the data as const reference.
@@ -147,6 +159,8 @@ class DataPacket: public Packet
      * @return The data size in bytes.
      **/
     [[nodiscard]] size_t dataSize() const;
+
+    //! @}
 
     //! @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;

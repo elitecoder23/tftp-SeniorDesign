@@ -70,6 +70,11 @@ class OptionsAcknowledgementPacket: public Packet
     OptionsAcknowledgementPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 
     /**
+     * @name TFTP Options
+     * @{
+     **/
+
+    /**
      * @brief Returns the options within the packet (const reference)
      *
      * @return Option list (as const reference)
@@ -93,6 +98,8 @@ class OptionsAcknowledgementPacket: public Packet
 
     //! @copydoc options(const Options&)
     void options( Options &&options );
+
+    /** @} **/
 
     //! @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;

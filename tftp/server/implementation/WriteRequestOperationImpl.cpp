@@ -100,6 +100,7 @@ void WriteRequestOperationImpl::start()
     }
     else
     {
+      // initialise server options with additional negotiated options
       Options serverOptions{ additionalNegotiatedOptions };
 
       // check block size option - if set use it
