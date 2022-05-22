@@ -133,13 +133,15 @@ int main( int argc, char *argv[] )
     switch ( requestType)
     {
       case Tftp::RequestType::Read:
-        tftpOperation= tftpClient->readRequestOperation(
+        tftpOperation= tftpClient->readOperation(
           optionNegotiation,
-          std::make_shared< Tftp::File::StreamFile>(
+          std::make_shared< Tftp::File::StreamFile >(
             Tftp::File::TftpFile::Operation::Receive,
             localFile ),
           std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ),
-          boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort },
+          boost::asio::ip::udp::endpoint{
+            address,
+            configuration.tftpServerPort },
           remoteFile,
           Tftp::TransferMode::OCTET,
           configuration.tftpOptions,
@@ -147,14 +149,16 @@ int main( int argc, char *argv[] )
         break;
 
       case Tftp::RequestType::Write:
-        tftpOperation = tftpClient->writeRequestOperation(
+        tftpOperation = tftpClient->writeOperation(
           optionNegotiation,
-          std::make_shared< Tftp::File::StreamFile>(
+          std::make_shared< Tftp::File::StreamFile >(
             Tftp::File::TftpFile::Operation::Transmit,
             localFile,
-            std::filesystem::file_size( localFile)),
+            std::filesystem::file_size( localFile ) ),
           std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ),
-          boost::asio::ip::udp::endpoint{ address, configuration.tftpServerPort },
+          boost::asio::ip::udp::endpoint{
+            address,
+            configuration.tftpServerPort },
           remoteFile,
           Tftp::TransferMode::OCTET,
           configuration.tftpOptions,

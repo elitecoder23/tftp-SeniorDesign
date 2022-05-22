@@ -7,10 +7,10 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Client::ReadRequestOperationImpl.
+ * @brief Definition of Class Tftp::Client::ReadOperationImpl.
  **/
 
-#include "ReadRequestOperationImpl.hpp"
+#include "ReadOperationImpl.hpp"
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/ReadRequestPacket.hpp>
@@ -25,7 +25,7 @@
 
 namespace Tftp::Client {
 
-ReadRequestOperationImpl::ReadRequestOperationImpl(
+ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
@@ -67,7 +67,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   }
 }
 
-ReadRequestOperationImpl::ReadRequestOperationImpl(
+ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
@@ -111,7 +111,7 @@ ReadRequestOperationImpl::ReadRequestOperationImpl(
   }
 }
 
-void ReadRequestOperationImpl::request()
+void ReadOperationImpl::request()
 {
   BOOST_LOG_FUNCTION()
 
@@ -166,7 +166,7 @@ void ReadRequestOperationImpl::request()
   }
 }
 
-void ReadRequestOperationImpl::finished(
+void ReadOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo ) noexcept
 {
@@ -177,7 +177,7 @@ void ReadRequestOperationImpl::finished(
   dataHandler->finished();
 }
 
-void ReadRequestOperationImpl::dataPacket(
+void ReadOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
@@ -303,7 +303,7 @@ void ReadRequestOperationImpl::dataPacket(
   }
 }
 
-void ReadRequestOperationImpl::acknowledgementPacket(
+void ReadOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
@@ -323,7 +323,7 @@ void ReadRequestOperationImpl::acknowledgementPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket ) );
 }
 
-void ReadRequestOperationImpl::optionsAcknowledgementPacket(
+void ReadOperationImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {

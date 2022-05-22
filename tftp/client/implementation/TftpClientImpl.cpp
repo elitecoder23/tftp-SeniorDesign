@@ -12,8 +12,8 @@
 
 #include "TftpClientImpl.hpp"
 
-#include <tftp/client/implementation/ReadRequestOperationImpl.hpp>
-#include <tftp/client/implementation/WriteRequestOperationImpl.hpp>
+#include <tftp/client/implementation/ReadOperationImpl.hpp>
+#include <tftp/client/implementation/WriteOperationImpl.hpp>
 
 #include <tftp/TftpLogger.hpp>
 
@@ -31,17 +31,17 @@ TftpClientImpl::TftpClientImpl(
 {
 }
 
-OperationPtr TftpClientImpl::readRequestOperation(
+OperationPtr TftpClientImpl::readOperation(
   OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
-  const TransferMode mode,
+  TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions )
 {
-  return std::make_shared< ReadRequestOperationImpl>(
+  return std::make_shared< ReadOperationImpl >(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -56,18 +56,18 @@ OperationPtr TftpClientImpl::readRequestOperation(
     additionalOptions );
 }
 
-OperationPtr TftpClientImpl::readRequestOperation(
+OperationPtr TftpClientImpl::readOperation(
   OptionNegotiationHandler optionNegotiationHandler,
   ReceiveDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
-  const TransferMode mode,
+  TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions,
   const boost::asio::ip::udp::endpoint &local )
 {
-  return std::make_shared< ReadRequestOperationImpl>(
+  return std::make_shared< ReadOperationImpl >(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -83,17 +83,17 @@ OperationPtr TftpClientImpl::readRequestOperation(
     local );
 }
 
-OperationPtr TftpClientImpl::writeRequestOperation(
+OperationPtr TftpClientImpl::writeOperation(
   OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
-  const TransferMode mode,
+  TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions )
 {
-  return std::make_shared< WriteRequestOperationImpl>(
+  return std::make_shared< WriteOperationImpl >(
     ioContext,
     tftpTimeout,
     tftpRetries,
@@ -107,18 +107,18 @@ OperationPtr TftpClientImpl::writeRequestOperation(
     additionalOptions );
 }
 
-OperationPtr TftpClientImpl::writeRequestOperation(
+OperationPtr TftpClientImpl::writeOperation(
   OptionNegotiationHandler optionNegotiationHandler,
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   std::string_view filename,
-  const TransferMode mode,
+  TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
   const Options &additionalOptions,
   const boost::asio::ip::udp::endpoint &local )
 {
-  return std::make_shared< WriteRequestOperationImpl>(
+  return std::make_shared< WriteOperationImpl >(
     ioContext,
     tftpTimeout,
     tftpRetries,

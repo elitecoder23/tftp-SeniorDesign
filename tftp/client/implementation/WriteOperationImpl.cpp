@@ -7,10 +7,10 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Client::WriteRequestOperationImpl.
+ * @brief Definition of Class Tftp::Client::WriteOperationImpl.
  **/
 
-#include "WriteRequestOperationImpl.hpp"
+#include "WriteOperationImpl.hpp"
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
@@ -25,7 +25,7 @@
 
 namespace Tftp::Client {
 
-WriteRequestOperationImpl::WriteRequestOperationImpl(
+WriteOperationImpl::WriteOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
@@ -65,7 +65,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   }
 }
 
-WriteRequestOperationImpl::WriteRequestOperationImpl(
+WriteOperationImpl::WriteOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
@@ -107,7 +107,7 @@ WriteRequestOperationImpl::WriteRequestOperationImpl(
   }
 }
 
-void WriteRequestOperationImpl::request()
+void WriteOperationImpl::request()
 {
   BOOST_LOG_FUNCTION()
 
@@ -169,7 +169,7 @@ void WriteRequestOperationImpl::request()
   }
 }
 
-void WriteRequestOperationImpl::finished(
+void WriteOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo) noexcept
 {
@@ -180,7 +180,7 @@ void WriteRequestOperationImpl::finished(
   dataHandler->finished();
 }
 
-void WriteRequestOperationImpl::sendData()
+void WriteOperationImpl::sendData()
 {
   BOOST_LOG_FUNCTION()
 
@@ -199,7 +199,7 @@ void WriteRequestOperationImpl::sendData()
   send( data );
 }
 
-void WriteRequestOperationImpl::dataPacket(
+void WriteOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::DataPacket &dataPacket)
 {
@@ -218,7 +218,7 @@ void WriteRequestOperationImpl::dataPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket ) );
 }
 
-void WriteRequestOperationImpl::acknowledgementPacket(
+void WriteOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
@@ -291,7 +291,7 @@ void WriteRequestOperationImpl::acknowledgementPacket(
   receive();
 }
 
-void WriteRequestOperationImpl::optionsAcknowledgementPacket(
+void WriteOperationImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {

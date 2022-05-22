@@ -7,11 +7,11 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::ReadRequestOperationImpl.
+ * @brief Declaration of Class Tftp::Client::ReadOperationImpl.
  **/
 
-#ifndef TFTP_CLIENT_READREQUESTOPERATIONIMPL_HPP
-#define TFTP_CLIENT_READREQUESTOPERATIONIMPL_HPP
+#ifndef TFTP_CLIENT_READOPERATIONIMPL_HPP
+#define TFTP_CLIENT_READOPERATIONIMPL_HPP
 
 #include <tftp/client/Client.hpp>
 
@@ -24,14 +24,14 @@
 namespace Tftp::Client {
 
 /**
- * @brief TFTP %Client Read Request %Operation (TFTP RRQ).
+ * @brief TFTP %Client Read %Operation (TFTP RRQ).
  *
  * After executed, the class sends the TFTP RRQ packet to the destination and
  * waits for answer.
  * Received data is handled by the TftpReadOperationHandler given at
  * construction time.
  **/
-class ReadRequestOperationImpl : public OperationImpl
+class ReadOperationImpl : public OperationImpl
 {
   public:
     /**
@@ -63,7 +63,7 @@ class ReadRequestOperationImpl : public OperationImpl
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.
      **/
-    ReadRequestOperationImpl(
+    ReadOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -78,12 +78,12 @@ class ReadRequestOperationImpl : public OperationImpl
       const Options &additionalOptions );
 
     /**
-     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
+     * @copydoc ReadOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
      *
      * @param[in] local
      *   communication source
      **/
-    ReadRequestOperationImpl(
+    ReadOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,

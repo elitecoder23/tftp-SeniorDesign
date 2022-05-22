@@ -16,11 +16,11 @@ target_sources(
     TftpClient.cpp
     implementation/OperationImpl.hpp
     implementation/OperationImpl.cpp
-    implementation/ReadRequestOperationImpl.hpp
-    implementation/ReadRequestOperationImpl.cpp
+    implementation/ReadOperationImpl.hpp
+    implementation/ReadOperationImpl.cpp
     implementation/TftpClientImpl.hpp
     implementation/TftpClientImpl.cpp
-    implementation/WriteRequestOperationImpl.hpp
-    implementation/WriteRequestOperationImpl.cpp)
+    implementation/WriteOperationImpl.hpp
+    implementation/WriteOperationImpl.cpp )
 
 #target_sources( tftp_test PRIVATE)

@@ -7,11 +7,11 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::WriteRequestOperationImpl.
+ * @brief Declaration of Class Tftp::Client::WriteOperationImpl.
  **/
 
-#ifndef TFTP_CLIENT_WRITEREQUESTOPERATIONIMPL_HPP
-#define TFTP_CLIENT_WRITEREQUESTOPERATIONIMPL_HPP
+#ifndef TFTP_CLIENT_WRITEOPERATIONIMPL_HPP
+#define TFTP_CLIENT_WRITEOPERATIONIMPL_HPP
 
 #include <tftp/client/Client.hpp>
 
@@ -24,13 +24,13 @@
 namespace Tftp::Client {
 
 /**
- * @brief TFTP %Client Write Request %Operation (TFTP WRQ).
+ * @brief TFTP %Client Write %Operation (TFTP WRQ).
  *
  * After executed, the class sends the TFTP WRQ packet to the destination
  * and waits for answer.
  * Data is handled by the TftpWriteOperationHandler given at construction time.
  **/
-class WriteRequestOperationImpl : public OperationImpl
+class WriteOperationImpl : public OperationImpl
 {
   public:
     /**
@@ -59,7 +59,7 @@ class WriteRequestOperationImpl : public OperationImpl
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.
      **/
-    WriteRequestOperationImpl(
+    WriteOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -73,12 +73,12 @@ class WriteRequestOperationImpl : public OperationImpl
       const Options &additionalOptions );
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
+     * @copydoc WriteOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
      *
      * @param[in] local
      *   Parameter to define the communication source
      **/
-    WriteRequestOperationImpl(
+    WriteOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
