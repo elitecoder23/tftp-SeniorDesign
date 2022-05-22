@@ -31,7 +31,7 @@ namespace Tftp::Server {
  * Waits on the specified port for a valid TFTP request and calls the
  * appropriate call-back, which has to handle the request.
  *
- * If not expected packets or invalid packets are received a error is send
+ * If not expected packets or invalid packets are received an error is sent
  * back to the sender.
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
@@ -97,7 +97,8 @@ class TftpServer
     virtual void stop() = 0;
 
     /**
-     * @brief Creates a TFTP Server Write Operation (TFTP RRQ)
+     * @brief Creates a TFTP Server Operation (TFTP RRQ), which reads data from
+     *   disk and sends them to a TFTP Client.
      *
      * Data is obtained from @p dataHandler and transmitted to TFTP Client.
      *
@@ -118,7 +119,7 @@ class TftpServer
      *
      * @return TFTP server write operation.
      **/
-    [[nodiscard]] virtual OperationPtr readRequestOperation(
+    [[nodiscard]] virtual OperationPtr readOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -127,12 +128,12 @@ class TftpServer
       const Options &additionalNegotiatedOptions ) = 0;
 
     /**
-     * @copydoc readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
+     * @copydoc readOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
-    [[nodiscard]] virtual OperationPtr readRequestOperation(
+    [[nodiscard]] virtual OperationPtr readOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -142,7 +143,8 @@ class TftpServer
       const boost::asio::ip::udp::endpoint &local ) = 0;
 
     /**
-     * @brief Creates a TFTP Server Read Operation (TFTP WRQ)
+     * @brief Creates a TFTP Server Operation (TFTP WRQ), which receives data
+     * from a TFTP Client and weites them to disk.
      *
      * Data is received form the client and written to @p dataHandler.
      *
@@ -163,7 +165,7 @@ class TftpServer
      *
      * @return TFTP Server Read Operation.
      **/
-    [[nodiscard]] virtual OperationPtr writeRequestOperation(
+    [[nodiscard]] virtual OperationPtr writeOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -172,12 +174,12 @@ class TftpServer
       const Options &additionalNegotiatedOptions ) = 0;
 
     /**
-     * @copydoc writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
+     * @copydoc writeOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
-    [[nodiscard]] virtual OperationPtr writeRequestOperation(
+    [[nodiscard]] virtual OperationPtr writeOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,

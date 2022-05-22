@@ -7,11 +7,11 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Server::ReadRequestOperationImpl.
+ * @brief Declaration of Class Tftp::Server::ReadOperationImpl.
  **/
 
-#ifndef TFTP_SERVER_READREQUESTOPERATIONIMPL_HPP
-#define TFTP_SERVER_READREQUESTOPERATIONIMPL_HPP
+#ifndef TFTP_SERVER_READOPERATIONIMPL_HPP
+#define TFTP_SERVER_READOPERATIONIMPL_HPP
 
 #include <tftp/Tftp.hpp>
 
@@ -28,15 +28,15 @@
 namespace Tftp::Server {
 
 /**
- * @brief TFTP %Server Read Request %Operation (TFTP RRQ).
+ * @brief TFTP %Server Read %Operation (TFTP RRQ).
  *
  * In this operation a client has requested to read a file, which is
  * transmitted form the server to the client.
- * Therefore the server performs a write operation.
+ * Therefore, the server performs a write operation.
  *
  * This operation is initiated by a client TFTP read request (RRQ)
  **/
-class ReadRequestOperationImpl final : public OperationImpl
+class ReadOperationImpl final : public OperationImpl
 {
   public:
     /**
@@ -61,7 +61,7 @@ class ReadRequestOperationImpl final : public OperationImpl
      * @param[in] additionalNegotiatedOptions
      *   Additional Options, which have been already negotiated.
      **/
-    ReadRequestOperationImpl(
+    ReadOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -73,12 +73,12 @@ class ReadRequestOperationImpl final : public OperationImpl
       const Options &additionalNegotiatedOptions );
 
     /**
-     * @copydoc ReadRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
+     * @copydoc ReadOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
-    ReadRequestOperationImpl(
+    ReadOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -91,7 +91,7 @@ class ReadRequestOperationImpl final : public OperationImpl
       const boost::asio::ip::udp::endpoint &local );
 
     //! Destructor
-    ~ReadRequestOperationImpl() noexcept final = default;
+    ~ReadOperationImpl() noexcept final = default;
 
     //! @copydoc OperationImpl::start()
     void start() final;
@@ -132,7 +132,6 @@ class ReadRequestOperationImpl final : public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
-  private:
     //! Handler which is called during operation.
     TransmitDataHandlerPtr dataHandler;
     //! TFTP Options Configuration

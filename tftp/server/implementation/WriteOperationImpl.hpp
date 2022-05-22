@@ -7,11 +7,11 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Server::WriteRequestOperationImpl.
+ * @brief Declaration of Class Tftp::Server::WriteOperationImpl.
  **/
 
-#ifndef TFTP_SERVER_WRITEREQUESTOPERATIONIMPL_HPP
-#define TFTP_SERVER_WRITEREQUESTOPERATIONIMPL_HPP
+#ifndef TFTP_SERVER_WRITEOPERATIONIMPL_HPP
+#define TFTP_SERVER_WRITEOPERATIONIMPL_HPP
 
 #include <tftp/server/Server.hpp>
 
@@ -29,14 +29,14 @@
 namespace Tftp::Server {
 
 /**
- * @brief TFTP %Server Write Request %Operation (TFTP WRQ).
+ * @brief TFTP %Server Write %Operation (TFTP WRQ).
  *
  * In this operation a client has requested to write a file, which is
  * transmitted form the client to the server.
  *
  * This operation is initiated by a client TFTP write request (WRQ)
  **/
-class WriteRequestOperationImpl : public OperationImpl
+class WriteOperationImpl : public OperationImpl
 {
   public:
     /**
@@ -64,7 +64,7 @@ class WriteRequestOperationImpl : public OperationImpl
      * @param[in] additionalNegotiatedOptions
      *   Additional Options, which have been already negotiated.
      **/
-    WriteRequestOperationImpl(
+    WriteOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -77,12 +77,12 @@ class WriteRequestOperationImpl : public OperationImpl
       const Options &additionalNegotiatedOptions );
 
     /**
-     * @copydoc WriteRequestOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
+     * @copydoc WriteOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
      *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
-    WriteRequestOperationImpl(
+    WriteOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
@@ -98,7 +98,7 @@ class WriteRequestOperationImpl : public OperationImpl
     /**
      * @brief Standard destructor.
      **/
-    ~WriteRequestOperationImpl() noexcept override = default;
+    ~WriteOperationImpl() noexcept override = default;
 
     //! @copydoc OperationImpl::start()
     void start() final;

@@ -81,8 +81,8 @@ class TftpServerImpl:
     //! @copydoc TftpServer::stop
     void stop() final;
 
-    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
-    OperationPtr readRequestOperation(
+    //! @copydoc TftpServer::readOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
+    OperationPtr readOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -90,8 +90,8 @@ class TftpServerImpl:
       const Options &clientOptions,
       const Options &additionalNegotiatedOptions ) final;
 
-    //! @copydoc TftpServer::readRequestOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,const boost::asio::ip::udp::endpoint&)
-    OperationPtr readRequestOperation(
+    //! @copydoc TftpServer::readOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,const boost::asio::ip::udp::endpoint&)
+    OperationPtr readOperation(
       TransmitDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -100,8 +100,8 @@ class TftpServerImpl:
       const Options &additionalNegotiatedOptions,
       const boost::asio::ip::udp::endpoint &local ) final;
 
-    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
-    OperationPtr writeRequestOperation(
+    //! @copydoc TftpServer::writeOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
+    OperationPtr writeOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
@@ -109,8 +109,8 @@ class TftpServerImpl:
       const Options &clientOptions,
       const Options &additionalNegotiatedOptions ) final;
 
-    //! @copydoc TftpServer::writeRequestOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,const boost::asio::ip::udp::endpoint&)
-    OperationPtr writeRequestOperation(
+    //! @copydoc TftpServer::writeOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&,const boost::asio::ip::udp::endpoint&)
+    OperationPtr writeOperation(
       ReceiveDataHandlerPtr dataHandler,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,

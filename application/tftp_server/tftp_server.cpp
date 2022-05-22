@@ -346,20 +346,18 @@ static void transmitFile(
   }
 
   // initiate TFTP operation
-  auto operation{
-    server->readRequestOperation(
-      std::make_shared< Tftp::File::StreamFile>(
-        Tftp::File::TftpFile::Operation::Transmit,
-        filename,
-        std::filesystem::file_size( filename ) ),
-      []( const Tftp::TransferStatus transferStatus )
-      {
-        std::cout << "Transfer Completed: " << transferStatus << "\n";
-      },
-      remote,
-      configuration.tftpOptions,
-      clientOptions,
-      {} /* no additional options */ ) };
+  auto operation{ server->readOperation(
+    std::make_shared< Tftp::File::StreamFile >(
+      Tftp::File::TftpFile::Operation::Transmit,
+      filename,
+      std::filesystem::file_size( filename ) ),
+    []( const Tftp::TransferStatus transferStatus ) {
+      std::cout << "Transfer Completed: " << transferStatus << "\n";
+    },
+    remote,
+    configuration.tftpOptions,
+    clientOptions,
+    {} /* no additional options */ ) };
 
   operation->start();
 }
@@ -391,20 +389,18 @@ static void receiveFile(
   }
 
   // initiate TFTP operation
-  auto operation{
-    server->writeRequestOperation(
-      std::make_shared< Tftp::File::StreamFile>(
-        Tftp::File::TftpFile::Operation::Receive,
-        filename,
-        std::filesystem::file_size( filename ) ),
-      []( const Tftp::TransferStatus transferStatus )
-      {
-        std::cout << "Transfer Completed: " << transferStatus << "\n";
-      },
-      remote,
-      configuration.tftpOptions,
-      clientOptions,
-      {} /* no additional options */ ) };
+  auto operation{ server->writeOperation(
+    std::make_shared< Tftp::File::StreamFile >(
+      Tftp::File::TftpFile::Operation::Receive,
+      filename,
+      std::filesystem::file_size( filename ) ),
+    []( const Tftp::TransferStatus transferStatus ) {
+      std::cout << "Transfer Completed: " << transferStatus << "\n";
+    },
+    remote,
+    configuration.tftpOptions,
+    clientOptions,
+    {} /* no additional options */ ) };
 
   operation->start();
 }
