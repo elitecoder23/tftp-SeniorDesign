@@ -70,7 +70,7 @@ class WriteOperationImpl : public OperationImpl
       std::string_view filename,
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions );
+      Options additionalOptions );
 
     /**
      * @copydoc WriteOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
@@ -89,7 +89,7 @@ class WriteOperationImpl : public OperationImpl
       std::string_view filename,
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions,
+      Options additionalOptions,
       const boost::asio::ip::udp::endpoint &local);
 
     //! @copydoc OperationImpl::request
@@ -143,9 +143,9 @@ class WriteOperationImpl : public OperationImpl
 
   private:
     //! Option Negotiation Handler
-    OptionNegotiationHandler optionNegotiationHandler;
+    OptionNegotiationHandler optionNegotiationHandlerV;
     //! Data Handler
-    TransmitDataHandlerPtr dataHandler;
+    TransmitDataHandlerPtr dataHandlerV;
 
     //! Filename of the transfer
     const std::string filename;

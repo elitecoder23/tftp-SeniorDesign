@@ -23,6 +23,8 @@
 
 #include <helper/Dump.hpp>
 
+#include <utility>
+
 namespace Tftp::Client {
 
 ReadOperationImpl::ReadOperationImpl(
@@ -37,29 +39,29 @@ ReadOperationImpl::ReadOperationImpl(
   std::string_view filename,
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &additionalOptions ):
+  Options additionalOptions ):
   OperationImpl{
     ioContext,
     tftpTimeout,
     tftpRetries,
     static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
       + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
-    completionHandler,
+    std::move( completionHandler ),
     remote },
   dally{ dally },
-  optionNegotiationHandler{ optionNegotiationHandler },
-  dataHandler{ dataHandler },
+  optionNegotiationHandlerV{ std::move( optionNegotiationHandler ) },
+  dataHandlerV{ std::move( dataHandler ) },
   filename{ filename },
   mode{ mode },
   optionsConfiguration{ optionsConfiguration },
-  additionalOptions{ additionalOptions },
+  additionalOptions{ std::move( additionalOptions ) },
   oackReceived{ false },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
 {
   BOOST_LOG_FUNCTION()
 
-  if ( !optionNegotiationHandler || !dataHandler || !completionHandler )
+  if ( !optionNegotiationHandlerV || !dataHandlerV )
   {
     BOOST_THROW_EXCEPTION( TftpException()
       << Helper::AdditionalInfo{ "Parameter Invalid" }
@@ -79,7 +81,7 @@ ReadOperationImpl::ReadOperationImpl(
   std::string_view filename,
   const TransferMode mode,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &additionalOptions,
+  Options additionalOptions,
   const boost::asio::ip::udp::endpoint &local ):
   OperationImpl{
     ioContext,
@@ -87,23 +89,23 @@ ReadOperationImpl::ReadOperationImpl(
     tftpRetries,
     static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
       + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
-    completionHandler,
+    std::move( completionHandler ),
     remote,
     local },
   dally{ dally },
-  optionNegotiationHandler{ optionNegotiationHandler },
-  dataHandler{ dataHandler },
+  optionNegotiationHandlerV{ std::move( optionNegotiationHandler ) },
+  dataHandlerV{ std::move( dataHandler ) },
   filename{ filename },
   mode{ mode },
   optionsConfiguration{ optionsConfiguration },
-  additionalOptions{ additionalOptions },
+  additionalOptions{ std::move( additionalOptions ) },
   oackReceived{ false },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
 {
   BOOST_LOG_FUNCTION()
 
-  if ( !optionNegotiationHandler || !dataHandler || !completionHandler )
+  if ( !optionNegotiationHandlerV || !dataHandlerV )
   {
     BOOST_THROW_EXCEPTION( TftpException()
       << Helper::AdditionalInfo{ "Parameter Invalid" }
@@ -118,7 +120,7 @@ void ReadOperationImpl::request()
   try
   {
     // Reset data handler
-    dataHandler->reset();
+    dataHandlerV->reset();
 
     receiveDataSize = DefaultDataSize;
     lastReceivedBlockNumber = 0U;
@@ -174,12 +176,12 @@ void ReadOperationImpl::finished(
   OperationImpl::finished( status, std::move( errorInfo ) );
 
   // Inform data handler
-  dataHandler->finished();
+  dataHandlerV->finished();
 }
 
 void ReadOperationImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &,
-  const Packets::DataPacket &dataPacket)
+  const Packets::DataPacket &dataPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -227,7 +229,7 @@ void ReadOperationImpl::dataPacket(
     // send error packet
     Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Block Number not expected"};
+      "Block Number not expected" };
     send( errorPacket );
 
     // Operation completed
@@ -257,7 +259,7 @@ void ReadOperationImpl::dataPacket(
     && ( !oackReceived ) )
   {
     // If options negotiation is aborted by callback - Abort Operation
-    if ( !optionNegotiationHandler( {} ) )
+    if ( !optionNegotiationHandlerV( {} ) )
     {
       BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
         << "Option Negotiation failed";
@@ -274,7 +276,7 @@ void ReadOperationImpl::dataPacket(
   }
 
   // pass data
-  dataHandler->receivedData( dataPacket.data() );
+  dataHandlerV->receivedData( dataPacket.data() );
 
   // increment received block number
   lastReceivedBlockNumber++;
@@ -305,7 +307,7 @@ void ReadOperationImpl::dataPacket(
 
 void ReadOperationImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &,
-  const Packets::AcknowledgementPacket &acknowledgementPacket)
+  const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -317,7 +319,7 @@ void ReadOperationImpl::acknowledgementPacket(
     ErrorCode::IllegalTftpOperation,
     "ACK not expected" };
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
   finished( TransferStatus::TransferError, std::move( errorPacket ) );
@@ -387,7 +389,9 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
       send( errorPacket);
 
       // Operation completed
-      finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+      finished(
+        TransferStatus::OptionNegotiationError,
+        std::move( errorPacket ) );
       return;
     }
 
@@ -405,14 +409,17 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
         send( errorPacket);
 
         // Operation completed
-        finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+        finished(
+          TransferStatus::OptionNegotiationError,
+          std::move( errorPacket ) );
         return;
       }
 
       receiveDataSize = *blockSizeValue;
     }
   }
-  remoteOptions.erase( std::string{ Packets::TftpOptions_name( KnownOptions::BlockSize ) } );
+  remoteOptions.erase(
+    std::string{ Packets::TftpOptions_name( KnownOptions::BlockSize ) } );
 
   // check timeout option
   if ( optionsConfiguration.timeoutOption )
@@ -434,7 +441,9 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
       send( errorPacket);
 
       // Operation completed
-      finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+      finished(
+        TransferStatus::OptionNegotiationError,
+        std::move( errorPacket ) );
       return;
     }
 
@@ -452,14 +461,17 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
         send( errorPacket);
 
         // Operation completed
-        finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+        finished(
+          TransferStatus::OptionNegotiationError,
+          std::move( errorPacket ) );
         return;
       }
 
       receiveTimeout( *timeoutValue );
     }
   }
-  remoteOptions.erase( std::string{ Packets::TftpOptions_name( KnownOptions::Timeout ) } );
+  remoteOptions.erase(
+    std::string{ Packets::TftpOptions_name( KnownOptions::Timeout ) } );
 
   // check transfer size option
   if ( optionsConfiguration.handleTransferSizeOption )
@@ -481,13 +493,15 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
       send( errorPacket);
 
       // Operation completed
-      finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+      finished(
+        TransferStatus::OptionNegotiationError,
+        std::move( errorPacket ) );
       return;
     }
 
     if ( transferSizeValue )
     {
-      if ( !dataHandler->receivedTransferSize( *transferSizeValue ) )
+      if ( !dataHandlerV->receivedTransferSize( *transferSizeValue ) )
       {
         Packets::ErrorPacket errorPacket{
           ErrorCode::DiskFullOrAllocationExceeds,
@@ -496,15 +510,18 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
         send( errorPacket );
 
         // Operation completed
-        finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+        finished(
+          TransferStatus::OptionNegotiationError,
+          std::move( errorPacket ) );
         return;
       }
     }
   }
-  remoteOptions.erase( std::string{ Packets::TftpOptions_name( KnownOptions::TransferSize ) } );
+  remoteOptions.erase(
+    std::string{ Packets::TftpOptions_name( KnownOptions::TransferSize ) } );
 
   // Perform additional Option Negotiation
-  if ( !optionNegotiationHandler( remoteOptions ) )
+  if ( !optionNegotiationHandlerV( remoteOptions ) )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Option negotiation failed";
@@ -516,7 +533,9 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished(
+      TransferStatus::OptionNegotiationError,
+      std::move( errorPacket ) );
     return;
   }
 

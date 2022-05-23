@@ -75,10 +75,10 @@ class ReadOperationImpl : public OperationImpl
       std::string_view filename,
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions );
+      Options additionalOptions );
 
     /**
-     * @copydoc ReadOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
+     * @copydoc ReadOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,Options)
      *
      * @param[in] local
      *   communication source
@@ -95,7 +95,7 @@ class ReadOperationImpl : public OperationImpl
       std::string_view filename,
       TransferMode mode,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions,
+      Options additionalOptions,
       const boost::asio::ip::udp::endpoint &local );
 
     //! @copydoc OperationImpl::request
@@ -142,9 +142,9 @@ class ReadOperationImpl : public OperationImpl
     const bool dally;
 
     //! Option Negotiation Handler
-    OptionNegotiationHandler optionNegotiationHandler;
+    OptionNegotiationHandler optionNegotiationHandlerV;
     //! Registered handler
-    ReceiveDataHandlerPtr dataHandler;
+    ReceiveDataHandlerPtr dataHandlerV;
 
     //! Filename of the transfer
     const std::string filename;

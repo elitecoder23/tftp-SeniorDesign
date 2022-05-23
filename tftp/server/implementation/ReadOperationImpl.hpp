@@ -69,8 +69,8 @@ class ReadOperationImpl final : public OperationImpl
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions,
-      const Options &additionalNegotiatedOptions );
+      Options clientOptions,
+      Options additionalNegotiatedOptions );
 
     /**
      * @copydoc ReadOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
@@ -86,8 +86,8 @@ class ReadOperationImpl final : public OperationImpl
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
       const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions,
-      const Options &additionalNegotiatedOptions,
+      Options clientOptions,
+      Options additionalNegotiatedOptions,
       const boost::asio::ip::udp::endpoint &local );
 
     //! Destructor

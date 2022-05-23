@@ -21,6 +21,8 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
+#include <utility>
+
 namespace Tftp::Server {
 
 ReadOperationImpl::ReadOperationImpl(
@@ -31,19 +33,19 @@ ReadOperationImpl::ReadOperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions,
-  const Options &additionalNegotiatedOptions ) :
+  Options clientOptions,
+  Options additionalNegotiatedOptions ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
     tftpRetries,
     DefaultMaxPacketSize,
-    completionHandler,
+    std::move( completionHandler ),
     remote },
-  dataHandler{ dataHandler },
+  dataHandler{ std::move( dataHandler ) },
   optionsConfiguration{ optionsConfiguration },
-  clientOptions{ clientOptions },
-  additionalNegotiatedOptions{ additionalNegotiatedOptions },
+  clientOptions{ std::move( clientOptions ) },
+  additionalNegotiatedOptions{ std::move( additionalNegotiatedOptions ) },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
   lastTransmittedBlockNumber{ 0U },
@@ -59,21 +61,21 @@ ReadOperationImpl::ReadOperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions,
-  const Options &additionalNegotiatedOptions,
+  Options clientOptions,
+  Options additionalNegotiatedOptions,
   const boost::asio::ip::udp::endpoint &local ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
     tftpRetries,
     DefaultMaxPacketSize,
-    completionHandler,
+    std::move( completionHandler ),
     remote,
     local },
   dataHandler{ std::move( dataHandler ) },
   optionsConfiguration{ optionsConfiguration },
-  clientOptions{ clientOptions },
-  additionalNegotiatedOptions{ additionalNegotiatedOptions },
+  clientOptions{ std::move( clientOptions ) },
+  additionalNegotiatedOptions{ std::move( additionalNegotiatedOptions ) },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
   lastTransmittedBlockNumber{ 0U },

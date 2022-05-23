@@ -21,6 +21,8 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
+#include <utility>
+
 namespace Tftp::Server {
 
 WriteOperationImpl::WriteOperationImpl(
@@ -32,21 +34,21 @@ WriteOperationImpl::WriteOperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions,
-  const Options &additionalNegotiatedOptions ) :
+  Options clientOptions,
+  Options additionalNegotiatedOptions ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
     tftpRetries,
     static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
       + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
-    completionHandler,
+    std::move( completionHandler ),
     remote },
   dally{ dally },
-  dataHandler{ dataHandler },
+  dataHandler{ std::move( dataHandler ) },
   optionsConfiguration{ optionsConfiguration },
-  clientOptions{ clientOptions },
-  additionalNegotiatedOptions{ additionalNegotiatedOptions },
+  clientOptions{ std::move( clientOptions ) },
+  additionalNegotiatedOptions{ std::move( additionalNegotiatedOptions ) },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
 {
@@ -61,8 +63,8 @@ WriteOperationImpl::WriteOperationImpl(
   OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
   const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions,
-  const Options &additionalNegotiatedOptions,
+  Options clientOptions,
+  Options additionalNegotiatedOptions,
   const boost::asio::ip::udp::endpoint &local ) :
   OperationImpl{
     ioContext,
@@ -70,14 +72,14 @@ WriteOperationImpl::WriteOperationImpl(
     tftpRetries,
     static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
       + std::max( DefaultDataSize, optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
-    completionHandler,
+    std::move( completionHandler ),
     remote,
     local },
   dally{ dally },
-  dataHandler{ dataHandler},
+  dataHandler{ std::move( dataHandler ) },
   optionsConfiguration{ optionsConfiguration },
-  clientOptions{ clientOptions },
-  additionalNegotiatedOptions{ additionalNegotiatedOptions },
+  clientOptions{ std::move( clientOptions ) },
+  additionalNegotiatedOptions{ std::move( additionalNegotiatedOptions ) },
   receiveDataSize{ DefaultDataSize },
   lastReceivedBlockNumber{ 0U }
 {
