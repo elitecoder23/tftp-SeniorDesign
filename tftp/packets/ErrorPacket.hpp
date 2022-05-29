@@ -73,7 +73,7 @@ class ErrorPacket: public Packet
      **/
     ErrorPacket& operator=( ConstRawTftpPacketSpan rawPacket);
 
-    //! @copydoc Packet::operator std::string() const
+    // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
 
     /**

@@ -90,7 +90,7 @@ class AcknowledgementPacket: public Packet
 
     //! @}
 
-    //! @copydoc Packet::operator std::string() const
+    // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
 
   private:
