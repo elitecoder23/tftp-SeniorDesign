@@ -128,12 +128,14 @@ void WriteOperationImpl::start()
       // check timeout option - if set use it
       if ( optionsConfiguration.timeoutOption )
       {
-        const auto [timeoutValid, timeout] =
+        const auto [ timeoutValid, timeout] =
         Packets::TftpOptions_getOption< uint8_t >(
           clientOptions,
           KnownOptions::Timeout );
 
-        if ( timeout )
+        if ( timeout
+          && ( *timeout > 0U )
+          && ( *timeout <= *optionsConfiguration.timeoutOption ) )
         {
           receiveTimeout( *timeout );
         }
@@ -147,7 +149,7 @@ void WriteOperationImpl::start()
       // check transfer size option
       if ( optionsConfiguration.handleTransferSizeOption )
       {
-        const auto [transferSizeValid, transferSize] =
+        const auto [ transferSizeValid, transferSize ] =
         Packets::TftpOptions_getOption< uint64_t >(
           clientOptions,
           KnownOptions::TransferSize );
@@ -158,7 +160,7 @@ void WriteOperationImpl::start()
           {
             Packets::ErrorPacket errorPacket{
               ErrorCode::DiskFullOrAllocationExceeds,
-              "FILE TO BIG"};
+              "FILE TO BIG" };
 
             send( errorPacket);
 

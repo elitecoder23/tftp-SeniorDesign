@@ -130,7 +130,9 @@ void ReadOperationImpl::start()
           clientOptions,
           KnownOptions::Timeout );
 
-        if ( timeout )
+        if ( timeout
+          && ( *timeout > 0U )
+          && ( *timeout <= *optionsConfiguration.timeoutOption ) )
         {
           receiveTimeout( *timeout );
         }

@@ -392,8 +392,7 @@ static void receiveFile(
   auto operation{ server->writeOperation(
     std::make_shared< Tftp::File::StreamFile >(
       Tftp::File::TftpFile::Operation::Receive,
-      filename,
-      std::filesystem::file_size( filename ) ),
+      filename ),
     []( const Tftp::TransferStatus transferStatus ) {
       std::cout << "Transfer Completed: " << transferStatus << "\n";
     },
