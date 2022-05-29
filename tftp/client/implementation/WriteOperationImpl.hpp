@@ -42,55 +42,14 @@ class WriteOperationImpl : public OperationImpl
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
-     * @param[in] optionNegotiationHandler
-     *   Option negotiation handler.
-     * @param[in] dataHandler
-     *   Handler for data.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     * @param[in] remote
-     *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   Transfer Mode
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     * @param[in] additionalOptions
-     *   Additional TFTP options sent to the server.
+     * @param[in] configuration
+     *   Write Operation Configuration.
      **/
     WriteOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
-      OptionNegotiationHandler optionNegotiationHandler,
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      Options additionalOptions );
-
-    /**
-     * @copydoc WriteOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
-     *
-     * @param[in] local
-     *   Parameter to define the communication source
-     **/
-    WriteOperationImpl(
-      boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      OptionNegotiationHandler optionNegotiationHandler,
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      Options additionalOptions,
-      const boost::asio::ip::udp::endpoint &local);
+      TftpClient::WriteOperationConfiguration configuration );
 
     //! @copydoc OperationImpl::request
     void request() final;
@@ -142,19 +101,8 @@ class WriteOperationImpl : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
 
   private:
-    //! Option Negotiation Handler
-    OptionNegotiationHandler optionNegotiationHandlerV;
-    //! Data Handler
-    TransmitDataHandlerPtr dataHandlerV;
-
-    //! Filename of the transfer
-    const std::string filename;
-    //! Transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
-    const TransferMode mode;
-    //! TFTP Options Configuration
-    TftpOptionsConfiguration optionsConfiguration;
-    //! Additional Options for the transfer
-    Options additionalOptions;
+    //! Write Operation Configuration
+    TftpClient::WriteOperationConfiguration configurationV;
 
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t transmitDataSize;

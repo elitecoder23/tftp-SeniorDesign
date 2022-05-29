@@ -118,9 +118,11 @@ int main( int argc, char *argv[] )
 
     auto tftpClient{ Tftp::Client::TftpClient::instance(
       ioContext,
-      configuration.tftpTimeout,
-      configuration.tftpRetries,
-      configuration.dally ) };
+      {
+        .tftpTimeout = configuration.tftpTimeout,
+        .tftpRetries = configuration.tftpRetries,
+        .dally = configuration.dally
+      } ) };
 
     Tftp::Client::OperationPtr tftpOperation{};
 
@@ -133,36 +135,38 @@ int main( int argc, char *argv[] )
     switch ( requestType)
     {
       case Tftp::RequestType::Read:
-        tftpOperation= tftpClient->readOperation(
-          optionNegotiation,
-          std::make_shared< Tftp::File::StreamFile >(
-            Tftp::File::TftpFile::Operation::Receive,
-            localFile ),
-          std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ),
-          boost::asio::ip::udp::endpoint{
+        tftpOperation= tftpClient->readOperation( {
+          .optionNegotiationHandler{ optionNegotiation },
+          .completionHandler{
+              std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ) },
+          .filename{ remoteFile },
+          .mode = Tftp::TransferMode::OCTET,
+          .optionsConfiguration{ configuration.tftpOptions },
+          .additionalOptions{}, /* no additional options */
+          .remote{ boost::asio::ip::udp::endpoint{
             address,
-            configuration.tftpServerPort },
-          remoteFile,
-          Tftp::TransferMode::OCTET,
-          configuration.tftpOptions,
-          {} /* no additional options */ );
+            configuration.tftpServerPort } },
+          .dataHandler{ std::make_shared< Tftp::File::StreamFile >(
+              Tftp::File::TftpFile::Operation::Receive,
+              localFile ) } } );
         break;
 
       case Tftp::RequestType::Write:
-        tftpOperation = tftpClient->writeOperation(
-          optionNegotiation,
-          std::make_shared< Tftp::File::StreamFile >(
+        tftpOperation = tftpClient->writeOperation( {
+          .optionNegotiationHandler{ optionNegotiation },
+          .completionHandler{
+            std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ) },
+          .filename{ remoteFile },
+          .mode = Tftp::TransferMode::OCTET,
+          .optionsConfiguration{ configuration.tftpOptions },
+          .additionalOptions{}, /* no additional options */
+          .remote{ boost::asio::ip::udp::endpoint{
+            address,
+            configuration.tftpServerPort } },
+          .dataHandler{ std::make_shared< Tftp::File::StreamFile >(
             Tftp::File::TftpFile::Operation::Transmit,
             localFile,
-            std::filesystem::file_size( localFile ) ),
-          std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ),
-          boost::asio::ip::udp::endpoint{
-            address,
-            configuration.tftpServerPort },
-          remoteFile,
-          Tftp::TransferMode::OCTET,
-          configuration.tftpOptions,
-          {} /* no additional options */ );
+            std::filesystem::file_size( localFile ) ) } } );
         break;
 
       default:
@@ -181,7 +185,7 @@ int main( int argc, char *argv[] )
     std::cout << e.what() << "\n" << optionsDescription << "\n";
     return EXIT_FAILURE;
   }
-  catch ( Tftp::TftpException &e)
+  catch ( Tftp::TftpException &e )
   {
     auto const * const info = boost::get_error_info< Helper::AdditionalInfo>( e );
 

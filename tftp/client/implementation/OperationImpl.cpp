@@ -18,7 +18,6 @@
 
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
-#include <tftp/packets/ErrorPacket.hpp>
 
 #include <tftp/TftpOptionsConfiguration.hpp>
 
@@ -78,15 +77,17 @@ OperationImpl::OperationImpl(
   const uint16_t tftpRetries,
   const uint16_t maxReceivePacketSize,
   OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote )
+  boost::asio::ip::udp::endpoint remote,
+  const std::optional< boost::asio::ip::udp::endpoint > &local )
 try :
-  completionHandler{ std::move( completionHandler ) },
-  remoteEndpoint{ remote },
   receiveTimeoutV{ tftpTimeout },
   tftpRetries{ tftpRetries },
+  completionHandler{ std::move( completionHandler ) },
+  remoteEndpoint{ std::move( remote ) },
   socket{ ioContext },
   timer{ ioContext },
   receivePacket( maxReceivePacketSize ),
+  receiveEndpoint{},
   transmitCounter{ 0U }
 {
   BOOST_LOG_FUNCTION()
@@ -94,53 +95,13 @@ try :
   try
   {
     // Open the socket
-    socket.open( remote.protocol() );
-  }
-  catch ( const boost::system::system_error &err )
-  {
-    // On error and if socket is opened - close it.
-    if ( socket.is_open() )
-    {
-      socket.close();
-    }
-
-    BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( err.what() ) );
-  }
-}
-catch ( const boost::system::system_error &err )
-{
-  BOOST_THROW_EXCEPTION( CommunicationException()
-    << Helper::AdditionalInfo( err.what() ) );
-}
-
-OperationImpl::OperationImpl(
-  boost::asio::io_context &ioContext,
-  const uint8_t tftpTimeout,
-  const uint16_t tftpRetries,
-  const uint16_t maxReceivePacketSize,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const boost::asio::ip::udp::endpoint &local )
-try :
-  completionHandler{ std::move( completionHandler ) },
-  remoteEndpoint{ remote },
-  receiveTimeoutV{ tftpTimeout },
-  tftpRetries{ tftpRetries },
-  socket{ ioContext },
-  timer{ ioContext },
-  receivePacket( maxReceivePacketSize ),
-  transmitCounter{ 0U }
-{
-  BOOST_LOG_FUNCTION()
-
-  try
-  {
-    // Open the socket
-    socket.open( remote.protocol() );
+    socket.open( remoteEndpoint.protocol() );
 
     // Bind socket to source address (from)
-    socket.bind( local );
+    if ( local )
+    {
+      socket.bind( *local );
+    }
   }
   catch ( const boost::system::system_error &err )
   {
@@ -151,13 +112,13 @@ try :
     }
 
     BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( err.what() ) );
+      << Helper::AdditionalInfo{ err.what() } );
   }
 }
 catch ( const boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
-   << Helper::AdditionalInfo( err.what() ) );
+    << Helper::AdditionalInfo{ err.what() } );
 }
 
 void OperationImpl::sendFirst( const Packets::Packet &packet )
@@ -178,7 +139,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
     // Send the packet to the remote server
     socket.send_to(
       boost::asio::buffer( transmitPacket ),
-      remoteEndpoint);
+      remoteEndpoint );
   }
   catch ( const boost::system::system_error &err)
   {
@@ -451,7 +412,7 @@ void OperationImpl::receiveFirstHandler(
   }
 
   // (internal) receive error occurred
-  if ( errorCode)
+  if ( errorCode )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Error when receiving message: " << errorCode.message();
@@ -466,7 +427,7 @@ void OperationImpl::receiveFirstHandler(
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Received packed from wrong source: "
-      << receiveEndpoint.address().to_string();
+      << receiveEndpoint.address();
 
     // sent Error packet to unknown partner
     try
@@ -511,9 +472,6 @@ void OperationImpl::receiveFirstHandler(
     }
   }
 
-  // store real end point
-  remoteEndpoint = receiveEndpoint;
-
   try
   {
     // connect to the server port
@@ -557,7 +515,7 @@ void OperationImpl::receiveHandler(
   }
 
   packet(
-    remoteEndpoint,
+    receiveEndpoint,
     Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
@@ -598,7 +556,7 @@ void OperationImpl::timeoutFirstHandler(
   try
   {
     // resent stored packet
-    socket.send_to( boost::asio::buffer( transmitPacket), remoteEndpoint );
+    socket.send_to( boost::asio::buffer( transmitPacket ), remoteEndpoint );
 
     // increment transmit counter
     ++transmitCounter;

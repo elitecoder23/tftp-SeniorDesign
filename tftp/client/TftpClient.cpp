@@ -18,15 +18,11 @@ namespace Tftp::Client {
 
 TftpClientPtr TftpClient::instance(
   boost::asio::io_context &ioContext,
-  const uint8_t tftpTimeout,
-  const uint16_t tftpRetries,
-  const bool dally )
+  ClientConfiguration configuration )
 {
   return std::make_shared< TftpClientImpl>(
     ioContext,
-    tftpTimeout,
-    tftpRetries,
-    dally );
+    std::move( configuration ) );
 }
 
 }

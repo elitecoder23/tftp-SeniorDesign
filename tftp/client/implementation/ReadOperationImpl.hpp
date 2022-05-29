@@ -46,57 +46,15 @@ class ReadOperationImpl : public OperationImpl
      * @param[in] dally
      *   If set to true, wait after transmission of the final ACK for potential
      *   retries.
-     * @param[in] optionNegotiationHandler
-     *   Option negotiation handler.
-     * @param[in] dataHandler
-     *   Handler for received data.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     * @param[in] remote
-     *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   Transfer Mode
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     * @param[in] additionalOptions
-     *   Additional TFTP options sent to the server.
+     * @param[in] configuration
+     *   Read Operation Configuration.
      **/
     ReadOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
       bool dally,
-      OptionNegotiationHandler optionNegotiationHandler,
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      Options additionalOptions );
-
-    /**
-     * @copydoc ReadOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,Options)
-     *
-     * @param[in] local
-     *   communication source
-     **/
-    ReadOperationImpl(
-      boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      bool dally,
-      OptionNegotiationHandler optionNegotiationHandler,
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      Options additionalOptions,
-      const boost::asio::ip::udp::endpoint &local );
+      TftpClient::ReadOperationConfiguration configuration );
 
     //! @copydoc OperationImpl::request
     void request() final;
@@ -112,11 +70,11 @@ class ReadOperationImpl : public OperationImpl
      *
      * The TFTP DATA packet is decoded and checked.
      * If everything is fine, handler is called with extracted data and the
-     * receive operation is continued.
+     * reception operation is continued.
      **/
     void dataPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket) final;
+      const Packets::DataPacket &dataPacket ) final;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket()
@@ -141,19 +99,8 @@ class ReadOperationImpl : public OperationImpl
     //! Dally Option
     const bool dally;
 
-    //! Option Negotiation Handler
-    OptionNegotiationHandler optionNegotiationHandlerV;
-    //! Registered handler
-    ReceiveDataHandlerPtr dataHandlerV;
-
-    //! Filename of the transfer
-    const std::string filename;
-    //! Transfer mode (OCTETT/ NETASCII/ MAIL/ ...)
-    const TransferMode mode;
-    //! TFTP Options Configuration
-    TftpOptionsConfiguration optionsConfiguration;
-    //! Additional Options for the transfer
-    Options additionalOptions;
+    //! Read Operation Configuration
+    TftpClient::ReadOperationConfiguration configurationV;
 
     //! flag to hold information if OACK has been received (used when first data packet is received)
     bool oackReceived;

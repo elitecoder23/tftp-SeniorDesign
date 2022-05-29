@@ -67,7 +67,7 @@ class OperationImpl :
      * @brief Initialises the operation.
      *
      * @param[in] ioContext
-     *   The I/O context used for communication.
+     *   I/O context used for communication.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
@@ -75,21 +75,9 @@ class OperationImpl :
      * @param[in] maxReceivePacketSize
      *   Maximum Receive Packet Size (defined by Block Size Option).
      * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
+     *   Handler which is called on completion of this operation.
      * @param[in] remote
      *   Where the connection should be established to.
-     **/
-    OperationImpl(
-      boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      uint16_t maxReceivePacketSize,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote );
-
-    /**
-     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
-     *
      * @param[in] local
      *   Parameter to define the communication source
      **/
@@ -99,8 +87,8 @@ class OperationImpl :
       uint16_t tftpRetries,
       uint16_t maxReceivePacketSize,
       OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const boost::asio::ip::udp::endpoint &local );
+      boost::asio::ip::udp::endpoint remote,
+      const std::optional< boost::asio::ip::udp::endpoint > &local );
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -266,15 +254,15 @@ class OperationImpl :
      **/
     void timeoutDallyHandler( const boost::system::error_code &errorCode );
 
-    //! Completion Handler
-    OperationCompletedHandler completionHandler;
-    //! TFTP Server Endpoint
-    boost::asio::ip::udp::endpoint remoteEndpoint;
-
     //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
     uint8_t receiveTimeoutV;
     //! TFTP Retries
     const uint16_t tftpRetries;
+
+    //! Completion Handler
+    const OperationCompletedHandler completionHandler;
+    //! TFTP Server Endpoint
+    const boost::asio::ip::udp::endpoint remoteEndpoint;
 
     //! TFTP socket
     boost::asio::ip::udp::socket socket;

@@ -31,27 +31,16 @@ WriteOperationImpl::WriteOperationImpl(
   boost::asio::io_context &ioContext,
   const uint8_t tftpTimeout,
   const uint16_t tftpRetries,
-  OptionNegotiationHandler optionNegotiationHandler,
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  std::string_view filename,
-  const TransferMode mode,
-  const TftpOptionsConfiguration &optionsConfiguration,
-  Options additionalOptions ):
+  TftpClient::WriteOperationConfiguration configuration ):
   OperationImpl{
     ioContext,
     tftpTimeout,
     tftpRetries,
     DefaultMaxPacketSize,
-    std::move( completionHandler ),
-    remote },
-  optionNegotiationHandlerV{ std::move( optionNegotiationHandler ) },
-  dataHandlerV{ std::move( dataHandler ) },
-  filename{ filename },
-  mode{ mode },
-  optionsConfiguration{ optionsConfiguration },
-  additionalOptions{std::move( additionalOptions )},
+    configuration.completionHandler,
+    configuration.remote,
+    configuration.local },
+  configurationV{ std::move( configuration ) },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
   lastTransmittedBlockNumber{ 0U },
@@ -59,49 +48,8 @@ WriteOperationImpl::WriteOperationImpl(
 {
   BOOST_LOG_FUNCTION()
 
-  if ( !optionNegotiationHandlerV || !dataHandlerV )
-  {
-    BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo{ "Parameter Invalid" }
-      << TransferPhaseInfo{ TransferPhase::Initialisation } );
-  }
-}
-
-WriteOperationImpl::WriteOperationImpl(
-  boost::asio::io_context &ioContext,
-  const uint8_t tftpTimeout,
-  const uint16_t tftpRetries,
-  OptionNegotiationHandler optionNegotiationHandler,
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  std::string_view filename,
-  const TransferMode mode,
-  const TftpOptionsConfiguration &optionsConfiguration,
-  Options additionalOptions,
-  const boost::asio::ip::udp::endpoint &local ):
-  OperationImpl{
-    ioContext,
-    tftpTimeout,
-    tftpRetries,
-    DefaultMaxPacketSize,
-    std::move( completionHandler ),
-    remote,
-    local },
-  optionNegotiationHandlerV{ std::move( optionNegotiationHandler ) },
-  dataHandlerV{ std::move( dataHandler ) },
-  filename{ filename },
-  mode{ mode },
-  optionsConfiguration{ optionsConfiguration },
-  additionalOptions{std::move( additionalOptions )},
-  transmitDataSize{ DefaultDataSize },
-  lastDataPacketTransmitted{ false },
-  lastTransmittedBlockNumber{ 0U },
-  lastReceivedBlockNumber{ 0U }
-{
-  BOOST_LOG_FUNCTION()
-
-  if ( !optionNegotiationHandlerV || !dataHandlerV )
+  if ( !configurationV.optionNegotiationHandler
+    || !configurationV.dataHandler )
   {
     BOOST_THROW_EXCEPTION( TftpException()
       << Helper::AdditionalInfo{ "Parameter Invalid" }
@@ -116,7 +64,7 @@ void WriteOperationImpl::request()
   try
   {
     // Reset data handler
-    dataHandlerV->reset();
+    configurationV.dataHandler->reset();
 
     transmitDataSize = DefaultDataSize;
     lastDataPacketTransmitted = false;
@@ -124,40 +72,44 @@ void WriteOperationImpl::request()
     lastReceivedBlockNumber = 0xFFFFU;
 
     // initialise Options with additional options
-    Options options{ additionalOptions };
+    Options options{ configurationV.additionalOptions };
 
     // Block size Option
-    if ( optionsConfiguration.blockSizeOption )
+    if ( configurationV.optionsConfiguration.blockSizeOption )
     {
       options.emplace( Packets::TftpOptions_setOption(
         KnownOptions::BlockSize,
-        *optionsConfiguration.blockSizeOption ) );
+        *configurationV.optionsConfiguration.blockSizeOption ) );
     }
 
     // Timeout Option
-    if ( optionsConfiguration.timeoutOption )
+    if ( configurationV.optionsConfiguration.timeoutOption )
     {
       options.emplace( Packets::TftpOptions_setOption(
         KnownOptions::Timeout,
-        *optionsConfiguration.timeoutOption ) );
+        *configurationV.optionsConfiguration.timeoutOption ) );
     }
 
     // Add transfer size option if requested.
-    if ( optionsConfiguration.handleTransferSizeOption )
+    if ( configurationV.optionsConfiguration.handleTransferSizeOption )
     {
       // If the handler supplies a transfer size
-      if ( transferSize = dataHandlerV->requestedTransferSize(); transferSize )
+      if (
+        transferSize = configurationV.dataHandler->requestedTransferSize();
+        transferSize )
       {
         // set transfer size TFTP option
         options.emplace( Packets::TftpOptions_setOption(
-          KnownOptions::Timeout,
+          KnownOptions::TransferSize,
           *transferSize ) );
       }
     }
 
     // send write request packet
-    sendFirst(
-      Packets::WriteRequestPacket{ filename, mode, options } );
+    sendFirst( Packets::WriteRequestPacket{
+      configurationV.filename,
+      configurationV.mode,
+      options } );
 
     // wait for answers
     receiveFirst();
@@ -179,7 +131,7 @@ void WriteOperationImpl::finished(
   OperationImpl::finished( status, std::move( errorInfo));
 
   // Inform data handler
-  dataHandlerV->finished();
+  configurationV.dataHandler->finished();
 }
 
 void WriteOperationImpl::sendData()
@@ -190,7 +142,7 @@ void WriteOperationImpl::sendData()
 
   Packets::DataPacket data{
     lastTransmittedBlockNumber,
-    dataHandlerV->sendData( transmitDataSize ) };
+    configurationV.dataHandler->sendData( transmitDataSize ) };
 
   if ( data.dataSize() < transmitDataSize )
   {
@@ -263,7 +215,7 @@ void WriteOperationImpl::acknowledgementPacket(
   if ( acknowledgementPacket.blockNumber() == Packets::BlockNumber{ 0U } )
   {
     // If empty options is returned - Abort Operation
-    if ( !optionNegotiationHandlerV( {} ) )
+    if ( !configurationV.optionNegotiationHandler( {} ) )
     {
       BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
         << "Option Negotiation failed";
@@ -338,10 +290,10 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   }
 
   // check block size option
-  if ( optionsConfiguration.blockSizeOption )
+  if ( configurationV.optionsConfiguration.blockSizeOption )
   {
-    auto [blockSizeValid, blockSizeValue] =
-      Packets::TftpOptions_getOption< uint16_t>(
+    auto [ blockSizeValid, blockSizeValue ] =
+      Packets::TftpOptions_getOption< uint16_t >(
         remoteOptions,
         KnownOptions::BlockSize );
 
@@ -363,7 +315,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
     if ( blockSizeValue )
     {
-      if ( *blockSizeValue > *optionsConfiguration.blockSizeOption )
+      if ( *blockSizeValue > *configurationV.optionsConfiguration.blockSizeOption )
       {
         BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Received Block Size Option bigger than negotiated";
@@ -372,7 +324,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
           ErrorCode::TftpOptionRefused,
           "Block size Option negotiation failed" };
 
-        send( errorPacket);
+        send( errorPacket );
 
         // Operation completed
         finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
@@ -385,7 +337,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   remoteOptions.erase( std::string{ Packets::TftpOptions_name( KnownOptions::BlockSize ) } );
 
   // check timeout option
-  if ( optionsConfiguration.timeoutOption )
+  if ( configurationV.optionsConfiguration.timeoutOption )
   {
     auto [timeoutValid, timeoutValue] =
       Packets::TftpOptions_getOption< uint8_t>(
@@ -410,7 +362,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
     if ( timeoutValue )
     {
-      if ( *timeoutValue != *optionsConfiguration.timeoutOption )
+      if ( *timeoutValue != *configurationV.optionsConfiguration.timeoutOption )
       {
         BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Timeout Option not equal to sent";
@@ -432,7 +384,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   remoteOptions.erase( std::string{ Packets::TftpOptions_name( KnownOptions::Timeout ) } );
 
   // check transfer size option
-  if ( optionsConfiguration.handleTransferSizeOption )
+  if ( configurationV.optionsConfiguration.handleTransferSizeOption )
   {
     auto [transferSizeValid, transferSizeValue] =
       Packets::TftpOptions_getOption< uint64_t>(
@@ -474,7 +426,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   remoteOptions.erase( std::string{ Packets::TftpOptions_name( KnownOptions::TransferSize ) } );
 
   // Perform additional Option Negotiation
-  if ( !optionNegotiationHandlerV( remoteOptions ) )
+  if ( !configurationV.optionNegotiationHandler( remoteOptions ) )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Option negotiation failed";

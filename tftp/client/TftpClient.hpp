@@ -14,11 +14,13 @@
 #define TFTP_CLIENT_TFTPCLIENT_HPP
 
 #include <tftp/client/Client.hpp>
+#include <tftp/TftpOptionsConfiguration.hpp>
 
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/udp.hpp>
 
 #include <string_view>
+#include <optional>
 
 namespace Tftp::Client {
 
@@ -31,6 +33,65 @@ namespace Tftp::Client {
 class TftpClient
 {
   public:
+    //! TFTP Client Configuration
+    struct ClientConfiguration
+    {
+      //! TFTP Timeout, when no timeout option is negotiated in seconds.
+      uint8_t tftpTimeout;
+      //! Number of retries.
+      uint16_t tftpRetries;
+      //! If set to true, wait after transmission of the final ACK for potential
+      //! retries.
+      //! Used by TFTP RRQ Operation
+      bool dally;
+    };
+
+    //! TFTP Client Read Operation Configuration
+    struct ReadOperationConfiguration
+    {
+      //! Option negotiation handler.
+      OptionNegotiationHandler optionNegotiationHandler;
+      //! Handler which is called on completion of the operation.
+      OperationCompletedHandler completionHandler;
+      //! Which file shall be requested
+      std::string_view filename;
+      //! Transfer Mode
+      TransferMode mode;
+      //! TFTP Options Configuration.
+      TftpOptionsConfiguration optionsConfiguration;
+      //! Additional TFTP options sent to the server.
+      Options additionalOptions;
+      //! Where the connection should be established to.
+      boost::asio::ip::udp::endpoint remote;
+      //! Parameter to define the communication source
+      std::optional< boost::asio::ip::udp::endpoint > local;
+      //! Handler for received data.
+      ReceiveDataHandlerPtr dataHandler;
+    };
+
+    //! TFTP Client Write Operation Configuration
+    struct WriteOperationConfiguration
+    {
+      //! Option negotiation handler.
+      OptionNegotiationHandler optionNegotiationHandler;
+      //! Handler which is called on completion of the operation.
+      OperationCompletedHandler completionHandler;
+      //! Which file shall be requested
+      std::string_view filename;
+      //! Transfer Mode
+      TransferMode mode;
+      //! TFTP Options Configuration.
+      TftpOptionsConfiguration optionsConfiguration;
+      //! Additional TFTP options sent to the server.
+      Options additionalOptions;
+      //! Where the connection should be established to.
+      boost::asio::ip::udp::endpoint remote;
+      //! Parameter to define the communication source
+      std::optional< boost::asio::ip::udp::endpoint > local;
+      //! Handler for received data.
+      TransmitDataHandlerPtr dataHandler;
+    };
+
     /**
      * @brief Creates a TFTP %Client Instance.
      *
@@ -38,22 +99,14 @@ class TftpClient
      *
      * @param[in] ioContext
      *   The I/O context used for communication.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
-     * @param[in] dally
-     *   If set to true, wait after transmission of the final ACK for potential
-     *   retries.
-     *   Used by TFTP RRQ Operation
+     * @param[in] configuration
+     *   TFTP Client Configuration
      *
      * @return Created TFTP Client Instance.
      **/
     [[nodiscard]] static TftpClientPtr instance(
       boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      bool dally );
+      ClientConfiguration configuration );
 
     //! Destructor
     virtual ~TftpClient() noexcept = default;
@@ -61,100 +114,24 @@ class TftpClient
     /**
      * @brief Initialises a TFTP Client Read Operation (RRQ).
      *
-     * @param[in] optionNegotiationHandler
-     *   Option negotiation handler.
-     * @param[in] dataHandler
-     *   Handler for received data.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of the operation.
-     * @param[in] remote
-     *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   Transfer Mode
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     * @param[in] additionalOptions
-     *   Additional TFTP options sent to the server.
+     * @param[in] configuration
+     *   Read Operation Configuration.
      *
      * @return Client Operation Instance.
      **/
     [[nodiscard]] virtual OperationPtr readOperation(
-      OptionNegotiationHandler optionNegotiationHandler,
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions ) = 0;
-
-    /**
-     * @copydoc readOperation(OptionNegotiationHandler,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
-     *
-     * @param[in] local
-     *   Parameter to define the communication source
-     **/
-    [[nodiscard]] virtual OperationPtr readOperation(
-      OptionNegotiationHandler optionNegotiationHandler,
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions,
-      const boost::asio::ip::udp::endpoint &local ) = 0;
+      ReadOperationConfiguration configuration ) = 0;
 
     /**
      * @brief Initialises a TFTP Client Write Operation (WRQ).
      *
-     * @param[in] optionNegotiationHandler
-     *   Option negotiation handler.
-     * @param[in] dataHandler
-     *   Handler for data.
-     * @param[in] completionHandler
-     *   Handler which is called on completion of the operation.
-     * @param[in] remote
-     *   Where the connection should be established to.
-     * @param[in] filename
-     *   Which file shall be requested
-     * @param[in] mode
-     *   Transfer Mode
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     * @param[in] additionalOptions
-     *   Additional TFTP options sent to the server.
+     * @param[in] configuration
+     *   Write Operation Configuration.
      *
      * @return TFTP Client Operation Instance.
      **/
     [[nodiscard]] virtual OperationPtr writeOperation(
-      OptionNegotiationHandler optionNegotiationHandler,
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions ) = 0;
-
-    /**
-     * @copydoc writeOperation(OptionNegotiationHandler,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,std::string_view,TransferMode,const TftpOptionsConfiguration&,const Options&)
-     *
-     * @param[in] local
-     *   Parameter to define the communication source
-     **/
-    [[nodiscard]] virtual OperationPtr writeOperation(
-      OptionNegotiationHandler optionNegotiationHandler,
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      std::string_view filename,
-      TransferMode mode,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &additionalOptions,
-      const boost::asio::ip::udp::endpoint &local ) = 0;
+      WriteOperationConfiguration configuration ) = 0;
 
   protected:
     //! Constructor.
