@@ -46,29 +46,15 @@ class TftpServerImpl:
      *
      * @param[in] ioContext
      *   I/O context used for Communication.
-     * @param[in] handler
-     *   TFTP Request Received Handler.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
-     * @param[in] dally
-     *   If set to true, wait after transmission of the final ACK for potential
-     *   retries.
-     *   Is used for TFTP WRQ Operations
-     * @param[in] serverAddress
-     *   Address where the TFTP server should listen on.
+     * @param[in] configuration
+     *   TFTP Server Configuration
      *
      * @throw CommunicationException
-     *   When a error occurs during socket initialisation.
+     *   When an error occurs during socket initialisation.
      **/
     TftpServerImpl(
       boost::asio::io_context &ioContext,
-      ReceivedTftpRequestHandler handler,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      bool dally,
-      const boost::asio::ip::udp::endpoint &serverAddress );
+      ServerConfiguration configuration );
 
     /**
      * @brief Destructor
@@ -228,26 +214,17 @@ class TftpServerImpl:
       const boost::asio::ip::udp::endpoint &remote,
       Packets::ConstRawTftpPacketSpan rawPacket ) final;
 
-  private:
-    //! Registered request handler
-    ReceivedTftpRequestHandler handler;
-    //! TFTP Receive Timeout
-    const uint8_t tftpTimeout;
-    //! TFTP Retries
-    const uint16_t tftpRetries;
-    //! TFTP Dally Option
-    const bool dally;
-    //! Server address to listen on
-    const boost::asio::ip::udp::endpoint serverAddress;
-
     //! TFTP Server I/O context
     boost::asio::io_context &ioContext;
     //! TFTP well known socket
     boost::asio::ip::udp::socket socket;
 
+    //! TFTP Client Configuration
+    ServerConfiguration configurationV;
+
     //! Buffer, which holds the received TFTP packet.
     Packets::RawTftpPacket receivePacket;
-    //! The remote endpoint on receive.
+    //! Remote endpoint on receive.
     boost::asio::ip::udp::endpoint remoteEndpoint;
 };
 

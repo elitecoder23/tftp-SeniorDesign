@@ -18,24 +18,16 @@ namespace Tftp::Server {
 
 const boost::asio::ip::udp::endpoint TftpServer::DefaultLocalEndpoint{
   boost::asio::ip::address_v4::any(),
-  DefaultTftpPort};
+  DefaultTftpPort };
 
 TftpServerPtr TftpServer::instance(
   boost::asio::io_context &ioContext,
-  ReceivedTftpRequestHandler handler,
-  const uint8_t tftpTimeout,
-  const uint16_t tftpRetries,
-  bool dally,
-  const boost::asio::ip::udp::endpoint &serverAddress )
+  ServerConfiguration configuration )
 {
   // create and return the real TFTP server
   return std::make_shared< TftpServerImpl>(
     ioContext,
-    std::move( handler ),
-    tftpTimeout,
-    tftpRetries,
-    dally,
-    serverAddress );
+    std::move( configuration ) );
 }
 
 }

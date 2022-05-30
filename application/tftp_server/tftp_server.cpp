@@ -180,20 +180,21 @@ int main( int argc, char * argv[] )
     // The TFTP server instance
     server = Tftp::Server::TftpServer::instance(
       ioContext,
-      std::bind(
-        &receivedRequest,
-        std::placeholders::_1,
-        std::placeholders::_2,
-        std::placeholders::_3,
-        std::placeholders::_4,
-        std::placeholders::_5,
-        std::placeholders::_6 ),
-      configuration.tftpTimeout,
-      configuration.tftpRetries,
-      configuration.dally,
-      boost::asio::ip::udp::endpoint{
-        boost::asio::ip::address_v4::any(),
-        configuration.tftpServerPort } );
+      {
+        .tftpTimeout = configuration.tftpTimeout,
+        .tftpRetries = configuration.tftpRetries,
+        .dally = configuration.dally,
+        .handler = std::bind(
+          &receivedRequest,
+          std::placeholders::_1,
+          std::placeholders::_2,
+          std::placeholders::_3,
+          std::placeholders::_4,
+          std::placeholders::_5,
+          std::placeholders::_6 ),
+        .serverAddress = boost::asio::ip::udp::endpoint{
+          boost::asio::ip::address_v4::any(),
+          configuration.tftpServerPort } } );
 
     server->start();
 

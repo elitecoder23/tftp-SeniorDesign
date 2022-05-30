@@ -32,28 +32,21 @@ namespace Tftp::Server {
 
 TftpServerImpl::TftpServerImpl(
   boost::asio::io_context &ioContext,
-  ReceivedTftpRequestHandler handler,
-  const uint8_t tftpTimeout,
-  const uint16_t tftpRetries,
-  const bool dally,
-  const boost::asio::ip::udp::endpoint &serverAddress )
+  ServerConfiguration configuration )
 try :
-  handler{ std::move( handler ) },
-  tftpTimeout{ tftpTimeout },
-  tftpRetries{ tftpRetries },
-  dally{ dally },
-  serverAddress{ serverAddress },
   ioContext{ ioContext },
   socket{ ioContext },
+  configurationV{ std::move( configuration ) },
   receivePacket( DefaultMaxPacketSize )
 {
   try
   {
     // open the socket
-    socket.open( serverAddress.protocol() );
+    socket.open(
+      configurationV.serverAddress.value_or( DefaultLocalEndpoint ).protocol() );
 
     // bind to the local address
-    socket.bind( serverAddress);
+    socket.bind( configurationV.serverAddress.value_or( DefaultLocalEndpoint ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -103,8 +96,8 @@ OperationPtr TftpServerImpl::readOperation(
 {
   return std::make_shared< ReadOperationImpl >(
     ioContext,
-    tftpTimeout,
-    tftpRetries,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -124,8 +117,8 @@ OperationPtr TftpServerImpl::readOperation(
 {
   return std::make_shared< ReadOperationImpl >(
     ioContext,
-    tftpTimeout,
-    tftpRetries,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
     dataHandler,
     completionHandler,
     remote,
@@ -145,9 +138,9 @@ OperationPtr TftpServerImpl::writeOperation(
 {
   return std::make_shared< WriteOperationImpl >(
     ioContext,
-    tftpTimeout,
-    tftpRetries,
-    dally,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
+    configurationV.dally,
     dataHandler,
     completionHandler,
     remote,
@@ -167,9 +160,9 @@ OperationPtr TftpServerImpl::writeOperation(
 {
   return std::make_shared< WriteOperationImpl >(
     ioContext,
-    tftpTimeout,
-    tftpRetries,
-    dally,
+    configurationV.tftpTimeout,
+    configurationV.tftpRetries,
+    configurationV.dally,
     dataHandler,
     completionHandler,
     remote,
@@ -308,7 +301,7 @@ void TftpServerImpl::readRequestPacket(
     << "RX: " << static_cast< std::string>( readRequestPacket );
 
   // check handler
-  if ( !handler )
+  if ( !configurationV.handler )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
       << "No registered handler - reject";
@@ -331,7 +324,7 @@ void TftpServerImpl::readRequestPacket(
     std::string{ Packets::TftpOptions_name( KnownOptions::TransferSize ) } ) ) ;
 
   // call the handler, which handles the received request
-  handler(
+  configurationV.handler(
     remote,
     RequestType::Read,
     readRequestPacket.filename(),
@@ -348,7 +341,7 @@ void TftpServerImpl::writeRequestPacket(
     << "RX: " << static_cast< std::string>( writeRequestPacket );
 
   // check handler
-  if ( !handler)
+  if ( !configurationV.handler)
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
       << "No registered handler - reject";
@@ -371,7 +364,7 @@ void TftpServerImpl::writeRequestPacket(
     std::string{ Packets::TftpOptions_name( KnownOptions::TransferSize ) } ) ) ;
 
   // call the handler, which handles the received request
-  handler(
+  configurationV.handler(
     remote,
     RequestType::Write,
     writeRequestPacket.filename(),
@@ -390,7 +383,6 @@ void TftpServerImpl::dataPacket(
   // execute error operation
   errorOperation(
     remote,
-    boost::asio::ip::udp::endpoint{ serverAddress.address(), 0 },
     ErrorCode::IllegalTftpOperation,
     "DATA not expected" );
 }
@@ -405,7 +397,6 @@ void TftpServerImpl::acknowledgementPacket(
   // execute error operation
   errorOperation(
     remote,
-    boost::asio::ip::udp::endpoint{ serverAddress.address(), 0 },
     ErrorCode::IllegalTftpOperation,
     "ACK not expected" );
 }
@@ -420,7 +411,6 @@ void TftpServerImpl::errorPacket(
   // execute error operation
   errorOperation(
     remote,
-    boost::asio::ip::udp::endpoint{ serverAddress.address(), 0 },
     ErrorCode::IllegalTftpOperation,
     "ERROR not expected" );
 }
@@ -435,7 +425,6 @@ void TftpServerImpl::optionsAcknowledgementPacket(
   // execute error operation
   errorOperation(
     remote,
-    boost::asio::ip::udp::endpoint{ serverAddress.address(), 0 },
     ErrorCode::IllegalTftpOperation,
     "OACK not expected" );
 }

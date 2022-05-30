@@ -22,6 +22,7 @@
 
 #include <string>
 #include <functional>
+#include <optional>
 
 namespace Tftp::Server {
 
@@ -39,8 +40,25 @@ namespace Tftp::Server {
 class TftpServer
 {
   public:
+    //! TFTP Server Configuration
+    struct ServerConfiguration
+    {
+        //! TFTP Timeout, when no timeout option is negotiated in seconds.
+        uint8_t tftpTimeout;
+        //! Number of retries.
+        uint16_t tftpRetries;
+        //! If set to true, wait after transmission of the final ACK for potential
+        //! retries.
+        //! Used by TFTP WRQ Operation
+        bool dally;
+        //! TFTP Request Received Handler
+        ReceivedTftpRequestHandler handler;
+        //! Address where the TFTP server should listen on.
+        std::optional< boost::asio::ip::udp::endpoint > serverAddress;
+    };
+
     /**
-     * @brief The default address, where the server listens.
+     * @brief Default UDP Endpoint, Where the TFTP Server Listens.
      *
      * The default local end-point where the TFTP server is listening is the
      * default TFTP Port any IP address.
@@ -52,28 +70,14 @@ class TftpServer
      *
      * @param[in] ioContext
      *   I/O context used for Communication.
-     * @param[in] handler
-     *   TFTP Request Received Handler.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
-     * @param[in] dally
-     *   If set to true, wait after transmission of the final ACK for potential
-     *   retries.
-     *   Is used for TFTP WRQ Operations
-     * @param[in] serverAddress
-     *   Address where the TFTP server should listen on.
+     * @param[in] configuration
+     *   TFTP Server Configuration
      *
      * @return Created TFTP Server Instance.
      **/
     [[nodiscard]] static TftpServerPtr instance(
       boost::asio::io_context &ioContext,
-      ReceivedTftpRequestHandler handler,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      bool dally,
-      const boost::asio::ip::udp::endpoint &serverAddress = DefaultLocalEndpoint );
+      ServerConfiguration configuration );
 
     //! Destructor
     virtual ~TftpServer() noexcept = default;
