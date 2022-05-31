@@ -53,6 +53,8 @@ class TftpClient
       OptionNegotiationHandler optionNegotiationHandler;
       //! Handler which is called on completion of the operation.
       OperationCompletedHandler completionHandler;
+      //! Handler for Received Sata.
+      ReceiveDataHandlerPtr dataHandler;
       //! Which file shall be requested
       std::string_view filename;
       //! Transfer Mode
@@ -65,8 +67,6 @@ class TftpClient
       boost::asio::ip::udp::endpoint remote;
       //! Parameter to define the communication source
       std::optional< boost::asio::ip::udp::endpoint > local;
-      //! Handler for received data.
-      ReceiveDataHandlerPtr dataHandler;
     };
 
     //! TFTP Client Write Operation Configuration
@@ -76,6 +76,8 @@ class TftpClient
       OptionNegotiationHandler optionNegotiationHandler;
       //! Handler which is called on completion of the operation.
       OperationCompletedHandler completionHandler;
+      //! Handler for Send Data.
+      TransmitDataHandlerPtr dataHandler;
       //! Which file shall be requested
       std::string_view filename;
       //! Transfer Mode
@@ -88,8 +90,6 @@ class TftpClient
       boost::asio::ip::udp::endpoint remote;
       //! Parameter to define the communication source
       std::optional< boost::asio::ip::udp::endpoint > local;
-      //! Handler for received data.
-      TransmitDataHandlerPtr dataHandler;
     };
 
     /**
