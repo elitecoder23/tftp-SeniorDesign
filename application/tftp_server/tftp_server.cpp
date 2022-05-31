@@ -214,20 +214,10 @@ int main( int argc, char * argv[] )
     std::cout << e.what() << std::endl << optionsDescription << "\n";
     return EXIT_FAILURE;
   }
-  catch ( Tftp::TftpException &e )
-  {
-    std::string const * info = boost::get_error_info < Helper::AdditionalInfo >( e );
-
-    std::cerr
-      << "TFTP Server exited with failure: "
-      << ( ( nullptr == info ) ? "Unknown" : *info ) << "\n";
-
-    return EXIT_FAILURE;
-  }
   catch ( boost::exception &e )
   {
     std::cerr
-      << "Error in TFTP server: " << boost::diagnostic_information( e) << "\n";
+      << "Error in TFTP server: " << boost::diagnostic_information( e ) << "\n";
     return EXIT_FAILURE;
   }
   catch ( ...)
@@ -348,17 +338,19 @@ static void transmitFile(
 
   // initiate TFTP operation
   auto operation{ server->readOperation(
-    std::make_shared< Tftp::File::StreamFile >(
-      Tftp::File::TftpFile::Operation::Transmit,
-      filename,
-      std::filesystem::file_size( filename ) ),
-    []( const Tftp::TransferStatus transferStatus ) {
-      std::cout << "Transfer Completed: " << transferStatus << "\n";
-    },
-    remote,
-    configuration.tftpOptions,
-    clientOptions,
-    {} /* no additional options */ ) };
+    {
+      .dataHandler = std::make_shared< Tftp::File::StreamFile >(
+        Tftp::File::TftpFile::Operation::Transmit,
+        filename,
+        std::filesystem::file_size( filename ) ),
+      .completionHandler = []( const Tftp::TransferStatus transferStatus ) {
+        std::cout << "Transfer Completed: " << transferStatus << "\n";
+      },
+      .remote = remote,
+      .optionsConfiguration = configuration.tftpOptions,
+      .clientOptions = clientOptions,
+      .additionalNegotiatedOptions {} /* no additional options */
+    } ) };
 
   operation->start();
 }
@@ -391,16 +383,18 @@ static void receiveFile(
 
   // initiate TFTP operation
   auto operation{ server->writeOperation(
-    std::make_shared< Tftp::File::StreamFile >(
-      Tftp::File::TftpFile::Operation::Receive,
-      filename ),
-    []( const Tftp::TransferStatus transferStatus ) {
-      std::cout << "Transfer Completed: " << transferStatus << "\n";
-    },
-    remote,
-    configuration.tftpOptions,
-    clientOptions,
-    {} /* no additional options */ ) };
+    {
+      .dataHandler = std::make_shared< Tftp::File::StreamFile >(
+        Tftp::File::TftpFile::Operation::Receive,
+        filename ),
+      .completionHandler = []( const Tftp::TransferStatus transferStatus ) {
+        std::cout << "Transfer Completed: " << transferStatus << "\n";
+      },
+      .remote = remote,
+      .optionsConfiguration = configuration.tftpOptions,
+      .clientOptions = clientOptions,
+      .additionalNegotiatedOptions = {} /* no additional options */
+    } ) };
 
   operation->start();
 }

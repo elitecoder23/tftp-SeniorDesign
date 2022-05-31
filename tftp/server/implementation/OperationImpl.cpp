@@ -69,49 +69,8 @@ OperationImpl::OperationImpl(
   const uint16_t tftpRetries,
   const uint16_t maxReceivePacketSize,
   OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote )
-try:
-  completionHandler{ std::move( completionHandler ) },
-  receiveTimeoutV{ tftpTimeout },
-  tftpRetries{ tftpRetries },
-  socket{ ioContext },
-  timer{ ioContext },
-  receivePacket( maxReceivePacketSize ),
-  transmitCounter{ 0 }
-{
-  try
-  {
-    // Open the socket
-    socket.open( remote.protocol() );
-
-    // connect to client.
-    socket.connect( remote );
-  }
-  catch ( boost::system::system_error &err )
-  {
-    if ( socket.is_open() )
-    {
-      socket.close();
-    }
-
-    BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo( err.what() ) );
-  }
-}
-catch (boost::system::system_error &err )
-{
-  BOOST_THROW_EXCEPTION( CommunicationException()
-    << Helper::AdditionalInfo( err.what() ) );
-}
-
-OperationImpl::OperationImpl(
-  boost::asio::io_context &ioContext,
-  const uint8_t tftpTimeout,
-  const uint16_t tftpRetries,
-  const uint16_t maxReceivePacketSize,
-  OperationCompletedHandler completionHandler,
   const boost::asio::ip::udp::endpoint &remote,
-  const boost::asio::ip::udp::endpoint &local )
+  const std::optional< boost::asio::ip::udp::endpoint > &local )
 try:
   completionHandler{ std::move( completionHandler ) },
   receiveTimeoutV{ tftpTimeout },
@@ -127,8 +86,10 @@ try:
     socket.open( remote.protocol());
 
     // bind to local address
-    socket.bind( local);
-
+    if ( local )
+    {
+      socket.bind( *local );
+    }
     // connect to client.
     socket.connect( remote);
   }
@@ -143,7 +104,7 @@ try:
       << Helper::AdditionalInfo{ err.what() } );
   }
 }
-catch (boost::system::system_error &err)
+catch ( boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
     << Helper::AdditionalInfo{ err.what() } );

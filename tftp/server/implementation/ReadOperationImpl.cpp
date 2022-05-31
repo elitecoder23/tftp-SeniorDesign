@@ -29,53 +29,16 @@ ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
   uint8_t tftpTimeout,
   uint16_t tftpRetries,
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const TftpOptionsConfiguration &optionsConfiguration,
-  Options clientOptions,
-  Options additionalNegotiatedOptions ) :
+  TftpServer::ReadOperationConfiguration configuration ) :
   OperationImpl{
     ioContext,
     tftpTimeout,
     tftpRetries,
     DefaultMaxPacketSize,
-    std::move( completionHandler ),
-    remote },
-  dataHandler{ std::move( dataHandler ) },
-  optionsConfiguration{ optionsConfiguration },
-  clientOptions{ std::move( clientOptions ) },
-  additionalNegotiatedOptions{ std::move( additionalNegotiatedOptions ) },
-  transmitDataSize{ DefaultDataSize },
-  lastDataPacketTransmitted{ false },
-  lastTransmittedBlockNumber{ 0U },
-  lastReceivedBlockNumber{ 0U }
-{
-}
-
-ReadOperationImpl::ReadOperationImpl(
-  boost::asio::io_context &ioContext,
-  uint8_t tftpTimeout,
-  uint16_t tftpRetries,
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const TftpOptionsConfiguration &optionsConfiguration,
-  Options clientOptions,
-  Options additionalNegotiatedOptions,
-  const boost::asio::ip::udp::endpoint &local ) :
-  OperationImpl{
-    ioContext,
-    tftpTimeout,
-    tftpRetries,
-    DefaultMaxPacketSize,
-    std::move( completionHandler ),
-    remote,
-    local },
-  dataHandler{ std::move( dataHandler ) },
-  optionsConfiguration{ optionsConfiguration },
-  clientOptions{ std::move( clientOptions ) },
-  additionalNegotiatedOptions{ std::move( additionalNegotiatedOptions ) },
+    configuration.completionHandler,
+    configuration.remote,
+    configuration.local },
+  configurationV{ std::move( configuration ) },
   transmitDataSize{ DefaultDataSize },
   lastDataPacketTransmitted{ false },
   lastTransmittedBlockNumber{ 0U },
@@ -90,30 +53,32 @@ void ReadOperationImpl::start()
   try
   {
     // Reset data handler
-    dataHandler->reset();
+    configurationV.dataHandler->reset();
 
     // option negotiation leads to empty option list
-    if ( clientOptions.empty() && additionalNegotiatedOptions.empty() )
+    if ( configurationV.clientOptions.empty()
+      && configurationV.additionalNegotiatedOptions.empty() )
     {
       sendData();
     }
     else
     {
       // initialise server options with additional negotiated options
-      Options serverOptions{ additionalNegotiatedOptions };
+      Options serverOptions{ configurationV.additionalNegotiatedOptions };
 
       // check block size option - if set use it
-      if ( optionsConfiguration.blockSizeOption )
+      if ( configurationV.optionsConfiguration.blockSizeOption )
       {
         const auto [ blockSizeValid, blockSize ] =
           Packets::TftpOptions_getOption< uint16_t >(
-            clientOptions,
+            configurationV.clientOptions,
             KnownOptions::BlockSize );
 
         if ( blockSize )
         {
-          transmitDataSize =
-            std::min( *blockSize, *optionsConfiguration.blockSizeOption );
+          transmitDataSize = std::min(
+            *blockSize,
+            *configurationV.optionsConfiguration.blockSizeOption );
 
           // respond option string
           serverOptions.emplace( Packets::TftpOptions_setOption(
@@ -123,16 +88,16 @@ void ReadOperationImpl::start()
       }
 
       // check timeout option - if set use it
-      if ( optionsConfiguration.timeoutOption )
+      if ( configurationV.optionsConfiguration.timeoutOption )
       {
-        const auto [timeoutValid, timeout] =
-        Packets::TftpOptions_getOption< uint8_t >(
-          clientOptions,
-          KnownOptions::Timeout );
+        const auto [ timeoutValid, timeout ] =
+          Packets::TftpOptions_getOption< uint8_t >(
+            configurationV.clientOptions,
+            KnownOptions::Timeout );
 
         if ( timeout
           && ( *timeout > 0U )
-          && ( *timeout <= *optionsConfiguration.timeoutOption ) )
+          && ( *timeout <= *configurationV.optionsConfiguration.timeoutOption ) )
         {
           receiveTimeout( *timeout );
         }
@@ -144,12 +109,12 @@ void ReadOperationImpl::start()
       }
 
       // check transfer size option
-      if ( optionsConfiguration.handleTransferSizeOption )
+      if ( configurationV.optionsConfiguration.handleTransferSizeOption )
       {
-        const auto [transferSizeValid, transferSize] =
-        Packets::TftpOptions_getOption< uint64_t >(
-          clientOptions,
-          KnownOptions::TransferSize );
+        const auto [ transferSizeValid, transferSize ] =
+          Packets::TftpOptions_getOption< uint64_t >(
+            configurationV.clientOptions,
+            KnownOptions::TransferSize );
 
         if ( transferSize )
         {
@@ -170,7 +135,7 @@ void ReadOperationImpl::start()
           }
 
           if (
-            auto newTransferSize = dataHandler->requestedTransferSize();
+            auto newTransferSize = configurationV.dataHandler->requestedTransferSize();
             newTransferSize )
           {
             // respond option string
@@ -219,7 +184,7 @@ void ReadOperationImpl::finished(
   BOOST_LOG_FUNCTION()
 
   OperationImpl::finished( status, std::move( errorInfo ) );
-  dataHandler->finished();
+  configurationV.dataHandler->finished();
 }
 
 void ReadOperationImpl::sendData()
@@ -233,7 +198,7 @@ void ReadOperationImpl::sendData()
 
   Packets::DataPacket data{
     lastTransmittedBlockNumber,
-    dataHandler->sendData( transmitDataSize ) };
+    configurationV.dataHandler->sendData( transmitDataSize ) };
 
   if ( data.dataSize() < transmitDataSize )
   {
@@ -287,7 +252,7 @@ void ReadOperationImpl::acknowledgementPacket(
   }
 
   // check invalid block number
-  if (acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber )
+  if ( acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Invalid block number received";

@@ -87,89 +87,24 @@ void TftpServerImpl::stop()
 }
 
 OperationPtr TftpServerImpl::readOperation(
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions,
-  const Options &additionalNegotiatedOptions )
+  ReadOperationConfiguration configuration )
 {
   return std::make_shared< ReadOperationImpl >(
     ioContext,
     configurationV.tftpTimeout,
     configurationV.tftpRetries,
-    dataHandler,
-    completionHandler,
-    remote,
-    optionsConfiguration,
-    clientOptions,
-    additionalNegotiatedOptions );
-}
-
-OperationPtr TftpServerImpl::readOperation(
-  TransmitDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions,
-  const Options &additionalNegotiatedOptions,
-  const boost::asio::ip::udp::endpoint &local )
-{
-  return std::make_shared< ReadOperationImpl >(
-    ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
-    dataHandler,
-    completionHandler,
-    remote,
-    optionsConfiguration,
-    clientOptions,
-    additionalNegotiatedOptions,
-    local );
+    std::move( configuration ) );
 }
 
 OperationPtr TftpServerImpl::writeOperation(
-  ReceiveDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions,
-  const Options &additionalNegotiatedOptions )
+  WriteOperationConfiguration configuration )
 {
   return std::make_shared< WriteOperationImpl >(
     ioContext,
     configurationV.tftpTimeout,
     configurationV.tftpRetries,
     configurationV.dally,
-    dataHandler,
-    completionHandler,
-    remote,
-    optionsConfiguration,
-    clientOptions,
-    additionalNegotiatedOptions );
-}
-
-OperationPtr TftpServerImpl::writeOperation(
-  ReceiveDataHandlerPtr dataHandler,
-  OperationCompletedHandler completionHandler,
-  const boost::asio::ip::udp::endpoint &remote,
-  const TftpOptionsConfiguration &optionsConfiguration,
-  const Options &clientOptions,
-  const Options &additionalNegotiatedOptions,
-  const boost::asio::ip::udp::endpoint &local )
-{
-  return std::make_shared< WriteOperationImpl >(
-    ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
-    configurationV.dally,
-    dataHandler,
-    completionHandler,
-    remote,
-    optionsConfiguration,
-    clientOptions,
-    additionalNegotiatedOptions,
-    local );
+    std::move( configuration ) );
 }
 
 void TftpServerImpl::errorOperation(

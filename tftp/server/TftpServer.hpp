@@ -17,6 +17,8 @@
 
 #include <tftp/server/Server.hpp>
 
+#include <tftp/TftpOptionsConfiguration.hpp>
+
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/udp.hpp>
 
@@ -43,18 +45,60 @@ class TftpServer
     //! TFTP Server Configuration
     struct ServerConfiguration
     {
-        //! TFTP Timeout, when no timeout option is negotiated in seconds.
-        uint8_t tftpTimeout;
-        //! Number of retries.
-        uint16_t tftpRetries;
-        //! If set to true, wait after transmission of the final ACK for potential
-        //! retries.
-        //! Used by TFTP WRQ Operation
-        bool dally;
-        //! TFTP Request Received Handler
-        ReceivedTftpRequestHandler handler;
-        //! Address where the TFTP server should listen on.
-        std::optional< boost::asio::ip::udp::endpoint > serverAddress;
+      //! TFTP Timeout, when no timeout option is negotiated in seconds.
+      uint8_t tftpTimeout;
+      //! Number of retries.
+      uint16_t tftpRetries;
+      //! If set to true, wait after transmission of the final ACK for potential
+      //! retries.
+      //! Used by TFTP WRQ Operation
+      bool dally;
+      //! TFTP Request Received Handler
+      ReceivedTftpRequestHandler handler;
+      //! Address where the TFTP server should listen on.
+      std::optional< boost::asio::ip::udp::endpoint > serverAddress;
+    };
+
+    //! TFTP Server Read Operation Configuration
+    struct ReadOperationConfiguration
+    {
+      //! Handler, which will be called on various events.
+      TransmitDataHandlerPtr dataHandler;
+      //! Handler which is called on completion of the operation.
+      OperationCompletedHandler completionHandler;
+      //! Address of the remote endpoint (TFTP Client).
+      boost::asio::ip::udp::endpoint remote;
+      //! TFTP Options Configuration.
+      //! Will be used for TFTP Options Negotiation.
+      TftpOptionsConfiguration optionsConfiguration;
+      //! TFTP Client Options.
+      //! Will be negotiated within TFTP Server Request Operation
+      Options clientOptions;
+      //! Additional Options, which have been already negotiated.
+      Options additionalNegotiatedOptions;
+      //! local endpoint, where the server handles the request from.
+      std::optional< boost::asio::ip::udp::endpoint > local;
+    };
+
+    //! TFTP Server Write Operation Configuration
+    struct WriteOperationConfiguration
+    {
+      //! Handler, which will be called on various events.
+      ReceiveDataHandlerPtr dataHandler;
+      //! Handler which is called on completion of the operation.
+      OperationCompletedHandler completionHandler;
+      //! Address of the remote endpoint (TFTP Client).
+      boost::asio::ip::udp::endpoint remote;
+      //! TFTP Options Configuration.
+      //! Will be used for TFTP Options Negotiation.
+      TftpOptionsConfiguration optionsConfiguration;
+      //! TFTP Client Options.
+      //! Will be negotiated within TFTP Server Request Operation
+      Options clientOptions;
+      //! Additional Options, which have been already negotiated.
+      Options additionalNegotiatedOptions;
+      //! local endpoint, where the server handles the request from.
+      std::optional< boost::asio::ip::udp::endpoint > local;
     };
 
     /**
@@ -106,45 +150,13 @@ class TftpServer
      *
      * Data is obtained from @p dataHandler and transmitted to TFTP Client.
      *
-     * @param[in] dataHandler
-     *   Handler, which will be called on various events.
-     * @param[in] completionHandler
-     *   Handler which is called on completion of the operation.
-     * @param[in] remote
-     *   Address of the remote endpoint (TFTP Client).
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     *   Will be used for TFTP Options Negotiation.
-     * @param[in] clientOptions
-     *   TFTP Client Options.
-     *   Will be negotiated within TFTP Server Request Operation
-     * @param[in] additionalNegotiatedOptions
-     *   Additional Options, which have been already negotiated.
+     * @param[in] configuration
+     *   Read Operation Configuration.
      *
      * @return TFTP server write operation.
      **/
     [[nodiscard]] virtual OperationPtr readOperation(
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions,
-      const Options &additionalNegotiatedOptions ) = 0;
-
-    /**
-     * @copydoc readOperation(TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
-     *
-     * @param[in] local
-     *   local endpoint, where the server handles the request from.
-     **/
-    [[nodiscard]] virtual OperationPtr readOperation(
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions,
-      const Options &additionalNegotiatedOptions,
-      const boost::asio::ip::udp::endpoint &local ) = 0;
+      ReadOperationConfiguration configuration ) = 0;
 
     /**
      * @brief Creates a TFTP Server Operation (TFTP WRQ), which receives data
@@ -152,45 +164,13 @@ class TftpServer
      *
      * Data is received form the client and written to @p dataHandler.
      *
-     * @param[in] dataHandler
-     *   Handler, which will be called on various events.
-     * @param[in] completionHandler
-     *   Handler which is called on completion of the operation.
-     * @param[in] remote
-     *   Address of the remote endpoint (TFTP client).
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     *   Will be used for TFTP Options Negotiation.
-     * @param[in] clientOptions
-     *   TFTP Client Options.
-     *   Will be negotiated within TFTP Server Request Operation
-     * @param[in] additionalNegotiatedOptions
-     *   Additional Options, which have been already negotiated.
+     * @param[in] configuration
+     *   Write Operation Configuration.
      *
      * @return TFTP Server Read Operation.
      **/
     [[nodiscard]] virtual OperationPtr writeOperation(
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions,
-      const Options &additionalNegotiatedOptions ) = 0;
-
-    /**
-     * @copydoc writeOperation(ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
-     *
-     * @param[in] local
-     *   local endpoint, where the server handles the request from.
-     **/
-    [[nodiscard]] virtual OperationPtr writeOperation(
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      const Options &clientOptions,
-      const Options &additionalNegotiatedOptions,
-      const boost::asio::ip::udp::endpoint &local ) = 0;
+      WriteOperationConfiguration configuration ) = 0;
 
     /**
      * @brief Executes TFTP Error Operation.

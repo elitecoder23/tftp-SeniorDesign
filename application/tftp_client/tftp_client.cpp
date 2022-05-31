@@ -132,7 +132,7 @@ int main( int argc, char *argv[] )
       return true;
     };
 
-    switch ( requestType)
+    switch ( requestType )
     {
       case Tftp::RequestType::Read:
         tftpOperation= tftpClient->readOperation( {
@@ -185,24 +185,13 @@ int main( int argc, char *argv[] )
     std::cout << e.what() << "\n" << optionsDescription << "\n";
     return EXIT_FAILURE;
   }
-  catch ( Tftp::TftpException &e )
-  {
-    auto const * const info = boost::get_error_info< Helper::AdditionalInfo>( e );
-
-    std::cerr
-      << "TFTP transfer failed: "
-      //      typeid( e).name() << " - " <<
-      << ((nullptr==info) ? "Unknown" : *info)
-      << "\n";
-    return EXIT_FAILURE;
-  }
-  catch ( boost::exception &e)
+  catch ( boost::exception &e )
   {
     std::cerr
-      << "Error in TFTP client: " << boost::diagnostic_information( e) << "\n";
+      << "Error in TFTP client: " << boost::diagnostic_information( e ) << "\n";
     return EXIT_FAILURE;
   }
-  catch ( ...)
+  catch ( ... )
   {
     std::cerr << "Error in TFTP client: UNKNOWN EXCEPTION\n";
     return EXIT_FAILURE;

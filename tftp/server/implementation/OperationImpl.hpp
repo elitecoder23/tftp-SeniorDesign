@@ -68,18 +68,6 @@ class OperationImpl:
      *   Handler which is called on completion of this operation.
      * @param[in] remote
      *   Address of the remote endpoint (TFTP client).
-     **/
-    OperationImpl(
-      boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      uint16_t maxReceivePacketSize,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote );
-
-    /**
-     * @copydoc OperationImpl(boost::asio::io_context&,uint8_t,uint16_t,uint16_t,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&)
-     *
      * @param[in] local
      *   local endpoint, where the server handles the request from.
      **/
@@ -90,7 +78,7 @@ class OperationImpl:
       uint16_t maxReceivePacketSize,
       OperationCompletedHandler completionHandler,
       const boost::asio::ip::udp::endpoint &remote,
-      const boost::asio::ip::udp::endpoint &local );
+      const std::optional< boost::asio::ip::udp::endpoint > &local );
 
     /**
      * @brief Destructor.

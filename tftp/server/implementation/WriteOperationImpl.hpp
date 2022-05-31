@@ -14,6 +14,7 @@
 #define TFTP_SERVER_WRITEOPERATIONIMPL_HPP
 
 #include <tftp/server/Server.hpp>
+#include <tftp/server/TftpServer.hpp>
 
 #include <tftp/server/implementation/OperationImpl.hpp>
 
@@ -51,49 +52,15 @@ class WriteOperationImpl : public OperationImpl
      * @param[in] dally
      *   If set to true, wait after transmission of the final ACK for potential
      *   retries.
-     * @param[in] dataHandler
-     *   Handler, which will be called on various events.
-     * @param[in] completionHandler
-     *   The handler which is called on completion of this operation.
-     * @param[in] remote
-     *   Address of the remote endpoint (TFTP client).
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     * @param[in] clientOptions
-     *   Server TFTP options used for operation.
-     * @param[in] additionalNegotiatedOptions
-     *   Additional Options, which have been already negotiated.
+     * @param[in] configuration
+     *   Write Operation Configuration.
      **/
     WriteOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
       bool dally,
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      Options clientOptions,
-      Options additionalNegotiatedOptions );
-
-    /**
-     * @copydoc WriteOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,bool,ReceiveDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
-     *
-     * @param[in] local
-     *   local endpoint, where the server handles the request from.
-     **/
-    WriteOperationImpl(
-      boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      bool dally,
-      ReceiveDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      Options clientOptions,
-      Options additionalNegotiatedOptions,
-      const boost::asio::ip::udp::endpoint &local );
+      TftpServer::WriteOperationConfiguration configuration );
 
     /**
      * @brief Standard destructor.
@@ -132,14 +99,8 @@ class WriteOperationImpl : public OperationImpl
 
     //! Dally Option
     const bool dally;
-    //! Handler which will be called on various events.
-    ReceiveDataHandlerPtr dataHandler;
-    //! TFTP Options Configuration
-    TftpOptionsConfiguration optionsConfiguration;
-    //! Options for the transfer
-    Options clientOptions;
-    //! Additional Negotiated Options
-    Options additionalNegotiatedOptions;
+    //! TFTP Server Write Operation Configuration
+    TftpServer::WriteOperationConfiguration configurationV;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize;
     //! Holds the last received block number.

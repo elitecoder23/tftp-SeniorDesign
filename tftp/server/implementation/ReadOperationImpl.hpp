@@ -13,8 +13,9 @@
 #ifndef TFTP_SERVER_READOPERATIONIMPL_HPP
 #define TFTP_SERVER_READOPERATIONIMPL_HPP
 
-#include <tftp/Tftp.hpp>
+#include <tftp/server/Server.hpp>
 
+#include <tftp/server/TftpServer.hpp>
 #include <tftp/server/implementation/OperationImpl.hpp>
 
 #include <tftp/packets/BlockNumber.hpp>
@@ -48,47 +49,14 @@ class ReadOperationImpl final : public OperationImpl
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
      *   Number of retries.
-     * @param[in] dataHandler
-     *   Handler, which will be called on various events.
-     * @param[in] completionHandler
-     *   Handler which is called on completion of this operation.
-     * @param[in] remote
-     *   Address of the remote endpoint (TFTP client).
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     * @param[in] clientOptions
-     *   Server TFTP options used for operation.
-     * @param[in] additionalNegotiatedOptions
-     *   Additional Options, which have been already negotiated.
+     * @param[in] configuration
+     *   Read Operation Configuration.
      **/
     ReadOperationImpl(
       boost::asio::io_context &ioContext,
       uint8_t tftpTimeout,
       uint16_t tftpRetries,
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      Options clientOptions,
-      Options additionalNegotiatedOptions );
-
-    /**
-     * @copydoc ReadOperationImpl(boost::asio::io_context&,uint8_t,uint16_t,TransmitDataHandlerPtr,OperationCompletedHandler,const boost::asio::ip::udp::endpoint&,const TftpOptionsConfiguration&,const Options&,const Options&)
-     *
-     * @param[in] local
-     *   local endpoint, where the server handles the request from.
-     **/
-    ReadOperationImpl(
-      boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
-      uint16_t tftpRetries,
-      TransmitDataHandlerPtr dataHandler,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const TftpOptionsConfiguration &optionsConfiguration,
-      Options clientOptions,
-      Options additionalNegotiatedOptions,
-      const boost::asio::ip::udp::endpoint &local );
+      TftpServer::ReadOperationConfiguration configuration );
 
     //! Destructor
     ~ReadOperationImpl() noexcept final = default;
@@ -132,14 +100,9 @@ class ReadOperationImpl final : public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket) final;
 
-    //! Handler which is called during operation.
-    TransmitDataHandlerPtr dataHandler;
-    //! TFTP Options Configuration
-    TftpOptionsConfiguration optionsConfiguration;
-    //! Options for the transfer
-    Options clientOptions;
-    //! Additional Negotiated Options
-    Options additionalNegotiatedOptions;
+    //! TFTP Server Read Operation Configuration
+    TftpServer::ReadOperationConfiguration configurationV;
+
     //! Contains the negotiated block size option.
     uint16_t transmitDataSize;
     //! Indicates, if the last data packet has been transmitted (closing).
