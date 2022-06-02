@@ -53,8 +53,8 @@ FetchContent_Declare(
   GIT_REPOSITORY https://git.thomas-vogt.de/thomas-vogt/cmake_common.git
   GIT_TAG        main )
 
-if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
-  set( FETCHCONTENT_SOURCE_DIR_CMAKE_COMMON ${CMAKE_CURRENT_SOURCE_DIR}/cmake_common )
+if( IS_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake_common )
+  set( FETCHCONTENT_SOURCE_DIR_CMAKE_COMMON ${CMAKE_SOURCE_DIR}/cmake_common )
 endif()
 
 FetchContent_GetProperties( cmake_common )
@@ -70,8 +70,8 @@ FetchContent_Declare(
   GIT_REPOSITORY https://git.thomas-vogt.de/thomas-vogt/helper.git
   GIT_TAG        main )
 
-if( IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/helper )
-  set( FETCHCONTENT_SOURCE_DIR_HELPER ${CMAKE_CURRENT_SOURCE_DIR}/helper )
+if( IS_DIRECTORY ${CMAKE_SOURCE_DIR}/helper )
+  set( FETCHCONTENT_SOURCE_DIR_HELPER ${CMAKE_SOURCE_DIR}/helper )
 endif()
 
 FetchContent_MakeAvailable( helper )
