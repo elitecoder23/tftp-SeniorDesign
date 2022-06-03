@@ -23,6 +23,7 @@
 #include <memory>
 #include <functional>
 #include <cstdint>
+#include <chrono>
 
 /**
  * @brief TFTP Protocol.
@@ -119,7 +120,7 @@ enum class TransferStatus
 constexpr uint16_t DefaultTftpPort{ 69U };
 
 //! Default TFTP Receive Timeout in Seconds (2 seconds)
-constexpr uint8_t DefaultTftpReceiveTimeout{ 2U };
+constexpr std::chrono::seconds DefaultTftpReceiveTimeout{ 2U };
 
 //! Number of retries performed, when no ACK has been received
 constexpr uint16_t DefaultTftpRetries{ 1U };

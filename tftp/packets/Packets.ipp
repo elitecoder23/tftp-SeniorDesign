@@ -13,8 +13,6 @@
 #ifndef TFTP_PACKETS_PACKETS_IPP
 #define TFTP_PACKETS_PACKETS_IPP
 
-#include <limits>
-
 namespace Tftp::Packets {
 
 template< std::unsigned_integral IntT >
@@ -25,7 +23,11 @@ Options::value_type TftpOptions_setOption( KnownOptions option, IntT value )
 
 template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > >
-TftpOptions_getOption( const Options &options, KnownOptions option )
+TftpOptions_getOption(
+  const Options &options,
+  KnownOptions option,
+  const IntT min,
+  const IntT max )
 {
   auto optionIt{ options.find( TftpOptions_name( option ) ) };
 
@@ -37,7 +39,7 @@ TftpOptions_getOption( const Options &options, KnownOptions option )
 
   const auto optionValue{ std::stoull( optionIt->second ) };
 
-  if ( optionValue > std::numeric_limits< IntT >::max() )
+  if ( ( optionValue < min ) || ( optionValue > max ) )
   {
     return { false, {} };
   }

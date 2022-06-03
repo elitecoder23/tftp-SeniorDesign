@@ -26,6 +26,7 @@
 #include <boost/asio.hpp>
 
 #include <string>
+#include <chrono>
 
 namespace Tftp::Server {
 
@@ -57,7 +58,7 @@ class WriteOperationImpl : public OperationImpl
      **/
     WriteOperationImpl(
       boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
+      std::chrono::seconds tftpTimeout,
       uint16_t tftpRetries,
       bool dally,
       TftpServer::WriteOperationConfiguration configuration );

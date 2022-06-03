@@ -32,7 +32,13 @@ void TftpOptionsConfiguration::fromProperties(
 {
   handleTransferSizeOption = ptree.get( "transferSize", false );
   blockSizeOption = ptree.get_optional< uint16_t>( "blockSize" );
-  timeoutOption = ptree.get_optional< uint16_t>( "timeout" );
+  auto timeoutOptionInt{
+    ptree.get_optional< std::chrono::seconds::rep >( "timeout" ) };
+  timeoutOption.reset();
+  if ( timeoutOptionInt )
+  {
+    timeoutOption = std::chrono::seconds{ *timeoutOptionInt };
+  }
 }
 
 boost::property_tree::ptree TftpOptionsConfiguration::toProperties() const
@@ -69,7 +75,12 @@ boost::program_options::options_description TftpOptionsConfiguration::options()
   )
   (
     "timeout-option",
-    boost::program_options::value( &timeoutOption )->value_name( "timeout" ),
+    boost::program_options::value< std::chrono::seconds::rep >()->value_name(
+      "timeout" )->notifier(
+        [this]( std::chrono::seconds::rep timeoutOptionInt )->void
+          {
+            timeoutOption = std::chrono::seconds{ timeoutOptionInt };
+          } ),
     "If set handles the timeout option negotiation (seconds)."
   )
   (

@@ -25,6 +25,7 @@
 #include <boost/asio.hpp>
 
 #include <string>
+#include <chrono>
 
 namespace Tftp::Server {
 
@@ -54,7 +55,7 @@ class ReadOperationImpl final : public OperationImpl
      **/
     ReadOperationImpl(
       boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
+      std::chrono::seconds tftpTimeout,
       uint16_t tftpRetries,
       TftpServer::ReadOperationConfiguration configuration );
 

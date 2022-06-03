@@ -29,7 +29,7 @@ namespace Tftp::Client {
 
 WriteOperationImpl::WriteOperationImpl(
   boost::asio::io_context &ioContext,
-  const uint8_t tftpTimeout,
+  const std::chrono::seconds tftpTimeout,
   const uint16_t tftpRetries,
   TftpClient::WriteOperationConfiguration configuration ):
   OperationImpl{
@@ -87,7 +87,8 @@ void WriteOperationImpl::request()
     {
       options.emplace( Packets::TftpOptions_setOption(
         KnownOptions::Timeout,
-        *configurationV.optionsConfiguration.timeoutOption ) );
+        static_cast< uint16_t >(
+          configurationV.optionsConfiguration.timeoutOption->count() ) ) );
     }
 
     // Add transfer size option if requested.
@@ -295,7 +296,9 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     auto [ blockSizeValid, blockSizeValue ] =
       Packets::TftpOptions_getOption< uint16_t >(
         remoteOptions,
-        KnownOptions::BlockSize );
+        KnownOptions::BlockSize,
+        BlockSizeOptionMin,
+        BlockSizeOptionMax  );
 
     if ( !blockSizeValid )
     {
@@ -339,10 +342,12 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   // check timeout option
   if ( configurationV.optionsConfiguration.timeoutOption )
   {
-    auto [timeoutValid, timeoutValue] =
+    auto [ timeoutValid, timeoutValue ] =
       Packets::TftpOptions_getOption< uint8_t>(
         remoteOptions,
-        KnownOptions::Timeout );
+        KnownOptions::Timeout,
+        TimeoutOptionMin,
+        TimeoutOptionMax );
 
     if ( !timeoutValid )
     {
@@ -362,7 +367,9 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
     if ( timeoutValue )
     {
-      if ( *timeoutValue != *configurationV.optionsConfiguration.timeoutOption )
+      // Timout Option Response from Server must be equal to Client Value
+      if ( std::chrono::seconds{ *timeoutValue }
+         != *configurationV.optionsConfiguration.timeoutOption )
       {
         BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Timeout Option not equal to sent";
@@ -378,7 +385,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
         return;
       }
 
-      receiveTimeout( *timeoutValue );
+      receiveTimeout( std::chrono::seconds{ *timeoutValue } );
     }
   }
   remoteOptions.erase( std::string{ Packets::TftpOptions_name( KnownOptions::Timeout ) } );

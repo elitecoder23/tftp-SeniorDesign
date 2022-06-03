@@ -19,6 +19,9 @@
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <boost/program_options/options_description.hpp>
 
+#include <chrono>
+#include <optional>
+
 namespace Tftp {
 
 /**
@@ -78,10 +81,8 @@ class TftpOptionsConfiguration
     //! If handleBlockSizeOption is set, this value is used for option negotiation
     boost::optional< uint16_t > blockSizeOption;
 
-    /** If handleTimeoutOption is set, this value is used for option negotiation
-     * @note Even if timeout is only uint8_t we make it 16bit for parsing.
-     **/
-    boost::optional< uint16_t > timeoutOption;
+    //! If handleTimeoutOption is set, this value is used for option negotiation
+    boost::optional< std::chrono::seconds > timeoutOption;
 };
 
 }

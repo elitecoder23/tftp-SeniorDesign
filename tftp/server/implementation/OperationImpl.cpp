@@ -65,7 +65,7 @@ const OperationImpl::ErrorInfo& OperationImpl::errorInfo() const
 
 OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
-  const uint8_t tftpTimeout,
+  const std::chrono::seconds tftpTimeout,
   const uint16_t tftpRetries,
   const uint16_t maxReceivePacketSize,
   OperationCompletedHandler completionHandler,
@@ -183,7 +183,7 @@ void OperationImpl::receive()
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
 
-    timer.expires_from_now( boost::posix_time::seconds( receiveTimeoutV ) );
+    timer.expires_from_now( receiveTimeoutV );
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,
@@ -215,7 +215,7 @@ void OperationImpl::receiveDally()
         boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
 
-    timer.expires_from_now( boost::posix_time::seconds( 2U * receiveTimeoutV ) );
+    timer.expires_from_now( 2U * receiveTimeoutV );
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutDallyHandler,
@@ -233,7 +233,8 @@ void OperationImpl::receiveDally()
   }
 }
 
-void OperationImpl::receiveTimeout( const uint8_t receiveTimeout ) noexcept
+void OperationImpl::receiveTimeout(
+  const std::chrono::seconds receiveTimeout ) noexcept
 {
   receiveTimeoutV = receiveTimeout;
 }
@@ -255,7 +256,7 @@ void OperationImpl::readRequestPacket(
   send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket));
+  finished( TransferStatus::TransferError, std::move( errorPacket ) );
 }
 
 void OperationImpl::writeRequestPacket(
@@ -411,24 +412,24 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
 
   try
   {
-    socket.send( boost::asio::buffer( transmitPacket));
+    socket.send( boost::asio::buffer( transmitPacket ) );
 
     ++transmitCounter;
 
-    timer.expires_from_now( boost::posix_time::seconds( receiveTimeoutV));
+    timer.expires_from_now( receiveTimeoutV );
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,
       shared_from_this(),
-      boost::asio::placeholders::error));
+      boost::asio::placeholders::error ) );
   }
-  catch ( boost::system::system_error &err)
+  catch ( boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TX error: " << err.what();
 
     // Operation completed
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
     return;
   }
 }

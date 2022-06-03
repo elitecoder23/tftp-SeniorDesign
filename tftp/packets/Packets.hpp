@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <optional>
 #include <concepts>
+#include <limits>
 
 /**
  * @brief TFTP %Packets.
@@ -143,6 +144,10 @@ Options::value_type TftpOptions_setOption(
  *   TFTP Options
  * @param[in] option
  *   Option Name
+ * @param[in] min
+ *   Minimum allowed Value
+ * @param[in] max
+ *   Maximum allowed Value
  *
  * @return std::pair Option was valid (not present or decoded correctly) and
  *   Option Value
@@ -150,7 +155,9 @@ Options::value_type TftpOptions_setOption(
 template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > > TftpOptions_getOption(
   const Options &options,
-  KnownOptions option );
+  KnownOptions option,
+  IntT min = std::numeric_limits< IntT >::min(),
+  IntT max = std::numeric_limits< IntT >::max() );
 
 }
 

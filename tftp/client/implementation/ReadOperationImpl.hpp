@@ -21,6 +21,8 @@
 
 #include <tftp/TftpOptionsConfiguration.hpp>
 
+#include <chrono>
+
 namespace Tftp::Client {
 
 /**
@@ -51,7 +53,7 @@ class ReadOperationImpl : public OperationImpl
      **/
     ReadOperationImpl(
       boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
+      std::chrono::seconds tftpTimeout,
       uint16_t tftpRetries,
       bool dally,
       TftpClient::ReadOperationConfiguration configuration );

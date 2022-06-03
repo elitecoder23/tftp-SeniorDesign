@@ -25,6 +25,7 @@
 #include <string>
 #include <functional>
 #include <optional>
+#include <chrono>
 
 namespace Tftp::Server {
 
@@ -46,7 +47,7 @@ class TftpServer
     struct ServerConfiguration
     {
       //! TFTP Timeout, when no timeout option is negotiated in seconds.
-      uint8_t tftpTimeout;
+      std::chrono::seconds tftpTimeout;
       //! Number of retries.
       uint16_t tftpRetries;
       //! If set to true, wait after transmission of the final ACK for potential

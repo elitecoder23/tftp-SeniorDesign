@@ -21,6 +21,7 @@
 #include <boost/program_options/options_description.hpp>
 
 #include <cstdint>
+#include <chrono>
 
 namespace Tftp {
 
@@ -80,7 +81,7 @@ class TftpConfiguration
     const uint16_t defaultTftpPort;
 
     //! TFTP timeout - The standard when no timeout option is negotiated in seconds.
-    uint8_t tftpTimeout;
+    std::chrono::seconds tftpTimeout;
     //! Number of Retries.
     uint16_t tftpRetries;
 

@@ -29,7 +29,7 @@ namespace Tftp::Client {
 
 ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
-  const uint8_t tftpTimeout,
+  const std::chrono::seconds tftpTimeout,
   const uint16_t tftpRetries,
   const bool dally,
   TftpClient::ReadOperationConfiguration configuration ):
@@ -87,7 +87,8 @@ void ReadOperationImpl::request()
     {
       options.emplace( Packets::TftpOptions_setOption(
         KnownOptions::Timeout,
-        *configurationV.optionsConfiguration.timeoutOption ) );
+        static_cast< uint16_t >(
+          configurationV.optionsConfiguration.timeoutOption->count() ) ) );
     }
 
     // Add transfer size option with size '0' if requested.
@@ -324,7 +325,9 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     auto [ blockSizeValid, blockSizeValue ] =
       Packets::TftpOptions_getOption< uint16_t >(
         remoteOptions,
-        KnownOptions::BlockSize );
+        KnownOptions::BlockSize,
+        BlockSizeOptionMin,
+        BlockSizeOptionMax );
 
     if ( !blockSizeValid )
     {
@@ -373,10 +376,12 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   // check timeout option
   if ( configurationV.optionsConfiguration.timeoutOption )
   {
-    auto [ timeoutValid, timeoutValue ] =
+    const auto [ timeoutValid, timeoutValue ] =
       Packets::TftpOptions_getOption< uint8_t>(
         remoteOptions,
-        KnownOptions::Timeout );
+        KnownOptions::Timeout,
+        TimeoutOptionMin,
+        TimeoutOptionMax );
 
     if ( !timeoutValid )
     {
@@ -398,7 +403,9 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
     if ( timeoutValue )
     {
-      if ( *timeoutValue != *configurationV.optionsConfiguration.timeoutOption )
+      // Timout Option Response from Server must be equal to Client Value
+      if ( std::chrono::seconds{ *timeoutValue }
+        != *configurationV.optionsConfiguration.timeoutOption )
       {
         BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Timeout Option not equal to sent";
@@ -416,7 +423,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
         return;
       }
 
-      receiveTimeout( *timeoutValue );
+      receiveTimeout( std::chrono::seconds{ *timeoutValue } );
     }
   }
   remoteOptions.erase(
@@ -439,7 +446,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
         ErrorCode::TftpOptionRefused,
         "Transfer Size Option negotiation failed" };
 
-      send( errorPacket);
+      send( errorPacket );
 
       // Operation completed
       finished(

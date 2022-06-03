@@ -26,6 +26,7 @@
 
 #include <string>
 #include <memory>
+#include <chrono>
 
 namespace Tftp::Client {
 
@@ -83,7 +84,7 @@ class OperationImpl :
      **/
     OperationImpl(
       boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
+      std::chrono::seconds tftpTimeout,
       uint16_t tftpRetries,
       uint16_t maxReceivePacketSize,
       OperationCompletedHandler completionHandler,
@@ -141,7 +142,7 @@ class OperationImpl :
      * @param[in] receiveTimeout
      *   New receive timeout.
      **/
-    void receiveTimeout( uint8_t receiveTimeout ) noexcept;
+    void receiveTimeout( std::chrono::seconds receiveTimeout ) noexcept;
 
     /**
      * @brief Sets the finished flag.
@@ -255,7 +256,7 @@ class OperationImpl :
     void timeoutDallyHandler( const boost::system::error_code &errorCode );
 
     //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
-    uint8_t receiveTimeoutV;
+    std::chrono::seconds receiveTimeoutV;
     //! TFTP Retries
     const uint16_t tftpRetries;
 
@@ -267,7 +268,7 @@ class OperationImpl :
     //! TFTP socket
     boost::asio::ip::udp::socket socket;
     //! Receive timeout timer
-    boost::asio::deadline_timer timer;
+    boost::asio::system_timer timer;
 
     //! Received Packet Data
     Packets::RawTftpPacket receivePacket;

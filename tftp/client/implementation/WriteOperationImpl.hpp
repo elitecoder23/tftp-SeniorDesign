@@ -21,6 +21,8 @@
 
 #include <tftp/TftpOptionsConfiguration.hpp>
 
+#include <chrono>
+
 namespace Tftp::Client {
 
 /**
@@ -47,7 +49,7 @@ class WriteOperationImpl : public OperationImpl
      **/
     WriteOperationImpl(
       boost::asio::io_context &ioContext,
-      uint8_t tftpTimeout,
+      std::chrono::seconds tftpTimeout,
       uint16_t tftpRetries,
       TftpClient::WriteOperationConfiguration configuration );
 

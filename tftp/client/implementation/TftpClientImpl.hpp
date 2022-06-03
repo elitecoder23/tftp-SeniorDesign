@@ -47,7 +47,7 @@ class TftpClientImpl : public TftpClient
 
     //! @copydoc TftpClient::writeOperation(WriteOperationConfiguration)
     OperationPtr writeOperation(
-      WriteOperationConfiguration configuration  ) final;
+      WriteOperationConfiguration configuration ) final;
 
   private:
     //! I/O context, which handles the asynchronous reception operation

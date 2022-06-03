@@ -73,7 +73,7 @@ const OperationImpl::ErrorInfo& OperationImpl::errorInfo() const
 
 OperationImpl::OperationImpl(
   boost::asio::io_context &ioContext,
-  const uint8_t tftpTimeout,
+  const std::chrono::seconds tftpTimeout,
   const uint16_t tftpRetries,
   const uint16_t maxReceivePacketSize,
   OperationCompletedHandler completionHandler,
@@ -196,7 +196,7 @@ void OperationImpl::receiveFirst()
         boost::asio::placeholders::bytes_transferred ) );
 
     // Set receive timeout
-    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV } );
+    timer.expires_from_now( receiveTimeoutV );
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
@@ -229,7 +229,7 @@ void OperationImpl::receive()
         boost::asio::placeholders::bytes_transferred ) );
 
     // set receive timeout
-    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV } );
+    timer.expires_from_now( receiveTimeoutV );
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
@@ -262,7 +262,7 @@ void OperationImpl::receiveDally()
         boost::asio::placeholders::bytes_transferred ) );
 
     // set receive timeout
-    timer.expires_from_now( boost::posix_time::seconds{ 2U * receiveTimeoutV } );
+    timer.expires_from_now( 2U * receiveTimeoutV );
 
     // start waiting for receive timeout
     timer.async_wait( boost::bind(
@@ -279,7 +279,8 @@ void OperationImpl::receiveDally()
   }
 }
 
-void OperationImpl::receiveTimeout( const uint8_t receiveTimeout ) noexcept
+void OperationImpl::receiveTimeout(
+  const std::chrono::seconds receiveTimeout ) noexcept
 {
   receiveTimeoutV = receiveTimeout;
 }
@@ -561,7 +562,7 @@ void OperationImpl::timeoutFirstHandler(
     // increment transmit counter
     ++transmitCounter;
 
-    timer.expires_from_now( boost::posix_time::seconds( receiveTimeoutV ) );
+    timer.expires_from_now( receiveTimeoutV );
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutFirstHandler,
@@ -617,7 +618,7 @@ void OperationImpl::timeoutHandler(
 
     ++transmitCounter;
 
-    timer.expires_from_now( boost::posix_time::seconds{ receiveTimeoutV } );
+    timer.expires_from_now( receiveTimeoutV );
 
     timer.async_wait( boost::bind(
       &OperationImpl::timeoutHandler,

@@ -27,7 +27,7 @@ namespace Tftp::Server {
 
 ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
-  uint8_t tftpTimeout,
+  std::chrono::seconds tftpTimeout,
   uint16_t tftpRetries,
   TftpServer::ReadOperationConfiguration configuration ) :
   OperationImpl{
@@ -72,7 +72,9 @@ void ReadOperationImpl::start()
         const auto [ blockSizeValid, blockSize ] =
           Packets::TftpOptions_getOption< uint16_t >(
             configurationV.clientOptions,
-            KnownOptions::BlockSize );
+            KnownOptions::BlockSize,
+            BlockSizeOptionMin,
+            BlockSizeOptionMax );
 
         if ( blockSize )
         {
@@ -93,19 +95,21 @@ void ReadOperationImpl::start()
         const auto [ timeoutValid, timeout ] =
           Packets::TftpOptions_getOption< uint8_t >(
             configurationV.clientOptions,
-            KnownOptions::Timeout );
+            KnownOptions::Timeout,
+            TimeoutOptionMin,
+            TimeoutOptionMax );
 
-        if ( timeout
-          && ( *timeout > 0U )
-          && ( *timeout <= *configurationV.optionsConfiguration.timeoutOption ) )
+        if ( timeoutValid && timeout
+          && ( std::chrono::seconds{ *timeout }
+            <= *configurationV.optionsConfiguration.timeoutOption ) )
         {
-          receiveTimeout( *timeout );
-        }
+          receiveTimeout( std::chrono::seconds{ *timeout } );
 
-        // respond option string
-        serverOptions.emplace( Packets::TftpOptions_setOption(
-          KnownOptions::Timeout,
-          *timeout ) );
+          // respond with timeout option set
+          serverOptions.emplace( Packets::TftpOptions_setOption(
+            KnownOptions::Timeout,
+            *timeout ) );
+        }
       }
 
       // check transfer size option
