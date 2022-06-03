@@ -17,7 +17,7 @@
 namespace Tftp {
 
 TftpOptionsConfiguration::TftpOptionsConfiguration() noexcept :
-  handleTransferSizeOption{ false}
+  handleTransferSizeOption{ false }
 {
 }
 
@@ -32,7 +32,7 @@ void TftpOptionsConfiguration::fromProperties(
 {
   handleTransferSizeOption = ptree.get( "transferSize", false );
   blockSizeOption = ptree.get_optional< uint16_t>( "blockSize" );
-  auto timeoutOptionInt{
+  const auto timeoutOptionInt{
     ptree.get_optional< std::chrono::seconds::rep >( "timeout" ) };
   timeoutOption.reset();
   if ( timeoutOptionInt )
@@ -57,7 +57,7 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties() const
 
   if ( timeoutOption )
   {
-    properties.add( "timeout", timeoutOption );
+    properties.add( "timeout", timeoutOption->count() );
   }
 
   return properties;
@@ -77,7 +77,7 @@ boost::program_options::options_description TftpOptionsConfiguration::options()
     "timeout-option",
     boost::program_options::value< std::chrono::seconds::rep >()->value_name(
       "timeout" )->notifier(
-        [this]( std::chrono::seconds::rep timeoutOptionInt )->void
+        [this]( const auto timeoutOptionInt )->void
           {
             timeoutOption = std::chrono::seconds{ timeoutOptionInt };
           } ),

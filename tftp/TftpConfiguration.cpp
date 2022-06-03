@@ -40,10 +40,9 @@ TftpConfiguration::TftpConfiguration(
 void TftpConfiguration::fromProperties(
   const boost::property_tree::ptree &ptree )
 {
-  const std::chrono::seconds::rep tftpTimeOutInt{
-    ptree.get< std::chrono::seconds::rep >(
-      "timeout",
-      DefaultTftpReceiveTimeout.count() ) };
+  const auto tftpTimeOutInt{ ptree.get< std::chrono::seconds::rep >(
+    "timeout",
+    DefaultTftpReceiveTimeout.count() ) };
   tftpTimeout = std::chrono::seconds{ tftpTimeOutInt };
   tftpRetries = ptree.get( "retries", DefaultTftpRetries ) ;
   tftpServerPort = ptree.get( "port", defaultTftpPort );
@@ -57,7 +56,7 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
 
   if ( tftpTimeout != DefaultTftpReceiveTimeout )
   {
-    properties.add( "timeout", tftpTimeout );
+    properties.add( "timeout", tftpTimeout.count() );
   }
   if ( tftpRetries != DefaultTftpRetries )
   {
