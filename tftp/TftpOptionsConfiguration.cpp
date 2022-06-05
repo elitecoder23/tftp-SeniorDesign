@@ -22,18 +22,19 @@ TftpOptionsConfiguration::TftpOptionsConfiguration() noexcept :
 }
 
 TftpOptionsConfiguration::TftpOptionsConfiguration(
-  const boost::property_tree::ptree &ptree )
+  const boost::property_tree::ptree &properties )
 {
-  fromProperties( ptree );
+  fromProperties( properties );
 }
 
 void TftpOptionsConfiguration::fromProperties(
-  const boost::property_tree::ptree &ptree )
+  const boost::property_tree::ptree &properties )
 {
-  handleTransferSizeOption = ptree.get( "transferSize", false );
-  blockSizeOption = ptree.get_optional< uint16_t>( "blockSize" );
+  handleTransferSizeOption = properties.get( "transferSize", false );
+  blockSizeOption = properties.get_optional< uint16_t>( "blockSize" );
+  //! @todo use std::optional::transform when C++23 is available
   const auto timeoutOptionInt{
-    ptree.get_optional< std::chrono::seconds::rep >( "timeout" ) };
+    properties.get_optional< std::chrono::seconds::rep >( "timeout" ) };
   timeoutOption.reset();
   if ( timeoutOptionInt )
   {

@@ -30,24 +30,25 @@ TftpConfiguration::TftpConfiguration(
 }
 
 TftpConfiguration::TftpConfiguration(
-  const boost::property_tree::ptree &ptree,
+  const boost::property_tree::ptree &properties,
   const uint16_t defaultTftpPort ) :
   defaultTftpPort{ defaultTftpPort }
 {
-  fromProperties( ptree );
+  fromProperties( properties );
 }
 
 void TftpConfiguration::fromProperties(
-  const boost::property_tree::ptree &ptree )
+  const boost::property_tree::ptree &properties )
 {
-  const auto tftpTimeOutInt{ ptree.get< std::chrono::seconds::rep >(
+  //! @todo use std::optional::transform when C++23 is available
+  const auto tftpTimeOutInt{ properties.get< std::chrono::seconds::rep >(
     "timeout",
     DefaultTftpReceiveTimeout.count() ) };
   tftpTimeout = std::chrono::seconds{ tftpTimeOutInt };
-  tftpRetries = ptree.get( "retries", DefaultTftpRetries ) ;
-  tftpServerPort = ptree.get( "port", defaultTftpPort );
-  tftpOptions.fromProperties( ptree.get_child( "options", {} ) );
-  dally = ptree.get( "dally", false ) ;
+  tftpRetries = properties.get( "retries", DefaultTftpRetries ) ;
+  tftpServerPort = properties.get( "port", defaultTftpPort );
+  tftpOptions.fromProperties( properties.get_child( "options", {} ) );
+  dally = properties.get( "dally", false ) ;
 }
 
 boost::property_tree::ptree TftpConfiguration::toProperties() const

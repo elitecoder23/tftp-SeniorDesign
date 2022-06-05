@@ -45,19 +45,19 @@ class TftpOptionsConfiguration
     /**
      * @brief Loads the Configuration via a boost::property_tree::ptree.
      *
-     * @param[in] ptree
-     *   Stored configuration.
+     * @param[in] properties
+     *   Stored TFTP Option Configuration.
      **/
     explicit TftpOptionsConfiguration(
-      const boost::property_tree::ptree &ptree );
+      const boost::property_tree::ptree &properties );
 
     /**
      * @brief Load Configuration from given Property Tree.
      *
-     * @param[in] ptree
+     * @param[in] properties
      *   Configuration as Property Tree
      **/
-    void fromProperties( const boost::property_tree::ptree &ptree );
+    void fromProperties( const boost::property_tree::ptree &properties );
 
     /**
      * @brief Converts the configuration values to a

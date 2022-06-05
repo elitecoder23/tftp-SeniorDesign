@@ -44,22 +44,22 @@ class TftpConfiguration
     /**
      * @brief Loads the configuration via a boost::property_tree::ptree.
      *
-     * @param[in] ptree
+     * @param[in] properties
      *   Stored Configuration.
      * @param[in] defaultTftpPort
      *   Default TFTP Port used for Configuration
      **/
     explicit TftpConfiguration(
-      const boost::property_tree::ptree &ptree,
+      const boost::property_tree::ptree &properties,
       uint16_t defaultTftpPort = DefaultTftpPort );
 
     /**
      * @brief Load Configuration from given Property Tree.
      *
-     * @param[in] ptree
+     * @param[in] properties
      *   Configuration as Property Tree
      **/
-    void fromProperties( const boost::property_tree::ptree &ptree );
+    void fromProperties( const boost::property_tree::ptree &properties );
 
     /**
      * @brief Converts the configuration values to a
