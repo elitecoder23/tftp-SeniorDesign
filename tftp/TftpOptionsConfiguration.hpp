@@ -25,12 +25,12 @@
 namespace Tftp {
 
 /**
- * @brief TFTP Option List.
+ * @brief TFTP Options Configuration.
  *
  * A TFTP option is a name - value pair.
  *
  * The option list also contains handler of common TFTP options like:
- * - blocksize option (RFC 2348)
+ * - block size option (RFC 2348)
  * - timeout option (RFC 2349)
  * - transfer size option (RFC 2349)
  **/
@@ -43,7 +43,7 @@ class TftpOptionsConfiguration
     TftpOptionsConfiguration() noexcept;
 
     /**
-     * @brief Loads the Configuration via a boost::property_tree::ptree.
+     * @brief Loads the Configuration via a Property Tree.
      *
      * @param[in] properties
      *   Stored TFTP Option Configuration.
@@ -60,10 +60,9 @@ class TftpOptionsConfiguration
     void fromProperties( const boost::property_tree::ptree &properties );
 
     /**
-     * @brief Converts the configuration values to a
-     *   boost::property_tree::ptree.
+     * @brief Converts the configuration values to a Property Tree.
      *
-     * @return The boost::property_tree::ptree.
+     * @return Configuration represented as Property Tree.
      **/
     [[nodiscard]] boost::property_tree::ptree toProperties() const;
 

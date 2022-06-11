@@ -44,9 +44,9 @@
  * @param[in] argc
  *   Number of arguments.
  * @param[in] argv
- *   The arguments
+ *   Arguments
  *
- * @return The success state of this operation.
+ * @return Success state of this operation.
  **/
 int main( int argc, char * argv[] );
 
@@ -64,7 +64,7 @@ static bool checkFilename( const std::filesystem::path &filename );
  * @brief Handler for Received TFTP Requests.
  *
  * @param[in] remote
- *   Remote address.
+ *   Remote Address.
  * @param[in] requestType
  *   TFTP Request Type (RRQ/ WRQ)
  * @param[in] filename
@@ -74,7 +74,7 @@ static bool checkFilename( const std::filesystem::path &filename );
  * @param[in] clientOptions
  *   TFTP Options.
  * @param[in] additionalClientOptions
- *   additional Options.
+ *   Additional Options.
  **/
 static void receivedRequest(
   const boost::asio::ip::udp::endpoint &remote,
@@ -132,7 +132,7 @@ int main( int argc, char * argv[] )
   std::cout << "TFTP Server - " << Tftp::Version::VersionInformation << "\n";
 
   boost::program_options::options_description optionsDescription{
-    "TFTP server options" };
+    "TFTP Server Options" };
 
   optionsDescription.add_options()
     (
@@ -141,7 +141,7 @@ int main( int argc, char * argv[] )
     )
     (
       "server-root",
-      boost::program_options::value( &baseDir)->default_value(
+      boost::program_options::value( &baseDir )->default_value(
         std::filesystem::current_path()),
       "Directory path, where the server shall have its root"
     );
@@ -170,7 +170,7 @@ int main( int argc, char * argv[] )
 
     boost::program_options::notify( options );
 
-    // make a absolute path
+    // make an absolute path
     baseDir = std::filesystem::canonical( baseDir );
 
     std::cout
@@ -241,7 +241,7 @@ static bool checkFilename( const std::filesystem::path &filename )
     return false;
   }
 
-  auto fileIt{ filename.begin()};
+  auto fileIt{ filename.begin() };
 
   for ( const auto& pathItem : baseDir )
   {

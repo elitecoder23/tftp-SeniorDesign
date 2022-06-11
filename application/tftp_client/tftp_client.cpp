@@ -43,15 +43,15 @@
  * @brief Program Entry Point
  *
  * @param[in] argc
- *   Number of arguments.
+ *   Number of Arguments.
  * @param[in] argv
- *   The arguments
+ *   Arguments
  *
- * @return The success state of this operation.
+ * @return Success state of this operation.
  **/
-int main( int argc, char *argv[] );
+int main( int argc, char * argv[] );
 
-int main( int argc, char *argv[] )
+int main( int argc, char * argv[] )
 {
   Tftp::RequestType requestType{ Tftp::RequestType::Invalid };
   std::string localFile{};
@@ -65,37 +65,37 @@ int main( int argc, char *argv[] )
     "TFTP Client Options" };
 
   optionsDescription.add_options()
-    (
-      "help",
-      "print this help screen"
-    )
-    (
-      "request-type",
-      boost::program_options::value( &requestType)->required(),
-      "the desired operation (\"Read\"|\"Write\")"
-    )
-    (
-      "local-file",
-      boost::program_options::value( &localFile),
-      "filename of local file"
-    )
-    (
-      "remote-file",
-      boost::program_options::value( &remoteFile)->required(),
-      "filename of remote file"
-    )
-    (
-      "address",
-      boost::program_options::value( &address)->required(),
-      "remote address"
-    );
+  (
+    "help",
+    "print this help screen"
+  )
+  (
+    "request-type",
+    boost::program_options::value( &requestType)->required(),
+    "the desired operation (\"Read\"|\"Write\" )"
+  )
+  (
+    "local-file",
+    boost::program_options::value( &localFile ),
+    "filename of local file"
+  )
+  (
+    "remote-file",
+    boost::program_options::value( &remoteFile)->required(),
+    "filename of remote file"
+  )
+  (
+    "address",
+    boost::program_options::value( &address)->required(),
+    "remote address"
+  );
 
   // Add common TFTP options
   optionsDescription.add( configuration.options() );
 
   try
   {
-    std::cout << "TFTP client\n";
+    std::cout << "TFTP Client\n";
 
     boost::program_options::variables_map options;
     boost::program_options::store(

@@ -6,6 +6,12 @@
 
 cmake_minimum_required( VERSION 3.21 )
 
+set_property(
+  DIRECTORY ${PROJECT_SOURCE_DIR}
+  APPEND
+  PROPERTY DOC_PATHS
+  ${CMAKE_CURRENT_SOURCE_DIR}/tftp_applications.md )
+
 add_subdirectory( tftp_unit_test )
 add_subdirectory( tftp_client )
 add_subdirectory( tftp_server )

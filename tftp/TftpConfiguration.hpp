@@ -26,8 +26,10 @@
 namespace Tftp {
 
 /**
- * @brief Encapsulates common TFTP options, which can be loaded via a
- *   boost::property_tree::ptree.
+ * @brief TFTP Configuration Parameters.
+ *
+ * Configuration can be load/ stored as Property Tree and Command Line
+ * Parameters.
  **/
 class TftpConfiguration
 {
@@ -36,18 +38,18 @@ class TftpConfiguration
      * @brief Initialises the Configuration with Default Values.
      *
      * @param[in] defaultTftpPort
-     *   Default TFTP Port used for Configuration
+     *   Default TFTP Port used for Configuration.
      **/
     explicit TftpConfiguration(
       uint16_t defaultTftpPort = DefaultTftpPort ) noexcept;
 
     /**
-     * @brief Loads the configuration via a boost::property_tree::ptree.
+     * @brief Loads the configuration via a Property Tree.
      *
      * @param[in] properties
      *   Stored Configuration.
      * @param[in] defaultTftpPort
-     *   Default TFTP Port used for Configuration
+     *   Default TFTP Port used for Configuration.
      **/
     explicit TftpConfiguration(
       const boost::property_tree::ptree &properties,
@@ -62,10 +64,9 @@ class TftpConfiguration
     void fromProperties( const boost::property_tree::ptree &properties );
 
     /**
-     * @brief Converts the configuration values to a
-     *   boost::property_tree::ptree.
+     * @brief Converts the configuration values to a Property Tree.
      *
-     * @return Configuration as boost::property_tree::ptree.
+     * @return Configuration as Property Tree.
      **/
     [[nodiscard]] boost::property_tree::ptree toProperties() const;
 
@@ -80,7 +81,7 @@ class TftpConfiguration
     //! Default TFTP Port ( can be overridden by configuration)
     const uint16_t defaultTftpPort;
 
-    //! TFTP timeout - The standard when no timeout option is negotiated in seconds.
+    //! TFTP timeout - standard when no timeout option is negotiated in seconds.
     std::chrono::seconds tftpTimeout;
     //! Number of Retries.
     uint16_t tftpRetries;

@@ -70,9 +70,9 @@ boost::program_options::options_description TftpOptionsConfiguration::options()
 
   options.add_options()
   (
-    "blocksize-option",
-    boost::program_options::value( &blockSizeOption )->value_name( "blocksize" ),
-    "blocksize of transfers to use."
+    "block-size-option",
+    boost::program_options::value( &blockSizeOption )->value_name( "block size" ),
+    "block size of transfers to use."
   )
   (
     "timeout-option",
