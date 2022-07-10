@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.21 )
+cmake_minimum_required( VERSION 3.23 )
 
 project(
   tftp
@@ -45,7 +45,6 @@ enable_testing()
 
 include( GNUInstallDirs )
 
-# get dependencies
 include( FetchContent )
 
 FetchContent_Declare(
