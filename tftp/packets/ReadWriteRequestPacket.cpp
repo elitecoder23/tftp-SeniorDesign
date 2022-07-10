@@ -16,14 +16,16 @@
 
 #include <helper/Endianess.hpp>
 
+#include <fmt/format.h>
+
 #include <algorithm>
 
 namespace Tftp::Packets {
 
 std::string_view ReadWriteRequestPacket::decodeMode(
-  const TransferMode mode)
+  const TransferMode mode )
 {
-  switch (mode)
+  switch ( mode )
   {
     case TransferMode::OCTET:
       return "OCTET";
@@ -115,11 +117,12 @@ void ReadWriteRequestPacket::options( Options &&options )
 
 ReadWriteRequestPacket::operator std::string() const
 {
-  return (boost::format( "%s: FILE: \"%s\" MODE: \"%s\" OPT: \"%s\"" ) %
-    Packet::operator std::string() %
-    filenameV %
-    decodeMode( modeV) %
-    TftpOptions_toString( optionsV ) ).str();
+  return fmt::format(
+    "{}: FILE: \"{}\" MODE: \"{}\" OPT: \"{}\"",
+    Packet::operator std::string(),
+    filenameV,
+    decodeMode( modeV ),
+    TftpOptions_toString( optionsV ) );
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
@@ -140,7 +143,8 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException()
-        << Helper::AdditionalInfo{ "Wrong packet type supplied only RRQ/WRW allowed" } );
+        << Helper::AdditionalInfo{
+          "Wrong packet type supplied only RRQ/WRW allowed" } );
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 }
@@ -163,7 +167,8 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException()
-        << Helper::AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
+        << Helper::AdditionalInfo{
+          "Wrong packet type supplied only RRQ/WRW allowed" } );
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 }
@@ -182,7 +187,8 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
     default:
       BOOST_THROW_EXCEPTION( InvalidPacketException()
-        << Helper::AdditionalInfo( "Wrong packet type supplied only RRQ/WRW allowed"));
+        << Helper::AdditionalInfo{
+          "Wrong packet type supplied only RRQ/WRW allowed" } );
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 
@@ -204,11 +210,11 @@ void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
   if ( rawPacket.back() != 0 )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "RRQ/WRQ message not 0-terminated" ));
+      << Helper::AdditionalInfo{ "RRQ/WRQ message not 0-terminated" } );
   }
 
   // filename
-  auto filenameEnd{ std::find( packetIt, rawPacket.end(), 0 ) };
+  const auto filenameEnd{ std::find( packetIt, rawPacket.end(), 0 ) };
 
   if ( filenameEnd == rawPacket.end())
   {
@@ -221,12 +227,12 @@ void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
   // transfer mode
   auto modeEnd{ std::find( packetIt, rawPacket.end(), 0)};
 
-  if (modeEnd == rawPacket.end())
+  if ( modeEnd == rawPacket.end() )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "No 0-termination for operation found"));
+      << Helper::AdditionalInfo{ "No 0-termination for operation found" } );
   }
-  modeV = decodeMode( std::string{ packetIt, modeEnd});
+  modeV = decodeMode( std::string{ packetIt, modeEnd } );
   packetIt = modeEnd + 1U;
 
   // assign options
@@ -244,9 +250,9 @@ RawTftpPacket ReadWriteRequestPacket::encode() const
     mode.size() + 1U +
     rawOptions.size() );
 
-  insertHeader( rawPacket);
+  insertHeader( rawPacket );
 
-  auto packetIt{ rawPacket.begin() + HeaderSize};
+  auto packetIt{ rawPacket.begin() + HeaderSize };
 
   // encode filename
   packetIt = std::copy( filenameV.begin(), filenameV.end(), packetIt );
@@ -254,12 +260,12 @@ RawTftpPacket ReadWriteRequestPacket::encode() const
   ++packetIt;
 
   // encode transfer mode
-  packetIt = std::copy( mode.begin(), mode.end(), packetIt);
+  packetIt = std::copy( mode.begin(), mode.end(), packetIt );
   *packetIt = 0;
   ++packetIt;
 
   // encode options
-  std::copy( rawOptions.begin(), rawOptions.end(), packetIt);
+  std::copy( rawOptions.begin(), rawOptions.end(), packetIt );
 
   return rawPacket;
 }

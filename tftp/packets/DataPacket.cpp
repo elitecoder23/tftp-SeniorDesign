@@ -15,34 +15,37 @@
 #include <tftp/packets/PacketException.hpp>
 
 #include <helper/Endianess.hpp>
+
+#include <fmt/format.h>
+
 #include <utility>
 
 namespace Tftp::Packets {
 
 DataPacket::DataPacket(
   BlockNumber blockNumber,
-  const Data &data) noexcept:
-  Packet{ PacketType::Data}, blockNumberV{ blockNumber}, dataV{ data}
+  const Data &data ) noexcept:
+  Packet{ PacketType::Data }, blockNumberV{ blockNumber }, dataV{ data }
 {
 }
 
 DataPacket::DataPacket(
   BlockNumber blockNumber,
-  Data &&data) noexcept:
-  Packet{ PacketType::Data}, blockNumberV{ blockNumber}, dataV{ std::move( data)}
+  Data &&data ) noexcept:
+  Packet{ PacketType::Data }, blockNumberV{ blockNumber }, dataV{ std::move( data ) }
 {
 }
 
-DataPacket::DataPacket( ConstRawTftpPacketSpan rawPacket) :
-  Packet{ PacketType::Data, rawPacket}
+DataPacket::DataPacket( ConstRawTftpPacketSpan rawPacket ) :
+  Packet{ PacketType::Data, rawPacket }
 {
-  decodeBody( rawPacket);
+  decodeBody( rawPacket );
 }
 
-DataPacket& DataPacket::operator=( ConstRawTftpPacketSpan rawPacket)
+DataPacket& DataPacket::operator=( ConstRawTftpPacketSpan rawPacket )
 {
-  decodeHeader( rawPacket);
-  decodeBody( rawPacket);
+  decodeHeader( rawPacket );
+  decodeBody( rawPacket );
   return *this;
 }
 
@@ -56,7 +59,7 @@ BlockNumber& DataPacket::blockNumber()
   return blockNumberV;
 }
 
-void DataPacket::blockNumber( const BlockNumber blockNumber)
+void DataPacket::blockNumber( const BlockNumber blockNumber )
 {
   blockNumberV = blockNumber;
 }
@@ -71,14 +74,14 @@ DataPacket::Data& DataPacket::data()
   return dataV;
 }
 
-void DataPacket::data( const Data &data)
+void DataPacket::data( const Data &data )
 {
   dataV = data;
 }
 
-void DataPacket::data( Data &&data)
+void DataPacket::data( Data &&data )
 {
-  dataV = std::move( data);
+  dataV = std::move( data );
 }
 
 size_t DataPacket::dataSize() const
@@ -88,24 +91,25 @@ size_t DataPacket::dataSize() const
 
 DataPacket::operator std::string() const
 {
-  return ( boost::format( "DATA: BLOCK NO: %d DATA: %d bytes") %
-    static_cast< uint16_t>( blockNumber()) %
-    dataSize()).str();
+  return fmt::format(
+    "DATA: BLOCK NO: {} DATA: {} bytes",
+    static_cast< uint16_t>( blockNumber() ),
+    dataSize() );
 }
 
 RawTftpPacket DataPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4U + dataV.size());
+  RawTftpPacket rawPacket( 4U + dataV.size() );
 
   insertHeader( rawPacket );
 
-  auto packetIt{ rawPacket.begin() + HeaderSize};
+  auto packetIt{ rawPacket.begin() + HeaderSize };
 
   // block number
-  packetIt = Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV ));
+  packetIt = Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV ) );
 
   // data
-  std::copy( dataV.begin(), dataV.end(), packetIt);
+  std::copy( dataV.begin(), dataV.end(), packetIt );
 
   return rawPacket;
 }

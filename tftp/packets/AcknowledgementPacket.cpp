@@ -16,6 +16,8 @@
 
 #include <helper/Endianess.hpp>
 
+#include <fmt/format.h>
+
 namespace Tftp::Packets {
 
 AcknowledgementPacket::AcknowledgementPacket(
@@ -51,18 +53,18 @@ void AcknowledgementPacket::blockNumber( const BlockNumber blockNumber)
 
 AcknowledgementPacket::operator std::string() const
 {
-  return ( boost::format( "ACK: BLOCK NO: %d") %
-    static_cast< uint16_t>( blockNumber())).str();
+  return
+    fmt::format( "ACK: BLOCK NO: {}", static_cast< uint16_t>( blockNumberV ) );
 }
 
 RawTftpPacket AcknowledgementPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4U);
+  RawTftpPacket rawPacket( 4U );
 
   // insert header data
   insertHeader( rawPacket);
 
-  auto packetIt( rawPacket.begin() + HeaderSize);
+  auto packetIt( rawPacket.begin() + HeaderSize );
 
   // Add block number
   Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV ) );
@@ -70,19 +72,19 @@ RawTftpPacket AcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-void AcknowledgementPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
+void AcknowledgementPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
 {
   // check size
-  if ( rawPacket.size() != PacketSize)
+  if ( rawPacket.size() != PacketSize )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "Invalid packet size of ACK packet"));
+      << Helper::AdditionalInfo{ "Invalid packet size of ACK packet" } );
   }
 
-  auto packetIt{ rawPacket.begin() + HeaderSize};
+  auto packetIt{ rawPacket.begin() + HeaderSize };
 
   // decode block number
-  Helper::getInt< uint16_t>( packetIt, static_cast< uint16_t&>( blockNumberV ));
+  Helper::getInt< uint16_t>( packetIt, static_cast< uint16_t&>( blockNumberV ) );
 }
 
 }

@@ -7,6 +7,7 @@
 cmake_minimum_required( VERSION 3.23 )
 
 find_package( Boost REQUIRED COMPONENTS program_options )
+find_package( fmt REQUIRED )
 
 # prepare Version.cpp
 configure_file( Version.cpp.in Version.cpp )
@@ -72,10 +73,13 @@ target_compile_options(
 
 target_link_libraries(
   tftp
+
   PUBLIC
     helper
     Boost::program_options
 
+  PRIVATE
+    fmt::fmt
     # Windows Socket must be explicitly linked in MinGW
     $<$<PLATFORM_ID:Windows>:wsock32>
     $<$<PLATFORM_ID:Windows>:ws2_32> )
@@ -95,8 +99,8 @@ target_compile_definitions(
   tftp_test
 
   PRIVATE
-  # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-  $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
+    # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
 target_compile_options(
   tftp_test
