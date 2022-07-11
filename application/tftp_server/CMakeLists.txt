@@ -22,7 +22,9 @@ target_link_libraries(
   PRIVATE
     tftp
     helper
-    Boost::thread )
+    Boost::thread
+    # Windows Socket must be explicitly linked in MinGW
+    $<$<PLATFORM_ID:Windows>:wsock32 ws2_32> )
 
 target_compile_definitions(
   tftp_server

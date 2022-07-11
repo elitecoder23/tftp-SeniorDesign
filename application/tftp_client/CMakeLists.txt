@@ -22,7 +22,7 @@ target_sources( tftp_client PRIVATE tftp_client.cpp )
 target_link_libraries(
   tftp_client
 
-  PUBLIC
+  PRIVATE
     tftp
     helper
 
@@ -30,7 +30,10 @@ target_link_libraries(
     Boost::program_options
     Boost::filesystem
     Boost::thread
-    Boost::chrono )
+    Boost::chrono
+
+    # Windows Socket must be explicitly linked in MinGW
+    $<$<PLATFORM_ID:Windows>:wsock32 ws2_32> )
 
 target_compile_definitions(
   tftp_client
