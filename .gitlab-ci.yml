@@ -1,5 +1,5 @@
 default:
-  image: infohoschie/build-gcc-clang-cmake:latest
+  image: git.thomas-vogt.de:5050/thomas-vogt/docker-gcc-clang-cmake:latest
 
 .cmake_build:
   stage: build
