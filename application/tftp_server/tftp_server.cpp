@@ -35,8 +35,6 @@
 #include <fstream>
 #include <cstdlib>
 #include <iostream>
-#include <memory>
-#include <thread>
 
 /**
  * @brief TFTP Server Program Entry Point
@@ -149,11 +147,11 @@ int main( int argc, char * argv[] )
   // Add TFTP options
   optionsDescription.add( configuration.options() );
 
-  boost::asio::io_context ioContext;
-  boost::asio::signal_set signals{ ioContext, SIGINT, SIGTERM };
-
   try
   {
+    boost::asio::io_context ioContext;
+    boost::asio::signal_set signals{ ioContext, SIGINT, SIGTERM };
+
     boost::program_options::variables_map options;
     boost::program_options::store(
       boost::program_options::parse_command_line(
@@ -184,14 +182,7 @@ int main( int argc, char * argv[] )
         .tftpTimeout = configuration.tftpTimeout,
         .tftpRetries = configuration.tftpRetries,
         .dally = configuration.dally,
-        .handler = std::bind(
-          &receivedRequest,
-          std::placeholders::_1,
-          std::placeholders::_2,
-          std::placeholders::_3,
-          std::placeholders::_4,
-          std::placeholders::_5,
-          std::placeholders::_6 ),
+        .handler = std::bind_front( &receivedRequest ),
         .serverAddress = boost::asio::ip::udp::endpoint{
           boost::asio::ip::address_v4::any(),
           configuration.tftpServerPort } } );
@@ -209,18 +200,18 @@ int main( int argc, char * argv[] )
 
     ioContext.run();
   }
-  catch ( boost::program_options::error &e )
+  catch ( const boost::program_options::error &e )
   {
     std::cout << e.what() << std::endl << optionsDescription << "\n";
     return EXIT_FAILURE;
   }
-  catch ( boost::exception &e )
+  catch ( const boost::exception &e )
   {
     std::cerr
       << "Error in TFTP server: " << boost::diagnostic_information( e ) << "\n";
     return EXIT_FAILURE;
   }
-  catch ( ...)
+  catch ( ... )
   {
     std::cerr << "Error in TFTP server: UNKNOWN EXCEPTION\n";
     return EXIT_FAILURE;
@@ -315,7 +306,7 @@ static void transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
   const Tftp::Options &clientOptions,
-  const Tftp::Options &additionalClientOptions )
+  [[maybe_unused]] const Tftp::Options &additionalClientOptions )
 {
   std::cout
     << "RRQ: " << filename << " from: " << remote.address().to_string() << "\n";
@@ -359,7 +350,7 @@ static void receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
   const Tftp::Options &clientOptions,
-  const Tftp::Options &additionalClientOptions )
+  [[maybe_unused]] const Tftp::Options &additionalClientOptions )
 {
   std::cout
     << "WRQ: " << filename << " from: " << remote.address().to_string() << "\n";
