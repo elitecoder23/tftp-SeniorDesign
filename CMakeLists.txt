@@ -30,12 +30,7 @@ endif()
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
 # find clang-tidy and add options to execute
-find_program(
-  CLANG_TIDY_EXE
-  NAMES
-    clang-tidy-13
-    clang-tidy-12
-    clang-tidy )
+find_program( CLANG_TIDY_EXE NAMES clang-tidy )
 
 if( CLANG_TIDY_EXE )
   set( CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} )

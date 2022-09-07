@@ -1,5 +1,13 @@
 default:
   image: git.thomas-vogt.de:5050/thomas-vogt/docker-gcc-clang-cmake:latest
+  retry:
+    max: 1
+    when:
+      - unknown_failure
+      - api_failure
+      - stuck_or_timeout_failure
+      - runner_system_failure
+      - stale_schedule
 
 .cmake_build:
   stage: build

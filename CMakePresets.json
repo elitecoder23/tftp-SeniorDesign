@@ -10,7 +10,10 @@
       "name": "base",
       "hidden": true,
       "binaryDir": "cmake-build-${presetName}",
-      "installDir": "cmake-install-${presetName}"
+      "installDir": "cmake-install-${presetName}",
+      "cacheVariables": {
+        "CMAKE_COMPILE_WARNING_AS_ERROR" : "False"
+      }
     },
     {
       "name": "gcc-base",
