@@ -39,7 +39,7 @@ class TransmitDataHandler : public virtual DataHandler
      * @retval {}
      *   If the transfer size of the data cannot be provided.
      **/
-    [[nodiscard]] virtual std::optional< uint64_t> requestedTransferSize() = 0;
+    [[nodiscard]] virtual std::optional< uint64_t > requestedTransferSize() = 0;
 
     /**
      * @brief Request for data, which will be transmitted.
@@ -48,7 +48,7 @@ class TransmitDataHandler : public virtual DataHandler
      * to the other side. The parameter maxSize defines the maximum data size,
      * which can be transmitted.
      *
-     * The data buffer must not be greater then the max size as defined by the
+     * The data buffer must not be greater than the max size as defined by the
      * parameter maxSize.
      *
      * If the dataBuffer is smaller than maxSize (also empty is allowed) this

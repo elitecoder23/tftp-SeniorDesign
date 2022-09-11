@@ -196,7 +196,7 @@ int main( int argc, char * argv[] )
     {
       std::cout << "Termination request\n";
       server->stop();
-    });
+    } );
 
     ioContext.run();
   }

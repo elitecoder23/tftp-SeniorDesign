@@ -16,11 +16,6 @@
 
 namespace Tftp {
 
-TftpOptionsConfiguration::TftpOptionsConfiguration() noexcept :
-  handleTransferSizeOption{ false }
-{
-}
-
 TftpOptionsConfiguration::TftpOptionsConfiguration(
   const boost::property_tree::ptree &properties )
 {

@@ -277,7 +277,7 @@ class OperationImpl :
     //! Last transmitted Packet ( used for retries)
     Packets::RawTftpPacket transmitPacket;
     //! Re-transmission counter
-    unsigned int transmitCounter;
+    unsigned int transmitCounter{ 0U };
     //! Error info
     ErrorInfo errorInfoV;
 };

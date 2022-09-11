@@ -22,10 +22,10 @@
 namespace Tftp {
 
 //! Description of TFTP Error Codes (ErrorCode)
-  class ErrorCodeDescription : public Helper::Description<
+class ErrorCodeDescription : public Helper::Description<
   ErrorCodeDescription,
   ErrorCode,
-  ErrorCode::Invalid>
+  ErrorCode::Invalid >
 {
   public:
     //! Initialises the Instance
@@ -42,7 +42,7 @@ namespace Tftp {
  *
  * @return The output stream.
  **/
-std::ostream& operator<<( std::ostream& stream, ErrorCode errorCode);
+std::ostream& operator<<( std::ostream& stream, ErrorCode errorCode );
 
 }
 

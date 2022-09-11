@@ -54,7 +54,7 @@ int main( int argc, char * argv[] );
 int main( int argc, char * argv[] )
 {
   Tftp::RequestType requestType{ Tftp::RequestType::Invalid };
-  std::string localFile{};
+  std::filesystem::path localFile{};
   std::string remoteFile{};
   boost::asio::ip::address address{};
   Tftp::TftpConfiguration configuration{};
@@ -72,7 +72,7 @@ int main( int argc, char * argv[] )
   (
     "request-type",
     boost::program_options::value( &requestType)->required(),
-    "the desired operation (\"Read\"|\"Write\" )"
+    R"(the desired operation ("Read"|"Write" ))"
   )
   (
     "local-file",
@@ -127,7 +127,7 @@ int main( int argc, char * argv[] )
     Tftp::Client::OperationPtr tftpOperation{};
 
     auto optionNegotiation = [](
-      const Tftp::Options &serverOptions ) -> bool
+      [[maybe_unused]] const Tftp::Options &serverOptions )
     {
       return true;
     };
@@ -138,7 +138,9 @@ int main( int argc, char * argv[] )
         tftpOperation= tftpClient->readOperation( {
           .optionNegotiationHandler{ optionNegotiation },
           .completionHandler{
-              std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ) },
+            [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
+              ioContext.stop();
+            } },
           .dataHandler{ std::make_shared< Tftp::File::StreamFile >(
             Tftp::File::TftpFile::Operation::Receive,
             localFile ) },
@@ -155,7 +157,9 @@ int main( int argc, char * argv[] )
         tftpOperation = tftpClient->writeOperation( {
           .optionNegotiationHandler{ optionNegotiation },
           .completionHandler{
-            std::bind( &boost::asio::io_context::stop, std::ref( ioContext ) ) },
+            [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
+              ioContext.stop();
+            } },
           .dataHandler{ std::make_shared< Tftp::File::StreamFile >(
             Tftp::File::TftpFile::Operation::Transmit,
             localFile,
@@ -180,12 +184,12 @@ int main( int argc, char * argv[] )
     // Start client and its operations
     ioContext.run();
   }
-  catch ( boost::program_options::error &e )
+  catch ( const boost::program_options::error &e )
   {
     std::cout << e.what() << "\n" << optionsDescription << "\n";
     return EXIT_FAILURE;
   }
-  catch ( boost::exception &e )
+  catch ( const boost::exception &e )
   {
     std::cerr
       << "Error in TFTP client: " << boost::diagnostic_information( e ) << "\n";

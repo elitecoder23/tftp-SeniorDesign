@@ -40,7 +40,7 @@ class TftpOptionsConfiguration
     /**
      * @brief Initialises the Configuration with Default Values.
      **/
-    TftpOptionsConfiguration() noexcept;
+    TftpOptionsConfiguration() noexcept = default;
 
     /**
      * @brief Loads the Configuration via a Property Tree.
@@ -75,13 +75,13 @@ class TftpOptionsConfiguration
     [[nodiscard]] boost::program_options::options_description options();
 
     //! If set, the client/ server shall handle the "Transfer Size" option
-    bool handleTransferSizeOption;
+    bool handleTransferSizeOption{ false };
 
     //! If handleBlockSizeOption is set, this value is used for option negotiation
-    boost::optional< uint16_t > blockSizeOption;
+    boost::optional< uint16_t > blockSizeOption{};
 
     //! If handleTimeoutOption is set, this value is used for option negotiation
-    boost::optional< std::chrono::seconds > timeoutOption;
+    boost::optional< std::chrono::seconds > timeoutOption{};
 };
 
 }

@@ -20,23 +20,21 @@ using namespace std::literals;
 
 TransferStatusDescription::TransferStatusDescription():
   Description{
-    { "Successful"sv,               TransferStatus::Successful},
-    { "Communication Error"sv,      TransferStatus::CommunicationError},
-    { "Request Error"sv,            TransferStatus::RequestError},
-    { "Option Negotiation Error"sv, TransferStatus::OptionNegotiationError},
-    { "Transfer Error"sv,           TransferStatus::TransferError},
-    { "Aborted"sv,                  TransferStatus::Aborted},
+    { "Successful"sv,               TransferStatus::Successful },
+    { "Communication Error"sv,      TransferStatus::CommunicationError },
+    { "Request Error"sv,            TransferStatus::RequestError },
+    { "Option Negotiation Error"sv, TransferStatus::OptionNegotiationError },
+    { "Transfer Error"sv,           TransferStatus::TransferError },
+    { "Aborted"sv,                  TransferStatus::Aborted },
   }
 {
 }
 
 std::ostream& operator<<(
   std::ostream& stream,
-  const TransferStatus transferStatus)
+  const TransferStatus transferStatus )
 {
-  return (stream << TransferStatusDescription::instance().name( transferStatus));
+  return ( stream << TransferStatusDescription::instance().name( transferStatus ) );
 }
 
 }
-
-

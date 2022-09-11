@@ -86,9 +86,7 @@ try :
   remoteEndpoint{ std::move( remote ) },
   socket{ ioContext },
   timer{ ioContext },
-  receivePacket( maxReceivePacketSize ),
-  receiveEndpoint{},
-  transmitCounter{ 0U }
+  receivePacket( maxReceivePacketSize )
 {
   BOOST_LOG_FUNCTION()
 

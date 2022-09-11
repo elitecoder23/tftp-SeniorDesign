@@ -43,10 +43,7 @@ ReadOperationImpl::ReadOperationImpl(
     configuration.remote,
     configuration.local },
   dally{ dally },
-  configurationV{ std::move( configuration ) },
-  oackReceived{ false },
-  receiveDataSize{ DefaultDataSize },
-  lastReceivedBlockNumber{ 0U }
+  configurationV{ std::move( configuration ) }
 {
   BOOST_LOG_FUNCTION()
 
@@ -109,7 +106,7 @@ void ReadOperationImpl::request()
     // wait for answers
     receiveFirst();
   }
-  catch ( boost::exception &e )
+  catch ( const boost::exception &e )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Exception during request " << boost::diagnostic_information( e );

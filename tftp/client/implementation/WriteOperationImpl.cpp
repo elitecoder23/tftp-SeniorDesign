@@ -40,11 +40,7 @@ WriteOperationImpl::WriteOperationImpl(
     configuration.completionHandler,
     configuration.remote,
     configuration.local },
-  configurationV{ std::move( configuration ) },
-  transmitDataSize{ DefaultDataSize },
-  lastDataPacketTransmitted{ false },
-  lastTransmittedBlockNumber{ 0U },
-  lastReceivedBlockNumber{ 0U }
+  configurationV{ std::move( configuration ) }
 {
   BOOST_LOG_FUNCTION()
 
@@ -115,7 +111,7 @@ void WriteOperationImpl::request()
     // wait for answers
     receiveFirst();
   }
-  catch ( boost::exception &e )
+  catch ( const boost::exception &e )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Exception during request " << boost::diagnostic_information( e );

@@ -33,14 +33,14 @@ class RequestTypeDescription : public Helper::Description<
 /**
  * @brief Parses the input stream as request type and returns them.
  *
- * @param[in] st
+ * @param[in] stream
  *   Input Stream
  * @param[out] requestType
  *   Decoded request type
  *
- * @return @p st.
+ * @return @p stream.
  **/
-std::istream& operator>>( std::istream& st, RequestType& requestType );
+std::istream& operator>>( std::istream &stream, RequestType& requestType );
 
 }
 

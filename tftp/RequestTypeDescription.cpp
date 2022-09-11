@@ -20,19 +20,19 @@ namespace Tftp {
 
 using namespace std::literals;
 
-RequestTypeDescription::RequestTypeDescription():
+RequestTypeDescription::RequestTypeDescription() :
   Description{
-    {"Read"sv,  RequestType::Read},
-    {"Write"sv, RequestType::Write}
+    { "Read"sv,  RequestType::Read },
+    { "Write"sv, RequestType::Write }
   }
 {
 }
 
-std::istream& operator>>( std::istream& st, RequestType& requestType)
+std::istream& operator>>( std::istream &stream, RequestType& requestType )
 {
   std::string requestTypeStr{};
 
-  st >> requestTypeStr;
+  stream >> requestTypeStr;
 
   // decode BHM area
   requestType = RequestTypeDescription::instance().enumeration( requestTypeStr);
@@ -40,10 +40,10 @@ std::istream& operator>>( std::istream& st, RequestType& requestType)
   if ( RequestType::Invalid == requestType)
   {
     BOOST_THROW_EXCEPTION(
-      boost::program_options::invalid_option_value( requestTypeStr));
+      boost::program_options::invalid_option_value{ requestTypeStr } );
   }
 
-  return st;
+  return stream;
 }
 
 }

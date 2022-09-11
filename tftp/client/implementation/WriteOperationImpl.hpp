@@ -107,13 +107,13 @@ class WriteOperationImpl : public OperationImpl
     TftpClient::WriteOperationConfiguration configurationV;
 
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
-    uint16_t transmitDataSize;
+    uint16_t transmitDataSize{ DefaultDataSize };
     //! Is set, when the last data packet has been transmitted
-    bool lastDataPacketTransmitted;
+    bool lastDataPacketTransmitted{ false };
     //! Block number of the last transmitted data packet.
-    Packets::BlockNumber lastTransmittedBlockNumber;
+    Packets::BlockNumber lastTransmittedBlockNumber{ 0U };
     //! Stored last received block number.
-    Packets::BlockNumber lastReceivedBlockNumber;
+    Packets::BlockNumber lastReceivedBlockNumber{ 0U };
     //! Transfer Size obtained from Data Handler
     std::optional< uint64_t > transferSize;
 };

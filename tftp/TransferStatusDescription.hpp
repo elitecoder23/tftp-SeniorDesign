@@ -25,7 +25,7 @@ namespace Tftp {
 class TransferStatusDescription : public Helper::Description<
   TransferStatusDescription,
   TransferStatus,
-  TransferStatus::Invalid>
+  TransferStatus::Invalid >
 {
   public:
     //! Initialises the Instance
@@ -42,7 +42,7 @@ class TransferStatusDescription : public Helper::Description<
  *
  * @return The output stream.
  **/
-std::ostream& operator<<( std::ostream& stream, TransferStatus transferStatus);
+std::ostream& operator<<( std::ostream& stream, TransferStatus transferStatus );
 
 }
 
