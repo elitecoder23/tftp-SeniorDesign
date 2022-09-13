@@ -24,15 +24,10 @@ namespace Tftp::Packets {
 
 DataPacket::DataPacket(
   BlockNumber blockNumber,
-  const Data &data ) noexcept:
-  Packet{ PacketType::Data }, blockNumberV{ blockNumber }, dataV{ data }
-{
-}
-
-DataPacket::DataPacket(
-  BlockNumber blockNumber,
-  Data &&data ) noexcept:
-  Packet{ PacketType::Data }, blockNumberV{ blockNumber }, dataV{ std::move( data ) }
+  Data data ) noexcept:
+  Packet{ PacketType::Data },
+  blockNumberV{ blockNumber },
+  dataV{ std::move( data ) }
 {
 }
 
@@ -74,12 +69,7 @@ DataPacket::Data& DataPacket::data()
   return dataV;
 }
 
-void DataPacket::data( const Data &data )
-{
-  dataV = data;
-}
-
-void DataPacket::data( Data &&data )
+void DataPacket::data( Data data )
 {
   dataV = std::move( data );
 }
@@ -109,7 +99,7 @@ RawTftpPacket DataPacket::encode() const
   packetIt = Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV ) );
 
   // data
-  std::copy( dataV.begin(), dataV.end(), packetIt );
+  std::ranges::copy( dataV, packetIt );
 
   return rawPacket;
 }

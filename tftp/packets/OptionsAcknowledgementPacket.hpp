@@ -43,10 +43,7 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] options
      *   TFTP Options List.
      **/
-    explicit OptionsAcknowledgementPacket( const Options &options ) noexcept;
-
-    //! @copydoc OptionsAcknowledgementPacket(const Options&) noexcept
-    explicit OptionsAcknowledgementPacket( Options &&options ) noexcept;
+    explicit OptionsAcknowledgementPacket( Options options ) noexcept;
 
     /**
      * @brief Generates a TFTP Options Acknowledgement packet from a data buffer
@@ -94,10 +91,7 @@ class OptionsAcknowledgementPacket: public Packet
      * @param[in] options
      *   New option list, which shall be used.
      **/
-    void options( const Options &options );
-
-    //! @copydoc options(const Options&)
-    void options( Options &&options );
+    void options( Options options );
 
     /** @} **/
 

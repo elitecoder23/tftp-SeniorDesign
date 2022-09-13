@@ -186,10 +186,10 @@ class TftpServer
     virtual void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       ErrorCode errorCode,
-      std::string_view errorMessage = {} ) = 0;
+      std::string errorMessage = {} ) = 0;
 
     /**
-     * @copydoc errorOperation(const boost::asio::ip::udp::endpoint&,ErrorCode,std::string_view)
+     * @copydoc errorOperation(const boost::asio::ip::udp::endpoint&,ErrorCode,std::string)
      *
      * @param[in] local
      *   Communication source
@@ -198,7 +198,7 @@ class TftpServer
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       ErrorCode errorCode,
-      std::string_view errorMessage = {} ) = 0;
+      std::string errorMessage = {} ) = 0;
 
   protected:
     //! Constructor

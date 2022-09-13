@@ -30,7 +30,7 @@ namespace Tftp::Server {
 
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
-  std::string_view errorMessage )
+  std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
@@ -39,9 +39,9 @@ void OperationImpl::gracefulAbort(
 
   Packets::ErrorPacket errorPacket{
     errorCode,
-    errorMessage};
+    std::move( errorMessage ) };
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
   finished( TransferStatus::Aborted, std::move( errorPacket ) );
@@ -93,7 +93,7 @@ try:
     // connect to client.
     socket.connect( remote);
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     if ( socket.is_open() )
     {
@@ -104,7 +104,7 @@ try:
       << Helper::AdditionalInfo{ err.what() } );
   }
 }
-catch ( boost::system::system_error &err )
+catch ( const boost::system::system_error &err )
 {
   BOOST_THROW_EXCEPTION( CommunicationException()
     << Helper::AdditionalInfo{ err.what() } );
@@ -158,7 +158,7 @@ void OperationImpl::send( const Packets::Packet &packet )
   {
     socket.send( boost::asio::buffer( transmitPacket ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TX ERROR: " << err.what();
@@ -190,7 +190,7 @@ void OperationImpl::receive()
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "RX ERROR: " << err.what();
@@ -222,7 +222,7 @@ void OperationImpl::receiveDally()
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "RX ERROR: " << err.what();
@@ -248,10 +248,9 @@ void OperationImpl::readRequestPacket(
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( readRequestPacket );
 
-  using namespace std::literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "RRQ not expected"sv };
+    "RRQ not expected" };
 
   send( errorPacket);
 
@@ -266,10 +265,9 @@ void OperationImpl::writeRequestPacket(
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( writeRequestPacket );
 
-  using namespace std::literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "WRQ not expected"sv };
+    "WRQ not expected" };
 
   send( errorPacket);
 
@@ -293,17 +291,17 @@ void OperationImpl::errorPacket(
       switch ( errorPacket.errorCode() )
       {
         case ErrorCode::TftpOptionRefused:
-          finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+          finished( TransferStatus::OptionNegotiationError, errorPacket );
           break;
 
         default:
-          finished( TransferStatus::TransferError, std::move( errorPacket ) );
+          finished( TransferStatus::TransferError,  errorPacket );
           break;
       }
       break;
 
     default:
-      finished( TransferStatus::TransferError, std::move( errorPacket));
+      finished( TransferStatus::TransferError, errorPacket );
       break;
   }
 }
@@ -317,15 +315,14 @@ void OperationImpl::optionsAcknowledgementPacket(
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket );
 
-  using namespace std::literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "OACK not expected"sv };
+    "OACK not expected" };
 
   send( errorPacket);
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket));
+  finished( TransferStatus::TransferError, std::move( errorPacket ) );
 }
 
 void OperationImpl::invalidPacket(
@@ -337,10 +334,9 @@ void OperationImpl::invalidPacket(
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
     << "RX: UNKNOWN";
 
-  using namespace std::literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "Invalid packet not expected"sv };
+    "Invalid packet not expected" };
 
   send( errorPacket);
 
@@ -361,7 +357,7 @@ void OperationImpl::receiveHandler(
   }
 
   // Check error
-  if ( errorCode)
+  if ( errorCode )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "receive error: " << errorCode.message();
@@ -423,7 +419,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
       shared_from_this(),
       boost::asio::placeholders::error ) );
   }
-  catch ( boost::system::system_error &err )
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TX error: " << err.what();

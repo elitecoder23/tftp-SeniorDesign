@@ -110,11 +110,11 @@ OperationPtr TftpServerImpl::writeOperation(
 void TftpServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const ErrorCode errorCode,
-  std::string_view errorMessage )
+  std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
-  Packets::ErrorPacket errorPacket{ errorCode, errorMessage };
+  Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( errorPacket );
@@ -141,11 +141,11 @@ void TftpServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local,
   const ErrorCode errorCode,
-  std::string_view errorMessage )
+  std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
-  Packets::ErrorPacket errorPacket{ errorCode, errorMessage };
+  Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( errorPacket );

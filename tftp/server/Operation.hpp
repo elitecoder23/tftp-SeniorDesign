@@ -56,7 +56,7 @@ class Operation
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      std::string_view errorMessage = {} ) = 0;
+      std::string errorMessage = {} ) = 0;
 
     /**
      * @brief Aborts the Operation Immediately.

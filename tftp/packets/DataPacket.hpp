@@ -52,13 +52,8 @@ class DataPacket: public Packet
      *   The data within the packet.
      **/
     DataPacket(
-      BlockNumber blockNumber,
-      const Data &data ) noexcept;
-
-    //! @copydoc DataPacket(BlockNumber,const Data&)
-    explicit DataPacket(
       BlockNumber blockNumber = {},
-      Data &&data = {} ) noexcept;
+      Data data = {} ) noexcept;
 
     /**
      * @brief Generates a TFTP Data packet from a data buffer.
@@ -141,17 +136,7 @@ class DataPacket: public Packet
      * @param[in] data
      *   The data to set.
      **/
-    void data( const Data &data );
-
-    /**
-     * @brief Sets the data of the packet by moving the content of [data].
-     *
-     * The given data is moved to the local data.
-     *
-     * @param[in] data
-     *   The data to set.
-     **/
-    void data( Data &&data );
+    void data( Data data );
 
     /**
      * @brief Returns the data size.

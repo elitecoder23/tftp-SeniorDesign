@@ -38,7 +38,7 @@ class AcknowledgementPacket: public Packet
     /**
      * @brief Creates the packet with the given block number.
      *
-     * If the blockNumber parameter is suppressed, a default block number is
+     * If the @p blockNumber parameter is suppressed, a default block number is
      * chosen.
      *
      * @param[in] blockNumber

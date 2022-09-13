@@ -245,10 +245,9 @@ void WriteOperationImpl::dataPacket(
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Too much data received";
 
-    using namespace std::literals;
     Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Too much data"sv };
+      "Too much data" };
 
     send( errorPacket );
 

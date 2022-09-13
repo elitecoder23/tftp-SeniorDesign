@@ -40,14 +40,14 @@ OperationImpl::~OperationImpl() noexcept
 
 void OperationImpl::gracefulAbort(
   const ErrorCode errorCode,
-  std::string_view errorMessage )
+  std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "Graceful abort requested: " << errorCode << " '" << errorMessage << "'";
 
-  Packets::ErrorPacket errorPacket{ errorCode, errorMessage };
+  Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
   send( errorPacket );
 

@@ -15,38 +15,27 @@
 namespace Tftp::Packets {
 
 ReadRequestPacket::ReadRequestPacket(
-  std::string_view filename,
-  const TransferMode mode,
-  const Options &options) noexcept:
-  ReadWriteRequestPacket{
-    PacketType::ReadRequest,
-    filename,
-    mode,
-    options}
-{
-}
-
-ReadRequestPacket::ReadRequestPacket(
-  std::string &&filename,
+  std::string filename,
   TransferMode mode,
-  Options &&options) noexcept:
+  Options options ) noexcept:
   ReadWriteRequestPacket{
     PacketType::ReadRequest,
-    std::move( filename),
+    std::move( filename ),
     mode,
-    std::move( options)}
+    std::move( options ) }
 {
 }
 
-ReadRequestPacket::ReadRequestPacket( ConstRawTftpPacketSpan rawPacket):
-  ReadWriteRequestPacket( PacketType::ReadRequest, rawPacket)
+ReadRequestPacket::ReadRequestPacket( ConstRawTftpPacketSpan rawPacket ) :
+  ReadWriteRequestPacket( PacketType::ReadRequest, rawPacket )
 {
 }
 
-ReadRequestPacket& ReadRequestPacket::operator=( ConstRawTftpPacketSpan rawPacket)
+ReadRequestPacket& ReadRequestPacket::operator=(
+  ConstRawTftpPacketSpan rawPacket )
 {
-  decodeHeader( rawPacket);
-  decodeBody( rawPacket);
+  decodeHeader( rawPacket );
+  decodeBody( rawPacket );
   return *this;
 }
 

@@ -21,20 +21,21 @@
 namespace Tftp::Packets {
 
 AcknowledgementPacket::AcknowledgementPacket(
-  const BlockNumber blockNumber) noexcept :
-  Packet{ PacketType::Acknowledgement},
-  blockNumberV{ blockNumber}
+  const BlockNumber blockNumber ) noexcept :
+  Packet{ PacketType::Acknowledgement },
+  blockNumberV{ blockNumber }
 {
 }
 
 AcknowledgementPacket::AcknowledgementPacket(
   ConstRawTftpPacketSpan rawPacket ) :
-  Packet{ PacketType::Acknowledgement, rawPacket}
+  Packet{ PacketType::Acknowledgement, rawPacket }
 {
-  decodeBody( rawPacket);
+  decodeBody( rawPacket );
 }
 
-AcknowledgementPacket& AcknowledgementPacket::operator=( ConstRawTftpPacketSpan rawPacket)
+AcknowledgementPacket& AcknowledgementPacket::operator=(
+  ConstRawTftpPacketSpan rawPacket )
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);
@@ -46,7 +47,7 @@ BlockNumber AcknowledgementPacket::blockNumber() const
   return blockNumberV;
 }
 
-void AcknowledgementPacket::blockNumber( const BlockNumber blockNumber)
+void AcknowledgementPacket::blockNumber( const BlockNumber blockNumber )
 {
   blockNumberV = blockNumber;
 }

@@ -21,14 +21,7 @@
 namespace Tftp::Packets {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  const Options &options ) noexcept:
-  Packet{ PacketType::OptionsAcknowledgement },
-  optionsV{ options }
-{
-}
-
-OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  Options &&options ) noexcept:
+  Options options ) noexcept:
   Packet{ PacketType::OptionsAcknowledgement },
   optionsV{ std::move( options ) }
 {
@@ -59,12 +52,7 @@ Options& OptionsAcknowledgementPacket::options()
   return optionsV;
 }
 
-void OptionsAcknowledgementPacket::options( const Options &options )
-{
-  optionsV = options;
-}
-
-void OptionsAcknowledgementPacket::options( Options &&options )
+void OptionsAcknowledgementPacket::options( Options options )
 {
   optionsV = std::move( options );
 }

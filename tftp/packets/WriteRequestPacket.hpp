@@ -35,15 +35,9 @@ class WriteRequestPacket: public ReadWriteRequestPacket
      *   Options, which are set
      **/
     WriteRequestPacket(
-      std::string_view filename,
+      std::string filename,
       TransferMode mode,
-      const Options &options ) noexcept;
-
-    //! @copydoc WriteRequestPacket(std::string_view,TransferMode,const Options&)
-    WriteRequestPacket(
-      std::string &&filename,
-      TransferMode mode,
-      Options &&options ) noexcept;
+      Options options ) noexcept;
 
     /**
      * @brief Generates a TFTP Write Request packet from a data buffer

@@ -23,10 +23,10 @@ namespace Tftp::Packets {
 
 ErrorPacket::ErrorPacket(
   const ErrorCode errorCode,
-  std::string_view errorMessage ):
+  std::string errorMessage ):
   Packet{ PacketType::Error },
   errorCodeV{ errorCode },
-  errorMessageV{ errorMessage }
+  errorMessageV{ std::move( errorMessage ) }
 {
 }
 
@@ -68,9 +68,9 @@ std::string_view ErrorPacket::errorMessage() const
   return errorMessageV;
 }
 
-void ErrorPacket::errorMessage( std::string_view errorMessage )
+void ErrorPacket::errorMessage( std::string errorMessage )
 {
-  errorMessageV = errorMessage;
+  errorMessageV = std::move( errorMessage );
 }
 
 RawTftpPacket ErrorPacket::encode() const

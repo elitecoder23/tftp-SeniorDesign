@@ -45,7 +45,7 @@ class OperationImpl:
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
       ErrorCode errorCode,
-      std::string_view errorMessage ) final;
+      std::string errorMessage ) final;
 
     //! @copydoc Operation::abort
     void abort() final;
@@ -90,7 +90,7 @@ class OperationImpl:
      * @brief Sets the Finished flag.
      *
      * This operation is called, when the last packet has been received or
-     * transmitted to stop the receive loop.
+     * transmitted to stop the reception loop.
      *
      * @param[in] status
      *   Transfer status.

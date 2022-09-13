@@ -32,7 +32,7 @@ class Operation
 {
   public:
     //! Error Information
-    using ErrorInfo = std::optional< Packets::ErrorPacket>;
+    using ErrorInfo = std::optional< Packets::ErrorPacket >;
 
     //! Destructor.
     virtual ~Operation() noexcept = default;
@@ -59,7 +59,7 @@ class Operation
      **/
     virtual void gracefulAbort(
       ErrorCode errorCode,
-      std::string_view errorMessage = {} ) = 0;
+      std::string errorMessage = {} ) = 0;
 
     /**
      * @brief Immediately Cancels the Transfer.

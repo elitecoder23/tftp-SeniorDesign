@@ -57,7 +57,7 @@ class TftpClient
       //! Handler for Received Sata.
       ReceiveDataHandlerPtr dataHandler;
       //! Which file shall be requested
-      std::string_view filename;
+      std::string filename;
       //! Transfer Mode
       TransferMode mode;
       //! TFTP Options Configuration.
@@ -80,7 +80,7 @@ class TftpClient
       //! Handler for Send Data.
       TransmitDataHandlerPtr dataHandler;
       //! Which file shall be requested
-      std::string_view filename;
+      std::string filename;
       //! Transfer Mode
       TransferMode mode;
       //! TFTP Options Configuration.

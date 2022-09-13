@@ -170,7 +170,7 @@ void ReadOperationImpl::start()
     // start receive loop
     receive();
   }
-  catch ( TftpException &e )
+  catch ( const TftpException &e )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Error during Operation: " << e.what();
@@ -210,7 +210,7 @@ void ReadOperationImpl::sendData()
   }
 
   // send data
-  send( data);
+  send( data );
 }
 
 void ReadOperationImpl::dataPacket(
@@ -222,10 +222,9 @@ void ReadOperationImpl::dataPacket(
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( dataPacket );
 
-  using namespace std::literals;
   Packets::ErrorPacket errorPacket{
     ErrorCode::IllegalTftpOperation,
-    "DATA not expected"sv };
+    "DATA not expected" };
 
   send( errorPacket );
 
@@ -261,10 +260,9 @@ void ReadOperationImpl::acknowledgementPacket(
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Invalid block number received";
 
-    using namespace std::literals;
     Packets::ErrorPacket errorPacket{
       ErrorCode::IllegalTftpOperation,
-      "Block number not expected"sv };
+      "Block number not expected" };
 
     send( errorPacket );
 

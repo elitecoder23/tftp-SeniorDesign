@@ -76,10 +76,7 @@ class ReadWriteRequestPacket: public Packet
      * @param[in] filename
      *   The new filename.
      **/
-    void filename( std::string_view filename );
-
-    //! @copydoc filename(std::string_view)
-    void filename( std::string &&filename );
+    void filename( std::string filename );
 
     /** @} **/
 
@@ -123,7 +120,7 @@ class ReadWriteRequestPacket: public Packet
     /**
      * @brief Returns the set TFTP options.
      *
-     * @return The TFTP options.
+     * @return TFTP options.
      **/
     [[nodiscard]] Options& options();
 
@@ -131,12 +128,9 @@ class ReadWriteRequestPacket: public Packet
      * @brief Sets the TFTP options.
      *
      * @param[in] options
-     *   The TFTP options.
+     *   TFTP options.
      **/
-    void options( const Options &options );
-
-    //! @copydoc options(const Options&)
-    void options( Options &&options );
+    void options( Options options );
 
     /** @} **/
 
@@ -161,16 +155,9 @@ class ReadWriteRequestPacket: public Packet
      **/
     ReadWriteRequestPacket(
       PacketType packetType,
-      std::string_view filename,
+      std::string filename,
       TransferMode mode,
-      const Options &options );
-
-    //! @copydoc ReadWriteRequestPacket(PacketType,std::string_view,TransferMode,const Options&)
-    ReadWriteRequestPacket(
-      PacketType packetType,
-      std::string &&filename,
-      TransferMode mode,
-      Options &&options );
+      Options options );
 
     /**
      * @brief Generates a TFTP Read/ Write Request packet from a data buffer

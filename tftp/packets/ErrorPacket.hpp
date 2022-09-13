@@ -46,11 +46,11 @@ class ErrorPacket: public Packet
      *   Error code, which shall be set.
      * @param[in] errorMessage
      *   Error message, which shall be set.
-     *   By default empty.
+     *   By default, empty.
      **/
     explicit ErrorPacket(
       ErrorCode errorCode,
-      std::string_view errorMessage = {} );
+      std::string errorMessage = {} );
 
     /**
      * @brief Generates a TFTP error packet from a data buffer
@@ -61,7 +61,7 @@ class ErrorPacket: public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit ErrorPacket( ConstRawTftpPacketSpan rawPacket);
+    explicit ErrorPacket( ConstRawTftpPacketSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -71,7 +71,7 @@ class ErrorPacket: public Packet
      *
      * @return *this
      **/
-    ErrorPacket& operator=( ConstRawTftpPacketSpan rawPacket);
+    ErrorPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const final;
@@ -114,9 +114,9 @@ class ErrorPacket: public Packet
      * @brief Sets the error message of this packet.
      *
      * @param[in] errorMessage
-     *   The error message to set.
+     *   Error message to set.
      **/
-    void errorMessage( std::string_view errorMessage );
+    void errorMessage( std::string errorMessage );
 
     //! @}
 

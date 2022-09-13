@@ -75,14 +75,9 @@ std::string_view ReadWriteRequestPacket::filename() const
   return filenameV;
 }
 
-void ReadWriteRequestPacket::filename( std::string_view filename )
+void ReadWriteRequestPacket::filename( std::string filename )
 {
-  filenameV = filename;
-}
-
-void ReadWriteRequestPacket::filename( std::string &&filename )
-{
-  filenameV = std::move( filename);
+  filenameV = std::move( filename );
 }
 
 Tftp::TransferMode ReadWriteRequestPacket::mode() const
@@ -105,12 +100,7 @@ Options& ReadWriteRequestPacket::options()
   return optionsV;
 }
 
-void ReadWriteRequestPacket::options( const Options &options )
-{
-  optionsV = options;
-}
-
-void ReadWriteRequestPacket::options( Options &&options )
+void ReadWriteRequestPacket::options( Options options )
 {
   optionsV = std::move( options);
 }
@@ -127,33 +117,9 @@ ReadWriteRequestPacket::operator std::string() const
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
-  std::string_view filename,
+  std::string filename,
   const TransferMode mode,
-  const Options &options ):
-  Packet{ packetType },
-  filenameV{ filename },
-  modeV{ mode },
-  optionsV{ options }
-{
-  switch ( packetType )
-  {
-    case PacketType::ReadRequest:
-    case PacketType::WriteRequest:
-      break;
-
-    default:
-      BOOST_THROW_EXCEPTION( InvalidPacketException()
-        << Helper::AdditionalInfo{
-          "Wrong packet type supplied only RRQ/WRW allowed" } );
-      /* no break - because BOOST_THROW_EXCEPTION throws */
-  }
-}
-
-ReadWriteRequestPacket::ReadWriteRequestPacket(
-  const PacketType packetType,
-  std::string &&filename,
-  const TransferMode mode,
-  Options &&options ):
+  Options options ):
   Packet{ packetType },
   filenameV{ std::move( filename ) },
   modeV{ mode },
