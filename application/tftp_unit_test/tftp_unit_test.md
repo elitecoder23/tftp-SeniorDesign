@@ -2,4 +2,4 @@
 
 @ref tftp_unit_test.cpp
 
-@sa @ref tftp
+@sa @ref Tftp
