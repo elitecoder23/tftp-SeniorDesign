@@ -34,12 +34,6 @@ set( DOXYGEN_WARN_NO_PARAMDOC YES )
 set( DOXYGEN_HTML_DYNAMIC_SECTIONS YES )
 
 set(
-  DOXYGEN_EXCLUDE_PATTERNS
-
-  *Test.*
-  */implementation/* )
-
-set(
   DOXYGEN_STRIP_FROM_PATH
 
   ${helper_SOURCE_DIR}
@@ -55,14 +49,14 @@ set(
   ${tftp_SOURCE_DIR} )
 
 doxygen_add_docs(
-  tftp_api_doc
+  tftp_internal_doc
 
   ../Mainpage.md
 
   ${HELPER_DOC_PATHS}
   ${TFTP_DOC_PATHS} )
 
-add_dependencies( doc tftp_api_doc )
+add_dependencies( doc tftp_internal_doc )
 
 # add index.html redirection
 configure_file(
@@ -73,12 +67,12 @@ configure_file(
 install(
   DIRECTORY
     ${CMAKE_CURRENT_BINARY_DIR}/html
-  DESTINATION ${CMAKE_INSTALL_DOCDIR}/tftp_api_doc
+  DESTINATION ${CMAKE_INSTALL_DOCDIR}/tftp_internal_doc
   COMPONENT development
   OPTIONAL )
 
 install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/index.html
-  DESTINATION ${CMAKE_INSTALL_DOCDIR}/tftp_api_doc
+  DESTINATION ${CMAKE_INSTALL_DOCDIR}/tftp_internal_doc
   COMPONENT development
   OPTIONAL )
