@@ -41,7 +41,7 @@ class Operation
      * @brief Executes the TFTP Client Operation.
      *
      * It prepares the FTP Request Packet, sends it to the remote endpoint and
-     * start the receive loop.
+     * start the reception loop.
      *
      * It returns immediately after sending the request.
      **/

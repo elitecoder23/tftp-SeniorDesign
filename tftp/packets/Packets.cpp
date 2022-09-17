@@ -16,7 +16,7 @@
 
 namespace Tftp::Packets {
 
-std::string_view TftpOptions_name( const KnownOptions option ) noexcept
+std::string TftpOptions_name( const KnownOptions option ) noexcept
 {
   switch ( option )
   {

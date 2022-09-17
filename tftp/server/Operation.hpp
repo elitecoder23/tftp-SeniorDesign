@@ -31,7 +31,7 @@ class Operation
 {
   public:
     //! Error Info Type
-    using ErrorInfo = std::optional< Packets::ErrorPacket>;
+    using ErrorInfo = std::optional< Packets::ErrorPacket >;
 
     //! Constructor
     virtual ~Operation() noexcept = default;

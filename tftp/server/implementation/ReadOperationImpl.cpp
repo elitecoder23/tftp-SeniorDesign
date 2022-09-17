@@ -38,11 +38,7 @@ ReadOperationImpl::ReadOperationImpl(
     configuration.completionHandler,
     configuration.remote,
     configuration.local },
-  configurationV{ std::move( configuration ) },
-  transmitDataSize{ DefaultDataSize },
-  lastDataPacketTransmitted{ false },
-  lastTransmittedBlockNumber{ 0U },
-  lastReceivedBlockNumber{ 0U }
+  configurationV{ std::move( configuration ) }
 {
 }
 
@@ -72,7 +68,7 @@ void ReadOperationImpl::start()
         const auto [ blockSizeValid, blockSize ] =
           Packets::TftpOptions_getOption< uint16_t >(
             configurationV.clientOptions,
-            KnownOptions::BlockSize,
+            Packets::TftpOptions_name( KnownOptions::BlockSize ),
             BlockSizeOptionMin,
             BlockSizeOptionMax );
 
@@ -83,9 +79,9 @@ void ReadOperationImpl::start()
             *configurationV.optionsConfiguration.blockSizeOption );
 
           // respond option string
-          serverOptions.emplace( Packets::TftpOptions_setOption(
-            KnownOptions::BlockSize,
-            transmitDataSize ) );
+          serverOptions.try_emplace(
+            Packets::TftpOptions_name( KnownOptions::BlockSize ),
+            std::to_string( transmitDataSize ) );
         }
       }
 
@@ -95,7 +91,7 @@ void ReadOperationImpl::start()
         const auto [ timeoutValid, timeout ] =
           Packets::TftpOptions_getOption< uint8_t >(
             configurationV.clientOptions,
-            KnownOptions::Timeout,
+            Packets::TftpOptions_name( KnownOptions::Timeout ),
             TimeoutOptionMin,
             TimeoutOptionMax );
 
@@ -106,9 +102,9 @@ void ReadOperationImpl::start()
           receiveTimeout( std::chrono::seconds{ *timeout } );
 
           // respond with timeout option set
-          serverOptions.emplace( Packets::TftpOptions_setOption(
-            KnownOptions::Timeout,
-            *timeout ) );
+          serverOptions.try_emplace(
+            Packets::TftpOptions_name( KnownOptions::Timeout ),
+            std::to_string( *timeout )  );
         }
       }
 
@@ -118,7 +114,7 @@ void ReadOperationImpl::start()
         const auto [ transferSizeValid, transferSize ] =
           Packets::TftpOptions_getOption< uint64_t >(
             configurationV.clientOptions,
-            KnownOptions::TransferSize );
+            Packets::TftpOptions_name( KnownOptions::TransferSize ) );
 
         if ( transferSize )
         {
@@ -143,9 +139,9 @@ void ReadOperationImpl::start()
             newTransferSize )
           {
             // respond option string
-            serverOptions.emplace( Packets::TftpOptions_setOption(
-              KnownOptions::TransferSize,
-              *newTransferSize ) );
+            serverOptions.try_emplace(
+              Packets::TftpOptions_name( KnownOptions::TransferSize ),
+              std::to_string( *newTransferSize ) );
           }
         }
       }
@@ -175,7 +171,7 @@ void ReadOperationImpl::start()
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Error during Operation: " << e.what();
   }
-  catch ( ...)
+  catch ( ... )
   {
     finished( TransferStatus::CommunicationError );
   }

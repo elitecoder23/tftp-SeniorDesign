@@ -41,9 +41,7 @@ WriteOperationImpl::WriteOperationImpl(
     configuration.remote,
     configuration.local },
   dally{ dally },
-  configurationV{ std::move( configuration ) },
-  receiveDataSize{ DefaultDataSize },
-  lastReceivedBlockNumber{ 0U }
+  configurationV{ std::move( configuration ) }
 {
 }
 
@@ -74,7 +72,7 @@ void WriteOperationImpl::start()
         const auto [ blockSizeValid, blockSize ] =
           Packets::TftpOptions_getOption< uint16_t >(
             configurationV.clientOptions,
-            KnownOptions::BlockSize,
+            Packets::TftpOptions_name( KnownOptions::BlockSize ),
             BlockSizeOptionMin,
             BlockSizeOptionMax  );
 
@@ -85,9 +83,9 @@ void WriteOperationImpl::start()
             *configurationV.optionsConfiguration.blockSizeOption );
 
           // respond option string
-          serverOptions.emplace( Packets::TftpOptions_setOption(
-            KnownOptions::BlockSize,
-            receiveDataSize ) );
+          serverOptions.try_emplace(
+            Packets::TftpOptions_name( KnownOptions::BlockSize ),
+            std::to_string( receiveDataSize ) );
         }
       }
 
@@ -97,7 +95,7 @@ void WriteOperationImpl::start()
         const auto [ timeoutValid, timeout ] =
           Packets::TftpOptions_getOption< uint8_t >(
             configurationV.clientOptions,
-            KnownOptions::Timeout,
+            Packets::TftpOptions_name( KnownOptions::Timeout ),
             TimeoutOptionMin,
             TimeoutOptionMax );
 
@@ -108,9 +106,9 @@ void WriteOperationImpl::start()
           receiveTimeout( std::chrono::seconds{ *timeout } );
 
           // respond with timeout option set
-          serverOptions.emplace( Packets::TftpOptions_setOption(
-            KnownOptions::Timeout,
-            *timeout ) );
+          serverOptions.try_emplace(
+            Packets::TftpOptions_name( KnownOptions::Timeout ),
+            std::to_string( *timeout ) );
         }
       }
 
@@ -120,7 +118,7 @@ void WriteOperationImpl::start()
         const auto [ transferSizeValid, transferSize ] =
           Packets::TftpOptions_getOption< uint64_t >(
             configurationV.clientOptions,
-            KnownOptions::TransferSize );
+            Packets::TftpOptions_name( KnownOptions::TransferSize ) );
 
         if ( transferSize )
         {
@@ -139,9 +137,9 @@ void WriteOperationImpl::start()
           }
 
           // respond option string
-          serverOptions.emplace( Packets::TftpOptions_setOption(
-            KnownOptions::TransferSize,
-            *transferSize ) );
+          serverOptions.try_emplace(
+            Packets::TftpOptions_name( KnownOptions::TransferSize ),
+            std::to_string( *transferSize ) );
         }
       }
 

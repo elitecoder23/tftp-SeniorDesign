@@ -116,7 +116,7 @@ class TftpServerImpl:
      * @copydoc Packets::PacketHandler::readRequestPacket
      *
      * The packet is decoded, and when valid the handler
-     * NewRequestHandler::receviedReadRequest() is called, which actually
+     * NewRequestHandler::receivedReadRequest() is called, which actually
      * handles the request.
      **/
     void readRequestPacket(
@@ -127,7 +127,7 @@ class TftpServerImpl:
      * @copydoc Packets::PacketHandler::writeRequestPacket
      *
      * The packet is decoded, and when valid the handler
-     * NewRequestHandler::receviedWriteRequest() is called, which actually
+     * NewRequestHandler::receivedWriteRequest() is called, which actually
      * handles the request.
      **/
     void writeRequestPacket(

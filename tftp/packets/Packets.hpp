@@ -68,7 +68,7 @@ using RawOptionsSpan = std::span< const uint8_t>;
  *
  * @return Returns the option name.
  **/
-std::string_view TftpOptions_name( KnownOptions option ) noexcept;
+std::string TftpOptions_name( KnownOptions option ) noexcept;
 
 /**
  * @brief Returns a string, which describes the option list.
@@ -117,24 +117,6 @@ Options TftpOptions_options( RawOptionsSpan rawOptions );
 RawOptions TftpOptions_rawOptions( const Options &options );
 
 /**
- * @brief Get the Named Option with given Value.
- *
- * @tparam IntT
- *   Unsigned Integer Type.
- *
- * @param[in] option
- *   Option Name
- * @param value
- *   Option Value
- *
- * @return Named Option
- **/
-template< std::unsigned_integral IntT >
-Options::value_type TftpOptions_setOption(
-  KnownOptions option,
-  IntT value );
-
-/**
  * @brief Decodes the Named Option.
  *
  * @tparam IntT
@@ -142,7 +124,7 @@ Options::value_type TftpOptions_setOption(
  *
  * @param[in] options
  *   TFTP Options
- * @param[in] option
+ * @param[in] name
  *   Option Name
  * @param[in] min
  *   Minimum allowed Value
@@ -155,7 +137,7 @@ Options::value_type TftpOptions_setOption(
 template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > > TftpOptions_getOption(
   const Options &options,
-  KnownOptions option,
+  std::string_view name,
   IntT min = std::numeric_limits< IntT >::min(),
   IntT max = std::numeric_limits< IntT >::max() );
 

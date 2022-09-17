@@ -19,8 +19,6 @@
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
 
-#include <tftp/TftpOptionsConfiguration.hpp>
-
 #include <helper/SafeCast.hpp>
 
 #include <boost/bind/bind.hpp>
@@ -139,7 +137,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
       boost::asio::buffer( transmitPacket ),
       remoteEndpoint );
   }
-  catch ( const boost::system::system_error &err)
+  catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "TX Error: " << err.what();
@@ -183,24 +181,21 @@ void OperationImpl::receiveFirst()
   try
   {
     // the first time, we make receive_from (answer is not sent from destination)
-    // Start the receive operation
+    // Start the reception operation
     socket.async_receive_from(
       boost::asio::buffer( receivePacket ),
       receiveEndpoint,
-      boost::bind(
+      std::bind_front(
         &OperationImpl::receiveFirstHandler,
-        shared_from_this(),
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred ) );
+        shared_from_this() ) );
 
     // Set receive timeout
     timer.expires_from_now( receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( boost::bind(
+    timer.async_wait( std::bind_front(
       &OperationImpl::timeoutFirstHandler,
-      shared_from_this(),
-      boost::asio::placeholders::error ) );
+      shared_from_this() ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -220,20 +215,17 @@ void OperationImpl::receive()
     // start receive operation
     socket.async_receive(
       boost::asio::buffer( receivePacket ),
-      boost::bind(
+      std::bind_front(
         &OperationImpl::receiveHandler,
-        shared_from_this(),
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred ) );
+        shared_from_this() ) );
 
     // set receive timeout
     timer.expires_from_now( receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( boost::bind(
+    timer.async_wait( std::bind_front(
       &OperationImpl::timeoutHandler,
-      shared_from_this(),
-      boost::asio::placeholders::error ) );
+      shared_from_this() ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -253,20 +245,17 @@ void OperationImpl::receiveDally()
     // start receive operation
     socket.async_receive(
       boost::asio::buffer( receivePacket ),
-      boost::bind(
+      std::bind_front(
         &OperationImpl::receiveHandler,
-        shared_from_this(),
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred ) );
+        shared_from_this() ) );
 
     // set receive timeout
     timer.expires_from_now( 2U * receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( boost::bind(
+    timer.async_wait( std::bind_front(
       &OperationImpl::timeoutDallyHandler,
-      shared_from_this(),
-      boost::asio::placeholders::error ) );
+      shared_from_this() ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -453,11 +442,9 @@ void OperationImpl::receiveFirstHandler(
       socket.async_receive_from(
         boost::asio::buffer( receivePacket ),
         receiveEndpoint,
-        boost::bind(
+        std::bind_front(
           &OperationImpl::receiveFirstHandler,
-          shared_from_this(),
-          boost::asio::placeholders::error,
-          boost::asio::placeholders::bytes_transferred ) );
+          shared_from_this() ) );
 
       return;
     }
@@ -562,10 +549,9 @@ void OperationImpl::timeoutFirstHandler(
 
     timer.expires_from_now( receiveTimeoutV );
 
-    timer.async_wait( boost::bind(
+    timer.async_wait( std::bind_front(
       &OperationImpl::timeoutFirstHandler,
-      shared_from_this(),
-      boost::asio::placeholders::error ) );
+      shared_from_this() ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -618,10 +604,9 @@ void OperationImpl::timeoutHandler(
 
     timer.expires_from_now( receiveTimeoutV );
 
-    timer.async_wait( boost::bind(
+    timer.async_wait( std::bind_front(
       &OperationImpl::timeoutHandler,
-      shared_from_this(),
-      boost::asio::placeholders::error ) );
+      shared_from_this() ) );
   }
   catch ( const boost::system::system_error &err )
   {

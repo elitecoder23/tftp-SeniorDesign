@@ -75,7 +75,7 @@ class WriteOperationImpl : public OperationImpl
     //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept final;
+      ErrorInfo &&errorInfo = {} ) noexcept final;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket
@@ -103,9 +103,9 @@ class WriteOperationImpl : public OperationImpl
     //! TFTP Server Write Operation Configuration
     TftpServer::WriteOperationConfiguration configurationV;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
-    uint16_t receiveDataSize;
+    uint16_t receiveDataSize{ DefaultDataSize };
     //! Holds the last received block number.
-    Packets::BlockNumber lastReceivedBlockNumber;
+    Packets::BlockNumber lastReceivedBlockNumber{ 0U };
 };
 
 }

@@ -37,7 +37,7 @@ class TftpServerInternal;
  * (Read Operation, Write Operation).
  **/
 class OperationImpl:
-  public std::enable_shared_from_this< OperationImpl>,
+  public std::enable_shared_from_this< OperationImpl >,
   public Operation,
   protected Packets::PacketHandler
 {
@@ -109,7 +109,7 @@ class OperationImpl:
      *
      * @throw CommunicationException
      **/
-    void send( const Packets::Packet &packet);
+    void send( const Packets::Packet &packet );
 
     /**
      * @brief receives a packet and calls the packet handlers
@@ -163,7 +163,7 @@ class OperationImpl:
      **/
     void errorPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ErrorPacket &errorPacket) final;
+      const Packets::ErrorPacket &errorPacket ) final;
 
     /**
      * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket()
@@ -195,7 +195,7 @@ class OperationImpl:
      **/
     void receiveHandler(
       const boost::system::error_code& errorCode,
-      std::size_t bytesTransferred);
+      std::size_t bytesTransferred );
 
     /**
      * @brief Handler for receive timeouts
@@ -233,7 +233,7 @@ class OperationImpl:
     //! transmitted packet is stored for retries
     Packets::RawTftpPacket transmitPacket;
     //! counter to store how often the same packet has been transmitted (retries)
-    unsigned int transmitCounter;
+    unsigned int transmitCounter{ 0U };
     //! Error info
     ErrorInfo errorInfoV;
 };

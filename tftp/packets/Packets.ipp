@@ -16,20 +16,14 @@
 namespace Tftp::Packets {
 
 template< std::unsigned_integral IntT >
-Options::value_type TftpOptions_setOption( KnownOptions option, IntT value )
-{
-  return { std::string{ TftpOptions_name( option ) }, std::to_string( value ) };
-}
-
-template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > >
 TftpOptions_getOption(
   const Options &options,
-  KnownOptions option,
+  std::string_view name,
   const IntT min,
   const IntT max )
 {
-  auto optionIt{ options.find( TftpOptions_name( option ) ) };
+  auto optionIt{ options.find( name ) };
 
   // option not set
   if ( optionIt == options.end() )
@@ -37,14 +31,29 @@ TftpOptions_getOption(
     return { true, {} };
   }
 
-  const auto optionValue{ std::stoull( optionIt->second ) };
-
-  if ( ( optionValue < min ) || ( optionValue > max ) )
+  try
   {
-    return { false, {} };
-  }
+    const auto optionValue{ std::stoull( optionIt->second ) };
 
-  return { true, static_cast< IntT >( optionValue ) };
+    if ( ( optionValue < min ) || ( optionValue > max ) )
+    {
+      return { false, {} };
+    }
+
+    return { true, static_cast< IntT >( optionValue ) };
+  }
+  catch ( const std::invalid_argument & )
+  {
+    return { true, {} };
+  }
+  catch ( const std::out_of_range & )
+  {
+    return { true, {} };
+  }
+  catch ( ...)
+  {
+    return { true, {} };
+  }
 }
 
 }

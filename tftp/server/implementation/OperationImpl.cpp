@@ -77,8 +77,7 @@ try:
   tftpRetries{ tftpRetries },
   socket{ ioContext },
   timer{ ioContext },
-  receivePacket( maxReceivePacketSize ),
-  transmitCounter{ 0 }
+  receivePacket( maxReceivePacketSize )
 {
   try
   {

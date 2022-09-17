@@ -74,17 +74,17 @@ void ReadOperationImpl::request()
     // Block size Option
     if ( configurationV.optionsConfiguration.blockSizeOption )
     {
-      options.emplace( Packets::TftpOptions_setOption(
-        KnownOptions::BlockSize,
-        *configurationV.optionsConfiguration.blockSizeOption ) );
+      options.try_emplace(
+        Packets::TftpOptions_name( KnownOptions::BlockSize ),
+        std::to_string( *configurationV.optionsConfiguration.blockSizeOption ) );
     }
 
     // Timeout Option
     if ( configurationV.optionsConfiguration.timeoutOption )
     {
-      options.emplace( Packets::TftpOptions_setOption(
-        KnownOptions::Timeout,
-        static_cast< uint16_t >(
+      options.try_emplace(
+        Packets::TftpOptions_name( KnownOptions::Timeout ),
+        std::to_string( static_cast< uint16_t >(
           configurationV.optionsConfiguration.timeoutOption->count() ) ) );
     }
 
@@ -92,16 +92,16 @@ void ReadOperationImpl::request()
     if ( configurationV.optionsConfiguration.handleTransferSizeOption )
     {
       // assure that transfer size is set to zero for read request
-      options.emplace( Packets::TftpOptions_setOption(
-        KnownOptions::TransferSize,
-        0U ) );
+      options.try_emplace(
+        Packets::TftpOptions_name( KnownOptions::TransferSize ),
+        "0" );
     }
 
     // send read request packet
     sendFirst( Packets::ReadRequestPacket{
       configurationV.filename,
       configurationV.mode,
-      options } );
+      std::move( options ) } );
 
     // wait for answers
     receiveFirst();
@@ -320,7 +320,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   const auto [ blockSizeValid, blockSizeValue ] =
     Packets::TftpOptions_getOption< uint16_t >(
       remoteOptions,
-      KnownOptions::BlockSize,
+      Packets::TftpOptions_name( KnownOptions::BlockSize ),
       BlockSizeOptionMin,
       BlockSizeOptionMax );
 
@@ -390,7 +390,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   const auto [ timeoutValid, timeoutValue ] =
     Packets::TftpOptions_getOption< uint8_t>(
       remoteOptions,
-      KnownOptions::Timeout,
+      Packets::TftpOptions_name( KnownOptions::Timeout ),
       TimeoutOptionMin,
       TimeoutOptionMax );
 
@@ -462,7 +462,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   const auto [ transferSizeValid, transferSizeValue ] =
     Packets::TftpOptions_getOption< uint64_t>(
       remoteOptions,
-      KnownOptions::TransferSize );
+      Packets::TftpOptions_name( KnownOptions::TransferSize ) );
 
   if ( !configurationV.optionsConfiguration.handleTransferSizeOption
     && transferSizeValue )
