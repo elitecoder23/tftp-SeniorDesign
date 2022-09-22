@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 
   RawTftpPacket raw{ ack};
 
-  std::cout << Helper::Dump( &(*raw.begin()), raw.size() );
+  std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
   BOOST_CHECK( ack.packetType() == PacketType::Acknowledgement );
   BOOST_CHECK( ack.blockNumber() == BlockNumber{ 10U } );
@@ -53,13 +53,24 @@ BOOST_AUTO_TEST_CASE( constructor2 )
   };
 
   AcknowledgementPacket ack{ raw };
-  std::cout << Helper::Dump( &(*raw.begin()), raw.size() );
+  std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
   BOOST_CHECK( ack.packetType() == PacketType::Acknowledgement );
-  BOOST_CHECK( ack.blockNumber() == BlockNumber( 4097U ) );
+  BOOST_CHECK( ack.blockNumber() == BlockNumber( 0x1001U ) );
 
+  // too few data
   BOOST_CHECK_THROW(
     ( AcknowledgementPacket{ RawTftpPacket{ 0x00, 0x04 } } ),
+    Tftp::Packets::InvalidPacketException );
+
+  // too much data
+  BOOST_CHECK_THROW(
+    ( AcknowledgementPacket{ RawTftpPacket{ 0x00, 0x04, 0x10, 0x01, 0x00 } } ),
+    Tftp::Packets::InvalidPacketException );
+
+  // Data Packet
+  BOOST_CHECK_THROW(
+    ( AcknowledgementPacket{ RawTftpPacket{ 0x00, 0x03, 0x10, 0x01 } } ),
     Tftp::Packets::InvalidPacketException );
 }
 

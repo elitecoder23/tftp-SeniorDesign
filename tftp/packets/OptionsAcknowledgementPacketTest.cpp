@@ -14,6 +14,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+#include <tftp/packets/PacketException.hpp>
 
 #include <helper/Dump.hpp>
 
@@ -32,11 +33,11 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   RawTftpPacket raw{ oack};
 
-  std::cout << "OACK:\n" << Helper::Dump( &(*raw.begin()), raw.size()) << "\n";
+  std::cout << "OACK:\n" << Helper::Dump( std::data( raw ), raw.size() ) << "\n";
 
-  OptionsAcknowledgementPacket oack2( raw);
+  OptionsAcknowledgementPacket oack2( raw );
 
-  BOOST_CHECK( oack.packetType()         == oack2.packetType());
+  BOOST_CHECK( oack.packetType()         == oack2.packetType() );
 
   auto options2{ oack.options()};
   BOOST_CHECK( options2.size() == 1);
@@ -52,6 +53,30 @@ BOOST_AUTO_TEST_CASE( constructor )
   BOOST_CHECK( blocksizeOption1->second == blocksizeOption2->second);
   BOOST_CHECK( blocksizeOption1->second == "4096");
   BOOST_CHECK( blocksizeOption2->second == "4096");
+}
+
+BOOST_AUTO_TEST_CASE( constructor2 )
+{
+  // Wrong Opcode
+  BOOST_CHECK_THROW(
+    ( OptionsAcknowledgementPacket{ RawTftpPacket{
+      0x00U, 0x05U,
+      0x00U, 0x01U,
+      'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U, 0x00U } } ),
+    Tftp::Packets::InvalidPacketException );
+
+  BOOST_CHECK_THROW(
+    ( OptionsAcknowledgementPacket{ RawTftpPacket{
+      0x00U, 0x06U,
+      0x00U, 0x01U,
+      'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U } } ),
+    Tftp::Packets::InvalidPacketException );
+  BOOST_CHECK_THROW(
+    ( OptionsAcknowledgementPacket{ RawTftpPacket{
+      0x00U, 0x06U,
+      0x00U, 0x01U,
+      'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U, 0x00U, 0x00U } } ),
+    Tftp::Packets::InvalidPacketException );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

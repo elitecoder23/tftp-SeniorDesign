@@ -3,6 +3,7 @@ Checks:          'clang-diagnostic-*,
                   bugprone-*,
                   -bugprone-easily-swappable-parameters,
                   readability-inconsistent-declaration-parameter-name,
+                  -google-default-arguments,
                   -llvmlibc-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''

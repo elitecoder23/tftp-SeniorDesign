@@ -134,7 +134,7 @@ class DataPacket: public Packet
      * The given data is copied to the local data.
      *
      * @param[in] data
-     *   The data to set.
+     *   Data to set.
      **/
     void data( Data data );
 

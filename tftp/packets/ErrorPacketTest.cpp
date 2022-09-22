@@ -11,6 +11,7 @@
  **/
 
 #include <tftp/packets/ErrorPacket.hpp>
+#include <tftp/packets/PacketException.hpp>
 
 #include <helper/Dump.hpp>
 
@@ -27,22 +28,22 @@ BOOST_AUTO_TEST_SUITE( TftpErrorPacket)
 //! ErrorPacket Constructor Test
 BOOST_AUTO_TEST_CASE( constructor1)
 {
-  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"};
+  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE" };
 
-  RawTftpPacket raw{ error};
+  RawTftpPacket raw{ error };
 
-  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
+  std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
 
-  BOOST_CHECK( error.packetType() == PacketType::Error);
-  BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined);
-  BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE");
+  BOOST_CHECK( error.packetType() == PacketType::Error );
+  BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined );
+  BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE" );
 
   BOOST_CHECK((raw == RawTftpPacket{
     0x00U, 0x05U,
     0x00U, 0x00U,
     'E', 'R', 'R', 'O', 'R', ' ', 'M', 'E', 'S', 'S', 'A', 'G', 'E', 0x00U
-  }));
+  } ) );
 }
 
 //! ErrorPacket Constructor Test
@@ -51,24 +52,24 @@ BOOST_AUTO_TEST_CASE( constructor2)
   using namespace std::literals;
   ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"s};
 
-  RawTftpPacket raw{ error};
+  RawTftpPacket raw{ error };
 
-  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
+  std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
 
   BOOST_CHECK( error.packetType() == PacketType::Error);
   BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined);
   BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE");
 
-  BOOST_CHECK((raw == RawTftpPacket{
+  BOOST_CHECK( (raw == RawTftpPacket{
     0x00U, 0x05U,
     0x00U, 0x00U,
     'E', 'R', 'R', 'O', 'R', ' ', 'M', 'E', 'S', 'S', 'A', 'G', 'E', 0x00U
-  }));
+  } ) );
 }
 
 //! ErrorPacket Constructor Test
-BOOST_AUTO_TEST_CASE( constructor3)
+BOOST_AUTO_TEST_CASE( constructor3 )
 {
   RawTftpPacket raw{
     0x00U, 0x05U,
@@ -76,13 +77,43 @@ BOOST_AUTO_TEST_CASE( constructor3)
     'E', 'R', 'R', 'O', 'R', 0x00U
   };
 
-  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
+  std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
   ErrorPacket error{ raw};
 
   BOOST_CHECK( error.packetType() == PacketType::Error);
   BOOST_CHECK( error.errorCode() == ErrorCode::FileNotFound);
   BOOST_CHECK( error.errorMessage() == "ERROR");
+
+  ErrorPacket error2{ RawTftpPacket{
+    0x00U, 0x05U,
+    0x00U, 0x01U,
+    0x00U
+  } };
+  BOOST_CHECK( error2.packetType() == PacketType::Error);
+  BOOST_CHECK( error2.errorCode() == ErrorCode::FileNotFound );
+  BOOST_CHECK( error2.errorMessage().empty() );
+
+  // Wrong Opcode
+  BOOST_CHECK_THROW(
+    ( ErrorPacket{ RawTftpPacket{
+      0x00U, 0x04U,
+      0x00U, 0x01U,
+      'E', 'R', 'R', 'O', 'R', 0x00U } } ),
+    Tftp::Packets::InvalidPacketException );
+
+  // too few data
+  BOOST_CHECK_THROW(
+    ( ErrorPacket{ RawTftpPacket{ 0x00, 0x05, 0x00, 0x00 } } ),
+    Tftp::Packets::InvalidPacketException );
+
+  // too much data
+  BOOST_CHECK_THROW(
+    ( ErrorPacket{ RawTftpPacket{
+      0x00U, 0x05U,
+      0x00U, 0x01U,
+      'E', 'R', 'R', 'O', 'R', 0x00U, 0xFF } } ),
+    Tftp::Packets::InvalidPacketException );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
