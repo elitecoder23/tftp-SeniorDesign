@@ -30,8 +30,8 @@ namespace Tftp::Client {
  *
  * After executed, the class sends the TFTP RRQ packet to the destination and
  * waits for answer.
- * Received data is handled by the TftpReadOperationHandler given at
- * construction time.
+ * Received data is handled by the ReceiveDataHandler given at construction
+ * time.
  **/
 class ReadOperationImpl : public OperationImpl
 {

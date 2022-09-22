@@ -77,10 +77,10 @@ class TftpOptionsConfiguration
     //! If set, the client/ server shall handle the "Transfer Size" option
     bool handleTransferSizeOption{ false };
 
-    //! If handleBlockSizeOption is set, this value is used for option negotiation
+    //! If set, this value is used for option negotiation
     boost::optional< uint16_t > blockSizeOption{};
 
-    //! If handleTimeoutOption is set, this value is used for option negotiation
+    //! If set, this value is used for option negotiation
     boost::optional< std::chrono::seconds > timeoutOption{};
 };
 

@@ -31,7 +31,7 @@ class TransmitDataHandler : public virtual DataHandler
   public:
     /**
      * @brief This call-back is executed, when the transfer size of the data
-     *   to be transmitted is requested (TRANSFERSIZE option set).
+     *   to be transmitted is requested (transfer size option set).
      *
      * The call to this call-back is optional.
      *

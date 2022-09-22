@@ -36,11 +36,11 @@ class ErrorCodeDescription : public Helper::Description<
  * @brief Outputs the error code to the stream.
  *
  * @param[in] stream
- *   The output stream.
+ *   Output stream.
  * @param[out] errorCode
- *   The error code.
+ *   Error code.
  *
- * @return The output stream.
+ * @return @p stream for chaining.
  **/
 std::ostream& operator<<( std::ostream& stream, ErrorCode errorCode );
 

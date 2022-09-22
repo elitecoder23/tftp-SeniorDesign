@@ -30,7 +30,7 @@ namespace Tftp::Client {
  *
  * After executed, the class sends the TFTP WRQ packet to the destination
  * and waits for answer.
- * Data is handled by the TftpWriteOperationHandler given at construction time.
+ * Data is handled by the TransmitDataHandler given at construction time.
  **/
 class WriteOperationImpl : public OperationImpl
 {
@@ -60,7 +60,7 @@ class WriteOperationImpl : public OperationImpl
     //! @copydoc OperationImpl::finished
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {}) noexcept final;
+      ErrorInfo &&errorInfo = {} ) noexcept final;
 
     /**
      * @brief Sends the data to the host.
@@ -78,7 +78,7 @@ class WriteOperationImpl : public OperationImpl
      **/
     void dataPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket) final;
+      const Packets::DataPacket &dataPacket ) final;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket()
@@ -88,7 +88,7 @@ class WriteOperationImpl : public OperationImpl
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket ) final;
 
     /**
      * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket()
@@ -100,7 +100,7 @@ class WriteOperationImpl : public OperationImpl
      **/
     void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket) final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) final;
 
   private:
     //! Write Operation Configuration
