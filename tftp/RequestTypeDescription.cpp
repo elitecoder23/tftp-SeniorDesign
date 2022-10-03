@@ -18,12 +18,10 @@
 
 namespace Tftp {
 
-using namespace std::literals;
-
 RequestTypeDescription::RequestTypeDescription() :
   Description{
-    { "Read"sv,  RequestType::Read },
-    { "Write"sv, RequestType::Write }
+    { "Read",  RequestType::Read },
+    { "Write", RequestType::Write }
   }
 {
 }

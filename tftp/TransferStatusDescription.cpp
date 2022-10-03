@@ -16,16 +16,14 @@
 
 namespace Tftp {
 
-using namespace std::literals;
-
 TransferStatusDescription::TransferStatusDescription():
   Description{
-    { "Successful"sv,               TransferStatus::Successful },
-    { "Communication Error"sv,      TransferStatus::CommunicationError },
-    { "Request Error"sv,            TransferStatus::RequestError },
-    { "Option Negotiation Error"sv, TransferStatus::OptionNegotiationError },
-    { "Transfer Error"sv,           TransferStatus::TransferError },
-    { "Aborted"sv,                  TransferStatus::Aborted },
+    { "Successful",               TransferStatus::Successful },
+    { "Communication Error",      TransferStatus::CommunicationError },
+    { "Request Error",            TransferStatus::RequestError },
+    { "Option Negotiation Error", TransferStatus::OptionNegotiationError },
+    { "Transfer Error",           TransferStatus::TransferError },
+    { "Aborted",                  TransferStatus::Aborted },
   }
 {
 }

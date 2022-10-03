@@ -16,19 +16,17 @@
 
 namespace Tftp {
 
-using namespace std::literals;
-
 ErrorCodeDescription::ErrorCodeDescription():
   Description{
-    { "Not defined"sv,                     ErrorCode::NotDefined },
-    { "File not found"sv,                  ErrorCode::FileNotFound },
-    { "Access violation"sv,                ErrorCode::AccessViolation },
-    { "Disk full or allocation exceeds"sv, ErrorCode::DiskFullOrAllocationExceeds },
-    { "Illegal TFTP operation"sv,          ErrorCode::IllegalTftpOperation },
-    { "Unknown transfer ID"sv,             ErrorCode::UnknownTransferId },
-    { "File already exists"sv,             ErrorCode::FileAlreadyExists },
-    { "No such user"sv,                    ErrorCode::NoSuchUser },
-    { "TFTP option refused"sv,             ErrorCode::TftpOptionRefused },
+    { "Not defined",                     ErrorCode::NotDefined },
+    { "File not found",                  ErrorCode::FileNotFound },
+    { "Access violation",                ErrorCode::AccessViolation },
+    { "Disk full or allocation exceeds", ErrorCode::DiskFullOrAllocationExceeds },
+    { "Illegal TFTP operation",          ErrorCode::IllegalTftpOperation },
+    { "Unknown transfer ID",             ErrorCode::UnknownTransferId },
+    { "File already exists",             ErrorCode::FileAlreadyExists },
+    { "No such user",                    ErrorCode::NoSuchUser },
+    { "TFTP option refused",             ErrorCode::TftpOptionRefused },
   }
 {
 }
