@@ -2,7 +2,7 @@
   "version": 3,
   "cmakeMinimumRequired": {
     "major": 3,
-    "minor": 21,
+    "minor": 24,
     "patch": 0
   },
   "configurePresets": [
@@ -12,7 +12,7 @@
       "binaryDir": "cmake-build-${presetName}",
       "installDir": "cmake-install-${presetName}",
       "cacheVariables": {
-        "CMAKE_COMPILE_WARNING_AS_ERROR" : "False"
+        "CMAKE_COMPILE_WARNING_AS_ERROR" : "True"
       }
     },
     {
