@@ -16,6 +16,7 @@
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+#include <tftp/packets/TftpOptions.hpp>
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>

@@ -1,17 +1,17 @@
 /**
-* @file
-* @copyright
-* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/.
-*
-* @author Thomas Vogt, thomas@thomas-vogt.de
-*
-* @brief Definition of Namespace Tftp::Packets.
-**/
+ * @file
+ * @copyright
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @author Thomas Vogt, thomas@thomas-vogt.de
+ *
+ * @brief Definition of Module Tftp::Packets TftpOptions.
+ **/
 
-#ifndef TFTP_PACKETS_PACKETS_IPP
-#define TFTP_PACKETS_PACKETS_IPP
+#ifndef TFTP_PACKETS_TFTPOPTIONS_IPP
+#define TFTP_PACKETS_TFTPOPTIONS_IPP
 
 namespace Tftp::Packets {
 
@@ -50,7 +50,7 @@ TftpOptions_getOption(
   {
     return { true, {} };
   }
-  catch ( ...)
+  catch ( ... )
   {
     return { true, {} };
   }

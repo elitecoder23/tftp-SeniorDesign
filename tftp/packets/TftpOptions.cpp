@@ -7,10 +7,10 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Namespace Tftp::Packets.
+ * @brief Definition of Module Tftp::Packets TftpOptions.
  **/
 
-#include "Packets.hpp"
+#include "TftpOptions.hpp"
 
 #include <tftp/packets/PacketException.hpp>
 

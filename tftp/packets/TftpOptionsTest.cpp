@@ -10,7 +10,7 @@
  * @brief Implementation of Unit Tests of Tftp::Packets.
  **/
 
-#include <tftp/packets/Packets.hpp>
+#include <tftp/packets/TftpOptions.hpp>
 
 #include <tftp/packets/PacketException.hpp>
 

@@ -84,7 +84,7 @@ class ErrorPacket: public Packet
     /**
      * @brief Returns the error code.
      *
-     * @return The error code.
+     * @return TFTP error code.
      **/
     [[nodiscard]] ErrorCode errorCode() const noexcept;
 
@@ -92,7 +92,7 @@ class ErrorPacket: public Packet
      * @brief Sets the error code.
      *
      * @param[in] errorCode
-     *   The error code to set
+     *   TFTP error code to set
      **/
     void errorCode( ErrorCode errorCode ) noexcept;
 
@@ -106,7 +106,7 @@ class ErrorPacket: public Packet
     /**
      * @brief Returns the error message of this packet.
      *
-     * @return The error message
+     * @return TFTP error message
      **/
     [[nodiscard]] std::string_view errorMessage() const;
 
@@ -114,7 +114,7 @@ class ErrorPacket: public Packet
      * @brief Sets the error message of this packet.
      *
      * @param[in] errorMessage
-     *   Error message to set.
+     *   TFTP Error message to set.
      **/
     void errorMessage( std::string errorMessage );
 

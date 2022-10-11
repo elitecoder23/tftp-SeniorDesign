@@ -20,6 +20,7 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+#include <tftp/packets/TftpOptions.hpp>
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
@@ -178,11 +179,7 @@ void TftpServerImpl::receive()
     socket.async_receive_from(
       boost::asio::buffer( receivePacket ),
       remoteEndpoint,
-      boost::bind(
-        &TftpServerImpl::receiveHandler,
-        this,
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred ) );
+      std::bind_front( &TftpServerImpl::receiveHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {

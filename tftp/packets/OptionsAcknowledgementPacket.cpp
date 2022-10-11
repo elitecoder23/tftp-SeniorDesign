@@ -13,6 +13,7 @@
 #include "OptionsAcknowledgementPacket.hpp"
 
 #include <tftp/packets/PacketException.hpp>
+#include <tftp/packets/TftpOptions.hpp>
 
 #include <helper/Endianess.hpp>
 

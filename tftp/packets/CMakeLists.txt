@@ -26,14 +26,15 @@ target_sources(
     PacketHandler.hpp
     PacketHandler.cpp
     Packets.hpp
-    Packets.cpp
-    Packets.ipp
     ReadRequestPacket.hpp
     ReadRequestPacket.cpp
     ReadWriteRequestPacket.hpp
     ReadWriteRequestPacket.cpp
+    TftpOptions.hpp
+    TftpOptions.ipp
+    TftpOptions.cpp
     WriteRequestPacket.hpp
-    WriteRequestPacket.cpp)
+    WriteRequestPacket.cpp )
 
 target_sources(
   tftp_test
@@ -44,7 +45,7 @@ target_sources(
     DataPacketTest.cpp
     ErrorPacketTest.cpp
     OptionsAcknowledgementPacketTest.cpp
-    PacketsTest.cpp
     ReadRequestPacketTest.cpp
     ReadWriteRequestPacketTest.cpp
+    TftpOptionsTest.cpp
     WriteRequestPacketTest.cpp )

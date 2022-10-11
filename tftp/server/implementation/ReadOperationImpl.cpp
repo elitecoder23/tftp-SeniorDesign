@@ -20,6 +20,7 @@
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
+#include <tftp/packets/TftpOptions.hpp>
 
 #include <utility>
 
