@@ -107,7 +107,7 @@ class ReadOperationImpl : public OperationImpl
     //! flag to hold information if OACK has been received (used when first data packet is received)
     bool oackReceived{ false };
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
-    uint16_t receiveDataSize{ DefaultDataSize };
+    uint16_t receiveDataSize{ Packets::DefaultDataSize };
     //! last received block number.
     Packets::BlockNumber lastReceivedBlockNumber{ 0U };
 };

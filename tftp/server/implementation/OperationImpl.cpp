@@ -16,8 +16,8 @@
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+#include <tftp/packets/ErrorCodeDescription.hpp>
 
-#include <tftp/ErrorCodeDescription.hpp>
 #include <tftp/TftpOptionsConfiguration.hpp>
 #include <tftp/TftpLogger.hpp>
 #include <tftp/TftpException.hpp>
@@ -29,7 +29,7 @@
 namespace Tftp::Server {
 
 void OperationImpl::gracefulAbort(
-  const ErrorCode errorCode,
+  const Packets::ErrorCode errorCode,
   std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
@@ -176,18 +176,15 @@ void OperationImpl::receive()
   {
     socket.async_receive(
       boost::asio::buffer( receivePacket),
-      boost::bind(
+      std::bind_front(
         &OperationImpl::receiveHandler,
-        shared_from_this(),
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred));
+        shared_from_this() ) );
 
     timer.expires_from_now( receiveTimeoutV );
 
-    timer.async_wait( boost::bind(
+    timer.async_wait( std::bind_front(
       &OperationImpl::timeoutHandler,
-      shared_from_this(),
-      boost::asio::placeholders::error ) );
+      shared_from_this() ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -208,18 +205,15 @@ void OperationImpl::receiveDally()
   {
     socket.async_receive(
       boost::asio::buffer( receivePacket),
-      boost::bind(
+      std::bind_front(
         &OperationImpl::receiveHandler,
-        shared_from_this(),
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred));
+        shared_from_this() ) );
 
     timer.expires_from_now( 2U * receiveTimeoutV );
 
-    timer.async_wait( boost::bind(
+    timer.async_wait( std::bind_front(
       &OperationImpl::timeoutDallyHandler,
-      shared_from_this(),
-      boost::asio::placeholders::error ) );
+      shared_from_this() ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -248,7 +242,7 @@ void OperationImpl::readRequestPacket(
     << "RX ERROR: " << static_cast< std::string>( readRequestPacket );
 
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "RRQ not expected" };
 
   send( errorPacket);
@@ -265,7 +259,7 @@ void OperationImpl::writeRequestPacket(
     << "RX ERROR: " << static_cast< std::string>( writeRequestPacket );
 
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "WRQ not expected" };
 
   send( errorPacket);
@@ -286,10 +280,10 @@ void OperationImpl::errorPacket(
   // Operation completed
   switch ( Packets::Packet::packetType( transmitPacket ) )
   {
-    case PacketType::OptionsAcknowledgement:
+    case Packets::PacketType::OptionsAcknowledgement:
       switch ( errorPacket.errorCode() )
       {
-        case ErrorCode::TftpOptionRefused:
+        case Packets::ErrorCode::TftpOptionRefused:
           finished( TransferStatus::OptionNegotiationError, errorPacket );
           break;
 
@@ -315,7 +309,7 @@ void OperationImpl::optionsAcknowledgementPacket(
     << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket );
 
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "OACK not expected" };
 
   send( errorPacket);
@@ -334,7 +328,7 @@ void OperationImpl::invalidPacket(
     << "RX: UNKNOWN";
 
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "Invalid packet not expected" };
 
   send( errorPacket);
@@ -413,10 +407,9 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
 
     timer.expires_from_now( receiveTimeoutV );
 
-    timer.async_wait( boost::bind(
+    timer.async_wait( std::bind_front(
       &OperationImpl::timeoutHandler,
-      shared_from_this(),
-      boost::asio::placeholders::error ) );
+      shared_from_this() ) );
   }
   catch ( const boost::system::system_error &err )
   {

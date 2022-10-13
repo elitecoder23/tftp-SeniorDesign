@@ -75,17 +75,17 @@ class TftpServerImpl:
     [[nodiscard]] OperationPtr writeOperation(
       WriteOperationConfiguration configuration ) final;
 
-    //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,ErrorCode,std::string)
+    //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
     void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
-      ErrorCode errorCode,
+      Packets::ErrorCode errorCode,
       std::string errorMessage = {} ) final;
 
-    //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,ErrorCode,std::string)
+    //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
     void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
-      ErrorCode errorCode,
+      Packets::ErrorCode errorCode,
       std::string errorMessage = {} ) final;
 
   private:

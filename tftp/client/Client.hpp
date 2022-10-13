@@ -20,6 +20,8 @@
 
 #include <tftp/Tftp.hpp>
 
+#include <tftp/packets/Packets.hpp>
+
 #include <memory>
 #include <functional>
 #include <optional>
@@ -38,14 +40,22 @@ class TftpClient;
 class Operation;
 
 //! TFTP %Client Instance Pointer
-using TftpClientPtr = std::shared_ptr< TftpClient>;
+using TftpClientPtr = std::shared_ptr< TftpClient >;
 
 //! TFTP %Client %Operation Instance Pointer
-using OperationPtr = std::shared_ptr< Operation>;
+using OperationPtr = std::shared_ptr< Operation >;
 
-//! TFTP Client Option Negotiation Handler
+/**
+ * @brief TFTP Client Option Negotiation Handler
+ *
+ * @param[in] serverOptions
+ *   Received Options from TFTP Server
+ *
+ * @return If the TFTP Option Negotiation was successful.
+ **/
 using OptionNegotiationHandler = std::function<
-  bool( const Options &serverOptions ) >;
+  bool( const Packets::Options &serverOptions ) >;
+
 }
 
 #endif

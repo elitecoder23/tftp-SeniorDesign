@@ -107,7 +107,7 @@ class WriteOperationImpl : public OperationImpl
     TftpClient::WriteOperationConfiguration configurationV;
 
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
-    uint16_t transmitDataSize{ DefaultDataSize };
+    uint16_t transmitDataSize{ Packets::DefaultDataSize };
     //! Is set, when the last data packet has been transmitted
     bool lastDataPacketTransmitted{ false };
     //! Block number of the last transmitted data packet.

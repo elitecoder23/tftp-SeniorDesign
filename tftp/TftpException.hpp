@@ -81,10 +81,6 @@ class ErrorReceivedException: public TftpException
 using TransferPhaseInfo =
   boost::error_info< struct TransferPhaseInfoTag, TransferPhase >;
 
-//! TFTP Packet Type Information.
-using PacketTypeInfo =
-  boost::error_info< struct PacketTypeInfoTag, PacketType >;
-
 //! TFTP Error Packet Information.
 using ErrorPacketInfo =
   boost::error_info< struct ErrorPacketInfoTag, Packets::ErrorPacket >;

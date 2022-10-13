@@ -7,19 +7,19 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::ErrorCodeDescription.
+ * @brief Declaration of Class Tftp::Packets::ErrorCodeDescription.
  **/
 
-#ifndef TFTP_ERRORCODEDESCRIPTION_HPP
-#define TFTP_ERRORCODEDESCRIPTION_HPP
+#ifndef TFTP_PACKETS_ERRORCODEDESCRIPTION_HPP
+#define TFTP_PACKETS_ERRORCODEDESCRIPTION_HPP
 
-#include <tftp/Tftp.hpp>
+#include <tftp/packets/Packets.hpp>
 
 #include <helper/Description.hpp>
 
 #include <iosfwd>
 
-namespace Tftp {
+namespace Tftp::Packets {
 
 //! Description of TFTP Error Codes (ErrorCode)
 class ErrorCodeDescription : public Helper::Description<

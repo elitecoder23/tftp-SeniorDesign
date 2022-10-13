@@ -44,7 +44,7 @@ class OperationImpl:
   public:
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
-      ErrorCode errorCode,
+      Packets::ErrorCode errorCode,
       std::string errorMessage ) final;
 
     //! @copydoc Operation::abort

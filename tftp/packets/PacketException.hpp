@@ -30,6 +30,10 @@ class InvalidPacketException: public virtual TftpException
     }
 };
 
+//! TFTP Packet Type Information.
+using PacketTypeInfo =
+  boost::error_info< struct PacketTypeInfoTag, PacketType >;
+
 }
 
 #endif

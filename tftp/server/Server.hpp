@@ -20,6 +20,8 @@
 
 #include <tftp/Tftp.hpp>
 
+#include <tftp/packets/Packets.hpp>
+
 #include <boost/asio/ip/udp.hpp>
 
 #include <memory>
@@ -74,9 +76,9 @@ using ReceivedTftpRequestHandler =
     const boost::asio::ip::udp::endpoint &remote,
     RequestType requestType,
     std::string_view filename,
-    TransferMode mode,
-    const Options &clientOptions,
-    const Options &additionalClientOptions ) >;
+    Packets::TransferMode mode,
+    const Packets::Options &clientOptions,
+    const Packets::Options &additionalClientOptions ) >;
 
 }
 

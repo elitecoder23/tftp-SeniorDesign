@@ -103,7 +103,7 @@ class WriteOperationImpl : public OperationImpl
     //! TFTP Server Write Operation Configuration
     TftpServer::WriteOperationConfiguration configurationV;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
-    uint16_t receiveDataSize{ DefaultDataSize };
+    uint16_t receiveDataSize{ Packets::DefaultDataSize };
     //! Holds the last received block number.
     Packets::BlockNumber lastReceivedBlockNumber{ 0U };
 };

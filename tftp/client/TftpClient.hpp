@@ -14,6 +14,7 @@
 #define TFTP_CLIENT_TFTPCLIENT_HPP
 
 #include <tftp/client/Client.hpp>
+
 #include <tftp/TftpOptionsConfiguration.hpp>
 
 #include <boost/asio/io_context.hpp>
@@ -59,11 +60,11 @@ class TftpClient
       //! Which file shall be requested
       std::string filename;
       //! Transfer Mode
-      TransferMode mode;
+      Packets::TransferMode mode;
       //! TFTP Options Configuration.
       TftpOptionsConfiguration optionsConfiguration;
       //! Additional TFTP options sent to the server.
-      Options additionalOptions;
+      Packets::Options additionalOptions;
       //! Where the connection should be established to.
       boost::asio::ip::udp::endpoint remote;
       //! Parameter to define the communication source
@@ -82,11 +83,11 @@ class TftpClient
       //! Which file shall be requested
       std::string filename;
       //! Transfer Mode
-      TransferMode mode;
+      Packets::TransferMode mode;
       //! TFTP Options Configuration.
       TftpOptionsConfiguration optionsConfiguration;
       //! Additional TFTP options sent to the server.
-      Options additionalOptions;
+      Packets::Options additionalOptions;
       //! Where the connection should be established to.
       boost::asio::ip::udp::endpoint remote;
       //! Parameter to define the communication source

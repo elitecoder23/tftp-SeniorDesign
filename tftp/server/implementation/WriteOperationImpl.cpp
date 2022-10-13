@@ -36,8 +36,11 @@ WriteOperationImpl::WriteOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
-    static_cast< uint16_t >( DefaultTftpDataPacketHeaderSize
-      + std::max( DefaultDataSize, configuration.optionsConfiguration.blockSizeOption.get_value_or( DefaultDataSize ) ) ),
+    static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
+      + std::max(
+        Packets::DefaultDataSize,
+        configuration.optionsConfiguration.blockSizeOption.get_value_or(
+          Packets::DefaultDataSize ) ) ),
     configuration.completionHandler,
     configuration.remote,
     configuration.local },
@@ -65,7 +68,7 @@ void WriteOperationImpl::start()
     else
     {
       // initialise server options with additional negotiated options
-      Options serverOptions{ configurationV.additionalNegotiatedOptions };
+      Packets::Options serverOptions{ configurationV.additionalNegotiatedOptions };
 
       // check block size option - if set use it
       if ( configurationV.optionsConfiguration.blockSizeOption )
@@ -73,9 +76,9 @@ void WriteOperationImpl::start()
         const auto [ blockSizeValid, blockSize ] =
           Packets::TftpOptions_getOption< uint16_t >(
             configurationV.clientOptions,
-            Packets::TftpOptions_name( KnownOptions::BlockSize ),
-            BlockSizeOptionMin,
-            BlockSizeOptionMax  );
+            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+            Packets::BlockSizeOptionMin,
+            Packets::BlockSizeOptionMax  );
 
         if ( blockSize )
         {
@@ -85,7 +88,7 @@ void WriteOperationImpl::start()
 
           // respond option string
           serverOptions.try_emplace(
-            Packets::TftpOptions_name( KnownOptions::BlockSize ),
+            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
             std::to_string( receiveDataSize ) );
         }
       }
@@ -96,9 +99,9 @@ void WriteOperationImpl::start()
         const auto [ timeoutValid, timeout ] =
           Packets::TftpOptions_getOption< uint8_t >(
             configurationV.clientOptions,
-            Packets::TftpOptions_name( KnownOptions::Timeout ),
-            TimeoutOptionMin,
-            TimeoutOptionMax );
+            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+            Packets::TimeoutOptionMin,
+            Packets::TimeoutOptionMax );
 
         if ( timeoutValid && timeout
           && ( std::chrono::seconds{ *timeout }
@@ -108,7 +111,7 @@ void WriteOperationImpl::start()
 
           // respond with timeout option set
           serverOptions.try_emplace(
-            Packets::TftpOptions_name( KnownOptions::Timeout ),
+            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
             std::to_string( *timeout ) );
         }
       }
@@ -119,14 +122,14 @@ void WriteOperationImpl::start()
         const auto [ transferSizeValid, transferSize ] =
           Packets::TftpOptions_getOption< uint64_t >(
             configurationV.clientOptions,
-            Packets::TftpOptions_name( KnownOptions::TransferSize ) );
+            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 
         if ( transferSize )
         {
           if ( !configurationV.dataHandler->receivedTransferSize( *transferSize ) )
           {
             Packets::ErrorPacket errorPacket{
-              ErrorCode::DiskFullOrAllocationExceeds,
+              Packets::ErrorCode::DiskFullOrAllocationExceeds,
               "FILE TO BIG" };
 
             send( errorPacket );
@@ -139,7 +142,7 @@ void WriteOperationImpl::start()
 
           // respond option string
           serverOptions.try_emplace(
-            Packets::TftpOptions_name( KnownOptions::TransferSize ),
+            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
             std::to_string( *transferSize ) );
         }
       }
@@ -227,7 +230,7 @@ void WriteOperationImpl::dataPacket(
       << "Unexpected packet";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::IllegalTftpOperation,
+      Packets::ErrorCode::IllegalTftpOperation,
       "Wrong block number" };
 
     send( errorPacket );
@@ -245,7 +248,7 @@ void WriteOperationImpl::dataPacket(
       << "Too much data received";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::IllegalTftpOperation,
+      Packets::ErrorCode::IllegalTftpOperation,
       "Too much data" };
 
     send( errorPacket );
@@ -295,7 +298,7 @@ void WriteOperationImpl::acknowledgementPacket(
     << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket );
 
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "ACK not expected" };
 
   send( errorPacket );

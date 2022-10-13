@@ -105,7 +105,7 @@ class ReadOperationImpl final : public OperationImpl
     TftpServer::ReadOperationConfiguration configurationV;
 
     //! Contains the negotiated block size option.
-    uint16_t transmitDataSize{ DefaultDataSize };
+    uint16_t transmitDataSize{ Packets::DefaultDataSize };
     //! Indicates, if the last data packet has been transmitted (closing).
     bool lastDataPacketTransmitted{ false };
     //! Stored last transmitted block number.

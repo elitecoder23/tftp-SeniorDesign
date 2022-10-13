@@ -55,7 +55,7 @@ class Operation
      *   Abort error message.
      **/
     virtual void gracefulAbort(
-      ErrorCode errorCode,
+      Packets::ErrorCode errorCode,
       std::string errorMessage = {} ) = 0;
 
     /**

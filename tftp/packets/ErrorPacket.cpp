@@ -13,7 +13,7 @@
 #include "ErrorPacket.hpp"
 
 #include <tftp/packets/PacketException.hpp>
-#include <tftp/ErrorCodeDescription.hpp>
+#include <tftp/packets/ErrorCodeDescription.hpp>
 
 #include <helper/Endianess.hpp>
 
@@ -53,7 +53,7 @@ ErrorPacket::operator std::string() const
     errorMessage() );
 }
 
-Tftp::ErrorCode ErrorPacket::errorCode() const noexcept
+ErrorCode ErrorPacket::errorCode() const noexcept
 {
   return errorCodeV;
 }

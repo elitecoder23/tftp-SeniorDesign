@@ -81,7 +81,7 @@ void ReadWriteRequestPacket::filename( std::string filename )
   filenameV = std::move( filename );
 }
 
-Tftp::TransferMode ReadWriteRequestPacket::mode() const
+TransferMode ReadWriteRequestPacket::mode() const
 {
   return modeV;
 }

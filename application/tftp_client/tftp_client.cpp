@@ -127,7 +127,7 @@ int main( int argc, char * argv[] )
     Tftp::Client::OperationPtr tftpOperation{};
 
     auto optionNegotiation = [](
-      [[maybe_unused]] const Tftp::Options &serverOptions )
+      [[maybe_unused]] const Tftp::Packets::Options &serverOptions )
     {
       return true;
     };
@@ -145,7 +145,7 @@ int main( int argc, char * argv[] )
             Tftp::File::TftpFile::Operation::Receive,
             localFile ) },
           .filename{ remoteFile },
-          .mode = Tftp::TransferMode::OCTET,
+          .mode = Tftp::Packets::TransferMode::OCTET,
           .optionsConfiguration{ configuration.tftpOptions },
           .additionalOptions{}, /* no additional options */
           .remote{ boost::asio::ip::udp::endpoint{
@@ -165,7 +165,7 @@ int main( int argc, char * argv[] )
             localFile,
             std::filesystem::file_size( localFile ) ) },
           .filename{ remoteFile },
-          .mode = Tftp::TransferMode::OCTET,
+          .mode = Tftp::Packets::TransferMode::OCTET,
           .optionsConfiguration{ configuration.tftpOptions },
           .additionalOptions{}, /* no additional options */
           .remote{ boost::asio::ip::udp::endpoint{

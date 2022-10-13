@@ -78,9 +78,9 @@ static void receivedRequest(
   const boost::asio::ip::udp::endpoint &remote,
   Tftp::RequestType requestType,
   std::string_view filename,
-  Tftp::TransferMode mode,
-  const Tftp::Options &clientOptions,
-  const Tftp::Options &additionalClientOptions );
+  Tftp::Packets::TransferMode mode,
+  const Tftp::Packets::Options &clientOptions,
+  const Tftp::Packets::Options &additionalClientOptions );
 
 /**
  * @brief Transmits a requested file (RRQ).
@@ -95,8 +95,8 @@ static void receivedRequest(
 static void transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options &clientOptions,
-  const Tftp::Options &additionalClientOptions );
+  const Tftp::Packets::Options &clientOptions,
+  const Tftp::Packets::Options &additionalClientOptions );
 
 /**
  * @brief Receives a requested file (WRQ).
@@ -111,8 +111,8 @@ static void transmitFile(
 static void receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options &clientOptions,
-  const Tftp::Options &additionalClientOptions );
+  const Tftp::Packets::Options &clientOptions,
+  const Tftp::Packets::Options &additionalClientOptions );
 
 //! TFTP Server Base Directory
 static std::filesystem::path baseDir{};
@@ -256,18 +256,18 @@ static void receivedRequest(
   const boost::asio::ip::udp::endpoint &remote,
   const Tftp::RequestType requestType,
   std::string_view filename,
-  const Tftp::TransferMode mode,
-  const Tftp::Options &clientOptions,
-  const Tftp::Options &additionalClientOptions )
+  const Tftp::Packets::TransferMode mode,
+  const Tftp::Packets::Options &clientOptions,
+  const Tftp::Packets::Options &additionalClientOptions )
 {
   // Check transfer mode
-  if ( mode != Tftp::TransferMode::OCTET )
+  if ( mode != Tftp::Packets::TransferMode::OCTET )
   {
     std::cerr << "Wrong transfer mode\n";
 
     server->errorOperation(
       remote,
-      Tftp::ErrorCode::IllegalTftpOperation,
+      Tftp::Packets::ErrorCode::IllegalTftpOperation,
       "wrong transfer mode" );
 
     return;
@@ -279,7 +279,7 @@ static void receivedRequest(
 
     server->errorOperation(
       remote,
-      Tftp::ErrorCode::AccessViolation,
+      Tftp::Packets::ErrorCode::AccessViolation,
       "Illegal filename" );
 
     return;
@@ -305,8 +305,8 @@ static void receivedRequest(
 static void transmitFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options &clientOptions,
-  [[maybe_unused]] const Tftp::Options &additionalClientOptions )
+  const Tftp::Packets::Options &clientOptions,
+  [[maybe_unused]] const Tftp::Packets::Options &additionalClientOptions )
 {
   std::cout
     << "RRQ: " << filename << " from: " << remote.address().to_string() << "\n";
@@ -321,7 +321,7 @@ static void transmitFile(
 
     server->errorOperation(
       remote,
-      Tftp::ErrorCode::FileNotFound,
+      Tftp::Packets::ErrorCode::FileNotFound,
       "file not found" );
 
     return;
@@ -349,8 +349,8 @@ static void transmitFile(
 static void receiveFile(
   const boost::asio::ip::udp::endpoint &remote,
   const std::filesystem::path &filename,
-  const Tftp::Options &clientOptions,
-  [[maybe_unused]] const Tftp::Options &additionalClientOptions )
+  const Tftp::Packets::Options &clientOptions,
+  [[maybe_unused]] const Tftp::Packets::Options &additionalClientOptions )
 {
   std::cout
     << "WRQ: " << filename << " from: " << remote.address().to_string() << "\n";
@@ -367,7 +367,7 @@ static void receiveFile(
 
     server->errorOperation(
       remote,
-      Tftp::ErrorCode::AccessViolation );
+      Tftp::Packets::ErrorCode::AccessViolation );
 
     return;
   }

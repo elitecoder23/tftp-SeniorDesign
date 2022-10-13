@@ -35,7 +35,7 @@ ReadOperationImpl::ReadOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
-    DefaultMaxPacketSize,
+    Packets::DefaultMaxPacketSize,
     configuration.completionHandler,
     configuration.remote,
     configuration.local },
@@ -61,7 +61,7 @@ void ReadOperationImpl::start()
     else
     {
       // initialise server options with additional negotiated options
-      Options serverOptions{ configurationV.additionalNegotiatedOptions };
+      Packets::Options serverOptions{ configurationV.additionalNegotiatedOptions };
 
       // check block size option - if set use it
       if ( configurationV.optionsConfiguration.blockSizeOption )
@@ -69,9 +69,9 @@ void ReadOperationImpl::start()
         const auto [ blockSizeValid, blockSize ] =
           Packets::TftpOptions_getOption< uint16_t >(
             configurationV.clientOptions,
-            Packets::TftpOptions_name( KnownOptions::BlockSize ),
-            BlockSizeOptionMin,
-            BlockSizeOptionMax );
+            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+            Packets::BlockSizeOptionMin,
+            Packets::BlockSizeOptionMax );
 
         if ( blockSize )
         {
@@ -81,7 +81,7 @@ void ReadOperationImpl::start()
 
           // respond option string
           serverOptions.try_emplace(
-            Packets::TftpOptions_name( KnownOptions::BlockSize ),
+            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
             std::to_string( transmitDataSize ) );
         }
       }
@@ -92,9 +92,9 @@ void ReadOperationImpl::start()
         const auto [ timeoutValid, timeout ] =
           Packets::TftpOptions_getOption< uint8_t >(
             configurationV.clientOptions,
-            Packets::TftpOptions_name( KnownOptions::Timeout ),
-            TimeoutOptionMin,
-            TimeoutOptionMax );
+            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+            Packets::TimeoutOptionMin,
+            Packets::TimeoutOptionMax );
 
         if ( timeoutValid && timeout
           && ( std::chrono::seconds{ *timeout }
@@ -104,7 +104,7 @@ void ReadOperationImpl::start()
 
           // respond with timeout option set
           serverOptions.try_emplace(
-            Packets::TftpOptions_name( KnownOptions::Timeout ),
+            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
             std::to_string( *timeout )  );
         }
       }
@@ -115,7 +115,7 @@ void ReadOperationImpl::start()
         const auto [ transferSizeValid, transferSize ] =
           Packets::TftpOptions_getOption< uint64_t >(
             configurationV.clientOptions,
-            Packets::TftpOptions_name( KnownOptions::TransferSize ) );
+            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 
         if ( transferSize )
         {
@@ -125,7 +125,7 @@ void ReadOperationImpl::start()
               << "Received transfer size must be 0";
 
             Packets::ErrorPacket errorPacket{
-              ErrorCode::TftpOptionRefused,
+              Packets::ErrorCode::TftpOptionRefused,
               "transfer size must be 0" };
             send( errorPacket );
 
@@ -141,7 +141,7 @@ void ReadOperationImpl::start()
           {
             // respond option string
             serverOptions.try_emplace(
-              Packets::TftpOptions_name( KnownOptions::TransferSize ),
+              Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
               std::to_string( *newTransferSize ) );
           }
         }
@@ -220,7 +220,7 @@ void ReadOperationImpl::dataPacket(
     << "RX ERROR: " << static_cast< std::string>( dataPacket );
 
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "DATA not expected" };
 
   send( errorPacket );
@@ -258,7 +258,7 @@ void ReadOperationImpl::acknowledgementPacket(
       << "Invalid block number received";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::IllegalTftpOperation,
+      Packets::ErrorCode::IllegalTftpOperation,
       "Block number not expected" };
 
     send( errorPacket );

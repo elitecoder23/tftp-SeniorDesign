@@ -16,6 +16,8 @@ target_sources(
     BlockNumber.cpp
     DataPacket.hpp
     DataPacket.cpp
+    ErrorCodeDescription.hpp
+    ErrorCodeDescription.cpp
     ErrorPacket.hpp
     ErrorPacket.cpp
     OptionsAcknowledgementPacket.hpp

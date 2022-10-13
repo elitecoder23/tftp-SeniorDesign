@@ -37,7 +37,7 @@ WriteOperationImpl::WriteOperationImpl(
     ioContext,
     tftpTimeout,
     tftpRetries,
-    DefaultMaxPacketSize,
+    Packets::DefaultMaxPacketSize,
     configuration.completionHandler,
     configuration.remote,
     configuration.local },
@@ -63,19 +63,19 @@ void WriteOperationImpl::request()
     // Reset data handler
     configurationV.dataHandler->reset();
 
-    transmitDataSize = DefaultDataSize;
+    transmitDataSize = Packets::DefaultDataSize;
     lastDataPacketTransmitted = false;
     lastTransmittedBlockNumber = 0U;
     lastReceivedBlockNumber = 0xFFFFU;
 
     // initialise Options with additional options
-    Options options{ configurationV.additionalOptions };
+    Packets::Options options{ configurationV.additionalOptions };
 
     // Block size Option
     if ( configurationV.optionsConfiguration.blockSizeOption )
     {
       options.try_emplace(
-        Packets::TftpOptions_name( KnownOptions::BlockSize ),
+        Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
         std::to_string( *configurationV.optionsConfiguration.blockSizeOption ) );
     }
 
@@ -83,7 +83,7 @@ void WriteOperationImpl::request()
     if ( configurationV.optionsConfiguration.timeoutOption )
     {
       options.try_emplace(
-        Packets::TftpOptions_name( KnownOptions::Timeout ),
+        Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
         std::to_string( static_cast< uint16_t >(
           configurationV.optionsConfiguration.timeoutOption->count() ) ) );
     }
@@ -98,7 +98,7 @@ void WriteOperationImpl::request()
       {
         // set transfer size TFTP option
         options.try_emplace(
-          Packets::TftpOptions_name( KnownOptions::TransferSize ),
+          Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
           std::to_string( *transferSize ) );
       }
     }
@@ -161,7 +161,7 @@ void WriteOperationImpl::dataPacket(
     << "RX ERROR: " << static_cast< std::string>( dataPacket );
 
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "DATA not expected" };
 
   send( errorPacket );
@@ -197,7 +197,7 @@ void WriteOperationImpl::acknowledgementPacket(
 
     // send error packet
     Packets::ErrorPacket errorPacket{
-      ErrorCode::IllegalTftpOperation,
+      Packets::ErrorCode::IllegalTftpOperation,
       "Wrong block number" };
 
     send( errorPacket );
@@ -219,7 +219,7 @@ void WriteOperationImpl::acknowledgementPacket(
         << "Option Negotiation failed";
 
       Packets::ErrorPacket errorPacket{
-        ErrorCode::TftpOptionRefused,
+        Packets::ErrorCode::TftpOptionRefused,
         "Option Negotiation Failed" };
 
       send( errorPacket );
@@ -258,7 +258,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "OACK must occur after WRQ";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::IllegalTftpOperation,
+      Packets::ErrorCode::IllegalTftpOperation,
       "OACK must occur after WRQ" };
 
     send( errorPacket );
@@ -277,7 +277,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "Received option list is empty";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::IllegalTftpOperation,
+      Packets::ErrorCode::IllegalTftpOperation,
       "Empty OACK not allowed" };
 
     send( errorPacket );
@@ -291,9 +291,9 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   const auto [ blockSizeValid, blockSizeValue ] =
     Packets::TftpOptions_getOption< uint16_t >(
       remoteOptions,
-      Packets::TftpOptions_name( KnownOptions::BlockSize ),
-      BlockSizeOptionMin,
-      BlockSizeOptionMax );
+      Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+      Packets::BlockSizeOptionMin,
+      Packets::BlockSizeOptionMax );
 
   if ( !configurationV.optionsConfiguration.blockSizeOption && blockSizeValue )
   {
@@ -301,7 +301,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "Block Size Option not expected";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::TftpOptionRefused,
+      Packets::ErrorCode::TftpOptionRefused,
       "Block Size Option not expected" };
 
     send( errorPacket );
@@ -319,7 +319,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "Block Size Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::TftpOptionRefused,
+      Packets::ErrorCode::TftpOptionRefused,
       "Block Size Option decoding failed" };
 
     send( errorPacket );
@@ -339,7 +339,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
         << "Received Block Size Option bigger than negotiated";
 
       Packets::ErrorPacket errorPacket{
-        ErrorCode::TftpOptionRefused,
+        Packets::ErrorCode::TftpOptionRefused,
         "Block size Option negotiation failed" };
 
       send( errorPacket );
@@ -354,16 +354,17 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     transmitDataSize = *blockSizeValue;
 
     remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name( KnownOptions::BlockSize ) } );
+      std::string{ Packets::TftpOptions_name(
+        Packets::KnownOptions::BlockSize ) } );
   }
 
   // Timeout Option
   const auto [ timeoutValid, timeoutValue ] =
     Packets::TftpOptions_getOption< uint8_t>(
       remoteOptions,
-      Packets::TftpOptions_name( KnownOptions::Timeout ),
-      TimeoutOptionMin,
-      TimeoutOptionMax );
+      Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+      Packets::TimeoutOptionMin,
+      Packets::TimeoutOptionMax );
 
   if ( !configurationV.optionsConfiguration.timeoutOption && timeoutValue )
   {
@@ -371,7 +372,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "Timeout Option not expected";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::TftpOptionRefused,
+      Packets::ErrorCode::TftpOptionRefused,
       "Timeout Option not expected" };
 
     send( errorPacket );
@@ -389,7 +390,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "Timeout Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::TftpOptionRefused,
+      Packets::ErrorCode::TftpOptionRefused,
       "Timeout Option decoding failed" };
 
     send( errorPacket);
@@ -411,7 +412,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
         << "Timeout Option not equal to requested";
 
       Packets::ErrorPacket errorPacket{
-        ErrorCode::TftpOptionRefused,
+        Packets::ErrorCode::TftpOptionRefused,
         "Timeout Option not equal to requested" };
 
       send( errorPacket);
@@ -426,14 +427,15 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     receiveTimeout( std::chrono::seconds{ *timeoutValue } );
 
     remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name( KnownOptions::Timeout ) } );
+      std::string{ Packets::TftpOptions_name(
+        Packets::KnownOptions::Timeout ) } );
   }
 
   // Transfer Size Option
   const auto [ transferSizeValid, transferSizeValue ] =
     Packets::TftpOptions_getOption< uint64_t>(
       remoteOptions,
-      Packets::TftpOptions_name( KnownOptions::TransferSize ) );
+      Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 
   if ( !configurationV.optionsConfiguration.handleTransferSizeOption
     && transferSizeValue )
@@ -442,7 +444,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "Transfer Size Option not expected";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::TftpOptionRefused,
+      Packets::ErrorCode::TftpOptionRefused,
       "Transfer Size Option not expected" };
 
     send( errorPacket );
@@ -460,7 +462,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "Transfer Size Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::TftpOptionRefused,
+      Packets::ErrorCode::TftpOptionRefused,
       "Transfer Size Option decoding failed" };
 
     send( errorPacket );
@@ -477,7 +479,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     if ( *transferSizeValue != *transferSize )
     {
       Packets::ErrorPacket errorPacket{
-        ErrorCode::TftpOptionRefused,
+        Packets::ErrorCode::TftpOptionRefused,
         "transfer size invalid" };
 
       send( errorPacket );
@@ -490,7 +492,8 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     }
 
     remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name( KnownOptions::TransferSize ) } );
+      std::string{ Packets::TftpOptions_name(
+        Packets::KnownOptions::TransferSize ) } );
   }
 
   // Perform additional Option Negotiation
@@ -500,7 +503,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       << "Option negotiation failed";
 
     Packets::ErrorPacket errorPacket{
-      ErrorCode::TftpOptionRefused,
+      Packets::ErrorCode::TftpOptionRefused,
       "Option negotiation failed" };
 
     send( errorPacket );

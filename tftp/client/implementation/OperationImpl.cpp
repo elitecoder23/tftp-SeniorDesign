@@ -12,12 +12,12 @@
 
 #include "OperationImpl.hpp"
 
-#include <tftp/TftpException.hpp>
-#include <tftp/TftpLogger.hpp>
-#include <tftp/ErrorCodeDescription.hpp>
-
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
+#include <tftp/packets/ErrorCodeDescription.hpp>
+
+#include <tftp/TftpException.hpp>
+#include <tftp/TftpLogger.hpp>
 
 #include <helper/SafeCast.hpp>
 
@@ -37,7 +37,7 @@ OperationImpl::~OperationImpl() noexcept
 }
 
 void OperationImpl::gracefulAbort(
-  const ErrorCode errorCode,
+  const Packets::ErrorCode errorCode,
   std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
@@ -303,7 +303,7 @@ void OperationImpl::readRequestPacket(
 
   // send error packet
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "RRQ not expected" };
 
   send( errorPacket );
@@ -323,7 +323,7 @@ void OperationImpl::writeRequestPacket(
 
   // send error packet
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "WRQ not expected" };
 
   send( errorPacket );
@@ -344,11 +344,11 @@ void OperationImpl::errorPacket(
   // Operation completed
   switch ( Packets::Packet::packetType( transmitPacket ) )
   {
-    case PacketType::ReadRequest:
-    case PacketType::WriteRequest:
+    case Packets::PacketType::ReadRequest:
+    case Packets::PacketType::WriteRequest:
       switch ( errorPacket.errorCode() )
       {
-        case ErrorCode::TftpOptionRefused:
+        case Packets::ErrorCode::TftpOptionRefused:
           // TFTP Option negotiation refused
           finished( TransferStatus::OptionNegotiationError, errorPacket );
           break;
@@ -378,7 +378,7 @@ void OperationImpl::invalidPacket(
 
   // send error packet
   Packets::ErrorPacket errorPacket{
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "Invalid packet not expected" };
 
   send( errorPacket );
@@ -422,7 +422,7 @@ void OperationImpl::receiveFirstHandler(
     {
       // send error packet
       Packets::ErrorPacket err{
-        ErrorCode::UnknownTransferId,
+        Packets::ErrorCode::UnknownTransferId,
         "Packet from wrong source" };
 
       socket.send_to(

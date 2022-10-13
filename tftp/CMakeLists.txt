@@ -19,8 +19,6 @@ target_sources(
 
   PRIVATE
     DataHandler.hpp
-    ErrorCodeDescription.hpp
-    ErrorCodeDescription.cpp
     ReceiveDataHandler.hpp
     RequestTypeDescription.hpp
     RequestTypeDescription.cpp

@@ -38,7 +38,7 @@ try :
   ioContext{ ioContext },
   socket{ ioContext },
   configurationV{ std::move( configuration ) },
-  receivePacket( DefaultMaxPacketSize )
+  receivePacket( Packets::DefaultMaxPacketSize )
 {
   try
   {
@@ -110,7 +110,7 @@ OperationPtr TftpServerImpl::writeOperation(
 
 void TftpServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
-  const ErrorCode errorCode,
+  const Packets::ErrorCode errorCode,
   std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
@@ -141,7 +141,7 @@ void TftpServerImpl::errorOperation(
 void TftpServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local,
-  const ErrorCode errorCode,
+  const Packets::ErrorCode errorCode,
   std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
@@ -241,19 +241,19 @@ void TftpServerImpl::readRequestPacket(
     // execute error operation
     errorOperation(
       remote,
-      ErrorCode::FileNotFound,
+      Packets::ErrorCode::FileNotFound,
       "RRQ not accepted" );
   }
 
   // extract known TFTP Options
   auto receivedOptions{ readRequestPacket.options() };
-  Options clientOptions{};
+  Packets::Options clientOptions{};
   clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( KnownOptions::BlockSize ) } ) ) ;
+    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } ) ) ;
   clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( KnownOptions::Timeout ) } ) ) ;
+    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } ) ) ;
   clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( KnownOptions::TransferSize ) } ) ) ;
+    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) } ) ) ;
 
   // call the handler, which handles the received request
   configurationV.handler(
@@ -281,19 +281,19 @@ void TftpServerImpl::writeRequestPacket(
     // execute error operation
     errorOperation(
       remote,
-      ErrorCode::FileNotFound,
+      Packets::ErrorCode::FileNotFound,
       "WRQ" );
   }
 
   // extract known TFTP Options
   auto receivedOptions{ writeRequestPacket.options() };
-  Options clientOptions{};
+  Packets::Options clientOptions{};
   clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( KnownOptions::BlockSize ) } ) ) ;
+    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } ) ) ;
   clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( KnownOptions::Timeout ) } ) ) ;
+    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } ) ) ;
   clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( KnownOptions::TransferSize ) } ) ) ;
+    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) } ) ) ;
 
   // call the handler, which handles the received request
   configurationV.handler(
@@ -315,7 +315,7 @@ void TftpServerImpl::dataPacket(
   // execute error operation
   errorOperation(
     remote,
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "DATA not expected" );
 }
 
@@ -329,7 +329,7 @@ void TftpServerImpl::acknowledgementPacket(
   // execute error operation
   errorOperation(
     remote,
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "ACK not expected" );
 }
 
@@ -343,7 +343,7 @@ void TftpServerImpl::errorPacket(
   // execute error operation
   errorOperation(
     remote,
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "ERROR not expected" );
 }
 
@@ -357,7 +357,7 @@ void TftpServerImpl::optionsAcknowledgementPacket(
   // execute error operation
   errorOperation(
     remote,
-    ErrorCode::IllegalTftpOperation,
+    Packets::ErrorCode::IllegalTftpOperation,
     "OACK not expected" );
 }
 

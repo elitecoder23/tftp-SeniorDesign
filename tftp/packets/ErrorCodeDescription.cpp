@@ -7,14 +7,14 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::ErrorCodeDescription.
+ * @brief Definition of Class Tftp::PacketsErrorCodeDescription.
  **/
 
 #include "ErrorCodeDescription.hpp"
 
 #include <ostream>
 
-namespace Tftp {
+namespace Tftp::Packets {
 
 ErrorCodeDescription::ErrorCodeDescription():
   Description{

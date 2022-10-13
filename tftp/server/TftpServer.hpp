@@ -74,9 +74,9 @@ class TftpServer
       TftpOptionsConfiguration optionsConfiguration;
       //! TFTP Client Options.
       //! Will be negotiated within TFTP Server Request Operation
-      Options clientOptions;
+      Packets::Options clientOptions;
       //! Additional Options, which have been already negotiated.
-      Options additionalNegotiatedOptions;
+      Packets::Options additionalNegotiatedOptions;
       //! local endpoint, where the server handles the request from.
       std::optional< boost::asio::ip::udp::endpoint > local;
     };
@@ -95,9 +95,9 @@ class TftpServer
       TftpOptionsConfiguration optionsConfiguration;
       //! TFTP Client Options.
       //! Will be negotiated within TFTP Server Request Operation
-      Options clientOptions;
+      Packets::Options clientOptions;
       //! Additional Options, which have been already negotiated.
-      Options additionalNegotiatedOptions;
+      Packets::Options additionalNegotiatedOptions;
       //! local endpoint, where the server handles the request from.
       std::optional< boost::asio::ip::udp::endpoint > local;
     };
@@ -185,11 +185,11 @@ class TftpServer
      **/
     virtual void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
-      ErrorCode errorCode,
+      Packets::ErrorCode errorCode,
       std::string errorMessage = {} ) = 0;
 
     /**
-     * @copydoc errorOperation(const boost::asio::ip::udp::endpoint&,ErrorCode,std::string)
+     * @copydoc errorOperation(const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
      *
      * @param[in] local
      *   Communication source
@@ -197,7 +197,7 @@ class TftpServer
     virtual void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
-      ErrorCode errorCode,
+      Packets::ErrorCode errorCode,
       std::string errorMessage = {} ) = 0;
 
   protected:
