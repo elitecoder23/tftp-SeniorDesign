@@ -82,7 +82,7 @@ try:
   try
   {
     // Open the socket
-    socket.open( remote.protocol());
+    socket.open( remote.protocol() );
 
     // bind to local address
     if ( local )
@@ -90,7 +90,7 @@ try:
       socket.bind( *local );
     }
     // connect to client.
-    socket.connect( remote);
+    socket.connect( remote );
   }
   catch ( const boost::system::system_error &err )
   {

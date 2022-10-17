@@ -71,6 +71,16 @@ catch ( const boost::system::system_error &err )
 
 TftpServerImpl::~TftpServerImpl() noexcept
 {
+  BOOST_LOG_FUNCTION()
+
+  boost::system::error_code ec;
+  // close socket and cancel all possible asynchronous operations.
+  socket.close( ec );
+}
+
+boost::asio::ip::udp::endpoint TftpServerImpl::localEndpoint() const
+{
+  return socket.local_endpoint();
 }
 
 void TftpServerImpl::start()
@@ -115,7 +125,7 @@ void TftpServerImpl::errorOperation(
 {
   BOOST_LOG_FUNCTION()
 
-  Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
+  const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( errorPacket );
@@ -146,7 +156,7 @@ void TftpServerImpl::errorOperation(
 {
   BOOST_LOG_FUNCTION()
 
-  Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
+  const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( errorPacket );

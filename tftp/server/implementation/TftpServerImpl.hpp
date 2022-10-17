@@ -36,7 +36,7 @@ namespace Tftp::Server {
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
-class TftpServerImpl:
+class TftpServerImpl final :
   public TftpServer,
   private Packets::PacketHandler
 {
@@ -61,32 +61,35 @@ class TftpServerImpl:
      **/
     ~TftpServerImpl() noexcept override;
 
+    //! @copydoc TftpServer::localEndpoint()
+    [[nodiscard]] boost::asio::ip::udp::endpoint localEndpoint() const override;
+
     //! @copydoc TftpServer::start()
-    void start() final;
+    void start() override;
 
     //! @copydoc TftpServer::stop()
-    void stop() final;
+    void stop() override;
 
     //! @copydoc TftpServer::readOperation()
     [[nodiscard]] OperationPtr readOperation(
-      ReadOperationConfiguration configuration ) final;
+      ReadOperationConfiguration configuration ) override;
 
     //! @copydoc TftpServer::writeOperation()
     [[nodiscard]] OperationPtr writeOperation(
-      WriteOperationConfiguration configuration ) final;
+      WriteOperationConfiguration configuration ) override;
 
     //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
     void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) final;
+      std::string errorMessage = {} ) override;
 
     //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
     void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,
       Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) final;
+      std::string errorMessage = {} ) override;
 
   private:
     /**
@@ -121,7 +124,7 @@ class TftpServerImpl:
      **/
     void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ReadRequestPacket &readRequestPacket ) final;
+      const Packets::ReadRequestPacket &readRequestPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::writeRequestPacket
@@ -132,7 +135,7 @@ class TftpServerImpl:
      **/
     void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::WriteRequestPacket &writeRequestPacket ) final;
+      const Packets::WriteRequestPacket &writeRequestPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket
@@ -142,7 +145,7 @@ class TftpServerImpl:
      **/
     void dataPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket ) final;
+      const Packets::DataPacket &dataPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket
@@ -152,7 +155,7 @@ class TftpServerImpl:
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::AcknowledgementPacket &acknowledgementPacket ) final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::errorPacket
@@ -162,7 +165,7 @@ class TftpServerImpl:
      **/
     void errorPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ErrorPacket &errorPacket ) final;
+      const Packets::ErrorPacket &errorPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket
@@ -172,7 +175,7 @@ class TftpServerImpl:
      **/
     void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) final;
+      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::invalidPacket
@@ -182,7 +185,7 @@ class TftpServerImpl:
      **/
     void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      Packets::ConstRawTftpPacketSpan rawPacket ) final;
+      Packets::ConstRawTftpPacketSpan rawPacket ) override;
 
     //! TFTP Server I/O context
     boost::asio::io_context &ioContext;

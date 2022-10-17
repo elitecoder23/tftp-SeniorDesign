@@ -128,9 +128,19 @@ class TftpServer
     virtual ~TftpServer() noexcept = default;
 
     /**
+     * @brief Returns the effective local endpoint.
+     *
+     * Is used to determine the local endpoint, when an automatic local endpoint
+     * is selected.
+     *
+     * @return Local endpoint.
+     **/
+    [[nodiscard]] virtual boost::asio::ip::udp::endpoint localEndpoint() const = 0;
+
+    /**
      * @brief Starts the TFTP Server.
      *
-     * This routines starts the server receive operation.
+     * This routine starts the server receive operation.
      * This routine returns immediately.
      *
      * It can be called before entry() is called.

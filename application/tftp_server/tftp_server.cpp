@@ -172,8 +172,7 @@ int main( int argc, char * argv[] )
     baseDir = std::filesystem::canonical( baseDir );
 
     std::cout
-      << "Starting TFTP server in " << baseDir.string()
-      << " on port " << configuration.tftpServerPort << "\n";
+      << "Starting TFTP server in " << baseDir.string() << "\n";
 
     // The TFTP server instance
     server = Tftp::Server::TftpServer::instance(
@@ -186,6 +185,9 @@ int main( int argc, char * argv[] )
         .serverAddress = boost::asio::ip::udp::endpoint{
           boost::asio::ip::address_v4::any(),
           configuration.tftpServerPort } } );
+
+    std::cout
+      << "Listening on " << server->localEndpoint() << "\n";
 
     server->start();
 
