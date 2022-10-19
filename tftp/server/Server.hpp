@@ -32,15 +32,18 @@
  *
  * The user of this library uses following interface classes to interact with
  * it:
- * @li \c TftpServer - The main entry point (is also an factory for all other
- *   classes,
- * @li \c ReceivedTftpRequestHandler - This interface must be implemented by the user
- *   of this library to handle new TFTP requests.
- * @li \c Operation - Class interface to execute the operations. The actual
- *   operations can be created by utilising the TftpServer class instances.
- * @li \c ReceiveDataHandler and \c TransmitDataHandler - This
- *   interface class must be implemented by the user of this library to make
- *   use of the TFTP server operations.
+ * - @ref TftpServer
+ *   The main entry point (is also a factory for all other classes).
+ * - @ref ReceivedTftpRequestHandler
+ *   This interface must be implemented by the user of this library to handle
+ *   new TFTP requests.
+ * - @ref Operation
+ *   Class interface to execute the operations.
+ *   The actual operations can be created by utilising the TftpServer class
+ *   instances.
+ * - @ref ReceiveDataHandler and @ref TransmitDataHandler
+ *   This interface class must be implemented by the user of this library to
+ *   make use of the TFTP server operations.
  **/
 namespace Tftp::Server {
 
@@ -55,7 +58,14 @@ class Operation;
 using OperationPtr = std::shared_ptr< Operation >;
 
 /**
- * @brief Function Handler Definition.
+ * @brief Received TFTP Request Handler.
+ *
+ * The registered handler is called, when a TFTP Server instance received a
+ * TFTP request.
+ * The handler can analyse it and responds with:
+ * - TFTP %Server Error %Operation
+ * - TFTP %Server Read Request
+ * - TFTP %Server Write Request
  *
  * @param[in] remote
  *   Remote Endpoint
@@ -66,19 +76,24 @@ using OperationPtr = std::shared_ptr< Operation >;
  * @param[in] mode
  *   Transfer Mode
  * @param[in] clientOptions
- *   Received TFTP %Client %Options (TFTP specific)
+ *   Received TFTP %Client %Options (TFTP specific).
+ *   Should be passed to server operation unmodified.
  * @param[in] additionalClientOptions
  *   Received TFTP %Client %Options (All Others).
  *   For additional Option Negotiation.
+ *
+ * @sa TftpServer::errorOperation()
+ * @sa TftpServer::readOperation()
+ * @sa TftpServer::writeOperation()
  **/
 using ReceivedTftpRequestHandler =
   std::function< void(
-    const boost::asio::ip::udp::endpoint &remote,
+    boost::asio::ip::udp::endpoint remote,
     RequestType requestType,
-    std::string_view filename,
+    std::string filename,
     Packets::TransferMode mode,
-    const Packets::Options &clientOptions,
-    const Packets::Options &additionalClientOptions ) >;
+    Packets::Options clientOptions,
+    Packets::Options additionalClientOptions ) >;
 
 }
 

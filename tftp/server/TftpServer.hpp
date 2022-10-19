@@ -135,7 +135,8 @@ class TftpServer
      *
      * @return Local endpoint.
      **/
-    [[nodiscard]] virtual boost::asio::ip::udp::endpoint localEndpoint() const = 0;
+    [[nodiscard]] virtual boost::asio::ip::udp::endpoint
+    localEndpoint() const = 0;
 
     /**
      * @brief Starts the TFTP Server.
@@ -185,6 +186,8 @@ class TftpServer
 
     /**
      * @brief Executes TFTP Error Operation.
+     *
+     * The error operation is executed (Error Packet sent) immediately.
      *
      * @param[in] remote
      *   Where the error packet shall be transmitted to.
