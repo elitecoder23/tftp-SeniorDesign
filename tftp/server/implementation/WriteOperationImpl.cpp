@@ -28,7 +28,7 @@ namespace Tftp::Server {
 
 WriteOperationImpl::WriteOperationImpl(
   boost::asio::io_context &ioContext,
-  TftpServer::WriteOperationConfiguration configuration ) :
+  WriteOperationConfiguration configuration ) :
   OperationImpl{
     ioContext,
     configuration.tftpTimeout,

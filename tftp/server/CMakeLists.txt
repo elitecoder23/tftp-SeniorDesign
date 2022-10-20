@@ -11,9 +11,16 @@ target_sources(
 
   PRIVATE
     Operation.hpp
+    ReadOperationConfiguration.hpp
+    ReadOperationConfiguration.cpp
     Server.hpp
+    ServerConfiguration.hpp
+    ServerConfiguration.cpp
     TftpServer.hpp
     TftpServer.cpp
+    WriteOperationConfiguration.hpp
+    WriteOperationConfiguration.cpp
+
     implementation/OperationImpl.hpp
     implementation/OperationImpl.cpp
     implementation/ReadOperationImpl.hpp

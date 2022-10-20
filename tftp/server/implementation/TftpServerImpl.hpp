@@ -15,6 +15,7 @@
 
 #include <tftp/server/Server.hpp>
 #include <tftp/server/TftpServer.hpp>
+#include <tftp/server/ServerConfiguration.hpp>
 
 #include <tftp/packets/PacketHandler.hpp>
 

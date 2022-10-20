@@ -28,7 +28,7 @@ namespace Tftp::Server {
 
 ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
-  TftpServer::ReadOperationConfiguration configuration ) :
+  ReadOperationConfiguration configuration ) :
   OperationImpl{
     ioContext,
     configuration.tftpTimeout,

@@ -50,6 +50,10 @@ namespace Tftp::Server {
 // Forward declarations
 class TftpServer;
 
+struct ServerConfiguration;
+struct ReadOperationConfiguration;
+struct WriteOperationConfiguration;
+
 //! TFTP Server Instance Pointer
 using TftpServerPtr = std::shared_ptr< TftpServer >;
 

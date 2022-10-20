@@ -12,6 +12,7 @@
 
 #include "TftpServer.hpp"
 
+#include <tftp/server/ServerConfiguration.hpp>
 #include <tftp/server/implementation/TftpServerImpl.hpp>
 
 namespace Tftp::Server {
@@ -25,7 +26,7 @@ TftpServerPtr TftpServer::instance(
   ServerConfiguration configuration )
 {
   // create and return the real TFTP server
-  return std::make_shared< TftpServerImpl>(
+  return std::make_shared< TftpServerImpl >(
     ioContext,
     std::move( configuration ) );
 }

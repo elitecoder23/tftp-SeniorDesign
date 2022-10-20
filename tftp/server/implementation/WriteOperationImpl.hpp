@@ -15,6 +15,7 @@
 
 #include <tftp/server/Server.hpp>
 #include <tftp/server/TftpServer.hpp>
+#include <tftp/server/WriteOperationConfiguration.hpp>
 
 #include <tftp/server/implementation/OperationImpl.hpp>
 
@@ -38,7 +39,7 @@ namespace Tftp::Server {
  *
  * This operation is initiated by a client TFTP write request (WRQ)
  **/
-class WriteOperationImpl : public OperationImpl
+class WriteOperationImpl final : public OperationImpl
 {
   public:
     /**
@@ -46,19 +47,12 @@ class WriteOperationImpl : public OperationImpl
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
-     * @param[in] dally
-     *   If set to true, wait after transmission of the final ACK for potential
-     *   retries.
      * @param[in] configuration
      *   Write Operation Configuration.
      **/
     WriteOperationImpl(
       boost::asio::io_context &ioContext,
-      TftpServer::WriteOperationConfiguration configuration );
+      WriteOperationConfiguration configuration );
 
     /**
      * @brief Standard destructor.
@@ -66,13 +60,13 @@ class WriteOperationImpl : public OperationImpl
     ~WriteOperationImpl() noexcept override = default;
 
     //! @copydoc OperationImpl::start()
-    void start() final;
+    void start() override;
 
   private:
     //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {} ) noexcept final;
+      ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket
@@ -83,7 +77,7 @@ class WriteOperationImpl : public OperationImpl
      **/
     void dataPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket ) final;
+      const Packets::DataPacket &dataPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket
@@ -93,10 +87,10 @@ class WriteOperationImpl : public OperationImpl
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::AcknowledgementPacket &acknowledgementPacket ) final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket ) override;
 
     //! TFTP Server Write Operation Configuration
-    TftpServer::WriteOperationConfiguration configurationV;
+    WriteOperationConfiguration configurationV;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize{ Packets::DefaultDataSize };
     //! Holds the last received block number.

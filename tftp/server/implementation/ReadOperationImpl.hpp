@@ -14,8 +14,7 @@
 #define TFTP_SERVER_READOPERATIONIMPL_HPP
 
 #include <tftp/server/Server.hpp>
-
-#include <tftp/server/TftpServer.hpp>
+#include <tftp/server/ReadOperationConfiguration.hpp>
 #include <tftp/server/implementation/OperationImpl.hpp>
 
 #include <tftp/packets/BlockNumber.hpp>
@@ -51,19 +50,19 @@ class ReadOperationImpl final : public OperationImpl
      **/
     ReadOperationImpl(
       boost::asio::io_context &ioContext,
-      TftpServer::ReadOperationConfiguration configuration );
+      ReadOperationConfiguration configuration );
 
     //! Destructor
-    ~ReadOperationImpl() noexcept final = default;
+    ~ReadOperationImpl() noexcept override = default;
 
     //! @copydoc OperationImpl::start()
-    void start() final;
+    void start() override;
 
   private:
     //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {} ) noexcept final;
+      ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @brief Sends a data packet to the client.
@@ -83,7 +82,7 @@ class ReadOperationImpl final : public OperationImpl
      **/
     void dataPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket) final;
+      const Packets::DataPacket &dataPacket) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket
@@ -93,10 +92,10 @@ class ReadOperationImpl final : public OperationImpl
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) final;
+      const Packets::AcknowledgementPacket &acknowledgementPacket) override;
 
     //! TFTP Server Read Operation Configuration
-    TftpServer::ReadOperationConfiguration configurationV;
+    ReadOperationConfiguration configurationV;
 
     //! Contains the negotiated block size option.
     uint16_t transmitDataSize{ Packets::DefaultDataSize };

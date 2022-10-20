@@ -17,10 +17,7 @@
 
 #include <tftp/server/Server.hpp>
 
-#include <tftp/TftpOptionsConfiguration.hpp>
-
 #include <boost/asio/io_context.hpp>
-#include <boost/asio/ip/udp.hpp>
 
 #include <string>
 #include <functional>
@@ -43,69 +40,6 @@ namespace Tftp::Server {
 class TftpServer
 {
   public:
-    //! TFTP Server Configuration
-    struct ServerConfiguration
-    {
-      //! TFTP Request Received Handler
-      ReceivedTftpRequestHandler handler;
-      //! Address where the TFTP server should listen on.
-      std::optional< boost::asio::ip::udp::endpoint > serverAddress;
-    };
-
-    //! TFTP Server Read Operation Configuration
-    struct ReadOperationConfiguration
-    {
-      //! TFTP Timeout, when no timeout option is negotiated in seconds.
-      std::chrono::seconds tftpTimeout;
-      //! Number of retries.
-      uint16_t tftpRetries;
-      //! Handler, which will be called on various events.
-      TransmitDataHandlerPtr dataHandler;
-      //! Handler which is called on completion of the operation.
-      OperationCompletedHandler completionHandler;
-      //! Address of the remote endpoint (TFTP Client).
-      boost::asio::ip::udp::endpoint remote;
-      //! TFTP Options Configuration.
-      //! Will be used for TFTP Options Negotiation.
-      TftpOptionsConfiguration optionsConfiguration;
-      //! TFTP Client Options.
-      //! Will be negotiated within TFTP Server Request Operation
-      Packets::Options clientOptions;
-      //! Additional Options, which have been already negotiated.
-      Packets::Options additionalNegotiatedOptions;
-      //! local endpoint, where the server handles the request from.
-      std::optional< boost::asio::ip::udp::endpoint > local;
-    };
-
-    //! TFTP Server Write Operation Configuration
-    struct WriteOperationConfiguration
-    {
-      //! TFTP Timeout, when no timeout option is negotiated in seconds.
-      std::chrono::seconds tftpTimeout;
-      //! Number of retries.
-      uint16_t tftpRetries;
-      //! If set to true, wait after transmission of the final ACK for potential
-      //! retries.
-      //! Used by TFTP WRQ Operation
-      bool dally;
-      //! Handler, which will be called on various events.
-      ReceiveDataHandlerPtr dataHandler;
-      //! Handler which is called on completion of the operation.
-      OperationCompletedHandler completionHandler;
-      //! Address of the remote endpoint (TFTP Client).
-      boost::asio::ip::udp::endpoint remote;
-      //! TFTP Options Configuration.
-      //! Will be used for TFTP Options Negotiation.
-      TftpOptionsConfiguration optionsConfiguration;
-      //! TFTP Client Options.
-      //! Will be negotiated within TFTP Server Request Operation
-      Packets::Options clientOptions;
-      //! Additional Options, which have been already negotiated.
-      Packets::Options additionalNegotiatedOptions;
-      //! local endpoint, where the server handles the request from.
-      std::optional< boost::asio::ip::udp::endpoint > local;
-    };
-
     /**
      * @brief Default UDP Endpoint, Where the TFTP Server Listens.
      *

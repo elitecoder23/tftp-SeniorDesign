@@ -17,6 +17,9 @@
 
 #include <tftp/server/TftpServer.hpp>
 #include <tftp/server/Operation.hpp>
+#include <tftp/server/ServerConfiguration.hpp>
+#include <tftp/server/ReadOperationConfiguration.hpp>
+#include <tftp/server/WriteOperationConfiguration.hpp>
 
 #include <tftp/file/StreamFile.hpp>
 
@@ -176,9 +179,9 @@ int main( int argc, char * argv[] )
     // The TFTP server instance
     server = Tftp::Server::TftpServer::instance(
       ioContext,
-      {
-        .handler = std::bind_front( &receivedRequest ),
-        .serverAddress = boost::asio::ip::udp::endpoint{
+      Tftp::Server::ServerConfiguration{
+        std::bind_front( &receivedRequest ),
+        boost::asio::ip::udp::endpoint{
           boost::asio::ip::address_v4::any(),
           configuration.tftpServerPort } } );
 
@@ -336,20 +339,19 @@ static void transmitFile(
 
   // initiate TFTP operation
   auto operation{ server->readOperation(
-    {
-      .tftpTimeout = configuration.tftpTimeout,
-      .tftpRetries = configuration.tftpRetries,
-      .dataHandler = std::make_shared< Tftp::File::StreamFile >(
+    Tftp::Server::ReadOperationConfiguration{
+      configuration,
+      configuration.tftpOptions,
+      std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Transmit,
         std::move( filename ),
         std::filesystem::file_size( filename ) ),
-      .completionHandler = []( const Tftp::TransferStatus transferStatus ) {
+      []( const Tftp::TransferStatus transferStatus ) {
         std::cout << "Transfer Completed: " << transferStatus << "\n";
       },
-      .remote = std::move( remote ),
-      .optionsConfiguration = configuration.tftpOptions,
-      .clientOptions = std::move( clientOptions ),
-      .additionalNegotiatedOptions {} /* no additional options */
+      std::move( remote ),
+      std::move( clientOptions ),
+      {} /* no additional options */
     } ) };
 
   operation->start();
@@ -382,20 +384,18 @@ static void receiveFile(
 
   // initiate TFTP operation
   auto operation{ server->writeOperation(
-    {
-      .tftpTimeout = configuration.tftpTimeout,
-      .tftpRetries = configuration.tftpRetries,
-      .dally = configuration.dally,
-      .dataHandler = std::make_shared< Tftp::File::StreamFile >(
+    Tftp::Server::WriteOperationConfiguration{
+      configuration,
+      configuration.tftpOptions,
+      std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Receive,
         std::move( filename ) ),
-      .completionHandler = []( const Tftp::TransferStatus transferStatus ) {
+      []( const Tftp::TransferStatus transferStatus ) {
         std::cout << "Transfer Completed: " << transferStatus << "\n";
       },
-      .remote = std::move( remote ),
-      .optionsConfiguration = configuration.tftpOptions,
-      .clientOptions = std::move( clientOptions ),
-      .additionalNegotiatedOptions = {} /* no additional options */
+      std::move( remote ),
+      std::move( clientOptions ),
+      {} /* no additional options */
     } ) };
 
   operation->start();
