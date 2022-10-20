@@ -14,7 +14,7 @@
 #define TFTP_CLIENT_WRITEOPERATIONIMPL_HPP
 
 #include <tftp/client/Client.hpp>
-
+#include <tftp/client/WriteOperationConfiguration.hpp>
 #include <tftp/client/implementation/OperationImpl.hpp>
 
 #include <tftp/packets/BlockNumber.hpp>
@@ -45,7 +45,7 @@ class WriteOperationImpl : public OperationImpl
      **/
     WriteOperationImpl(
       boost::asio::io_context &ioContext,
-      TftpClient::WriteOperationConfiguration configuration );
+      WriteOperationConfiguration configuration );
 
     //! @copydoc OperationImpl::request
     void request() final;
@@ -98,7 +98,7 @@ class WriteOperationImpl : public OperationImpl
 
   private:
     //! Write Operation Configuration
-    TftpClient::WriteOperationConfiguration configurationV;
+    WriteOperationConfiguration configurationV;
 
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t transmitDataSize{ Packets::DefaultDataSize };

@@ -30,7 +30,7 @@ namespace Tftp::Client {
 
 WriteOperationImpl::WriteOperationImpl(
   boost::asio::io_context &ioContext,
-  TftpClient::WriteOperationConfiguration configuration ):
+  WriteOperationConfiguration configuration ):
   OperationImpl{
     ioContext,
     configuration.tftpTimeout,
@@ -136,7 +136,7 @@ void WriteOperationImpl::sendData()
 
   lastTransmittedBlockNumber++;
 
-  Packets::DataPacket data{
+  const Packets::DataPacket data{
     lastTransmittedBlockNumber,
     configurationV.dataHandler->sendData( transmitDataSize ) };
 

@@ -26,6 +26,8 @@
 #include <tftp/client/Client.hpp>
 #include <tftp/client/TftpClient.hpp>
 #include <tftp/client/Operation.hpp>
+#include <tftp/client/ReadOperationConfiguration.hpp>
+#include <tftp/client/WriteOperationConfiguration.hpp>
 
 #include <helper/Logger.hpp>
 #include <helper/BoostAsioProgramOptions.hpp>
@@ -71,7 +73,7 @@ int main( int argc, char * argv[] )
   )
   (
     "request-type",
-    boost::program_options::value( &requestType)->required(),
+    boost::program_options::value( &requestType )->required(),
     R"(the desired operation ("Read"|"Write" ))"
   )
   (
@@ -129,47 +131,46 @@ int main( int argc, char * argv[] )
     switch ( requestType )
     {
       case Tftp::RequestType::Read:
-        tftpOperation= tftpClient->readOperation( {
-          .tftpTimeout = configuration.tftpTimeout,
-          .tftpRetries = configuration.tftpRetries,
-          .dally = configuration.dally,
-          .optionNegotiationHandler{ optionNegotiation },
-          .completionHandler{
-            [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
-              ioContext.stop();
-            } },
-          .dataHandler{ std::make_shared< Tftp::File::StreamFile >(
-            Tftp::File::TftpFile::Operation::Receive,
-            localFile ) },
-          .filename{ remoteFile },
-          .mode = Tftp::Packets::TransferMode::OCTET,
-          .optionsConfiguration{ configuration.tftpOptions },
-          .additionalOptions{}, /* no additional options */
-          .remote{ boost::asio::ip::udp::endpoint{
-            address,
-            configuration.tftpServerPort } } } );
+        tftpOperation= tftpClient->readOperation(
+          Tftp::Client::ReadOperationConfiguration{
+            configuration,
+            configuration.tftpOptions,
+            optionNegotiation,
+            {
+              [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
+                ioContext.stop();
+              } },
+            std::make_shared< Tftp::File::StreamFile >(
+              Tftp::File::TftpFile::Operation::Receive,
+              localFile ),
+            remoteFile,
+            Tftp::Packets::TransferMode::OCTET,
+            {}, /* no additional options */
+            boost::asio::ip::udp::endpoint{
+              address,
+              configuration.tftpServerPort } } );
         break;
 
       case Tftp::RequestType::Write:
-        tftpOperation = tftpClient->writeOperation( {
-          .tftpTimeout = configuration.tftpTimeout,
-          .tftpRetries = configuration.tftpRetries,
-          .optionNegotiationHandler{ optionNegotiation },
-          .completionHandler{
-            [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
-              ioContext.stop();
-            } },
-          .dataHandler{ std::make_shared< Tftp::File::StreamFile >(
-            Tftp::File::TftpFile::Operation::Transmit,
-            localFile,
-            std::filesystem::file_size( localFile ) ) },
-          .filename{ remoteFile },
-          .mode = Tftp::Packets::TransferMode::OCTET,
-          .optionsConfiguration{ configuration.tftpOptions },
-          .additionalOptions{}, /* no additional options */
-          .remote{ boost::asio::ip::udp::endpoint{
-            address,
-            configuration.tftpServerPort } } } );
+        tftpOperation = tftpClient->writeOperation(
+          Tftp::Client::WriteOperationConfiguration{
+            configuration,
+            configuration.tftpOptions,
+            optionNegotiation,
+            {
+              [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
+                ioContext.stop();
+              } },
+            std::make_shared< Tftp::File::StreamFile >(
+              Tftp::File::TftpFile::Operation::Transmit,
+              localFile,
+              std::filesystem::file_size( localFile ) ),
+            remoteFile,
+            Tftp::Packets::TransferMode::OCTET,
+            {}, /* no additional options */
+            boost::asio::ip::udp::endpoint{
+              address,
+              configuration.tftpServerPort } } );
         break;
 
       default:

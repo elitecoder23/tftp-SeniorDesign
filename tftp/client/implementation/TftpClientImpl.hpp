@@ -17,7 +17,7 @@
 
 #include <tftp/client/TftpClient.hpp>
 
-#include <boost/asio.hpp>
+#include <boost/asio/io_context.hpp>
 
 namespace Tftp::Client {
 

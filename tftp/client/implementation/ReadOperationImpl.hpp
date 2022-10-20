@@ -14,7 +14,7 @@
 #define TFTP_CLIENT_READOPERATIONIMPL_HPP
 
 #include <tftp/client/Client.hpp>
-
+#include <tftp/client/ReadOperationConfiguration.hpp>
 #include <tftp/client/implementation/OperationImpl.hpp>
 
 #include <tftp/packets/BlockNumber.hpp>
@@ -46,7 +46,7 @@ class ReadOperationImpl : public OperationImpl
      **/
     ReadOperationImpl(
       boost::asio::io_context &ioContext,
-      TftpClient::ReadOperationConfiguration configuration );
+      ReadOperationConfiguration configuration );
 
     //! @copydoc OperationImpl::request
     void request() final;
@@ -89,7 +89,7 @@ class ReadOperationImpl : public OperationImpl
 
   private:
     //! Read Operation Configuration
-    TftpClient::ReadOperationConfiguration configurationV;
+    ReadOperationConfiguration configurationV;
 
     //! flag to hold information if OACK has been received (used when first data packet is received)
     bool oackReceived{ false };

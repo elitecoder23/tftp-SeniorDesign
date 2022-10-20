@@ -30,7 +30,7 @@ namespace Tftp::Client {
 
 ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
-  TftpClient::ReadOperationConfiguration configuration ):
+  ReadOperationConfiguration configuration ):
   OperationImpl{
     ioContext,
     configuration.tftpTimeout,

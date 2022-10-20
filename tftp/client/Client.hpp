@@ -39,6 +39,9 @@ namespace Tftp::Client {
 class TftpClient;
 class Operation;
 
+struct ReadOperationConfiguration;
+struct WriteOperationConfiguration;
+
 //! TFTP %Client Instance Pointer
 using TftpClientPtr = std::shared_ptr< TftpClient >;
 
