@@ -45,7 +45,7 @@ class WriteOperationImpl : public OperationImpl
      * @brief Constructs the class.
      *
      * @param[in] ioContext
-     *   The I/O context used for communication.
+     *   I/O context used for communication.
      * @param[in] tftpTimeout
      *   TFTP Timeout, when no timeout option is negotiated in seconds.
      * @param[in] tftpRetries
@@ -58,9 +58,6 @@ class WriteOperationImpl : public OperationImpl
      **/
     WriteOperationImpl(
       boost::asio::io_context &ioContext,
-      std::chrono::seconds tftpTimeout,
-      uint16_t tftpRetries,
-      bool dally,
       TftpServer::WriteOperationConfiguration configuration );
 
     /**
@@ -98,8 +95,6 @@ class WriteOperationImpl : public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket ) final;
 
-    //! Dally Option
-    const bool dally;
     //! TFTP Server Write Operation Configuration
     TftpServer::WriteOperationConfiguration configurationV;
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.

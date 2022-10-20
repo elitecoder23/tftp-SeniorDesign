@@ -46,14 +46,6 @@ class TftpServer
     //! TFTP Server Configuration
     struct ServerConfiguration
     {
-      //! TFTP Timeout, when no timeout option is negotiated in seconds.
-      std::chrono::seconds tftpTimeout;
-      //! Number of retries.
-      uint16_t tftpRetries;
-      //! If set to true, wait after transmission of the final ACK for potential
-      //! retries.
-      //! Used by TFTP WRQ Operation
-      bool dally;
       //! TFTP Request Received Handler
       ReceivedTftpRequestHandler handler;
       //! Address where the TFTP server should listen on.
@@ -63,6 +55,10 @@ class TftpServer
     //! TFTP Server Read Operation Configuration
     struct ReadOperationConfiguration
     {
+      //! TFTP Timeout, when no timeout option is negotiated in seconds.
+      std::chrono::seconds tftpTimeout;
+      //! Number of retries.
+      uint16_t tftpRetries;
       //! Handler, which will be called on various events.
       TransmitDataHandlerPtr dataHandler;
       //! Handler which is called on completion of the operation.
@@ -84,6 +80,14 @@ class TftpServer
     //! TFTP Server Write Operation Configuration
     struct WriteOperationConfiguration
     {
+      //! TFTP Timeout, when no timeout option is negotiated in seconds.
+      std::chrono::seconds tftpTimeout;
+      //! Number of retries.
+      uint16_t tftpRetries;
+      //! If set to true, wait after transmission of the final ACK for potential
+      //! retries.
+      //! Used by TFTP WRQ Operation
+      bool dally;
       //! Handler, which will be called on various events.
       ReceiveDataHandlerPtr dataHandler;
       //! Handler which is called on completion of the operation.

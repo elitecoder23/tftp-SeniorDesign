@@ -102,8 +102,6 @@ OperationPtr TftpServerImpl::readOperation(
 {
   return std::make_shared< ReadOperationImpl >(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
     std::move( configuration ) );
 }
 
@@ -112,9 +110,6 @@ OperationPtr TftpServerImpl::writeOperation(
 {
   return std::make_shared< WriteOperationImpl >(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
-    configurationV.dally,
     std::move( configuration ) );
 }
 

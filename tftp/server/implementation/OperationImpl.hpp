@@ -105,7 +105,7 @@ class OperationImpl:
      * @brief Sends the given packet to the client.
      *
      * @param[in] packet
-     *   The packet, which is sent to the client.
+     *   Packet, which is sent to the client.
      *
      * @throw CommunicationException
      **/

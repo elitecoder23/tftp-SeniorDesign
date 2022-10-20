@@ -177,9 +177,6 @@ int main( int argc, char * argv[] )
     server = Tftp::Server::TftpServer::instance(
       ioContext,
       {
-        .tftpTimeout = configuration.tftpTimeout,
-        .tftpRetries = configuration.tftpRetries,
-        .dally = configuration.dally,
         .handler = std::bind_front( &receivedRequest ),
         .serverAddress = boost::asio::ip::udp::endpoint{
           boost::asio::ip::address_v4::any(),
@@ -340,6 +337,8 @@ static void transmitFile(
   // initiate TFTP operation
   auto operation{ server->readOperation(
     {
+      .tftpTimeout = configuration.tftpTimeout,
+      .tftpRetries = configuration.tftpRetries,
       .dataHandler = std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Transmit,
         std::move( filename ),
@@ -384,6 +383,9 @@ static void receiveFile(
   // initiate TFTP operation
   auto operation{ server->writeOperation(
     {
+      .tftpTimeout = configuration.tftpTimeout,
+      .tftpRetries = configuration.tftpRetries,
+      .dally = configuration.dally,
       .dataHandler = std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Receive,
         std::move( filename ) ),

@@ -28,14 +28,11 @@ namespace Tftp::Server {
 
 WriteOperationImpl::WriteOperationImpl(
   boost::asio::io_context &ioContext,
-  const std::chrono::seconds tftpTimeout,
-  const uint16_t tftpRetries,
-  const bool dally,
   TftpServer::WriteOperationConfiguration configuration ) :
   OperationImpl{
     ioContext,
-    tftpTimeout,
-    tftpRetries,
+    configuration.tftpTimeout,
+    configuration.tftpRetries,
     static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
       + std::max(
         Packets::DefaultDataSize,
@@ -44,7 +41,6 @@ WriteOperationImpl::WriteOperationImpl(
     configuration.completionHandler,
     configuration.remote,
     configuration.local },
-  dally{ dally },
   configurationV{ std::move( configuration ) }
 {
 }
@@ -204,7 +200,7 @@ void WriteOperationImpl::dataPacket(
     // received
     if ( dataPacket.dataSize() < receiveDataSize )
     {
-      if ( dally )
+      if ( configurationV.dally )
       {
         // wait for potential retry of Data.
         receiveDally();
@@ -271,7 +267,7 @@ void WriteOperationImpl::dataPacket(
   // received
   if ( dataPacket.dataSize() < receiveDataSize )
   {
-    if ( dally )
+    if ( configurationV.dally )
     {
       // wait for potential retry of Data.
       receiveDally();

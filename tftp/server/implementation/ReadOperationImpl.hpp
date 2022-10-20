@@ -46,17 +46,11 @@ class ReadOperationImpl final : public OperationImpl
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
      * @param[in] configuration
      *   Read Operation Configuration.
      **/
     ReadOperationImpl(
       boost::asio::io_context &ioContext,
-      std::chrono::seconds tftpTimeout,
-      uint16_t tftpRetries,
       TftpServer::ReadOperationConfiguration configuration );
 
     //! Destructor

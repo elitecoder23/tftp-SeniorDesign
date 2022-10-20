@@ -28,13 +28,11 @@ namespace Tftp::Server {
 
 ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
-  std::chrono::seconds tftpTimeout,
-  uint16_t tftpRetries,
   TftpServer::ReadOperationConfiguration configuration ) :
   OperationImpl{
     ioContext,
-    tftpTimeout,
-    tftpRetries,
+    configuration.tftpTimeout,
+    configuration.tftpRetries,
     Packets::DefaultMaxPacketSize,
     configuration.completionHandler,
     configuration.remote,
