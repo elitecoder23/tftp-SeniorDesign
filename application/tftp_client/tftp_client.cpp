@@ -116,13 +116,7 @@ int main( int argc, char * argv[] )
     // Assemble TFTP configuration
     boost::asio::io_context ioContext;
 
-    auto tftpClient{ Tftp::Client::TftpClient::instance(
-      ioContext,
-      {
-        .tftpTimeout = configuration.tftpTimeout,
-        .tftpRetries = configuration.tftpRetries,
-        .dally = configuration.dally
-      } ) };
+    auto tftpClient{ Tftp::Client::TftpClient::instance( ioContext ) };
 
     Tftp::Client::OperationPtr tftpOperation{};
 
@@ -136,6 +130,9 @@ int main( int argc, char * argv[] )
     {
       case Tftp::RequestType::Read:
         tftpOperation= tftpClient->readOperation( {
+          .tftpTimeout = configuration.tftpTimeout,
+          .tftpRetries = configuration.tftpRetries,
+          .dally = configuration.dally,
           .optionNegotiationHandler{ optionNegotiation },
           .completionHandler{
             [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
@@ -155,6 +152,8 @@ int main( int argc, char * argv[] )
 
       case Tftp::RequestType::Write:
         tftpOperation = tftpClient->writeOperation( {
+          .tftpTimeout = configuration.tftpTimeout,
+          .tftpRetries = configuration.tftpRetries,
           .optionNegotiationHandler{ optionNegotiation },
           .completionHandler{
             [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){

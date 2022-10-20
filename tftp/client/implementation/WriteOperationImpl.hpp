@@ -40,17 +40,11 @@ class WriteOperationImpl : public OperationImpl
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
      * @param[in] configuration
      *   Write Operation Configuration.
      **/
     WriteOperationImpl(
       boost::asio::io_context &ioContext,
-      std::chrono::seconds tftpTimeout,
-      uint16_t tftpRetries,
       TftpClient::WriteOperationConfiguration configuration );
 
     //! @copydoc OperationImpl::request

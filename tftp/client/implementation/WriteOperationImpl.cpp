@@ -30,13 +30,11 @@ namespace Tftp::Client {
 
 WriteOperationImpl::WriteOperationImpl(
   boost::asio::io_context &ioContext,
-  const std::chrono::seconds tftpTimeout,
-  const uint16_t tftpRetries,
   TftpClient::WriteOperationConfiguration configuration ):
   OperationImpl{
     ioContext,
-    tftpTimeout,
-    tftpRetries,
+    configuration.tftpTimeout,
+    configuration.tftpRetries,
     Packets::DefaultMaxPacketSize,
     configuration.completionHandler,
     configuration.remote,

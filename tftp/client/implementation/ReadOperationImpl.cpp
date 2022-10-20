@@ -30,14 +30,11 @@ namespace Tftp::Client {
 
 ReadOperationImpl::ReadOperationImpl(
   boost::asio::io_context &ioContext,
-  const std::chrono::seconds tftpTimeout,
-  const uint16_t tftpRetries,
-  const bool dally,
   TftpClient::ReadOperationConfiguration configuration ):
   OperationImpl{
     ioContext,
-    tftpTimeout,
-    tftpRetries,
+    configuration.tftpTimeout,
+    configuration.tftpRetries,
     static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
       + std::max(
         Packets::DefaultDataSize,
@@ -46,7 +43,6 @@ ReadOperationImpl::ReadOperationImpl(
     configuration.completionHandler,
     configuration.remote,
     configuration.local },
-  dally{ dally },
   configurationV{ std::move( configuration ) }
 {
   BOOST_LOG_FUNCTION()
@@ -152,7 +148,7 @@ void ReadOperationImpl::dataPacket(
     if ( dataPacket.dataSize() < receiveDataSize )
     {
       // last packet has been received and operation is finished
-      if ( dally )
+      if ( configurationV.dally )
       {
         // wait for potential retry of Data.
         receiveDally();
@@ -239,7 +235,7 @@ void ReadOperationImpl::dataPacket(
   if ( dataPacket.dataSize() < receiveDataSize )
   {
     // last packet has been received and operation is finished
-    if ( dally )
+    if ( configurationV.dally )
     {
       // wait for potential retry of Data.
       receiveDally();

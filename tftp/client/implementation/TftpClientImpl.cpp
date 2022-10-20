@@ -19,11 +19,8 @@
 
 namespace Tftp::Client {
 
-TftpClientImpl::TftpClientImpl(
-  boost::asio::io_context &ioContext,
-  ClientConfiguration configuration ):
-  ioContext{ ioContext },
-  configurationV{ std::move( configuration ) }
+TftpClientImpl::TftpClientImpl( boost::asio::io_context &ioContext ) :
+  ioContext{ ioContext }
 {
 }
 
@@ -32,9 +29,6 @@ OperationPtr TftpClientImpl::readOperation(
 {
   return std::make_shared< ReadOperationImpl >(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
-    configurationV.dally,
     std::move( configuration ) );
 }
 
@@ -43,8 +37,6 @@ OperationPtr TftpClientImpl::writeOperation(
 {
   return std::make_shared< WriteOperationImpl >(
     ioContext,
-    configurationV.tftpTimeout,
-    configurationV.tftpRetries,
     std::move( configuration ) );
 }
 

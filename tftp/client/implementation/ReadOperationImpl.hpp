@@ -41,21 +41,11 @@ class ReadOperationImpl : public OperationImpl
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
-     * @param[in] dally
-     *   If set to true, wait after transmission of the final ACK for potential
-     *   retries.
      * @param[in] configuration
      *   Read Operation Configuration.
      **/
     ReadOperationImpl(
       boost::asio::io_context &ioContext,
-      std::chrono::seconds tftpTimeout,
-      uint16_t tftpRetries,
-      bool dally,
       TftpClient::ReadOperationConfiguration configuration );
 
     //! @copydoc OperationImpl::request
@@ -98,9 +88,6 @@ class ReadOperationImpl : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) final;
 
   private:
-    //! Dally Option
-    const bool dally;
-
     //! Read Operation Configuration
     TftpClient::ReadOperationConfiguration configurationV;
 

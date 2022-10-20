@@ -16,13 +16,9 @@
 
 namespace Tftp::Client {
 
-TftpClientPtr TftpClient::instance(
-  boost::asio::io_context &ioContext,
-  ClientConfiguration configuration )
+TftpClientPtr TftpClient::instance( boost::asio::io_context &ioContext )
 {
-  return std::make_shared< TftpClientImpl>(
-    ioContext,
-    std::move( configuration ) );
+  return std::make_shared< TftpClientImpl>( ioContext );
 }
 
 }

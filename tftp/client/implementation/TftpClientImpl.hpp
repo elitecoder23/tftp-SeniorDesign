@@ -26,34 +26,28 @@ namespace Tftp::Client {
  *
  * This factory class creates on request the concrete client operations.
  **/
-class TftpClientImpl : public TftpClient
+class TftpClientImpl final : public TftpClient
 {
   public:
     /**
      * @brief Creates the concrete TFTP %Client.
      *
      * @param[in] ioContext
-     *   The I/O context used for communication.
-     * @param[in] configuration
-     *   TFTP Client Configuration
+     *   I/O context used for communication.
      **/
-    explicit TftpClientImpl(
-      boost::asio::io_context &ioContext,
-      ClientConfiguration configuration );
+    explicit TftpClientImpl( boost::asio::io_context &ioContext );
 
     //! @copydoc TftpClient::readOperation(ReadOperationConfiguration)
     OperationPtr readOperation(
-      ReadOperationConfiguration configuration ) final;
+      ReadOperationConfiguration configuration ) override;
 
     //! @copydoc TftpClient::writeOperation(WriteOperationConfiguration)
     OperationPtr writeOperation(
-      WriteOperationConfiguration configuration ) final;
+      WriteOperationConfiguration configuration ) override;
 
   private:
     //! I/O context, which handles the asynchronous reception operation
     boost::asio::io_context &ioContext;
-    //! TFTP Client Configuration
-    ClientConfiguration configurationV;
 };
 
 }
