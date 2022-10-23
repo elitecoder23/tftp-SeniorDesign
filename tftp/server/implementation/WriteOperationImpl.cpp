@@ -74,7 +74,7 @@ void WriteOperationImpl::start()
             configurationV.clientOptions,
             Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
             Packets::BlockSizeOptionMin,
-            Packets::BlockSizeOptionMax  );
+            Packets::BlockSizeOptionMax );
 
         if ( blockSize )
         {

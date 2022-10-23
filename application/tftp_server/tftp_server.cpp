@@ -25,6 +25,7 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
+#include <tftp/TftpOptionsConfiguration.hpp>
 #include <tftp/TransferStatusDescription.hpp>
 #include <tftp/Version.hpp>
 
@@ -120,7 +121,10 @@ static void receiveFile(
 static std::filesystem::path baseDir{};
 
 //! TFTP Server Configuration
-static Tftp::TftpConfiguration configuration{};
+static Tftp::TftpConfiguration tftpConfiguration{};
+
+//! TFTP Server Options Configuration
+static Tftp::TftpOptionsConfiguration tftpOptionsConfiguration{};
 
 //! TFTP Server Instance
 static Tftp::Server::TftpServerPtr server{};
@@ -147,7 +151,8 @@ int main( int argc, char * argv[] )
     );
 
   // Add TFTP options
-  optionsDescription.add( configuration.options() );
+  optionsDescription.add( tftpConfiguration.options() );
+  optionsDescription.add( tftpOptionsConfiguration.options() );
 
   try
   {
@@ -183,7 +188,7 @@ int main( int argc, char * argv[] )
         std::bind_front( &receivedRequest ),
         boost::asio::ip::udp::endpoint{
           boost::asio::ip::address_v4::any(),
-          configuration.tftpServerPort } } );
+          tftpConfiguration.tftpServerPort } } );
 
     std::cout
       << "Listening on " << server->localEndpoint() << "\n";
@@ -340,8 +345,8 @@ static void transmitFile(
   // initiate TFTP operation
   auto operation{ server->readOperation(
     Tftp::Server::ReadOperationConfiguration{
-      configuration,
-      configuration.tftpOptions,
+      tftpConfiguration,
+      tftpOptionsConfiguration,
       std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Transmit,
         std::move( filename ),
@@ -385,8 +390,8 @@ static void receiveFile(
   // initiate TFTP operation
   auto operation{ server->writeOperation(
     Tftp::Server::WriteOperationConfiguration{
-      configuration,
-      configuration.tftpOptions,
+      tftpConfiguration,
+      tftpOptionsConfiguration,
       std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Receive,
         std::move( filename ) ),

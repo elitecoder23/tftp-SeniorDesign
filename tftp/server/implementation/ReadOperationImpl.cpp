@@ -103,7 +103,7 @@ void ReadOperationImpl::start()
           // respond with timeout option set
           serverOptions.try_emplace(
             Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
-            std::to_string( *timeout )  );
+            std::to_string( *timeout ) );
         }
       }
 

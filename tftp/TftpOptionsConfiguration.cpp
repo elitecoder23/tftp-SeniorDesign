@@ -73,7 +73,7 @@ boost::program_options::options_description TftpOptionsConfiguration::options()
     "timeout-option",
     boost::program_options::value< std::chrono::seconds::rep >()->value_name(
       "timeout" )->notifier(
-        [this]( const auto timeoutOptionInt )->void
+        [this]( const auto timeoutOptionInt )
           {
             timeoutOption = std::chrono::seconds{ timeoutOptionInt };
           } ),

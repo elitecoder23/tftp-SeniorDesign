@@ -20,12 +20,8 @@ namespace Tftp {
 
 TftpConfiguration::TftpConfiguration(
   const uint16_t defaultTftpPort ) noexcept :
-  defaultTftpPort{ defaultTftpPort },
-  tftpTimeout{ DefaultTftpReceiveTimeout },
-  tftpRetries{ DefaultTftpRetries },
   tftpServerPort{ defaultTftpPort },
-  tftpOptions{},
-  dally{ false }
+  defaultTftpPort{ defaultTftpPort }
 {
 }
 
@@ -47,7 +43,6 @@ void TftpConfiguration::fromProperties(
   tftpTimeout = std::chrono::seconds{ tftpTimeOutInt };
   tftpRetries = properties.get( "retries", DefaultTftpRetries ) ;
   tftpServerPort = properties.get( "port", defaultTftpPort );
-  tftpOptions.fromProperties( properties.get_child( "options", {} ) );
   dally = properties.get( "dally", false ) ;
 }
 
@@ -66,12 +61,6 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
   if ( tftpServerPort != defaultTftpPort )
   {
     properties.add( "port", tftpServerPort );
-  }
-
-  const auto tftpOptionsPtree{ tftpOptions.toProperties() };
-  if ( !tftpOptionsPtree.empty() )
-  {
-    properties.add_child( "options", tftpOptionsPtree );
   }
 
   if ( dally )
@@ -98,8 +87,6 @@ boost::program_options::options_description TftpConfiguration::options()
     boost::program_options::bool_switch( &dally ),
     "Dally Option"
   );
-
-  options.add( tftpOptions.options() );
 
   return options;
 }

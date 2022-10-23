@@ -17,6 +17,7 @@
 
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpConfiguration.hpp>
+#include <tftp/TftpOptionsConfiguration.hpp>
 #include <tftp/TftpException.hpp>
 
 #include <tftp/RequestTypeDescription.hpp>
@@ -59,7 +60,8 @@ int main( int argc, char * argv[] )
   std::filesystem::path localFile{};
   std::string remoteFile{};
   boost::asio::ip::address address{};
-  Tftp::TftpConfiguration configuration{};
+  Tftp::TftpConfiguration tftpConfiguration{};
+  Tftp::TftpOptionsConfiguration tftpOptionsConfiguration{};
 
   Helper::initLogging();
 
@@ -93,7 +95,8 @@ int main( int argc, char * argv[] )
   );
 
   // Add common TFTP options
-  optionsDescription.add( configuration.options() );
+  optionsDescription.add( tftpConfiguration.options() );
+  optionsDescription.add( tftpOptionsConfiguration.options() );
 
   try
   {
@@ -131,10 +134,10 @@ int main( int argc, char * argv[] )
     switch ( requestType )
     {
       case Tftp::RequestType::Read:
-        tftpOperation= tftpClient->readOperation(
+        tftpOperation = tftpClient->readOperation(
           Tftp::Client::ReadOperationConfiguration{
-            configuration,
-            configuration.tftpOptions,
+            tftpConfiguration,
+            tftpOptionsConfiguration,
             optionNegotiation,
             {
               [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
@@ -148,14 +151,14 @@ int main( int argc, char * argv[] )
             {}, /* no additional options */
             boost::asio::ip::udp::endpoint{
               address,
-              configuration.tftpServerPort } } );
+              tftpConfiguration.tftpServerPort } } );
         break;
 
       case Tftp::RequestType::Write:
         tftpOperation = tftpClient->writeOperation(
           Tftp::Client::WriteOperationConfiguration{
-            configuration,
-            configuration.tftpOptions,
+            tftpConfiguration,
+            tftpOptionsConfiguration,
             optionNegotiation,
             {
               [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
@@ -170,7 +173,7 @@ int main( int argc, char * argv[] )
             {}, /* no additional options */
             boost::asio::ip::udp::endpoint{
               address,
-              configuration.tftpServerPort } } );
+              tftpConfiguration.tftpServerPort } } );
         break;
 
       default:

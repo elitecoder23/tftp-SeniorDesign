@@ -15,9 +15,8 @@
 
 #include <tftp/Tftp.hpp>
 
-#include <tftp/TftpOptionsConfiguration.hpp>
-
 #include <boost/property_tree/ptree_fwd.hpp>
+
 #include <boost/program_options/options_description.hpp>
 
 #include <cstdint>
@@ -78,22 +77,22 @@ class TftpConfiguration
      **/
     [[nodiscard]] boost::program_options::options_description options();
 
-    //! Default TFTP Port ( can be overridden by configuration)
-    const uint16_t defaultTftpPort;
-
     //! TFTP timeout - standard when no timeout option is negotiated in seconds.
-    std::chrono::seconds tftpTimeout;
+    std::chrono::seconds tftpTimeout{ DefaultTftpReceiveTimeout };
     //! Number of Retries.
-    uint16_t tftpRetries;
+    uint16_t tftpRetries{ DefaultTftpRetries };
 
     //! UDP Port used for TFTP Communication.
     uint16_t tftpServerPort;
 
-    //! Options Configuration
-    TftpOptionsConfiguration tftpOptions;
-
     //! Dally Option
-    bool dally;
+    bool dally{ false };
+
+  private:
+    //! Default TFTP Port ( can be overridden by configuration)
+    //! This value is used for loading and storing to determine the default
+    //! value.
+    const uint16_t defaultTftpPort;
 };
 
 }
