@@ -55,7 +55,7 @@ void WriteOperationImpl::start()
     configurationV.dataHandler->reset();
 
     // option negotiation leads to empty option list
-    if ( configurationV.clientOptions.empty()
+    if ( !configurationV.clientOptions
       && configurationV.additionalNegotiatedOptions.empty() )
     {
       // Then no OACK is sent back - a simple ACK is sent.
@@ -67,80 +67,57 @@ void WriteOperationImpl::start()
       Packets::Options serverOptions{ configurationV.additionalNegotiatedOptions };
 
       // check block size option - if set use it
-      if ( configurationV.optionsConfiguration.blockSizeOption )
+      if ( configurationV.optionsConfiguration.blockSizeOption
+        && configurationV.clientOptions.blockSize )
       {
-        const auto [ blockSizeValid, blockSize ] =
-          Packets::TftpOptions_getOption< uint16_t >(
-            configurationV.clientOptions,
-            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
-            Packets::BlockSizeOptionMin,
-            Packets::BlockSizeOptionMax );
+        receiveDataSize = std::min(
+          *configurationV.clientOptions.blockSize,
+          *configurationV.optionsConfiguration.blockSizeOption );
 
-        if ( blockSize )
-        {
-          receiveDataSize = std::min(
-            *blockSize,
-            *configurationV.optionsConfiguration.blockSizeOption );
-
-          // respond option string
-          serverOptions.try_emplace(
-            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
-            std::to_string( receiveDataSize ) );
-        }
+        // respond option string
+        serverOptions.try_emplace(
+          Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+          std::to_string( receiveDataSize ) );
       }
 
       // check timeout option - if set use it
-      if ( configurationV.optionsConfiguration.timeoutOption )
+      if ( configurationV.optionsConfiguration.timeoutOption
+        && configurationV.clientOptions.timeout
+        && ( std::chrono::seconds{ *configurationV.clientOptions.timeout }
+          <= *configurationV.optionsConfiguration.timeoutOption ) )
       {
-        const auto [ timeoutValid, timeout ] =
-          Packets::TftpOptions_getOption< uint8_t >(
-            configurationV.clientOptions,
-            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
-            Packets::TimeoutOptionMin,
-            Packets::TimeoutOptionMax );
+        receiveTimeout(
+          std::chrono::seconds{ *configurationV.clientOptions.timeout } );
 
-        if ( timeoutValid && timeout
-          && ( std::chrono::seconds{ *timeout }
-            <= *configurationV.optionsConfiguration.timeoutOption ) )
-        {
-          receiveTimeout( std::chrono::seconds{ *timeout } );
-
-          // respond with timeout option set
-          serverOptions.try_emplace(
-            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
-            std::to_string( *timeout ) );
-        }
+        // respond with timeout option set
+        serverOptions.try_emplace(
+          Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+          std::to_string( *configurationV.clientOptions.timeout ) );
       }
 
       // check transfer size option
-      if ( configurationV.optionsConfiguration.handleTransferSizeOption )
+      if ( configurationV.optionsConfiguration.handleTransferSizeOption
+        && configurationV.clientOptions.transferSize )
       {
-        const auto [ transferSizeValid, transferSize ] =
-          Packets::TftpOptions_getOption< uint64_t >(
-            configurationV.clientOptions,
-            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
-
-        if ( transferSize )
+        if ( !configurationV.dataHandler->receivedTransferSize(
+          *configurationV.clientOptions.transferSize ) )
         {
-          if ( !configurationV.dataHandler->receivedTransferSize( *transferSize ) )
-          {
-            Packets::ErrorPacket errorPacket{
-              Packets::ErrorCode::DiskFullOrAllocationExceeds,
-              "FILE TO BIG" };
+          Packets::ErrorPacket errorPacket{
+            Packets::ErrorCode::DiskFullOrAllocationExceeds,
+            "FILE TO BIG" };
 
-            send( errorPacket );
+          send( errorPacket );
 
-            // Operation completed
-            finished( TransferStatus::TransferError, std::move( errorPacket ) );
+          // Operation completed
+          finished( TransferStatus::TransferError, std::move( errorPacket ) );
 
-            return;
-          }
-
-          // respond option string
-          serverOptions.try_emplace(
-            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
-            std::to_string( *transferSize ) );
+          return;
         }
+
+        // respond option string
+        serverOptions.try_emplace(
+          Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
+          std::to_string( *configurationV.clientOptions.transferSize ) );
       }
 
       if ( !serverOptions.empty() )

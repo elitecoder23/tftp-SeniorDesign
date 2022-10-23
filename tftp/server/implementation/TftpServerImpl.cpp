@@ -252,13 +252,7 @@ void TftpServerImpl::readRequestPacket(
 
   // extract known TFTP Options
   auto receivedOptions{ readRequestPacket.options() };
-  Packets::Options clientOptions{};
-  clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } ) ) ;
-  clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } ) ) ;
-  clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) } ) ) ;
+  auto decodedOptions{ tftpOptions( receivedOptions ) };
 
   // call the handler, which handles the received request
   configurationV.handler(
@@ -266,7 +260,7 @@ void TftpServerImpl::readRequestPacket(
     RequestType::Read,
     std::string{ readRequestPacket.filename() },
     readRequestPacket.mode(),
-    std::move( clientOptions ),
+    std::move( decodedOptions ),
     std::move( receivedOptions ) );
 }
 
@@ -292,13 +286,7 @@ void TftpServerImpl::writeRequestPacket(
 
   // extract known TFTP Options
   auto receivedOptions{ writeRequestPacket.options() };
-  Packets::Options clientOptions{};
-  clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } ) ) ;
-  clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } ) ) ;
-  clientOptions.insert( receivedOptions.extract(
-    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) } ) ) ;
+  auto decodedOptions{ tftpOptions( receivedOptions ) };
 
   // call the handler, which handles the received request
   configurationV.handler(
@@ -306,7 +294,7 @@ void TftpServerImpl::writeRequestPacket(
     RequestType::Write,
     std::string{ writeRequestPacket.filename() },
     writeRequestPacket.mode(),
-    std::move( clientOptions ),
+    std::move( decodedOptions ),
     std::move( receivedOptions ) );
 }
 
@@ -315,7 +303,7 @@ void TftpServerImpl::dataPacket(
   const Packets::DataPacket &dataPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
-    << "RX ERROR: " << static_cast< std::string>( dataPacket );
+    << "RX ERROR: " << static_cast< std::string >( dataPacket );
 
   // execute error operation
   errorOperation(
@@ -329,7 +317,7 @@ void TftpServerImpl::acknowledgementPacket(
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
-    << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket );
+    << "RX ERROR: " << static_cast< std::string >( acknowledgementPacket );
 
   // execute error operation
   errorOperation(
@@ -357,7 +345,7 @@ void TftpServerImpl::optionsAcknowledgementPacket(
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
-    << "RX ERROR: " << static_cast< std::string>( optionsAcknowledgementPacket );
+    << "RX ERROR: " << static_cast< std::string >( optionsAcknowledgementPacket );
 
   // execute error operation
   errorOperation(
@@ -372,6 +360,47 @@ void TftpServerImpl::invalidPacket(
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "RX: UNKNOWN: *ERROR* - IGNORE";
+}
+
+TftpOptions TftpServerImpl::tftpOptions( Packets::Options &clientOptions ) const
+{
+  TftpOptions decodedOptions;
+
+  // check block size option - if set use it
+  const auto [ blockSizeValid, blockSize ] =
+    Packets::TftpOptions_getOption< uint16_t >(
+      clientOptions,
+      Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+      Packets::BlockSizeOptionMin,
+      Packets::BlockSizeOptionMax );
+
+  decodedOptions.blockSize = blockSize;
+  // remove blocksize option
+  clientOptions.erase( Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) );
+
+  // check timeout option - if set use it
+  const auto [ timeoutValid, timeout ] =
+    Packets::TftpOptions_getOption< uint8_t >(
+      clientOptions,
+      Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+      Packets::TimeoutOptionMin,
+      Packets::TimeoutOptionMax );
+
+  decodedOptions.timeout = timeout;
+  // remove timeout option
+  clientOptions.erase( Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) );
+
+  // check transfer size option
+  const auto [ transferSizeValid, transferSize ] =
+    Packets::TftpOptions_getOption< uint64_t >(
+      clientOptions,
+      Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
+
+  decodedOptions.transferSize = transferSize;
+  // remove timeout option
+  clientOptions.erase( Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
+
+  return decodedOptions;
 }
 
 }

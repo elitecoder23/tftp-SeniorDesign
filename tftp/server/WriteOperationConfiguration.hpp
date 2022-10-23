@@ -48,7 +48,7 @@ struct WriteOperationConfiguration
   boost::asio::ip::udp::endpoint remote;
   //! TFTP Client Options.
   //! Will be negotiated within TFTP Server Request Operation
-  Packets::Options clientOptions;
+  TftpOptions clientOptions;
   //! Additional Options, which have been already negotiated.
   Packets::Options additionalNegotiatedOptions;
   //! local endpoint, where the server handles the request from.
@@ -80,7 +80,7 @@ struct WriteOperationConfiguration
     ReceiveDataHandlerPtr dataHandler,
     OperationCompletedHandler completionHandler,
     boost::asio::ip::udp::endpoint remote,
-    Packets::Options clientOptions,
+    TftpOptions clientOptions,
     Packets::Options additionalNegotiatedOptions,
     std::optional< boost::asio::ip::udp::endpoint > local = {} );
 };

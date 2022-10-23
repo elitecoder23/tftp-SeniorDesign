@@ -12,8 +12,8 @@
 
 #include "ReadOperationImpl.hpp"
 
-#include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
+#include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataHandler.hpp>
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
@@ -51,7 +51,7 @@ void ReadOperationImpl::start()
     configurationV.dataHandler->reset();
 
     // option negotiation leads to empty option list
-    if ( configurationV.clientOptions.empty()
+    if ( !configurationV.clientOptions
       && configurationV.additionalNegotiatedOptions.empty() )
     {
       sendData();
@@ -62,86 +62,62 @@ void ReadOperationImpl::start()
       Packets::Options serverOptions{ configurationV.additionalNegotiatedOptions };
 
       // check block size option - if set use it
-      if ( configurationV.optionsConfiguration.blockSizeOption )
+      if ( configurationV.optionsConfiguration.blockSizeOption
+        && configurationV.clientOptions.blockSize )
       {
-        const auto [ blockSizeValid, blockSize ] =
-          Packets::TftpOptions_getOption< uint16_t >(
-            configurationV.clientOptions,
-            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
-            Packets::BlockSizeOptionMin,
-            Packets::BlockSizeOptionMax );
+        transmitDataSize = std::min(
+          *configurationV.clientOptions.blockSize,
+          *configurationV.optionsConfiguration.blockSizeOption );
 
-        if ( blockSize )
-        {
-          transmitDataSize = std::min(
-            *blockSize,
-            *configurationV.optionsConfiguration.blockSizeOption );
-
-          // respond option string
-          serverOptions.try_emplace(
-            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
-            std::to_string( transmitDataSize ) );
-        }
+        // respond option string
+        serverOptions.try_emplace(
+          Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+          std::to_string( transmitDataSize ) );
       }
 
       // check timeout option - if set use it
-      if ( configurationV.optionsConfiguration.timeoutOption )
+      if ( configurationV.optionsConfiguration.timeoutOption
+        && configurationV.clientOptions.timeout
+        && ( std::chrono::seconds{ *configurationV.clientOptions.timeout }
+          <= *configurationV.optionsConfiguration.timeoutOption ) )
       {
-        const auto [ timeoutValid, timeout ] =
-          Packets::TftpOptions_getOption< uint8_t >(
-            configurationV.clientOptions,
-            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
-            Packets::TimeoutOptionMin,
-            Packets::TimeoutOptionMax );
+        receiveTimeout(
+          std::chrono::seconds{ *configurationV.clientOptions.timeout } );
 
-        if ( timeoutValid && timeout
-          && ( std::chrono::seconds{ *timeout }
-            <= *configurationV.optionsConfiguration.timeoutOption ) )
-        {
-          receiveTimeout( std::chrono::seconds{ *timeout } );
-
-          // respond with timeout option set
-          serverOptions.try_emplace(
-            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
-            std::to_string( *timeout ) );
-        }
+        // respond with timeout option set
+        serverOptions.try_emplace(
+          Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+          std::to_string( *configurationV.clientOptions.timeout ) );
       }
 
       // check transfer size option
-      if ( configurationV.optionsConfiguration.handleTransferSizeOption )
+      if ( configurationV.optionsConfiguration.handleTransferSizeOption
+        && configurationV.clientOptions.transferSize )
       {
-        const auto [ transferSizeValid, transferSize ] =
-          Packets::TftpOptions_getOption< uint64_t >(
-            configurationV.clientOptions,
-            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
-
-        if ( transferSize )
+        if ( 0U != *configurationV.clientOptions.transferSize )
         {
-          if ( 0U != *transferSize )
-          {
-            BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
-              << "Received transfer size must be 0";
+          BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+            << "Received transfer size must be 0";
 
-            Packets::ErrorPacket errorPacket{
-              Packets::ErrorCode::TftpOptionRefused,
-              "transfer size must be 0" };
-            send( errorPacket );
+          Packets::ErrorPacket errorPacket{
+            Packets::ErrorCode::TftpOptionRefused,
+            "transfer size must be 0" };
+          send( errorPacket );
 
-            // Operation completed
-            finished( TransferStatus::TransferError, std::move( errorPacket ) );
+          // Operation completed
+          finished( TransferStatus::TransferError, std::move( errorPacket ) );
 
-            return;
-          }
+          return;
+        }
 
-          if (
-            auto newTransferSize = configurationV.dataHandler->requestedTransferSize();
-            newTransferSize )
-          {
-            // respond option string
-            serverOptions.try_emplace(
-              Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
-              std::to_string( *newTransferSize ) );
-          }
+        if (
+          auto newTransferSize = configurationV.dataHandler->requestedTransferSize();
+          newTransferSize )
+        {
+          // respond option string
+          serverOptions.try_emplace(
+            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
+            std::to_string( *newTransferSize ) );
         }
       }
 
@@ -178,7 +154,7 @@ void ReadOperationImpl::start()
 
 void ReadOperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo) noexcept
+  ErrorInfo &&errorInfo ) noexcept
 {
   BOOST_LOG_FUNCTION()
 

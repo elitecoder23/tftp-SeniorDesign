@@ -84,7 +84,7 @@ static void receivedRequest(
   Tftp::RequestType requestType,
   std::string filename,
   Tftp::Packets::TransferMode mode,
-  Tftp::Packets::Options clientOptions,
+  Tftp::Server::TftpOptions clientOptions,
   Tftp::Packets::Options additionalClientOptions );
 
 /**
@@ -100,7 +100,7 @@ static void receivedRequest(
 static void transmitFile(
   boost::asio::ip::udp::endpoint remote,
   std::filesystem::path filename,
-  Tftp::Packets::Options clientOptions );
+  Tftp::Server::TftpOptions clientOptions );
 
 /**
  * @brief Receives a requested file (WRQ).
@@ -115,7 +115,7 @@ static void transmitFile(
 static void receiveFile(
   boost::asio::ip::udp::endpoint remote,
   std::filesystem::path filename,
-  Tftp::Packets::Options clientOptions );
+  Tftp::Server::TftpOptions clientOptions );
 
 //! TFTP Server Base Directory
 static std::filesystem::path baseDir{};
@@ -263,7 +263,7 @@ static void receivedRequest(
   const Tftp::RequestType requestType,
   std::string filename,
   const Tftp::Packets::TransferMode mode,
-  Tftp::Packets::Options clientOptions,
+  Tftp::Server::TftpOptions clientOptions,
   Tftp::Packets::Options additionalClientOptions )
 {
   // Check transfer mode
@@ -321,7 +321,7 @@ static void receivedRequest(
 static void transmitFile(
   boost::asio::ip::udp::endpoint remote,
   std::filesystem::path filename,
-  Tftp::Packets::Options clientOptions )
+  Tftp::Server::TftpOptions clientOptions )
 {
   std::cout
     << "RRQ: " << filename << " from: " << remote.address().to_string() << "\n";
@@ -365,7 +365,7 @@ static void transmitFile(
 static void receiveFile(
   boost::asio::ip::udp::endpoint remote,
   std::filesystem::path filename,
-  Tftp::Packets::Options clientOptions )
+  Tftp::Server::TftpOptions clientOptions )
 {
   std::cout
     << "WRQ: " << filename << " from: " << remote.address().to_string() << "\n";

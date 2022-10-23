@@ -188,6 +188,17 @@ class TftpServerImpl final :
       const boost::asio::ip::udp::endpoint &remote,
       Packets::ConstRawTftpPacketSpan rawPacket ) override;
 
+    /**
+     * @brief Decodes the FTP Options.
+     *
+     * @param[in,out] clientOptions
+     *   Received TFTP Options.
+     *   Will remove all options decoded by this operation.
+     *
+     * @return Decoded TFTP Options
+     **/
+    TftpOptions tftpOptions( Packets::Options &clientOptions ) const;
+
     //! TFTP Server I/O context
     boost::asio::io_context &ioContext;
     //! TFTP well known socket
