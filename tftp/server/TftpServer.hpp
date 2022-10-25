@@ -52,11 +52,11 @@ class TftpServer
      * @brief Creates a TFTP Server Instance.
      *
      * @param[in] ioContext
-     *   I/O context used for Communication.
+     *   I/O context used for communication.
      * @param[in] configuration
-     *   TFTP Server Configuration
+     *   TFTP Server Configuration.
      *
-     * @return Created TFTP Server Instance.
+     * @return TFTP Server Instance.
      **/
     [[nodiscard]] static TftpServerPtr instance(
       boost::asio::io_context &ioContext,
