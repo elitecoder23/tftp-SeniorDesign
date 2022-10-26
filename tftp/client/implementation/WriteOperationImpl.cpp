@@ -211,7 +211,8 @@ void WriteOperationImpl::acknowledgementPacket(
   if ( acknowledgementPacket.blockNumber() == Packets::BlockNumber{ 0U } )
   {
     // If empty options is returned - Abort Operation
-    if ( !configurationV.optionNegotiationHandler( {} ) )
+    Packets::Options options{};
+    if ( !configurationV.optionNegotiationHandler( options ) )
     {
       BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
         << "Option Negotiation failed";
@@ -350,10 +351,6 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     }
 
     transmitDataSize = *blockSizeValue;
-
-    remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name(
-        Packets::KnownOptions::BlockSize ) } );
   }
 
   // Timeout Option
@@ -402,7 +399,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( timeoutValue )
   {
-    // Timout Option Response from Server must be equal to Client Value
+    // Timeout Option Response from Server must be equal to Client Value
     if ( std::chrono::seconds{ *timeoutValue }
       != *configurationV.optionsConfiguration.timeoutOption )
     {
@@ -423,10 +420,6 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     }
 
     receiveTimeout( std::chrono::seconds{ *timeoutValue } );
-
-    remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name(
-        Packets::KnownOptions::Timeout ) } );
   }
 
   // Transfer Size Option
@@ -472,26 +465,19 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     return;
   }
 
-  if ( transferSizeValue )
+  if ( transferSizeValue && *transferSizeValue != *transferSize )
   {
-    if ( *transferSizeValue != *transferSize )
-    {
-      Packets::ErrorPacket errorPacket{
-        Packets::ErrorCode::TftpOptionRefused,
-        "transfer size invalid" };
+    Packets::ErrorPacket errorPacket{
+      Packets::ErrorCode::TftpOptionRefused,
+      "transfer size invalid" };
 
-      send( errorPacket );
+    send( errorPacket );
 
-      // Operation completed
-      finished(
-        TransferStatus::OptionNegotiationError,
-        std::move( errorPacket ) );
-      return;
-    }
-
-    remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name(
-        Packets::KnownOptions::TransferSize ) } );
+    // Operation completed
+    finished(
+      TransferStatus::OptionNegotiationError,
+      std::move( errorPacket ) );
+    return;
   }
 
   // Perform additional Option Negotiation
@@ -503,6 +489,25 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::TftpOptionRefused,
       "Option negotiation failed" };
+
+    send( errorPacket );
+
+    // Operation completed
+    finished(
+      TransferStatus::OptionNegotiationError,
+      std::move( errorPacket ) );
+    return;
+  }
+
+  // check that remaining remote options are empty
+  if ( !remoteOptions.empty() )
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "Option negotiation failed - unexpected options";
+
+    Packets::ErrorPacket errorPacket{
+      Packets::ErrorCode::TftpOptionRefused,
+      "Unexpected options" };
 
     send( errorPacket );
 

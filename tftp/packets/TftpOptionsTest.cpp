@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE( optionsDecode )
 //! TftpOptions_getOption tests
 BOOST_AUTO_TEST_CASE( getOptions )
 {
-  Options options{
+  const Options options{
     { "opt1", "" },
     { "opt2", "65535" },
     { "opt3", "65536" },
@@ -81,19 +81,27 @@ BOOST_AUTO_TEST_CASE( getOptions )
     { "opt5", "100" },
   };
 
-  BOOST_CHECK( TftpOptions_getOption< uint16_t >( options, "optX" ) == std::make_pair( true, std::optional< uint16_t >{} ) );
+  auto opt1{ options };
+  BOOST_CHECK( TftpOptions_getOption< uint16_t >( opt1, "optX" ) == std::make_pair( true, std::optional< uint16_t >{} ) );
 
-  BOOST_CHECK_NO_THROW( TftpOptions_getOption< uint16_t >( options, "opt1" ) );// == std::make_pair( false, std::optional< uint16_t >{} ) );
+  auto opt2{ options };
+  BOOST_CHECK_NO_THROW( TftpOptions_getOption< uint16_t >( opt2, "opt1" ) );// == std::make_pair( false, std::optional< uint16_t >{} ) );
 
-  BOOST_CHECK( TftpOptions_getOption< uint16_t >( options, "opt2" ) == std::make_pair( true, std::optional< uint16_t >{ 65535 } ) );
+  auto opt3{ options };
+  BOOST_CHECK( TftpOptions_getOption< uint16_t >( opt3, "opt2" ) == std::make_pair( true, std::optional< uint16_t >{ 65535 } ) );
 
-  BOOST_CHECK( TftpOptions_getOption< uint16_t >( options, "opt3" ) == std::make_pair( false, std::optional< uint16_t >{} ) );
+  auto opt4{ options };
+  BOOST_CHECK( TftpOptions_getOption< uint16_t >( opt4, "opt3" ) == std::make_pair( false, std::optional< uint16_t >{} ) );
 
-  BOOST_CHECK( TftpOptions_getOption< uint16_t >( options, "opt4", 0, 100 ) == std::make_pair( true, std::optional< uint16_t >{ 0 } ) );
-  BOOST_CHECK( TftpOptions_getOption< uint16_t >( options, "opt4", 1, 100 ) == std::make_pair( false, std::optional< uint16_t >{} ) );
+  auto opt5a{ options };
+  BOOST_CHECK( TftpOptions_getOption< uint16_t >( opt5a, "opt4", 0, 100 ) == std::make_pair( true, std::optional< uint16_t >{ 0 } ) );
+  auto opt5b{ options };
+  BOOST_CHECK( TftpOptions_getOption< uint16_t >( opt5b, "opt4", 1, 100 ) == std::make_pair( false, std::optional< uint16_t >{} ) );
 
-  BOOST_CHECK( TftpOptions_getOption< uint16_t >( options, "opt5", 0, 100 ) == std::make_pair( true, std::optional< uint16_t >{ 100 } ) );
-  BOOST_CHECK( TftpOptions_getOption< uint16_t >( options, "opt5", 0, 99 ) == std::make_pair( false, std::optional< uint16_t >{} ) );
+  auto opt6a{ options };
+  BOOST_CHECK( TftpOptions_getOption< uint16_t >( opt6a, "opt5", 0, 100 ) == std::make_pair( true, std::optional< uint16_t >{ 100 } ) );
+  auto opt6b{ options };
+  BOOST_CHECK( TftpOptions_getOption< uint16_t >( opt6b, "opt5", 0, 99 ) == std::make_pair( false, std::optional< uint16_t >{} ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

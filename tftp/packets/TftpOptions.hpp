@@ -84,7 +84,7 @@ RawOptions TftpOptions_rawOptions( const Options &options );
  * @tparam IntT
  *   Unsigned Integer Type.
  *
- * @param[in] options
+ * @param[in,out] options
  *   TFTP Options
  * @param[in] name
  *   Option Name
@@ -98,8 +98,8 @@ RawOptions TftpOptions_rawOptions( const Options &options );
  */
 template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > > TftpOptions_getOption(
-  const Options &options,
-  std::string_view name,
+  Options &options,
+  const std::string &name,
   IntT min = std::numeric_limits< IntT >::min(),
   IntT max = std::numeric_limits< IntT >::max() );
 

@@ -51,14 +51,17 @@ using OperationPtr = std::shared_ptr< Operation >;
 /**
  * @brief TFTP Client Option Negotiation Handler
  *
- * @param[in] serverOptions
+ * The handler removes handled exceptions from this list.
+ * The Operation will reject option negotiation, if @p serverOptions is not
+ * empty after handler call.
+ *
+ * @param[in,out] serverOptions
  *   Received Options from TFTP Server
  *
  * @return If the TFTP Option Negotiation was successful.
  **/
 using OptionNegotiationHandler = std::function<
-  bool( const Packets::Options &serverOptions ) >;
-
+  bool( Packets::Options &serverOptions ) >;
 }
 
 #endif

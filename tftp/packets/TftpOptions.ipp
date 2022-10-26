@@ -18,22 +18,22 @@ namespace Tftp::Packets {
 template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > >
 TftpOptions_getOption(
-  const Options &options,
-  std::string_view name,
+  Options &options,
+  const std::string &name,
   const IntT min,
   const IntT max )
 {
-  auto optionIt{ options.find( name ) };
+  auto option{ options.extract( name ) };
 
   // option not set
-  if ( optionIt == options.end() )
+  if ( !option )
   {
     return { true, {} };
   }
 
   try
   {
-    const auto optionValue{ std::stoull( optionIt->second ) };
+    const auto optionValue{ std::stoull( option.mapped() ) };
 
     if ( ( optionValue < min ) || ( optionValue > max ) )
     {

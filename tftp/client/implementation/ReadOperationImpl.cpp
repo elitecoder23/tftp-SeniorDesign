@@ -206,7 +206,8 @@ void ReadOperationImpl::dataPacket(
     && ( !oackReceived ) )
   {
     // If options negotiation is aborted by callback - Abort Operation
-    if ( !configurationV.optionNegotiationHandler( {} ) )
+    Packets::Options options{};
+    if ( !configurationV.optionNegotiationHandler( options ) )
     {
       BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
         << "Option Negotiation failed";
@@ -381,9 +382,6 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     }
 
     receiveDataSize = *blockSizeValue;
-
-    remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } );
   }
 
   // Timeout Option
@@ -432,7 +430,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( timeoutValue )
   {
-    // Timout Option Response from Server must be equal to Client Value
+    // Timeout Option Response from Server must be equal to Client Value
     if ( std::chrono::seconds{ *timeoutValue }
       != *configurationV.optionsConfiguration.timeoutOption )
     {
@@ -453,9 +451,6 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     }
 
     receiveTimeout( std::chrono::seconds{ *timeoutValue } );
-
-    remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } );
   }
 
   // Transfer Size Option
@@ -517,10 +512,6 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
         std::move( errorPacket ) );
       return;
     }
-
-    remoteOptions.erase(
-      std::string{ Packets::TftpOptions_name(
-        Packets::KnownOptions::TransferSize ) } );
   }
 
   // Perform additional Option Negotiation
@@ -532,6 +523,25 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::TftpOptionRefused,
       "Option negotiation failed" };
+
+    send( errorPacket );
+
+    // Operation completed
+    finished(
+      TransferStatus::OptionNegotiationError,
+      std::move( errorPacket ) );
+    return;
+  }
+
+  // check that remaining remote options are empty
+  if ( !remoteOptions.empty() )
+  {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "Option negotiation failed - unexpected options";
+
+    Packets::ErrorPacket errorPacket{
+      Packets::ErrorCode::TftpOptionRefused,
+      "Unexpected options" };
 
     send( errorPacket );
 
