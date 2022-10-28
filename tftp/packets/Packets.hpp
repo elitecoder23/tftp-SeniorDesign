@@ -36,6 +36,21 @@
  **/
 namespace Tftp::Packets {
 
+
+class Packet;
+class ReadRequestPacket;
+class WriteRequestPacket;
+class DataPacket;
+class AcknowledgementPacket;
+class ErrorPacket;
+class OptionsAcknowledgementPacket;
+
+class BlockNumber;
+
+class PacketHandler;
+
+struct TftpOptions;
+
 /**
  * @brief TFTP Packet Types.
  *
@@ -142,18 +157,6 @@ using RawOptions = std::vector< uint8_t >;
 using RawOptionsSpan = std::span< const uint8_t >;
 //! TFTP Options (Maps Option Name to Option Value)
 using Options = std::map< std::string, std::string, std::less< > >;
-
-class Packet;
-class ReadRequestPacket;
-class WriteRequestPacket;
-class DataPacket;
-class AcknowledgementPacket;
-class ErrorPacket;
-class OptionsAcknowledgementPacket;
-
-class BlockNumber;
-
-class PacketHandler;
 
 }
 

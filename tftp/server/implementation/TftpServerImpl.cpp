@@ -362,9 +362,10 @@ void TftpServerImpl::invalidPacket(
     << "RX: UNKNOWN: *ERROR* - IGNORE";
 }
 
-TftpOptions TftpServerImpl::tftpOptions( Packets::Options &clientOptions ) const
+Packets::TftpOptions TftpServerImpl::tftpOptions(
+  Packets::Options &clientOptions ) const
 {
-  TftpOptions decodedOptions;
+  Packets::TftpOptions decodedOptions{};
 
   // check block size option - if set use it
   const auto [ blockSizeValid, blockSize ] =

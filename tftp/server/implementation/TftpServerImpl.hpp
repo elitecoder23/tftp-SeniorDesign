@@ -189,7 +189,7 @@ class TftpServerImpl final :
       Packets::ConstRawTftpPacketSpan rawPacket ) override;
 
     /**
-     * @brief Decodes the FTP Options.
+     * @brief Decodes the TFTP Options.
      *
      * @param[in,out] clientOptions
      *   Received TFTP Options.
@@ -197,7 +197,7 @@ class TftpServerImpl final :
      *
      * @return Decoded TFTP Options
      **/
-    TftpOptions tftpOptions( Packets::Options &clientOptions ) const;
+    Packets::TftpOptions tftpOptions( Packets::Options &clientOptions ) const;
 
     //! TFTP Server I/O context
     boost::asio::io_context &ioContext;

@@ -15,6 +15,8 @@
 
 #include <tftp/server/Server.hpp>
 
+#include <tftp/packets/TftpOptions.hpp>
+
 #include <tftp/TftpOptionsConfiguration.hpp>
 
 #include <boost/asio/ip/udp.hpp>
@@ -44,7 +46,7 @@ struct ReadOperationConfiguration
   boost::asio::ip::udp::endpoint remote;
   //! TFTP Client Options.
   //! Will be negotiated within TFTP Server Request Operation
-  TftpOptions clientOptions;
+  Packets::TftpOptions clientOptions;
   //! Additional Options, which have been already negotiated.
   Packets::Options additionalNegotiatedOptions;
   //! local endpoint, where the server handles the request from.
@@ -76,7 +78,7 @@ struct ReadOperationConfiguration
     TransmitDataHandlerPtr dataHandler,
     OperationCompletedHandler completionHandler,
     boost::asio::ip::udp::endpoint remote,
-    TftpOptions clientOptions,
+    Packets::TftpOptions clientOptions,
     Packets::Options additionalNegotiatedOptions,
     std::optional< boost::asio::ip::udp::endpoint > local = {} );
 };

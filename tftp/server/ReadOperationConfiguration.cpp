@@ -24,7 +24,7 @@ ReadOperationConfiguration::ReadOperationConfiguration(
   TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
   boost::asio::ip::udp::endpoint remote,
-  TftpOptions clientOptions,
+  Packets::TftpOptions clientOptions,
   Packets::Options additionalNegotiatedOptions,
   std::optional< boost::asio::ip::udp::endpoint > local ) :
   tftpTimeout{ configuration.tftpTimeout },

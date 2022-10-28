@@ -23,6 +23,34 @@
 namespace Tftp::Packets {
 
 /**
+ * @brief Decoded TFTP Options
+ *
+ * Used to store all known TFTP Options like:
+ * - blocksize,
+ * - timeout, and
+ * - transfer size.
+ **/
+struct TftpOptions
+{
+  //! Block size option
+  std::optional< uint16_t > blockSize;
+  //! Timeout option
+  std::optional< uint8_t > timeout;
+  //! Transfer size option
+  std::optional< uint64_t > transferSize;
+
+  /**
+   * @brief Returns if any option is set.
+   *
+   * @return If any option is set
+   **/
+  operator bool() const
+  {
+    return blockSize || timeout || transferSize;
+  }
+};
+
+/**
  * @brief Returns the Option Name String for the given Option.
  *
  * @param[in] option
