@@ -43,7 +43,6 @@ struct ServerConfiguration
     std::optional< boost::asio::ip::udp::endpoint > serverAddress = {} );
 };
 
-
 }
 
 #endif

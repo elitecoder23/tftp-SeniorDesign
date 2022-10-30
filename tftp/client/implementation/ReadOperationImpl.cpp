@@ -17,6 +17,7 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/TftpOptions.hpp>
+#include <tftp/packets/Options.hpp>
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
@@ -319,7 +320,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   // Block Size Option
   const auto [ blockSizeValid, blockSizeValue ] =
-    Packets::TftpOptions_getOption< uint16_t >(
+    Packets::Options_getOption< uint16_t >(
       remoteOptions,
       Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
       Packets::BlockSizeOptionMin,
@@ -386,7 +387,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   // Timeout Option
   const auto [ timeoutValid, timeoutValue ] =
-    Packets::TftpOptions_getOption< uint8_t>(
+    Packets::Options_getOption< uint8_t>(
       remoteOptions,
       Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
       Packets::TimeoutOptionMin,
@@ -455,7 +456,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   // Transfer Size Option
   const auto [ transferSizeValid, transferSizeValue ] =
-    Packets::TftpOptions_getOption< uint64_t>(
+    Packets::Options_getOption< uint64_t>(
       remoteOptions,
       Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 

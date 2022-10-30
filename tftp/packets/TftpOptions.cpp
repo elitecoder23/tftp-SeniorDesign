@@ -12,7 +12,7 @@
 
 #include "TftpOptions.hpp"
 
-#include <tftp/packets/PacketException.hpp>
+#include <fmt/format.h>
 
 namespace Tftp::Packets {
 
@@ -34,90 +34,45 @@ std::string TftpOptions_name( const KnownOptions option ) noexcept
   }
 }
 
-std::string TftpOptions_toString( const Options &options )
+std::string TftpOptions_toString( const TftpOptions &options )
 {
-  if ( options.empty() )
+  if ( !options )
   {
     return "(NONE)";
   }
 
-  std::string result{};
+  std::string retStr{};
 
-  // iterate over all options
-  for ( const auto &[ name, value ] : options )
+  if ( options.blockSize )
   {
-    result += name;
-    result += ":";
-    result += value;
-    result += ";";
+    retStr+= fmt::format(
+      "[{}:{}]",
+      TftpOptions_name( KnownOptions::BlockSize ),
+      std::to_string( *options.blockSize ) );
   }
 
-  return result;
+  if ( options.timeout )
+  {
+    retStr+= fmt::format(
+      "[{}:{}]",
+      TftpOptions_name( KnownOptions::Timeout ),
+      *options.timeout );
+  }
+
+  if ( options.transferSize )
+  {
+    retStr+= fmt::format(
+      "[{}:{}]",
+      TftpOptions_name( KnownOptions::TransferSize ),
+      *options.transferSize );
+  }
+
+  return retStr;
 }
-Options TftpOptions_options( RawOptionsSpan rawOptions )
+
+std::ostream &operator<<( std::ostream &stream, const TftpOptions &options )
 {
-  Options options{};
-
-  for( auto begin = rawOptions.begin(); begin != rawOptions.end(); )
-  {
-    auto nameBegin{ begin };
-
-    // Option Name is delimited by "\0" character
-    auto nameEnd{ std::find( nameBegin, rawOptions.end(), 0 ) };
-
-    if ( nameEnd == rawOptions.end() )
-    {
-      BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo{ "Unexpected end of input data" } );
-    }
-
-    auto valueBegin{ nameEnd + 1U };
-
-    if ( valueBegin == rawOptions.end() )
-    {
-      BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo{ "Unexpected end of input data"} );
-    }
-
-    // Option Value is delimited by "\0" character
-    auto valueEnd{ std::find( valueBegin, rawOptions.end(), 0 ) };
-
-    if ( valueEnd == rawOptions.end() )
-    {
-      BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo{ "Unexpected end of input data" } );
-    }
-
-    options.emplace(
-      std::string{ nameBegin, nameEnd },
-      std::string{ valueBegin, valueEnd } );
-
-    begin = valueEnd + 1U;
-  }
-
-  return options;
-}
-RawOptions TftpOptions_rawOptions( const Options &options )
-{
-  RawOptions rawOptions{};
-
-  // copy options
-  for ( const auto &[ name, option ] : options )
-  {
-    // option name
-    rawOptions.insert( rawOptions.end(), name.begin(), name.end() );
-
-    // name value divider
-    rawOptions.push_back( 0 );
-
-    // option value
-    rawOptions.insert( rawOptions.end(), option.begin(), option.end() );
-
-    // option terminator
-    rawOptions.push_back( 0 );
-  }
-
-  return rawOptions;
+  return ( stream << TftpOptions_toString( options ) );
 }
 
 }

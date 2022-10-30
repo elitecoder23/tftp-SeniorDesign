@@ -7,17 +7,17 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Module Tftp::Packets TftpOptions.
+ * @brief Definition of Module Tftp::Packets Options.
  **/
 
-#ifndef TFTP_PACKETS_TFTPOPTIONS_IPP
-#define TFTP_PACKETS_TFTPOPTIONS_IPP
+#ifndef TFTP_PACKETS_OPTIONS_IPP
+#define TFTP_PACKETS_OPTIONS_IPP
 
 namespace Tftp::Packets {
 
 template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > >
-TftpOptions_getOption(
+Options_getOption(
   Options &options,
   const std::string &name,
   const IntT min,

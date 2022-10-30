@@ -20,6 +20,9 @@ target_sources(
     ErrorCodeDescription.cpp
     ErrorPacket.hpp
     ErrorPacket.cpp
+    Options.hpp
+    Options.ipp
+    Options.cpp
     OptionsAcknowledgementPacket.hpp
     OptionsAcknowledgementPacket.cpp
     Packet.hpp
@@ -33,7 +36,6 @@ target_sources(
     ReadWriteRequestPacket.hpp
     ReadWriteRequestPacket.cpp
     TftpOptions.hpp
-    TftpOptions.ipp
     TftpOptions.cpp
     WriteRequestPacket.hpp
     WriteRequestPacket.cpp )
@@ -47,6 +49,7 @@ target_sources(
     DataPacketTest.cpp
     ErrorPacketTest.cpp
     OptionsAcknowledgementPacketTest.cpp
+    OptionsTest.cpp
     ReadRequestPacketTest.cpp
     ReadWriteRequestPacketTest.cpp
     TftpOptionsTest.cpp

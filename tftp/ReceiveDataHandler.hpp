@@ -31,7 +31,8 @@ class ReceiveDataHandler : public virtual DataHandler
      * @brief This call-back is executed, when the transfer size of the data
      *   to be transmitted is received.
      *
-     * The call to this call-back is optional.
+     * This call-back is called optional, when a transfer size option has been
+     * received.
      *
      * @param[in] transferSize
      *   Received transfer size.

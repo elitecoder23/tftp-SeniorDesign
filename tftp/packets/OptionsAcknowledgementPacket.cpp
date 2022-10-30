@@ -13,7 +13,7 @@
 #include "OptionsAcknowledgementPacket.hpp"
 
 #include <tftp/packets/PacketException.hpp>
-#include <tftp/packets/TftpOptions.hpp>
+#include <tftp/packets/Options.hpp>
 
 #include <helper/Endianess.hpp>
 
@@ -60,12 +60,12 @@ void OptionsAcknowledgementPacket::options( Options options )
 
 OptionsAcknowledgementPacket::operator std::string() const
 {
-  return fmt::format( "OACK: OPT: \"{}\"", TftpOptions_toString( optionsV ) );
+  return fmt::format( "OACK: OPT: \"{}\"", Options_toString( optionsV ) );
 }
 
 RawTftpPacket OptionsAcknowledgementPacket::encode() const
 {
-  auto rawOptions{ TftpOptions_rawOptions( optionsV ) };
+  auto rawOptions{ Options_rawOptions( optionsV ) };
 
   RawTftpPacket rawPacket( HeaderSize + rawOptions.size() );
 
@@ -92,7 +92,7 @@ void OptionsAcknowledgementPacket::decodeBody(
   auto packetIt{ rawPacket.begin() + HeaderSize };
 
   // assign options
-  optionsV = TftpOptions_options( RawOptionsSpan{ packetIt, rawPacket.end() } );
+  optionsV = Options_options( RawOptionsSpan{ packetIt, rawPacket.end() } );
 }
 
 }

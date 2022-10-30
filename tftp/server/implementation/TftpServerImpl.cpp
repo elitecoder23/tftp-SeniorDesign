@@ -20,7 +20,7 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
-#include <tftp/packets/TftpOptions.hpp>
+#include <tftp/packets/Options.hpp>
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
@@ -369,7 +369,7 @@ Packets::TftpOptions TftpServerImpl::tftpOptions(
 
   // check block size option - if set use it
   const auto [ blockSizeValid, blockSize ] =
-    Packets::TftpOptions_getOption< uint16_t >(
+    Packets::Options_getOption< uint16_t >(
       clientOptions,
       Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
       Packets::BlockSizeOptionMin,
@@ -381,7 +381,7 @@ Packets::TftpOptions TftpServerImpl::tftpOptions(
 
   // check timeout option - if set use it
   const auto [ timeoutValid, timeout ] =
-    Packets::TftpOptions_getOption< uint8_t >(
+    Packets::Options_getOption< uint8_t >(
       clientOptions,
       Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
       Packets::TimeoutOptionMin,
@@ -393,7 +393,7 @@ Packets::TftpOptions TftpServerImpl::tftpOptions(
 
   // check transfer size option
   const auto [ transferSizeValid, transferSize ] =
-    Packets::TftpOptions_getOption< uint64_t >(
+    Packets::Options_getOption< uint64_t >(
       clientOptions,
       Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 

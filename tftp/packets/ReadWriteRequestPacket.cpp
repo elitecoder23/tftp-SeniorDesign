@@ -13,7 +13,7 @@
 #include "ReadWriteRequestPacket.hpp"
 
 #include <tftp/packets/PacketException.hpp>
-#include <tftp/packets/TftpOptions.hpp>
+#include <tftp/packets/Options.hpp>
 
 #include <helper/Endianess.hpp>
 
@@ -113,7 +113,7 @@ ReadWriteRequestPacket::operator std::string() const
     Packet::operator std::string(),
     filenameV,
     decodeMode( modeV ),
-    TftpOptions_toString( optionsV ) );
+    Options_toString( optionsV ) );
 }
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
@@ -203,13 +203,13 @@ void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
   packetIt = modeEnd + 1U;
 
   // assign options
-  optionsV = TftpOptions_options( RawOptionsSpan{ packetIt, rawPacket.end() } );
+  optionsV = Options_options( RawOptionsSpan{ packetIt, rawPacket.end() } );
 }
 
 RawTftpPacket ReadWriteRequestPacket::encode() const
 {
   const auto mode{ decodeMode( modeV ) };
-  const auto rawOptions{ TftpOptions_rawOptions( optionsV ) };
+  const auto rawOptions{ Options_rawOptions( optionsV ) };
 
   RawTftpPacket rawPacket(
     HeaderSize +
