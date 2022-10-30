@@ -44,4 +44,32 @@ ReadOperationConfiguration::ReadOperationConfiguration(
 {
 }
 
+ReadOperationConfiguration::ReadOperationConfiguration(
+  std::chrono::seconds tftpTimeout,
+  uint16_t tftpRetries,
+  bool dally,
+  TftpOptionsConfiguration optionsConfiguration,
+  OptionNegotiationHandler optionNegotiationHandler,
+  OperationCompletedHandler completionHandler,
+  ReceiveDataHandlerPtr dataHandler,
+  std::string filename,
+  Packets::TransferMode mode,
+  Packets::Options additionalOptions,
+  boost::asio::ip::udp::endpoint remote,
+  std::optional< boost::asio::ip::udp::endpoint > local ) :
+  tftpTimeout{ tftpTimeout },
+  tftpRetries{ tftpRetries },
+  dally{ dally },
+  optionsConfiguration{std::move( optionsConfiguration )},
+  optionNegotiationHandler{ std::move( optionNegotiationHandler ) },
+  completionHandler{ std::move( completionHandler ) },
+  dataHandler{ std::move( dataHandler ) },
+  filename{ std::move( filename ) },
+  mode{ mode },
+  additionalOptions{ std::move( additionalOptions ) },
+  remote{ std::move( remote ) },
+  local{ std::move( local ) }
+{
+}
+
 }

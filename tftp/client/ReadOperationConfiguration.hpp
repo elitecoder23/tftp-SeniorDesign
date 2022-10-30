@@ -92,6 +92,48 @@ struct ReadOperationConfiguration
     Packets::Options additionalOptions,
     boost::asio::ip::udp::endpoint remote,
     std::optional< boost::asio::ip::udp::endpoint > local = {} );
+
+  /**
+   * @brief Initialises the configuration.
+   *
+   * @param[in] tftpTimeout
+   *   TFTP Timeout
+   * @param[in] tftpRetries
+   *   TFTP Retries
+   * @param[in] dally
+   *   TFTP Dally Parameter
+   * @param[in] optionsConfiguration
+   *   TFTP Options Configuration
+   * @param[in] optionNegotiationHandler
+   *   TFTP Options Negotiation Handler
+   * @param[in] completionHandler
+   *   Operation Completion Handler
+   * @param[in] dataHandler
+   *   Receive Data Handler
+   * @param[in] filename
+   *   Request Filename
+   * @param[in] mode
+   *   Request Mode
+   * @param[in] additionalOptions
+   *   Additional Options
+   * @param[in] remote
+   *   Request remote address
+   * @param[in] local
+   *   Request local address
+   **/
+  ReadOperationConfiguration(
+    std::chrono::seconds tftpTimeout,
+    uint16_t tftpRetries,
+    bool dally,
+    TftpOptionsConfiguration optionsConfiguration,
+    OptionNegotiationHandler optionNegotiationHandler,
+    OperationCompletedHandler completionHandler,
+    ReceiveDataHandlerPtr dataHandler,
+    std::string filename,
+    Packets::TransferMode mode,
+    Packets::Options additionalOptions,
+    boost::asio::ip::udp::endpoint remote,
+    std::optional< boost::asio::ip::udp::endpoint > local = {} );
 };
 
 }
