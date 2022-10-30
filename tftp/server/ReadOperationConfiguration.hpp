@@ -37,10 +37,10 @@ struct ReadOperationConfiguration
   //! Will be used for TFTP Options Negotiation.
   TftpOptionsConfiguration optionsConfiguration;
 
-  //! Handler, which will be called on various events.
-  TransmitDataHandlerPtr dataHandler;
   //! Handler which is called on completion of the operation.
   OperationCompletedHandler completionHandler;
+  //! Handler, which will be called on various events.
+  TransmitDataHandlerPtr dataHandler;
 
   //! Address of the remote endpoint (TFTP Client).
   boost::asio::ip::udp::endpoint remote;
@@ -59,10 +59,10 @@ struct ReadOperationConfiguration
    *   TFTP Configuration
    * @param[in] optionsConfiguration
    *   TFTP Options Configuration
-   * @param[in] dataHandler
-   *   Transmit Data Handler
    * @param[in] completionHandler
    *   Operation Completion Handler
+   * @param[in] dataHandler
+   *   Transmit Data Handler
    * @param[in] remote
    *   Request remote address
    * @param[in] clientOptions
@@ -75,8 +75,41 @@ struct ReadOperationConfiguration
   ReadOperationConfiguration(
     const TftpConfiguration &configuration,
     TftpOptionsConfiguration optionsConfiguration,
-    TransmitDataHandlerPtr dataHandler,
     OperationCompletedHandler completionHandler,
+    TransmitDataHandlerPtr dataHandler,
+    boost::asio::ip::udp::endpoint remote,
+    Packets::TftpOptions clientOptions,
+    Packets::Options additionalNegotiatedOptions,
+    std::optional< boost::asio::ip::udp::endpoint > local = {} );
+
+  /**
+   * @brief Initialises the configuration.
+   *
+   * @param[in] tftpTimeout
+   *   TFTP Timeout
+   * @param[in] tftpRetries
+   *   TFTP Retries
+   * @param[in] optionsConfiguration
+   *   TFTP Options Configuration
+   * @param[in] completionHandler
+   *   Operation Completion Handler
+   * @param[in] dataHandler
+   *   Transmit Data Handler
+   * @param[in] remote
+   *   Request remote address
+   * @param[in] clientOptions
+   *   Received Client Options
+   * @param[in] additionalNegotiatedOptions
+   *   Negotiated Additional Options
+   * @param[in] local
+   *   Local Address
+   **/
+  ReadOperationConfiguration(
+    std::chrono::seconds tftpTimeout,
+    uint16_t tftpRetries,
+    TftpOptionsConfiguration optionsConfiguration,
+    OperationCompletedHandler completionHandler,
+    TransmitDataHandlerPtr dataHandler,
     boost::asio::ip::udp::endpoint remote,
     Packets::TftpOptions clientOptions,
     Packets::Options additionalNegotiatedOptions,

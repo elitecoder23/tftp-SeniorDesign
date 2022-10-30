@@ -347,17 +347,16 @@ static void transmitFile(
     Tftp::Server::ReadOperationConfiguration{
       tftpConfiguration,
       tftpOptionsConfiguration,
+      []( const Tftp::TransferStatus transferStatus ) {
+        std::cout << "Transfer Completed: " << transferStatus << "\n";
+      },
       std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Transmit,
         std::move( filename ),
         std::filesystem::file_size( filename ) ),
-      []( const Tftp::TransferStatus transferStatus ) {
-        std::cout << "Transfer Completed: " << transferStatus << "\n";
-      },
       std::move( remote ),
       std::move( clientOptions ),
-      {} /* no additional options */
-    } ) };
+      {} /* no additional options */ } ) };
 
   operation->start();
 }
@@ -392,16 +391,15 @@ static void receiveFile(
     Tftp::Server::WriteOperationConfiguration{
       tftpConfiguration,
       tftpOptionsConfiguration,
-      std::make_shared< Tftp::File::StreamFile >(
-        Tftp::File::TftpFile::Operation::Receive,
-        std::move( filename ) ),
       []( const Tftp::TransferStatus transferStatus ) {
         std::cout << "Transfer Completed: " << transferStatus << "\n";
       },
+      std::make_shared< Tftp::File::StreamFile >(
+        Tftp::File::TftpFile::Operation::Receive,
+        std::move( filename ) ),
       std::move( remote ),
       std::move( clientOptions ),
-      {} /* no additional options */
-    } ) };
+      {} /* no additional options */ } ) };
 
   operation->start();
 }

@@ -21,8 +21,8 @@ namespace Tftp::Server {
 ReadOperationConfiguration::ReadOperationConfiguration(
   const TftpConfiguration &configuration,
   TftpOptionsConfiguration optionsConfiguration,
-  TransmitDataHandlerPtr dataHandler,
   OperationCompletedHandler completionHandler,
+  TransmitDataHandlerPtr dataHandler,
   boost::asio::ip::udp::endpoint remote,
   Packets::TftpOptions clientOptions,
   Packets::Options additionalNegotiatedOptions,
@@ -30,8 +30,30 @@ ReadOperationConfiguration::ReadOperationConfiguration(
   tftpTimeout{ configuration.tftpTimeout },
   tftpRetries{ configuration.tftpRetries },
   optionsConfiguration{ std::move( optionsConfiguration ) },
-  dataHandler{ std::move( dataHandler ) },
   completionHandler{ std::move( completionHandler ) },
+  dataHandler{ std::move( dataHandler ) },
+  remote{ std::move( remote ) },
+  clientOptions{ clientOptions },
+  additionalNegotiatedOptions{ std::move( additionalNegotiatedOptions ) },
+  local{ std::move( local ) }
+{
+}
+
+ReadOperationConfiguration::ReadOperationConfiguration(
+  const std::chrono::seconds tftpTimeout,
+  const uint16_t tftpRetries,
+  TftpOptionsConfiguration optionsConfiguration,
+  OperationCompletedHandler completionHandler,
+  TransmitDataHandlerPtr dataHandler,
+  boost::asio::ip::udp::endpoint remote,
+  Packets::TftpOptions clientOptions,
+  Packets::Options additionalNegotiatedOptions,
+  std::optional< boost::asio::ip::udp::endpoint > local ) :
+  tftpTimeout{ tftpTimeout },
+  tftpRetries{ tftpRetries },
+  optionsConfiguration{ std::move( optionsConfiguration ) },
+  completionHandler{ std::move( completionHandler ) },
+  dataHandler{ std::move( dataHandler ) },
   remote{ std::move( remote ) },
   clientOptions{ clientOptions },
   additionalNegotiatedOptions{ std::move( additionalNegotiatedOptions ) },
