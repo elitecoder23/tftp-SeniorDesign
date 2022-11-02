@@ -25,8 +25,8 @@ TftpOptionsConfiguration::TftpOptionsConfiguration(
 void TftpOptionsConfiguration::fromProperties(
   const boost::property_tree::ptree &properties )
 {
-  handleTransferSizeOption = properties.get( "transferSize", false );
-  blockSizeOption = properties.get_optional< uint16_t>( "blockSize" );
+  handleTransferSizeOption = properties.get( "transfer_size", false );
+  blockSizeOption = properties.get_optional< uint16_t>( "block_size" );
   //! @todo use std::optional::transform when C++23 is available
   const auto timeoutOptionInt{
     properties.get_optional< std::chrono::seconds::rep >( "timeout" ) };
@@ -43,12 +43,12 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties() const
 
   if ( handleTransferSizeOption )
   {
-    properties.add( "transferSize", handleTransferSizeOption );
+    properties.add( "transfer_size", handleTransferSizeOption );
   }
 
   if ( blockSizeOption )
   {
-    properties.add( "blockSize", blockSizeOption );
+    properties.add( "block_size", blockSizeOption );
   }
 
   if ( timeoutOption )
@@ -61,28 +61,31 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties() const
 
 boost::program_options::options_description TftpOptionsConfiguration::options()
 {
-  boost::program_options::options_description options{ "TFTP Option Negotiation Options" };
+  boost::program_options::options_description options{
+    "TFTP Option Negotiation Options" };
 
   options.add_options()
   (
     "block-size-option",
-    boost::program_options::value( &blockSizeOption )->value_name( "block size" ),
-    "block size of transfers to use."
+    boost::program_options::value( &blockSizeOption )
+      ->value_name( "block-size" ),
+    "Negotiates the TFTP block size for transfers"
   )
   (
     "timeout-option",
-    boost::program_options::value< std::chrono::seconds::rep >()->value_name(
-      "timeout" )->notifier(
+    boost::program_options::value< std::chrono::seconds::rep >()
+      ->value_name( "timeout" )
+      ->notifier(
         [this]( const auto timeoutOptionInt )
           {
             timeoutOption = std::chrono::seconds{ timeoutOptionInt };
           } ),
-    "If set handles the timeout option negotiation (seconds)."
+    "Handles the TFTP timeout option negotiation with the given timeout in seconds"
   )
   (
     "handle-transfer-size-option",
     boost::program_options::bool_switch( &handleTransferSizeOption ),
-    "If set handles the transfer size option negotiation."
+    "Handles the TFTP transfer size option negotiation"
   );
 
   return options;

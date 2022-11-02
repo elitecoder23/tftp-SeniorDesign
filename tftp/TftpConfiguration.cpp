@@ -54,10 +54,12 @@ boost::property_tree::ptree TftpConfiguration::toProperties() const
   {
     properties.add( "timeout", tftpTimeout.count() );
   }
+
   if ( tftpRetries != DefaultTftpRetries )
   {
     properties.add( "retries", tftpRetries );
   }
+
   if ( tftpServerPort != defaultTftpPort )
   {
     properties.add( "port", tftpServerPort );
@@ -78,14 +80,28 @@ boost::program_options::options_description TftpConfiguration::options()
   options.add_options()
   (
     "server-port",
-    boost::program_options::value( &tftpServerPort )->default_value(
-      tftpServerPort )->value_name( "port" ),
-    "UDP port, where the server is listen."
+    boost::program_options::value( &tftpServerPort )
+      ->default_value( tftpServerPort )
+      ->value_name( "port" ),
+    "UDP port, where the server is listen"
+  )
+  (
+    "tftp-timeout",
+    boost::program_options::value< std::chrono::seconds::rep >()
+      ->default_value( DefaultTftpReceiveTimeout.count() )
+      ->value_name( "timeout" )
+      ->notifier(
+        [this]( const auto timeoutInt )
+        {
+          tftpTimeout = std::chrono::seconds{ timeoutInt };
+        } ),
+    "Default TFTP packet timeout in seconds, when no timeout option is negotiated"
   )
   (
     "dally",
     boost::program_options::bool_switch( &dally ),
-    "Dally Option"
+    "TFTP Dally Option"
+    " - Wait when last ACK has been sent to prevent aborts on last ACK miss"
   );
 
   return options;
