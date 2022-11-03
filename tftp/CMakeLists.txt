@@ -60,6 +60,8 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
 
+    # remove absolute paths from __FILE__ macro
+    $<$<CXX_COMPILER_ID:Clang>:-fmacro-prefix-map=${PROJECT_SOURCE_DIR}=.>
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
 
