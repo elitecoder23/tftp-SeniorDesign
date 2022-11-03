@@ -48,21 +48,15 @@ target_compile_definitions(
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
-target_compile_features( tftp PUBLIC cxx_std_20 )
-
-target_compile_definitions(
-  tftp
-
-  PRIVATE
-  # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-  $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
-
 target_compile_options(
   tftp
 
   PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:-W3>
 
+    # remove absolute paths from __FILE__ macro
+    $<$<CXX_COMPILER_ID:GNU>:-fmacro-prefix-map=${PROJECT_SOURCE_DIR}=.>
+    # warning level
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
 
