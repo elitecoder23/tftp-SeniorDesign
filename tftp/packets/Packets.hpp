@@ -51,6 +51,8 @@ class PacketHandler;
 
 struct TftpOptions;
 
+class PacketStatistic;
+
 /**
  * @brief TFTP Packet Types.
  *

@@ -10,11 +10,6 @@
  * @brief TFTP Client CLI Application.
  **/
 
-/**
- * @dir
- * @brief TFTP Client CLI Application.
- **/
-
 #include <tftp/Tftp.hpp>
 #include <tftp/TftpConfiguration.hpp>
 #include <tftp/TftpOptionsConfiguration.hpp>
@@ -29,6 +24,8 @@
 #include <tftp/client/Operation.hpp>
 #include <tftp/client/ReadOperationConfiguration.hpp>
 #include <tftp/client/WriteOperationConfiguration.hpp>
+
+#include <tftp/packets/PacketStatistic.hpp>
 
 #include <helper/Logger.hpp>
 #include <helper/BoostAsioProgramOptions.hpp>
@@ -186,6 +183,11 @@ int main( int argc, char * argv[] )
 
     // Start client and its operations
     ioContext.run();
+
+    // Print Packet Statistic
+    std::cout
+      << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
+      << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
   }
   catch ( const boost::program_options::error &e )
   {

@@ -14,9 +14,9 @@
 
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
-#include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/ErrorCodeDescription.hpp>
+#include <tftp/packets/PacketStatistic.hpp>
 
 #include <tftp/TftpOptionsConfiguration.hpp>
 #include <tftp/TftpLogger.hpp>
@@ -147,14 +147,19 @@ void OperationImpl::send( const Packets::Packet &packet )
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( packet);
 
-  // Reset the transmit-counter
-  transmitCounter = 1U;
-
-  // Encode raw packet
-  transmitPacket = static_cast< Packets::RawTftpPacket>( packet);
-
   try
   {
+    // Reset the transmit-counter
+    transmitCounter = 1U;
+
+    // Encode raw packet
+    transmitPacket = static_cast< Packets::RawTftpPacket>( packet );
+
+    // Update statistic
+    Packets::PacketStatistic::globalTransmit().packet(
+      packet.packetType(),
+      transmitPacket.size() );
+
     socket.send( boost::asio::buffer( transmitPacket ) );
   }
   catch ( const boost::system::system_error &err )
@@ -245,7 +250,7 @@ void OperationImpl::readRequestPacket(
     Packets::ErrorCode::IllegalTftpOperation,
     "RRQ not expected" };
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
   finished( TransferStatus::TransferError, std::move( errorPacket ) );
@@ -262,7 +267,7 @@ void OperationImpl::writeRequestPacket(
     Packets::ErrorCode::IllegalTftpOperation,
     "WRQ not expected" };
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
   finished( TransferStatus::TransferError, std::move( errorPacket) );
@@ -312,7 +317,7 @@ void OperationImpl::optionsAcknowledgementPacket(
     Packets::ErrorCode::IllegalTftpOperation,
     "OACK not expected" };
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
   finished( TransferStatus::TransferError, std::move( errorPacket ) );
@@ -331,7 +336,7 @@ void OperationImpl::invalidPacket(
     Packets::ErrorCode::IllegalTftpOperation,
     "Invalid packet not expected" };
 
-  send( errorPacket);
+  send( errorPacket );
 
   // Operation completed
   finished( TransferStatus::TransferError, std::move( errorPacket ) );
@@ -371,12 +376,12 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
   BOOST_LOG_FUNCTION()
 
   // handle abort
-  if ( boost::asio::error::operation_aborted == errorCode)
+  if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;
   }
 
-  if (errorCode)
+  if ( errorCode )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "timer error: " << errorCode.message();
@@ -386,7 +391,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
     return;
   }
 
-  if ( transmitCounter > tftpRetries)
+  if ( transmitCounter > tftpRetries )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "Retry counter exceeded ABORT";

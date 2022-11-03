@@ -21,6 +21,7 @@
 #include <tftp/packets/AcknowledgementPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/Options.hpp>
+#include <tftp/packets/PacketStatistic.hpp>
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
@@ -131,10 +132,16 @@ void TftpServerImpl::errorOperation(
 
     errSocket.open( remote.protocol() );
 
-    errSocket.connect( remote);
+    errSocket.connect( remote );
 
-    errSocket.send( boost::asio::buffer(
-      static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
+    auto rawPacket{ static_cast< Packets::RawTftpPacket>( errorPacket ) };
+
+    // Update statistic
+    Packets::PacketStatistic::globalTransmit().packet(
+      errorPacket.packetType(),
+      rawPacket.size() );
+
+    errSocket.send( boost::asio::buffer( rawPacket ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -166,8 +173,14 @@ void TftpServerImpl::errorOperation(
 
     errSocket.connect( remote );
 
-    errSocket.send( boost::asio::buffer(
-      static_cast< Packets::RawTftpPacket>( errorPacket ) ) );
+    auto rawPacket{ static_cast< Packets::RawTftpPacket>( errorPacket ) };
+
+    // Update statistic
+    Packets::PacketStatistic::globalTransmit().packet(
+      errorPacket.packetType(),
+      rawPacket.size() );
+
+    errSocket.send( boost::asio::buffer( rawPacket ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -205,7 +218,7 @@ void TftpServerImpl::receiveHandler(
   }
 
   // Check error
-  if ( errorCode)
+  if ( errorCode )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
       << "receive error: " + errorCode.message();

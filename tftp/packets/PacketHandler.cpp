@@ -20,6 +20,7 @@
 #include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/PacketException.hpp>
+#include <tftp/packets/PacketStatistic.hpp>
 
 #include <tftp/TftpLogger.hpp>
 
@@ -36,43 +37,72 @@ void PacketHandler::packet(
     case PacketType::ReadRequest:
       try
       {
-        readRequestPacket(
-          remote,
-          Packets::ReadRequestPacket{ rawPacket } );
+        readRequestPacket( remote, Packets::ReadRequestPacket{ rawPacket } );
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::ReadRequest,
+          rawPacket.size() );
       }
-      catch ( Packets::InvalidPacketException &e)
+      catch ( const Packets::InvalidPacketException &e )
       {
         BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Error decoding/ handling RRQ packet: " << e.what();
-        invalidPacket( remote, rawPacket);
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Invalid,
+          rawPacket.size() );
+
+        invalidPacket( remote, rawPacket );
       }
       break;
 
     case PacketType::WriteRequest:
       try
       {
-        writeRequestPacket(
-          remote,
-          Packets::WriteRequestPacket{ rawPacket});
+        writeRequestPacket( remote, Packets::WriteRequestPacket{ rawPacket } );
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::WriteRequest,
+          rawPacket.size() );
       }
-      catch ( Packets::InvalidPacketException &e)
+      catch ( const Packets::InvalidPacketException &e )
       {
-        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Error decoding/ handling WRQ packet: " << e.what();
-        invalidPacket( remote, rawPacket);
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Invalid,
+          rawPacket.size() );
+
+        invalidPacket( remote, rawPacket );
       }
       break;
 
     case PacketType::Data:
       try
       {
-        dataPacket( remote, Packets::DataPacket{ rawPacket});
+        dataPacket( remote, Packets::DataPacket{ rawPacket } );
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Data,
+          rawPacket.size() );
       }
-      catch ( Packets::InvalidPacketException &e)
+      catch ( const Packets::InvalidPacketException &e )
       {
-        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
-          << "Error decoding/ handling DATA packet: "<< e.what();
-        invalidPacket( remote, rawPacket);
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+          << "Error decoding/ handling DATA packet: " << e.what();
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Invalid,
+          rawPacket.size() );
+
+        invalidPacket( remote, rawPacket );
       }
       break;
 
@@ -81,26 +111,48 @@ void PacketHandler::packet(
       {
         acknowledgementPacket(
           remote,
-          Packets::AcknowledgementPacket{ rawPacket});
+          Packets::AcknowledgementPacket{ rawPacket } );
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Acknowledgement,
+          rawPacket.size() );
       }
-      catch ( Packets::InvalidPacketException &e)
+      catch ( const Packets::InvalidPacketException &e )
       {
-        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Error decoding/ handling ACK packet: " << e.what();
-        invalidPacket( remote, rawPacket);
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Invalid,
+          rawPacket.size() );
+
+        invalidPacket( remote, rawPacket );
       }
       break;
 
     case PacketType::Error:
       try
       {
-        errorPacket( remote, Packets::ErrorPacket{ rawPacket});
+        errorPacket( remote, Packets::ErrorPacket{ rawPacket } );
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Error,
+          rawPacket.size() );
       }
-      catch ( Packets::InvalidPacketException &e)
+      catch ( const Packets::InvalidPacketException &e )
       {
-        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Error decoding/ handling ERR packet: " << e.what();
-        invalidPacket( remote, rawPacket);
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Invalid,
+          rawPacket.size() );
+
+        invalidPacket( remote, rawPacket );
       }
       break;
 
@@ -109,18 +161,34 @@ void PacketHandler::packet(
       {
         optionsAcknowledgementPacket(
           remote,
-          Packets::OptionsAcknowledgementPacket{ rawPacket});
+          Packets::OptionsAcknowledgementPacket{ rawPacket } );
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::OptionsAcknowledgement,
+          rawPacket.size() );
       }
-      catch ( Packets::InvalidPacketException &e)
+      catch ( const Packets::InvalidPacketException &e )
       {
-        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+        BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
           << "Error decoding/ handling OACK packet: " << e.what();
-        invalidPacket( remote, rawPacket);
+
+        // Update statistic
+        PacketStatistic::globalReceive().packet(
+          PacketType::Invalid,
+          rawPacket.size() );
+
+        invalidPacket( remote, rawPacket );
       }
       break;
 
     default:
-      invalidPacket( remote, rawPacket);
+      // Update statistic
+      PacketStatistic::globalReceive().packet(
+        PacketType::Invalid,
+        rawPacket.size() );
+
+      invalidPacket( remote, rawPacket );
       break;
   }
 }

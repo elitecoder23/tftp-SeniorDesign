@@ -23,6 +23,8 @@
 
 #include <tftp/file/StreamFile.hpp>
 
+#include <tftp/packets/PacketStatistic.hpp>
+
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpConfiguration.hpp>
 #include <tftp/TftpOptionsConfiguration.hpp>
@@ -205,6 +207,11 @@ int main( int argc, char * argv[] )
     } );
 
     ioContext.run();
+
+    // Print Packet Statistic
+    std::cout
+      << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
+      << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
   }
   catch ( const boost::program_options::error &e )
   {
@@ -349,6 +356,10 @@ static void transmitFile(
       tftpOptionsConfiguration,
       []( const Tftp::TransferStatus transferStatus ) {
         std::cout << "Transfer Completed: " << transferStatus << "\n";
+        // Print Packet Statistic
+        std::cout
+          << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
+          << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
       },
       std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Transmit,
@@ -393,6 +404,10 @@ static void receiveFile(
       tftpOptionsConfiguration,
       []( const Tftp::TransferStatus transferStatus ) {
         std::cout << "Transfer Completed: " << transferStatus << "\n";
+        // Print Packet Statistic
+        std::cout
+          << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
+          << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
       },
       std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Receive,

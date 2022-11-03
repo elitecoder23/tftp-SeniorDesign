@@ -31,6 +31,10 @@ target_sources(
     PacketHandler.hpp
     PacketHandler.cpp
     Packets.hpp
+    PacketStatistic.hpp
+    PacketStatistic.cpp
+    PacketTypeDescription.hpp
+    PacketTypeDescription.cpp
     ReadRequestPacket.hpp
     ReadRequestPacket.cpp
     ReadWriteRequestPacket.hpp

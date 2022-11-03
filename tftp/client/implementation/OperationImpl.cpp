@@ -15,6 +15,7 @@
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorCodeDescription.hpp>
+#include <tftp/packets/PacketStatistic.hpp>
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
@@ -132,6 +133,11 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
     // Encode raw packet
     transmitPacket = static_cast< Packets::RawTftpPacket>( packet );
 
+    // Update statistic
+    Packets::PacketStatistic::globalTransmit().packet(
+      packet.packetType(),
+      transmitPacket.size() );
+
     // Send the packet to the remote server
     socket.send_to(
       boost::asio::buffer( transmitPacket ),
@@ -161,6 +167,11 @@ void OperationImpl::send( const Packets::Packet &packet )
 
     // Encode raw packet
     transmitPacket = static_cast< Packets::RawTftpPacket>( packet );
+
+    // Update statistic
+    Packets::PacketStatistic::globalTransmit().packet(
+      packet.packetType(),
+      transmitPacket.size() );
 
     // Send the packet to the remote server
     socket.send( boost::asio::buffer( transmitPacket ) );
@@ -421,13 +432,18 @@ void OperationImpl::receiveFirstHandler(
     try
     {
       // send error packet
-      Packets::ErrorPacket err{
+      const Packets::ErrorPacket err{
         Packets::ErrorCode::UnknownTransferId,
         "Packet from wrong source" };
 
-      socket.send_to(
-        boost::asio::buffer( static_cast< Packets::RawTftpPacket>( err ) ),
-        receiveEndpoint );
+      auto rawPacket{ static_cast< Packets::RawTftpPacket>( err ) };
+
+      // Update statistic
+      Packets::PacketStatistic::globalTransmit().packet(
+        err.packetType(),
+        rawPacket.size() );
+
+      socket.send_to( boost::asio::buffer( rawPacket ), receiveEndpoint );
     }
     catch ( const boost::system::system_error &err)
     {
