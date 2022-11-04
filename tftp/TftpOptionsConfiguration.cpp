@@ -37,21 +37,22 @@ void TftpOptionsConfiguration::fromProperties(
   }
 }
 
-boost::property_tree::ptree TftpOptionsConfiguration::toProperties() const
+boost::property_tree::ptree TftpOptionsConfiguration::toProperties(
+  const bool full ) const
 {
   boost::property_tree::ptree properties{};
 
-  if ( handleTransferSizeOption )
+  if ( full || handleTransferSizeOption )
   {
     properties.add( "transfer_size", handleTransferSizeOption );
   }
 
-  if ( blockSizeOption )
+  if ( full || blockSizeOption )
   {
     properties.add( "block_size", blockSizeOption );
   }
 
-  if ( timeoutOption )
+  if ( full || timeoutOption )
   {
     properties.add( "timeout", timeoutOption->count() );
   }

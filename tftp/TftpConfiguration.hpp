@@ -65,9 +65,14 @@ class TftpConfiguration
     /**
      * @brief Converts the configuration values to a Property Tree.
      *
+     * @param[in] full
+     *   If set to true, all options are added to the property tree, even if
+     *   defaulted.
+     *
      * @return Configuration as Property Tree.
      **/
-    [[nodiscard]] boost::property_tree::ptree toProperties() const;
+    [[nodiscard]] boost::property_tree::ptree toProperties(
+      bool full = false ) const;
 
     /**
      * @brief Returns an option description, which can be used to parse a

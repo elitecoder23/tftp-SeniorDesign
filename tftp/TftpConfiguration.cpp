@@ -46,26 +46,27 @@ void TftpConfiguration::fromProperties(
   dally = properties.get( "dally", false ) ;
 }
 
-boost::property_tree::ptree TftpConfiguration::toProperties() const
+boost::property_tree::ptree TftpConfiguration::toProperties(
+  const bool full ) const
 {
   boost::property_tree::ptree properties{};
 
-  if ( tftpTimeout != DefaultTftpReceiveTimeout )
+  if ( full || ( tftpTimeout != DefaultTftpReceiveTimeout ) )
   {
     properties.add( "timeout", tftpTimeout.count() );
   }
 
-  if ( tftpRetries != DefaultTftpRetries )
+  if ( full || ( tftpRetries != DefaultTftpRetries ) )
   {
     properties.add( "retries", tftpRetries );
   }
 
-  if ( tftpServerPort != defaultTftpPort )
+  if ( full || ( tftpServerPort != defaultTftpPort ) )
   {
     properties.add( "port", tftpServerPort );
   }
 
-  if ( dally )
+  if ( full || dally )
   {
     properties.add( "dally", dally );
   }
