@@ -29,6 +29,9 @@ namespace Tftp {
  *
  * Configuration can be load/ stored as Property Tree and Command Line
  * Parameters.
+ * TFTP Options are configured in a separate Configuration instance.
+ *
+ * @sa TftpOptionsConfiguration
  **/
 class TftpConfiguration
 {
@@ -97,7 +100,7 @@ class TftpConfiguration
     //! Default TFTP Port ( can be overridden by configuration)
     //! This value is used for loading and storing to determine the default
     //! value.
-    const uint16_t defaultTftpPort;
+    uint16_t defaultTftpPort;
 };
 
 }

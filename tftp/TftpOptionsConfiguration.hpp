@@ -35,6 +35,8 @@ namespace Tftp {
  * - block size option (RFC 2348)
  * - timeout option (RFC 2349)
  * - transfer size option (RFC 2349)
+ *
+ * @sa TftpConfiguration
  **/
 class TftpOptionsConfiguration
 {
