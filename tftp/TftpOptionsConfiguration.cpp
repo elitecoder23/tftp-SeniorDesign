@@ -54,9 +54,7 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties(
 
   if ( full || timeoutOption )
   {
-    properties.add(
-      "timeout",
-      timeoutOption.value_or( DefaultTftpReceiveTimeout ).count() );
+    properties.add( "timeout", timeoutOption );
   }
 
   return properties;
