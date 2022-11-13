@@ -140,6 +140,9 @@ enum class KnownOptions
 constexpr uint16_t BlockSizeOptionMin{ 8U };
 //! Maximum TFTP block size option as defined within RFC 2348
 constexpr uint16_t BlockSizeOptionMax{ 65464U };
+//! Default TFTP block size option when using plain Ethernet with IPv4.
+//! Ethernet MTU (1500), IPv4 Header (20), UDP Header (8), and TFTP Header (4)
+constexpr uint16_t BlockSizeOptionDefault{ 1468U }; // TFTP Header
 
 //! Minimum TFTP timeout option as defined within RFC 2349
 constexpr uint8_t TimeoutOptionMin{ 1U };

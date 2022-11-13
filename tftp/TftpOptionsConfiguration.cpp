@@ -12,6 +12,8 @@
 
 #include "TftpOptionsConfiguration.hpp"
 
+#include <tftp/packets/Packets.hpp>
+
 #include <boost/property_tree/ptree.hpp>
 
 namespace Tftp {
@@ -54,7 +56,11 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties(
 
   if ( full || timeoutOption )
   {
-    properties.add( "timeout", timeoutOption );
+    properties.add(
+      "timeout",
+      timeoutOption.has_value() ?
+        boost::optional< std::chrono::seconds::rep >{ timeoutOption->count() } :
+        boost::none );
   }
 
   return properties;
@@ -69,13 +75,15 @@ boost::program_options::options_description TftpOptionsConfiguration::options()
   (
     "block-size-option",
     boost::program_options::value( &blockSizeOption )
-      ->value_name( "block-size" ),
+      ->value_name( "block-size" )
+      ->implicit_value( Packets::BlockSizeOptionDefault ),
     "Negotiates the TFTP block size for transfers"
   )
   (
     "timeout-option",
     boost::program_options::value< std::chrono::seconds::rep >()
       ->value_name( "timeout" )
+      ->implicit_value( DefaultTftpReceiveTimeout.count() )
       ->notifier(
         [this]( const auto timeoutOptionInt )
           {
