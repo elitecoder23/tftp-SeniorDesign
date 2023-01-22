@@ -84,8 +84,8 @@ target_sources(
   tftp_test
 
   PRIVATE
-    TftpOptionsConfigurationTest.cpp
-    VersionTest.cpp )
+    test/TftpOptionsConfigurationTest.cpp
+    test/VersionTest.cpp )
 
 target_compile_features( tftp_test PUBLIC cxx_std_20 )
 
@@ -134,7 +134,7 @@ install(
   COMPONENT development
   FILES_MATCHING
     PATTERN "*.hpp"
-    PATTERN "*Test.*" EXCLUDE
+    PATTERN "test" EXCLUDE
     PATTERN "implementation" EXCLUDE )
 
 install(

@@ -48,13 +48,13 @@ target_sources(
   tftp_test
 
   PRIVATE
-    AcknowledgementPacketTest.cpp
-    BlockNumberTest.cpp
-    DataPacketTest.cpp
-    ErrorPacketTest.cpp
-    OptionsAcknowledgementPacketTest.cpp
-    OptionsTest.cpp
-    ReadRequestPacketTest.cpp
-    ReadWriteRequestPacketTest.cpp
-    TftpOptionsTest.cpp
-    WriteRequestPacketTest.cpp )
+    test/AcknowledgementPacketTest.cpp
+    test/BlockNumberTest.cpp
+    test/DataPacketTest.cpp
+    test/ErrorPacketTest.cpp
+    test/OptionsAcknowledgementPacketTest.cpp
+    test/OptionsTest.cpp
+    test/ReadRequestPacketTest.cpp
+    test/ReadWriteRequestPacketTest.cpp
+    test/TftpOptionsTest.cpp
+    test/WriteRequestPacketTest.cpp )
