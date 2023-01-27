@@ -4,19 +4,23 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.25 )
 
 target_sources(
   tftp
 
+  PUBLIC
+    FILE_SET HEADERS
+      FILES
+        File.hpp
+        MemoryFile.hpp
+        NullSinkFile.hpp
+        StreamFile.hpp
+        TftpFile.hpp
+
   PRIVATE
-    File.hpp
-    TftpFile.hpp
-    MemoryFile.hpp
     MemoryFile.cpp
-    StreamFile.hpp
     StreamFile.cpp
-    NullSinkFile.hpp
     NullSinkFile.cpp )
 
 #target_sources( tftp_test PRIVATE)

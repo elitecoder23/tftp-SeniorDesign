@@ -4,29 +4,31 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.25 )
 
 target_sources(
   tftp
 
+  PUBLIC
+    FILE_SET HEADERS
+      FILES
+        Client.hpp
+        Operation.hpp
+        ReadOperationConfiguration.hpp
+        TftpClient.hpp
+        WriteOperationConfiguration.hpp
+
   PRIVATE
-    Operation.hpp
-    ReadOperationConfiguration.hpp
     ReadOperationConfiguration.cpp
-    Server.hpp
-    ServerConfiguration.hpp
-    ServerConfiguration.cpp
-    TftpServer.hpp
-    TftpServer.cpp
-    WriteOperationConfiguration.hpp
+    TftpClient.cpp
     WriteOperationConfiguration.cpp
 
     implementation/OperationImpl.hpp
     implementation/OperationImpl.cpp
     implementation/ReadOperationImpl.hpp
     implementation/ReadOperationImpl.cpp
-    implementation/TftpServerImpl.hpp
-    implementation/TftpServerImpl.cpp
+    implementation/TftpClientImpl.hpp
+    implementation/TftpClientImpl.cpp
     implementation/WriteOperationImpl.hpp
     implementation/WriteOperationImpl.cpp )
 

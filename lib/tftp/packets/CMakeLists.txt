@@ -4,44 +4,48 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.25 )
 
 target_sources(
   tftp
 
+  PUBLIC
+    FILE_SET HEADERS
+      FILES
+        AcknowledgementPacket.hpp
+        BlockNumber.hpp
+        DataPacket.hpp
+        ErrorCodeDescription.hpp
+        ErrorPacket.hpp
+        Options.hpp
+        Options.ipp
+        OptionsAcknowledgementPacket.hpp
+        Packet.hpp
+        PacketException.hpp
+        PacketHandler.hpp
+        Packets.hpp
+        PacketStatistic.hpp
+        PacketTypeDescription.hpp
+        ReadRequestPacket.hpp
+        ReadWriteRequestPacket.hpp
+        TftpOptions.hpp
+        WriteRequestPacket.hpp
+
   PRIVATE
-    AcknowledgementPacket.hpp
     AcknowledgementPacket.cpp
-    BlockNumber.hpp
     BlockNumber.cpp
-    DataPacket.hpp
     DataPacket.cpp
-    ErrorCodeDescription.hpp
     ErrorCodeDescription.cpp
-    ErrorPacket.hpp
     ErrorPacket.cpp
-    Options.hpp
-    Options.ipp
     Options.cpp
-    OptionsAcknowledgementPacket.hpp
     OptionsAcknowledgementPacket.cpp
-    Packet.hpp
     Packet.cpp
-    PacketException.hpp
-    PacketHandler.hpp
     PacketHandler.cpp
-    Packets.hpp
-    PacketStatistic.hpp
     PacketStatistic.cpp
-    PacketTypeDescription.hpp
     PacketTypeDescription.cpp
-    ReadRequestPacket.hpp
     ReadRequestPacket.cpp
-    ReadWriteRequestPacket.hpp
     ReadWriteRequestPacket.cpp
-    TftpOptions.hpp
     TftpOptions.cpp
-    WriteRequestPacket.hpp
     WriteRequestPacket.cpp )
 
 target_sources(

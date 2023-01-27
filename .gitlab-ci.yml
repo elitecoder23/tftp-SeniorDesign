@@ -13,8 +13,7 @@ default:
   stage: build
   script:
     - cmake --preset ${CMAKE_PRESET}
-    - cmake --build --preset ${CMAKE_PRESET}
-    - cmake --build --preset ${CMAKE_PRESET} --target doc
+    - cmake --build --preset ${CMAKE_PRESET} --target all doc
     - ctest --preset ${CMAKE_PRESET}
 
 GCC Static Debug:

@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.25 )
 
 find_package( Doxygen )
 find_package( Boost )
@@ -43,23 +43,22 @@ set(
 set(
   DOXYGEN_STRIP_FROM_PATH
 
-  ${helper_SOURCE_DIR}
-  ${helper_SOURCE_DIR}/application
-  ${tftp_SOURCE_DIR}
-  ${tftp_SOURCE_DIR}/application )
+  ${helper_SOURCE_DIR}/lib
+  ${helper_SOURCE_DIR}/app
+  ${tftp_SOURCE_DIR}/lib
+  ${tftp_SOURCE_DIR}/app )
 
 set(
   DOXYGEN_INCLUDE_PATH
 
   ${Boost_INCLUDE_DIRS}
-  ${helper_SOURCE_DIR}
-  ${tftp_SOURCE_DIR} )
+  ${helper_SOURCE_DIR}/lib
+  ${tftp_SOURCE_DIR}/lib )
 
 doxygen_add_docs(
   tftp_api_doc
 
   ../Mainpage.md
-
   ${HELPER_DOC_PATHS}
   ${TFTP_DOC_PATHS} )
 

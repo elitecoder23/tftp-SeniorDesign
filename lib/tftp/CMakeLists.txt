@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.25 )
 
 find_package( Boost REQUIRED COMPONENTS program_options )
 find_package( fmt REQUIRED )
@@ -17,27 +17,30 @@ add_library( tftp )
 target_sources(
   tftp
 
-  PRIVATE
-    DataHandler.hpp
-    ReceiveDataHandler.hpp
-    RequestTypeDescription.hpp
-    RequestTypeDescription.cpp
-    Tftp.hpp
-    TftpConfiguration.hpp
-    TftpConfiguration.cpp
-    TftpException.hpp
-    TftpLogger.hpp
-    TftpOptionsConfiguration.hpp
-    TftpOptionsConfiguration.cpp
-    TransferStatusDescription.hpp
-    TransferStatusDescription.cpp
-    TransmitDataHandler.hpp
-    Version.hpp
-    ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp )
+  PUBLIC
+    FILE_SET HEADERS
+      BASE_DIRS
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
+        ${CMAKE_CURRENT_BINARY_DIR}/..
+      FILES
+        DataHandler.hpp
+        ReceiveDataHandler.hpp
+        RequestTypeDescription.hpp
+        Tftp.hpp
+        TftpConfiguration.hpp
+        TftpException.hpp
+        TftpLogger.hpp
+        TftpOptionsConfiguration.hpp
+        TransferStatusDescription.hpp
+        TransmitDataHandler.hpp
+        Version.hpp
 
-target_include_directories(
-  tftp
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..> )
+  PRIVATE
+    RequestTypeDescription.cpp
+    TftpConfiguration.cpp
+    TftpOptionsConfiguration.cpp
+    TransferStatusDescription.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp )
 
 target_compile_features( tftp PUBLIC cxx_std_20 )
 
@@ -121,21 +124,14 @@ set_property(
   APPEND
   PROPERTY DOC_PATHS ${CMAKE_CURRENT_SOURCE_DIR} )
 
+
 install(
   TARGETS tftp
   RUNTIME_DEPENDENCY_SET runtime-libs
   EXPORT tftp-config
   COMPONENT runtime
-  ARCHIVE COMPONENT development )
-
-install(
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  TYPE INCLUDE
-  COMPONENT development
-  FILES_MATCHING
-    PATTERN "*.hpp"
-    PATTERN "test" EXCLUDE
-    PATTERN "implementation" EXCLUDE )
+  ARCHIVE COMPONENT development
+  FILE_SET HEADERS COMPONENT development )
 
 install(
   EXPORT tftp-config

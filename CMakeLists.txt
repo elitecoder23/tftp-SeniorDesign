@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.25 )
 
 project(
   tftp
@@ -70,11 +70,10 @@ endif()
 
 FetchContent_MakeAvailable( helper )
 
+add_subdirectory( lib )
+add_subdirectory( app )
+add_subdirectory( doc )
 
-add_subdirectory( tftp )
-add_subdirectory( application )
-
-add_subdirectory( tftp_doc )
 
 install(
   FILES LICENSE
