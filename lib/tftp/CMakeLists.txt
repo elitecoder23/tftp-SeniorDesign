@@ -21,7 +21,7 @@ target_sources(
     FILE_SET HEADERS
       BASE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/..
-        ${CMAKE_CURRENT_BINARY_DIR}/..
+        #${CMAKE_CURRENT_BINARY_DIR}/..
       FILES
         DataHandler.hpp
         ReceiveDataHandler.hpp
