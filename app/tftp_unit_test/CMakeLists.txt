@@ -26,4 +26,7 @@ set_property(
   APPEND
   PROPERTY DOC_PATHS ${CMAKE_CURRENT_SOURCE_DIR} )
 
-install( TARGETS tftp_unit_test COMPONENT runtime )
+install(
+  TARGETS tftp_unit_test
+  RUNTIME_DEPENDENCY_SET tftp-runtime-deps
+  COMPONENT test )

@@ -38,4 +38,7 @@ set_property(
   APPEND
   PROPERTY DOC_PATHS ${CMAKE_CURRENT_SOURCE_DIR} )
 
-install( TARGETS tftp_server COMPONENT runtime )
+install(
+  TARGETS tftp_server
+  RUNTIME_DEPENDENCY_SET tftp-runtime-deps
+  COMPONENT runtime )

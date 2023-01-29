@@ -127,7 +127,7 @@ set_property(
 
 install(
   TARGETS tftp
-  RUNTIME_DEPENDENCY_SET runtime-libs
+  RUNTIME_DEPENDENCY_SET tftp-runtime-deps
   EXPORT tftp-config
   COMPONENT runtime
   ARCHIVE COMPONENT development
