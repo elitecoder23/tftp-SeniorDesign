@@ -8,7 +8,7 @@ cmake_minimum_required( VERSION 3.25 )
 
 project(
   tftp
-  VERSION 1.0.0.0
+  VERSION 0.0.0.0
   DESCRIPTION "TFTP Protocol Library and Applications"
   HOMEPAGE_URL "https://git.thomas-vogt.de/thomas-vogt/tftp" )
 
