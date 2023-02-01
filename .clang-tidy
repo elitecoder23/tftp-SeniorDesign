@@ -1,13 +1,13 @@
 ---
 Checks: |
- clang-diagnostic-*,
- clang-analyzer-*,
- bugprone-*,
- -bugprone-unchecked-optional-access,
- -bugprone-easily-swappable-parameters,
- readability-inconsistent-declaration-parameter-name,
- -google-default-arguments,
- -llvmlibc-*
+  clang-diagnostic-*,
+  clang-analyzer-*,
+  bugprone-*,
+  -bugprone-unchecked-optional-access,
+  -bugprone-easily-swappable-parameters,
+  readability-inconsistent-declaration-parameter-name,
+  -google-default-arguments,
+  -llvmlibc-*
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false
