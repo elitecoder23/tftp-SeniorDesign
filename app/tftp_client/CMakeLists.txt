@@ -19,6 +19,25 @@ add_executable( tftp_client )
 
 target_sources( tftp_client PRIVATE tftp_client.cpp )
 
+target_compile_definitions(
+  tftp_client
+
+  PRIVATE
+    # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
+    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
+
+target_compile_options(
+  tftp_client
+
+  PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:-W3>
+
+    $<$<CXX_COMPILER_ID:GNU>:-Wall>
+    $<$<CXX_COMPILER_ID:GNU>:-Wextra>
+
+    $<$<CXX_COMPILER_ID:Clang>:-Wall>
+    $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
+
 target_link_libraries(
   tftp_client
 
@@ -34,13 +53,6 @@ target_link_libraries(
 
     # Windows Socket must be explicitly linked in MinGW
     $<$<PLATFORM_ID:Windows>:wsock32 ws2_32> )
-
-target_compile_definitions(
-  tftp_client
-
-  PRIVATE
-    # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
-    $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )
 
 set_property(
   DIRECTORY ${PROJECT_SOURCE_DIR}
