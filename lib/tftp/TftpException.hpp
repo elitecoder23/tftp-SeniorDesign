@@ -19,9 +19,10 @@
 #include <tftp/packets/Packets.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
-#include <helper/Exception.hpp>
+#include <boost/exception/exception.hpp>
+#include <boost/exception/error_info.hpp>
 
-#include <string>
+#include <exception>
 
 namespace Tftp {
 

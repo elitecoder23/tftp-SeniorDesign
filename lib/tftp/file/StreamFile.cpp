@@ -14,6 +14,11 @@
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
+
+#include <helper/Exception.hpp>
+
+#include <boost/exception/all.hpp>
+
 #include <utility>
 
 namespace Tftp::File {

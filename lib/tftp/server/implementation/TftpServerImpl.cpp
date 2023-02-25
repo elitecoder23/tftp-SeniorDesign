@@ -26,6 +26,10 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
 
+#include <helper/Exception.hpp>
+
+#include <boost/exception/all.hpp>
+
 #include <boost/bind/bind.hpp>
 
 #include <cstdint>

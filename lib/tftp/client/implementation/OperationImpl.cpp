@@ -21,6 +21,9 @@
 #include <tftp/TftpLogger.hpp>
 
 #include <helper/SafeCast.hpp>
+#include <helper/Exception.hpp>
+
+#include <boost/exception/all.hpp>
 
 #include <boost/bind/bind.hpp>
 

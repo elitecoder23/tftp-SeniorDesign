@@ -14,6 +14,10 @@
 
 #include <tftp/packets/PacketException.hpp>
 
+#include <helper/Exception.hpp>
+
+#include <boost/exception/all.hpp>
+
 namespace Tftp::Packets {
 
 std::string Options_toString( const Options &options )

@@ -16,11 +16,14 @@
 
 #include <tftp/TftpLogger.hpp>
 
-#include <helper/Endianess.hpp>
+#include <helper/Endianness.hpp>
+#include <helper/Exception.hpp>
+
+#include <boost/exception/all.hpp>
 
 namespace Tftp::Packets {
 
-PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket) noexcept
+PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket ) noexcept
 {
   // check minimum data size.
   if ( rawPacket.size() < HeaderSize )

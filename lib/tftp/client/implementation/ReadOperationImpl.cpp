@@ -24,6 +24,9 @@
 #include <tftp/ReceiveDataHandler.hpp>
 
 #include <helper/Dump.hpp>
+#include <helper/Exception.hpp>
+
+#include <boost/exception/all.hpp>
 
 #include <utility>
 

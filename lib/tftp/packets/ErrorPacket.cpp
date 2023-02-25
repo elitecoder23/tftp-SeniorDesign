@@ -15,7 +15,10 @@
 #include <tftp/packets/PacketException.hpp>
 #include <tftp/packets/ErrorCodeDescription.hpp>
 
-#include <helper/Endianess.hpp>
+#include <helper/Endianness.hpp>
+#include <helper/Exception.hpp>
+
+#include <boost/exception/all.hpp>
 
 #include <fmt/format.h>
 

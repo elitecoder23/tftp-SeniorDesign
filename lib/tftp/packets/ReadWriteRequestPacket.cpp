@@ -15,7 +15,10 @@
 #include <tftp/packets/PacketException.hpp>
 #include <tftp/packets/Options.hpp>
 
-#include <helper/Endianess.hpp>
+#include <helper/Endianness.hpp>
+#include <helper/Exception.hpp>
+
+#include <boost/exception/all.hpp>
 
 #include <fmt/format.h>
 
@@ -28,13 +31,15 @@ std::string_view ReadWriteRequestPacket::decodeMode(
 {
   switch ( mode )
   {
-    case TransferMode::OCTET:
+    using enum TransferMode;
+
+    case OCTET:
       return "OCTET";
 
-    case TransferMode::NETASCII:
+    case NETASCII:
       return "NETASCII";
 
-    case TransferMode::MAIL:
+    case MAIL:
       return "MAIL";
 
     default:
@@ -142,11 +147,11 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
 
 ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
-  ConstRawTftpPacketSpan rawPacket ):
+  ConstRawTftpPacketSpan rawPacket ) :
   Packet{ packetType, rawPacket },
   modeV{}
 {
-  switch (packetType)
+  switch ( packetType )
   {
     case PacketType::ReadRequest:
     case PacketType::WriteRequest:
@@ -159,18 +164,18 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
       /* no break - because BOOST_THROW_EXCEPTION throws */
   }
 
-  decodeBody( rawPacket);
+  decodeBody( rawPacket );
 }
 
-void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
+void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
 {
-  auto packetIt{ rawPacket.begin() + HeaderSize};
+  auto packetIt{ rawPacket.begin() + HeaderSize };
 
   // check size
-  if ( rawPacket.size() <= HeaderSize)
+  if ( rawPacket.size() <= HeaderSize )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "Invalid packet size of RRQ/WRQ packet"));
+      << Helper::AdditionalInfo{ "Invalid packet size of RRQ/WRQ packet" } );
   }
 
   // check terminating 0 character
@@ -183,10 +188,10 @@ void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket)
   // filename
   const auto filenameEnd{ std::find( packetIt, rawPacket.end(), 0 ) };
 
-  if ( filenameEnd == rawPacket.end())
+  if ( filenameEnd == rawPacket.end() )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
-      << Helper::AdditionalInfo( "No 0-termination for filename found"));
+      << Helper::AdditionalInfo{ "No 0-termination for filename found" } );
   }
   filenameV.assign( packetIt, filenameEnd);
   packetIt = filenameEnd + 1U;
