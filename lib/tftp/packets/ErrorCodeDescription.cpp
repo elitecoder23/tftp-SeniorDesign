@@ -31,7 +31,7 @@ ErrorCodeDescription::ErrorCodeDescription():
 {
 }
 
-std::ostream& operator<<( std::ostream& stream, const ErrorCode errorCode)
+std::ostream& operator<<( std::ostream& stream, const ErrorCode errorCode )
 {
   return (stream << ErrorCodeDescription::instance().name( errorCode ) );
 }

@@ -26,20 +26,23 @@ RequestTypeDescription::RequestTypeDescription() :
 {
 }
 
-std::istream& operator>>( std::istream &stream, RequestType& requestType )
+std::istream& operator>>( std::istream &stream, RequestType &requestType )
 {
   std::string requestTypeStr{};
 
   stream >> requestTypeStr;
 
   // decode Request Type
-  requestType = RequestTypeDescription::instance().enumeration( requestTypeStr );
+  const auto optionalRequestType{
+    RequestTypeDescription::instance().enumeration( requestTypeStr ) };
 
-  if ( RequestType::Invalid == requestType)
+  if ( !optionalRequestType )
   {
     BOOST_THROW_EXCEPTION(
       boost::program_options::invalid_option_value{ requestTypeStr } );
   }
+
+  requestType = *optionalRequestType;
 
   return stream;
 }

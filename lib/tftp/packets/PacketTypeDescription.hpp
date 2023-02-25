@@ -22,10 +22,8 @@
 namespace Tftp::Packets {
 
 //! Description of TFTP Error Codes (ErrorCode)
-class PacketTypeDescription : public Helper::Description<
-  PacketTypeDescription,
-  PacketType,
-  PacketType::Invalid >
+class PacketTypeDescription :
+  public Helper::Description< PacketTypeDescription, PacketType >
 {
   public:
     //! Initialises the Instance

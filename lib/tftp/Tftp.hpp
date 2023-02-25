@@ -54,28 +54,21 @@ enum class TftpVersion
   //! TFTP Version 2 (RFC1350)
   Version2,
   //! TFTP Version 2 with Options Extension (RFC1350 + RFC2347)
-  Version2WithOptionsExtension,
-
-  //! Invalid entry
-  Invalid
+  Version2WithOptionsExtension
 };
 
 //! TFTP Role Enumeration
 enum class Role
 {
   Client, //!< TFTP Client Role
-  Server, //!< TFTP Server Role
-
-  Invalid //!< Invalid Value
+  Server  //!< TFTP Server Role
 };
 
 //! TFTP Request Type
 enum class RequestType
 {
   Read,
-  Write,
-
-  Invalid
+  Write
 };
 
 //! @brief Phases of TFTP Transfer
@@ -109,9 +102,6 @@ enum class TransferStatus
   TransferError,
   //! User (own side) requested abort (gracefully or not gracefully)
   Aborted,
-
-  //! Invalid value
-  Invalid
 };
 
 //! Default TFTP Port.

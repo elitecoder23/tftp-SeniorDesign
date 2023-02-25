@@ -24,8 +24,7 @@ namespace Tftp {
 //! Description of TFTP Transfer Status
 class TransferStatusDescription : public Helper::Description<
   TransferStatusDescription,
-  TransferStatus,
-  TransferStatus::Invalid >
+  TransferStatus >
 {
   public:
     //! Initialises the Instance

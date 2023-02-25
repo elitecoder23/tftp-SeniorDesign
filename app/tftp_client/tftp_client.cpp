@@ -53,7 +53,7 @@ int main( int argc, char * argv[] );
 
 int main( int argc, char * argv[] )
 {
-  Tftp::RequestType requestType{ Tftp::RequestType::Invalid };
+  Tftp::RequestType requestType{};
   std::filesystem::path localFile{};
   std::string remoteFile{};
   boost::asio::ip::address address{};
@@ -107,7 +107,7 @@ int main( int argc, char * argv[] )
         optionsDescription),
       options );
 
-    if ( options.count( "help" ) != 0)
+    if ( options.count( "help" ) != 0 )
     {
       std::cout << optionsDescription << "\n";
       return EXIT_FAILURE;

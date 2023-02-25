@@ -20,10 +20,8 @@
 namespace Tftp {
 
 //! Description of Request Type (RequestType)
-class RequestTypeDescription : public Helper::Description<
-  RequestTypeDescription,
-  RequestType,
-  RequestType::Invalid >
+class RequestTypeDescription :
+  public Helper::Description< RequestTypeDescription, RequestType >
 {
   public:
     //! Initialises the Instance.
@@ -40,7 +38,7 @@ class RequestTypeDescription : public Helper::Description<
  *
  * @return @p stream.
  **/
-std::istream& operator>>( std::istream &stream, RequestType& requestType );
+std::istream& operator>>( std::istream &stream, RequestType &requestType );
 
 }
 
