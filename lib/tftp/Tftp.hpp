@@ -19,7 +19,6 @@
 #define TFTP_TFTP_HPP
 
 #include <memory>
-#include <functional>
 #include <cstdint>
 #include <chrono>
 
@@ -125,9 +124,6 @@ class TransmitDataHandler;
 using ReceiveDataHandlerPtr = std::shared_ptr< ReceiveDataHandler >;
 //! Transmit Data Handler Pointer
 using TransmitDataHandlerPtr =  std::shared_ptr< TransmitDataHandler >;
-
-//! Operation Completed handler, which indicates, if the transfer was successful
-using OperationCompletedHandler = std::function< void( TransferStatus ) >;
 
 class Version;
 

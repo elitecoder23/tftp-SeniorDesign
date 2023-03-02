@@ -100,6 +100,19 @@ using ReceivedTftpRequestHandler =
     Packets::TftpOptions clientOptions,
     Packets::Options additionalClientOptions ) >;
 
+/**
+ * @brief Operation Completed handler, which indicates, if the transfer is
+ *   completed.
+ *
+ * @param[in,out] operation
+ *   Operation which informs the callback.
+ * @param[in] transferStatus
+ *   Status of operation.
+ **/
+using OperationCompletedHandler = std::function< void(
+  const OperationPtr &operation,
+  TransferStatus transferStatus ) >;
+
 }
 
 #endif

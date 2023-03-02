@@ -119,6 +119,10 @@ static void receiveFile(
   std::filesystem::path filename,
   Tftp::Packets::TftpOptions clientOptions );
 
+static void operationCompleted(
+  const Tftp::Server::OperationPtr &operation,
+  Tftp::TransferStatus transferStatus );
+
 //! TFTP Server Base Directory
 static std::filesystem::path baseDir{};
 
@@ -354,13 +358,7 @@ static void transmitFile(
     Tftp::Server::ReadOperationConfiguration{
       tftpConfiguration,
       tftpOptionsConfiguration,
-      []( const Tftp::TransferStatus transferStatus ) {
-        std::cout << "Transfer Completed: " << transferStatus << "\n";
-        // Print Packet Statistic
-        std::cout
-          << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
-          << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
-      },
+      std::bind_front( &operationCompleted ),
       std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Transmit,
         std::move( filename ),
@@ -402,13 +400,7 @@ static void receiveFile(
     Tftp::Server::WriteOperationConfiguration{
       tftpConfiguration,
       tftpOptionsConfiguration,
-      []( const Tftp::TransferStatus transferStatus ) {
-        std::cout << "Transfer Completed: " << transferStatus << "\n";
-        // Print Packet Statistic
-        std::cout
-          << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
-          << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
-      },
+      std::bind_front( &operationCompleted ),
       std::make_shared< Tftp::File::StreamFile >(
         Tftp::File::TftpFile::Operation::Receive,
         std::move( filename ) ),
@@ -417,4 +409,15 @@ static void receiveFile(
       {} /* no additional options */ } ) };
 
   operation->start();
+}
+
+static void operationCompleted(
+  [[maybe_unused]] const Tftp::Server::OperationPtr &operation,
+  Tftp::TransferStatus transferStatus )
+{
+  std::cout << "Transfer Completed: " << transferStatus << "\n";
+  // Print Packet Statistic
+  std::cout
+    << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
+    << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
 }

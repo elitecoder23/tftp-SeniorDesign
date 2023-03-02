@@ -139,7 +139,7 @@ void OperationImpl::finished(
 
   if ( completionHandler )
   {
-    completionHandler( status );
+    completionHandler( shared_from_this(), status );
   }
 }
 

@@ -51,6 +51,15 @@
  **/
 int main( int argc, char * argv[] );
 
+static bool optionNegotiation(
+  const Tftp::Client::OperationPtr &operation,
+  const Tftp::Packets::Options &serverOptions );
+
+static void operationCompleted(
+  boost::asio::io_context &ioContext,
+  const Tftp::Client::OperationPtr &operation,
+  Tftp::TransferStatus transferStatus );
+
 int main( int argc, char * argv[] )
 {
   Tftp::RequestType requestType{};
@@ -122,12 +131,6 @@ int main( int argc, char * argv[] )
 
     Tftp::Client::OperationPtr tftpOperation{};
 
-    auto optionNegotiation = [](
-      [[maybe_unused]] const Tftp::Packets::Options &serverOptions )
-    {
-      return true;
-    };
-
     switch ( requestType )
     {
       case Tftp::RequestType::Read:
@@ -135,11 +138,8 @@ int main( int argc, char * argv[] )
           Tftp::Client::ReadOperationConfiguration{
             tftpConfiguration,
             tftpOptionsConfiguration,
-            optionNegotiation,
-            {
-              [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
-                ioContext.stop();
-              } },
+            std::bind_front( &optionNegotiation ),
+            std::bind_front( &operationCompleted, std::ref( ioContext ) ),
             std::make_shared< Tftp::File::StreamFile >(
               Tftp::File::TftpFile::Operation::Receive,
               localFile ),
@@ -156,11 +156,8 @@ int main( int argc, char * argv[] )
           Tftp::Client::WriteOperationConfiguration{
             tftpConfiguration,
             tftpOptionsConfiguration,
-            optionNegotiation,
-            {
-              [ &ioContext ]( [[maybe_unused]] Tftp::TransferStatus status ){
-                ioContext.stop();
-              } },
+            std::bind_front( &optionNegotiation ),
+            std::bind_front( &operationCompleted, std::ref( ioContext ) ),
             std::make_shared< Tftp::File::StreamFile >(
               Tftp::File::TftpFile::Operation::Transmit,
               localFile,
@@ -207,4 +204,19 @@ int main( int argc, char * argv[] )
   }
 
   return EXIT_SUCCESS;
+}
+
+static bool optionNegotiation(
+  [[maybe_unused]] const Tftp::Client::OperationPtr &operation,
+  [[maybe_unused]] const Tftp::Packets::Options &serverOptions )
+{
+  return true;
+}
+
+static void operationCompleted(
+  boost::asio::io_context &ioContext,
+  [[maybe_unused]] const Tftp::Client::OperationPtr &operation,
+  [[maybe_unused]] Tftp::TransferStatus transferStatus )
+{
+  ioContext.stop();
 }

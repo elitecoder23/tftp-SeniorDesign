@@ -216,7 +216,9 @@ void WriteOperationImpl::acknowledgementPacket(
   {
     // If empty options is returned - Abort Operation
     Packets::Options options{};
-    if ( !configurationV.optionNegotiationHandler( options ) )
+    if ( !configurationV.optionNegotiationHandler(
+      shared_from_this(),
+      options ) )
     {
       BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
         << "Option Negotiation failed";
@@ -485,7 +487,9 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   }
 
   // Perform additional Option Negotiation
-  if ( !configurationV.optionNegotiationHandler( remoteOptions ) )
+  if ( !configurationV.optionNegotiationHandler(
+    shared_from_this(),
+    remoteOptions ) )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Option negotiation failed";
