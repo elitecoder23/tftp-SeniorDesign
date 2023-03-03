@@ -28,8 +28,6 @@
 
 namespace Tftp::Server {
 
-class TftpServerInternal;
-
 /**
  * @brief TFTP %Server %Operation.
  *
@@ -37,7 +35,7 @@ class TftpServerInternal;
  * (Read Operation, Write Operation).
  **/
 class OperationImpl:
-  public std::enable_shared_from_this< OperationImpl >,
+  public std::enable_shared_from_this< Operation >,
   public Operation,
   protected Packets::PacketHandler
 {

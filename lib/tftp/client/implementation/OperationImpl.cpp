@@ -199,9 +199,7 @@ void OperationImpl::receiveFirst()
     socket.async_receive_from(
       boost::asio::buffer( receivePacket ),
       receiveEndpoint,
-      std::bind_front(
-        &OperationImpl::receiveFirstHandler,
-        shared_from_this() ) );
+      std::bind_front( &OperationImpl::receiveFirstHandler, this ) );
 
     // Set receive timeout
     timer.expires_from_now( receiveTimeoutV );
@@ -209,7 +207,7 @@ void OperationImpl::receiveFirst()
     // start waiting for receive timeout
     timer.async_wait( std::bind_front(
       &OperationImpl::timeoutFirstHandler,
-      shared_from_this() ) );
+      this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -229,17 +227,13 @@ void OperationImpl::receive()
     // start receive operation
     socket.async_receive(
       boost::asio::buffer( receivePacket ),
-      std::bind_front(
-        &OperationImpl::receiveHandler,
-        shared_from_this() ) );
+      std::bind_front( &OperationImpl::receiveHandler, this ) );
 
     // set receive timeout
     timer.expires_from_now( receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( std::bind_front(
-      &OperationImpl::timeoutHandler,
-      shared_from_this() ) );
+    timer.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -259,17 +253,14 @@ void OperationImpl::receiveDally()
     // start receive operation
     socket.async_receive(
       boost::asio::buffer( receivePacket ),
-      std::bind_front(
-        &OperationImpl::receiveHandler,
-        shared_from_this() ) );
+      std::bind_front( &OperationImpl::receiveHandler, this ) );
 
     // set receive timeout
     timer.expires_from_now( 2U * receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( std::bind_front(
-      &OperationImpl::timeoutDallyHandler,
-      shared_from_this() ) );
+    timer.async_wait(
+      std::bind_front( &OperationImpl::timeoutDallyHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -461,9 +452,7 @@ void OperationImpl::receiveFirstHandler(
       socket.async_receive_from(
         boost::asio::buffer( receivePacket ),
         receiveEndpoint,
-        std::bind_front(
-          &OperationImpl::receiveFirstHandler,
-          shared_from_this() ) );
+        std::bind_front( &OperationImpl::receiveFirstHandler, this ) );
 
       return;
     }
@@ -568,9 +557,8 @@ void OperationImpl::timeoutFirstHandler(
 
     timer.expires_from_now( receiveTimeoutV );
 
-    timer.async_wait( std::bind_front(
-      &OperationImpl::timeoutFirstHandler,
-      shared_from_this() ) );
+    timer.async_wait(
+      std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -623,9 +611,7 @@ void OperationImpl::timeoutHandler(
 
     timer.expires_from_now( receiveTimeoutV );
 
-    timer.async_wait( std::bind_front(
-      &OperationImpl::timeoutHandler,
-      shared_from_this() ) );
+    timer.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
