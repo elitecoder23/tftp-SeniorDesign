@@ -30,7 +30,7 @@ namespace Tftp::Packets {
  * @sa DataPacket
  * @sa AcknowledgementPacket
  **/
-class BlockNumber
+class TFTP_EXPORT BlockNumber
 {
   public:
     //! Initialises a block number with value 0.

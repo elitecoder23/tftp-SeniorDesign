@@ -30,7 +30,7 @@ namespace Tftp::File {
  * If a size is given, this size is checked against the value given when calling
  * receivedTransferSize().
  **/
-class NullSinkFile : public ReceiveDataHandler
+class TFTP_EXPORT NullSinkFile : public ReceiveDataHandler
 {
   public:
     //! Constructor

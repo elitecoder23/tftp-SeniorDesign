@@ -22,7 +22,7 @@
 namespace Tftp::Packets {
 
 //! Description of TFTP Error Codes (ErrorCode)
-class ErrorCodeDescription :
+class TFTP_EXPORT ErrorCodeDescription :
   public Helper::Description< ErrorCodeDescription, ErrorCode >
 {
   public:
@@ -40,7 +40,8 @@ class ErrorCodeDescription :
  *
  * @return @p stream for chaining.
  **/
-std::ostream& operator<<( std::ostream& stream, ErrorCode errorCode );
+TFTP_EXPORT std::ostream&
+operator<<( std::ostream& stream, ErrorCode errorCode );
 
 }
 

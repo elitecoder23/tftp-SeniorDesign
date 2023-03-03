@@ -29,7 +29,7 @@ namespace Tftp::Packets {
  * |:---:|:-------:|
  * | 2 B |   2 B   |
  **/
-class AcknowledgementPacket: public Packet
+class TFTP_EXPORT AcknowledgementPacket : public Packet
 {
   public:
     //! Packet Size ( Opcode + Block Number)

@@ -28,7 +28,7 @@ namespace Tftp::Client {
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class Operation
+class TFTP_EXPORT Operation
 {
   public:
     //! Error Information

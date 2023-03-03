@@ -22,7 +22,7 @@
 namespace Tftp {
 
 //! Description of TFTP Transfer Status
-class TransferStatusDescription : public Helper::Description<
+class TFTP_EXPORT TransferStatusDescription : public Helper::Description<
   TransferStatusDescription,
   TransferStatus >
 {
@@ -41,7 +41,8 @@ class TransferStatusDescription : public Helper::Description<
  *
  * @return The output stream.
  **/
-std::ostream& operator<<( std::ostream& stream, TransferStatus transferStatus );
+TFTP_EXPORT std::ostream&
+operator<<( std::ostream& stream, TransferStatus transferStatus );
 
 }
 

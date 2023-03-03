@@ -36,7 +36,7 @@ namespace Tftp::Packets {
  * @retval `(NONE)`
  *   When @p options is empty.
  **/
-std::string Options_toString( const Options &options );
+std::string TFTP_EXPORT Options_toString( const Options &options );
 
 /**
  * @brief Decodes Options from the given Raw Data.
@@ -51,7 +51,7 @@ std::string Options_toString( const Options &options );
  *
  * @sa TftpOptions_rawOptions()
  **/
-Options Options_options( RawOptionsSpan rawOptions );
+Options TFTP_EXPORT Options_options( RawOptionsSpan rawOptions );
 
 /**
  * @brief Returns the Option List as Raw Data.
@@ -66,7 +66,7 @@ Options Options_options( RawOptionsSpan rawOptions );
  *
  * @sa TftpOptions_options()
  **/
-RawOptions Options_rawOptions( const Options &options );
+RawOptions TFTP_EXPORT Options_rawOptions( const Options &options );
 
 /**
  * @brief Decodes the Named Option.

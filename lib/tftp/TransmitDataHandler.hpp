@@ -26,7 +26,7 @@ namespace Tftp {
  * Class interface, which must be implemented by an class, which wants to
  * transmit data for a TFTP operation (TFTP client WRQ or TFTP server RRQ)
  **/
-class TransmitDataHandler : public virtual DataHandler
+class TFTP_EXPORT TransmitDataHandler : public virtual DataHandler
 {
   public:
     /**

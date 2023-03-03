@@ -26,7 +26,7 @@ namespace Tftp::File {
  *
  * File implementation, which uses a std::fstream for file I/O handling.
  **/
-class StreamFile : public TftpFile
+class TFTP_EXPORT StreamFile : public TftpFile
 {
   public:
     /**

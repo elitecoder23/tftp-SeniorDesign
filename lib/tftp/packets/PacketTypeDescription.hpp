@@ -22,7 +22,7 @@
 namespace Tftp::Packets {
 
 //! Description of TFTP Error Codes (ErrorCode)
-class PacketTypeDescription :
+class TFTP_EXPORT PacketTypeDescription :
   public Helper::Description< PacketTypeDescription, PacketType >
 {
   public:
@@ -36,11 +36,12 @@ class PacketTypeDescription :
  * @param[in] stream
  *   Output stream.
  * @param[out] packetType
- *   PAcket Type.
+ *   Packet Type.
  *
  * @return @p stream for chaining.
  **/
-std::ostream& operator<<( std::ostream& stream, PacketType packetType );
+TFTP_EXPORT std::ostream&
+operator<<( std::ostream& stream, PacketType packetType );
 
 }
 

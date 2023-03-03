@@ -33,7 +33,7 @@ namespace Tftp {
  *
  * @sa TftpOptionsConfiguration
  **/
-class TftpConfiguration
+class TFTP_EXPORT TftpConfiguration
 {
   public:
     /**

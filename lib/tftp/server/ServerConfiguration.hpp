@@ -22,7 +22,7 @@
 namespace Tftp::Server {
 
 //! TFTP Server Configuration
-struct ServerConfiguration
+struct TFTP_EXPORT ServerConfiguration
 {
   //! TFTP Request Received Handler
   ReceivedTftpRequestHandler handler;

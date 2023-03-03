@@ -20,7 +20,7 @@
 namespace Tftp {
 
 //! Description of Request Type (RequestType)
-class RequestTypeDescription :
+class TFTP_EXPORT RequestTypeDescription :
   public Helper::Description< RequestTypeDescription, RequestType >
 {
   public:
@@ -38,7 +38,8 @@ class RequestTypeDescription :
  *
  * @return @p stream.
  **/
-std::istream& operator>>( std::istream &stream, RequestType &requestType );
+TFTP_EXPORT std::istream&
+operator>>( std::istream &stream, RequestType &requestType );
 
 }
 

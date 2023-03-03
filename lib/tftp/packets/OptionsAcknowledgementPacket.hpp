@@ -33,7 +33,7 @@ namespace Tftp::Packets {
  * | 2 B  |  str  | 1 B |  str   | 1 B |     |  str  | 1 B |  str   | 1 B |
  *
  **/
-class OptionsAcknowledgementPacket: public Packet
+class TFTP_EXPORT OptionsAcknowledgementPacket : public Packet
 {
   public:
     /**

@@ -32,7 +32,7 @@ namespace Tftp::Packets {
  * | 2 B |    2 B    |  str   | 1 B |
  *
  **/
-class ErrorPacket: public Packet
+class TFTP_EXPORT ErrorPacket : public Packet
 {
   public:
     //! Minimum Header Size ( Opcode, Error Code, Empty String)

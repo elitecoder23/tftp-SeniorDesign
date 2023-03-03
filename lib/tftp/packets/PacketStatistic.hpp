@@ -38,7 +38,7 @@ namespace Tftp::Packets {
  * There is no distinction between multiple clients, operations, nor
  * client/server.
  **/
-class PacketStatistic
+class TFTP_EXPORT PacketStatistic
 {
   public:
     //! Statistic Value Type (Count, Size)

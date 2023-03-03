@@ -26,7 +26,7 @@
 namespace Tftp::Client {
 
 //! TFTP Client Read Operation Configuration
-struct ReadOperationConfiguration
+struct TFTP_EXPORT ReadOperationConfiguration
 {
   //! TFTP Timeout, when no timeout option is negotiated in seconds.
   std::chrono::seconds tftpTimeout;

@@ -22,7 +22,7 @@ namespace Tftp::Packets {
 /**
  * @brief TFTP %Packet.
  **/
-class Packet
+class TFTP_EXPORT Packet
 {
   public:
     //! Minimum Size is the Opcode Field.

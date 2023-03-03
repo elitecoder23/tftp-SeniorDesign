@@ -29,7 +29,7 @@ namespace Tftp::Packets {
  * |:----:|:-------:|:------:|
  * |  2 B |   2 B   |  n B   |
  **/
-class DataPacket: public Packet
+class TFTP_EXPORT DataPacket : public Packet
 {
   public:
     //! Minimum Header Size (Opcode + Block Number)

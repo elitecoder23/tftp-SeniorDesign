@@ -20,7 +20,7 @@
 namespace Tftp::Packets {
 
 //! TFTP %Packet Processing Exception.
-class InvalidPacketException: public virtual TftpException
+class TFTP_EXPORT InvalidPacketException : public TftpException
 {
   public:
     //! @copydoc TftpException::what() const

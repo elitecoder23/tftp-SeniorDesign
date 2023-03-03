@@ -29,7 +29,7 @@ namespace Tftp::Packets {
  * |:-------:|:-----:|:---:|:----:|:---:|:-----:|:---:|:------:|:---:|:---:|:-----:|:---:|:------:|:---:|
  * |   2 B   |  str  | 1 B | str  | 1 B |  str  | 1 B |   str  | 1 B |     |  str  | 1 B |  str   | 1 B |
  **/
-class ReadWriteRequestPacket: public Packet
+class TFTP_EXPORT ReadWriteRequestPacket : public Packet
 {
   public:
     /**

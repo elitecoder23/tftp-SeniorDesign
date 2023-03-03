@@ -27,7 +27,7 @@ namespace Tftp::Packets {
  * The packet handlers are used internally.
  * A user of the TFTP library doesn't need to derive from this class.
  **/
-class PacketHandler
+class TFTP_EXPORT PacketHandler
 {
   public:
     //! Destructor

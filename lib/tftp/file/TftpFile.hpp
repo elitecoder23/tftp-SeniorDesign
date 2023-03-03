@@ -26,7 +26,7 @@ namespace Tftp::File {
  * Base class for a TFTP file operation handler, which can be used to transfer
  * files
  **/
-class TftpFile:
+class TFTP_EXPORT TftpFile :
   public ReceiveDataHandler,
   public TransmitDataHandler
 {

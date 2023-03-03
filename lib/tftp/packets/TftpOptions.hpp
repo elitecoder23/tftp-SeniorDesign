@@ -29,7 +29,7 @@ namespace Tftp::Packets {
  * - timeout, and
  * - transfer size.
  **/
-struct TftpOptions
+struct TFTP_EXPORT TftpOptions
 {
   //! Block size option
   std::optional< uint16_t > blockSize;
@@ -57,7 +57,7 @@ struct TftpOptions
  *
  * @return Returns the option name.
  **/
-std::string TftpOptions_name( KnownOptions option ) noexcept;
+std::string TFTP_EXPORT TftpOptions_name( KnownOptions option ) noexcept;
 
 /**
  * @brief Returns a string, which describes the TFTP Options.
@@ -71,7 +71,7 @@ std::string TftpOptions_name( KnownOptions option ) noexcept;
  * @retval `(NONE)`
  *   When @p options is empty.
  **/
-std::string TftpOptions_toString( const TftpOptions &options );
+std::string TFTP_EXPORT TftpOptions_toString( const TftpOptions &options );
 
 /**
  * @brief Outputs @p options to @p stream.
@@ -83,7 +83,8 @@ std::string TftpOptions_toString( const TftpOptions &options );
  *
  * @return @p stream
  **/
-std::ostream &operator<<( std::ostream &stream, const TftpOptions &options );
+TFTP_EXPORT std::ostream&
+operator<<( std::ostream &stream, const TftpOptions &options );
 
 }
 

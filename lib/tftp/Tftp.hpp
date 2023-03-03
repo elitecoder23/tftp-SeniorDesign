@@ -18,6 +18,8 @@
 #ifndef TFTP_TFTP_HPP
 #define TFTP_TFTP_HPP
 
+#include <tftp/tftp_export.h>
+
 #include <memory>
 #include <cstdint>
 #include <chrono>

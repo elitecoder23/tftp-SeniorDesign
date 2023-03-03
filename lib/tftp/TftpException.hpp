@@ -29,7 +29,7 @@ namespace Tftp {
 /**
  * @brief TFTP Exception.
  **/
-class TftpException :
+class TFTP_EXPORT TftpException :
   public std::exception,
   public boost::exception
 {
@@ -46,7 +46,7 @@ class TftpException :
 };
 
 //! TFTP Communication Exception.
-class CommunicationException : public TftpException
+class TFTP_EXPORT CommunicationException : public TftpException
 {
   public:
     //! @copydoc TftpException::what() const
@@ -57,7 +57,7 @@ class CommunicationException : public TftpException
 };
 
 //! TFTP Option Negotiation Exception.
-class OptionNegotiationException: public TftpException
+class TFTP_EXPORT OptionNegotiationException: public TftpException
 {
   public:
     //! @copydoc TftpException::what() const
@@ -68,7 +68,7 @@ class OptionNegotiationException: public TftpException
 };
 
 //! TFTP Error Packet Received Exception.
-class ErrorReceivedException: public TftpException
+class TFTP_EXPORT ErrorReceivedException: public TftpException
 {
   public:
     //! @copydoc TftpException::what() const

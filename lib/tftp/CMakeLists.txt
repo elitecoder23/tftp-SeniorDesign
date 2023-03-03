@@ -14,6 +14,9 @@ configure_file( Version.cpp.in Version.cpp )
 
 add_library( tftp )
 
+include( GenerateExportHeader )
+generate_export_header( tftp )
+
 target_sources(
   tftp
 
@@ -21,7 +24,7 @@ target_sources(
     FILE_SET HEADERS
       BASE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/..
-        #${CMAKE_CURRENT_BINARY_DIR}/..
+        ${CMAKE_CURRENT_BINARY_DIR}/..
       FILES
         DataHandler.hpp
         ReceiveDataHandler.hpp
@@ -34,6 +37,7 @@ target_sources(
         TransferStatusDescription.hpp
         TransmitDataHandler.hpp
         Version.hpp
+        ${CMAKE_CURRENT_BINARY_DIR}/tftp_export.h
 
   PRIVATE
     RequestTypeDescription.cpp

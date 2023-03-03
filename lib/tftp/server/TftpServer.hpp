@@ -37,7 +37,7 @@ namespace Tftp::Server {
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
-class TftpServer
+class TFTP_EXPORT TftpServer
 {
   public:
     /**

@@ -23,7 +23,7 @@ namespace Tftp::File {
  *
  * File implementation, which holds all data in memory.
  **/
-class MemoryFile: public TftpFile
+class TFTP_EXPORT MemoryFile : public TftpFile
 {
   public:
     /**

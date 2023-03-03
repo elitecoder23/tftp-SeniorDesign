@@ -24,7 +24,7 @@ namespace Tftp {
 /**
  * @brief TFTP Data Handler.
  **/
-class DataHandler
+class TFTP_EXPORT DataHandler
 {
   public:
     //! Data Type.

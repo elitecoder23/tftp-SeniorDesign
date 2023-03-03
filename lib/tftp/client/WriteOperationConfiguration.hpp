@@ -26,7 +26,7 @@
 namespace Tftp::Client {
 
 //! TFTP Client Write Operation Configuration
-struct WriteOperationConfiguration
+struct TFTP_EXPORT WriteOperationConfiguration
 {
   //! TFTP Timeout, when no timeout option is negotiated in seconds.
   std::chrono::seconds tftpTimeout;

@@ -22,7 +22,7 @@
 namespace Tftp {
 
 //! TFTP C++ Library %Version Information.
-class Version
+class TFTP_EXPORT Version
 {
   public:
     // delete constructors
