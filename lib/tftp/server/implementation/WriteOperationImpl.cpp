@@ -152,8 +152,11 @@ void WriteOperationImpl::finished(
 {
   BOOST_LOG_FUNCTION()
 
-  OperationImpl::finished( status, std::move( errorInfo ) );
+  // Complete data handler
   configurationV.dataHandler->finished();
+
+  // Inform base class
+  OperationImpl::finished( status, std::move( errorInfo ) );
 }
 
 void WriteOperationImpl::dataPacket(

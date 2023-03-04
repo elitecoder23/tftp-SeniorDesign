@@ -127,11 +127,11 @@ void WriteOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo ) noexcept
 {
+  // Complete data handler
+  configurationV.dataHandler->finished();
+
   // inform base class
   OperationImpl::finished( status, std::move( errorInfo ) );
-
-  // Inform data handler
-  configurationV.dataHandler->finished();
 }
 
 void WriteOperationImpl::sendData()
