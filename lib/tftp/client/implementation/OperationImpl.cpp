@@ -16,6 +16,7 @@
 #include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorCodeDescription.hpp>
 #include <tftp/packets/PacketStatistic.hpp>
+#include <tftp/packets/PacketTypeDescription.hpp>
 
 #include <tftp/TftpException.hpp>
 #include <tftp/TftpLogger.hpp>
@@ -47,11 +48,16 @@ void OperationImpl::gracefulAbort(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
-    << "Graceful abort requested: " << errorCode << " '" << errorMessage << "'";
+    << "Graceful abort requested: "
+    << "'" << errorCode << "' '" << errorMessage << "'";
 
   Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
-  send( errorPacket );
+  // skip transmission if not already received something from remote
+  if ( receiveEndpoint != boost::asio::ip::udp::endpoint{} )
+  {
+    send( errorPacket );
+  }
 
   // Operation completed
   finished( TransferStatus::Aborted, std::move( errorPacket ) );
@@ -518,7 +524,7 @@ void OperationImpl::timeoutFirstHandler(
 {
   BOOST_LOG_FUNCTION()
 
-  // operation aborted (packet received)
+  // wait aborted (packet received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;
@@ -528,7 +534,7 @@ void OperationImpl::timeoutFirstHandler(
   if ( errorCode )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
-      << "timer error: " + errorCode.message();
+      << "Timer error: " + errorCode.message();
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -538,17 +544,23 @@ void OperationImpl::timeoutFirstHandler(
   if ( transmitCounter > tftpRetries )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
-      << "Retry counter exceeded ABORT";
+      << "TFTP Retry counter exceeded";
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "retransmit last packet";
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+    << "Retransmit last TFTP packet: "
+    << Packets::Packet::packetType( transmitPacket );
 
   try
   {
+    // Update statistic
+    Packets::PacketStatistic::globalTransmit().packet(
+      Packets::Packet::packetType( transmitPacket ),
+      transmitPacket.size() );
+
     // resent stored packet
     socket.send_to( boost::asio::buffer( transmitPacket ), remoteEndpoint );
 
@@ -574,7 +586,7 @@ void OperationImpl::timeoutHandler(
 {
   BOOST_LOG_FUNCTION()
 
-  // operation aborted (packet received)
+  // wait aborted (packet received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;
@@ -584,7 +596,7 @@ void OperationImpl::timeoutHandler(
   if ( errorCode )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
-      << "timer error: " << errorCode.message();
+      << "Timer error: " << errorCode.message();
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -594,17 +606,23 @@ void OperationImpl::timeoutHandler(
   if ( transmitCounter > tftpRetries )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
-      << "Retry counter exceeded ABORT";
+      << "TFTP Retry counter exceeded";
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "retransmit last packet";
+    << "Retransmit last TFTP packet: "
+    << Packets::Packet::packetType( transmitPacket );
 
   try
   {
+    // Update statistic
+    Packets::PacketStatistic::globalTransmit().packet(
+      Packets::Packet::packetType( transmitPacket ),
+      transmitPacket.size() );
+
     socket.send( boost::asio::buffer( transmitPacket ) );
 
     ++transmitCounter;
@@ -637,7 +655,7 @@ void OperationImpl::timeoutDallyHandler(
   if ( errorCode )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
-      << "timer error: " << errorCode.message();
+      << "Timer error: " << errorCode.message();
 
     finished( TransferStatus::CommunicationError );
     return;
