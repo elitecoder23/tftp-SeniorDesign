@@ -119,7 +119,7 @@ class TFTP_EXPORT PacketStatistic
  *
  * @return @p stream for chaining.
  **/
-std::ostream& operator<<(
+TFTP_EXPORT std::ostream& operator<<(
   std::ostream &stream,
   const PacketStatistic &statistic );
 

@@ -153,8 +153,8 @@ class TFTP_EXPORT BlockNumber
  * @return Equality of the block numbers.
  *
  * @return
- */
-bool operator==( uint16_t lhs, const BlockNumber &rhs );
+ **/
+TFTP_EXPORT bool operator==( uint16_t lhs, const BlockNumber &rhs );
 
 /**
  * @brief Un-equality Comparison of uint16_t Block Number and Block Number
@@ -167,7 +167,7 @@ bool operator==( uint16_t lhs, const BlockNumber &rhs );
  *
  * @return Un-Equality of the block numbers.
  **/
-bool operator!=( uint16_t lhs, const BlockNumber &rhs );
+TFTP_EXPORT bool operator!=( uint16_t lhs, const BlockNumber &rhs );
 
 }
 
