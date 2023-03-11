@@ -171,8 +171,8 @@ void ReadOperationImpl::sendData()
 
   lastTransmittedBlockNumber++;
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "Send Data: " << static_cast< uint16_t >( lastTransmittedBlockNumber );
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+    << "Send Data #" << static_cast< uint16_t >( lastTransmittedBlockNumber );
 
   Packets::DataPacket data{
     lastTransmittedBlockNumber,
@@ -212,7 +212,7 @@ void ReadOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( acknowledgementPacket );
 
   // check retransmission
@@ -251,7 +251,7 @@ void ReadOperationImpl::acknowledgementPacket(
   // if it was the last ACK of the last data packet - we are finished.
   if ( lastDataPacketTransmitted )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
       << "Last acknowledgement received";
 
     finished( TransferStatus::Successful );

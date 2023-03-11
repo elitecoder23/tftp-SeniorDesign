@@ -159,7 +159,7 @@ void WriteOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( dataPacket );
 
   Packets::ErrorPacket errorPacket{
@@ -178,7 +178,7 @@ void WriteOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( acknowledgementPacket );
 
   // check retransmission
@@ -254,7 +254,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket );
 
   if ( lastReceivedBlockNumber != Packets::BlockNumber{ 0xFFFFU } )

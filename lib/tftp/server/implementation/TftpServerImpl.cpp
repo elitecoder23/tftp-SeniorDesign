@@ -251,7 +251,7 @@ void TftpServerImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket )
 {
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( readRequestPacket );
 
   // check handler
@@ -285,7 +285,7 @@ void TftpServerImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::WriteRequestPacket &writeRequestPacket )
 {
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info)
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( writeRequestPacket );
 
   // check handler

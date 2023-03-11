@@ -147,8 +147,8 @@ void OperationImpl::send( const Packets::Packet &packet )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "TX: " << static_cast< std::string>( packet);
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+    << "TX: " << static_cast< std::string>( packet );
 
   try
   {
@@ -340,7 +340,7 @@ void OperationImpl::invalidPacket(
 
 void OperationImpl::receiveHandler(
   const boost::system::error_code& errorCode,
-  std::size_t bytesTransferred)
+  std::size_t bytesTransferred )
 {
   BOOST_LOG_FUNCTION()
 
@@ -367,7 +367,7 @@ void OperationImpl::receiveHandler(
     Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
-void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode)
+void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 {
   BOOST_LOG_FUNCTION()
 

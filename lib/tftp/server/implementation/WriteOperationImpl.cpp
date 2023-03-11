@@ -165,7 +165,7 @@ void WriteOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( dataPacket );
 
   // Check retransmission
