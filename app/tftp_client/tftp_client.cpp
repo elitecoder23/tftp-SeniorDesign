@@ -51,10 +51,33 @@
  **/
 int main( int argc, char * argv[] );
 
+/**
+ * @brief Option Negotiation callback.
+ *
+ * Checks Server options.
+ * As we don't send any additional options, the received options must be empty.
+ *
+ * @param[in,out] operation
+ *   TFTP Operation
+ * @param[in] serverOptions
+ *   Received Server Options.
+ *
+ * @return if @p serverOptions are empty.
+ **/
 static bool optionNegotiation(
   const Tftp::Client::OperationPtr &operation,
   const Tftp::Packets::Options &serverOptions );
 
+/**
+ * @brief Operation Completed callback
+ *
+ * @param[in] ioContext
+ *   IO Context
+ * @param[in] operation
+ *   TFTP Operation
+ * @param[in] transferStatus
+ *   Transfer Status
+ **/
 static void operationCompleted(
   boost::asio::io_context &ioContext,
   const Tftp::Client::OperationPtr &operation,
@@ -208,9 +231,9 @@ int main( int argc, char * argv[] )
 
 static bool optionNegotiation(
   [[maybe_unused]] const Tftp::Client::OperationPtr &operation,
-  [[maybe_unused]] const Tftp::Packets::Options &serverOptions )
+  const Tftp::Packets::Options &serverOptions )
 {
-  return true;
+  return serverOptions.empty();
 }
 
 static void operationCompleted(

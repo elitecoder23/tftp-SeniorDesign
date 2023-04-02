@@ -119,6 +119,14 @@ static void receiveFile(
   std::filesystem::path filename,
   Tftp::Packets::TftpOptions clientOptions );
 
+/**
+ * @brief Operatrion Completed callback
+ *
+ * @param[in] operation
+ *   TFTP Operation
+ * @param[in] transferStatus
+ *   Transfer status.
+ **/
 static void operationCompleted(
   const Tftp::Server::OperationPtr &operation,
   Tftp::TransferStatus transferStatus );
