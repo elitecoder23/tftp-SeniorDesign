@@ -6,7 +6,7 @@
 
 cmake_minimum_required( VERSION 3.25 )
 
-find_package( Qt5 COMPONENTS Widgets QUIET )
+find_package( Qt5 COMPONENTS Core QUIET )
 
 if( NOT TARGET Qt5::Core )
   return()
