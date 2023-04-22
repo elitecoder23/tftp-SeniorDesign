@@ -273,12 +273,12 @@ void TftpServerImpl::readRequestPacket(
 
   // call the handler, which handles the received request
   configurationV.handler(
-    std::move( remote ),
+    remote,
     RequestType::Read,
-    std::string{ readRequestPacket.filename() },
+    readRequestPacket.filename(),
     readRequestPacket.mode(),
-    std::move( decodedOptions ),
-    std::move( receivedOptions ) );
+    decodedOptions,
+    receivedOptions );
 }
 
 void TftpServerImpl::writeRequestPacket(
@@ -307,12 +307,12 @@ void TftpServerImpl::writeRequestPacket(
 
   // call the handler, which handles the received request
   configurationV.handler(
-    std::move( remote ),
+    remote,
     RequestType::Write,
-    std::string{ writeRequestPacket.filename() },
+    writeRequestPacket.filename(),
     writeRequestPacket.mode(),
-    std::move( decodedOptions ),
-    std::move( receivedOptions ) );
+    decodedOptions,
+    receivedOptions );
 }
 
 void TftpServerImpl::dataPacket(

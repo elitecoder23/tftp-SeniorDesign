@@ -27,6 +27,7 @@
 #include <memory>
 #include <functional>
 #include <optional>
+#include <string_view>
 
 /**
  * @brief TFTP %Server.
@@ -93,12 +94,12 @@ using OperationPtr = std::shared_ptr< Operation >;
  **/
 using ReceivedTftpRequestHandler =
   std::function< void(
-    boost::asio::ip::udp::endpoint remote,
+    const boost::asio::ip::udp::endpoint &remote,
     RequestType requestType,
-    std::string filename,
+    std::string_view filename,
     Packets::TransferMode mode,
-    Packets::TftpOptions clientOptions,
-    Packets::Options additionalClientOptions ) >;
+    const Packets::TftpOptions &clientOptions,
+    const Packets::Options &additionalClientOptions ) >;
 
 /**
  * @brief Operation Completed handler, which indicates, if the transfer is
