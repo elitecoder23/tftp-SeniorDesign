@@ -9,6 +9,10 @@ default:
       - runner_system_failure
       - stale_schedule
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 .cmake_build:
   stage: build
   script:
