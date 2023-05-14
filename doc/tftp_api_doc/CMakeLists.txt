@@ -48,8 +48,10 @@ set(
   DOXYGEN_STRIP_FROM_PATH
 
   ${helper_SOURCE_DIR}/lib
+  ${helper_BINARY_DIR}/lib
   ${helper_SOURCE_DIR}/app
   ${tftp_SOURCE_DIR}/lib
+  ${tftp_BINARY_DIR}/lib
   ${tftp_SOURCE_DIR}/app )
 
 set(
@@ -57,7 +59,9 @@ set(
 
   ${Boost_INCLUDE_DIRS}
   ${helper_SOURCE_DIR}/lib
-  ${tftp_SOURCE_DIR}/lib )
+  ${helper_BINARY_DIR}/lib
+  ${tftp_SOURCE_DIR}/lib
+  ${tftp_BINARY_DIR}/lib )
 
 doxygen_add_docs(
   tftp_api_doc

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 /**
  * @file
  * @copyright
@@ -25,11 +26,13 @@ BOOST_AUTO_TEST_SUITE( VersionTest )
 BOOST_AUTO_TEST_CASE( version )
 {
   std::cout
-    << "TFTP Version: "
+    << Version::Key << " " << Version::Name
+    << " Version: "
     << Version::Major << "."
     << Version::Minor << "."
     << Version::Patch << "-"
-    << Version::Addition << "\n";
+    << Version::Addition << "\n"
+    << Version::Url << " " << Version::License << "\n";
 
   std::cout
     << "TFTP Version Information: " << Version::VersionInformation << "\n";

@@ -12,7 +12,7 @@ find_package( Boost REQUIRED COMPONENTS program_options )
 find_package( fmt REQUIRED )
 
 # prepare Version.cpp
-configure_file( Version.cpp.in Version.cpp )
+configure_file( Version.hpp.in Version.hpp )
 
 add_library( tftp )
 
@@ -38,15 +38,14 @@ target_sources(
         TftpOptionsConfiguration.hpp
         TransferStatusDescription.hpp
         TransmitDataHandler.hpp
-        Version.hpp
         ${CMAKE_CURRENT_BINARY_DIR}/tftp_export.h
+        ${CMAKE_CURRENT_BINARY_DIR}/Version.hpp
 
   PRIVATE
     RequestTypeDescription.cpp
     TftpConfiguration.cpp
     TftpOptionsConfiguration.cpp
-    TransferStatusDescription.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/Version.cpp )
+    TransferStatusDescription.cpp )
 
 target_compile_features( tftp PUBLIC cxx_std_20 )
 
@@ -129,7 +128,9 @@ add_subdirectory( server )
 set_property(
   DIRECTORY ${PROJECT_SOURCE_DIR}
   APPEND
-  PROPERTY DOC_PATHS ${CMAKE_CURRENT_SOURCE_DIR} )
+  PROPERTY DOC_PATHS
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/Version.hpp )
 
 
 install(

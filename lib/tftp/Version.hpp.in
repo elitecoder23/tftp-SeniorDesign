@@ -16,8 +16,6 @@
 #include <tftp/Tftp.hpp>
 
 #include <cstdint>
-#include <string>
-#include <string_view>
 
 namespace Tftp {
 
@@ -28,18 +26,31 @@ class TFTP_EXPORT Version
     // delete constructors
     Version() = delete;
 
+    //! Product Key
+    static constexpr auto Key{ "${PROJECT_NAME}" };
+
+    //! Product Name
+    static constexpr auto Name{ "${PROJECT_DESCRIPTION}" };
+
+    //! Product License
+    static constexpr auto License{ "MPL-2.0" };
+
+    //! Product Url
+    static constexpr auto Url{ "${PROJECT_HOMEPAGE_URL}" };
+
     //! Major Version
-    static const uint32_t Major;
+    static constexpr uint32_t Major{ ${PROJECT_VERSION_MAJOR} +0U };
     //! Minor Version
-    static const uint32_t Minor;
+    static constexpr uint32_t Minor{ ${PROJECT_VERSION_MINOR} +0U };
     //! Patch Version
-    static const uint32_t Patch;
+    static constexpr uint32_t Patch{ ${PROJECT_VERSION_PATCH} +0U };
 
     //! Additional Version Information
-    static const std::string_view Addition;
+    static constexpr auto Addition{ "${PROJECT_VERSION_ADDITION}" };
 
     //! Version Information as String.
-    static const std::string_view VersionInformation;
+    static constexpr auto VersionInformation{
+      "${PROJECT_VERSION} (${PROJECT_VERSION_ADDITION})" };
 };
 
 }
