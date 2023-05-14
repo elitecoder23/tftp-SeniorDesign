@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 /**
  * @file
  * @copyright
@@ -21,7 +22,7 @@
 #include <tftp_qt/tftp_qt_export.h>
 
 /**
- * @brief TFTP QT
+ * @brief TFTP Qt
  **/
 namespace TftpQt {
 

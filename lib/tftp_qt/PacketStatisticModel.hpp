@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 /**
  * @file
  * @copyright
@@ -22,7 +23,7 @@
 namespace TftpQt {
 
 /**
- * @brief QT Table Model listing the TFTP Packet Statistic.
+ * @brief Qt Table Model listing the TFTP Packet Statistic.
  **/
 class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
 {
