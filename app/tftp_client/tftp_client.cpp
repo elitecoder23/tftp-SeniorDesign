@@ -30,24 +30,26 @@
 #include <helper/Logger.hpp>
 #include <helper/BoostAsioProgramOptions.hpp>
 
-#include <boost/program_options.hpp>
 #include <boost/asio.hpp>
+
 #include <boost/exception/all.hpp>
 
+#include <boost/program_options.hpp>
+
 #include <cstdlib>
+#include <iostream>
 #include <memory>
 #include <string>
-#include <iostream>
 
 /**
- * @brief Program Entry Point
+ * @brief Application Entry Point.
  *
  * @param[in] argc
- *   Number of Arguments.
+ *   Number of arguments.
  * @param[in] argv
  *   Arguments
  *
- * @return Success state of this operation.
+ * @return Application exit status.
  **/
 int main( int argc, char * argv[] );
 
@@ -85,67 +87,71 @@ static void operationCompleted(
 
 int main( int argc, char * argv[] )
 {
-  Tftp::RequestType requestType{};
-  std::filesystem::path localFile{};
-  std::string remoteFile{};
-  boost::asio::ip::address address{};
-  Tftp::TftpConfiguration tftpConfiguration{};
-  Tftp::TftpOptionsConfiguration tftpOptionsConfiguration{};
+  BOOST_LOG_FUNCTION()
 
   Helper::initLogging();
 
-  boost::program_options::options_description optionsDescription{
-    "TFTP Client Options" };
-
-  optionsDescription.add_options()
-  (
-    "help",
-    "print this help screen"
-  )
-  (
-    "request-type",
-    boost::program_options::value( &requestType )->required(),
-    R"(the desired operation ("Read"|"Write" ))"
-  )
-  (
-    "local-file",
-    boost::program_options::value( &localFile ),
-    "filename of local file"
-  )
-  (
-    "remote-file",
-    boost::program_options::value( &remoteFile)->required(),
-    "filename of remote file"
-  )
-  (
-    "address",
-    boost::program_options::value( &address)->required(),
-    "remote address"
-  );
-
-  // Add common TFTP options
-  optionsDescription.add( tftpConfiguration.options() );
-  optionsDescription.add( tftpOptionsConfiguration.options() );
-
   try
   {
+    Tftp::RequestType requestType{};
+    std::filesystem::path localFile{};
+    std::string remoteFile{};
+    boost::asio::ip::address address{};
+    Tftp::TftpConfiguration tftpConfiguration{};
+    Tftp::TftpOptionsConfiguration tftpOptionsConfiguration{};
+
+    boost::program_options::options_description optionsDescription{
+      "TFTP Client Options" };
+
+    optionsDescription.add_options()
+    (
+      "help",
+      "print this help screen"
+    )
+    (
+      "request-type",
+      boost::program_options::value( &requestType )->required(),
+      R"(the desired operation ("Read"|"Write" ))"
+    )
+    (
+      "local-file",
+      boost::program_options::value( &localFile ),
+      "filename of local file"
+    )
+    (
+      "remote-file",
+      boost::program_options::value( &remoteFile)->required(),
+      "filename of remote file"
+    )
+    (
+      "address",
+      boost::program_options::value( &address)->required(),
+      "remote address"
+    );
+
+    // Add common TFTP options
+    optionsDescription.add( tftpConfiguration.options() );
+    optionsDescription.add( tftpOptionsConfiguration.options() );
+
     std::cout << "TFTP Client\n";
 
-    boost::program_options::variables_map options;
+    boost::program_options::variables_map vm{};
     boost::program_options::store(
       boost::program_options::parse_command_line(
         argc,
         argv,
-        optionsDescription),
-      options );
+        optionsDescription ),
+      vm );
 
-    if ( options.count( "help" ) != 0 )
+    if ( 0U != vm.count( "help" ) )
     {
-      std::cout << optionsDescription << "\n";
+      std::cout
+        << "Performs TFTP Client transfer\n"
+        << optionsDescription << "\n";
       return EXIT_FAILURE;
     }
 
-    boost::program_options::notify( options );
+    boost::program_options::notify( vm );
 
     // Assemble TFTP configuration
     boost::asio::io_context ioContext;
@@ -208,25 +214,36 @@ int main( int argc, char * argv[] )
     std::cout
       << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
       << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
+
+    return EXIT_SUCCESS;
   }
   catch ( const boost::program_options::error &e )
   {
-    std::cout << e.what() << "\n" << optionsDescription << "\n";
+    std::cerr
+      << "Error parsing command line: " << e.what() << "\n"
+      << "Enter " << argv[0]
+      << " --help for command line description\n";
     return EXIT_FAILURE;
   }
   catch ( const boost::exception &e )
   {
     std::cerr
-      << "Error in TFTP client: " << boost::diagnostic_information( e ) << "\n";
+      << "Error: "
+      << boost::diagnostic_information( e ) << "\n";
+    return EXIT_FAILURE;
+  }
+  catch ( const std::exception &e )
+  {
+    std::cerr
+      << "Error: "
+      << boost::diagnostic_information( e ) << "\n";
     return EXIT_FAILURE;
   }
   catch ( ... )
   {
-    std::cerr << "Error in TFTP client: UNKNOWN EXCEPTION\n";
+    std::cerr << "Unknown exception occurred\n";
     return EXIT_FAILURE;
   }
-
-  return EXIT_SUCCESS;
 }
 
 static bool optionNegotiation(

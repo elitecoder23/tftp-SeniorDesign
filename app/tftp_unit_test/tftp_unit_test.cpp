@@ -10,11 +10,6 @@
  * @brief TFTP Unit Test Application.
  **/
 
-/**
- * @dir
- * @brief TFTP Unit Test Application.
- **/
-
 //! Automatically Defines Unit Test Entry.
 #define BOOST_TEST_MODULE TFTP Unit Tests
 #include <boost/test/included/unit_test.hpp>

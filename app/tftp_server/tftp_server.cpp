@@ -10,11 +10,6 @@
  * @brief TFTP Server CLI Application.
  **/
 
-/**
- * @dir
- * @brief TFTP Server CLI Application.
- **/
-
 #include <tftp/server/TftpServer.hpp>
 #include <tftp/server/Operation.hpp>
 #include <tftp/server/ServerConfiguration.hpp>
@@ -33,25 +28,27 @@
 
 #include <helper/Logger.hpp>
 
-#include <boost/exception/all.hpp>
-#include <boost/program_options.hpp>
 #include <boost/asio.hpp>
 
-#include <filesystem>
-#include <fstream>
+#include <boost/exception/all.hpp>
+
+#include <boost/program_options.hpp>
+
 #include <cstdlib>
+#include <filesystem>
 #include <iostream>
+#include <fstream>
 #include <utility>
 
 /**
- * @brief TFTP Server Program Entry Point
+ * @brief Application Entry Point.
  *
  * @param[in] argc
  *   Number of arguments.
  * @param[in] argv
  *   Arguments
  *
- * @return Success state of this operation.
+ * @return Application exit status.
  **/
 int main( int argc, char * argv[] );
 
@@ -145,14 +142,18 @@ static Tftp::Server::TftpServerPtr server{};
 
 int main( int argc, char * argv[] )
 {
+  BOOST_LOG_FUNCTION()
+
   Helper::initLogging();
 
-  std::cout << "TFTP Server - " << Tftp::Version::VersionInformation << "\n";
+  try
+  {
+    std::cout << "TFTP Server - " << Tftp::Version::VersionInformation << "\n";
 
-  boost::program_options::options_description optionsDescription{
-    "TFTP Server Options" };
+    boost::program_options::options_description optionsDescription{
+      "TFTP Server Options" };
 
-  optionsDescription.add_options()
+    optionsDescription.add_options()
     (
       "help",
       "print this help screen"
@@ -164,30 +165,30 @@ int main( int argc, char * argv[] )
       "Directory path, where the server shall have its root"
     );
 
-  // Add TFTP options
-  optionsDescription.add( tftpConfiguration.options() );
-  optionsDescription.add( tftpOptionsConfiguration.options() );
+    // Add TFTP options
+    optionsDescription.add( tftpConfiguration.options() );
+    optionsDescription.add( tftpOptionsConfiguration.options() );
 
-  try
-  {
     boost::asio::io_context ioContext;
     boost::asio::signal_set signals{ ioContext, SIGINT, SIGTERM };
 
-    boost::program_options::variables_map options;
+    boost::program_options::variables_map vm{};
     boost::program_options::store(
       boost::program_options::parse_command_line(
         argc,
         argv,
-        optionsDescription),
-      options );
+        optionsDescription ),
+      vm );
 
-    if ( options.count( "help" ) != 0 )
+    if ( 0U != vm.count( "help" ) )
     {
-      std::cout << optionsDescription << "\n";
+      std::cout
+        << "TFTP Server\n"
+        << optionsDescription << "\n";
       return EXIT_FAILURE;
     }
 
-    boost::program_options::notify( options );
+    boost::program_options::notify( vm );
 
     // make an absolute path
     baseDir = std::filesystem::canonical( baseDir );
@@ -224,25 +225,36 @@ int main( int argc, char * argv[] )
     std::cout
       << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
       << "TX:\n" << Tftp::Packets::PacketStatistic::globalTransmit() << "\n";
+
+    return EXIT_SUCCESS;
   }
   catch ( const boost::program_options::error &e )
   {
-    std::cout << e.what() << std::endl << optionsDescription << "\n";
+    std::cerr
+      << "Error parsing command line: " << e.what() << "\n"
+      << "Enter " << argv[0]
+      << " --help for command line description\n";
     return EXIT_FAILURE;
   }
   catch ( const boost::exception &e )
   {
     std::cerr
-      << "Error in TFTP server: " << boost::diagnostic_information( e ) << "\n";
+      << "Error: "
+      << boost::diagnostic_information( e ) << "\n";
+    return EXIT_FAILURE;
+  }
+  catch ( const std::exception &e )
+  {
+    std::cerr
+      << "Error: "
+      << boost::diagnostic_information( e ) << "\n";
     return EXIT_FAILURE;
   }
   catch ( ... )
   {
-    std::cerr << "Error in TFTP server: UNKNOWN EXCEPTION\n";
+    std::cerr << "Unknown exception occurred\n";
     return EXIT_FAILURE;
   }
-
-  return EXIT_SUCCESS;
 }
 
 static bool checkFilename( const std::filesystem::path &filename )
