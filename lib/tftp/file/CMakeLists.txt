@@ -25,4 +25,8 @@ target_sources(
     StreamFile.cpp
     NullSinkFile.cpp )
 
-#target_sources( tftp_test PRIVATE)
+target_sources(
+  tftp_test
+
+  PRIVATE
+    test/NullSinkFileTest.cpp )

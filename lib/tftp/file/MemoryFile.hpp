@@ -24,7 +24,7 @@ namespace Tftp::File {
  *
  * File implementation, which holds all data in memory.
  **/
-class TFTP_EXPORT MemoryFile : public TftpFile
+class TFTP_EXPORT MemoryFile final : public TftpFile
 {
   public:
     /**
@@ -61,7 +61,7 @@ class TFTP_EXPORT MemoryFile : public TftpFile
      * For write operation, the read pointer is reset to the beginning of the
      * file.
      **/
-    void reset() final;
+    void reset() override;
 
     /**
      * @brief Returns a reference to the locally stored data.
@@ -75,7 +75,7 @@ class TFTP_EXPORT MemoryFile : public TftpFile
      *
      * Reset current position.
      **/
-    void finished() noexcept final;
+    void finished() noexcept override;
 
     /**
      * @copydoc TftpFile::receivedTransferSize()
@@ -83,22 +83,22 @@ class TFTP_EXPORT MemoryFile : public TftpFile
      * Value supplied is ignored.
      * @return Always true.
      **/
-    [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) final;
+    [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) override;
 
     /**
      * @copydoc TftpFile::receivedData()
      **/
-    void receivedData( DataSpan data ) noexcept final;
+    void receivedData( DataSpan data ) noexcept override;
 
     /**
      * @copydoc TftpFile::requestedTransferSize()
      **/
-    [[nodiscard]] std::optional< uint64_t> requestedTransferSize() final;
+    [[nodiscard]] std::optional< uint64_t> requestedTransferSize() override;
 
     /**
      * @copydoc TftpFile::sendData()
      **/
-    [[nodiscard]] Data sendData( size_t maxSize ) noexcept final;
+    [[nodiscard]] Data sendData( size_t maxSize ) noexcept override;
 
   private:
     //! Operation Type

@@ -27,7 +27,7 @@ namespace Tftp::File {
  *
  * File implementation, which uses a std::fstream for file I/O handling.
  **/
-class TFTP_EXPORT StreamFile : public TftpFile
+class TFTP_EXPORT StreamFile final : public TftpFile
 {
   public:
     /**
@@ -65,34 +65,34 @@ class TFTP_EXPORT StreamFile : public TftpFile
      *
      * Reopens the file depending on @p operationV.
      **/
-    void reset() final;
+    void reset() override;
 
     /**
      * @copydoc TftpFile::finished()
      *
      * Flushes the stream.
      **/
-    void finished() noexcept final;
+    void finished() noexcept override;
 
     /**
      * @copydoc TftpFile::receivedTransferSize()
      **/
-    [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) final;
+    [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) override;
 
     /**
      * @copydoc TftpFile::receivedData()
      **/
-    void receivedData( DataSpan data ) noexcept final;
+    void receivedData( DataSpan data ) noexcept override;
 
     /**
      * @copydoc TftpFile::requestedTransferSize()
      **/
-    [[nodiscard]] std::optional< uint64_t> requestedTransferSize() final;
+    [[nodiscard]] std::optional< uint64_t> requestedTransferSize() override;
 
     /**
      * @copydoc TftpFile::sendData()
      **/
-    [[nodiscard]] Data sendData( size_t maxSize ) noexcept final;
+    [[nodiscard]] Data sendData( size_t maxSize ) noexcept override;
 
   private:
     //! Actual Operation

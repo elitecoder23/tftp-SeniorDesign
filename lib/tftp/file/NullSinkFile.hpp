@@ -31,7 +31,7 @@ namespace Tftp::File {
  * If a size is given, this size is checked against the value given when calling
  * receivedTransferSize().
  **/
-class TFTP_EXPORT NullSinkFile : public ReceiveDataHandler
+class TFTP_EXPORT NullSinkFile final : public ReceiveDataHandler
 {
   public:
     //! Constructor
@@ -43,32 +43,37 @@ class TFTP_EXPORT NullSinkFile : public ReceiveDataHandler
      * @param[in] size
      *   The maximum allowed size.
      **/
-    explicit NullSinkFile( std::optional< uint64_t> size = {} );
+    explicit NullSinkFile( uint64_t size );
 
     /**
      * @copydoc ReceiveDataHandler::reset
      *
      **/
-    void reset() final;
+    void reset() override;
+
+    /**
+     * @copydoc ReceiveDataHandler::finished
+     **/
+    void finished() noexcept override;
 
     /**
      * @copydoc ReceiveDataHandler::receivedTransferSize
      *
      * If size is given on constructing this file, handle it.
-     * Otherwise return true.
+     * Otherwise, return true.
      **/
-    [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) final;
+    [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) override;
 
     /**
      * @copydoc ReceiveDataHandler::receivedData
      *
      * Drops the data immediately.
      **/
-    void receivedData( DataSpan data ) noexcept final;
+    void receivedData( DataSpan data ) noexcept override;
 
   private:
     //! Optional size (used for options negotiation)
-    std::optional< uint64_t> size;
+    std::optional< uint64_t > size{};
 };
 
 }
