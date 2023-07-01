@@ -6,7 +6,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.25 )
+cmake_minimum_required( VERSION 3.26 )
 
 set_property(
   DIRECTORY ${PROJECT_SOURCE_DIR}
