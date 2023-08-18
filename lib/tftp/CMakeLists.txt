@@ -47,7 +47,7 @@ target_sources(
     TftpOptionsConfiguration.cpp
     TransferStatusDescription.cpp )
 
-target_compile_features( tftp PUBLIC cxx_std_20 )
+target_compile_features( tftp PUBLIC cxx_std_23 )
 
 target_compile_definitions(
   tftp
@@ -96,7 +96,7 @@ target_sources(
     test/TftpOptionsConfigurationTest.cpp
     test/VersionTest.cpp )
 
-target_compile_features( tftp_test PUBLIC cxx_std_20 )
+target_compile_features( tftp_test PUBLIC cxx_std_23 )
 
 target_compile_definitions(
   tftp_test

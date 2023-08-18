@@ -39,7 +39,7 @@ target_sources(
   PRIVATE
     PacketStatisticModel.cpp )
 
-target_compile_features( tftp_qt PUBLIC cxx_std_20 )
+target_compile_features( tftp_qt PUBLIC cxx_std_23 )
 
 target_compile_options(
   tftp_qt
