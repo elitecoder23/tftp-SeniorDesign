@@ -41,7 +41,7 @@ PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket ) noexcept
   Helper::getInt< uint16_t>( it, opcode );
 
   // check valid opcodes
-  switch ( static_cast< PacketType>( opcode ) )
+  switch ( PacketType{ opcode } )
   {
     case PacketType::ReadRequest:
     case PacketType::WriteRequest:
@@ -59,7 +59,7 @@ PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket ) noexcept
       return PacketType::Invalid;
   }
 
-  return static_cast< PacketType>( opcode);
+  return PacketType{ opcode };
 }
 
 PacketType Packet::packetType() const noexcept
@@ -134,7 +134,7 @@ void Packet::insertHeader( RawTftpPacketSpan rawPacket ) const
   auto packetIt{ rawPacket.begin() };
 
   // encode opcode
-  Helper::setInt( packetIt, static_cast< uint16_t>( packetTypeV ) );
+  Helper::setInt( packetIt, std::to_underlying( packetTypeV ) );
 }
 
 void Packet::decodeHeader( ConstRawTftpPacketSpan rawPacket )
@@ -152,7 +152,7 @@ void Packet::decodeHeader( ConstRawTftpPacketSpan rawPacket )
   uint16_t opcode{};
   Helper::getInt< uint16_t>( packetIt, opcode );
 
-  if ( static_cast< PacketType >( opcode ) != packetTypeV )
+  if ( PacketType{ opcode } != packetTypeV )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "Invalid opcode" } );
