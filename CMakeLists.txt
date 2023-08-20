@@ -35,7 +35,7 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 find_program( CLANG_TIDY_EXE NAMES clang-tidy )
 
 # Workaround, when CXX standard option differs for clang-tidy and g++
-if( CLANG_TIDY_EXE AND CMAKE_CXX_COMPILER_ID EQUAL Clang )
+if( CLANG_TIDY_EXE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang )
   set( CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} )
 endif()
 
