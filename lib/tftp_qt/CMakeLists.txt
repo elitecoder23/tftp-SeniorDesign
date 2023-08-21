@@ -8,9 +8,12 @@
 
 cmake_minimum_required( VERSION 3.26 )
 
-find_package( Qt5 COMPONENTS Core QUIET )
+find_package( Qt6 COMPONENTS Core QUIET )
+if( NOT Qt6_FOUND )
+  find_package( Qt5 COMPONENTS Core QUIET )
+endif()
 
-if( NOT TARGET Qt5::Core )
+if( NOT TARGET Qt::Core )
   return()
 endif()
 
@@ -57,7 +60,7 @@ target_link_libraries(
   tftp_qt
 
   PUBLIC
-    Qt5::Core
+    Qt::Core
     tftp
 
   PRIVATE
