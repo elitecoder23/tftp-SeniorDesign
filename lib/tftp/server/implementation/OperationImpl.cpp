@@ -119,7 +119,8 @@ OperationImpl::~OperationImpl() noexcept
 
   boost::system::error_code ec;
   // close socket and cancel all possible asynchronous operations.
-  socket.close( ec );
+  // TODO remove cast for new boost version
+  (void)socket.close( ec );
   // cancel timer
   timer.cancel( ec );
 }

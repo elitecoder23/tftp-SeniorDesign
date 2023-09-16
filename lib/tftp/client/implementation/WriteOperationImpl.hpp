@@ -110,7 +110,7 @@ class WriteOperationImpl : public OperationImpl
     //! Stored last received block number.
     Packets::BlockNumber lastReceivedBlockNumber{ 0U };
     //! Transfer Size obtained from Data Handler
-    std::optional< uint64_t > transferSize;
+    std::optional< uint64_t > transferSize{};
 };
 
 }

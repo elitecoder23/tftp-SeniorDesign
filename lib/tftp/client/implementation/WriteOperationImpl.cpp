@@ -435,8 +435,9 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       remoteOptions,
       Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 
-  if ( !configurationV.optionsConfiguration.handleTransferSizeOption
-    && transferSizeValue )
+  if ( ( !configurationV.optionsConfiguration.handleTransferSizeOption
+      || !transferSize )
+        && transferSizeValue )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Transfer Size Option not expected";
