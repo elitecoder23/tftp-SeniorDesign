@@ -119,9 +119,21 @@
       "configurePreset": "gcc-static-debug"
     },
     {
+      "name": "gcc-static-debug-doc",
+      "displayName": "GCC Static Debug Documentation",
+      "configurePreset": "gcc-static-debug",
+      "targets": [ "doc" ]
+    },
+    {
       "name": "gcc-static-release",
       "displayName": "GCC Static Release",
       "configurePreset": "gcc-static-release"
+    },
+    {
+      "name": "gcc-static-release-doc",
+      "displayName": "GCC Static Release Documentation",
+      "configurePreset": "gcc-static-release",
+      "targets": [ "doc" ]
     },
     {
       "name": "gcc-shared-debug",
@@ -129,9 +141,21 @@
       "configurePreset": "gcc-shared-debug"
     },
     {
+      "name": "gcc-shared-debug-doc",
+      "displayName": "GCC Shared Debug Documentation",
+      "configurePreset": "gcc-shared-debug",
+      "targets": [ "doc" ]
+    },
+    {
       "name": "gcc-shared-release",
       "displayName": "GCC Shared Release",
       "configurePreset": "gcc-shared-release"
+    },
+    {
+      "name": "gcc-shared-release-doc",
+      "displayName": "GCC Shared Release Documentation",
+      "configurePreset": "gcc-shared-release",
+      "targets": [ "doc" ]
     },
     {
       "name": "clang-static-debug",
@@ -139,9 +163,21 @@
       "configurePreset": "clang-static-debug"
     },
     {
+      "name": "clang-static-debug-doc",
+      "displayName": "CLang Static Debug Documentation",
+      "configurePreset": "clang-static-debug",
+      "targets": [ "doc" ]
+    },
+    {
       "name": "clang-static-release",
       "displayName": "CLang Static Release",
       "configurePreset": "clang-static-release"
+    },
+    {
+      "name": "clang-static-release-doc",
+      "displayName": "CLang Static Release Documentation",
+      "configurePreset": "clang-static-release",
+      "targets": [ "doc" ]
     },
     {
       "name": "clang-shared-debug",
@@ -149,9 +185,21 @@
       "configurePreset": "clang-shared-debug"
     },
     {
+      "name": "clang-shared-debug-doc",
+      "displayName": "CLang Shared Debug Documentation",
+      "configurePreset": "clang-shared-debug",
+      "targets": [ "doc" ]
+    },
+    {
       "name": "clang-shared-release",
       "displayName": "CLang Shared Release",
       "configurePreset": "clang-shared-release"
+    },
+    {
+      "name": "clang-shared-release-doc",
+      "displayName": "CLang Shared Release Documentation",
+      "configurePreset": "clang-shared-release",
+      "targets": [ "doc" ]
     }
   ],
   "testPresets": [
@@ -194,6 +242,114 @@
       "name": "clang-shared-release",
       "displayName": "CLang Shared Release",
       "configurePreset": "clang-shared-release"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "base",
+      "hidden": true
+    },
+    {
+      "name": "gcc-static-debug",
+      "displayName": "GCC Static Debug",
+      "configurePreset": "gcc-static-debug",
+      "inherits": "base"
+    },
+    {
+      "name": "gcc-static-release",
+      "displayName": "GCC Static Release",
+      "configurePreset": "gcc-static-release",
+      "inherits": "base"
+    },
+    {
+      "name": "gcc-shared-debug",
+      "displayName": "GCC Shared Debug",
+      "configurePreset": "gcc-shared-debug",
+      "inherits": "base"
+    },
+    {
+      "name": "gcc-shared-release",
+      "displayName": "GCC Shared Release",
+      "configurePreset": "gcc-shared-release",
+      "inherits": "base"
+    },
+    {
+      "name": "clang-static-debug",
+      "displayName": "CLang Static Debug",
+      "configurePreset": "clang-static-debug",
+      "inherits": "base"
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "CLang Static Release",
+      "configurePreset": "clang-static-release",
+      "inherits": "base"
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "CLang Shared Debug",
+      "configurePreset": "clang-shared-debug",
+      "inherits": "base"
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "CLang Shared Release",
+      "configurePreset": "clang-shared-release",
+      "inherits": "base"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "gcc-static-debug",
+      "displayName": "GCC Static Debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-static-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc-static-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc-static-debug-doc"
+        },
+        {
+          "type": "test",
+          "name": "gcc-static-debug"
+        },
+        {
+          "type": "package",
+          "name": "gcc-static-debug"
+        }
+      ]
+    },
+    {
+      "name": "gcc-static-release",
+      "displayName": "GCC Static Release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-static-release"
+        },
+        {
+          "type": "build",
+          "name": "gcc-static-release"
+        },
+        {
+          "type": "build",
+          "name": "gcc-static-release-doc"
+        },
+        {
+          "type": "test",
+          "name": "gcc-static-release"
+        },
+        {
+          "type": "package",
+          "name": "gcc-static-release"
+        }
+      ]
     }
   ]
 }
