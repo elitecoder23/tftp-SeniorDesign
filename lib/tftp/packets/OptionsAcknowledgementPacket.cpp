@@ -21,7 +21,7 @@
 
 #include <boost/exception/all.hpp>
 
-#include <fmt/format.h>
+#include <format>
 
 namespace Tftp::Packets {
 
@@ -64,7 +64,7 @@ void OptionsAcknowledgementPacket::options( Options options )
 
 OptionsAcknowledgementPacket::operator std::string() const
 {
-  return fmt::format( "OACK: OPT: \"{}\"", Options_toString( optionsV ) );
+  return std::format( "OACK: OPT: \"{}\"", Options_toString( optionsV ) );
 }
 
 RawTftpPacket OptionsAcknowledgementPacket::encode() const

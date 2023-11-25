@@ -21,9 +21,8 @@
 
 #include <boost/exception/all.hpp>
 
-#include <fmt/format.h>
-
 #include <algorithm>
+#include <format>
 
 namespace Tftp::Packets {
 
@@ -114,7 +113,7 @@ void ReadWriteRequestPacket::options( Options options )
 
 ReadWriteRequestPacket::operator std::string() const
 {
-  return fmt::format(
+  return std::format(
     "{}: FILE: \"{}\" MODE: \"{}\" OPT: \"{}\"",
     Packet::operator std::string(),
     filenameV,

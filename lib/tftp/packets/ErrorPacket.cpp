@@ -21,7 +21,7 @@
 
 #include <boost/exception/all.hpp>
 
-#include <fmt/format.h>
+#include <format>
 
 namespace Tftp::Packets {
 
@@ -50,7 +50,7 @@ ErrorPacket& ErrorPacket::operator=( ConstRawTftpPacketSpan rawPacket )
 
 ErrorPacket::operator std::string() const
 {
-  return fmt::format(
+  return std::format(
     "ERR: EC: {} ({}) - DESC: \"{}\"",
     ErrorCodeDescription::instance().name( errorCode() ),
     static_cast< uint16_t>( errorCode() ),

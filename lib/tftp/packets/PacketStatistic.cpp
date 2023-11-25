@@ -15,11 +15,10 @@
 
 #include <tftp/packets/PacketTypeDescription.hpp>
 
-#include <fmt/format.h>
-
 #include <mutex>
 #include <algorithm>
 #include <ostream>
+#include <format>
 
 namespace Tftp::Packets {
 
@@ -78,7 +77,7 @@ std::string PacketStatistic::toString() const
 
   for ( const auto &[ packetType, statistic ] : statistic() )
   {
-    str += fmt::format(
+    str += std::format(
       "{:22}: Count: {} Total Size: {}\n",
       PacketTypeDescription::instance().name( packetType),
       std::get< 0 >( statistic ),
@@ -88,7 +87,7 @@ std::string PacketStatistic::toString() const
     size += std::get< 1 >( statistic );
   }
 
-  str += fmt::format( "{:22}: Count: {} Total Size: {}\n", "Total", count, size );
+  str += std::format( "{:22}: Count: {} Total Size: {}\n", "Total", count, size );
 
   return str;
 }

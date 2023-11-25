@@ -9,7 +9,6 @@
 cmake_minimum_required( VERSION 3.26 )
 
 find_package( Boost REQUIRED COMPONENTS program_options )
-find_package( fmt REQUIRED )
 
 # prepare Version.cpp
 configure_file( Version.hpp.in Version.hpp )
@@ -82,7 +81,6 @@ target_link_libraries(
     Boost::program_options
 
   PRIVATE
-    fmt::fmt
     # Windows Socket must be explicitly linked in MinGW
     $<$<PLATFORM_ID:Windows>:wsock32>
     $<$<PLATFORM_ID:Windows>:ws2_32> )
