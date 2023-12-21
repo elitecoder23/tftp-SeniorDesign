@@ -21,6 +21,8 @@
 
 #include <tftp/tftp_export.h>
 
+#include <helper/Helper.hpp>
+
 #include <memory>
 #include <cstdint>
 #include <chrono>
@@ -129,6 +131,13 @@ using ReceiveDataHandlerPtr = std::shared_ptr< ReceiveDataHandler >;
 using TransmitDataHandlerPtr =  std::shared_ptr< TransmitDataHandler >;
 
 class Version;
+
+/**
+ * @brief Provide TFTP Library Version Information.
+ *
+ * @return Version Information.
+ **/
+TFTP_EXPORT Helper::VersionsInformation::value_type tftpVersion();
 
 }
 

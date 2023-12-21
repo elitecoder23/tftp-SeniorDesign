@@ -149,7 +149,7 @@ int main( int argc, char * argv[] )
 
   try
   {
-    std::cout << "TFTP Server - " << Tftp::Version::VersionString << "\n";
+    std::cout << "TFTP Server - " << Tftp::Version::VersionInformation << "\n";
 
     boost::program_options::options_description optionsDescription{
       "TFTP Server Options" };

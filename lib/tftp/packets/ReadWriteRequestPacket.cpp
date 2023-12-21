@@ -50,7 +50,7 @@ std::string_view ReadWriteRequestPacket::decodeMode(
 TransferMode ReadWriteRequestPacket::decodeMode( std::string_view mode )
 {
   //! @todo check implementation of transform
-  std::string upperMode{ mode};
+  std::string upperMode{ mode };
 
   std::transform(
     upperMode.begin(),

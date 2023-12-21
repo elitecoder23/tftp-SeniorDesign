@@ -16,8 +16,6 @@
 
 #include <tftp/Tftp.hpp>
 
-#include <helper/VersionInformation.hpp>
-
 #include <cstdint>
 
 namespace Tftp {
@@ -52,19 +50,8 @@ class TFTP_EXPORT Version
     static constexpr auto Addition{ "${PROJECT_VERSION_ADDITION}" };
 
     //! Version Information as String.
-    static constexpr auto VersionString{
+    static constexpr auto VersionInformation{
       "${PROJECT_VERSION} (${PROJECT_VERSION_ADDITION})" };
-
-    /**
-     * @brief Provide Version Information as
-     *   Helper::VersionsInformation::value_type.
-     *
-     * @return Version Information.
-     **/
-    static Helper::VersionsInformation::value_type VersionInformation()
-    {
-      return { Key, { Name, VersionString, License, Url } };
-    }
 };
 
 }

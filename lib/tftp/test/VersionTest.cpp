@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE( version )
     << Version::Url << " " << Version::License << "\n";
 
   std::cout
-    << "TFTP Version Information: " << Version::VersionString << "\n";
+    << "TFTP Version Information: " << Version::VersionInformation << "\n";
 }
 
 BOOST_AUTO_TEST_SUITE_END()

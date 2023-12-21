@@ -26,6 +26,7 @@ target_sources(
       BASE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/..
         ${CMAKE_CURRENT_BINARY_DIR}/..
+
       FILES
         DataHandler.hpp
         ReceiveDataHandler.hpp
@@ -42,6 +43,7 @@ target_sources(
 
   PRIVATE
     RequestTypeDescription.cpp
+    Tftp.cpp
     TftpConfiguration.cpp
     TftpOptionsConfiguration.cpp
     TransferStatusDescription.cpp )
