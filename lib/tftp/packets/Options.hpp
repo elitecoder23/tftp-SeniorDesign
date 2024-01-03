@@ -37,7 +37,8 @@ namespace Tftp::Packets {
  * @retval `(NONE)`
  *   When @p options is empty.
  **/
-std::string TFTP_EXPORT Options_toString( const Options &options );
+[[nodiscard]] std::string TFTP_EXPORT Options_toString(
+  const Options &options );
 
 /**
  * @brief Decodes Options from the given Raw Data.
@@ -52,7 +53,7 @@ std::string TFTP_EXPORT Options_toString( const Options &options );
  *
  * @sa TftpOptions_rawOptions()
  **/
-Options TFTP_EXPORT Options_options( RawOptionsSpan rawOptions );
+[[nodiscard]] Options TFTP_EXPORT Options_options( RawOptionsSpan rawOptions );
 
 /**
  * @brief Returns the Option List as Raw Data.
@@ -67,10 +68,23 @@ Options TFTP_EXPORT Options_options( RawOptionsSpan rawOptions );
  *
  * @sa TftpOptions_options()
  **/
-RawOptions TFTP_EXPORT Options_rawOptions( const Options &options );
+[[nodiscard]] RawOptions TFTP_EXPORT Options_rawOptions(
+  const Options &options );
 
 /**
  * @brief Decodes the Named Option.
+ *
+ * It extracts the option namen @p name from @p options and tries to convert it
+ * to the given @p IntT.
+ * Finally, the converted value is checked against the allowed ranges @p min and
+ * @p max.
+ *
+ * The operation returns the option and if the *basic* option negotiation was
+ * successful.
+ *
+ * - Option not found -> @p { true, {} }
+ * - Option value empty or invalid -> @p { false, {} }
+ * - Option value not in range of @p min and @p max -> @p { false, {} }
  *
  * @tparam IntT
  *   Unsigned Integer Type.
@@ -86,9 +100,9 @@ RawOptions TFTP_EXPORT Options_rawOptions( const Options &options );
  *
  * @return std::pair Option was valid (not present or decoded correctly) and
  *   Option Value
- */
+ **/
 template< std::unsigned_integral IntT >
-std::pair< bool, std::optional< IntT > > Options_getOption(
+[[nodiscard]] std::pair< bool, std::optional< IntT > > Options_getOption(
   Options &options,
   const std::string &name,
   IntT min = std::numeric_limits< IntT >::min(),

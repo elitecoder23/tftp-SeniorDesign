@@ -58,7 +58,8 @@ struct TFTP_EXPORT TftpOptions
  *
  * @return Returns the option name.
  **/
-std::string TFTP_EXPORT TftpOptions_name( KnownOptions option ) noexcept;
+[[nodiscard]] std::string TFTP_EXPORT TftpOptions_name(
+  KnownOptions option ) noexcept;
 
 /**
  * @brief Returns a string, which describes the TFTP Options.
@@ -72,7 +73,8 @@ std::string TFTP_EXPORT TftpOptions_name( KnownOptions option ) noexcept;
  * @retval `(NONE)`
  *   When @p options is empty.
  **/
-std::string TFTP_EXPORT TftpOptions_toString( const TftpOptions &options );
+[[nodiscard]] std::string TFTP_EXPORT TftpOptions_toString(
+  const TftpOptions &options );
 
 /**
  * @brief Outputs @p options to @p stream.
@@ -84,8 +86,9 @@ std::string TFTP_EXPORT TftpOptions_toString( const TftpOptions &options );
  *
  * @return @p stream
  **/
-TFTP_EXPORT std::ostream&
-operator<<( std::ostream &stream, const TftpOptions &options );
+TFTP_EXPORT std::ostream& operator<<(
+  std::ostream &stream,
+  const TftpOptions &options );
 
 }
 

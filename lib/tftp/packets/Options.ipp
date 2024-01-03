@@ -32,9 +32,16 @@ Options_getOption(
     return { true, {} };
   }
 
+  const auto optionString{ option.mapped() };
+
+  if ( optionString.empty() )
+  {
+    return { false, {} };
+  }
+
   try
   {
-    const auto optionValue{ std::stoull( option.mapped() ) };
+    const auto optionValue{ std::stoull( optionString ) };
 
     if ( ( optionValue < min ) || ( optionValue > max ) )
     {
@@ -45,15 +52,15 @@ Options_getOption(
   }
   catch ( const std::invalid_argument & )
   {
-    return { true, {} };
+    return { false, {} };
   }
   catch ( const std::out_of_range & )
   {
-    return { true, {} };
+    return { false, {} };
   }
   catch ( ... )
   {
-    return { true, {} };
+    return { false, {} };
   }
 }
 

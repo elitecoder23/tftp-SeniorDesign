@@ -25,7 +25,7 @@ namespace Tftp::Packets {
 /**
  * @brief TFTP Read Request %Packet (RRQ).
  **/
-class TFTP_EXPORT ReadRequestPacket : public ReadWriteRequestPacket
+class TFTP_EXPORT ReadRequestPacket final : public ReadWriteRequestPacket
 {
   public:
     /**

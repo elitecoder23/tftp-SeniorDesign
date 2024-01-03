@@ -39,10 +39,12 @@ BOOST_AUTO_TEST_CASE( name )
 BOOST_AUTO_TEST_CASE( toString )
 {
   TftpOptions options{};
-  BOOST_CHECK_NO_THROW( TftpOptions_toString( options ) );
+  BOOST_CHECK_NO_THROW(
+    boost::ignore_unused( TftpOptions_toString( options ) ) );
 
   options.transferSize=1000;
-  BOOST_CHECK_NO_THROW( TftpOptions_toString( options ) );
+  BOOST_CHECK_NO_THROW(
+    boost::ignore_unused( TftpOptions_toString( options ) ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

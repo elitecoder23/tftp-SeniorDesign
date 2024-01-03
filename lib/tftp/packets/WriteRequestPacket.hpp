@@ -22,7 +22,7 @@ namespace Tftp::Packets {
 /**
  * @brief TFTP Write Request %Packet (WRQ).
  **/
-class TFTP_EXPORT WriteRequestPacket : public ReadWriteRequestPacket
+class TFTP_EXPORT WriteRequestPacket final : public ReadWriteRequestPacket
 {
   public:
     /**

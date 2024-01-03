@@ -34,7 +34,7 @@ namespace Tftp::Packets {
  * | 2 B  |  str  | 1 B |  str   | 1 B |     |  str  | 1 B |  str   | 1 B |
  *
  **/
-class TFTP_EXPORT OptionsAcknowledgementPacket : public Packet
+class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
 {
   public:
     /**
@@ -97,13 +97,13 @@ class TFTP_EXPORT OptionsAcknowledgementPacket : public Packet
     /** @} **/
 
     // @copydoc Packet::operator std::string() const
-    explicit operator std::string() const final;
+    explicit operator std::string() const override;
 
   private:
     /**
      * @copydoc Packet::encode()
      **/
-    [[nodiscard]] RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const override;
 
     /**
      * @brief Decodes the TFTP body.
@@ -117,7 +117,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket : public Packet
     void decodeBody( ConstRawTftpPacketSpan rawPacket );
 
     //! Stored Options.
-    Options optionsV;
+    Options optionsV{};
 };
 
 }

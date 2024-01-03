@@ -29,10 +29,10 @@ BOOST_AUTO_TEST_SUITE( OptionsTest )
 BOOST_AUTO_TEST_CASE( toString )
 {
   Options options{};
-  BOOST_CHECK_NO_THROW( Options_toString( options ) );
+  BOOST_CHECK_NO_THROW( boost::ignore_unused( Options_toString( options ) ) );
 
   options.try_emplace( "name", "value" );
-  BOOST_CHECK_NO_THROW( Options_toString( options ) );
+  BOOST_CHECK_NO_THROW( boost::ignore_unused( Options_toString( options ) ) );
 }
 
 //! Options_options tests
@@ -52,13 +52,13 @@ BOOST_AUTO_TEST_CASE( optionsDecode )
   BOOST_CHECK( ( options == Options{ { "OPTION1", "VALUE1"}, { "OPTION2", "VALUE2" } } ) );
 
   BOOST_CHECK_THROW(
-    Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+7U } ),
+    boost::ignore_unused( Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+7U } ) ),
     TftpException );
   BOOST_CHECK_THROW(
-    Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+8U } ),
+    boost::ignore_unused( Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+8U } ) ),
     TftpException );
   BOOST_CHECK_THROW(
-    Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+14U } ),
+    boost::ignore_unused( Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+14U } ) ),
     TftpException );
 }
 
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE( getOptions )
   BOOST_CHECK( Options_getOption< uint16_t >( opt1, "optX" ) == std::make_pair( true, std::optional< uint16_t >{} ) );
 
   auto opt2{ options };
-  BOOST_CHECK_NO_THROW( Options_getOption< uint16_t >( opt2, "opt1" ) );// == std::make_pair( false, std::optional< uint16_t >{} ) );
+  BOOST_CHECK( Options_getOption< uint16_t >( opt2, "opt1" ) == std::make_pair( false, std::optional< uint16_t >{} ) );
 
   auto opt3{ options };
   BOOST_CHECK( Options_getOption< uint16_t >( opt3, "opt2" ) == std::make_pair( true, std::optional< uint16_t >{ 65535 } ) );
