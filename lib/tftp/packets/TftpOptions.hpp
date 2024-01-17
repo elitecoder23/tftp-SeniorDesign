@@ -32,11 +32,29 @@ namespace Tftp::Packets {
  **/
 struct TFTP_EXPORT TftpOptions
 {
-  //! Block size option
+  /**
+   * @brief Block size option (RFC 2348)
+   *
+   * The number of octets in a block.
+   * Valid values range between "8" and "65464" octets, inclusive.
+   * The *blocksize* refers to the number of data octets; it does not include
+   * the four octets of TFTP header.
+   **/
   std::optional< uint16_t > blockSize;
-  //! Timeout option
+  /**
+   * @brief Timeout option (RFC 2349)
+   *
+   * The number of seconds to wait before retransmitting.
+   * Valid values range between "1" and "255" seconds, inclusive.
+   **/
   std::optional< uint8_t > timeout;
-  //! Transfer size option
+  /**
+   * @brief Transfer size option (RFC 2349)
+   *
+   * The size of the file to be transferred.
+   * Allows the side receiving the file to determine the ultimate size of the
+   * transfer before it begins.
+   **/
   std::optional< uint64_t > transferSize;
 
   /**

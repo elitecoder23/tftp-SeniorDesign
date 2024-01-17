@@ -24,7 +24,7 @@ namespace Tftp::Packets {
  *
  * Block numbers are used within the TFTP Data and TFTP Acknowledgement
  * packet.
- * A block number is an 16 Bit integer, which has a special meaning of the
+ * A block number is an 16-Bit integer, which has a special meaning of the
  * 0-value.
  * This 0-value handling is implemented within this class.
  *
