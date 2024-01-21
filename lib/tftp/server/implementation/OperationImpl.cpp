@@ -132,7 +132,7 @@ void OperationImpl::finished(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "Operation finished";
+    << "TFTP Server Operation finished";
 
   errorInfoV = std::move( errorInfo );
 

@@ -185,7 +185,7 @@ void WriteOperationImpl::acknowledgementPacket(
   // check retransmission
   if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
       << "Received previous ACK packet: retry of last data package - "
          "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
@@ -475,6 +475,9 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( transferSizeValue && *transferSizeValue != *transferSize )
   {
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      << "Transfer size value not equal to sent value";
+
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::TftpOptionRefused,
       "transfer size invalid" };

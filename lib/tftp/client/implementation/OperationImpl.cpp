@@ -133,7 +133,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "TX: " << static_cast< std::string>( packet );
 
   try
@@ -168,7 +168,7 @@ void OperationImpl::send( const Packets::Packet &packet )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "TX: " << static_cast< std::string>( packet );
 
   try
@@ -292,7 +292,7 @@ void OperationImpl::finished(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "Operation finished";
+    << "TFTP Client Operation finished";
 
   errorInfoV = std::move( errorInfo );
 

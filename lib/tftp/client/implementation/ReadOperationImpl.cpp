@@ -143,7 +143,7 @@ void ReadOperationImpl::dataPacket(
   // check retransmission of last packet
   if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
       << "Received last data package again. Re-ACK them";
 
     // Retransmit last ACK packet
