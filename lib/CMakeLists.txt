@@ -6,7 +6,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.26 )
+cmake_minimum_required( VERSION 3.28 )
 
 add_subdirectory( tftp )
 add_subdirectory( tftp_qt )
