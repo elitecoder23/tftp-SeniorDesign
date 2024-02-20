@@ -1,6 +1,7 @@
 ---
 default:
   image: git.thomas-vogt.de:5050/thomas-vogt/docker-gcc-clang-cmake:latest
+  interruptible: true
   retry:
     max: 1
     when:
