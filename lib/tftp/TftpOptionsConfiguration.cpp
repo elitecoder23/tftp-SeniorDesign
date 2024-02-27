@@ -30,14 +30,11 @@ void TftpOptionsConfiguration::fromProperties(
 {
   handleTransferSizeOption = properties.get( "transfer_size", false );
   blockSizeOption = properties.get_optional< uint16_t>( "block_size" );
-  //! @todo use std::optional::transform when C++23 is available
-  const auto timeoutOptionInt{
-    properties.get_optional< std::chrono::seconds::rep >( "timeout" ) };
-  timeoutOption.reset();
-  if ( timeoutOptionInt )
-  {
-    timeoutOption = std::chrono::seconds{ *timeoutOptionInt };
-  }
+  // convert to std::chrono (is similar to std::optional::transform)
+  timeoutOption =
+    properties.get_optional< std::chrono::seconds::rep >( "timeout" )
+      .map(
+        []( const auto timeout ) { return std::chrono::seconds{ timeout }; } );
 }
 
 boost::property_tree::ptree TftpOptionsConfiguration::toProperties(

@@ -39,11 +39,11 @@ TftpConfiguration::TftpConfiguration(
 void TftpConfiguration::fromProperties(
   const boost::property_tree::ptree &properties )
 {
-  //! @todo use std::optional::transform when C++23 is available
-  const auto tftpTimeOutInt{ properties.get< std::chrono::seconds::rep >(
-    "timeout",
-    DefaultTftpReceiveTimeout.count() ) };
-  tftpTimeout = std::chrono::seconds{ tftpTimeOutInt };
+  // convert to std::chrono (is similar to std::optional::transform)
+  tftpTimeout =
+    properties.get_optional< std::chrono::seconds::rep >( "timeout" )
+      .map( []( const auto timeout ) { return std::chrono::seconds{ timeout }; } )
+      .get_value_or( DefaultTftpReceiveTimeout );
   tftpRetries = properties.get( "retries", DefaultTftpRetries ) ;
   tftpServerPort = properties.get( "port", defaultTftpPort );
   dally = properties.get( "dally", false ) ;

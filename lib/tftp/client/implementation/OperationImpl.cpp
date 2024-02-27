@@ -31,17 +31,7 @@
 
 namespace Tftp::Client {
 
-OperationImpl::~OperationImpl() noexcept
-{
-  BOOST_LOG_FUNCTION()
-
-  boost::system::error_code ec;
-  // close socket and cancel all possible asynchronous operations.
-  // TODO remove cast for new boost version
-  (void)socket.close( ec );
-  // cancel timer
-  timer.cancel( ec );
-}
+OperationImpl::~OperationImpl() noexcept = default;
 
 void OperationImpl::gracefulAbort(
   const Packets::ErrorCode errorCode,
@@ -210,7 +200,7 @@ void OperationImpl::receiveFirst()
       std::bind_front( &OperationImpl::receiveFirstHandler, this ) );
 
     // Set receive timeout
-    timer.expires_from_now( receiveTimeoutV );
+    timer.expires_after( receiveTimeoutV );
 
     // start waiting for receive timeout
     timer.async_wait( std::bind_front(
@@ -238,7 +228,7 @@ void OperationImpl::receive()
       std::bind_front( &OperationImpl::receiveHandler, this ) );
 
     // set receive timeout
-    timer.expires_from_now( receiveTimeoutV );
+    timer.expires_after( receiveTimeoutV );
 
     // start waiting for receive timeout
     timer.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
@@ -264,7 +254,7 @@ void OperationImpl::receiveDally()
       std::bind_front( &OperationImpl::receiveHandler, this ) );
 
     // set receive timeout
-    timer.expires_from_now( 2U * receiveTimeoutV );
+    timer.expires_after( 2U * receiveTimeoutV );
 
     // start waiting for receive timeout
     timer.async_wait(
@@ -569,7 +559,7 @@ void OperationImpl::timeoutFirstHandler(
     // increment transmit counter
     ++transmitCounter;
 
-    timer.expires_from_now( receiveTimeoutV );
+    timer.expires_after( receiveTimeoutV );
 
     timer.async_wait(
       std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
@@ -629,7 +619,7 @@ void OperationImpl::timeoutHandler(
 
     ++transmitCounter;
 
-    timer.expires_from_now( receiveTimeoutV );
+    timer.expires_after( receiveTimeoutV );
 
     timer.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
   }

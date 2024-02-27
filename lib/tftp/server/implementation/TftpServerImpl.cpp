@@ -75,15 +75,7 @@ catch ( const boost::system::system_error &err )
     << TransferPhaseInfo{ TransferPhase::Initialisation } );
 }
 
-TftpServerImpl::~TftpServerImpl() noexcept
-{
-  BOOST_LOG_FUNCTION()
-
-  boost::system::error_code ec;
-  // close socket and cancel all possible asynchronous operations.
-  // TODO remove cast for new boost version
-  (void)socket.close( ec );
-}
+TftpServerImpl::~TftpServerImpl() noexcept = default;
 
 boost::asio::ip::udp::endpoint TftpServerImpl::localEndpoint() const
 {

@@ -53,6 +53,10 @@ target_compile_features( tftp PUBLIC cxx_std_23 )
 target_compile_definitions(
   tftp
 
+  PUBLIC
+    # deactivate Boost ASIO deprecated interfaces
+    BOOST_ASIO_NO_DEPRECATED
+
   PRIVATE
     # Disable C++17 deprecation warning for BOOST in MSVC (Version 1.67)
     $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING> )

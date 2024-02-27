@@ -113,17 +113,7 @@ catch ( const boost::system::system_error &err )
     << Helper::AdditionalInfo{ err.what() } );
 }
 
-OperationImpl::~OperationImpl() noexcept
-{
-  BOOST_LOG_FUNCTION()
-
-  boost::system::error_code ec;
-  // close socket and cancel all possible asynchronous operations.
-  // TODO remove cast for new boost version
-  (void)socket.close( ec );
-  // cancel timer
-  timer.cancel( ec );
-}
+OperationImpl::~OperationImpl() noexcept = default;
 
 void OperationImpl::finished(
   const TransferStatus status,
@@ -188,7 +178,7 @@ void OperationImpl::receive()
       boost::asio::buffer( receivePacket),
       std::bind_front( &OperationImpl::receiveHandler, this ) );
 
-    timer.expires_from_now( receiveTimeoutV );
+    timer.expires_after( receiveTimeoutV );
 
     timer.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
   }
@@ -213,7 +203,7 @@ void OperationImpl::receiveDally()
       boost::asio::buffer( receivePacket ),
       std::bind_front( &OperationImpl::receiveHandler, this ) );
 
-    timer.expires_from_now( 2U * receiveTimeoutV );
+    timer.expires_after( 2U * receiveTimeoutV );
 
     timer.async_wait(
       std::bind_front( &OperationImpl::timeoutDallyHandler, this ) );
@@ -408,7 +398,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 
     ++transmitCounter;
 
-    timer.expires_from_now( receiveTimeoutV );
+    timer.expires_after( receiveTimeoutV );
 
     timer.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
   }
