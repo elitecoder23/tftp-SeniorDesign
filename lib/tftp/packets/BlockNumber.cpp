@@ -57,7 +57,7 @@ BlockNumber& BlockNumber::operator++()
   return *this;
 }
 
-const BlockNumber BlockNumber::operator++( int )
+BlockNumber BlockNumber::operator++( int )
 {
   const BlockNumber old{ blockNumberV };
   blockNumberV = next();

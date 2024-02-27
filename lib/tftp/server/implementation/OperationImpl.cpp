@@ -226,7 +226,7 @@ void OperationImpl::receiveTimeout(
 }
 
 void OperationImpl::readRequestPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket)
 {
   BOOST_LOG_FUNCTION()
@@ -245,7 +245,7 @@ void OperationImpl::readRequestPacket(
 }
 
 void OperationImpl::writeRequestPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::WriteRequestPacket &writeRequestPacket)
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
@@ -262,7 +262,7 @@ void OperationImpl::writeRequestPacket(
 }
 
 void OperationImpl::errorPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::ErrorPacket &errorPacket )
 {
   BOOST_LOG_FUNCTION()
@@ -293,7 +293,7 @@ void OperationImpl::errorPacket(
 }
 
 void OperationImpl::optionsAcknowledgementPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {
   BOOST_LOG_FUNCTION()
@@ -312,8 +312,8 @@ void OperationImpl::optionsAcknowledgementPacket(
 }
 
 void OperationImpl::invalidPacket(
-  const boost::asio::ip::udp::endpoint &,
-  Packets::ConstRawTftpPacketSpan )
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
+  [[maybe_unused]] Packets::ConstRawTftpPacketSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 

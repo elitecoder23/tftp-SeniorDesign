@@ -96,7 +96,7 @@ class TFTP_EXPORT BlockNumber
      * @return The class itself
      **/
 
-    const BlockNumber operator++( int );
+    BlockNumber operator++( int );
 
     /**
      * @brief Un-equality Comparison to Block Number.

@@ -189,7 +189,7 @@ void ReadOperationImpl::sendData()
 }
 
 void ReadOperationImpl::dataPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket )
 {
   BOOST_LOG_FUNCTION()
@@ -208,7 +208,7 @@ void ReadOperationImpl::dataPacket(
 }
 
 void ReadOperationImpl::acknowledgementPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
   BOOST_LOG_FUNCTION()

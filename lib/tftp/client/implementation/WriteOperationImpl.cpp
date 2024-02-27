@@ -155,7 +155,7 @@ void WriteOperationImpl::sendData()
 }
 
 void WriteOperationImpl::dataPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket )
 {
   BOOST_LOG_FUNCTION()
@@ -174,7 +174,7 @@ void WriteOperationImpl::dataPacket(
 }
 
 void WriteOperationImpl::acknowledgementPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
   BOOST_LOG_FUNCTION()
@@ -250,7 +250,7 @@ void WriteOperationImpl::acknowledgementPacket(
 }
 
 void WriteOperationImpl::optionsAcknowledgementPacket(
-  const boost::asio::ip::udp::endpoint &,
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {
   BOOST_LOG_FUNCTION()

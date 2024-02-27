@@ -38,10 +38,10 @@ BOOST_AUTO_TEST_CASE( decodeModeString)
 //! Decode enumeration test
 BOOST_AUTO_TEST_CASE( decodeModeEnum)
 {
-  BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::Invalid) == std::string_view{});
-  BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::OCTET) == "OCTET");
-  BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::NETASCII) == "NETASCII");
-  BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::MAIL) == "MAIL");
+  BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::Invalid ).empty() );
+  BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::OCTET ) == "OCTET" );
+  BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::NETASCII ) == "NETASCII" );
+  BOOST_CHECK( ReadWriteRequestPacket::decodeMode( TransferMode::MAIL ) == "MAIL" );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

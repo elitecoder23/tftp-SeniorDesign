@@ -366,8 +366,8 @@ void TftpServerImpl::optionsAcknowledgementPacket(
 }
 
 void TftpServerImpl::invalidPacket(
-  const boost::asio::ip::udp::endpoint &,
-  Packets::ConstRawTftpPacketSpan )
+  [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
+  [[maybe_unused]] Packets::ConstRawTftpPacketSpan rawPacket )
 {
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "RX: UNKNOWN: *ERROR* - IGNORE";
