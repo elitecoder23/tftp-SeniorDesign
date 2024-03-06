@@ -17,10 +17,23 @@ workflow:
 
 .cmake_build:
   stage: build
+  variables:
+    CCACHE_BASEDIR: $CI_PROJECT_DIR
+    CCACHE_DIR: $CI_PROJECT_DIR/ccache
+    CMAKE_C_COMPILER_LAUNCHER: ccache
+    CMAKE_CXX_COMPILER_LAUNCHER: ccache
+  cache:
+    key: ccache-$CI_JOB_NAME
+    paths:
+      - $CCACHE_DIR
+  before_script:
+    - ccache --zero-stats
   script:
     - cmake --preset ${CMAKE_PRESET}
     - cmake --build --preset ${CMAKE_PRESET} --target all doc
     - ctest --preset ${CMAKE_PRESET}
+  after_script:
+    - ccache --show-stats
 
 GCC Static Debug:
   extends: .cmake_build
