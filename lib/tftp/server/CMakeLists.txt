@@ -17,13 +17,11 @@ target_sources(
         Operation.hpp
         ReadOperationConfiguration.hpp
         Server.hpp
-        ServerConfiguration.hpp
         TftpServer.hpp
         WriteOperationConfiguration.hpp
 
   PRIVATE
     ReadOperationConfiguration.cpp
-    ServerConfiguration.cpp
     TftpServer.cpp
     WriteOperationConfiguration.cpp
 

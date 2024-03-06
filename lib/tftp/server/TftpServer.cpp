@@ -13,7 +13,6 @@
 
 #include "TftpServer.hpp"
 
-#include <tftp/server/ServerConfiguration.hpp>
 #include <tftp/server/implementation/TftpServerImpl.hpp>
 
 namespace Tftp::Server {
@@ -22,14 +21,10 @@ const boost::asio::ip::udp::endpoint TftpServer::DefaultLocalEndpoint{
   boost::asio::ip::address_v4::any(),
   DefaultTftpPort };
 
-TftpServerPtr TftpServer::instance(
-  boost::asio::io_context &ioContext,
-  ServerConfiguration configuration )
+TftpServerPtr TftpServer::instance( boost::asio::io_context &ioContext )
 {
   // create and return the real TFTP server
-  return std::make_shared< TftpServerImpl >(
-    ioContext,
-    std::move( configuration ) );
+  return std::make_shared< TftpServerImpl >( ioContext );
 }
 
 }

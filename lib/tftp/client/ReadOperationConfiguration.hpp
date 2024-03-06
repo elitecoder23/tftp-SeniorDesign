@@ -35,7 +35,6 @@ struct TFTP_EXPORT ReadOperationConfiguration
   uint16_t tftpRetries;
   //! If set to true, wait after transmission of the final ACK for potential
   //! retries.
-  //! Used by TFTP RRQ Operation
   bool dally;
   //! TFTP Options Configuration.
   TftpOptionsConfiguration optionsConfiguration;

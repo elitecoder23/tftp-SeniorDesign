@@ -13,7 +13,6 @@
 
 #include <tftp/server/TftpServer.hpp>
 #include <tftp/server/Operation.hpp>
-#include <tftp/server/ServerConfiguration.hpp>
 #include <tftp/server/ReadOperationConfiguration.hpp>
 #include <tftp/server/WriteOperationConfiguration.hpp>
 
@@ -198,18 +197,20 @@ int main( int argc, char * argv[] )
       << "Starting TFTP server in " << baseDir.string() << "\n";
 
     // The TFTP server instance
-    server = Tftp::Server::TftpServer::instance(
-      ioContext,
-      Tftp::Server::ServerConfiguration{
-        std::bind_front( &receivedRequest ),
-        boost::asio::ip::udp::endpoint{
-          boost::asio::ip::address_v4::any(),
-          tftpConfiguration.tftpServerPort } } );
+    server = Tftp::Server::TftpServer::instance( ioContext );
+    assert( server );
+
+    // configure
+    server
+      ->requestHandler( std::bind_front( &receivedRequest ) )
+      .serverAddress( boost::asio::ip::udp::endpoint{
+        boost::asio::ip::address_v4::any(),
+        tftpConfiguration.tftpServerPort } );
+
+    server->start();
 
     std::cout
       << "Listening on " << server->localEndpoint() << "\n";
-
-    server->start();
 
     // connect to SIGINT and SIGTERM
     signals.async_wait( [](

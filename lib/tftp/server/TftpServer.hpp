@@ -54,23 +54,48 @@ class TFTP_EXPORT TftpServer
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] configuration
-     *   TFTP Server Configuration.
      *
      * @return TFTP Server Instance.
      **/
     [[nodiscard]] static TftpServerPtr instance(
-      boost::asio::io_context &ioContext,
-      ServerConfiguration configuration );
+      boost::asio::io_context &ioContext );
 
     //! Destructor
     virtual ~TftpServer() noexcept = default;
+
+    /**
+     * @brief Set TFTP Request Received Handler
+     *
+     * @param[in] requestHandler
+     *   TFTP Request Handler
+     *
+     * @return *this for chaining.
+     **/
+    virtual TftpServer& requestHandler(
+      ReceivedTftpRequestHandler requestHandler ) = 0;
+
+    /**
+     * @brief Set Address where the TFTP server should listen on.
+     *
+     * If address is not set @ref DefaultLocalEndpoint is used.
+     *
+     * @param serverAddress
+     *   Address where the TFTP server should listen on.
+     *
+     * @return *this for chaining.
+     **/
+    virtual TftpServer& serverAddress(
+      boost::asio::ip::udp::endpoint serverAddress ) = 0;
 
     /**
      * @brief Returns the effective local endpoint.
      *
      * Is used to determine the local endpoint, when an automatic local endpoint
      * is selected.
+     *
+     * @note
+     * The return value is valid after calling @ref start(), when the port is
+     * bound, actually.
      *
      * @return Local endpoint.
      **/

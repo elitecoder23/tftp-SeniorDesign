@@ -16,7 +16,6 @@
 
 #include <tftp/server/Server.hpp>
 #include <tftp/server/TftpServer.hpp>
-#include <tftp/server/ServerConfiguration.hpp>
 
 #include <tftp/packets/PacketHandler.hpp>
 
@@ -48,20 +47,25 @@ class TftpServerImpl final :
      *
      * @param[in] ioContext
      *   I/O context used for Communication.
-     * @param[in] configuration
-     *   TFTP Server Configuration
      *
      * @throw CommunicationException
      *   When an error occurs during socket initialisation.
      **/
     TftpServerImpl(
-      boost::asio::io_context &ioContext,
-      ServerConfiguration configuration );
+      boost::asio::io_context &ioContext );
 
     /**
      * @brief Destructor
      **/
     ~TftpServerImpl() noexcept override;
+
+    //! @copydoc TftpServer::requestHandler()
+    TftpServer& requestHandler(
+      ReceivedTftpRequestHandler requestHandler ) override;
+
+    //! @copydoc TftpServer::serverAddress()
+    TftpServer& serverAddress(
+      boost::asio::ip::udp::endpoint serverAddress ) override;
 
     //! @copydoc TftpServer::localEndpoint()
     [[nodiscard]] boost::asio::ip::udp::endpoint localEndpoint() const override;
@@ -200,18 +204,20 @@ class TftpServerImpl final :
      **/
     Packets::TftpOptions tftpOptions( Packets::Options &clientOptions ) const;
 
-    //! TFTP Server I/O context
-    boost::asio::io_context &ioContext;
-    //! TFTP well known socket
-    boost::asio::ip::udp::socket socket;
+    //! TFTP Request Received Handler
+    ReceivedTftpRequestHandler requestHandlerV{};
+    //! Address where the TFTP server should listen on.
+    boost::asio::ip::udp::endpoint serverAddressV{ DefaultLocalEndpoint };
 
-    //! TFTP Client Configuration
-    ServerConfiguration configurationV;
+    //! TFTP Server I/O context
+    boost::asio::io_context &ioContextV;
+    //! TFTP well known socket
+    boost::asio::ip::udp::socket socketV;
 
     //! Buffer, which holds the received TFTP packet.
-    Packets::RawTftpPacket receivePacket;
+    Packets::RawTftpPacket receivePacketV;
     //! Remote endpoint on receive.
-    boost::asio::ip::udp::endpoint remoteEndpoint;
+    boost::asio::ip::udp::endpoint remoteEndpointV;
 };
 
 }

@@ -53,7 +53,6 @@ namespace Tftp::Server {
 // Forward declarations
 class TftpServer;
 
-struct ServerConfiguration;
 struct ReadOperationConfiguration;
 struct WriteOperationConfiguration;
 

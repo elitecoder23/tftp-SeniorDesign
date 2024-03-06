@@ -37,30 +37,55 @@
 
 namespace Tftp::Server {
 
-TftpServerImpl::TftpServerImpl(
-  boost::asio::io_context &ioContext,
-  ServerConfiguration configuration )
-try :
-  ioContext{ ioContext },
-  socket{ ioContext },
-  configurationV{ std::move( configuration ) },
-  receivePacket( Packets::DefaultMaxPacketSize )
+TftpServerImpl::TftpServerImpl( boost::asio::io_context &ioContext ):
+  ioContextV{ ioContext },
+  socketV{ ioContextV },
+  receivePacketV( Packets::DefaultMaxPacketSize )
 {
+}
+
+TftpServerImpl::~TftpServerImpl() noexcept = default;
+
+TftpServer& TftpServerImpl::requestHandler(
+  ReceivedTftpRequestHandler requestHandler )
+{
+  requestHandlerV = std::move( requestHandler );
+  return *this;
+}
+
+TftpServer& TftpServerImpl::serverAddress(
+  boost::asio::ip::udp::endpoint serverAddress )
+{
+  serverAddressV = std::move( serverAddress );
+  return *this;
+}
+
+boost::asio::ip::udp::endpoint TftpServerImpl::localEndpoint() const
+{
+  return socketV.local_endpoint();
+}
+
+void TftpServerImpl::start()
+{
+  BOOST_LOG_FUNCTION()
+
   try
   {
     // open the socket
-    socket.open(
-      configurationV.serverAddress.value_or( DefaultLocalEndpoint ).protocol() );
+    socketV.open( serverAddressV.protocol() );
 
     // bind to the local address
-    socket.bind( configurationV.serverAddress.value_or( DefaultLocalEndpoint ) );
+    socketV.bind( serverAddressV );
+
+    // start receive
+    receive();
   }
   catch ( const boost::system::system_error &err )
   {
     // close socket when opened
-    if ( socket.is_open() )
+    if ( socketV.is_open() )
     {
-      socket.close();
+      socketV.close();
     }
 
     BOOST_THROW_EXCEPTION( CommunicationException()
@@ -68,39 +93,19 @@ try :
       << TransferPhaseInfo{ TransferPhase::Initialisation } );
   }
 }
-catch ( const boost::system::system_error &err )
-{
-  BOOST_THROW_EXCEPTION( CommunicationException()
-    << Helper::AdditionalInfo{ err.what() }
-    << TransferPhaseInfo{ TransferPhase::Initialisation } );
-}
-
-TftpServerImpl::~TftpServerImpl() noexcept = default;
-
-boost::asio::ip::udp::endpoint TftpServerImpl::localEndpoint() const
-{
-  return socket.local_endpoint();
-}
-
-void TftpServerImpl::start()
-{
-  BOOST_LOG_FUNCTION()
-
-  // start receive
-  receive();
-}
 
 void TftpServerImpl::stop()
 {
-  // cancel receive operation
-  socket.cancel();
+  socketV.cancel();
+
+  socketV.close();
 }
 
 OperationPtr TftpServerImpl::readOperation(
   ReadOperationConfiguration configuration )
 {
   return std::make_shared< ReadOperationImpl >(
-    ioContext,
+    ioContextV,
     std::move( configuration ) );
 }
 
@@ -108,7 +113,7 @@ OperationPtr TftpServerImpl::writeOperation(
   WriteOperationConfiguration configuration )
 {
   return std::make_shared< WriteOperationImpl >(
-    ioContext,
+    ioContextV,
     std::move( configuration ) );
 }
 
@@ -126,7 +131,7 @@ void TftpServerImpl::errorOperation(
 
   try
   {
-    boost::asio::ip::udp::socket errSocket{ ioContext };
+    boost::asio::ip::udp::socket errSocket{ ioContextV };
 
     errSocket.open( remote.protocol() );
 
@@ -163,7 +168,7 @@ void TftpServerImpl::errorOperation(
 
   try
   {
-    boost::asio::ip::udp::socket errSocket{ ioContext };
+    boost::asio::ip::udp::socket errSocket{ ioContextV };
 
     errSocket.open( remote.protocol() );
 
@@ -192,9 +197,9 @@ void TftpServerImpl::receive()
   try
   {
     // wait for incoming packet
-    socket.async_receive_from(
-      boost::asio::buffer( receivePacket ),
-      remoteEndpoint,
+    socketV.async_receive_from(
+      boost::asio::buffer( receivePacketV ),
+      remoteEndpointV,
       std::bind_front( &TftpServerImpl::receiveHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
@@ -229,8 +234,8 @@ void TftpServerImpl::receiveHandler(
   {
     // handle the received packet (decode it and call the appropriate handler)
     packet(
-      remoteEndpoint,
-      Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
+      remoteEndpointV,
+      Packets::ConstRawTftpPacketSpan{ receivePacketV.begin(), bytesTransferred } );
   }
   catch ( const TftpException &e )
   {
@@ -249,7 +254,7 @@ void TftpServerImpl::readRequestPacket(
     << "RX: " << static_cast< std::string>( readRequestPacket );
 
   // check handler
-  if ( !configurationV.handler )
+  if ( !requestHandlerV )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
       << "No registered handler - reject";
@@ -266,7 +271,7 @@ void TftpServerImpl::readRequestPacket(
   auto decodedOptions{ tftpOptions( receivedOptions ) };
 
   // call the handler, which handles the received request
-  configurationV.handler(
+  requestHandlerV(
     remote,
     RequestType::Read,
     readRequestPacket.filename(),
@@ -283,7 +288,7 @@ void TftpServerImpl::writeRequestPacket(
     << "RX: " << static_cast< std::string>( writeRequestPacket );
 
   // check handler
-  if ( !configurationV.handler)
+  if ( !requestHandlerV )
   {
     BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
       << "No registered handler - reject";
@@ -300,7 +305,7 @@ void TftpServerImpl::writeRequestPacket(
   auto decodedOptions{ tftpOptions( receivedOptions ) };
 
   // call the handler, which handles the received request
-  configurationV.handler(
+  requestHandlerV(
     remote,
     RequestType::Write,
     writeRequestPacket.filename(),
