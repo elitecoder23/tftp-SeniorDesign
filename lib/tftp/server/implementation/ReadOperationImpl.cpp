@@ -83,11 +83,13 @@ void ReadOperationImpl::start()
           <= *configurationV.optionsConfiguration.timeoutOption ) )
       {
         receiveTimeout(
+          // NOLINTNEXTLINE(bugprone-unchecked-optional-access): false positive
           std::chrono::seconds{ *configurationV.clientOptions.timeout } );
 
         // respond with timeout option set
         serverOptions.try_emplace(
           Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+          // NOLINTNEXTLINE(bugprone-unchecked-optional-access): false positive
           std::to_string( *configurationV.clientOptions.timeout ) );
       }
 
