@@ -57,7 +57,7 @@ class TftpServerImpl final :
     /**
      * @brief Destructor
      **/
-    ~TftpServerImpl() noexcept override;
+    ~TftpServerImpl() override;
 
     //! @copydoc TftpServer::requestHandler()
     TftpServer& requestHandler(

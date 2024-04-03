@@ -61,7 +61,7 @@ class TFTP_EXPORT TftpServer
       boost::asio::io_context &ioContext );
 
     //! Destructor
-    virtual ~TftpServer() noexcept = default;
+    virtual ~TftpServer() = default;
 
     /**
      * @brief Set TFTP Request Received Handler

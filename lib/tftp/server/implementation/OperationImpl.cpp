@@ -113,7 +113,7 @@ catch ( const boost::system::system_error &err )
     << Helper::AdditionalInfo{ err.what() } );
 }
 
-OperationImpl::~OperationImpl() noexcept = default;
+OperationImpl::~OperationImpl() = default;
 
 void OperationImpl::finished(
   const TransferStatus status,
@@ -371,21 +371,21 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 
   if ( errorCode )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "timer error: " << errorCode.message();
 
     // Operation completed
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
     return;
   }
 
   if ( transmitCounter > tftpRetries )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
       << "Retry counter exceeded ABORT";
 
     // Operation completed
-    finished( TransferStatus::CommunicationError);
+    finished( TransferStatus::CommunicationError );
     return;
   }
 

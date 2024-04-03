@@ -35,7 +35,7 @@ class TFTP_EXPORT Operation
     using ErrorInfo = std::optional< Packets::ErrorPacket >;
 
     //! Constructor
-    virtual ~Operation() noexcept = default;
+    virtual ~Operation() = default;
 
     /**
      * @brief Executes the TFTP Server Operation.
@@ -47,8 +47,8 @@ class TFTP_EXPORT Operation
     /**
      * @brief Aborts the Operation Gracefully.
      *
-     * With an graceful abort the transfer is canceled by sending an error
-     * packet to the client, signalling the abort of the transfer.
+     * With a graceful abort the transfer is canceled by sending an error packet
+     * to the client, signalling the abort of the transfer.
      *
      * @param[in] errorCode
      *   Abort error code.

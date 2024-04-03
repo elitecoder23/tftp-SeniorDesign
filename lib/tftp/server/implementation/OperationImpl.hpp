@@ -83,7 +83,7 @@ class OperationImpl:
     /**
      * @brief Destructor.
      **/
-    ~OperationImpl() noexcept override;
+    ~OperationImpl() override;
 
     /**
      * @brief Sets the Finished flag.

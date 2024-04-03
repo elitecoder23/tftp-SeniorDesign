@@ -36,7 +36,7 @@ class TFTP_EXPORT Operation
     using ErrorInfo = std::optional< Packets::ErrorPacket >;
 
     //! Destructor.
-    virtual ~Operation() noexcept = default;
+    virtual ~Operation() = default;
 
     /**
      * @brief Executes the TFTP Client Operation.

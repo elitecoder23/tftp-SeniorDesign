@@ -16,8 +16,6 @@
 #include <tftp/client/implementation/ReadOperationImpl.hpp>
 #include <tftp/client/implementation/WriteOperationImpl.hpp>
 
-#include <tftp/TftpLogger.hpp>
-
 namespace Tftp::Client {
 
 TftpClientImpl::TftpClientImpl( boost::asio::io_context &ioContext ) :

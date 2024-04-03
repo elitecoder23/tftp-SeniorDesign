@@ -101,7 +101,7 @@ RawTftpPacket ErrorPacket::encode() const
 void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
 {
   // check size
-  if (rawPacket.size() < MinPacketSize )
+  if ( rawPacket.size() < MinPacketSize )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "Invalid packet size of ERROR packet" } );
@@ -111,7 +111,7 @@ void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
 
   // decode error code
   uint16_t errorCodeInt{};
-  packetIt = Helper::getInt< uint16_t>( packetIt, errorCodeInt );
+  packetIt = Helper::getInt< uint16_t >( packetIt, errorCodeInt );
   errorCodeV = static_cast< ErrorCode>( errorCodeInt );
 
   // check terminating 0 character

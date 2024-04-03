@@ -132,7 +132,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
     transmitCounter = 1U;
 
     // Encode raw packet
-    transmitPacket = static_cast< Packets::RawTftpPacket>( packet );
+    transmitPacket = static_cast< Packets::RawTftpPacket >( packet );
 
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet(

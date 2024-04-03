@@ -58,7 +58,7 @@ class WriteOperationImpl final : public OperationImpl
     /**
      * @brief Standard destructor.
      **/
-    ~WriteOperationImpl() noexcept override = default;
+    ~WriteOperationImpl() override = default;
 
     //! @copydoc OperationImpl::start()
     void start() override;

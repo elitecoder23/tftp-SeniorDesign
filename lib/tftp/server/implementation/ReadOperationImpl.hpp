@@ -54,7 +54,7 @@ class ReadOperationImpl final : public OperationImpl
       ReadOperationConfiguration configuration );
 
     //! Destructor
-    ~ReadOperationImpl() noexcept override = default;
+    ~ReadOperationImpl() override = default;
 
     //! @copydoc OperationImpl::start()
     void start() override;

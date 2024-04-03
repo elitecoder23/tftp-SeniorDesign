@@ -33,8 +33,6 @@
 
 #include <boost/bind/bind.hpp>
 
-#include <cstdint>
-
 namespace Tftp::Server {
 
 TftpServerImpl::TftpServerImpl( boost::asio::io_context &ioContext ):
@@ -44,7 +42,7 @@ TftpServerImpl::TftpServerImpl( boost::asio::io_context &ioContext ):
 {
 }
 
-TftpServerImpl::~TftpServerImpl() noexcept = default;
+TftpServerImpl::~TftpServerImpl() = default;
 
 TftpServer& TftpServerImpl::requestHandler(
   ReceivedTftpRequestHandler requestHandler )
@@ -137,7 +135,7 @@ void TftpServerImpl::errorOperation(
 
     errSocket.connect( remote );
 
-    auto rawPacket{ static_cast< Packets::RawTftpPacket>( errorPacket ) };
+    auto rawPacket{ static_cast< Packets::RawTftpPacket >( errorPacket ) };
 
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet(
@@ -164,7 +162,7 @@ void TftpServerImpl::errorOperation(
   const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
-    << "TX: " << static_cast< std::string>( errorPacket );
+    << "TX: " << static_cast< std::string >( errorPacket );
 
   try
   {
@@ -194,6 +192,8 @@ void TftpServerImpl::errorOperation(
 
 void TftpServerImpl::receive()
 {
+  BOOST_LOG_FUNCTION()
+
   try
   {
     // wait for incoming packet
@@ -214,6 +214,8 @@ void TftpServerImpl::receiveHandler(
   const boost::system::error_code& errorCode,
   const std::size_t bytesTransferred )
 {
+  BOOST_LOG_FUNCTION()
+
   // handle abort
   if ( boost::asio::error::operation_aborted == errorCode )
   {
@@ -250,6 +252,8 @@ void TftpServerImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket )
 {
+  BOOST_LOG_FUNCTION()
+
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( readRequestPacket );
 
@@ -284,6 +288,8 @@ void TftpServerImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::WriteRequestPacket &writeRequestPacket )
 {
+  BOOST_LOG_FUNCTION()
+
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( writeRequestPacket );
 
@@ -318,6 +324,8 @@ void TftpServerImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket)
 {
+  BOOST_LOG_FUNCTION()
+
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string >( dataPacket );
 
@@ -325,13 +333,15 @@ void TftpServerImpl::dataPacket(
   errorOperation(
     remote,
     Packets::ErrorCode::IllegalTftpOperation,
-    "DATA not expected" );
+    "DATA packet not expected" );
 }
 
 void TftpServerImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
+  BOOST_LOG_FUNCTION()
+
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string >( acknowledgementPacket );
 
@@ -339,13 +349,15 @@ void TftpServerImpl::acknowledgementPacket(
   errorOperation(
     remote,
     Packets::ErrorCode::IllegalTftpOperation,
-    "ACK not expected" );
+    "ACK packet not expected" );
 }
 
 void TftpServerImpl::errorPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ErrorPacket &errorPacket )
 {
+  BOOST_LOG_FUNCTION()
+
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string>( errorPacket );
 
@@ -353,13 +365,15 @@ void TftpServerImpl::errorPacket(
   errorOperation(
     remote,
     Packets::ErrorCode::IllegalTftpOperation,
-    "ERROR not expected" );
+    "ERROR packet not expected" );
 }
 
 void TftpServerImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {
+  BOOST_LOG_FUNCTION()
+
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string >( optionsAcknowledgementPacket );
 
@@ -367,13 +381,15 @@ void TftpServerImpl::optionsAcknowledgementPacket(
   errorOperation(
     remote,
     Packets::ErrorCode::IllegalTftpOperation,
-    "OACK not expected" );
+    "OACK packet not expected" );
 }
 
 void TftpServerImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   [[maybe_unused]] Packets::ConstRawTftpPacketSpan rawPacket )
 {
+  BOOST_LOG_FUNCTION()
+
   BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
     << "RX: UNKNOWN: *ERROR* - IGNORE";
 }
@@ -392,7 +408,7 @@ Packets::TftpOptions TftpServerImpl::tftpOptions(
       Packets::BlockSizeOptionMax );
 
   decodedOptions.blockSize = blockSize;
-  // remove blocksize option
+  // remove block size option
   clientOptions.erase( Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) );
 
   // check timeout option - if set use it
