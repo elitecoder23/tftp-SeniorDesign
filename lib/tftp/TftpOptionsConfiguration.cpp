@@ -54,11 +54,10 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties(
 
   if ( full || timeoutOption )
   {
+    // like std::optional::transform
     properties.add(
       "timeout",
-      timeoutOption.has_value() ?
-        boost::optional< std::chrono::seconds::rep >{ timeoutOption->count() } :
-        boost::none );
+      timeoutOption.map( []( const auto &timeOut ) { return timeOut.count(); } ) );
   }
 
   return properties;
