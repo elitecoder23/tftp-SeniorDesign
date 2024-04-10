@@ -31,7 +31,7 @@
 
 namespace Tftp::Client {
 
-OperationImpl::~OperationImpl() noexcept = default;
+OperationImpl::~OperationImpl() = default;
 
 void OperationImpl::gracefulAbort(
   const Packets::ErrorCode errorCode,

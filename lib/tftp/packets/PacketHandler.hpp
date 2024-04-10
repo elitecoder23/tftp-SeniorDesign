@@ -32,7 +32,7 @@ class TFTP_EXPORT PacketHandler
 {
   public:
     //! Destructor
-    virtual ~PacketHandler() noexcept = default;
+    virtual ~PacketHandler() = default;
 
     /**
      * @brief The handler of all received packets.

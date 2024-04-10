@@ -47,10 +47,8 @@ class OperationImpl :
   public:
     /**
      * @brief Destructor.
-     *
-     * Closes the socket.
      **/
-    ~OperationImpl() noexcept override;
+    ~OperationImpl() override;
 
     //! @copydoc Operation::gracefulAbort
     void gracefulAbort(
