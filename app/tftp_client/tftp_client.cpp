@@ -136,15 +136,15 @@ int main( int argc, char * argv[] )
 
     std::cout << "TFTP Client\n";
 
-    boost::program_options::variables_map vm{};
+    boost::program_options::variables_map variablesMap{};
     boost::program_options::store(
       boost::program_options::parse_command_line(
         argc,
         argv,
         optionsDescription ),
-      vm );
+      variablesMap );
 
-    if ( 0U != vm.count( "help" ) )
+    if ( 0U != variablesMap.count( "help" ) )
     {
       std::cout
         << "Performs TFTP Client transfer\n"
@@ -152,7 +152,7 @@ int main( int argc, char * argv[] )
       return EXIT_FAILURE;
     }
 
-    boost::program_options::notify( vm );
+    boost::program_options::notify( variablesMap );
 
     // Assemble TFTP configuration
     boost::asio::io_context ioContext;
