@@ -29,12 +29,12 @@ target_sources(
 
       FILES
         DataHandler.hpp
+        Logger.hpp
         ReceiveDataHandler.hpp
         RequestTypeDescription.hpp
         Tftp.hpp
         TftpConfiguration.hpp
         TftpException.hpp
-        Logger.hpp
         TftpOptionsConfiguration.hpp
         TransferStatusDescription.hpp
         TransmitDataHandler.hpp
