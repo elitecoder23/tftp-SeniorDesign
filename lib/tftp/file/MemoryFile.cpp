@@ -13,7 +13,7 @@
 
 #include "MemoryFile.hpp"
 
-#include <tftp/TftpLogger.hpp>
+#include <tftp/Logger.hpp>
 
 namespace Tftp::File {
 
@@ -59,7 +59,7 @@ void MemoryFile::finished() noexcept
 
 bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
 {
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
     << "Received transfer size: " << transferSize;
 
   return true;

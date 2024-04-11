@@ -13,15 +13,13 @@
 
 #include "WriteOperationImpl.hpp"
 
-#include <tftp/TftpLogger.hpp>
-#include <tftp/TftpException.hpp>
+#include <tftp/Logger.hpp>
 #include <tftp/ReceiveDataHandler.hpp>
+#include <tftp/TftpException.hpp>
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
-#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
-#include <tftp/packets/ErrorPacket.hpp>
-#include <tftp/packets/TftpOptions.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
 #include <utility>
 
@@ -140,7 +138,7 @@ void WriteOperationImpl::start()
   }
   catch ( const TftpException &e )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Error during Operation: " << e.what();
   }
   catch ( ... )
@@ -168,13 +166,13 @@ void WriteOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( dataPacket );
 
   // Check retransmission
   if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
       << "Retransmission of last packet - only send ACK";
 
     send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
@@ -205,7 +203,7 @@ void WriteOperationImpl::dataPacket(
   // check not expected block
   if ( dataPacket.blockNumber() != lastReceivedBlockNumber.next() )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Unexpected packet";
 
     Packets::ErrorPacket errorPacket{
@@ -223,7 +221,7 @@ void WriteOperationImpl::dataPacket(
   // check for too much data
   if ( dataPacket.dataSize() > receiveDataSize )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Too much data received";
 
     Packets::ErrorPacket errorPacket{
@@ -273,7 +271,7 @@ void WriteOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket );
 
   Packets::ErrorPacket errorPacket{

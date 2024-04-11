@@ -8,11 +8,11 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Logger Tftp::TftpLogger.
+ * @brief Declaration of Logger Tftp::Logger.
  **/
 
-#ifndef TFTP_TFTPLOGGER_HPP
-#define TFTP_TFTPLOGGER_HPP
+#ifndef TFTP_LOGGER_HPP
+#define TFTP_LOGGER_HPP
 
 #include <tftp/Tftp.hpp>
 
@@ -24,9 +24,9 @@ namespace Tftp {
 
 //! TFTP Logger
 BOOST_LOG_INLINE_GLOBAL_LOGGER_CTOR_ARGS(
-  TftpLogger,
+  Logger,
   Helper::ChannelSeverityLoggerMt,
-  ( boost::log::keywords::channel = "Tftp" ))
+  ( boost::log::keywords::channel = "Tftp" ) )
 
 }
 

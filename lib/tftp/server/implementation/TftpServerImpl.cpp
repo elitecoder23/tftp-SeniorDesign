@@ -16,16 +16,16 @@
 #include <tftp/server/implementation/ReadOperationImpl.hpp>
 #include <tftp/server/implementation/WriteOperationImpl.hpp>
 
+#include <tftp/packets/AcknowledgementPacket.hpp>
+#include <tftp/packets/DataPacket.hpp>
+#include <tftp/packets/Options.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+#include <tftp/packets/PacketStatistic.hpp>
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
-#include <tftp/packets/DataPacket.hpp>
-#include <tftp/packets/AcknowledgementPacket.hpp>
-#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
-#include <tftp/packets/Options.hpp>
-#include <tftp/packets/PacketStatistic.hpp>
 
+#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
-#include <tftp/TftpLogger.hpp>
 
 #include <helper/Exception.hpp>
 
@@ -124,7 +124,7 @@ void TftpServerImpl::errorOperation(
 
   const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string>( errorPacket );
 
   try
@@ -146,7 +146,7 @@ void TftpServerImpl::errorOperation(
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << err.what();
   }
 }
@@ -161,7 +161,7 @@ void TftpServerImpl::errorOperation(
 
   const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
     << "TX: " << static_cast< std::string >( errorPacket );
 
   try
@@ -185,7 +185,7 @@ void TftpServerImpl::errorOperation(
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << err.what();
   }
 }
@@ -225,7 +225,7 @@ void TftpServerImpl::receiveHandler(
   // Check error
   if ( errorCode )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error)
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "receive error: " + errorCode.message();
 
     BOOST_THROW_EXCEPTION( CommunicationException()
@@ -241,7 +241,7 @@ void TftpServerImpl::receiveHandler(
   }
   catch ( const TftpException &e )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TFTP exception: " << e.what();
   }
 
@@ -254,13 +254,13 @@ void TftpServerImpl::readRequestPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( readRequestPacket );
 
   // check handler
   if ( !requestHandlerV )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
       << "No registered handler - reject";
 
     // execute error operation
@@ -290,13 +290,13 @@ void TftpServerImpl::writeRequestPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( writeRequestPacket );
 
   // check handler
   if ( !requestHandlerV )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
       << "No registered handler - reject";
 
     // execute error operation
@@ -326,7 +326,7 @@ void TftpServerImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string >( dataPacket );
 
   // execute error operation
@@ -342,7 +342,7 @@ void TftpServerImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string >( acknowledgementPacket );
 
   // execute error operation
@@ -358,7 +358,7 @@ void TftpServerImpl::errorPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string>( errorPacket );
 
   // execute error operation
@@ -374,7 +374,7 @@ void TftpServerImpl::optionsAcknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
     << "RX ERROR: " << static_cast< std::string >( optionsAcknowledgementPacket );
 
   // execute error operation
@@ -390,7 +390,7 @@ void TftpServerImpl::invalidPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
     << "RX: UNKNOWN: *ERROR* - IGNORE";
 }
 

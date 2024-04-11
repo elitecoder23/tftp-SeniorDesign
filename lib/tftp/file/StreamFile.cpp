@@ -13,8 +13,8 @@
 
 #include "StreamFile.hpp"
 
+#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
-#include <tftp/TftpLogger.hpp>
 
 #include <helper/Exception.hpp>
 

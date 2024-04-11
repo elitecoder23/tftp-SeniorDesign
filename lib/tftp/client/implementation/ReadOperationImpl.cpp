@@ -14,15 +14,15 @@
 #include "ReadOperationImpl.hpp"
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
-#include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
-#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
-#include <tftp/packets/TftpOptions.hpp>
 #include <tftp/packets/Options.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+#include <tftp/packets/ReadRequestPacket.hpp>
+#include <tftp/packets/TftpOptions.hpp>
 
-#include <tftp/TftpException.hpp>
-#include <tftp/TftpLogger.hpp>
+#include <tftp/Logger.hpp>
 #include <tftp/ReceiveDataHandler.hpp>
+#include <tftp/TftpException.hpp>
 
 #include <helper/Dump.hpp>
 #include <helper/Exception.hpp>
@@ -113,7 +113,7 @@ void ReadOperationImpl::request()
   }
   catch ( const boost::exception &e )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Exception during request " << boost::diagnostic_information( e );
 
     finished( TransferStatus::CommunicationError );
@@ -137,13 +137,13 @@ void ReadOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( dataPacket );
 
   // check retransmission of last packet
   if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
       << "Received last data package again. Re-ACK them";
 
     // Retransmit last ACK packet
@@ -175,7 +175,7 @@ void ReadOperationImpl::dataPacket(
   // check unexpected block number
   if ( dataPacket.blockNumber() != lastReceivedBlockNumber.next() )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Wrong Data packet block number";
 
     // send error packet
@@ -192,7 +192,7 @@ void ReadOperationImpl::dataPacket(
   // check for too much data
   if ( dataPacket.dataSize() > receiveDataSize )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Too much data received";
 
     // send error packet
@@ -216,7 +216,7 @@ void ReadOperationImpl::dataPacket(
       shared_from_this(),
       options ) )
     {
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Option Negotiation failed";
 
       Packets::ErrorPacket errorPacket{
@@ -266,7 +266,7 @@ void ReadOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket );
 
   // send Error
@@ -286,12 +286,12 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket );
 
   if ( lastReceivedBlockNumber != Packets::BlockNumber{ 0U } )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "OACK must occur after RRQ";
 
     Packets::ErrorPacket errorPacket{
@@ -310,7 +310,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   // check empty options - not allowed
   if ( remoteOptions.empty() )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Received option list is empty";
 
     Packets::ErrorPacket errorPacket{
@@ -334,7 +334,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( !configurationV.optionsConfiguration.blockSizeOption && blockSizeValue )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Block Size Option not expected";
 
     Packets::ErrorPacket errorPacket{
@@ -352,7 +352,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( !blockSizeValid )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Block Size Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
@@ -372,7 +372,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   {
     if ( *blockSizeValue > *configurationV.optionsConfiguration.blockSizeOption )
     {
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Received Block Size Option bigger than negotiated";
 
       Packets::ErrorPacket errorPacket{
@@ -401,7 +401,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( !configurationV.optionsConfiguration.timeoutOption && timeoutValue )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Timeout Option not expected";
 
     Packets::ErrorPacket errorPacket{
@@ -419,7 +419,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( !timeoutValid )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Timeout Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
@@ -441,7 +441,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     if ( std::chrono::seconds{ *timeoutValue }
       != *configurationV.optionsConfiguration.timeoutOption )
     {
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Timeout Option not equal to requested";
 
       Packets::ErrorPacket errorPacket{
@@ -469,7 +469,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   if ( !configurationV.optionsConfiguration.handleTransferSizeOption
     && transferSizeValue )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Transfer Size Option not expected";
 
     Packets::ErrorPacket errorPacket{
@@ -487,7 +487,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( !transferSizeValid )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Transfer Size Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
@@ -526,7 +526,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     shared_from_this(),
     remoteOptions ) )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Option negotiation failed";
 
     Packets::ErrorPacket errorPacket{
@@ -545,7 +545,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   // check that remaining remote options are empty
   if ( !remoteOptions.empty() )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Option negotiation failed - unexpected options";
 
     Packets::ErrorPacket errorPacket{

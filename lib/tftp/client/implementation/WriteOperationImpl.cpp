@@ -14,14 +14,14 @@
 #include "WriteOperationImpl.hpp"
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
-#include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
+#include <tftp/packets/Options.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/TftpOptions.hpp>
-#include <tftp/packets/Options.hpp>
+#include <tftp/packets/WriteRequestPacket.hpp>
 
+#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
-#include <tftp/TftpLogger.hpp>
 #include <tftp/TransmitDataHandler.hpp>
 
 #include <helper/Dump.hpp>
@@ -117,7 +117,7 @@ void WriteOperationImpl::request()
   }
   catch ( const boost::exception &e )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Exception during request " << boost::diagnostic_information( e );
 
     finished( TransferStatus::CommunicationError );
@@ -160,7 +160,7 @@ void WriteOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( dataPacket );
 
   Packets::ErrorPacket errorPacket{
@@ -179,13 +179,13 @@ void WriteOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( acknowledgementPacket );
 
   // check retransmission
   if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
       << "Received previous ACK packet: retry of last data package - "
          "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
@@ -195,7 +195,7 @@ void WriteOperationImpl::acknowledgementPacket(
   // check invalid block number
   if ( acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Invalid block number received";
 
     // send error packet
@@ -221,7 +221,7 @@ void WriteOperationImpl::acknowledgementPacket(
       shared_from_this(),
       options ) )
     {
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Option Negotiation failed";
 
       Packets::ErrorPacket errorPacket{
@@ -255,12 +255,12 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket );
 
   if ( lastReceivedBlockNumber != Packets::BlockNumber{ 0xFFFFU } )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "OACK must occur after WRQ";
 
     Packets::ErrorPacket errorPacket{
@@ -279,7 +279,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   // check empty options - not allowed
   if ( remoteOptions.empty() )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Received option list is empty";
 
     Packets::ErrorPacket errorPacket{
@@ -303,7 +303,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !configurationV.optionsConfiguration.blockSizeOption && blockSizeValue )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Block Size Option not expected";
 
     Packets::ErrorPacket errorPacket{
@@ -321,7 +321,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !blockSizeValid )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Block Size Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
@@ -341,7 +341,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   {
     if ( *blockSizeValue > *configurationV.optionsConfiguration.blockSizeOption )
     {
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Received Block Size Option bigger than negotiated";
 
       Packets::ErrorPacket errorPacket{
@@ -370,7 +370,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !configurationV.optionsConfiguration.timeoutOption && timeoutValue )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Timeout Option not expected";
 
     Packets::ErrorPacket errorPacket{
@@ -388,7 +388,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !timeoutValid )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Timeout Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
@@ -410,7 +410,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     if ( std::chrono::seconds{ *timeoutValue }
       != *configurationV.optionsConfiguration.timeoutOption )
     {
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Timeout Option not equal to requested";
 
       Packets::ErrorPacket errorPacket{
@@ -439,7 +439,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
       || !transferSize )
         && transferSizeValue )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Transfer Size Option not expected";
 
     Packets::ErrorPacket errorPacket{
@@ -457,7 +457,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !transferSizeValid )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Transfer Size Option decoding failed";
 
     Packets::ErrorPacket errorPacket{
@@ -475,7 +475,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( transferSizeValue && *transferSizeValue != *transferSize )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Transfer size value not equal to sent value";
 
     Packets::ErrorPacket errorPacket{
@@ -496,7 +496,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     shared_from_this(),
     remoteOptions ) )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Option negotiation failed";
 
     Packets::ErrorPacket errorPacket{
@@ -515,7 +515,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   // check that remaining remote options are empty
   if ( !remoteOptions.empty() )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Option negotiation failed - unexpected options";
 
     Packets::ErrorPacket errorPacket{

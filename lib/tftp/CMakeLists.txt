@@ -34,7 +34,7 @@ target_sources(
         Tftp.hpp
         TftpConfiguration.hpp
         TftpException.hpp
-        TftpLogger.hpp
+        Logger.hpp
         TftpOptionsConfiguration.hpp
         TransferStatusDescription.hpp
         TransmitDataHandler.hpp

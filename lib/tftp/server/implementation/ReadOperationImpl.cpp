@@ -13,15 +13,13 @@
 
 #include "ReadOperationImpl.hpp"
 
-#include <tftp/TftpLogger.hpp>
+#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataHandler.hpp>
 
 #include <tftp/packets/AcknowledgementPacket.hpp>
-#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 #include <tftp/packets/DataPacket.hpp>
-#include <tftp/packets/ErrorPacket.hpp>
-#include <tftp/packets/TftpOptions.hpp>
+#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
 #include <utility>
 
@@ -99,7 +97,7 @@ void ReadOperationImpl::start()
       {
         if ( 0U != *configurationV.clientOptions.transferSize )
         {
-          BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+          BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
             << "Received transfer size must be 0";
 
           Packets::ErrorPacket errorPacket{
@@ -146,7 +144,7 @@ void ReadOperationImpl::start()
   }
   catch ( const TftpException &e )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Error during Operation: " << e.what();
   }
   catch ( ... )
@@ -174,7 +172,7 @@ void ReadOperationImpl::sendData()
 
   lastTransmittedBlockNumber++;
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "Send Data #" << static_cast< uint16_t >( lastTransmittedBlockNumber );
 
   Packets::DataPacket data{
@@ -196,7 +194,7 @@ void ReadOperationImpl::dataPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( dataPacket );
 
   Packets::ErrorPacket errorPacket{
@@ -215,13 +213,13 @@ void ReadOperationImpl::acknowledgementPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( acknowledgementPacket );
 
   // check retransmission
   if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
       << "Received previous ACK packet: retry of last data package - "
          "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
@@ -234,7 +232,7 @@ void ReadOperationImpl::acknowledgementPacket(
   // check invalid block number
   if ( acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Invalid block number received";
 
     Packets::ErrorPacket errorPacket{
@@ -254,7 +252,7 @@ void ReadOperationImpl::acknowledgementPacket(
   // if it was the last ACK of the last data packet - we are finished.
   if ( lastDataPacketTransmitted )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
       << "Last acknowledgement received";
 
     finished( TransferStatus::Successful );

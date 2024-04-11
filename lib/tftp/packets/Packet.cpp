@@ -15,7 +15,7 @@
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <tftp/TftpLogger.hpp>
+#include <tftp/Logger.hpp>
 
 #include <helper/Endianness.hpp>
 #include <helper/Exception.hpp>
@@ -29,7 +29,7 @@ PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket ) noexcept
   // check minimum data size.
   if ( rawPacket.size() < HeaderSize )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Packet to small";
     return PacketType::Invalid;
   }
@@ -54,7 +54,7 @@ PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket ) noexcept
 
     default:
       // return INVALID for invalid values
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Invalid opcode " << std::hex << opcode;
       return PacketType::Invalid;
   }

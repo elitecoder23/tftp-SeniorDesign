@@ -13,17 +13,17 @@
 
 #include "OperationImpl.hpp"
 
-#include <tftp/packets/ReadRequestPacket.hpp>
-#include <tftp/packets/WriteRequestPacket.hpp>
 #include <tftp/packets/ErrorCodeDescription.hpp>
 #include <tftp/packets/PacketStatistic.hpp>
 #include <tftp/packets/PacketTypeDescription.hpp>
+#include <tftp/packets/ReadRequestPacket.hpp>
+#include <tftp/packets/WriteRequestPacket.hpp>
 
+#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
-#include <tftp/TftpLogger.hpp>
 
-#include <helper/SafeCast.hpp>
 #include <helper/Exception.hpp>
+#include <helper/SafeCast.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -39,7 +39,7 @@ void OperationImpl::gracefulAbort(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
     << "Graceful abort requested: "
     << "'" << errorCode << "' '" << errorMessage << "'";
 
@@ -59,7 +59,7 @@ void OperationImpl::abort()
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
     << "Abort requested";
 
   // Operation completed
@@ -123,7 +123,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "TX: " << static_cast< std::string>( packet );
 
   try
@@ -146,7 +146,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TX Error: " << err.what();
 
     // Operation finished
@@ -158,7 +158,7 @@ void OperationImpl::send( const Packets::Packet &packet )
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::trace )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "TX: " << static_cast< std::string>( packet );
 
   try
@@ -179,7 +179,7 @@ void OperationImpl::send( const Packets::Packet &packet )
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TX Error: " << err.what();
 
     finished( TransferStatus::CommunicationError );
@@ -209,7 +209,7 @@ void OperationImpl::receiveFirst()
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "RX Error: " << err.what();
 
     finished( TransferStatus::CommunicationError );
@@ -235,7 +235,7 @@ void OperationImpl::receive()
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "RX Error: " << err.what();
 
     finished( TransferStatus::CommunicationError );
@@ -262,7 +262,7 @@ void OperationImpl::receiveDally()
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "RX Error: " << err.what();
 
     finished( TransferStatus::CommunicationError );
@@ -281,7 +281,7 @@ void OperationImpl::finished(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
     << "TFTP Client Operation finished";
 
   errorInfoV = std::move( errorInfo );
@@ -301,7 +301,7 @@ void OperationImpl::readRequestPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( readRequestPacket );
 
   // send error packet
@@ -321,7 +321,7 @@ void OperationImpl::writeRequestPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( writeRequestPacket );
 
   // send error packet
@@ -341,7 +341,7 @@ void OperationImpl::errorPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX ERROR: " << static_cast< std::string>( errorPacket );
 
   // Operation completed
@@ -376,7 +376,7 @@ void OperationImpl::invalidPacket(
 {
   BOOST_LOG_FUNCTION()
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX ERROR: INVALID Packet";
 
   // send error packet
@@ -405,7 +405,7 @@ void OperationImpl::receiveFirstHandler(
   // (internal) receive error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Error when receiving message: " << errorCode.message();
 
     finished( TransferStatus::CommunicationError );
@@ -416,7 +416,7 @@ void OperationImpl::receiveFirstHandler(
   // send error packet and ignore it.
   if ( remoteEndpoint.address() != receiveEndpoint.address() )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Received packed from wrong source: "
       << receiveEndpoint.address();
 
@@ -440,7 +440,7 @@ void OperationImpl::receiveFirstHandler(
     catch ( const boost::system::system_error &err)
     {
       // ignore send error to unknown partner
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Error sending ERR packet: " << err.what();
     }
 
@@ -456,7 +456,7 @@ void OperationImpl::receiveFirstHandler(
     }
     catch ( const boost::system::system_error &err )
     {
-      BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Start Receive: " << err.what();
 
       finished( TransferStatus::CommunicationError );
@@ -471,7 +471,7 @@ void OperationImpl::receiveFirstHandler(
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Connect: " << err.what();
 
     finished( TransferStatus::CommunicationError );
@@ -499,7 +499,7 @@ void OperationImpl::receiveHandler(
   // (internal) receive error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Error when receiving message: " << errorCode.message();
 
     finished( TransferStatus::CommunicationError );
@@ -525,7 +525,7 @@ void OperationImpl::timeoutFirstHandler(
   // internal (timer) error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Timer error: " + errorCode.message();
 
     finished( TransferStatus::CommunicationError );
@@ -535,14 +535,14 @@ void OperationImpl::timeoutFirstHandler(
   // if maximum retries exceeded -> abort receive operation
   if ( transmitCounter > tftpRetries )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TFTP Retry counter exceeded";
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::warning )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
     << "Retransmit last TFTP packet: "
     << Packets::Packet::packetType( transmitPacket );
 
@@ -566,7 +566,7 @@ void OperationImpl::timeoutFirstHandler(
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Re-TX error: " << err.what();
 
     finished( TransferStatus::CommunicationError );
@@ -587,7 +587,7 @@ void OperationImpl::timeoutHandler(
   // internal (timer) error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Timer error: " << errorCode.message();
 
     finished( TransferStatus::CommunicationError );
@@ -597,14 +597,14 @@ void OperationImpl::timeoutHandler(
   // if maximum retries exceeded -> abort receive operation
   if ( transmitCounter > tftpRetries )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TFTP Retry counter exceeded";
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
     << "Retransmit last TFTP packet: "
     << Packets::Packet::packetType( transmitPacket );
 
@@ -625,7 +625,7 @@ void OperationImpl::timeoutHandler(
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Re-TX error: " << err.what();
 
     finished( TransferStatus::CommunicationError );
@@ -646,14 +646,14 @@ void OperationImpl::timeoutDallyHandler(
   // internal (timer) error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::error )
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Timer error: " << errorCode.message();
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  BOOST_LOG_SEV( TftpLogger::get(), Helper::Severity::info )
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
     << "Dally Timeout Completed - Finish";
 
   finished( TransferStatus::Successful );
