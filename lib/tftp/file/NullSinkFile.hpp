@@ -14,8 +14,8 @@
 #ifndef TFTP_FILE_NULLSINKFILE_HPP
 #define TFTP_FILE_NULLSINKFILE_HPP
 
-#include <tftp/file/File.hpp>
-#include <tftp/ReceiveDataHandler.hpp>
+#include "tftp/file/File.hpp"
+#include "tftp/ReceiveDataHandler.hpp"
 
 #include <optional>
 

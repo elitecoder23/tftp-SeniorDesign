@@ -11,25 +11,25 @@
  * @brief TFTP Client CLI Application.
  **/
 
-#include <tftp/Tftp.hpp>
-#include <tftp/TftpConfiguration.hpp>
-#include <tftp/TftpOptionsConfiguration.hpp>
-#include <tftp/TftpException.hpp>
+#include "tftp/Tftp.hpp"
+#include "tftp/TftpConfiguration.hpp"
+#include "tftp/TftpOptionsConfiguration.hpp"
+#include "tftp/TftpException.hpp"
 
-#include <tftp/RequestTypeDescription.hpp>
+#include "tftp/RequestTypeDescription.hpp"
 
-#include <tftp/file/StreamFile.hpp>
+#include "tftp/file/StreamFile.hpp"
 
-#include <tftp/client/Client.hpp>
-#include <tftp/client/TftpClient.hpp>
-#include <tftp/client/Operation.hpp>
-#include <tftp/client/ReadOperationConfiguration.hpp>
-#include <tftp/client/WriteOperationConfiguration.hpp>
+#include "tftp/client/Client.hpp"
+#include "tftp/client/TftpClient.hpp"
+#include "tftp/client/Operation.hpp"
+#include "tftp/client/ReadOperationConfiguration.hpp"
+#include "tftp/client/WriteOperationConfiguration.hpp"
 
-#include <tftp/packets/PacketStatistic.hpp>
+#include "tftp/packets/PacketStatistic.hpp"
 
-#include <helper/Logger.hpp>
-#include <helper/BoostAsioProgramOptions.hpp>
+#include "helper/Logger.hpp"
+#include "helper/BoostAsioProgramOptions.hpp"
 
 #include <boost/asio.hpp>
 

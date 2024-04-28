@@ -14,11 +14,11 @@
 #ifndef TFTP_SERVER_READOPERATIONCONFIGURATION_HPP
 #define TFTP_SERVER_READOPERATIONCONFIGURATION_HPP
 
-#include <tftp/server/Server.hpp>
+#include "tftp/server/Server.hpp"
 
-#include <tftp/packets/TftpOptions.hpp>
+#include "tftp/packets/TftpOptions.hpp"
 
-#include <tftp/TftpOptionsConfiguration.hpp>
+#include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <boost/asio/ip/udp.hpp>
 

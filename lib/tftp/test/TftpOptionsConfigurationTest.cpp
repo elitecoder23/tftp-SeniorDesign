@@ -11,7 +11,7 @@
  * @brief Implementation of Unit Tests of Class Tftp::OptionList.
  **/
 
-#include <tftp/TftpOptionsConfiguration.hpp>
+#include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <boost/test/unit_test.hpp>
 

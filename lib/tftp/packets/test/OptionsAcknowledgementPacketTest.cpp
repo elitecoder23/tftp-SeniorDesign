@@ -14,10 +14,10 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
-#include <tftp/packets/PacketException.hpp>
+#include "tftp/packets/OptionsAcknowledgementPacket.hpp"
+#include "tftp/packets/PacketException.hpp"
 
-#include <helper/Dump.hpp>
+#include "helper/Dump.hpp"
 
 #include <iostream>
 

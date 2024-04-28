@@ -14,8 +14,8 @@
 #ifndef TFTP_PACKETS_ERRORPACKET_HPP
 #define TFTP_PACKETS_ERRORPACKET_HPP
 
-#include <tftp/packets/Packets.hpp>
-#include <tftp/packets/Packet.hpp>
+#include "tftp/packets/Packets.hpp"
+#include "tftp/packets/Packet.hpp"
 
 #include <string>
 #include <string_view>

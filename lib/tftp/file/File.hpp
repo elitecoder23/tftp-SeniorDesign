@@ -19,7 +19,7 @@
 #ifndef TFTP_FILE_FILE_HPP
 #define TFTP_FILE_FILE_HPP
 
-#include <tftp/Tftp.hpp>
+#include "tftp/Tftp.hpp"
 
 #include <memory>
 #include <iosfwd>

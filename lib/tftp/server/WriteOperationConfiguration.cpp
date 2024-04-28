@@ -13,7 +13,7 @@
 
 #include "WriteOperationConfiguration.hpp"
 
-#include <tftp/TftpConfiguration.hpp>
+#include "tftp/TftpConfiguration.hpp"
 
 #include <utility>
 

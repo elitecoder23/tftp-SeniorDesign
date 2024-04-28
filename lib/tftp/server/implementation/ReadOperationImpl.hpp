@@ -14,13 +14,13 @@
 #ifndef TFTP_SERVER_READOPERATIONIMPL_HPP
 #define TFTP_SERVER_READOPERATIONIMPL_HPP
 
-#include <tftp/server/Server.hpp>
-#include <tftp/server/ReadOperationConfiguration.hpp>
-#include <tftp/server/implementation/OperationImpl.hpp>
+#include "tftp/server/Server.hpp"
+#include "tftp/server/ReadOperationConfiguration.hpp"
+#include "tftp/server/implementation/OperationImpl.hpp"
 
-#include <tftp/packets/BlockNumber.hpp>
+#include "tftp/packets/BlockNumber.hpp"
 
-#include <tftp/TftpOptionsConfiguration.hpp>
+#include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <boost/asio.hpp>
 

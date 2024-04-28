@@ -14,7 +14,7 @@
 #ifndef TFTP_PACKETS_PACKET_HPP
 #define TFTP_PACKETS_PACKET_HPP
 
-#include <tftp/packets/Packets.hpp>
+#include "tftp/packets/Packets.hpp"
 
 #include <string>
 

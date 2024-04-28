@@ -13,8 +13,8 @@
 
 #include "TftpClientImpl.hpp"
 
-#include <tftp/client/implementation/ReadOperationImpl.hpp>
-#include <tftp/client/implementation/WriteOperationImpl.hpp>
+#include "tftp/client/implementation/ReadOperationImpl.hpp"
+#include "tftp/client/implementation/WriteOperationImpl.hpp"
 
 namespace Tftp::Client {
 

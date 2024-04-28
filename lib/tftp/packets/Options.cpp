@@ -13,9 +13,9 @@
 
 #include "Options.hpp"
 
-#include <tftp/packets/PacketException.hpp>
+#include "tftp/packets/PacketException.hpp"
 
-#include <helper/Exception.hpp>
+#include "helper/Exception.hpp"
 
 #include <boost/exception/all.hpp>
 

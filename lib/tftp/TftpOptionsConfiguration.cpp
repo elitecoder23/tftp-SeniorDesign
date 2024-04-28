@@ -13,7 +13,7 @@
 
 #include "TftpOptionsConfiguration.hpp"
 
-#include <tftp/packets/Packets.hpp>
+#include "tftp/packets/Packets.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 

@@ -19,9 +19,9 @@
 #ifndef TFTP_CLIENT_CLIENT_HPP
 #define TFTP_CLIENT_CLIENT_HPP
 
-#include <tftp/Tftp.hpp>
+#include "tftp/Tftp.hpp"
 
-#include <tftp/packets/Packets.hpp>
+#include "tftp/packets/Packets.hpp"
 
 #include <memory>
 #include <functional>

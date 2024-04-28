@@ -11,9 +11,9 @@
  * @brief Implementation of Unit Tests of Tftp::Packets.
  **/
 
-#include <tftp/packets/Options.hpp>
+#include "tftp/packets/Options.hpp"
 
-#include <tftp/packets/PacketException.hpp>
+#include "tftp/packets/PacketException.hpp"
 
 #include <boost/test/unit_test.hpp>
 

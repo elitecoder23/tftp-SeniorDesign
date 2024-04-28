@@ -14,8 +14,8 @@
 #ifndef TFTP_PACKETS_READREQUESTPACKET_HPP
 #define TFTP_PACKETS_READREQUESTPACKET_HPP
 
-#include <tftp/packets/Packets.hpp>
-#include <tftp/packets/ReadWriteRequestPacket.hpp>
+#include "tftp/packets/Packets.hpp"
+#include "tftp/packets/ReadWriteRequestPacket.hpp"
 
 #include <string_view>
 #include <string>

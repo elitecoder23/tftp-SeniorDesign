@@ -14,10 +14,10 @@
 #ifndef TFTP_SERVER_TFTPSERVERIMPL_HPP
 #define TFTP_SERVER_TFTPSERVERIMPL_HPP
 
-#include <tftp/server/Server.hpp>
-#include <tftp/server/TftpServer.hpp>
+#include "tftp/server/Server.hpp"
+#include "tftp/server/TftpServer.hpp"
 
-#include <tftp/packets/PacketHandler.hpp>
+#include "tftp/packets/PacketHandler.hpp"
 
 #include <boost/asio.hpp>
 

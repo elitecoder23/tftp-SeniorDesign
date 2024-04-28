@@ -14,9 +14,9 @@
 #ifndef TFTP_REQUESTTYPEDESCRIPTION_HPP
 #define TFTP_REQUESTTYPEDESCRIPTION_HPP
 
-#include <tftp/Tftp.hpp>
+#include "tftp/Tftp.hpp"
 
-#include <helper/Description.hpp>
+#include "helper/Description.hpp"
 
 namespace Tftp {
 

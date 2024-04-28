@@ -14,16 +14,16 @@
 #ifndef TFTP_SERVER_WRITEOPERATIONIMPL_HPP
 #define TFTP_SERVER_WRITEOPERATIONIMPL_HPP
 
-#include <tftp/server/Server.hpp>
-#include <tftp/server/TftpServer.hpp>
-#include <tftp/server/WriteOperationConfiguration.hpp>
+#include "tftp/server/Server.hpp"
+#include "tftp/server/TftpServer.hpp"
+#include "tftp/server/WriteOperationConfiguration.hpp"
 
-#include <tftp/server/implementation/OperationImpl.hpp>
+#include "tftp/server/implementation/OperationImpl.hpp"
 
-#include <tftp/packets/Packets.hpp>
-#include <tftp/packets/BlockNumber.hpp>
+#include "tftp/packets/Packets.hpp"
+#include "tftp/packets/BlockNumber.hpp"
 
-#include <tftp/TftpOptionsConfiguration.hpp>
+#include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <boost/asio.hpp>
 

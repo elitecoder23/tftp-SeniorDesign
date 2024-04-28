@@ -14,9 +14,9 @@
 #ifndef TFTP_CLIENT_READOPERATIONCONFIGURATION_HPP
 #define TFTP_CLIENT_READOPERATIONCONFIGURATION_HPP
 
-#include <tftp/client/Client.hpp>
+#include "tftp/client/Client.hpp"
 
-#include <tftp/TftpOptionsConfiguration.hpp>
+#include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <boost/asio/ip/udp.hpp>
 

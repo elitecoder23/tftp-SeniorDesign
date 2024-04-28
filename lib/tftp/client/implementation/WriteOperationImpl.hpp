@@ -14,13 +14,13 @@
 #ifndef TFTP_CLIENT_WRITEOPERATIONIMPL_HPP
 #define TFTP_CLIENT_WRITEOPERATIONIMPL_HPP
 
-#include <tftp/client/Client.hpp>
-#include <tftp/client/WriteOperationConfiguration.hpp>
-#include <tftp/client/implementation/OperationImpl.hpp>
+#include "tftp/client/Client.hpp"
+#include "tftp/client/WriteOperationConfiguration.hpp"
+#include "tftp/client/implementation/OperationImpl.hpp"
 
-#include <tftp/packets/BlockNumber.hpp>
+#include "tftp/packets/BlockNumber.hpp"
 
-#include <tftp/TftpOptionsConfiguration.hpp>
+#include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <chrono>
 

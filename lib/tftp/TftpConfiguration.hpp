@@ -14,7 +14,7 @@
 #ifndef TFTP_TFTPCONFIGURATION_HPP
 #define TFTP_TFTPCONFIGURATION_HPP
 
-#include <tftp/Tftp.hpp>
+#include "tftp/Tftp.hpp"
 
 #include <boost/property_tree/ptree_fwd.hpp>
 

@@ -19,9 +19,9 @@
 #ifndef TFTP_SERVER_SERVER_HPP
 #define TFTP_SERVER_SERVER_HPP
 
-#include <tftp/Tftp.hpp>
+#include "tftp/Tftp.hpp"
 
-#include <tftp/packets/Packets.hpp>
+#include "tftp/packets/Packets.hpp"
 
 #include <boost/asio/ip/udp.hpp>
 

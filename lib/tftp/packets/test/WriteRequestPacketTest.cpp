@@ -13,10 +13,10 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <tftp/packets/WriteRequestPacket.hpp>
-#include <tftp/packets/PacketException.hpp>
+#include "tftp/packets/WriteRequestPacket.hpp"
+#include "tftp/packets/PacketException.hpp"
 
-#include <helper/Dump.hpp>
+#include "helper/Dump.hpp"
 
 #include <iostream>
 

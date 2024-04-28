@@ -13,13 +13,13 @@
 
 #include "ReadOperationImpl.hpp"
 
-#include <tftp/Logger.hpp>
-#include <tftp/TftpException.hpp>
-#include <tftp/TransmitDataHandler.hpp>
+#include "tftp/Logger.hpp"
+#include "tftp/TftpException.hpp"
+#include "tftp/TransmitDataHandler.hpp"
 
-#include <tftp/packets/AcknowledgementPacket.hpp>
-#include <tftp/packets/DataPacket.hpp>
-#include <tftp/packets/OptionsAcknowledgementPacket.hpp>
+#include "tftp/packets/AcknowledgementPacket.hpp"
+#include "tftp/packets/DataPacket.hpp"
+#include "tftp/packets/OptionsAcknowledgementPacket.hpp"
 
 #include <utility>
 

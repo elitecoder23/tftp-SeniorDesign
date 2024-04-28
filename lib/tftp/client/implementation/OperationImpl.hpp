@@ -14,13 +14,13 @@
 #ifndef TFTP_CLIENT_OPERATIONIMPL_HPP
 #define TFTP_CLIENT_OPERATIONIMPL_HPP
 
-#include <tftp/client/Client.hpp>
-#include <tftp/client/Operation.hpp>
-#include <tftp/client/TftpClient.hpp>
+#include "tftp/client/Client.hpp"
+#include "tftp/client/Operation.hpp"
+#include "tftp/client/TftpClient.hpp"
 
-#include <tftp/packets/PacketHandler.hpp>
-#include <tftp/packets/Packets.hpp>
-#include <tftp/packets/ErrorPacket.hpp>
+#include "tftp/packets/PacketHandler.hpp"
+#include "tftp/packets/Packets.hpp"
+#include "tftp/packets/ErrorPacket.hpp"
 
 #include <boost/asio.hpp>
 

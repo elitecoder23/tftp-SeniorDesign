@@ -14,9 +14,9 @@
 #ifndef TFTP_PACKETS_PACKETTYPEDESCRIPTION_HPP
 #define TFTP_PACKETS_PACKETTYPEDESCRIPTION_HPP
 
-#include <tftp/packets/Packets.hpp>
+#include "tftp/packets/Packets.hpp"
 
-#include <helper/Description.hpp>
+#include "helper/Description.hpp"
 
 #include <iosfwd>
 

@@ -14,9 +14,9 @@
 #ifndef TFTP_CLIENT_TFTPCLIENTIMPL_HPP
 #define TFTP_CLIENT_TFTPCLIENTIMPL_HPP
 
-#include <tftp/client/Client.hpp>
+#include "tftp/client/Client.hpp"
 
-#include <tftp/client/TftpClient.hpp>
+#include "tftp/client/TftpClient.hpp"
 
 #include <boost/asio/io_context.hpp>
 

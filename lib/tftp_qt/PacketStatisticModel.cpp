@@ -13,9 +13,9 @@
 
 #include "PacketStatisticModel.hpp"
 
-#include <tftp/packets/PacketTypeDescription.hpp>
+#include "tftp/packets/PacketTypeDescription.hpp"
 
-#include <helper_qt/String.hpp>
+#include "helper_qt/String.hpp"
 
 #include <utility>
 

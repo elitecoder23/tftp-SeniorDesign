@@ -11,22 +11,22 @@
  * @brief TFTP Server CLI Application.
  **/
 
-#include <tftp/server/TftpServer.hpp>
-#include <tftp/server/Operation.hpp>
-#include <tftp/server/ReadOperationConfiguration.hpp>
-#include <tftp/server/WriteOperationConfiguration.hpp>
+#include "tftp/server/TftpServer.hpp"
+#include "tftp/server/Operation.hpp"
+#include "tftp/server/ReadOperationConfiguration.hpp"
+#include "tftp/server/WriteOperationConfiguration.hpp"
 
-#include <tftp/file/StreamFile.hpp>
+#include "tftp/file/StreamFile.hpp"
 
-#include <tftp/packets/PacketStatistic.hpp>
+#include "tftp/packets/PacketStatistic.hpp"
 
-#include <tftp/TftpException.hpp>
-#include <tftp/TftpConfiguration.hpp>
-#include <tftp/TftpOptionsConfiguration.hpp>
-#include <tftp/TransferStatusDescription.hpp>
-#include <tftp/Version.hpp>
+#include "tftp/TftpException.hpp"
+#include "tftp/TftpConfiguration.hpp"
+#include "tftp/TftpOptionsConfiguration.hpp"
+#include "tftp/TransferStatusDescription.hpp"
+#include "tftp/Version.hpp"
 
-#include <helper/Logger.hpp>
+#include "helper/Logger.hpp"
 
 #include <boost/asio.hpp>
 

@@ -14,8 +14,8 @@
 #ifndef TFTP_RECEIVEDATAHANDLER_HPP
 #define TFTP_RECEIVEDATAHANDLER_HPP
 
-#include <tftp/Tftp.hpp>
-#include <tftp/DataHandler.hpp>
+#include "tftp/Tftp.hpp"
+#include "tftp/DataHandler.hpp"
 
 namespace Tftp {
 

@@ -13,9 +13,9 @@
 
 #include "Tftp.hpp"
 
-#include <tftp/Version.hpp>
+#include "tftp/Version.hpp"
 
-#include <helper/VersionInformation.hpp>
+#include "helper/VersionInformation.hpp"
 
 namespace Tftp {
 

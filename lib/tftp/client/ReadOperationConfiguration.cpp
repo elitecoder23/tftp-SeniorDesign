@@ -13,7 +13,7 @@
 
 #include "ReadOperationConfiguration.hpp"
 
-#include <tftp/TftpConfiguration.hpp>
+#include "tftp/TftpConfiguration.hpp"
 
 #include <utility>
 

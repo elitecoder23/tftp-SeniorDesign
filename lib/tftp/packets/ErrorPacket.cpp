@@ -13,11 +13,11 @@
 
 #include "ErrorPacket.hpp"
 
-#include <tftp/packets/PacketException.hpp>
-#include <tftp/packets/ErrorCodeDescription.hpp>
+#include "tftp/packets/PacketException.hpp"
+#include "tftp/packets/ErrorCodeDescription.hpp"
 
-#include <helper/Endianness.hpp>
-#include <helper/Exception.hpp>
+#include "helper/Endianness.hpp"
+#include "helper/Exception.hpp"
 
 #include <boost/exception/all.hpp>
 

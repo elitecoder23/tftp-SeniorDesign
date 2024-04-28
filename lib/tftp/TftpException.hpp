@@ -16,9 +16,9 @@
 #ifndef TFTP_TFTPEXCEPTION_HPP
 #define TFTP_TFTPEXCEPTION_HPP
 
-#include <tftp/Tftp.hpp>
-#include <tftp/packets/Packets.hpp>
-#include <tftp/packets/ErrorPacket.hpp>
+#include "tftp/Tftp.hpp"
+#include "tftp/packets/Packets.hpp"
+#include "tftp/packets/ErrorPacket.hpp"
 
 #include <boost/exception/exception.hpp>
 #include <boost/exception/error_info.hpp>

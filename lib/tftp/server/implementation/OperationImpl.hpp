@@ -14,12 +14,12 @@
 #ifndef TFTP_SERVER_OPERATIONIMPL_HPP
 #define TFTP_SERVER_OPERATIONIMPL_HPP
 
-#include <tftp/server/Server.hpp>
-#include <tftp/server/Operation.hpp>
+#include "tftp/server/Server.hpp"
+#include "tftp/server/Operation.hpp"
 
-#include <tftp/packets/Packets.hpp>
-#include <tftp/packets/ErrorPacket.hpp>
-#include <tftp/packets/PacketHandler.hpp>
+#include "tftp/packets/Packets.hpp"
+#include "tftp/packets/ErrorPacket.hpp"
+#include "tftp/packets/PacketHandler.hpp"
 
 #include <boost/asio.hpp>
 

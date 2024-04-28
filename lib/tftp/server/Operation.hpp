@@ -14,8 +14,8 @@
 #ifndef TFTP_SERVER_OPERATION_HPP
 #define TFTP_SERVER_OPERATION_HPP
 
-#include <tftp/server/Server.hpp>
-#include <tftp/packets/Packets.hpp>
+#include "tftp/server/Server.hpp"
+#include "tftp/packets/Packets.hpp"
 
 #include <optional>
 #include <string_view>

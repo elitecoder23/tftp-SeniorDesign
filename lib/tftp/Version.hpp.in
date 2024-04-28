@@ -14,7 +14,7 @@
 #ifndef TFTP_VERSION_HPP
 #define TFTP_VERSION_HPP
 
-#include <tftp/Tftp.hpp>
+#include "tftp/Tftp.hpp"
 
 #include <cstdint>
 
