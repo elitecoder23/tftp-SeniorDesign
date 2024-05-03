@@ -22,6 +22,7 @@ target_sources(
 
   PRIVATE
     ReadOperationConfiguration.cpp
+    Server.cpp
     TftpServer.cpp
     WriteOperationConfiguration.cpp
 

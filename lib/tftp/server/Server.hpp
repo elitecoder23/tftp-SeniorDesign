@@ -25,8 +25,9 @@
 
 #include <boost/asio/ip/udp.hpp>
 
-#include <memory>
+#include <filesystem>
 #include <functional>
+#include <memory>
 #include <optional>
 #include <string_view>
 
@@ -113,6 +114,32 @@ using ReceivedTftpRequestHandler =
 using OperationCompletedHandler = std::function< void(
   const OperationPtr &operation,
   TransferStatus transferStatus ) >;
+
+/**
+ * @brief Assembles and checks given filename.
+ *
+ * Checks for existence of @p baseDir.
+ * Assemble `basedir/filename`.
+ * Check that assembled file path is within @p baseDir.
+ * Optionally check for existence of assembled file path.
+ *
+ * @param[in] baseDir
+ *   Base directory.
+ *   This directory must exist.
+ * @param[in] filename
+ *   Filename to check.
+ * @param[in] mustExist
+ *   If set to true `basedir/filename` must exist.
+ *   Otherwise don't care.
+ *
+ * @return The processed file path
+ * @retval std::nullopt
+ *   When filename is not valid
+ **/
+[[nodiscard]] std::optional< std::filesystem::path > TFTP_EXPORT checkFilename(
+  const std::filesystem::path &baseDir,
+  const std::filesystem::path &filename,
+  bool mustExist = false );
 
 }
 

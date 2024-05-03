@@ -121,12 +121,12 @@ int main( int argc, char * argv[] )
     )
     (
       "remote-file",
-      boost::program_options::value( &remoteFile)->required(),
+      boost::program_options::value( &remoteFile )->required(),
       "filename of remote file"
     )
     (
       "address",
-      boost::program_options::value( &address)->required(),
+      boost::program_options::value( &address )->required(),
       "remote address"
     );
 
@@ -160,6 +160,18 @@ int main( int argc, char * argv[] )
     auto tftpClient{ Tftp::Client::TftpClient::instance( ioContext ) };
 
     Tftp::Client::OperationPtr tftpOperation{};
+
+    if ( localFile.empty() )
+    {
+      localFile = std::filesystem::path{ remoteFile }.filename();
+    }
+
+    std::cout << std::format(
+      "{} request to {} '{}'<->'{}'\n",
+      Tftp::RequestTypeDescription::instance().name( requestType ),
+      address.to_string(),
+      remoteFile,
+      localFile.string() );
 
     switch ( requestType )
     {

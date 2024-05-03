@@ -38,7 +38,6 @@
 #include <filesystem>
 #include <iostream>
 #include <fstream>
-#include <utility>
 
 /**
  * @brief Application Entry Point.
@@ -51,16 +50,6 @@
  * @return Application exit status.
  **/
 int main( int argc, char * argv[] );
-
-/**
- * @brief Performs Validity Check of supplied Filename.
- *
- * @param[in] filename
- *   Filename to check.
- *
- * @return If filename is valid.
- **/
-static bool checkFilename( const std::filesystem::path &filename );
 
 /**
  * @brief Handler for Received TFTP Requests.
@@ -140,6 +129,9 @@ static Tftp::TftpOptionsConfiguration tftpOptionsConfiguration{};
 //! TFTP Server Instance
 static Tftp::Server::TftpServerPtr server{};
 
+//! TFTP Server Operation
+static Tftp::Server::OperationPtr serverOperation;
+
 int main( int argc, char * argv[] )
 {
   BOOST_LOG_FUNCTION()
@@ -215,7 +207,7 @@ int main( int argc, char * argv[] )
     // connect to SIGINT and SIGTERM
     signals.async_wait( [](
       const boost::system::error_code& error [[maybe_unused]],
-      int signal_number [[maybe_unused]])
+      int signal_number [[maybe_unused]] )
     {
       std::cout << "Termination request\n";
       server->stop();
@@ -259,38 +251,6 @@ int main( int argc, char * argv[] )
   }
 }
 
-static bool checkFilename( const std::filesystem::path &filename )
-{
-  if ( filename.is_relative())
-  {
-    return false;
-  }
-
-  if ( std::filesystem::is_directory( filename ) )
-  {
-    return false;
-  }
-
-  auto fileIt{ filename.begin() };
-
-  for ( const auto& pathItem : baseDir )
-  {
-    if ( fileIt == filename.end() )
-    {
-      return false;
-    }
-
-    if ( *fileIt != pathItem)
-    {
-      return false;
-    }
-
-    ++fileIt;
-  }
-
-  return true;
-}
-
 static void receivedRequest(
   const boost::asio::ip::udp::endpoint &remote,
   const Tftp::RequestType requestType,
@@ -312,7 +272,12 @@ static void receivedRequest(
     return;
   }
 
-  if ( !checkFilename( ( baseDir / filename ).lexically_normal() ) )
+  // check and generate file path
+  const auto filePath{ Tftp::Server::checkFilename(
+    baseDir,
+    filename,
+    Tftp::RequestType::Read == requestType ) };
+  if ( !filePath )
   {
     std::cerr << "Error filename check\n";
 
@@ -343,7 +308,7 @@ static void receivedRequest(
 
     case Tftp::RequestType::Write:
       // we are on server side and receive the data on WRQ
-      receiveFile( remote, baseDir /  filename, clientOptions );
+      receiveFile( remote, baseDir / filename, clientOptions );
       break;
 
     default:
@@ -376,7 +341,7 @@ static void transmitFile(
   }
 
   // initiate TFTP operation
-  auto operation{ server->readOperation(
+  serverOperation = server->readOperation(
     Tftp::Server::ReadOperationConfiguration{
       tftpConfiguration,
       tftpOptionsConfiguration,
@@ -387,9 +352,9 @@ static void transmitFile(
         std::filesystem::file_size( filename ) ),
       remote,
       clientOptions,
-      {} /* no additional options */ } ) };
+      {} /* no additional options */ } );
 
-  operation->start();
+  serverOperation->start();
 }
 
 static void receiveFile(
@@ -418,7 +383,7 @@ static void receiveFile(
   }
 
   // initiate TFTP operation
-  auto operation{ server->writeOperation(
+  serverOperation = server->writeOperation(
     Tftp::Server::WriteOperationConfiguration{
       tftpConfiguration,
       tftpOptionsConfiguration,
@@ -428,16 +393,21 @@ static void receiveFile(
         filename ),
       remote,
       clientOptions,
-      {} /* no additional options */ } ) };
+      {} /* no additional options */ } );
 
-  operation->start();
+  serverOperation->start();
 }
 
 static void operationCompleted(
   [[maybe_unused]] const Tftp::Server::OperationPtr &operation,
   Tftp::TransferStatus transferStatus )
 {
+  assert( serverOperation == operation );
+
   std::cout << "Transfer Completed: " << transferStatus << "\n";
+
+  serverOperation.reset();
+
   // Print Packet Statistic
   std::cout
     << "RX:\n" << Tftp::Packets::PacketStatistic::globalReceive() << "\n"
