@@ -38,6 +38,11 @@ set( DOXYGEN_HTML_DYNAMIC_SECTIONS YES )
 set( DOXYGEN_GENERATE_TREEVIEW YES )
 set( DOXYGEN_INCLUDED_BY_GRAPH NO )
 
+if( WIN32 )
+  # shorten filename otherwise exceeds 255 characters for paths
+  set( DOXYGEN_SHORT_NAMES YES )
+endif()
+
 set(
   DOXYGEN_STRIP_FROM_PATH
 
