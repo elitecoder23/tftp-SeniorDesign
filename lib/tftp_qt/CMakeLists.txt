@@ -6,7 +6,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.28 )
+cmake_minimum_required( VERSION 3.29 )
 
 find_package( Qt6 COMPONENTS Core QUIET )
 if( NOT Qt6_FOUND )
