@@ -2,7 +2,7 @@
   "version": 6,
   "cmakeMinimumRequired": {
     "major": 3,
-    "minor": 26,
+    "minor": 30,
     "patch": 0
   },
   "configurePresets": [
@@ -302,6 +302,7 @@
     {
       "name": "gcc-static-debug",
       "displayName": "GCC Static Debug",
+      "description": "Build and package GCC Static Debug Configuration",
       "steps": [
         {
           "type": "configure",
@@ -328,6 +329,7 @@
     {
       "name": "gcc-static-release",
       "displayName": "GCC Static Release",
+      "description": "Build and package GCC Static Release Configuration",
       "steps": [
         {
           "type": "configure",
@@ -348,6 +350,52 @@
         {
           "type": "package",
           "name": "gcc-static-release"
+        }
+      ]
+    },
+    {
+      "name": "gcc-shared-debug",
+      "displayName": "GCC Shared Debug",
+      "description": "Build and package GCC Shared Debug Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-shared-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc-shared-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc-shared-debug-doc"
+        },
+        {
+          "type": "package",
+          "name": "gcc-shared-debug"
+        }
+      ]
+    },
+    {
+      "name": "gcc-shared-release",
+      "displayName": "GCC Shared Release",
+      "description": "Build and package GCC Shared Release Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-shared-release"
+        },
+        {
+          "type": "build",
+          "name": "gcc-shared-release"
+        },
+        {
+          "type": "build",
+          "name": "gcc-shared-release-doc"
+        },
+        {
+          "type": "package",
+          "name": "gcc-shared-release"
         }
       ]
     }

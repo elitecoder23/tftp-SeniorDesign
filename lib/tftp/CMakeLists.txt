@@ -6,7 +6,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.29 )
+cmake_minimum_required( VERSION 3.30 )
 
 find_package( Boost REQUIRED COMPONENTS program_options )
 

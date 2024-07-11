@@ -6,7 +6,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.29 )
+cmake_minimum_required( VERSION 3.30 )
 
 project(
   tftp
@@ -67,7 +67,7 @@ endif()
 
 FetchContent_GetProperties( cmake_common )
 if( NOT cmake_common_POPULATED )
-  FetchContent_Populate( cmake_common )
+  FetchContent_MakeAvailable( cmake_common )
   # Add own CMake scripts to module path
   list( APPEND CMAKE_MODULE_PATH "${cmake_common_SOURCE_DIR}" )
 endif()
@@ -95,10 +95,5 @@ install(
   COMPONENT runtime )
 
 if( PROJECT_IS_TOP_LEVEL )
-  set( CPACK_GENERATOR ZIP )
-  set( CPACK_PACKAGE_DESCRIPTION_SUMMARY ${PROJECT_DESCRIPTION} )
-  set( CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR} )
-  set( CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR} )
-  set( CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH} )
-  include( CPack )
+  include( InstallPackage.cmake )
 endif()
