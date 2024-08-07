@@ -4,9 +4,16 @@
 This repository provides a C++ Library which implements the TFTP Protocol.
 It also provides a commandline TFTP Server and Client.
 
+## Dependencies
+First level dependencies:
+- [Helper Library](https://git.thomas-vogt.de/thomas-vogt/helper)
+- Boost Library
+  - Boost::Log
+  - Boost::Program Options
+- Qt (Version 5 or 6)
+
 ## License
-This code is published under der Mozilla Public License Version 2.0 (MPL 2.0).
-See [LICENSE](LICENSE).
+This project is licensed under the terms of the [*Mozilla Public License Version 2.0* (MPL)](LICENSE).
 
 ## References
 - [RFC 1350 The TFTP Protocol (Revision 2)](http://tools.ietf.org/html/rfc1350)

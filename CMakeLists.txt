@@ -54,6 +54,9 @@ if( WIN32 )
   set( Boost_USE_STATIC_LIBS OFF )
 endif()
 
+# TODO Disable Module scanning for the moment
+set( CMAKE_CXX_SCAN_FOR_MODULES OFF )
+
 include( FetchContent )
 
 FetchContent_Declare(
