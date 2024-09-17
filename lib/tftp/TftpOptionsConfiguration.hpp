@@ -88,10 +88,10 @@ class TFTP_EXPORT TftpOptionsConfiguration
     bool handleTransferSizeOption{ false };
 
     //! If set, this value is used for option negotiation
-    boost::optional< uint16_t > blockSizeOption{};
+    boost::optional< uint16_t > blockSizeOption;
 
     //! If set, this value is used for option negotiation
-    boost::optional< std::chrono::seconds > timeoutOption{};
+    boost::optional< std::chrono::seconds > timeoutOption;
 };
 
 }

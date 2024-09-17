@@ -46,14 +46,15 @@ class TFTP_EXPORT TransmitDataHandler : public virtual DataHandler
      * @brief Request for data, which will be transmitted.
      *
      * The operation must return a std::vector with data, which is transmitted
-     * to the other side. The parameter maxSize defines the maximum data size,
-     * which can be transmitted.
+     * to the other side.
+     * The parameter @p maxSize defines the maximum data size, which can be
+     * transmitted.
      *
      * The data buffer must not be greater than the max size as defined by the
      * parameter maxSize.
      *
-     * If the dataBuffer is smaller than maxSize (also empty is allowed) this
-     * will be the last packet (EOF).
+     * If the data buffer is smaller than @p maxSize (also empty is allowed)
+     * this will be the last packet (EOF).
      *
      * @param[in] maxSize
      *   The maximum size, which shall be returned.

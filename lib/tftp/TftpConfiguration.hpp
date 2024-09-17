@@ -20,8 +20,8 @@
 
 #include <boost/program_options/options_description.hpp>
 
-#include <cstdint>
 #include <chrono>
+#include <cstdint>
 
 namespace Tftp {
 

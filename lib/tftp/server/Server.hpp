@@ -130,7 +130,7 @@ using OperationCompletedHandler = std::function< void(
  *   Filename to check.
  * @param[in] mustExist
  *   If set to true `basedir/filename` must exist.
- *   Otherwise don't care.
+ *   Otherwise, don't care.
  *
  * @return The processed file path
  * @retval std::nullopt

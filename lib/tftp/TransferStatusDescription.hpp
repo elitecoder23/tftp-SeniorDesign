@@ -42,8 +42,9 @@ class TFTP_EXPORT TransferStatusDescription : public Helper::Description<
  *
  * @return The output stream.
  **/
-TFTP_EXPORT std::ostream&
-operator<<( std::ostream& stream, TransferStatus transferStatus );
+TFTP_EXPORT std::ostream& operator<<(
+  std::ostream& stream,
+  TransferStatus transferStatus );
 
 }
 

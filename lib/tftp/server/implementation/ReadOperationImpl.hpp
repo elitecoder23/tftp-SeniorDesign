@@ -24,8 +24,8 @@
 
 #include <boost/asio.hpp>
 
-#include <string>
 #include <chrono>
+#include <string>
 
 namespace Tftp::Server {
 
@@ -83,7 +83,7 @@ class ReadOperationImpl final : public OperationImpl
      **/
     void dataPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket) override;
+      const Packets::DataPacket &dataPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket
@@ -93,7 +93,7 @@ class ReadOperationImpl final : public OperationImpl
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::AcknowledgementPacket &acknowledgementPacket) override;
+      const Packets::AcknowledgementPacket &acknowledgementPacket ) override;
 
     //! TFTP Server Read Operation Configuration
     ReadOperationConfiguration configurationV;

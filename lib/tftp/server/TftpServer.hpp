@@ -20,10 +20,10 @@
 
 #include <boost/asio/io_context.hpp>
 
-#include <string>
+#include <chrono>
 #include <functional>
 #include <optional>
-#include <chrono>
+#include <string>
 
 namespace Tftp::Server {
 
@@ -107,8 +107,6 @@ class TFTP_EXPORT TftpServer
      *
      * This routine starts the server receive operation.
      * This routine returns immediately.
-     *
-     * It can be called before entry() is called.
      **/
     virtual void start() = 0;
 

@@ -39,8 +39,9 @@ class TFTP_EXPORT RequestTypeDescription :
  *
  * @return @p stream.
  **/
-TFTP_EXPORT std::istream&
-operator>>( std::istream &stream, RequestType &requestType );
+TFTP_EXPORT std::istream& operator>>(
+  std::istream &stream,
+  RequestType &requestType );
 
 }
 
