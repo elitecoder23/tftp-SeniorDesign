@@ -136,7 +136,7 @@ using OperationCompletedHandler = std::function< void(
  * @retval std::nullopt
  *   When filename is not valid
  **/
-[[nodiscard]] std::optional< std::filesystem::path > TFTP_EXPORT checkFilename(
+[[nodiscard]] TFTP_EXPORT std::optional< std::filesystem::path > checkFilename(
   const std::filesystem::path &baseDir,
   const std::filesystem::path &filename,
   bool mustExist = false );

@@ -16,10 +16,10 @@
 
 #include "tftp/packets/Packets.hpp"
 
-#include <string>
-#include <optional>
 #include <concepts>
 #include <limits>
+#include <optional>
+#include <string>
 
 namespace Tftp::Packets {
 
@@ -37,7 +37,7 @@ namespace Tftp::Packets {
  * @retval `(NONE)`
  *   When @p options is empty.
  **/
-[[nodiscard]] std::string TFTP_EXPORT Options_toString(
+[[nodiscard]] TFTP_EXPORT std::string Options_toString(
   const Options &options );
 
 /**
@@ -53,7 +53,7 @@ namespace Tftp::Packets {
  *
  * @sa TftpOptions_rawOptions()
  **/
-[[nodiscard]] Options TFTP_EXPORT Options_options( RawOptionsSpan rawOptions );
+[[nodiscard]] TFTP_EXPORT Options Options_options( RawOptionsSpan rawOptions );
 
 /**
  * @brief Returns the Option List as Raw Data.
@@ -68,7 +68,7 @@ namespace Tftp::Packets {
  *
  * @sa TftpOptions_options()
  **/
-[[nodiscard]] RawOptions TFTP_EXPORT Options_rawOptions(
+[[nodiscard]] TFTP_EXPORT RawOptions Options_rawOptions(
   const Options &options );
 
 /**

@@ -137,7 +137,7 @@ class Version;
  *
  * @return Version Information.
  **/
-[[nodiscard]] Helper::VersionsInformation::value_type TFTP_EXPORT tftpVersion();
+[[nodiscard]] TFTP_EXPORT Helper::VersionsInformation::value_type tftpVersion();
 
 }
 
