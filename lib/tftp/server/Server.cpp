@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 /**
  * @file
  * @copyright
@@ -5,14 +6,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author @todo Add author
+ * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief @todo Add brief description
+ * @brief Definition of Namespace Tftp::Server.
  **/
 
 #include "Server.hpp"
 
-#include <tftp/Logger.hpp>
+#include "tftp/Logger.hpp"
 
 namespace Tftp::Server {
 
