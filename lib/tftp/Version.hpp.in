@@ -24,34 +24,29 @@ namespace Tftp {
 class TFTP_EXPORT Version
 {
   public:
-    // delete constructors
+    // Deleted Constructor
     Version() = delete;
 
-    //! Product Key
+    //! Product Key.
     static constexpr auto Key{ "${PROJECT_NAME}" };
 
-    //! Product Name
+    //! Product Name.
     static constexpr auto Name{ "${PROJECT_DESCRIPTION}" };
 
-    //! Product License
+    //! Product License.
     static constexpr auto License{ "MPL-2.0" };
 
-    //! Product Url
+    //! Product Url.
     static constexpr auto Url{ "${PROJECT_HOMEPAGE_URL}" };
 
-    //! Major Version
-    static constexpr uint32_t Major{ ${PROJECT_VERSION_MAJOR} +0U };
-    //! Minor Version
-    static constexpr uint32_t Minor{ ${PROJECT_VERSION_MINOR} +0U };
-    //! Patch Version
-    static constexpr uint32_t Patch{ ${PROJECT_VERSION_PATCH} +0U };
+    //! Version Number as String.
+    static constexpr auto Number{ "${PROJECT_VERSION}" };
 
-    //! Additional Version Information
+    //! Additional Version Information.
     static constexpr auto Addition{ "${PROJECT_VERSION_ADDITION}" };
 
-    //! Version Information as String.
-    static constexpr auto VersionInformation{
-      "${PROJECT_VERSION} (${PROJECT_VERSION_ADDITION})" };
+    //! Full Version Information as String.
+    static constexpr auto VersionInformation{ "${PROJECT_VERSION_FULL}" };
 };
 
 }

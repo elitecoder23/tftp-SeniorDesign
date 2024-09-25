@@ -28,9 +28,7 @@ BOOST_AUTO_TEST_CASE( version )
   std::cout
     << Version::Key << " " << Version::Name
     << " Version: "
-    << Version::Major << "."
-    << Version::Minor << "."
-    << Version::Patch << "-"
+    << Version::Number << " "
     << Version::Addition << "\n"
     << Version::Url << " " << Version::License << "\n";
 
