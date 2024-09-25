@@ -99,20 +99,14 @@ void TftpServerImpl::stop()
   socketV.close();
 }
 
-OperationPtr TftpServerImpl::readOperation(
-  ReadOperationConfiguration configuration )
+ReadOperationPtr TftpServerImpl::readOperation()
 {
-  return std::make_shared< ReadOperationImpl >(
-    ioContextV,
-    std::move( configuration ) );
+  return std::make_shared< ReadOperationImpl >( ioContextV );
 }
 
-OperationPtr TftpServerImpl::writeOperation(
-  WriteOperationConfiguration configuration )
+WriteOperationPtr TftpServerImpl::writeOperation()
 {
-  return std::make_shared< WriteOperationImpl >(
-    ioContextV,
-    std::move( configuration ) );
+  return std::make_shared< WriteOperationImpl >( ioContextV );
 }
 
 void TftpServerImpl::errorOperation(
@@ -327,7 +321,7 @@ void TftpServerImpl::dataPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX ERROR: " << static_cast< std::string >( dataPacket );
+    << "RX Error: " << static_cast< std::string >( dataPacket );
 
   // execute error operation
   errorOperation(
@@ -343,7 +337,7 @@ void TftpServerImpl::acknowledgementPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX ERROR: " << static_cast< std::string >( acknowledgementPacket );
+    << "RX Error: " << static_cast< std::string >( acknowledgementPacket );
 
   // execute error operation
   errorOperation(
@@ -359,13 +353,13 @@ void TftpServerImpl::errorPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX ERROR: " << static_cast< std::string>( errorPacket );
+    << "RX Error: " << static_cast< std::string>( errorPacket );
 
   // execute error operation
   errorOperation(
     remote,
     Packets::ErrorCode::IllegalTftpOperation,
-    "ERROR packet not expected" );
+    "ERR packet not expected" );
 }
 
 void TftpServerImpl::optionsAcknowledgementPacket(
@@ -375,7 +369,7 @@ void TftpServerImpl::optionsAcknowledgementPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX ERROR: " << static_cast< std::string >( optionsAcknowledgementPacket );
+    << "RX Error: " << static_cast< std::string >( optionsAcknowledgementPacket );
 
   // execute error operation
   errorOperation(
@@ -391,7 +385,7 @@ void TftpServerImpl::invalidPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX: UNKNOWN: *ERROR* - IGNORE";
+    << "RX: UNKNOWN: *Error* - IGNORE";
 }
 
 Packets::TftpOptions TftpServerImpl::tftpOptions(

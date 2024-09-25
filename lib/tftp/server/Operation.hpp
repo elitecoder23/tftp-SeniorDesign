@@ -15,10 +15,10 @@
 #define TFTP_SERVER_OPERATION_HPP
 
 #include "tftp/server/Server.hpp"
+
 #include "tftp/packets/Packets.hpp"
 
-#include <optional>
-#include <string_view>
+#include <string>
 
 namespace Tftp::Server {
 
@@ -31,10 +31,7 @@ namespace Tftp::Server {
 class TFTP_EXPORT Operation
 {
   public:
-    //! Error Info Type
-    using ErrorInfo = std::optional< Packets::ErrorPacket >;
-
-    //! Constructor
+    //! Destructor.
     virtual ~Operation() = default;
 
     /**
@@ -71,7 +68,7 @@ class TFTP_EXPORT Operation
      *
      * @return The error info of this operation
      * @retval ErrorInfo()
-     *   When operation has no error.
+     *   If no error occurred.
      **/
     [[nodiscard]] virtual const ErrorInfo& errorInfo() const = 0;
 };

@@ -17,15 +17,15 @@
 #include "tftp/server/Server.hpp"
 #include "tftp/server/Operation.hpp"
 
-#include "tftp/packets/Packets.hpp"
 #include "tftp/packets/ErrorPacket.hpp"
 #include "tftp/packets/PacketHandler.hpp"
+#include "tftp/packets/Packets.hpp"
 
 #include <boost/asio.hpp>
 
-#include <string>
-#include <memory>
 #include <chrono>
+#include <memory>
+#include <string>
 
 namespace Tftp::Server {
 
@@ -35,50 +35,16 @@ namespace Tftp::Server {
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class OperationImpl:
-  public std::enable_shared_from_this< Operation >,
-  public Operation,
-  protected Packets::PacketHandler
+class OperationImpl : protected Packets::PacketHandler
 {
-  public:
-    //! @copydoc Operation::gracefulAbort
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage ) final;
-
-    //! @copydoc Operation::abort
-    void abort() final;
-
-    //! @copydoc Operation::errorInfo
-    const ErrorInfo& errorInfo() const final;
-
   protected:
     /**
-     * @brief Initialises the TFTP server operation.
+     * @brief Initialises the TFTP Server Operation.
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
-     * @param[in] maxReceivePacketSize
-     *   Maximum packet size for receive operation.
-     * @param[in] completionHandler
-     *   Handler which is called on completion of this operation.
-     * @param[in] remote
-     *   Address of the remote endpoint (TFTP client).
-     * @param[in] local
-     *   local endpoint, where the server handles the request from.
      **/
-    OperationImpl(
-      boost::asio::io_context &ioContext,
-      std::chrono::seconds tftpTimeout,
-      uint16_t tftpRetries,
-      uint16_t maxReceivePacketSize,
-      OperationCompletedHandler completionHandler,
-      const boost::asio::ip::udp::endpoint &remote,
-      const std::optional< boost::asio::ip::udp::endpoint > &local );
+    explicit OperationImpl( boost::asio::io_context &ioContext );
 
     /**
      * @brief Destructor.
@@ -86,22 +52,105 @@ class OperationImpl:
     ~OperationImpl() override;
 
     /**
-     * @brief Sets the Finished flag.
+     * @brief Initialises the Operation
      *
-     * This operation is called, when the last packet has been received or
-     * transmitted to stop the reception loop.
-     *
-     * @param[in] status
-     *   Transfer status.
-     * @param[in] errorInfo
-     *   Optional error information
+     * Setup the socket.
      **/
-    virtual void finished(
-      TransferStatus status,
-      ErrorInfo &&errorInfo = {} );
+    void initialise();
 
     /**
-     * @brief Sends the given packet to the client.
+     * @brief Aborts the Operation Gracefully.
+     *
+     * Sends an error packet at next possible time point.
+     *
+     * @param[in] errorCode
+     *   The TFTP error code.
+     * @param[in] errorMessage
+     *   An additional error message.
+     **/
+    void gracefulAbort(
+      Packets::ErrorCode errorCode,
+      std::string errorMessage );
+
+    /**
+     * @brief Immediately Cancels the Transfer.
+     **/
+    void abort();
+
+    /**
+     * @brief Returns the error information.
+     *
+     * @return The error information
+     * @retval ErrorInfo()
+     *   If no error occurred.
+     **/
+    [[nodiscard]] const ErrorInfo& errorInfo() const;
+
+    /**
+     * @brief Updates TFTP Timeout.
+     *
+     * TFTP Timeout, when no timeout option is negotiated in seconds.
+     *
+     * @param[in] timeout
+     *   TFTP timeout.
+     **/
+    void tftpTimeout( std::chrono::seconds timeout );
+
+    /**
+     * @brief Updates the NUmber of TFTP Packet Retries.
+     *
+     * @param[in] retries
+     *   Number of TFTP Packet Retries.
+     **/
+    void tftpRetries( uint16_t retries );
+
+    /**
+     * @brief Updates the remote (client address)
+     *
+     * @param[in] remote
+     *   Where the connection should be established to.
+     **/
+    void remote( boost::asio::ip::udp::endpoint remote );
+
+    /**
+     * @brief Updates the local address to use as connection source.
+     *
+     * @param[in] local
+     *   Parameter to define the communication source
+     **/
+    void local( boost::asio::ip::udp::endpoint local );
+
+    /**
+     * @brief Updates the Operation Completed Handler
+     *
+     * @param[in] completionHandler
+     *   Handler which is called on completion of the operation.
+     **/
+    void completionHandler( OperationCompletedHandler completionHandler );
+
+    /**
+     * @brief Updates the Maximum Receive Packet Size.
+     *
+     * This operation should be called, if a block size option has been
+     * negotiated.
+     *
+     * @param[in] maxReceivePacketSize
+     *   New max receive packet size.
+     **/
+    void maxReceivePacketSize( uint16_t maxReceivePacketSize );
+
+    /**
+     * @brief Update the Receive Timeout Value.
+     *
+     * This operation should be called, if a timout option has been negotiated.
+     *
+     * @param[in] receiveTimeout
+     *   New receive timeout.
+     **/
+    void receiveTimeout( std::chrono::seconds receiveTimeout ) noexcept;
+
+    /**
+     * @brief Sends the given Packet to the %Client.
      *
      * @param[in] packet
      *   Packet, which is sent to the client.
@@ -111,7 +160,7 @@ class OperationImpl:
     void send( const Packets::Packet &packet );
 
     /**
-     * @brief receives a packet and calls the packet handlers
+     * @brief Receives a packet and calls the packet handlers
      **/
     void receive();
 
@@ -128,28 +177,37 @@ class OperationImpl:
     void receiveDally();
 
     /**
-     * @brief Update the receiveTimeout value.
+     * @brief Sets the Finished flag.
      *
-     * @param[in] receiveTimeout
-     *   The new receive timeout.
+     * This operation is called, when the last packet has been received or
+     * transmitted to stop the reception loop.
+     *
+     * @param[in] status
+     *   If the operation was successful, or an error occurred.
+     * @param[in] errorInfo
+     *   In error case, this information is set accordingly.
      **/
-    void receiveTimeout( std::chrono::seconds receiveTimeout ) noexcept;
+    virtual void finished(
+      TransferStatus status,
+      ErrorInfo &&errorInfo = {} );
 
     /**
-     * @copydoc Packets::PacketHandler::readRequestPacket
+     * @copydoc Packets::PacketHandler::readRequestPacket()
      *
-     * A RRQ packet is not expected - therefore send an error packet an
-     * terminate connection.
+     * A read request packet is handled as failure.
+     * An error packet is sent to the origin and the finished flag is set.
+     *
+     * This operation always throws an CommunicationException.
      **/
     void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::ReadRequestPacket &readRequestPacket ) final;
 
     /**
-     * @copydoc Packets::PacketHandler::writeRequestPacket
+     * @copydoc Packets::PacketHandler::writeRequestPacket()
      *
-     * A WRQ packet is not expected - therefore send an error packet an
-     * terminate connection.
+     * A write request packet is handled as failure.
+     * An error packet is sent to the origin and the finished flag is set.
      **/
     void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -167,7 +225,7 @@ class OperationImpl:
     /**
      * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket()
      *
-     * A OACK packet is not expected - therefore send an error packet an
+     * A OACK packet is not expected - therefore send an error packet and
      * terminate connection.
      **/
      void optionsAcknowledgementPacket(
@@ -189,20 +247,23 @@ class OperationImpl:
      *
      * @param[in] errorCode
      *   Receive error code
-     * @param bytesTransferred
-     *   Number of transferred bytes.
+     * @param[in] bytesTransferred
+     *   Number of bytes transferred.
      **/
     void receiveHandler(
       const boost::system::error_code& errorCode,
       std::size_t bytesTransferred );
 
     /**
-     * @brief Handler for receive timeouts
+     * @brief Called when no data is received for the sent packet.
+     *
+     * If the retransmission counter has not exceeded, the last sent packet
+     * is retransmitted.
      *
      * @param[in] errorCode
-     *   When handler is called with error, errorCode is set
+     *   error status of operation.
      **/
-    void timeoutHandler( const boost::system::error_code& errorCode );
+    void timeoutHandler( const boost::system::error_code &errorCode );
 
     /**
      * @brief Called when no data is received for the last sent ACK.
@@ -214,24 +275,28 @@ class OperationImpl:
      **/
     void timeoutDallyHandler( const boost::system::error_code &errorCode );
 
-    //! Operation Completed Handler
-    OperationCompletedHandler completionHandler;
-
-    //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
-    std::chrono::seconds receiveTimeoutV;
+    //! Receive timeout (can be updated by option negotiation)
+    std::chrono::seconds receiveTimeoutV{ Tftp::DefaultTftpReceiveTimeout };
     //! TFTP Retries
-    const uint16_t tftpRetries;
+    uint16_t tftpRetriesV{ Tftp::DefaultTftpRetries };
+
+    //! Handler which is called on completion of the operation.
+    OperationCompletedHandler completionHandlerV;
+    //! Address of the remote endpoint (TFTP %Client).
+    boost::asio::ip::udp::endpoint remoteV;
+    //! Local address, where the server handles the request from.
+    boost::asio::ip::udp::endpoint localV;
 
     //! TFTP UDP Socket
     boost::asio::ip::udp::socket socket;
-    //! Timeout timer
+    //! Receive timeout timer
     boost::asio::system_timer timer;
 
-    //! stores the received packets
+    //! Received Packet Data
     Packets::RawTftpPacket receivePacket;
-    //! transmitted packet is stored for retries
+    //! Last transmitted Packet ( used for retries)
     Packets::RawTftpPacket transmitPacket;
-    //! counter to store how often the same packet has been transmitted (retries)
+    //! Re-transmission counter
     unsigned int transmitCounter{ 0U };
     //! Error info
     ErrorInfo errorInfoV;

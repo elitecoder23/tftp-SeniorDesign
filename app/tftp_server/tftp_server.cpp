@@ -11,17 +11,18 @@
  * @brief TFTP Server CLI Application.
  **/
 
-#include "tftp/server/TftpServer.hpp"
 #include "tftp/server/Operation.hpp"
-#include "tftp/server/ReadOperationConfiguration.hpp"
-#include "tftp/server/WriteOperationConfiguration.hpp"
+#include "tftp/server/ReadOperation.hpp"
+#include "tftp/server/TftpServer.hpp"
+#include "tftp/server/WriteOperation.hpp"
 
 #include "tftp/file/StreamFile.hpp"
 
 #include "tftp/packets/PacketStatistic.hpp"
+#include "tftp/packets/TftpOptions.hpp"
 
-#include "tftp/TftpException.hpp"
 #include "tftp/TftpConfiguration.hpp"
+#include "tftp/TftpException.hpp"
 #include "tftp/TftpOptionsConfiguration.hpp"
 #include "tftp/TransferStatusDescription.hpp"
 #include "tftp/Version.hpp"
@@ -36,8 +37,8 @@
 
 #include <cstdlib>
 #include <filesystem>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 /**
  * @brief Application Entry Point.
@@ -106,16 +107,12 @@ static void receiveFile(
   const Tftp::Packets::TftpOptions &clientOptions );
 
 /**
- * @brief Operatrion Completed callback
+ * @brief Operation Completed callback
  *
- * @param[in] operation
- *   TFTP Operation
  * @param[in] transferStatus
  *   Transfer status.
  **/
-static void operationCompleted(
-  const Tftp::Server::OperationPtr &operation,
-  Tftp::TransferStatus transferStatus );
+static void operationCompleted( Tftp::TransferStatus transferStatus );
 
 //! TFTP Server Base Directory
 static std::filesystem::path baseDir{};
@@ -341,19 +338,21 @@ static void transmitFile(
   }
 
   // initiate TFTP operation
-  serverOperation = server->readOperation(
-    Tftp::Server::ReadOperationConfiguration{
-      tftpConfiguration,
-      tftpOptionsConfiguration,
-      std::bind_front( &operationCompleted ),
-      std::make_shared< Tftp::File::StreamFile >(
-        Tftp::File::TftpFile::Operation::Transmit,
-        filename,
-        std::filesystem::file_size( filename ) ),
-      remote,
-      clientOptions,
-      {} /* no additional options */ } );
+  auto readOperation{ server->readOperation() };
 
+  readOperation
+    ->tftpTimeout( tftpConfiguration.tftpTimeout )
+    .tftpRetries( tftpConfiguration.tftpRetries )
+    .optionsConfiguration( tftpOptionsConfiguration )
+    .completionHandler( std::bind_front( &operationCompleted ) )
+    .dataHandler( std::make_shared< Tftp::File::StreamFile >(
+      Tftp::File::TftpFile::Operation::Transmit,
+      filename,
+      std::filesystem::file_size( filename ) ) )
+    .remote( remote)
+    .clientOptions( clientOptions );
+
+  serverOperation = readOperation;
   serverOperation->start();
 }
 
@@ -383,30 +382,35 @@ static void receiveFile(
   }
 
   // initiate TFTP operation
-  serverOperation = server->writeOperation(
-    Tftp::Server::WriteOperationConfiguration{
-      tftpConfiguration,
-      tftpOptionsConfiguration,
-      std::bind_front( &operationCompleted ),
-      std::make_shared< Tftp::File::StreamFile >(
-        Tftp::File::TftpFile::Operation::Receive,
-        filename ),
-      remote,
-      clientOptions,
-      {} /* no additional options */ } );
+  auto writeOperation{ server->writeOperation() };
 
+  writeOperation
+    ->tftpTimeout( tftpConfiguration.tftpTimeout )
+    .tftpRetries( tftpConfiguration.tftpRetries )
+    .dally( tftpConfiguration.dally )
+    .optionsConfiguration( tftpOptionsConfiguration )
+    .completionHandler( std::bind_front( &operationCompleted ) )
+    .dataHandler( std::make_shared< Tftp::File::StreamFile >(
+      Tftp::File::TftpFile::Operation::Receive,
+      filename ) )
+    .remote( remote )
+    .clientOptions( clientOptions );
+
+  serverOperation = writeOperation;
   serverOperation->start();
 }
 
-static void operationCompleted(
-  [[maybe_unused]] const Tftp::Server::OperationPtr &operation,
-  Tftp::TransferStatus transferStatus )
+static void operationCompleted( const Tftp::TransferStatus transferStatus )
 {
-  assert( serverOperation == operation );
-
   std::cout << "Transfer Completed: " << transferStatus << "\n";
 
   serverOperation.reset();
+
+  /* TODO
+   * RX statistic maybe incomplete, because this completion handler maybe called
+   * within the reception of the last packet and the packet statistic is not
+   * updated yet.
+   */
 
   // Print Packet Statistic
   std::cout

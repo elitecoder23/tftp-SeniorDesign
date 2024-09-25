@@ -77,12 +77,10 @@ class TftpServerImpl final :
     void stop() override;
 
     //! @copydoc TftpServer::readOperation()
-    [[nodiscard]] OperationPtr readOperation(
-      ReadOperationConfiguration configuration ) override;
+    [[nodiscard]] ReadOperationPtr readOperation() override;
 
     //! @copydoc TftpServer::writeOperation()
-    [[nodiscard]] OperationPtr writeOperation(
-      WriteOperationConfiguration configuration ) override;
+    [[nodiscard]] WriteOperationPtr writeOperation() override;
 
     //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
     void errorOperation(

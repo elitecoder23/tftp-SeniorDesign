@@ -15,16 +15,14 @@ target_sources(
     FILE_SET HEADERS
       FILES
         Operation.hpp
-        ReadOperationConfiguration.hpp
+        ReadOperation.hpp
         Server.hpp
         TftpServer.hpp
-        WriteOperationConfiguration.hpp
+        WriteOperation.hpp
 
   PRIVATE
-    ReadOperationConfiguration.cpp
     Server.cpp
     TftpServer.cpp
-    WriteOperationConfiguration.cpp
 
     implementation/OperationImpl.hpp
     implementation/OperationImpl.cpp

@@ -53,16 +53,24 @@ namespace Tftp::Server {
 
 // Forward declarations
 class TftpServer;
+class Operation;
+class ReadOperation;
+class WriteOperation;
 
-struct ReadOperationConfiguration;
-struct WriteOperationConfiguration;
+//! Error Information
+using ErrorInfo = std::optional< Packets::ErrorPacket >;
 
-//! TFTP Server Instance Pointer
+//! TFTP %Server Instance Pointer
 using TftpServerPtr = std::shared_ptr< TftpServer >;
 
-class Operation;
-//! TFTP Server Operation Instance Pointer
+//! TFTP %Server Operation Instance Pointer
 using OperationPtr = std::shared_ptr< Operation >;
+
+//! TFTP %Server Read %Operation Instance Pointer
+using ReadOperationPtr = std::shared_ptr< ReadOperation >;
+
+//! TFTP %Server Write %Operation Instance Pointer
+using WriteOperationPtr = std::shared_ptr< WriteOperation >;
 
 /**
  * @brief Received TFTP Request Handler.
@@ -106,13 +114,10 @@ using ReceivedTftpRequestHandler =
  * @brief Operation Completed handler, which indicates, if the transfer is
  *   completed.
  *
- * @param[in,out] operation
- *   Operation which informs the callback.
  * @param[in] transferStatus
  *   Status of operation.
  **/
 using OperationCompletedHandler = std::function< void(
-  const OperationPtr &operation,
   TransferStatus transferStatus ) >;
 
 /**

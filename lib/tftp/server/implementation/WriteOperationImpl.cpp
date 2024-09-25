@@ -13,34 +13,24 @@
 
 #include "WriteOperationImpl.hpp"
 
+#include "tftp/packets/AcknowledgementPacket.hpp"
+#include "tftp/packets/DataPacket.hpp"
+#include "tftp/packets/OptionsAcknowledgementPacket.hpp"
+
 #include "tftp/Logger.hpp"
 #include "tftp/ReceiveDataHandler.hpp"
 #include "tftp/TftpException.hpp"
 
-#include "tftp/packets/AcknowledgementPacket.hpp"
-#include "tftp/packets/DataPacket.hpp"
-#include "tftp/packets/OptionsAcknowledgementPacket.hpp"
+#include "helper/Exception.hpp"
+
+#include <boost/exception/all.hpp>
 
 #include <utility>
 
 namespace Tftp::Server {
 
-WriteOperationImpl::WriteOperationImpl(
-  boost::asio::io_context &ioContext,
-  WriteOperationConfiguration configuration ) :
-  OperationImpl{
-    ioContext,
-    configuration.tftpTimeout,
-    configuration.tftpRetries,
-    static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
-      + std::max(
-        Packets::DefaultDataSize,
-        configuration.optionsConfiguration.blockSizeOption.get_value_or(
-          Packets::DefaultDataSize ) ) ),
-    configuration.completionHandler,
-    configuration.remote,
-    configuration.local },
-  configurationV{ std::move( configuration ) }
+WriteOperationImpl::WriteOperationImpl( boost::asio::io_context &ioContext ) :
+  OperationImpl{ ioContext }
 {
 }
 
@@ -48,14 +38,23 @@ void WriteOperationImpl::start()
 {
   BOOST_LOG_FUNCTION()
 
+  if ( !dataHandlerV )
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo{ "Parameter Invalid" }
+      << TransferPhaseInfo{ TransferPhase::Initialisation } );
+  }
+
   try
   {
+    // initialise socket
+    initialise();
+
     // Reset data handler
-    configurationV.dataHandler->reset();
+    dataHandlerV->reset();
 
     // option negotiation leads to empty option list
-    if ( !configurationV.clientOptions
-      && configurationV.additionalNegotiatedOptions.empty() )
+    if ( !clientOptionsV && additionalNegotiatedOptionsV.empty() )
     {
       // Then no OACK is sent back - a simple ACK is sent.
       send( Packets::AcknowledgementPacket{ Packets::BlockNumber{ 0U } } );
@@ -63,15 +62,14 @@ void WriteOperationImpl::start()
     else
     {
       // initialise server options with additional negotiated options
-      Packets::Options serverOptions{ configurationV.additionalNegotiatedOptions };
+      Packets::Options serverOptions{ additionalNegotiatedOptionsV };
 
       // check block size option - if set use it
-      if ( configurationV.optionsConfiguration.blockSizeOption
-        && configurationV.clientOptions.blockSize )
+      if ( optionsConfigurationV.blockSizeOption && clientOptionsV.blockSize )
       {
         receiveDataSize = std::min(
-          *configurationV.clientOptions.blockSize,
-          *configurationV.optionsConfiguration.blockSizeOption );
+          *clientOptionsV.blockSize,
+          *optionsConfigurationV.blockSizeOption );
 
         // respond option string
         serverOptions.try_emplace(
@@ -80,28 +78,27 @@ void WriteOperationImpl::start()
       }
 
       // check timeout option - if set use it
-      if ( configurationV.optionsConfiguration.timeoutOption
-        && configurationV.clientOptions.timeout
-        && ( std::chrono::seconds{ *configurationV.clientOptions.timeout }
-          <= *configurationV.optionsConfiguration.timeoutOption ) )
+      if ( optionsConfigurationV.timeoutOption
+        && clientOptionsV.timeout
+        && ( std::chrono::seconds{ *clientOptionsV.timeout }
+          <= *optionsConfigurationV.timeoutOption ) )
       {
         receiveTimeout(
           // NOLINTNEXTLINE(bugprone-unchecked-optional-access): false positive
-          std::chrono::seconds{ *configurationV.clientOptions.timeout } );
+          std::chrono::seconds{ *clientOptionsV.timeout } );
 
         // respond with timeout option set
         serverOptions.try_emplace(
           Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
           // NOLINTNEXTLINE(bugprone-unchecked-optional-access): false positive
-          std::to_string( *configurationV.clientOptions.timeout ) );
+          std::to_string( *clientOptionsV.timeout ) );
       }
 
       // check transfer size option
-      if ( configurationV.optionsConfiguration.handleTransferSizeOption
-        && configurationV.clientOptions.transferSize )
+      if ( optionsConfigurationV.handleTransferSizeOption
+        && clientOptionsV.transferSize )
       {
-        if ( !configurationV.dataHandler->receivedTransferSize(
-          *configurationV.clientOptions.transferSize ) )
+        if ( !dataHandlerV->receivedTransferSize( *clientOptionsV.transferSize ) )
         {
           Packets::ErrorPacket errorPacket{
             Packets::ErrorCode::DiskFullOrAllocationExceeds,
@@ -118,17 +115,17 @@ void WriteOperationImpl::start()
         // respond option string
         serverOptions.try_emplace(
           Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
-          std::to_string( *configurationV.clientOptions.transferSize ) );
+          std::to_string( *clientOptionsV.transferSize ) );
       }
 
       if ( !serverOptions.empty() )
       {
-        // send OACK
+        // Send OACK
         send( Packets::OptionsAcknowledgementPacket{ serverOptions } );
       }
       else
       {
-        // Send OACK instead of ACK
+        // Send ACK instead of OACK
         send( Packets::AcknowledgementPacket{ Packets::BlockNumber{ 0U } } );
       }
     }
@@ -147,6 +144,97 @@ void WriteOperationImpl::start()
   }
 }
 
+void WriteOperationImpl::gracefulAbort(
+  Packets::ErrorCode errorCode,
+  std::string errorMessage )
+{
+  OperationImpl::gracefulAbort( errorCode, std::move( errorMessage ) );
+}
+
+void WriteOperationImpl::abort()
+{
+  OperationImpl::abort();
+}
+
+const ErrorInfo& WriteOperationImpl::errorInfo() const
+{
+  return OperationImpl::errorInfo();
+}
+
+WriteOperation& WriteOperationImpl::tftpTimeout(
+  const std::chrono::seconds timeout )
+{
+  OperationImpl::tftpTimeout( timeout );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::tftpRetries( const uint16_t retries )
+{
+  OperationImpl::tftpRetries( retries );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::dally( const bool dally )
+{
+  dallyV = dally;
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::optionsConfiguration(
+  TftpOptionsConfiguration optionsConfiguration )
+{
+  optionsConfigurationV = std::move( optionsConfiguration );
+
+  maxReceivePacketSize(
+    static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
+      + std::max(
+          Packets::DefaultDataSize,
+          optionsConfigurationV.blockSizeOption.get_value_or(
+            Packets::DefaultDataSize ) ) ) );
+
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::completionHandler(
+  OperationCompletedHandler completionHandler )
+{
+  OperationImpl::completionHandler( std::move( completionHandler ) );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::dataHandler(
+  ReceiveDataHandlerPtr dataHandler )
+{
+  dataHandlerV = std::move( dataHandler );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::remote( boost::asio::ip::udp::endpoint remote )
+{
+  OperationImpl::remote( std::move( remote ) );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::local( boost::asio::ip::udp::endpoint local )
+{
+  OperationImpl::remote( std::move( local ) );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::clientOptions(
+  Packets::TftpOptions clientOptions )
+{
+  clientOptionsV = std::move( clientOptions );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::additionalNegotiatedOptions(
+  Packets::Options additionalNegotiatedOptions )
+{
+  additionalNegotiatedOptionsV = std::move( additionalNegotiatedOptions );
+  return *this;
+}
+
 void WriteOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo ) noexcept
@@ -154,7 +242,7 @@ void WriteOperationImpl::finished(
   BOOST_LOG_FUNCTION()
 
   // Complete data handler
-  configurationV.dataHandler->finished();
+  dataHandlerV->finished();
 
   // Inform base class
   OperationImpl::finished( status, std::move( errorInfo ) );
@@ -169,19 +257,20 @@ void WriteOperationImpl::dataPacket(
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( dataPacket );
 
-  // Check retransmission
+  // Check retransmission of last packet
   if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
       << "Retransmission of last packet - only send ACK";
 
+    // Retransmit last ACK packet
     send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
-    // if received data size is smaller than the expected -> last packet has been
-    // received
+    // if received data size is smaller than the expected
     if ( dataPacket.dataSize() < receiveDataSize )
     {
-      if ( configurationV.dally )
+      // last packet has been received and operation is finished
+      if ( dallyV )
       {
         // wait for potential retry of Data.
         receiveDally();
@@ -193,28 +282,27 @@ void WriteOperationImpl::dataPacket(
     }
     else
     {
-      // receive next packet
+      // otherwise, wait for next data package
       receive();
     }
 
     return;
   }
 
-  // check not expected block
+  // check unexpected block number
   if ( dataPacket.blockNumber() != lastReceivedBlockNumber.next() )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Unexpected packet";
+      << "Wrong Data packet block number";
 
+    // send error packet
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::IllegalTftpOperation,
-      "Wrong block number" };
-
+      "Block Number not expected" };
     send( errorPacket );
 
     // Operation completed
     finished( TransferStatus::TransferError, std::move( errorPacket ) );
-
     return;
   }
 
@@ -224,31 +312,31 @@ void WriteOperationImpl::dataPacket(
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Too much data received";
 
+    // send error packet
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::IllegalTftpOperation,
       "Too much data" };
-
     send( errorPacket );
 
     // Operation completed
     finished( TransferStatus::TransferError, std::move( errorPacket ) );
-
     return;
   }
 
-  // call data handler
-  configurationV.dataHandler->receivedData( dataPacket.data() );
+  // pass data
+  dataHandlerV->receivedData( dataPacket.data() );
 
-  // increment block number
+  // increment received block number
   lastReceivedBlockNumber++;
 
+  // send ACK
   send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
-  // if received data size is smaller than the expected -> last packet has been
-  // received
+  // if received data size is smaller than the expected
   if ( dataPacket.dataSize() < receiveDataSize )
   {
-    if ( configurationV.dally )
+    // last packet has been received and operation is finished
+    if ( dallyV )
     {
       // wait for potential retry of Data.
       receiveDally();
@@ -260,7 +348,7 @@ void WriteOperationImpl::dataPacket(
   }
   else
   {
-    // receive next packet
+    // otherwise, wait for next data package
     receive();
   }
 }
@@ -272,8 +360,9 @@ void WriteOperationImpl::acknowledgementPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket );
+    << "RX Error: " << static_cast< std::string>( acknowledgementPacket );
 
+  // send Error
   Packets::ErrorPacket errorPacket{
     Packets::ErrorCode::IllegalTftpOperation,
     "ACK not expected" };

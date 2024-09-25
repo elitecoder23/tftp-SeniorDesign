@@ -15,17 +15,18 @@
 #define TFTP_SERVER_READOPERATIONIMPL_HPP
 
 #include "tftp/server/Server.hpp"
-#include "tftp/server/ReadOperationConfiguration.hpp"
+#include "tftp/server/ReadOperation.hpp"
+
 #include "tftp/server/implementation/OperationImpl.hpp"
 
 #include "tftp/packets/BlockNumber.hpp"
+#include "tftp/packets/TftpOptions.hpp"
 
 #include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <boost/asio.hpp>
 
 #include <chrono>
-#include <string>
 
 namespace Tftp::Server {
 
@@ -38,26 +39,65 @@ namespace Tftp::Server {
  *
  * This operation is initiated by a client TFTP read request (RRQ)
  **/
-class ReadOperationImpl final : public OperationImpl
+class ReadOperationImpl final :
+  public ReadOperation,
+  private OperationImpl
 {
   public:
     /**
-     * @brief Initialises the TFTP server write operation instance.
+     * @brief Initialises the TFTP read write operation instance.
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] configuration
-     *   Read Operation Configuration.
      **/
-    ReadOperationImpl(
-      boost::asio::io_context &ioContext,
-      ReadOperationConfiguration configuration );
+    explicit ReadOperationImpl( boost::asio::io_context &ioContext );
 
     //! Destructor
     ~ReadOperationImpl() override = default;
 
-    //! @copydoc OperationImpl::start()
+    //! @copydoc ReadOperation::start()
     void start() override;
+
+    //! @copydoc ReadOperation::gracefulAbort()
+    void gracefulAbort(
+      Packets::ErrorCode errorCode,
+      std::string errorMessage = {} ) override;
+
+    //! @copydoc ReadOperation::abort()
+    void abort() override;
+
+    //! @copydoc ReadOperation::errorInfo()
+    [[nodiscard]] const ErrorInfo& errorInfo() const override;
+
+    //! @copydoc ReadOperation::tftpTimeout()
+    ReadOperation& tftpTimeout( std::chrono::seconds timeout ) override;
+
+    //! @copydoc ReadOperation::tftpRetries()
+    ReadOperation& tftpRetries( uint16_t retries ) override;
+
+    //! @copydoc ReadOperation::optionsConfiguration()
+    ReadOperation& optionsConfiguration(
+      TftpOptionsConfiguration optionsConfiguration ) override;
+
+    //! @copydoc ReadOperation::completionHandler()
+    ReadOperation& completionHandler(
+      OperationCompletedHandler completionHandler ) override;
+
+    //! @copydoc ReadOperation::dataHandler()
+    ReadOperation& dataHandler( TransmitDataHandlerPtr dataHandler ) override;
+
+    //! @copydoc ReadOperation::remote()
+    ReadOperation& remote( boost::asio::ip::udp::endpoint remote ) override;
+
+    //! @copydoc ReadOperation::local()
+    ReadOperation& local( boost::asio::ip::udp::endpoint local ) override;
+
+    //! @copydoc ReadOperation::clientOptions()
+    ReadOperation& clientOptions( Packets::TftpOptions clientOptions ) override;
+
+    //! @copydoc ReadOperation::additionalNegotiatedOptions()
+    ReadOperation& additionalNegotiatedOptions(
+      Packets::Options additionalNegotiatedOptions ) override;
 
   private:
     //! @copydoc OperationImpl::finished()
@@ -86,7 +126,7 @@ class ReadOperationImpl final : public OperationImpl
       const Packets::DataPacket &dataPacket ) override;
 
     /**
-     * @copydoc Packets::PacketHandler::acknowledgementPacket
+     * @copydoc Packets::PacketHandler::acknowledgementPacket()
      *
      * The acknowledgement packet is checked and the next data sequence is
      * handled.
@@ -95,16 +135,22 @@ class ReadOperationImpl final : public OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket ) override;
 
-    //! TFTP Server Read Operation Configuration
-    ReadOperationConfiguration configurationV;
+    //! TFTP Options Configuration.
+    TftpOptionsConfiguration optionsConfigurationV;
+    //! Handler for Transmit Data.
+    TransmitDataHandlerPtr dataHandlerV;
+    //! Received TFTP Client Options.
+    Packets::TftpOptions clientOptionsV;
+    //! Additional Options, which have been already negotiated.
+    Packets::Options additionalNegotiatedOptionsV;
 
     //! Contains the negotiated block size option.
     uint16_t transmitDataSize{ Packets::DefaultDataSize };
     //! Indicates, if the last data packet has been transmitted (closing).
     bool lastDataPacketTransmitted{ false };
-    //! Stored last transmitted block number.
+    //! Block number of the last transmitted data packet.
     Packets::BlockNumber lastTransmittedBlockNumber{ 0U };
-    //! Stored last received block number.
+    //! Last received block number.
     Packets::BlockNumber lastReceivedBlockNumber{ 0U };
 };
 

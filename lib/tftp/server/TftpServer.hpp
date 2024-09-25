@@ -124,13 +124,9 @@ class TFTP_EXPORT TftpServer
      *
      * Data is obtained from @p dataHandler and transmitted to TFTP Client.
      *
-     * @param[in] configuration
-     *   Read Operation Configuration.
-     *
-     * @return TFTP server write operation.
+     * @return TFTP server read operation.
      **/
-    [[nodiscard]] virtual OperationPtr readOperation(
-      ReadOperationConfiguration configuration ) = 0;
+    [[nodiscard]] virtual ReadOperationPtr readOperation() = 0;
 
     /**
      * @brief Creates a TFTP Server Operation (TFTP WRQ), which receives data
@@ -138,13 +134,9 @@ class TFTP_EXPORT TftpServer
      *
      * Data is received form the client and written to @p dataHandler.
      *
-     * @param[in] configuration
-     *   Write Operation Configuration.
-     *
-     * @return TFTP Server Read Operation.
+     * @return TFTP server write operation.
      **/
-    [[nodiscard]] virtual OperationPtr writeOperation(
-      WriteOperationConfiguration configuration ) = 0;
+    [[nodiscard]] virtual WriteOperationPtr writeOperation() = 0;
 
     /**
      * @brief Executes TFTP Error Operation.
@@ -176,7 +168,7 @@ class TFTP_EXPORT TftpServer
       std::string errorMessage = {} ) = 0;
 
   protected:
-    //! Constructor
+    //! Constructor.
     TftpServer() = default;
 };
 
