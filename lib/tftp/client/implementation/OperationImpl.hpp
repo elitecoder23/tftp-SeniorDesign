@@ -15,7 +15,6 @@
 #define TFTP_CLIENT_OPERATIONIMPL_HPP
 
 #include "tftp/client/Client.hpp"
-#include "tftp/client/Operation.hpp"
 #include "tftp/client/TftpClient.hpp"
 
 #include "tftp/packets/PacketHandler.hpp"
@@ -39,10 +38,7 @@ class TftpClientInternal;
  * This class is specialised for the two kinds of TFTP operations
  * (Read Operation, Write Operation).
  **/
-class OperationImpl :
-  public std::enable_shared_from_this< Operation >,
-  public Operation,
-  protected Packets::PacketHandler
+class OperationImpl : protected Packets::PacketHandler
 {
   public:
     /**
@@ -50,44 +46,95 @@ class OperationImpl :
      **/
     ~OperationImpl() override;
 
-    //! @copydoc Operation::gracefulAbort
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) final;
-
-    //! @copydoc Operation::abort
-    void abort() final;
-
-    //! @copydoc Operation::errorInfo
-    const ErrorInfo& errorInfo() const final;
-
   protected:
     /**
      * @brief Initialises the operation.
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] tftpTimeout
-     *   TFTP Timeout, when no timeout option is negotiated in seconds.
-     * @param[in] tftpRetries
-     *   Number of retries.
-     * @param[in] maxReceivePacketSize
-     *   Maximum Receive Packet Size (defined by Block Size Option).
-     * @param[in] completionHandler
-     *   Handler which is called on completion of this operation.
+     **/
+    OperationImpl( boost::asio::io_context &ioContext );
+
+    /**
+     * @brief Updates TFTP Timeout.
+     *
+     * TFTP Timeout, when no timeout option is negotiated in seconds.
+     *
+     * @param[in] timeout
+     *   TFTP timeout.
+     **/
+    void tftpTimeout( std::chrono::seconds timeout );
+
+    /**
+     * @brief Updates the NUmber of TFTP Packet Retries.
+     *
+     * @param[in] retries
+     *   Number of TFTP Packet Retries.
+     **/
+    void tftpRetries( uint16_t retries );
+
+    /**
+     * @brief Updates the remote (server address)
+     *
      * @param[in] remote
      *   Where the connection should be established to.
+     **/
+    void remote( boost::asio::ip::udp::endpoint remote );
+
+    /**
+     * @brief Updates the local address to use as connection source.
+     *
      * @param[in] local
      *   Parameter to define the communication source
      **/
-    OperationImpl(
-      boost::asio::io_context &ioContext,
-      std::chrono::seconds tftpTimeout,
-      uint16_t tftpRetries,
-      uint16_t maxReceivePacketSize,
-      OperationCompletedHandler completionHandler,
-      boost::asio::ip::udp::endpoint remote,
-      const std::optional< boost::asio::ip::udp::endpoint > &local );
+    void local( boost::asio::ip::udp::endpoint local );
+
+    /**
+     * @brief Updates the Operation Completed Handler
+     *
+     * @param[in] completionHandler
+     *   Handler which is called on completion of the operation.
+     **/
+    void completionHandler( OperationCompletedHandler completionHandler );
+
+    /**
+     * @brief Aborts the Operation Gracefully.
+     *
+     * Sends an error packet at next possible time point.
+     *
+     * @param[in] errorCode
+     *   The TFTP error code.
+     * @param[in] errorMessage
+     *   An additional error message.
+     **/
+    void gracefulAbort(
+      Packets::ErrorCode errorCode,
+      std::string errorMessage );
+
+    /**
+     * @brief Immediately Cancels the Transfer.
+     **/
+    void abort();
+
+    /**
+     * @brief Returns the error information.
+     *
+     * @return The error information
+     * @retval ErrorInfo()
+     *   If no error occurred.
+     **/
+    [[nodiscard]] const ErrorInfo& errorInfo() const;
+
+    /**
+     * @brief Updates the Maximum Receive packet Size.
+     *
+     * THis operation should be called, if a block size option has been
+     * negotiated.
+     *
+     * @param[in] maxReceivePacketSize
+     *   New max receive packet size.
+     **/
+    void maxReceivePacketSize( uint16_t maxReceivePacketSize );
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -253,15 +300,17 @@ class OperationImpl :
      **/
     void timeoutDallyHandler( const boost::system::error_code &errorCode );
 
-    //! Receive timeout - is initialised to Tftp::DefaultTftpReceiveTimeout
-    std::chrono::seconds receiveTimeoutV;
+    //! Receive timeout (can be updated by option negotiation)
+    std::chrono::seconds receiveTimeoutV{ Tftp::DefaultTftpReceiveTimeout };
     //! TFTP Retries
-    const uint16_t tftpRetries;
+    uint16_t tftpRetriesV{ Tftp::DefaultTftpRetries };
 
-    //! Completion Handler
-    const OperationCompletedHandler completionHandler;
+    //! Handler which is called on completion of the operation.
+    OperationCompletedHandler completionHandlerV;
     //! TFTP Server Endpoint
-    const boost::asio::ip::udp::endpoint remoteEndpoint;
+    boost::asio::ip::udp::endpoint remoteEndpointV;
+    //! TFTP Local Endpoint
+    boost::asio::ip::udp::endpoint localEndpointV;
 
     //! TFTP socket
     boost::asio::ip::udp::socket socket;

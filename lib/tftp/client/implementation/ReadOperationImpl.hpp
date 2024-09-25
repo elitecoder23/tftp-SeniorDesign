@@ -15,7 +15,7 @@
 #define TFTP_CLIENT_READOPERATIONIMPL_HPP
 
 #include "tftp/client/Client.hpp"
-#include "tftp/client/ReadOperationConfiguration.hpp"
+#include "tftp/client/ReadOperation.hpp"
 #include "tftp/client/implementation/OperationImpl.hpp"
 
 #include "tftp/packets/BlockNumber.hpp"
@@ -34,7 +34,10 @@ namespace Tftp::Client {
  * Received data is handled by the ReceiveDataHandler given at construction
  * time.
  **/
-class ReadOperationImpl final : public OperationImpl
+class ReadOperationImpl final :
+  public std::enable_shared_from_this< ReadOperation >,
+  public ReadOperation,
+  private OperationImpl
 {
   public:
     /**
@@ -42,15 +45,61 @@ class ReadOperationImpl final : public OperationImpl
      *
      * @param[in] ioContext
      *   I/O context used for communication.
-     * @param[in] configuration
-     *   Read Operation Configuration.
      **/
-    ReadOperationImpl(
-      boost::asio::io_context &ioContext,
-      ReadOperationConfiguration configuration );
+    explicit ReadOperationImpl( boost::asio::io_context &ioContext );
 
-    //! @copydoc OperationImpl::request
+    //! @copydoc ReadOperation::request
     void request() override;
+
+    //! @copydoc ReadOperation::gracefulAbort
+    void gracefulAbort(
+      Packets::ErrorCode errorCode,
+      std::string errorMessage = {} ) override;
+
+    //! @copydoc ReadOperation::abort
+    void abort() override;
+
+    //! @copydoc ReadOperation::errorInfo
+    const ErrorInfo& errorInfo() const override;
+
+    //! @copydoc ReadOperation::tftpTimeout
+    ReadOperation& tftpTimeout( std::chrono::seconds timeout ) override;
+
+    //! @copydoc ReadOperation::tftpRetries
+    ReadOperation& tftpRetries( uint16_t retries ) override;
+
+    //! @copydoc ReadOperation::dally
+    ReadOperation& dally( bool dally ) override;
+
+    //! @copydoc ReadOperation::optionsConfiguration
+    ReadOperation& optionsConfiguration(
+      TftpOptionsConfiguration optionsConfiguration ) override;
+
+    //! @copydoc ReadOperation::additionalOptions
+    ReadOperation& additionalOptions( Packets::Options additionalOptions ) override;
+
+    //! @copydoc ReadOperation::optionNegotiationHandler
+    ReadOperation& optionNegotiationHandler(
+      OptionNegotiationHandler optionNegotiationHandler ) override;
+
+    //! @copydoc ReadOperation::completionHandler
+    ReadOperation& completionHandler(
+      OperationCompletedHandler completionHandler ) override;
+
+    //! @copydoc ReadOperation::dataHandler
+    ReadOperation& dataHandler( ReceiveDataHandlerPtr dataHandler ) override;
+
+    //! @copydoc ReadOperation::filename
+    ReadOperation& filename( std::string filename ) override;
+
+    //! @copydoc ReadOperation::mode
+    ReadOperation& mode( Packets::TransferMode mode ) override;
+
+    //! @copydoc ReadOperation::remote
+    ReadOperation& remote( boost::asio::ip::udp::endpoint remote ) override;
+
+    //! @copydoc ReadOperation::local
+    ReadOperation& local( boost::asio::ip::udp::endpoint local ) override;
 
   protected:
     //! @copydoc OperationImpl::finished
@@ -89,8 +138,21 @@ class ReadOperationImpl final : public OperationImpl
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) override;
 
   private:
-    //! Read Operation Configuration
-    ReadOperationConfiguration configurationV;
+    //! TFTP Options Configuration.
+    TftpOptionsConfiguration optionsConfigurationV;
+    //! Additional TFTP options sent to the server.
+    Packets::Options additionalOptionsV;
+    //! Option Negotiation Handler
+    OptionNegotiationHandler optionNegotiationHandlerV;
+    //! Handler for Received Data.
+    ReceiveDataHandlerPtr dataHandlerV;
+    //! Which file shall be requested
+    std::string filenameV;
+    //! Transfer Mode
+    Packets::TransferMode modeV{ Packets::TransferMode::Invalid };
+    //! If set to true, wait after transmission of the final ACK for potential
+    //! retries.
+    bool dallyV{ false };
 
     //! flag to hold information if OACK has been received (used when first data packet is received)
     bool oackReceived{ false };

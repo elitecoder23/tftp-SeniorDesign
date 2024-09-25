@@ -23,8 +23,8 @@
 
 #include "tftp/packets/Packets.hpp"
 
-#include <memory>
 #include <functional>
+#include <memory>
 #include <optional>
 
 /**
@@ -39,15 +39,23 @@ namespace Tftp::Client {
 
 class TftpClient;
 class Operation;
+class ReadOperation;
+class WriteOperation;
 
-struct ReadOperationConfiguration;
-struct WriteOperationConfiguration;
+//! Error Information
+using ErrorInfo = std::optional< Packets::ErrorPacket >;
 
 //! TFTP %Client Instance Pointer
 using TftpClientPtr = std::shared_ptr< TftpClient >;
 
 //! TFTP %Client %Operation Instance Pointer
 using OperationPtr = std::shared_ptr< Operation >;
+
+//! TFTP %Client Read %Operation Instance Pointer
+using ReadOperationPtr = std::shared_ptr< ReadOperation >;
+
+//! TFTP %Client Write %Operation Instance Pointer
+using WriteOperationPtr = std::shared_ptr< WriteOperation >;
 
 /**
  * @brief TFTP Client Option Negotiation Handler
@@ -61,8 +69,6 @@ using OperationPtr = std::shared_ptr< Operation >;
  * The TFTP Client Operation will reject the option negotiation, if
  * @p serverOptions is not empty after the handler returns.
  *
- * @param[in,out] operation
- *   Operation which informs the callback.
  * @param[in,out] serverOptions
  *   Additional Options received from TFTP Server.
  *   WIll be negotiated by this handler and removed from this list
@@ -75,18 +81,15 @@ using OperationPtr = std::shared_ptr< Operation >;
  *   Additional option negotiation was failed.
  **/
 using OptionNegotiationHandler = std::function<
-  bool( const OperationPtr &operation, Packets::Options &serverOptions ) >;
+  bool( Packets::Options &serverOptions ) >;
 
 /**
  * @brief Handler which indicates, if the TFTP transfer is completed.
  *
- * @param[in,out] operation
- *   Operation which informs the callback.
  * @param[in] transferStatus
  *   Status of operation.
  **/
 using OperationCompletedHandler = std::function< void(
-  const OperationPtr &operation,
   TransferStatus transferStatus ) >;
 
 }

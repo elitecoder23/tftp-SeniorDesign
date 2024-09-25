@@ -33,68 +33,52 @@
 
 namespace Tftp::Client {
 
-ReadOperationImpl::ReadOperationImpl(
-  boost::asio::io_context &ioContext,
-  ReadOperationConfiguration configuration ):
-  OperationImpl{
-    ioContext,
-    configuration.tftpTimeout,
-    configuration.tftpRetries,
-    static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
-      + std::max(
-        Packets::DefaultDataSize,
-        configuration.optionsConfiguration.blockSizeOption.get_value_or(
-          Packets::DefaultDataSize ) ) ),
-    configuration.completionHandler,
-    configuration.remote,
-    configuration.local },
-  configurationV{ std::move( configuration ) }
+ReadOperationImpl::ReadOperationImpl( boost::asio::io_context &ioContext ):
+  OperationImpl{ ioContext }
 {
-  BOOST_LOG_FUNCTION()
-
-  if ( !configurationV.optionNegotiationHandler
-    || !configurationV.dataHandler )
-  {
-    BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo{ "Parameter Invalid" }
-      << TransferPhaseInfo{ TransferPhase::Initialisation } );
-  }
 }
 
 void ReadOperationImpl::request()
 {
   BOOST_LOG_FUNCTION()
 
+  if ( !dataHandlerV )
+  {
+    BOOST_THROW_EXCEPTION( TftpException()
+      << Helper::AdditionalInfo{ "Parameter Invalid" }
+      << TransferPhaseInfo{ TransferPhase::Initialisation } );
+  }
+
   try
   {
     // Reset data handler
-    configurationV.dataHandler->reset();
+    dataHandlerV->reset();
 
     receiveDataSize = Packets::DefaultDataSize;
     lastReceivedBlockNumber = 0U;
 
     // initialise Options with additional options
-    Packets::Options options{ configurationV.additionalOptions };
+    Packets::Options options{ additionalOptionsV };
 
     // Block size Option
-    if ( configurationV.optionsConfiguration.blockSizeOption )
+    if ( optionsConfigurationV.blockSizeOption )
     {
       options.try_emplace(
         Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
-        std::to_string( *configurationV.optionsConfiguration.blockSizeOption ) );
+        std::to_string( *optionsConfigurationV.blockSizeOption ) );
     }
 
     // Timeout Option
-    if ( configurationV.optionsConfiguration.timeoutOption )
+    if ( optionsConfigurationV.timeoutOption )
     {
       options.try_emplace(
         Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
         std::to_string( static_cast< uint16_t >(
-          configurationV.optionsConfiguration.timeoutOption->count() ) ) );
+          optionsConfigurationV.timeoutOption->count() ) ) );
     }
 
     // Add transfer size option with size '0' if requested.
-    if ( configurationV.optionsConfiguration.handleTransferSizeOption )
+    if ( optionsConfigurationV.handleTransferSizeOption )
     {
       // assure that transfer size is set to zero for read request
       options.try_emplace(
@@ -104,8 +88,8 @@ void ReadOperationImpl::request()
 
     // send read request packet
     sendFirst( Packets::ReadRequestPacket{
-      configurationV.filename,
-      configurationV.mode,
+      filenameV,
+      modeV,
       std::move( options ) } );
 
     // wait for answers
@@ -120,12 +104,118 @@ void ReadOperationImpl::request()
   }
 }
 
+void ReadOperationImpl::gracefulAbort(
+  Packets::ErrorCode errorCode,
+  std::string errorMessage )
+{
+  OperationImpl::gracefulAbort( errorCode, std::move( errorMessage ) );
+}
+
+void ReadOperationImpl::abort()
+{
+  OperationImpl::abort();
+}
+
+const ErrorInfo& ReadOperationImpl::errorInfo() const
+{
+  return OperationImpl::errorInfo();
+}
+
+ReadOperation& ReadOperationImpl::tftpTimeout( std::chrono::seconds timeout )
+{
+  OperationImpl::tftpTimeout( timeout );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::tftpRetries( uint16_t retries )
+{
+  OperationImpl::tftpRetries( retries );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::dally( bool dally )
+{
+  dallyV = dally;
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::optionsConfiguration(
+  TftpOptionsConfiguration optionsConfiguration )
+{
+  optionsConfigurationV = std::move( optionsConfiguration );
+
+  maxReceivePacketSize(
+    static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
+      + std::max(
+          Packets::DefaultDataSize,
+          optionsConfigurationV.blockSizeOption.get_value_or(
+            Packets::DefaultDataSize ) ) ) );
+
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::additionalOptions(
+  Packets::Options additionalOptions )
+{
+  additionalOptionsV = std::move( additionalOptions );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::optionNegotiationHandler(
+  OptionNegotiationHandler optionNegotiationHandler )
+{
+  optionNegotiationHandlerV = std::move( optionNegotiationHandler );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::completionHandler(
+  OperationCompletedHandler completionHandler )
+{
+  OperationImpl::completionHandler( std::move( completionHandler ) );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::dataHandler(
+  ReceiveDataHandlerPtr dataHandler )
+{
+  dataHandlerV = std::move( dataHandler );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::filename( std::string filename )
+{
+  filenameV = std::move( filename );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::mode( Packets::TransferMode mode )
+{
+  modeV = mode;
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::remote(
+  boost::asio::ip::udp::endpoint remote )
+{
+  OperationImpl::remote( remote );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::local(
+  boost::asio::ip::udp::endpoint local )
+{
+  OperationImpl::local( local );
+  return *this;
+}
+
 void ReadOperationImpl::finished(
   const TransferStatus status,
   ErrorInfo &&errorInfo ) noexcept
 {
+  BOOST_LOG_FUNCTION()
+
   // Complete data handler
-  configurationV.dataHandler->finished();
+  dataHandlerV->finished();
 
   // inform base class
   OperationImpl::finished( status, std::move( errorInfo ) );
@@ -153,7 +243,7 @@ void ReadOperationImpl::dataPacket(
     if ( dataPacket.dataSize() < receiveDataSize )
     {
       // last packet has been received and operation is finished
-      if ( configurationV.dally )
+      if ( dallyV )
       {
         // wait for potential retry of Data.
         receiveDally();
@@ -210,11 +300,12 @@ void ReadOperationImpl::dataPacket(
   if ( ( dataPacket.blockNumber() == static_cast< uint16_t >( 1U ) )
     && ( !oackReceived ) )
   {
-    // If options negotiation is aborted by callback - Abort Operation
+    // Call Option Negotiation Handler
+    // If no Handler is registered - Continue Operation.
+    // If options negotiation is aborted by Option Negotiation Handler - Abort
+    //   Operation
     Packets::Options options{};
-    if ( !configurationV.optionNegotiationHandler(
-      shared_from_this(),
-      options ) )
+    if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( options ) )
     {
       BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Option Negotiation failed";
@@ -231,7 +322,7 @@ void ReadOperationImpl::dataPacket(
   }
 
   // pass data
-  configurationV.dataHandler->receivedData( dataPacket.data() );
+  dataHandlerV->receivedData( dataPacket.data() );
 
   // increment received block number
   lastReceivedBlockNumber++;
@@ -243,7 +334,7 @@ void ReadOperationImpl::dataPacket(
   if ( dataPacket.dataSize() < receiveDataSize )
   {
     // last packet has been received and operation is finished
-    if ( configurationV.dally )
+    if ( dallyV )
     {
       // wait for potential retry of Data.
       receiveDally();
@@ -332,7 +423,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
       Packets::BlockSizeOptionMin,
       Packets::BlockSizeOptionMax );
 
-  if ( !configurationV.optionsConfiguration.blockSizeOption && blockSizeValue )
+  if ( !optionsConfigurationV.blockSizeOption && blockSizeValue )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Block Size Option not expected";
@@ -370,7 +461,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( blockSizeValue )
   {
-    if ( *blockSizeValue > *configurationV.optionsConfiguration.blockSizeOption )
+    if ( *blockSizeValue > *optionsConfigurationV.blockSizeOption )
     {
       BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Received Block Size Option bigger than negotiated";
@@ -399,7 +490,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
       Packets::TimeoutOptionMin,
       Packets::TimeoutOptionMax );
 
-  if ( !configurationV.optionsConfiguration.timeoutOption && timeoutValue )
+  if ( !optionsConfigurationV.timeoutOption && timeoutValue )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Timeout Option not expected";
@@ -439,7 +530,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   {
     // Timeout Option Response from Server must be equal to Client Value
     if ( std::chrono::seconds{ *timeoutValue }
-      != *configurationV.optionsConfiguration.timeoutOption )
+      != *optionsConfigurationV.timeoutOption )
     {
       BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
         << "Timeout Option not equal to requested";
@@ -466,7 +557,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
       remoteOptions,
       Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 
-  if ( !configurationV.optionsConfiguration.handleTransferSizeOption
+  if ( !optionsConfigurationV.handleTransferSizeOption
     && transferSizeValue )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
@@ -505,7 +596,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( transferSizeValue )
   {
-    if ( !configurationV.dataHandler->receivedTransferSize( *transferSizeValue ) )
+    if ( !dataHandlerV->receivedTransferSize( *transferSizeValue ) )
     {
       Packets::ErrorPacket errorPacket{
         Packets::ErrorCode::DiskFullOrAllocationExceeds,
@@ -522,9 +613,8 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   }
 
   // Perform additional Option Negotiation
-  if ( !configurationV.optionNegotiationHandler(
-    shared_from_this(),
-    remoteOptions ) )
+  // If no handler is registered - Accept options and continue operation
+  if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( remoteOptions ) )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Option negotiation failed";

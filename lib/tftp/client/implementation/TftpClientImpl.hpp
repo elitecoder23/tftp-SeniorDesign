@@ -38,13 +38,11 @@ class TftpClientImpl final : public TftpClient
      **/
     explicit TftpClientImpl( boost::asio::io_context &ioContext );
 
-    //! @copydoc TftpClient::readOperation(ReadOperationConfiguration)
-    OperationPtr readOperation(
-      ReadOperationConfiguration configuration ) override;
+    //! @copydoc TftpClient::readOperation
+    ReadOperationPtr readOperation() override;
 
-    //! @copydoc TftpClient::writeOperation(WriteOperationConfiguration)
-    OperationPtr writeOperation(
-      WriteOperationConfiguration configuration ) override;
+    //! @copydoc TftpClient::writeOperation
+    WriteOperationPtr writeOperation() override;
 
   private:
     //! I/O context, which handles the asynchronous reception operation

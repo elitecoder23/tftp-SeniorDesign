@@ -23,20 +23,14 @@ TftpClientImpl::TftpClientImpl( boost::asio::io_context &ioContext ) :
 {
 }
 
-OperationPtr TftpClientImpl::readOperation(
-  ReadOperationConfiguration configuration )
+ReadOperationPtr TftpClientImpl::readOperation()
 {
-  return std::make_shared< ReadOperationImpl >(
-    ioContext,
-    std::move( configuration ) );
+  return std::make_shared< ReadOperationImpl >( ioContext );
 }
 
-OperationPtr TftpClientImpl::writeOperation(
-  WriteOperationConfiguration configuration )
+WriteOperationPtr TftpClientImpl::writeOperation()
 {
-  return std::make_shared< WriteOperationImpl >(
-    ioContext,
-    std::move( configuration ) );
+  return std::make_shared< WriteOperationImpl >( ioContext );
 }
 
 }

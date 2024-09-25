@@ -18,8 +18,9 @@
 
 #include "tftp/packets/Packets.hpp"
 
+#include <boost/asio/ip/udp.hpp>
+
 #include <string>
-#include <optional>
 
 namespace Tftp::Client {
 
@@ -32,9 +33,6 @@ namespace Tftp::Client {
 class TFTP_EXPORT Operation
 {
   public:
-    //! Error Information
-    using ErrorInfo = std::optional< Packets::ErrorPacket >;
-
     //! Destructor.
     virtual ~Operation() = default;
 

@@ -48,24 +48,16 @@ class TFTP_EXPORT TftpClient
     /**
      * @brief Initialises a TFTP Client Read Operation (RRQ).
      *
-     * @param[in] configuration
-     *   Read Operation Configuration.
-     *
-     * @return Client Operation Instance.
+     * @return Client Read Operation Instance.
      **/
-    [[nodiscard]] virtual OperationPtr readOperation(
-      ReadOperationConfiguration configuration ) = 0;
+    [[nodiscard]] virtual ReadOperationPtr readOperation() = 0;
 
     /**
      * @brief Initialises a TFTP Client Write Operation (WRQ).
      *
-     * @param[in] configuration
-     *   Write Operation Configuration.
-     *
-     * @return TFTP Client Operation Instance.
+     * @return TFTP Client Write Operation Instance.
      **/
-    [[nodiscard]] virtual OperationPtr writeOperation(
-      WriteOperationConfiguration configuration ) = 0;
+    [[nodiscard]] virtual WriteOperationPtr writeOperation() = 0;
 
   protected:
     //! Constructor.

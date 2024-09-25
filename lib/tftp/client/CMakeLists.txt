@@ -16,14 +16,12 @@ target_sources(
       FILES
         Client.hpp
         Operation.hpp
-        ReadOperationConfiguration.hpp
+        ReadOperation.hpp
         TftpClient.hpp
-        WriteOperationConfiguration.hpp
+        WriteOperation.hpp
 
   PRIVATE
-    ReadOperationConfiguration.cpp
     TftpClient.cpp
-    WriteOperationConfiguration.cpp
 
     implementation/OperationImpl.hpp
     implementation/OperationImpl.cpp

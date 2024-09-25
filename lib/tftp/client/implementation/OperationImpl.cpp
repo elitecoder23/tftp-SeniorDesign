@@ -33,6 +33,41 @@ namespace Tftp::Client {
 
 OperationImpl::~OperationImpl() = default;
 
+OperationImpl::OperationImpl(
+  boost::asio::io_context &ioContext ) :
+  socket{ ioContext },
+  timer{ ioContext },
+  receivePacket( Packets::DefaultMaxPacketSize )
+{
+  BOOST_LOG_FUNCTION()
+}
+
+void OperationImpl::tftpTimeout( std::chrono::seconds timeout )
+{
+  receiveTimeoutV = timeout;
+}
+
+void OperationImpl::tftpRetries( const uint16_t retries )
+{
+  tftpRetriesV = retries;
+}
+
+void OperationImpl::remote( boost::asio::ip::udp::endpoint remote )
+{
+  remoteEndpointV = std::move( remote );
+}
+
+void OperationImpl::local( boost::asio::ip::udp::endpoint local )
+{
+  localEndpointV = std::move( local );
+}
+
+void OperationImpl::completionHandler(
+  OperationCompletedHandler completionHandler )
+{
+  completionHandlerV = std::move( completionHandler );
+}
+
 void OperationImpl::gracefulAbort(
   const Packets::ErrorCode errorCode,
   std::string errorMessage )
@@ -66,57 +101,14 @@ void OperationImpl::abort()
   finished( TransferStatus::Aborted );
 }
 
-const OperationImpl::ErrorInfo& OperationImpl::errorInfo() const
+const ErrorInfo& OperationImpl::errorInfo() const
 {
   return errorInfoV;
 }
 
-OperationImpl::OperationImpl(
-  boost::asio::io_context &ioContext,
-  const std::chrono::seconds tftpTimeout,
-  const uint16_t tftpRetries,
-  const uint16_t maxReceivePacketSize,
-  OperationCompletedHandler completionHandler,
-  boost::asio::ip::udp::endpoint remote,
-  const std::optional< boost::asio::ip::udp::endpoint > &local )
-try :
-  receiveTimeoutV{ tftpTimeout },
-  tftpRetries{ tftpRetries },
-  completionHandler{ std::move( completionHandler ) },
-  remoteEndpoint{ std::move( remote ) },
-  socket{ ioContext },
-  timer{ ioContext },
-  receivePacket( maxReceivePacketSize )
+void OperationImpl::maxReceivePacketSize( const uint16_t maxReceivePacketSize )
 {
-  BOOST_LOG_FUNCTION()
-
-  try
-  {
-    // Open the socket
-    socket.open( remoteEndpoint.protocol() );
-
-    // Bind socket to source address (from)
-    if ( local )
-    {
-      socket.bind( *local );
-    }
-  }
-  catch ( const boost::system::system_error &err )
-  {
-    // On error and if socket is opened - close it.
-    if ( socket.is_open() )
-    {
-      socket.close();
-    }
-
-    BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo{ err.what() } );
-  }
-}
-catch ( const boost::system::system_error &err )
-{
-  BOOST_THROW_EXCEPTION( CommunicationException()
-    << Helper::AdditionalInfo{ err.what() } );
+  receivePacket.resize( maxReceivePacketSize );
 }
 
 void OperationImpl::sendFirst( const Packets::Packet &packet )
@@ -128,6 +120,15 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
 
   try
   {
+    // Open the socket
+    socket.open( remoteEndpointV.protocol() );
+
+    // Bind socket to source address (from)
+    if ( !localEndpointV.address().is_unspecified() )
+    {
+      socket.bind( localEndpointV );
+    }
+
     // Reset transmit counter
     transmitCounter = 1U;
 
@@ -142,12 +143,18 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
     // Send the packet to the remote server
     socket.send_to(
       boost::asio::buffer( transmitPacket ),
-      remoteEndpoint );
+      remoteEndpointV );
   }
   catch ( const boost::system::system_error &err )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TX Error: " << err.what();
+
+    // On error and if socket is opened - close it.
+    if ( socket.is_open() )
+    {
+      socket.close();
+    }
 
     // Operation finished
     finished( TransferStatus::CommunicationError );
@@ -289,9 +296,9 @@ void OperationImpl::finished(
   timer.cancel();
   socket.cancel();
 
-  if ( completionHandler )
+  if ( completionHandlerV )
   {
-    completionHandler( shared_from_this(), status );
+    completionHandlerV( status );
   }
 }
 
@@ -414,7 +421,7 @@ void OperationImpl::receiveFirstHandler(
 
   // check, if packet has been received from not expected source
   // send error packet and ignore it.
-  if ( remoteEndpoint.address() != receiveEndpoint.address() )
+  if ( remoteEndpointV.address() != receiveEndpoint.address() )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Received packed from wrong source: "
@@ -533,7 +540,7 @@ void OperationImpl::timeoutFirstHandler(
   }
 
   // if maximum retries exceeded -> abort receive operation
-  if ( transmitCounter > tftpRetries )
+  if ( transmitCounter > tftpRetriesV )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TFTP Retry counter exceeded";
@@ -554,7 +561,7 @@ void OperationImpl::timeoutFirstHandler(
       transmitPacket.size() );
 
     // resent stored packet
-    socket.send_to( boost::asio::buffer( transmitPacket ), remoteEndpoint );
+    socket.send_to( boost::asio::buffer( transmitPacket ), remoteEndpointV );
 
     // increment transmit counter
     ++transmitCounter;
@@ -595,7 +602,7 @@ void OperationImpl::timeoutHandler(
   }
 
   // if maximum retries exceeded -> abort receive operation
-  if ( transmitCounter > tftpRetries )
+  if ( transmitCounter > tftpRetriesV )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TFTP Retry counter exceeded";
