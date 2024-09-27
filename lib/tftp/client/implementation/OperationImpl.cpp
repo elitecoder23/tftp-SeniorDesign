@@ -44,13 +44,16 @@ void OperationImpl::initialise()
 {
   try
   {
+    // reset remembered connected endpoint
+    receiveEndpoint = boost::asio::ip::udp::endpoint{};
+
     // Open the socket
-    socket.open( remoteEndpointV.protocol() );
+    socket.open( remoteV.protocol() );
 
     // Bind socket to source address (from)
-    if ( !localEndpointV.address().is_unspecified() )
+    if ( !localV.address().is_unspecified() )
     {
-      socket.bind( localEndpointV );
+      socket.bind( localV );
     }
   }
   catch ( const boost::system::system_error &err )
@@ -119,12 +122,12 @@ void OperationImpl::tftpRetries( const uint16_t retries )
 
 void OperationImpl::remote( boost::asio::ip::udp::endpoint remote )
 {
-  remoteEndpointV = std::move( remote );
+  remoteV = std::move( remote );
 }
 
 void OperationImpl::local( boost::asio::ip::udp::endpoint local )
 {
-  localEndpointV = std::move( local );
+  localV = std::move( local );
 }
 
 void OperationImpl::completionHandler(
@@ -136,6 +139,12 @@ void OperationImpl::completionHandler(
 void OperationImpl::maxReceivePacketSize( const uint16_t maxReceivePacketSize )
 {
   receivePacket.resize( maxReceivePacketSize );
+}
+
+void OperationImpl::receiveTimeout(
+  const std::chrono::seconds receiveTimeout ) noexcept
+{
+  receiveTimeoutV = receiveTimeout;
 }
 
 void OperationImpl::sendFirst( const Packets::Packet &packet )
@@ -161,7 +170,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
     // Send the packet to the remote server
     socket.send_to(
       boost::asio::buffer( transmitPacket ),
-      remoteEndpointV );
+      remoteV );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -286,12 +295,6 @@ void OperationImpl::receiveDally()
 
     finished( TransferStatus::CommunicationError );
   }
-}
-
-void OperationImpl::receiveTimeout(
-  const std::chrono::seconds receiveTimeout ) noexcept
-{
-  receiveTimeoutV = receiveTimeout;
 }
 
 void OperationImpl::finished(
@@ -434,7 +437,7 @@ void OperationImpl::receiveFirstHandler(
 
   // check, if packet has been received from not expected source
   // send error packet and ignore it.
-  if ( remoteEndpointV.address() != receiveEndpoint.address() )
+  if ( remoteV.address() != receiveEndpoint.address() )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Received packed from wrong source: "
@@ -575,7 +578,7 @@ void OperationImpl::timeoutFirstHandler(
       transmitPacket.size() );
 
     // resent stored packet
-    socket.send_to( boost::asio::buffer( transmitPacket ), remoteEndpointV );
+    socket.send_to( boost::asio::buffer( transmitPacket ), remoteV );
 
     // increment transmit counter
     ++transmitCounter;

@@ -131,13 +131,23 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Updates the Maximum Receive Packet Size.
      *
-     * THis operation should be called, if a block size option has been
+     * This operation should be called, if a block size option has been
      * negotiated.
      *
      * @param[in] maxReceivePacketSize
      *   New max receive packet size.
      **/
     void maxReceivePacketSize( uint16_t maxReceivePacketSize );
+
+    /**
+     * @brief Update the Receive Timeout Value.
+     *
+     * This operation should be called, if a timout option has been negotiated.
+     *
+     * @param[in] receiveTimeout
+     *   New receive timeout.
+     **/
+    void receiveTimeout( std::chrono::seconds receiveTimeout ) noexcept;
 
     /**
      * @brief Sends the packet to the TFTP server identified by its default
@@ -149,10 +159,10 @@ class OperationImpl : protected Packets::PacketHandler
     void sendFirst( const Packets::Packet &packet );
 
     /**
-     * @brief Sends the packet to the TFTP server.
+     * @brief Sends the packet to the TFTP %Server.
      *
      * @param[in] packet
-     *   TFTP packet to send.
+     *   Packet, which is sent to the server.
      **/
     void send( const Packets::Packet &packet );
 
@@ -185,14 +195,6 @@ class OperationImpl : protected Packets::PacketHandler
     void receiveDally();
 
     /**
-     * @brief Update the receiveTimeout value.
-     *
-     * @param[in] receiveTimeout
-     *   New receive timeout.
-     **/
-    void receiveTimeout( std::chrono::seconds receiveTimeout ) noexcept;
-
-    /**
      * @brief Sets the Finished flag.
      *
      * This operation is called, when the last packet has been received or
@@ -211,7 +213,7 @@ class OperationImpl : protected Packets::PacketHandler
      * @copydoc Packets::PacketHandler::readRequestPacket()
      *
      * A read request packet is handled as failure.
-     * A error packet is sent to the origin and the finished flag is set.
+     * An error packet is sent to the origin and the finished flag is set.
      *
      * This operation always throws an CommunicationException.
      **/
@@ -223,7 +225,7 @@ class OperationImpl : protected Packets::PacketHandler
      * @copydoc Packets::PacketHandler::writeRequestPacket()
      *
      * A write request packet is handled as failure.
-     * A error packet is sent to the origin and the finished flag is set.
+     * An error packet is sent to the origin and the finished flag is set.
      **/
     void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -317,10 +319,10 @@ class OperationImpl : protected Packets::PacketHandler
 
     //! Handler which is called on completion of the operation.
     OperationCompletedHandler completionHandlerV;
-    //! TFTP Server Endpoint
-    boost::asio::ip::udp::endpoint remoteEndpointV;
-    //! TFTP Local Endpoint
-    boost::asio::ip::udp::endpoint localEndpointV;
+    //! Address of the remote endpoint (TFTP %Server).
+    boost::asio::ip::udp::endpoint remoteV;
+    //! Local address, where the client handles the request from.
+    boost::asio::ip::udp::endpoint localV;
 
     //! TFTP UDP Socket
     boost::asio::ip::udp::socket socket;
@@ -329,7 +331,7 @@ class OperationImpl : protected Packets::PacketHandler
 
     //! Received Packet Data
     Packets::RawTftpPacket receivePacket;
-    //! Remote Address
+    //! Remote Address (set, when server sends first answer)
     boost::asio::ip::udp::endpoint receiveEndpoint;
     //! Last transmitted Packet ( used for retries)
     Packets::RawTftpPacket transmitPacket;
