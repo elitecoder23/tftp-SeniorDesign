@@ -362,7 +362,7 @@ void ReadOperationImpl::acknowledgementPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX ERROR: " << static_cast< std::string>( acknowledgementPacket );
+    << "RX Error: " << static_cast< std::string>( acknowledgementPacket );
 
   // send Error
   Packets::ErrorPacket errorPacket{

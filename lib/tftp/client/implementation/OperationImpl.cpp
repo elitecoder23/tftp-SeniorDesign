@@ -325,7 +325,7 @@ void OperationImpl::readRequestPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX ERROR: " << static_cast< std::string>( readRequestPacket );
+    << "RX Error: " << static_cast< std::string>( readRequestPacket );
 
   // send error packet
   Packets::ErrorPacket errorPacket{
@@ -345,7 +345,7 @@ void OperationImpl::writeRequestPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX ERROR: " << static_cast< std::string>( writeRequestPacket );
+    << "RX Error: " << static_cast< std::string>( writeRequestPacket );
 
   // send error packet
   Packets::ErrorPacket errorPacket{
@@ -365,7 +365,7 @@ void OperationImpl::errorPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX ERROR: " << static_cast< std::string>( errorPacket );
+    << "RX Error: " << static_cast< std::string>( errorPacket );
 
   // Operation completed
   switch ( Packets::Packet::packetType( transmitPacket ) )
@@ -400,7 +400,7 @@ void OperationImpl::invalidPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX ERROR: INVALID Packet";
+    << "RX Error: INVALID Packet";
 
   // send error packet
   Packets::ErrorPacket errorPacket{
@@ -410,7 +410,7 @@ void OperationImpl::invalidPacket(
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, errorPacket );
+  finished( TransferStatus::TransferError, std::move( errorPacket ) );
 }
 
 void OperationImpl::receiveFirstHandler(

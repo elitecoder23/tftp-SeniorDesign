@@ -247,7 +247,7 @@ void WriteOperationImpl::dataPacket(
   BOOST_LOG_FUNCTION()
 
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX ERROR: " << static_cast< std::string>( dataPacket );
+    << "RX Error: " << static_cast< std::string>( dataPacket );
 
   Packets::ErrorPacket errorPacket{
     Packets::ErrorCode::IllegalTftpOperation,
