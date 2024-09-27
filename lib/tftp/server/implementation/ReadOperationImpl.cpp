@@ -214,7 +214,7 @@ ReadOperation& ReadOperationImpl::remote( boost::asio::ip::udp::endpoint remote 
 
 ReadOperation& ReadOperationImpl::local( boost::asio::ip::udp::endpoint local )
 {
-  OperationImpl::remote( std::move( local ) );
+  OperationImpl::local( std::move( local ) );
   return *this;
 }
 

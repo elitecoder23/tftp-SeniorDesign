@@ -217,7 +217,7 @@ WriteOperation& WriteOperationImpl::remote( boost::asio::ip::udp::endpoint remot
 
 WriteOperation& WriteOperationImpl::local( boost::asio::ip::udp::endpoint local )
 {
-  OperationImpl::remote( std::move( local ) );
+  OperationImpl::local( std::move( local ) );
   return *this;
 }
 
