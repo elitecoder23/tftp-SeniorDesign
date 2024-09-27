@@ -18,8 +18,6 @@
 
 #include "tftp/packets/Packets.hpp"
 
-#include <boost/asio/ip/udp.hpp>
-
 #include <string>
 
 namespace Tftp::Client {
@@ -37,9 +35,9 @@ class TFTP_EXPORT Operation
     virtual ~Operation() = default;
 
     /**
-     * @brief Executes the TFTP Client Operation.
+     * @brief Executes the TFTP %Client %Operation.
      *
-     * It prepares the FTP Request Packet, sends it to the remote endpoint and
+     * It prepares the TFTP request packet, sends it to the remote endpoint and
      * start the reception loop.
      *
      * It returns immediately after sending the request.
@@ -47,12 +45,12 @@ class TFTP_EXPORT Operation
     virtual void request() = 0;
 
     /**
-     * @brief Aborts the Operation Gracefully.
+     * @brief Aborts the %Operation Gracefully.
      *
      * Sends an error packet at next possible time point.
      *
      * @param[in] errorCode
-     *   The TFTP error code.
+     *   TFTP error code.
      * @param[in] errorMessage
      *   An additional error message.
      **/
@@ -61,14 +59,16 @@ class TFTP_EXPORT Operation
       std::string errorMessage = {} ) = 0;
 
     /**
-     * @brief Immediately Cancels the Transfer.
+     * @brief Aborts the %Operation Immediately.
+     *
+     * No error message is sent.
      **/
     virtual void abort() = 0;
 
     /**
-     * @brief Returns the error information.
+     * @brief Returns the Error Information of this %Operation.
      *
-     * @return The error information
+     * @return The error information of this operation
      * @retval ErrorInfo()
      *   If no error occurred.
      **/

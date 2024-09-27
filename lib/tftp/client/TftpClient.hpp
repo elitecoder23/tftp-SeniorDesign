@@ -25,6 +25,8 @@ namespace Tftp::Client {
  *
  * This class acts as factory for creating client operations, like read
  * requests or write requests.
+ *
+ * An instance is created by calling @ref TftpClient::instance().
  **/
 class TFTP_EXPORT TftpClient
 {
@@ -46,16 +48,20 @@ class TFTP_EXPORT TftpClient
     virtual ~TftpClient() noexcept = default;
 
     /**
-     * @brief Initialises a TFTP Client Read Operation (RRQ).
+     * @brief Initialises a TFTP Client Read %Operation (RRQ).
      *
-     * @return Client Read Operation Instance.
+     * @return TFTP client read operation instance.
+     *
+     * @sa @ref ReadOperation
      **/
     [[nodiscard]] virtual ReadOperationPtr readOperation() = 0;
 
     /**
-     * @brief Initialises a TFTP Client Write Operation (WRQ).
+     * @brief Initialises a TFTP Client Write %Operation (WRQ).
      *
-     * @return TFTP Client Write Operation Instance.
+     * @return TFTP client write operation instance.
+     *
+     * @sa @ref WriteOperation
      **/
     [[nodiscard]] virtual WriteOperationPtr writeOperation() = 0;
 

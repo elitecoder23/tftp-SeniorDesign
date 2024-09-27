@@ -51,13 +51,16 @@ void ReadOperationImpl::request()
 
   try
   {
+    // initialise socket
+    initialise();
+
     // Reset data handler
     dataHandlerV->reset();
 
     receiveDataSize = Packets::DefaultDataSize;
     lastReceivedBlockNumber = 0U;
 
-    // initialise Options with additional options
+    // initialise options with additional options
     Packets::Options options{ additionalOptionsV };
 
     // Block size Option
@@ -121,13 +124,14 @@ const ErrorInfo& ReadOperationImpl::errorInfo() const
   return OperationImpl::errorInfo();
 }
 
-ReadOperation& ReadOperationImpl::tftpTimeout( std::chrono::seconds timeout )
+ReadOperation& ReadOperationImpl::tftpTimeout(
+  const std::chrono::seconds timeout )
 {
   OperationImpl::tftpTimeout( timeout );
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::tftpRetries( uint16_t retries )
+ReadOperation& ReadOperationImpl::tftpRetries( const uint16_t retries )
 {
   OperationImpl::tftpRetries( retries );
   return *this;
@@ -217,7 +221,7 @@ void ReadOperationImpl::finished(
   // Complete data handler
   dataHandlerV->finished();
 
-  // inform base class
+  // Inform base class
   OperationImpl::finished( status, std::move( errorInfo ) );
 }
 
@@ -230,7 +234,7 @@ void ReadOperationImpl::dataPacket(
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "RX: " << static_cast< std::string>( dataPacket );
 
-  // check retransmission of last packet
+  // Check retransmission of last packet
   if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
@@ -328,7 +332,7 @@ void ReadOperationImpl::dataPacket(
   lastReceivedBlockNumber++;
 
   // send ACK
-  send( Packets::AcknowledgementPacket( lastReceivedBlockNumber ) );
+  send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
   // if received data size is smaller than the expected
   if ( dataPacket.dataSize() < receiveDataSize )

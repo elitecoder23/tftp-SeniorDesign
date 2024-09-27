@@ -17,20 +17,17 @@
 #include "tftp/client/Client.hpp"
 #include "tftp/client/TftpClient.hpp"
 
+#include "tftp/packets/ErrorPacket.hpp"
 #include "tftp/packets/PacketHandler.hpp"
 #include "tftp/packets/Packets.hpp"
-#include "tftp/packets/ErrorPacket.hpp"
 
 #include <boost/asio.hpp>
 
-#include <string>
-#include <memory>
 #include <chrono>
+#include <memory>
+#include <string>
 
 namespace Tftp::Client {
-
-// Forward declaration
-class TftpClientInternal;
 
 /**
  * @brief TFTP %Client %Operation.
@@ -40,20 +37,54 @@ class TftpClientInternal;
  **/
 class OperationImpl : protected Packets::PacketHandler
 {
-  public:
+  protected:
+    /**
+     * @brief Initialises the TFTP Client Operation.
+     *
+     * @param[in] ioContext
+     *   I/O context used for communication.
+     **/
+    explicit OperationImpl( boost::asio::io_context &ioContext );
+
     /**
      * @brief Destructor.
      **/
     ~OperationImpl() override;
 
-  protected:
     /**
-     * @brief Initialises the operation.
+     * @brief Initialises the Operation
      *
-     * @param[in] ioContext
-     *   I/O context used for communication.
+     * Creates the socket.
      **/
-    OperationImpl( boost::asio::io_context &ioContext );
+    void initialise();
+
+    /**
+     * @brief Aborts the Operation Gracefully.
+     *
+     * Sends an error packet at next possible time point.
+     *
+     * @param[in] errorCode
+     *   The TFTP error code.
+     * @param[in] errorMessage
+     *   An additional error message.
+     **/
+    void gracefulAbort(
+      Packets::ErrorCode errorCode,
+      std::string errorMessage );
+
+    /**
+     * @brief Immediately Cancels the Transfer.
+     **/
+    void abort();
+
+    /**
+     * @brief Returns the error information.
+     *
+     * @return The error information
+     * @retval ErrorInfo()
+     *   If no error occurred.
+     **/
+    [[nodiscard]] const ErrorInfo& errorInfo() const;
 
     /**
      * @brief Updates TFTP Timeout.
@@ -98,35 +129,7 @@ class OperationImpl : protected Packets::PacketHandler
     void completionHandler( OperationCompletedHandler completionHandler );
 
     /**
-     * @brief Aborts the Operation Gracefully.
-     *
-     * Sends an error packet at next possible time point.
-     *
-     * @param[in] errorCode
-     *   The TFTP error code.
-     * @param[in] errorMessage
-     *   An additional error message.
-     **/
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage );
-
-    /**
-     * @brief Immediately Cancels the Transfer.
-     **/
-    void abort();
-
-    /**
-     * @brief Returns the error information.
-     *
-     * @return The error information
-     * @retval ErrorInfo()
-     *   If no error occurred.
-     **/
-    [[nodiscard]] const ErrorInfo& errorInfo() const;
-
-    /**
-     * @brief Updates the Maximum Receive packet Size.
+     * @brief Updates the Maximum Receive Packet Size.
      *
      * THis operation should be called, if a block size option has been
      * negotiated.
@@ -190,7 +193,10 @@ class OperationImpl : protected Packets::PacketHandler
     void receiveTimeout( std::chrono::seconds receiveTimeout ) noexcept;
 
     /**
-     * @brief Sets the finished flag.
+     * @brief Sets the Finished flag.
+     *
+     * This operation is called, when the last packet has been received or
+     * transmitted to stop the reception loop.
      *
      * @param[in] status
      *   If the operation was successful, or an error occurred.
@@ -225,6 +231,8 @@ class OperationImpl : protected Packets::PacketHandler
 
     /**
      * @copydoc Packets::PacketHandler::errorPacket()
+     *
+     * Terminate connection.
      **/
     void errorPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -232,6 +240,8 @@ class OperationImpl : protected Packets::PacketHandler
 
     /**
      * @copydoc Packets::PacketHandler::invalidPacket()
+     *
+     * Send error packet and terminate connection.
      **/
     void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -257,10 +267,10 @@ class OperationImpl : protected Packets::PacketHandler
       std::size_t bytesTransferred );
 
     /**
-     * @brief Called, when data is received.
+     * @brief Handler, which is called when new data has been received.
      *
      * @param[in] errorCode
-     *   error status of operation.
+     *   Receive error code
      * @param[in] bytesTransferred
      *   Number of bytes transferred.
      **/
@@ -312,7 +322,7 @@ class OperationImpl : protected Packets::PacketHandler
     //! TFTP Local Endpoint
     boost::asio::ip::udp::endpoint localEndpointV;
 
-    //! TFTP socket
+    //! TFTP UDP Socket
     boost::asio::ip::udp::socket socket;
     //! Receive timeout timer
     boost::asio::system_timer timer;

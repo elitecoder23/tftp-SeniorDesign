@@ -33,7 +33,7 @@
 
 namespace Tftp::Client {
 
-WriteOperationImpl::WriteOperationImpl( boost::asio::io_context &ioContext ):
+WriteOperationImpl::WriteOperationImpl( boost::asio::io_context &ioContext ) :
   OperationImpl{ ioContext }
 {
 }
@@ -51,6 +51,9 @@ void WriteOperationImpl::request()
 
   try
   {
+    // initialise socket
+    initialise();
+
     // Reset data handler
     dataHandlerV->reset();
 
@@ -128,13 +131,14 @@ const ErrorInfo& WriteOperationImpl::errorInfo() const
   return OperationImpl::errorInfo();
 }
 
-WriteOperation& WriteOperationImpl::tftpTimeout( std::chrono::seconds timeout )
+WriteOperation& WriteOperationImpl::tftpTimeout(
+  const std::chrono::seconds timeout )
 {
   OperationImpl::tftpTimeout( timeout );
   return *this;
 }
 
-WriteOperation& WriteOperationImpl::tftpRetries( uint16_t retries )
+WriteOperation& WriteOperationImpl::tftpRetries( const uint16_t retries )
 {
   OperationImpl::tftpRetries( retries );
   return *this;
@@ -210,7 +214,7 @@ void WriteOperationImpl::finished(
   // Complete data handler
   dataHandlerV->finished();
 
-  // inform base class
+  // Inform base class
   OperationImpl::finished( status, std::move( errorInfo ) );
 }
 
@@ -219,6 +223,9 @@ void WriteOperationImpl::sendData()
   BOOST_LOG_FUNCTION()
 
   lastTransmittedBlockNumber++;
+
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
+    << "Send Data #" << static_cast< uint16_t >( lastTransmittedBlockNumber );
 
   const Packets::DataPacket data{
     lastTransmittedBlockNumber,
@@ -267,6 +274,9 @@ void WriteOperationImpl::acknowledgementPacket(
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
       << "Received previous ACK packet: retry of last data package - "
          "IGNORE it due to Sorcerer's Apprentice Syndrome";
+
+    // receive next packet
+    receive();
 
     return;
   }
@@ -345,10 +355,10 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "OACK must occur after WRQ";
 
+    // send error packet
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::IllegalTftpOperation,
       "OACK must occur after WRQ" };
-
     send( errorPacket );
 
     // Operation completed
@@ -364,10 +374,10 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Received option list is empty";
 
+    // send error packet
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::IllegalTftpOperation,
       "Empty OACK not allowed" };
-
     send( errorPacket );
 
     // Operation completed
@@ -615,7 +625,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   // send data
   sendData();
 
-  // wait for next packet
+  // receive next packet
   receive();
 }
 

@@ -31,12 +31,17 @@
  * @brief TFTP %Client.
  *
  * The main entry point for users of this part of the TFTP library is the
- * class TftpClient.
+ * class @ref TftpClient.
  * With an instance of this class the user can create TFTP client read and write
  * operations.
+ *
+ * @sa @ref TftpClient
+ * @sa @ref ReadOperation
+ * @sa @ref WriteOperation
  **/
 namespace Tftp::Client {
 
+// Forward declarations
 class TftpClient;
 class Operation;
 class ReadOperation;
@@ -84,7 +89,8 @@ using OptionNegotiationHandler = std::function<
   bool( Packets::Options &serverOptions ) >;
 
 /**
- * @brief Handler which indicates, if the TFTP transfer is completed.
+ * @brief Operation Completed handler, which indicates, if the transfer is
+ *   completed.
  *
  * @param[in] transferStatus
  *   Status of operation.

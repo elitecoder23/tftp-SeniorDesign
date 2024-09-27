@@ -33,12 +33,11 @@
  * This library implements the TFTP protocol.
  *
  * The library is divided into sections:
- * - Tftp.
- * - Tftp::Packets - TFTP Packets
- * - Tftp::Options - TFTP Option Handling
- * - Tftp::Client - TFTP Clients
- * - Tftp::Server - TFTP Servers
- * - Tftp::File - Helper Classes for file transfers
+ * - @ref Tftp.
+ * - @ref Tftp::Packets - TFTP Packets
+ * - @ref Tftp::Client - TFTP Client
+ * - @ref Tftp::Server - TFTP Server
+ * - @ref Tftp::File - %Helper Classes for file transfers
  *
  * @par Referenced Documents
  * - RFC 1350 The TFTP Protocol (Revision 2)<br>

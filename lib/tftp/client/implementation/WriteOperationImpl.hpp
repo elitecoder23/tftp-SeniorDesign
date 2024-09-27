@@ -16,6 +16,7 @@
 
 #include "tftp/client/Client.hpp"
 #include "tftp/client/WriteOperation.hpp"
+
 #include "tftp/client/implementation/OperationImpl.hpp"
 
 #include "tftp/packets/BlockNumber.hpp"
@@ -26,15 +27,8 @@
 
 namespace Tftp::Client {
 
-/**
- * @brief TFTP %Client Write %Operation (TFTP WRQ).
- *
- * After executed, the class sends the TFTP WRQ packet to the destination
- * and waits for answer.
- * Data is handled by the TransmitDataHandler given at construction time.
- **/
+//! TFTP %Client Write %Operation (WRQ).
 class WriteOperationImpl final :
-  public std::enable_shared_from_this< WriteOperation >,
   public WriteOperation,
   private OperationImpl
 {
@@ -47,58 +41,62 @@ class WriteOperationImpl final :
      **/
     explicit WriteOperationImpl( boost::asio::io_context &ioContext );
 
-    //! @copydoc WriteOperation::request
+    //! Destructor
+    ~WriteOperationImpl() override = default;
+
+    //! @copydoc WriteOperation::request()
     void request() override;
 
-    //! @copydoc WriteOperation::gracefulAbort
+    //! @copydoc WriteOperation::gracefulAbort()
     void gracefulAbort(
       Packets::ErrorCode errorCode,
       std::string errorMessage = {} ) override;
 
-    //! @copydoc WriteOperation::abort
+    //! @copydoc WriteOperation::abort()
     void abort() override;
 
-    //! @copydoc WriteOperation::errorInfo
-    const ErrorInfo& errorInfo() const override;
+    //! @copydoc WriteOperation::errorInfo()
+    [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
-    //! @copydoc WriteOperation::tftpTimeout
+    //! @copydoc WriteOperation::tftpTimeout()
     WriteOperation& tftpTimeout( std::chrono::seconds timeout ) override;
 
-    //! @copydoc WriteOperation::tftpRetries
+    //! @copydoc WriteOperation::tftpRetries()
     WriteOperation& tftpRetries( uint16_t retries ) override;
 
-    //! @copydoc WriteOperation::optionsConfiguration
+    //! @copydoc WriteOperation::optionsConfiguration()
     WriteOperation& optionsConfiguration(
       TftpOptionsConfiguration optionsConfiguration ) override;
 
-    //! @copydoc WriteOperation::additionalOptions
-    WriteOperation& additionalOptions( Packets::Options additionalOptions ) override;
+    //! @copydoc WriteOperation::additionalOptions()
+    WriteOperation& additionalOptions(
+      Packets::Options additionalOptions ) override;
 
-    //! @copydoc WriteOperation::optionNegotiationHandler
+    //! @copydoc WriteOperation::optionNegotiationHandler()
     WriteOperation& optionNegotiationHandler(
       OptionNegotiationHandler optionNegotiationHandler ) override;
 
-    //! @copydoc WriteOperation::completionHandler
+    //! @copydoc WriteOperation::completionHandler()
     WriteOperation& completionHandler(
       OperationCompletedHandler completionHandler ) override;
 
-    //! @copydoc WriteOperation::dataHandler
+    //! @copydoc WriteOperation::dataHandler()
     WriteOperation& dataHandler( TransmitDataHandlerPtr dataHandler ) override;
 
-    //! @copydoc WriteOperation::filename
+    //! @copydoc WriteOperation::filename()
     WriteOperation& filename( std::string filename ) override;
 
-    //! @copydoc WriteOperation::mode
+    //! @copydoc WriteOperation::mode()
     WriteOperation& mode( Packets::TransferMode mode ) override;
 
-    //! @copydoc WriteOperation::remote
+    //! @copydoc WriteOperation::remote()
     WriteOperation& remote( boost::asio::ip::udp::endpoint remote ) override;
 
-    //! @copydoc WriteOperation::local
+    //! @copydoc WriteOperation::local()
     WriteOperation& local( boost::asio::ip::udp::endpoint local ) override;
 
-  protected:
-    //! @copydoc OperationImpl::finished
+  private:
+    //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
       ErrorInfo &&errorInfo = {} ) noexcept override;
@@ -143,14 +141,13 @@ class WriteOperationImpl final :
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) override;
 
-  private:
     //! TFTP Options Configuration.
     TftpOptionsConfiguration optionsConfigurationV;
     //! Additional TFTP options sent to the server.
     Packets::Options additionalOptionsV;
     //! Option Negotiation Handler
     OptionNegotiationHandler optionNegotiationHandlerV;
-    //! Handler for Send Data.
+    //! Handler for Transmit Data.
     TransmitDataHandlerPtr dataHandlerV;
     //! Which file shall be requested
     std::string filenameV;
@@ -159,11 +156,11 @@ class WriteOperationImpl final :
 
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t transmitDataSize{ Packets::DefaultDataSize };
-    //! Is set, when the last data packet has been transmitted
+    //! Indicates, if the last data packet has been transmitted (closing).
     bool lastDataPacketTransmitted{ false };
     //! Block number of the last transmitted data packet.
     Packets::BlockNumber lastTransmittedBlockNumber{ 0U };
-    //! Stored last received block number.
+    //! Last received block number.
     Packets::BlockNumber lastReceivedBlockNumber{ 0U };
     //! Transfer Size obtained from Data Handler
     std::optional< uint64_t > transferSize{};

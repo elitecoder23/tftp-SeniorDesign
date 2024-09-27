@@ -31,41 +31,42 @@
 
 namespace Tftp::Client {
 
-OperationImpl::~OperationImpl() = default;
-
-OperationImpl::OperationImpl(
-  boost::asio::io_context &ioContext ) :
+OperationImpl::OperationImpl( boost::asio::io_context &ioContext ) :
   socket{ ioContext },
   timer{ ioContext },
   receivePacket( Packets::DefaultMaxPacketSize )
 {
-  BOOST_LOG_FUNCTION()
 }
 
-void OperationImpl::tftpTimeout( std::chrono::seconds timeout )
-{
-  receiveTimeoutV = timeout;
-}
+OperationImpl::~OperationImpl() = default;
 
-void OperationImpl::tftpRetries( const uint16_t retries )
+void OperationImpl::initialise()
 {
-  tftpRetriesV = retries;
-}
+  try
+  {
+    // Open the socket
+    socket.open( remoteEndpointV.protocol() );
 
-void OperationImpl::remote( boost::asio::ip::udp::endpoint remote )
-{
-  remoteEndpointV = std::move( remote );
-}
+    // Bind socket to source address (from)
+    if ( !localEndpointV.address().is_unspecified() )
+    {
+      socket.bind( localEndpointV );
+    }
+  }
+  catch ( const boost::system::system_error &err )
+  {
+    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
+      << "Initialisation Error: " << err.what();
 
-void OperationImpl::local( boost::asio::ip::udp::endpoint local )
-{
-  localEndpointV = std::move( local );
-}
+    // On error and if socket is opened - close it.
+    if ( socket.is_open() )
+    {
+      socket.close();
+    }
 
-void OperationImpl::completionHandler(
-  OperationCompletedHandler completionHandler )
-{
-  completionHandlerV = std::move( completionHandler );
+    // Operation finished
+    finished( TransferStatus::CommunicationError );
+  }
 }
 
 void OperationImpl::gracefulAbort(
@@ -106,6 +107,32 @@ const ErrorInfo& OperationImpl::errorInfo() const
   return errorInfoV;
 }
 
+void OperationImpl::tftpTimeout( std::chrono::seconds timeout )
+{
+  receiveTimeoutV = timeout;
+}
+
+void OperationImpl::tftpRetries( const uint16_t retries )
+{
+  tftpRetriesV = retries;
+}
+
+void OperationImpl::remote( boost::asio::ip::udp::endpoint remote )
+{
+  remoteEndpointV = std::move( remote );
+}
+
+void OperationImpl::local( boost::asio::ip::udp::endpoint local )
+{
+  localEndpointV = std::move( local );
+}
+
+void OperationImpl::completionHandler(
+  OperationCompletedHandler completionHandler )
+{
+  completionHandlerV = std::move( completionHandler );
+}
+
 void OperationImpl::maxReceivePacketSize( const uint16_t maxReceivePacketSize )
 {
   receivePacket.resize( maxReceivePacketSize );
@@ -120,15 +147,6 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
 
   try
   {
-    // Open the socket
-    socket.open( remoteEndpointV.protocol() );
-
-    // Bind socket to source address (from)
-    if ( !localEndpointV.address().is_unspecified() )
-    {
-      socket.bind( localEndpointV );
-    }
-
     // Reset transmit counter
     transmitCounter = 1U;
 
@@ -149,12 +167,6 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "TX Error: " << err.what();
-
-    // On error and if socket is opened - close it.
-    if ( socket.is_open() )
-    {
-      socket.close();
-    }
 
     // Operation finished
     finished( TransferStatus::CommunicationError );
@@ -295,6 +307,7 @@ void OperationImpl::finished(
 
   timer.cancel();
   socket.cancel();
+  socket.close();
 
   if ( completionHandlerV )
   {
@@ -513,6 +526,7 @@ void OperationImpl::receiveHandler(
     return;
   }
 
+  // handle the received packet
   packet(
     receiveEndpoint,
     Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
@@ -580,8 +594,7 @@ void OperationImpl::timeoutFirstHandler(
   }
 }
 
-void OperationImpl::timeoutHandler(
-  const boost::system::error_code& errorCode )
+void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 {
   BOOST_LOG_FUNCTION()
 

@@ -16,6 +16,7 @@
 
 #include "tftp/client/Client.hpp"
 #include "tftp/client/ReadOperation.hpp"
+
 #include "tftp/client/implementation/OperationImpl.hpp"
 
 #include "tftp/packets/BlockNumber.hpp"
@@ -26,16 +27,8 @@
 
 namespace Tftp::Client {
 
-/**
- * @brief TFTP %Client Read %Operation (TFTP RRQ).
- *
- * After executed, the class sends the TFTP RRQ packet to the destination and
- * waits for answer.
- * Received data is handled by the ReceiveDataHandler given at construction
- * time.
- **/
+//! TFTP %Client Read %Operation (TFTP RRQ).
 class ReadOperationImpl final :
-  public std::enable_shared_from_this< ReadOperation >,
   public ReadOperation,
   private OperationImpl
 {
@@ -48,61 +41,65 @@ class ReadOperationImpl final :
      **/
     explicit ReadOperationImpl( boost::asio::io_context &ioContext );
 
-    //! @copydoc ReadOperation::request
+    //! Destructor
+    ~ReadOperationImpl() override = default;
+
+    //! @copydoc ReadOperation::request()
     void request() override;
 
-    //! @copydoc ReadOperation::gracefulAbort
+    //! @copydoc ReadOperation::gracefulAbort()
     void gracefulAbort(
       Packets::ErrorCode errorCode,
       std::string errorMessage = {} ) override;
 
-    //! @copydoc ReadOperation::abort
+    //! @copydoc ReadOperation::abort()
     void abort() override;
 
-    //! @copydoc ReadOperation::errorInfo
-    const ErrorInfo& errorInfo() const override;
+    //! @copydoc ReadOperation::errorInfo()
+    [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
-    //! @copydoc ReadOperation::tftpTimeout
+    //! @copydoc ReadOperation::tftpTimeout()
     ReadOperation& tftpTimeout( std::chrono::seconds timeout ) override;
 
-    //! @copydoc ReadOperation::tftpRetries
+    //! @copydoc ReadOperation::tftpRetries()
     ReadOperation& tftpRetries( uint16_t retries ) override;
 
-    //! @copydoc ReadOperation::dally
+    //! @copydoc ReadOperation::dally()
     ReadOperation& dally( bool dally ) override;
 
-    //! @copydoc ReadOperation::optionsConfiguration
+    //! @copydoc ReadOperation::optionsConfiguration()
     ReadOperation& optionsConfiguration(
       TftpOptionsConfiguration optionsConfiguration ) override;
 
-    //! @copydoc ReadOperation::additionalOptions
-    ReadOperation& additionalOptions( Packets::Options additionalOptions ) override;
+    //! @copydoc ReadOperation::additionalOptions()
+    ReadOperation& additionalOptions(
+      Packets::Options additionalOptions ) override;
 
-    //! @copydoc ReadOperation::optionNegotiationHandler
+    //! @copydoc ReadOperation::optionNegotiationHandler()
     ReadOperation& optionNegotiationHandler(
       OptionNegotiationHandler optionNegotiationHandler ) override;
 
-    //! @copydoc ReadOperation::completionHandler
+    //! @copydoc ReadOperation::completionHandler()
     ReadOperation& completionHandler(
       OperationCompletedHandler completionHandler ) override;
 
-    //! @copydoc ReadOperation::dataHandler
+    //! @copydoc ReadOperation::dataHandler()
     ReadOperation& dataHandler( ReceiveDataHandlerPtr dataHandler ) override;
 
-    //! @copydoc ReadOperation::filename
+    //! @copydoc ReadOperation::filename()
     ReadOperation& filename( std::string filename ) override;
 
-    //! @copydoc ReadOperation::mode
+    //! @copydoc ReadOperation::mode()
     ReadOperation& mode( Packets::TransferMode mode ) override;
 
-    //! @copydoc ReadOperation::remote
+    //! @copydoc ReadOperation::remote()
     ReadOperation& remote( boost::asio::ip::udp::endpoint remote ) override;
 
-    //! @copydoc ReadOperation::local
+    //! @copydoc ReadOperation::local()
     ReadOperation& local( boost::asio::ip::udp::endpoint local ) override;
 
-  protected:
-    //! @copydoc OperationImpl::finished
+  private:
+    //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
       ErrorInfo &&errorInfo = {} ) noexcept override;
@@ -137,7 +134,6 @@ class ReadOperationImpl final :
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) override;
 
-  private:
     //! TFTP Options Configuration.
     TftpOptionsConfiguration optionsConfigurationV;
     //! Additional TFTP options sent to the server.
@@ -158,7 +154,7 @@ class ReadOperationImpl final :
     bool oackReceived{ false };
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize{ Packets::DefaultDataSize };
-    //! last received block number.
+    //! Last received block number.
     Packets::BlockNumber lastReceivedBlockNumber{ 0U };
 };
 
