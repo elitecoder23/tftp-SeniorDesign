@@ -18,6 +18,8 @@
 
 #include "tftp/packets/Packets.hpp"
 
+#include <boost/asio/ip/udp.hpp>
+
 #include <string>
 
 namespace Tftp::Server {
@@ -33,6 +35,114 @@ class TFTP_EXPORT Operation
   public:
     //! Destructor.
     virtual ~Operation() = default;
+
+    /**
+     * @name Configuration Operations
+     * @{
+     **/
+
+    /**
+     * @brief Updates TFTP Timeout.
+     *
+     * TFTP Timeout, when no timeout option is negotiated in seconds.
+     * If the _TFTP Timeout_ parameter is not set, the TFTP defaults are used.
+     *
+     * @param[in] timeout
+     *   TFTP timeout.
+     *
+     * @return @p *this for chaining.
+     **/
+    virtual Operation& tftpTimeout( std::chrono::seconds timeout ) = 0;
+
+    /**
+     * @brief Updates the NUmber of TFTP Packet Retries.
+     *
+     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
+     * used.
+     *
+     * @param[in] retries
+     *   Number of TFTP Packet Retries.
+     *
+     * @return @p *this for chaining.
+     **/
+    virtual Operation& tftpRetries( uint16_t retries ) = 0;
+
+    /**
+     * @brief Updates TFTP Options Configuration.
+     *
+     * If no TFTP Option configuration is provided, the defaults are used.
+     *
+     * @param[in] optionsConfiguration
+     *   TFTP Options Configuration.
+     *
+     * @return @p *this for chaining.
+     **/
+    virtual Operation& optionsConfiguration(
+      TftpOptionsConfiguration optionsConfiguration ) = 0;
+
+    /**
+     * @brief Updates the Operation Completed Handler.
+     *
+     * @param[in] handler
+     *   Handler which is called on completion of the operation.
+     *
+     * @return @p *this for chaining.
+     **/
+    virtual Operation& completionHandler(
+      OperationCompletedHandler handler ) = 0;
+
+    /**
+     * @brief Updates the remote (client address).
+     *
+     * This parameter is required.
+     *
+     * @param[in] remote
+     *   Where the connection should be established to.
+     *
+     * @return @p *this for chaining.
+     **/
+    virtual Operation& remote( boost::asio::ip::udp::endpoint remote ) = 0;
+
+    /**
+     * @brief Updates the local address to use as connection source.
+     *
+     * To set a fixed IP-address and leave the UDP port up to the IP-Stack,
+     * set the port to `0`.
+     *
+     * @param[in] local
+     *   Parameter to define the communication source
+     *
+     * @return @p *this for chaining.
+     **/
+    virtual Operation& local( boost::asio::ip::udp::endpoint local ) = 0;
+
+    /**
+     * @brief Updates the Client Options
+     *
+     * This options will be negotiated within TFTP Server Request Operation.
+     *
+     * @param[in] clientOptions
+     *   Received TFTP Client Options
+     *
+     * @return @return @p *this for chaining.
+     **/
+    virtual Operation& clientOptions(
+      Packets::TftpOptions clientOptions ) = 0;
+
+    /**
+     * @brief Updates additional negotiated TFTP Options
+     *
+     * By default, no additional Options are sent to the client.
+     *
+     * @param[in] additionalNegotiatedOptions
+     *   Additional negotiated TFTP options sent to the client.
+     *
+     * @return @p *this for chaining.
+     **/
+    virtual Operation& additionalNegotiatedOptions(
+      Packets::Options additionalNegotiatedOptions ) = 0;
+
+    /** @} **/
 
     /**
      * @brief Executes the TFTP Server Operation.

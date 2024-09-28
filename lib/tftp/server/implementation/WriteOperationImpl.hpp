@@ -84,10 +84,10 @@ class WriteOperationImpl final :
 
     //! @copydoc WriteOperation::completionHandler()
     WriteOperation& completionHandler(
-      OperationCompletedHandler completionHandler ) override;
+      OperationCompletedHandler handler ) override;
 
     //! @copydoc WriteOperation::dataHandler()
-    WriteOperation& dataHandler( ReceiveDataHandlerPtr dataHandler ) override;
+    WriteOperation& dataHandler( ReceiveDataHandlerPtr handler ) override;
 
     //! @copydoc WriteOperation::remote()
     WriteOperation& remote( boost::asio::ip::udp::endpoint remote ) override;

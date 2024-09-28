@@ -159,23 +159,23 @@ WriteOperation& WriteOperationImpl::additionalOptions(
 }
 
 WriteOperation& WriteOperationImpl::optionNegotiationHandler(
-  OptionNegotiationHandler optionNegotiationHandler )
+  OptionNegotiationHandler handler )
 {
-  optionNegotiationHandlerV = std::move( optionNegotiationHandler );
+  optionNegotiationHandlerV = std::move( handler );
   return *this;
 }
 
 WriteOperation& WriteOperationImpl::completionHandler(
-  OperationCompletedHandler completionHandler )
+  OperationCompletedHandler handler )
 {
-  OperationImpl::completionHandler( std::move( completionHandler ) );
+  OperationImpl::completionHandler( std::move( handler ) );
   return *this;
 }
 
 WriteOperation& WriteOperationImpl::dataHandler(
-  TransmitDataHandlerPtr dataHandler )
+  TransmitDataHandlerPtr handler )
 {
-  dataHandlerV = std::move( dataHandler );
+  dataHandlerV = std::move( handler );
   return *this;
 }
 

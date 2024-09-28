@@ -74,14 +74,14 @@ class WriteOperationImpl final :
 
     //! @copydoc WriteOperation::optionNegotiationHandler()
     WriteOperation& optionNegotiationHandler(
-      OptionNegotiationHandler optionNegotiationHandler ) override;
+      OptionNegotiationHandler handler ) override;
 
     //! @copydoc WriteOperation::completionHandler()
     WriteOperation& completionHandler(
-      OperationCompletedHandler completionHandler ) override;
+      OperationCompletedHandler handler ) override;
 
     //! @copydoc WriteOperation::dataHandler()
-    WriteOperation& dataHandler( TransmitDataHandlerPtr dataHandler ) override;
+    WriteOperation& dataHandler( TransmitDataHandlerPtr handler ) override;
 
     //! @copydoc WriteOperation::filename()
     WriteOperation& filename( std::string filename ) override;

@@ -123,10 +123,10 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Updates the Operation Completed Handler
      *
-     * @param[in] completionHandler
+     * @param[in] handler
      *   Handler which is called on completion of the operation.
      **/
-    void completionHandler( OperationCompletedHandler completionHandler );
+    void completionHandler( OperationCompletedHandler handler );
 
     /**
      * @brief Updates the Maximum Receive Packet Size.

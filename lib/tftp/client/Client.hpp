@@ -76,7 +76,7 @@ using WriteOperationPtr = std::shared_ptr< WriteOperation >;
  *
  * @param[in,out] serverOptions
  *   Additional Options received from TFTP Server.
- *   WIll be negotiated by this handler and removed from this list
+ *   Will be negotiated by this handler and removed from this list.
  *
  * @return If the TFTP Option Negotiation was successful.
  * @retval true

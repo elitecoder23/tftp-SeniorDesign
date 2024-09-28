@@ -166,23 +166,22 @@ ReadOperation& ReadOperationImpl::additionalOptions(
 }
 
 ReadOperation& ReadOperationImpl::optionNegotiationHandler(
-  OptionNegotiationHandler optionNegotiationHandler )
+  OptionNegotiationHandler handler )
 {
-  optionNegotiationHandlerV = std::move( optionNegotiationHandler );
+  optionNegotiationHandlerV = std::move( handler );
   return *this;
 }
 
 ReadOperation& ReadOperationImpl::completionHandler(
-  OperationCompletedHandler completionHandler )
+  OperationCompletedHandler handler )
 {
-  OperationImpl::completionHandler( std::move( completionHandler ) );
+  OperationImpl::completionHandler( std::move( handler ) );
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::dataHandler(
-  ReceiveDataHandlerPtr dataHandler )
+ReadOperation& ReadOperationImpl::dataHandler( ReceiveDataHandlerPtr handler )
 {
-  dataHandlerV = std::move( dataHandler );
+  dataHandlerV = std::move( handler );
   return *this;
 }
 

@@ -44,10 +44,9 @@ TftpServerImpl::TftpServerImpl( boost::asio::io_context &ioContext ):
 
 TftpServerImpl::~TftpServerImpl() = default;
 
-TftpServer& TftpServerImpl::requestHandler(
-  ReceivedTftpRequestHandler requestHandler )
+TftpServer& TftpServerImpl::requestHandler( ReceivedTftpRequestHandler handler )
 {
-  requestHandlerV = std::move( requestHandler );
+  requestHandlerV = std::move( handler );
   return *this;
 }
 

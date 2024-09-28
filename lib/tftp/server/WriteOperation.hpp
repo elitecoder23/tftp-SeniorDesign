@@ -17,8 +17,6 @@
 #include "tftp/server/Server.hpp"
 #include "tftp/server/Operation.hpp"
 
-#include <boost/asio/ip/udp.hpp>
-
 namespace Tftp::Server {
 
 /**
@@ -37,32 +35,11 @@ class TFTP_EXPORT WriteOperation : public Operation
      * @{
      **/
 
-    /**
-     * @brief Updates TFTP Timeout.
-     *
-     * TFTP Timeout, when no timeout option is negotiated in seconds.
-     *
-     * If the _TFTP Timeout_ parameter is not set, the TFTP defaults are used.
-     *
-     * @param[in] timeout
-     *   TFTP timeout.
-     *
-     * @return @p *this for chaining.
-     **/
-    virtual WriteOperation& tftpTimeout( std::chrono::seconds timeout ) = 0;
+    //! @copydoc Operation::tftpTimeout()
+    WriteOperation& tftpTimeout( std::chrono::seconds timeout ) override = 0;
 
-    /**
-     * @brief Updates the Number of TFTP Packet Retries.
-     *
-     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
-     * used.
-     *
-     * @param[in] retries
-     *   Number of TFTP Packet Retries.
-     *
-     * @return @p *this for chaining.
-     **/
-    virtual WriteOperation& tftpRetries( uint16_t retries ) = 0;
+    //! @copydoc Operation::tftpRetries()
+    WriteOperation& tftpRetries( uint16_t retries ) override = 0;
 
     /**
      * @brief Updates the Dally Parameter.
@@ -77,29 +54,13 @@ class TFTP_EXPORT WriteOperation : public Operation
      **/
     virtual WriteOperation& dally( bool dally ) = 0;
 
-    /**
-     * @brief Updates TFTP Options Configuration.
-     *
-     * If no TFTP Option configuration is provided, the defaults are used.
-     *
-     * @param[in] optionsConfiguration
-     *   TFTP Options Configuration.
-     *
-     * @return @p *this for chaining.
-     **/
-    virtual WriteOperation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) = 0;
+    //! @copydoc Operation::optionsConfiguration()
+    WriteOperation& optionsConfiguration(
+      TftpOptionsConfiguration optionsConfiguration ) override = 0;
 
-    /**
-     * @brief Updates the Operation Completed Handler.
-     *
-     * @param[in] completionHandler
-     *   Handler which is called on completion of the operation.
-     *
-     * @return @p *this for chaining.
-     **/
-    virtual WriteOperation& completionHandler(
-      OperationCompletedHandler completionHandler ) = 0;
+    //! @copydoc Operation::completionHandler()
+    WriteOperation& completionHandler(
+      OperationCompletedHandler handler ) override = 0;
 
     /**
      * @brief Updates the Receive Data Handler.
@@ -107,61 +68,27 @@ class TFTP_EXPORT WriteOperation : public Operation
      * This handler is required.
      * If not provided the operation will fail.
      *
-     * @param[in] dataHandler
+     * @param[in] handler
      *   Handler for Received Data.
      *
      * @return @p *this for chaining.
      **/
-    virtual WriteOperation& dataHandler( ReceiveDataHandlerPtr dataHandler ) = 0;
+    virtual WriteOperation& dataHandler( ReceiveDataHandlerPtr handler ) = 0;
 
-    /**
-     * @brief Updates the remote (client address).
-     *
-     * @param[in] remote
-     *   Where the connection should be established to.
-     *
-     * @return @p *this for chaining.
-     **/
-    virtual WriteOperation& remote( boost::asio::ip::udp::endpoint remote ) = 0;
+    //! @copydoc Operation::remote()
+    WriteOperation& remote(
+      boost::asio::ip::udp::endpoint remote ) override = 0;
 
-    /**
-     * @brief Updates the local address to use as connection source.
-     *
-     * To set a fixed IP-address and leave the UDP port up to the IP-Stack,
-     * set the port to `0`.
-     *
-     * @param[in] local
-     *   Parameter to define the communication source
-     *
-     * @return @p *this for chaining.
-     **/
-    virtual WriteOperation& local( boost::asio::ip::udp::endpoint local ) = 0;
+    //! @copydoc Operation::local()
+    WriteOperation& local( boost::asio::ip::udp::endpoint local ) override = 0;
 
-    /**
-     * @brief Updates the Client Options
-     *
-     * This options will be negotiated within TFTP Server Request Operation.
-     *
-     * @param[in] clientOptions
-     *   Received TFTP Client Options
-     *
-     * @return @return @p *this for chaining.
-     **/
-    virtual WriteOperation& clientOptions(
-      Packets::TftpOptions clientOptions ) = 0;
+    //! @copydoc Operation::clientOptions()
+    WriteOperation& clientOptions(
+      Packets::TftpOptions clientOptions ) override = 0;
 
-    /**
-     * @brief Updates additional negotiated TFTP Options
-     *
-     * By default, no additional Options are sent to the client.
-     *
-     * @param[in] additionalNegotiatedOptions
-     *   Additional negotiated TFTP options sent to the client.
-     *
-     * @return @p *this for chaining.
-     **/
-    virtual WriteOperation& additionalNegotiatedOptions(
-      Packets::Options additionalNegotiatedOptions ) = 0;
+    //! @copydoc Operation::additionalNegotiatedOptions()
+    WriteOperation& additionalNegotiatedOptions(
+      Packets::Options additionalNegotiatedOptions ) override = 0;
 
     /** @} **/
 };

@@ -128,10 +128,9 @@ void OperationImpl::local( boost::asio::ip::udp::endpoint local )
   localV = std::move( local );
 }
 
-void OperationImpl::completionHandler(
-  OperationCompletedHandler completionHandler )
+void OperationImpl::completionHandler( OperationCompletedHandler handler )
 {
-  completionHandlerV = std::move( completionHandler );
+  completionHandlerV = std::move( handler );
 }
 
 void OperationImpl::maxReceivePacketSize( const uint16_t maxReceivePacketSize )

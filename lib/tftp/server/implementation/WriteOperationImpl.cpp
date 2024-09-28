@@ -196,26 +196,27 @@ WriteOperation& WriteOperationImpl::optionsConfiguration(
 }
 
 WriteOperation& WriteOperationImpl::completionHandler(
-  OperationCompletedHandler completionHandler )
+  OperationCompletedHandler handler )
 {
-  OperationImpl::completionHandler( std::move( completionHandler ) );
+  OperationImpl::completionHandler( std::move( handler ) );
   return *this;
 }
 
-WriteOperation& WriteOperationImpl::dataHandler(
-  ReceiveDataHandlerPtr dataHandler )
+WriteOperation& WriteOperationImpl::dataHandler( ReceiveDataHandlerPtr handler )
 {
-  dataHandlerV = std::move( dataHandler );
+  dataHandlerV = std::move( handler );
   return *this;
 }
 
-WriteOperation& WriteOperationImpl::remote( boost::asio::ip::udp::endpoint remote )
+WriteOperation& WriteOperationImpl::remote(
+  boost::asio::ip::udp::endpoint remote )
 {
   OperationImpl::remote( std::move( remote ) );
   return *this;
 }
 
-WriteOperation& WriteOperationImpl::local( boost::asio::ip::udp::endpoint local )
+WriteOperation& WriteOperationImpl::local(
+  boost::asio::ip::udp::endpoint local )
 {
   OperationImpl::local( std::move( local ) );
   return *this;

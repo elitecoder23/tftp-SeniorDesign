@@ -81,10 +81,10 @@ class ReadOperationImpl final :
 
     //! @copydoc ReadOperation::completionHandler()
     ReadOperation& completionHandler(
-      OperationCompletedHandler completionHandler ) override;
+      OperationCompletedHandler handler ) override;
 
     //! @copydoc ReadOperation::dataHandler()
-    ReadOperation& dataHandler( TransmitDataHandlerPtr dataHandler ) override;
+    ReadOperation& dataHandler( TransmitDataHandlerPtr handler ) override;
 
     //! @copydoc ReadOperation::remote()
     ReadOperation& remote( boost::asio::ip::udp::endpoint remote ) override;

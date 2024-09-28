@@ -194,19 +194,20 @@ ReadOperation& ReadOperationImpl::optionsConfiguration(
 }
 
 ReadOperation& ReadOperationImpl::completionHandler(
-  OperationCompletedHandler completionHandler )
+  OperationCompletedHandler handler )
 {
-  OperationImpl::completionHandler( std::move( completionHandler ) );
+  OperationImpl::completionHandler( std::move( handler ) );
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::dataHandler( TransmitDataHandlerPtr dataHandler )
+ReadOperation& ReadOperationImpl::dataHandler( TransmitDataHandlerPtr handler )
 {
-  dataHandlerV = std::move( dataHandler );
+  dataHandlerV = std::move( handler );
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::remote( boost::asio::ip::udp::endpoint remote )
+ReadOperation& ReadOperationImpl::remote(
+  boost::asio::ip::udp::endpoint remote )
 {
   OperationImpl::remote( std::move( remote ) );
   return *this;

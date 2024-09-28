@@ -71,13 +71,13 @@ class TFTP_EXPORT TftpServer
     /**
      * @brief Set TFTP Request Received Handler
      *
-     * @param[in] requestHandler
+     * @param[in] handler
      *   TFTP Request Handler
      *
      * @return *this for chaining.
      **/
     virtual TftpServer& requestHandler(
-      ReceivedTftpRequestHandler requestHandler ) = 0;
+      ReceivedTftpRequestHandler handler ) = 0;
 
     /**
      * @brief Set Address where the TFTP server should listen on.

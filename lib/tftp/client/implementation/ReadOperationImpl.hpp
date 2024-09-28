@@ -77,14 +77,14 @@ class ReadOperationImpl final :
 
     //! @copydoc ReadOperation::optionNegotiationHandler()
     ReadOperation& optionNegotiationHandler(
-      OptionNegotiationHandler optionNegotiationHandler ) override;
+      OptionNegotiationHandler handler ) override;
 
     //! @copydoc ReadOperation::completionHandler()
     ReadOperation& completionHandler(
-      OperationCompletedHandler completionHandler ) override;
+      OperationCompletedHandler handler ) override;
 
     //! @copydoc ReadOperation::dataHandler()
-    ReadOperation& dataHandler( ReceiveDataHandlerPtr dataHandler ) override;
+    ReadOperation& dataHandler( ReceiveDataHandlerPtr handler ) override;
 
     //! @copydoc ReadOperation::filename()
     ReadOperation& filename( std::string filename ) override;

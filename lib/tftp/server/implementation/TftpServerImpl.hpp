@@ -61,8 +61,7 @@ class TftpServerImpl final :
     ~TftpServerImpl() override;
 
     //! @copydoc TftpServer::requestHandler()
-    TftpServer& requestHandler(
-      ReceivedTftpRequestHandler requestHandler ) override;
+    TftpServer& requestHandler( ReceivedTftpRequestHandler handler ) override;
 
     //! @copydoc TftpServer::serverAddress()
     TftpServer& serverAddress(
