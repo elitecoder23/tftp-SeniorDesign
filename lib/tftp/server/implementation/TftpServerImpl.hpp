@@ -19,6 +19,8 @@
 
 #include "tftp/packets/PacketHandler.hpp"
 
+#include "tftp/TftpOptionsConfiguration.hpp"
+
 #include <boost/asio.hpp>
 
 #include <string>
@@ -43,7 +45,7 @@ class TftpServerImpl final :
 {
   public:
     /**
-     * @brief Creates an instance of the TFTP Server.
+     * @brief Creates an Instance of the TFTP %Server.
      *
      * @param[in] ioContext
      *   I/O context used for Communication.
@@ -51,8 +53,7 @@ class TftpServerImpl final :
      * @throw CommunicationException
      *   When an error occurs during socket initialisation.
      **/
-    TftpServerImpl(
-      boost::asio::io_context &ioContext );
+    explicit TftpServerImpl( boost::asio::io_context &ioContext );
 
     /**
      * @brief Destructor
@@ -69,6 +70,22 @@ class TftpServerImpl final :
 
     //! @copydoc TftpServer::localEndpoint()
     [[nodiscard]] boost::asio::ip::udp::endpoint localEndpoint() const override;
+
+    //! @copydoc TftpServer::tftpTimeoutDefault()
+    TftpServer& tftpTimeoutDefault( std::chrono::seconds timeout ) override;
+
+    //! @copydoc TftpServer::tftpRetriesDefault()
+    TftpServer& tftpRetriesDefault( uint16_t retries ) override;
+
+    //! @copydoc TftpServer::dallyDefault()
+    TftpServer& dallyDefault( bool dally ) override;
+
+    //! @copydoc TftpServer::optionsConfigurationDefault()
+    TftpServer& optionsConfigurationDefault(
+      TftpOptionsConfiguration optionsConfiguration ) override;
+
+    //! @copydoc TftpServer::localDefault()
+    TftpServer& localDefault( boost::asio::ip::address local ) override;
 
     //! @copydoc TftpServer::start()
     void start() override;
@@ -203,7 +220,7 @@ class TftpServerImpl final :
     Packets::TftpOptions tftpOptions( Packets::Options &clientOptions ) const;
 
     //! TFTP Request Received Handler
-    ReceivedTftpRequestHandler requestHandlerV{};
+    ReceivedTftpRequestHandler requestHandlerV;
     //! Address where the TFTP server should listen on.
     boost::asio::ip::udp::endpoint serverAddressV{ DefaultLocalEndpoint };
 
@@ -211,6 +228,19 @@ class TftpServerImpl final :
     boost::asio::io_context &ioContextV;
     //! TFTP well known socket
     boost::asio::ip::udp::socket socketV;
+
+    //! Default timeout for TFTP operations
+    std::optional< std::chrono::seconds > tftpTimeoutDefaultV;
+    //! Default number of retries for TFTP operations
+    std::optional< uint16_t > tftpRetriesDefaultV;
+    //! Default value for the DALLY option
+    std::optional< bool > dallyDefaultV;
+    //! Default value for the options configuration
+    std::optional< TftpOptionsConfiguration > optionsConfigurationDefaultV;
+    //! Additional options
+    Packets::Options additionalOptionsV;
+    //! Default local IP address
+    boost::asio::ip::address localV;
 
     //! Buffer, which holds the received TFTP packet.
     Packets::RawTftpPacket receivePacketV;

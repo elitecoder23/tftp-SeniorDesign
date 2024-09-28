@@ -63,6 +63,38 @@ boost::asio::ip::udp::endpoint TftpServerImpl::localEndpoint() const
   return socketV.local_endpoint();
 }
 
+TftpServer& TftpServerImpl::tftpTimeoutDefault(
+  const std::chrono::seconds timeout )
+{
+  tftpTimeoutDefaultV = timeout;
+  return *this;
+}
+
+TftpServer& TftpServerImpl::tftpRetriesDefault( const uint16_t retries )
+{
+  tftpRetriesDefaultV = retries;
+  return *this;
+}
+
+TftpServer& TftpServerImpl::dallyDefault( const bool dally )
+{
+  dallyDefaultV = dally;
+  return *this;
+}
+
+TftpServer& TftpServerImpl::optionsConfigurationDefault(
+  TftpOptionsConfiguration optionsConfiguration )
+{
+  optionsConfigurationDefaultV = std::move( optionsConfiguration );
+  return *this;
+}
+
+TftpServer& TftpServerImpl::localDefault( boost::asio::ip::address local )
+{
+  localV = std::move( local );
+  return *this;
+}
+
 void TftpServerImpl::start()
 {
   BOOST_LOG_FUNCTION()
@@ -101,12 +133,61 @@ void TftpServerImpl::stop()
 
 ReadOperationPtr TftpServerImpl::readOperation()
 {
-  return std::make_shared< ReadOperationImpl >( ioContextV );
+  auto operation{ std::make_shared< ReadOperationImpl >( ioContextV ) };
+
+  if ( tftpTimeoutDefaultV )
+  {
+    operation->tftpTimeout( *tftpTimeoutDefaultV );
+  }
+
+  if ( tftpRetriesDefaultV )
+  {
+    operation->tftpRetries( *tftpRetriesDefaultV );
+  }
+
+  if ( optionsConfigurationDefaultV )
+  {
+    operation->optionsConfiguration( *optionsConfigurationDefaultV );
+  }
+
+  if ( !localV.is_unspecified() )
+  {
+    operation->local( { localV, 0 } );
+  }
+
+  return operation;
 }
 
 WriteOperationPtr TftpServerImpl::writeOperation()
 {
-  return std::make_shared< WriteOperationImpl >( ioContextV );
+  auto operation{ std::make_shared< WriteOperationImpl >( ioContextV ) };
+
+  if ( tftpTimeoutDefaultV )
+  {
+    operation->tftpTimeout( *tftpTimeoutDefaultV );
+  }
+
+  if ( tftpRetriesDefaultV )
+  {
+    operation->tftpRetries( *tftpRetriesDefaultV );
+  }
+
+  if ( dallyDefaultV )
+  {
+    operation->dally( *dallyDefaultV );
+  }
+
+  if ( optionsConfigurationDefaultV )
+  {
+    operation->optionsConfiguration( *optionsConfigurationDefaultV );
+  }
+
+  if ( !localV.is_unspecified() )
+  {
+    operation->local( { localV, 0 } );
+  }
+
+  return operation;
 }
 
 void TftpServerImpl::errorOperation(

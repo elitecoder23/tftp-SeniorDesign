@@ -15,7 +15,6 @@
 #define TFTP_CLIENT_READOPERATION_HPP
 
 #include "tftp/client/Client.hpp"
-
 #include "tftp/client/Operation.hpp"
 
 #include <boost/asio/ip/udp.hpp>
@@ -41,6 +40,7 @@ class TFTP_EXPORT ReadOperation : public Operation
      * @brief Updates TFTP Timeout.
      *
      * TFTP Timeout, when no timeout option is negotiated in seconds.
+     *
      * If the _TFTP Timeout_ parameter is not set, the TFTP defaults are used.
      *
      * @param[in] timeout
@@ -51,7 +51,7 @@ class TFTP_EXPORT ReadOperation : public Operation
     virtual ReadOperation& tftpTimeout( std::chrono::seconds timeout ) = 0;
 
     /**
-     * @brief Updates the NUmber of TFTP Packet Retries.
+     * @brief Updates the Number of TFTP Packet Retries.
      *
      * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
      * used.

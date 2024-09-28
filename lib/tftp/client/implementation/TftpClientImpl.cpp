@@ -23,14 +23,114 @@ TftpClientImpl::TftpClientImpl( boost::asio::io_context &ioContext ) :
 {
 }
 
+TftpClientImpl::~TftpClientImpl() = default;
+
+TftpClient& TftpClientImpl::tftpTimeoutDefault(
+  const std::chrono::seconds timeout )
+{
+  tftpTimeoutDefaultV = timeout;
+  return *this;
+}
+
+TftpClient& TftpClientImpl::tftpRetriesDefault( const uint16_t retries )
+{
+  tftpRetriesDefaultV = retries;
+  return *this;
+}
+
+TftpClient& TftpClientImpl::dallyDefault( const bool dally )
+{
+  dallyDefaultV = dally;
+  return *this;
+}
+
+TftpClient& TftpClientImpl::optionsConfigurationDefault(
+  TftpOptionsConfiguration optionsConfiguration )
+{
+  optionsConfigurationDefaultV = std::move( optionsConfiguration );
+  return *this;
+}
+
+TftpClient& TftpClientImpl::additionalOptions(
+  Packets::Options additionalOptions )
+{
+  additionalOptionsV = std::move( additionalOptions );
+  return *this;
+}
+
+TftpClient& TftpClientImpl::localDefault( const boost::asio::ip::address local )
+{
+  localV = local;
+  return *this;
+}
+
 ReadOperationPtr TftpClientImpl::readOperation()
 {
-  return std::make_shared< ReadOperationImpl >( ioContext );
+  auto operation{ std::make_shared< ReadOperationImpl >( ioContext ) };
+
+  if ( tftpTimeoutDefaultV )
+  {
+    operation->tftpTimeout( *tftpTimeoutDefaultV );
+  }
+
+  if ( tftpRetriesDefaultV )
+  {
+    operation->tftpRetries( *tftpRetriesDefaultV );
+  }
+
+  if ( dallyDefaultV )
+  {
+    operation->dally( *dallyDefaultV );
+  }
+
+  if ( optionsConfigurationDefaultV )
+  {
+    operation->optionsConfiguration( *optionsConfigurationDefaultV );
+  }
+
+  if ( !additionalOptionsV.empty() )
+  {
+    operation->additionalOptions( additionalOptionsV );
+  }
+
+  if ( !localV.is_unspecified() )
+  {
+    operation->local( { localV, 0 } );
+  }
+
+  return operation;
 }
 
 WriteOperationPtr TftpClientImpl::writeOperation()
 {
-  return std::make_shared< WriteOperationImpl >( ioContext );
+  auto operation{ std::make_shared< WriteOperationImpl >( ioContext ) };
+
+  if ( tftpTimeoutDefaultV )
+  {
+    operation->tftpTimeout( *tftpTimeoutDefaultV );
+  }
+
+  if ( tftpRetriesDefaultV )
+  {
+    operation->tftpRetries( *tftpRetriesDefaultV );
+  }
+
+  if ( optionsConfigurationDefaultV )
+  {
+    operation->optionsConfiguration( *optionsConfigurationDefaultV );
+  }
+
+  if ( !additionalOptionsV.empty() )
+  {
+    operation->additionalOptions( additionalOptionsV );
+  }
+
+  if ( !localV.is_unspecified() )
+  {
+    operation->local( { localV, 0 } );
+  }
+
+  return operation;
 }
 
 }

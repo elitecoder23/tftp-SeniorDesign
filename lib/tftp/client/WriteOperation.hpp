@@ -15,7 +15,6 @@
 #define TFTP_CLIENT_WRITEOPERATION_HPP
 
 #include "tftp/client/Client.hpp"
-
 #include "tftp/client/Operation.hpp"
 
 #include <boost/asio/ip/udp.hpp>

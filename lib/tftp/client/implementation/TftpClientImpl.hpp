@@ -17,8 +17,11 @@
 #include "tftp/client/Client.hpp"
 
 #include "tftp/client/TftpClient.hpp"
+#include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <boost/asio/io_context.hpp>
+
+#include <optional>
 
 namespace Tftp::Client {
 
@@ -31,22 +34,59 @@ class TftpClientImpl final : public TftpClient
 {
   public:
     /**
-     * @brief Creates the concrete TFTP %Client.
+     * @brief Creates an Instance of the TFTP %Client.
      *
      * @param[in] ioContext
-     *   I/O context used for communication.
+     *   I/O context used for Communication.
      **/
     explicit TftpClientImpl( boost::asio::io_context &ioContext );
 
-    //! @copydoc TftpClient::readOperation
+    /**
+     * @brief Destructor
+     **/
+    ~TftpClientImpl() override;
+
+    //! @copydoc TftpClient::tftpTimeoutDefault()
+    TftpClient& tftpTimeoutDefault( std::chrono::seconds timeout ) override;
+
+    //! @copydoc TftpClient::tftpRetriesDefault()
+    TftpClient& tftpRetriesDefault( uint16_t retries ) override;
+
+    //! @copydoc TftpClient::dallyDefault()
+    TftpClient& dallyDefault( bool dally ) override;
+
+    //! @copydoc TftpClient::optionsConfigurationDefault()
+    TftpClient& optionsConfigurationDefault(
+      TftpOptionsConfiguration optionsConfiguration ) override;
+
+    //! @copydoc TftpClient::additionalOptions()
+    TftpClient& additionalOptions(
+      Packets::Options additionalOptions ) override;
+
+    //! @copydoc TftpClient::localDefault()
+    TftpClient& localDefault( boost::asio::ip::address local ) override;
+
+    //! @copydoc TftpClient::readOperation()
     ReadOperationPtr readOperation() override;
 
-    //! @copydoc TftpClient::writeOperation
+    //! @copydoc TftpClient::writeOperation()
     WriteOperationPtr writeOperation() override;
 
   private:
     //! I/O context, which handles the asynchronous reception operation
     boost::asio::io_context &ioContext;
+    //! Default timeout for TFTP operations
+    std::optional< std::chrono::seconds > tftpTimeoutDefaultV;
+    //! Default number of retries for TFTP operations
+    std::optional< uint16_t > tftpRetriesDefaultV;
+    //! Default value for the DALLY option
+    std::optional< bool > dallyDefaultV;
+    //! Default value for the options configuration
+    std::optional< TftpOptionsConfiguration > optionsConfigurationDefaultV;
+    //! Additional options
+    Packets::Options additionalOptionsV;
+    //! Default local IP address
+    boost::asio::ip::address localV;
 };
 
 }
