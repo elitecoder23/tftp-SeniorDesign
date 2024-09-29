@@ -55,7 +55,7 @@ class ReadOperationImpl final :
     //! @copydoc ReadOperation::abort()
     void abort() override;
 
-    //! @copydoc ReadOperation::errorInfo()
+    //! @copydoc ReadOperation::errorInfo() const
     [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
     //! @copydoc ReadOperation::tftpTimeout()

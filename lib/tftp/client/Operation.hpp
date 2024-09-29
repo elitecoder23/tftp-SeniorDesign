@@ -55,7 +55,7 @@ class TFTP_EXPORT Operation
     virtual Operation& tftpTimeout( std::chrono::seconds timeout ) = 0;
 
     /**
-     * @brief Updates the NUmber of TFTP Packet Retries.
+     * @brief Updates the Number of TFTP Packet Retries.
      *
      * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
      * used.

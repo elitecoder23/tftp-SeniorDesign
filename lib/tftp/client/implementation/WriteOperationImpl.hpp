@@ -27,7 +27,7 @@
 
 namespace Tftp::Client {
 
-//! TFTP %Client Write %Operation (WRQ).
+//! TFTP %Client Write %Operation (TFTP WRQ).
 class WriteOperationImpl final :
   public WriteOperation,
   private OperationImpl
@@ -55,7 +55,7 @@ class WriteOperationImpl final :
     //! @copydoc WriteOperation::abort()
     void abort() override;
 
-    //! @copydoc WriteOperation::errorInfo()
+    //! @copydoc WriteOperation::errorInfo() const
     [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
     //! @copydoc WriteOperation::tftpTimeout()
