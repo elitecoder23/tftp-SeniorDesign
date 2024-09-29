@@ -55,7 +55,7 @@ class TFTP_EXPORT Operation
     virtual Operation& tftpTimeout( std::chrono::seconds timeout ) = 0;
 
     /**
-     * @brief Updates the NUmber of TFTP Packet Retries.
+     * @brief Updates the Number of TFTP Packet Retries.
      *
      * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
      * used.
@@ -130,7 +130,7 @@ class TFTP_EXPORT Operation
       Packets::TftpOptions clientOptions ) = 0;
 
     /**
-     * @brief Updates additional negotiated TFTP Options
+     * @brief Updates additional negotiated TFTP Options.
      *
      * By default, no additional Options are sent to the client.
      *
@@ -145,14 +145,14 @@ class TFTP_EXPORT Operation
     /** @} **/
 
     /**
-     * @brief Executes the TFTP Server Operation.
+     * @brief Executes the TFTP %Server %Operation.
      *
      * Sends response to request and waits for answers.
      **/
     virtual void start() = 0;
 
     /**
-     * @brief Aborts the Operation Gracefully.
+     * @brief Aborts the %Operation Gracefully.
      *
      * With a graceful abort the transfer is canceled by sending an error packet
      * to the client, signalling the abort of the transfer.
@@ -167,14 +167,14 @@ class TFTP_EXPORT Operation
       std::string errorMessage = {} ) = 0;
 
     /**
-     * @brief Aborts the Operation Immediately.
+     * @brief Aborts the %Operation Immediately.
      *
      * No error message is sent.
      **/
     virtual void abort() = 0;
 
     /**
-     * @brief Returns the Error Information of this Operation
+     * @brief Returns the Error Information of this %Operation.
      *
      * @return The error info of this operation
      * @retval ErrorInfo()

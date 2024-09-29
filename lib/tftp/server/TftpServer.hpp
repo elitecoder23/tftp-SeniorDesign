@@ -210,7 +210,7 @@ class TFTP_EXPORT TftpServer
     virtual void stop() = 0;
 
     /**
-     * @brief Creates a TFTP Server Operation (TFTP RRQ), which reads data from
+     * @brief Creates a TFTP %Server %Operation (TFTP RRQ), which reads data from
      *   disk and sends them to a TFTP Client.
      *
      * Data is obtained from @p dataHandler and transmitted to TFTP Client.

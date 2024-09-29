@@ -30,6 +30,9 @@ namespace Tftp::Server {
 class TFTP_EXPORT WriteOperation : public Operation
 {
   public:
+    //! Destructor.
+    ~WriteOperation() override = default;
+
     /**
      * @name Configuration Operations
      * @{

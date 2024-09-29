@@ -52,7 +52,7 @@ class WriteOperationImpl final :
      **/
     explicit WriteOperationImpl( boost::asio::io_context &ioContext );
 
-    //! Destructor
+    //! Destructor.
     ~WriteOperationImpl() override = default;
 
     //! @copydoc WriteOperation::start()
@@ -66,7 +66,7 @@ class WriteOperationImpl final :
     //! @copydoc WriteOperation::abort()
     void abort() override;
 
-    //! @copydoc WriteOperation::errorInfo()
+    //! @copydoc WriteOperation::errorInfo() const
     [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
     //! @copydoc WriteOperation::tftpTimeout()

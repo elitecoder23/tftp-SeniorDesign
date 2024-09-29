@@ -31,6 +31,9 @@ namespace Tftp::Server {
 class TFTP_EXPORT ReadOperation : public Operation
 {
   public:
+    //! Destructor.
+    ~ReadOperation() override = default;
+
     /**
      * @name Configuration Operations
      * @{

@@ -52,7 +52,7 @@ class ReadOperationImpl final :
      **/
     explicit ReadOperationImpl( boost::asio::io_context &ioContext );
 
-    //! Destructor
+    //! Destructor.
     ~ReadOperationImpl() override = default;
 
     //! @copydoc ReadOperation::start()
@@ -66,7 +66,7 @@ class ReadOperationImpl final :
     //! @copydoc ReadOperation::abort()
     void abort() override;
 
-    //! @copydoc ReadOperation::errorInfo()
+    //! @copydoc ReadOperation::errorInfo() const
     [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
     //! @copydoc ReadOperation::tftpTimeout()
