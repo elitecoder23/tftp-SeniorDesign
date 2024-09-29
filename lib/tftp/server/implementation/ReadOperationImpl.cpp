@@ -34,6 +34,66 @@ ReadOperationImpl::ReadOperationImpl( boost::asio::io_context &ioContext ) :
 {
 }
 
+ReadOperation& ReadOperationImpl::tftpTimeout(
+  const std::chrono::seconds timeout )
+{
+  OperationImpl::tftpTimeout( timeout );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::tftpRetries( const uint16_t retries )
+{
+  OperationImpl::tftpRetries( retries );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::optionsConfiguration(
+  TftpOptionsConfiguration optionsConfiguration )
+{
+  optionsConfigurationV = std::move( optionsConfiguration );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::completionHandler(
+  OperationCompletedHandler handler )
+{
+  OperationImpl::completionHandler( std::move( handler ) );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::dataHandler( TransmitDataHandlerPtr handler )
+{
+  dataHandlerV = std::move( handler );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::remote(
+  boost::asio::ip::udp::endpoint remote )
+{
+  OperationImpl::remote( std::move( remote ) );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::local( boost::asio::ip::udp::endpoint local )
+{
+  OperationImpl::local( std::move( local ) );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::clientOptions(
+  Packets::TftpOptions clientOptions )
+{
+  clientOptionsV = std::move( clientOptions );
+  return *this;
+}
+
+ReadOperation& ReadOperationImpl::additionalNegotiatedOptions(
+  Packets::Options additionalNegotiatedOptions )
+{
+  additionalNegotiatedOptionsV = std::move( additionalNegotiatedOptions );
+  return *this;
+}
+
 void ReadOperationImpl::start()
 {
   BOOST_LOG_FUNCTION()
@@ -171,66 +231,6 @@ void ReadOperationImpl::abort()
 const ErrorInfo& ReadOperationImpl::errorInfo() const
 {
   return OperationImpl::errorInfo();
-}
-
-ReadOperation& ReadOperationImpl::tftpTimeout(
-  const std::chrono::seconds timeout )
-{
-  OperationImpl::tftpTimeout( timeout );
-  return *this;
-}
-
-ReadOperation& ReadOperationImpl::tftpRetries( const uint16_t retries )
-{
-  OperationImpl::tftpRetries( retries );
-  return *this;
-}
-
-ReadOperation& ReadOperationImpl::optionsConfiguration(
-  TftpOptionsConfiguration optionsConfiguration )
-{
-  optionsConfigurationV = std::move( optionsConfiguration );
-  return *this;
-}
-
-ReadOperation& ReadOperationImpl::completionHandler(
-  OperationCompletedHandler handler )
-{
-  OperationImpl::completionHandler( std::move( handler ) );
-  return *this;
-}
-
-ReadOperation& ReadOperationImpl::dataHandler( TransmitDataHandlerPtr handler )
-{
-  dataHandlerV = std::move( handler );
-  return *this;
-}
-
-ReadOperation& ReadOperationImpl::remote(
-  boost::asio::ip::udp::endpoint remote )
-{
-  OperationImpl::remote( std::move( remote ) );
-  return *this;
-}
-
-ReadOperation& ReadOperationImpl::local( boost::asio::ip::udp::endpoint local )
-{
-  OperationImpl::local( std::move( local ) );
-  return *this;
-}
-
-ReadOperation& ReadOperationImpl::clientOptions(
-  Packets::TftpOptions clientOptions )
-{
-  clientOptionsV = std::move( clientOptions );
-  return *this;
-}
-
-ReadOperation& ReadOperationImpl::additionalNegotiatedOptions(
-  Packets::Options additionalNegotiatedOptions )
-{
-  additionalNegotiatedOptionsV = std::move( additionalNegotiatedOptions );
-  return *this;
 }
 
 void ReadOperationImpl::finished(

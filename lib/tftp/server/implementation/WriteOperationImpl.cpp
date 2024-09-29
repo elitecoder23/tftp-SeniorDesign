@@ -34,6 +34,81 @@ WriteOperationImpl::WriteOperationImpl( boost::asio::io_context &ioContext ) :
 {
 }
 
+WriteOperation& WriteOperationImpl::tftpTimeout(
+  const std::chrono::seconds timeout )
+{
+  OperationImpl::tftpTimeout( timeout );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::tftpRetries( const uint16_t retries )
+{
+  OperationImpl::tftpRetries( retries );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::dally( const bool dally )
+{
+  dallyV = dally;
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::optionsConfiguration(
+  TftpOptionsConfiguration optionsConfiguration )
+{
+  optionsConfigurationV = std::move( optionsConfiguration );
+
+  maxReceivePacketSize(
+    static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
+                             + std::max(
+                               Packets::DefaultDataSize,
+                               optionsConfigurationV.blockSizeOption.get_value_or(
+                                 Packets::DefaultDataSize ) ) ) );
+
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::completionHandler(
+  OperationCompletedHandler handler )
+{
+  OperationImpl::completionHandler( std::move( handler ) );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::dataHandler( ReceiveDataHandlerPtr handler )
+{
+  dataHandlerV = std::move( handler );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::remote(
+  boost::asio::ip::udp::endpoint remote )
+{
+  OperationImpl::remote( std::move( remote ) );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::local(
+  boost::asio::ip::udp::endpoint local )
+{
+  OperationImpl::local( std::move( local ) );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::clientOptions(
+  Packets::TftpOptions clientOptions )
+{
+  clientOptionsV = std::move( clientOptions );
+  return *this;
+}
+
+WriteOperation& WriteOperationImpl::additionalNegotiatedOptions(
+  Packets::Options additionalNegotiatedOptions )
+{
+  additionalNegotiatedOptionsV = std::move( additionalNegotiatedOptions );
+  return *this;
+}
+
 void WriteOperationImpl::start()
 {
   BOOST_LOG_FUNCTION()
@@ -159,81 +234,6 @@ void WriteOperationImpl::abort()
 const ErrorInfo& WriteOperationImpl::errorInfo() const
 {
   return OperationImpl::errorInfo();
-}
-
-WriteOperation& WriteOperationImpl::tftpTimeout(
-  const std::chrono::seconds timeout )
-{
-  OperationImpl::tftpTimeout( timeout );
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::tftpRetries( const uint16_t retries )
-{
-  OperationImpl::tftpRetries( retries );
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::dally( const bool dally )
-{
-  dallyV = dally;
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::optionsConfiguration(
-  TftpOptionsConfiguration optionsConfiguration )
-{
-  optionsConfigurationV = std::move( optionsConfiguration );
-
-  maxReceivePacketSize(
-    static_cast< uint16_t >( Packets::DefaultTftpDataPacketHeaderSize
-      + std::max(
-          Packets::DefaultDataSize,
-          optionsConfigurationV.blockSizeOption.get_value_or(
-            Packets::DefaultDataSize ) ) ) );
-
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::completionHandler(
-  OperationCompletedHandler handler )
-{
-  OperationImpl::completionHandler( std::move( handler ) );
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::dataHandler( ReceiveDataHandlerPtr handler )
-{
-  dataHandlerV = std::move( handler );
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::remote(
-  boost::asio::ip::udp::endpoint remote )
-{
-  OperationImpl::remote( std::move( remote ) );
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::local(
-  boost::asio::ip::udp::endpoint local )
-{
-  OperationImpl::local( std::move( local ) );
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::clientOptions(
-  Packets::TftpOptions clientOptions )
-{
-  clientOptionsV = std::move( clientOptions );
-  return *this;
-}
-
-WriteOperation& WriteOperationImpl::additionalNegotiatedOptions(
-  Packets::Options additionalNegotiatedOptions )
-{
-  additionalNegotiatedOptionsV = std::move( additionalNegotiatedOptions );
-  return *this;
 }
 
 void WriteOperationImpl::finished(

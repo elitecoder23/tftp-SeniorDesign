@@ -23,8 +23,8 @@
 
 #include <boost/asio.hpp>
 
-#include <string>
 #include <map>
+#include <string>
 
 namespace Tftp::Server {
 

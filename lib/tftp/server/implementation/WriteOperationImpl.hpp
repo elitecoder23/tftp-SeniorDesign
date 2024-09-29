@@ -45,7 +45,7 @@ class WriteOperationImpl final :
 {
   public:
     /**
-     * @brief Initialises the operation.
+     * @brief Initialises the TFTP write operation instance.
      *
      * @param[in] ioContext
      *   I/O context used for communication.
@@ -54,20 +54,6 @@ class WriteOperationImpl final :
 
     //! Destructor.
     ~WriteOperationImpl() override = default;
-
-    //! @copydoc WriteOperation::start()
-    void start() override;
-
-    //! @copydoc WriteOperation::gracefulAbort()
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) override;
-
-    //! @copydoc WriteOperation::abort()
-    void abort() override;
-
-    //! @copydoc WriteOperation::errorInfo() const
-    [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
     //! @copydoc WriteOperation::tftpTimeout()
     WriteOperation& tftpTimeout( std::chrono::seconds timeout ) override;
@@ -101,6 +87,20 @@ class WriteOperationImpl final :
     //! @copydoc WriteOperation::additionalNegotiatedOptions()
     WriteOperation& additionalNegotiatedOptions(
       Packets::Options additionalNegotiatedOptions ) override;
+
+    //! @copydoc WriteOperation::start()
+    void start() override;
+
+    //! @copydoc WriteOperation::gracefulAbort()
+    void gracefulAbort(
+      Packets::ErrorCode errorCode,
+      std::string errorMessage = {} ) override;
+
+    //! @copydoc WriteOperation::abort()
+    void abort() override;
+
+    //! @copydoc WriteOperation::errorInfo() const
+    [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
   private:
     //! @copydoc OperationImpl::finished()

@@ -27,6 +27,7 @@
 #include <boost/asio.hpp>
 
 #include <chrono>
+#include <string>
 
 namespace Tftp::Server {
 
@@ -45,7 +46,7 @@ class ReadOperationImpl final :
 {
   public:
     /**
-     * @brief Initialises the TFTP read write operation instance.
+     * @brief Initialises the TFTP read operation instance.
      *
      * @param[in] ioContext
      *   I/O context used for communication.
@@ -54,20 +55,6 @@ class ReadOperationImpl final :
 
     //! Destructor.
     ~ReadOperationImpl() override = default;
-
-    //! @copydoc ReadOperation::start()
-    void start() override;
-
-    //! @copydoc ReadOperation::gracefulAbort()
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) override;
-
-    //! @copydoc ReadOperation::abort()
-    void abort() override;
-
-    //! @copydoc ReadOperation::errorInfo() const
-    [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
     //! @copydoc ReadOperation::tftpTimeout()
     ReadOperation& tftpTimeout( std::chrono::seconds timeout ) override;
@@ -98,6 +85,20 @@ class ReadOperationImpl final :
     //! @copydoc ReadOperation::additionalNegotiatedOptions()
     ReadOperation& additionalNegotiatedOptions(
       Packets::Options additionalNegotiatedOptions ) override;
+
+    //! @copydoc ReadOperation::start()
+    void start() override;
+
+    //! @copydoc ReadOperation::gracefulAbort()
+    void gracefulAbort(
+      Packets::ErrorCode errorCode,
+      std::string errorMessage = {} ) override;
+
+    //! @copydoc ReadOperation::abort()
+    void abort() override;
+
+    //! @copydoc ReadOperation::errorInfo() const
+    [[nodiscard]] const ErrorInfo& errorInfo() const override;
 
   private:
     //! @copydoc OperationImpl::finished()
