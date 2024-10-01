@@ -8,63 +8,63 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Client::TftpClientImpl.
+ * @brief Definition of Class Tftp::Clients::ClientImpl.
  **/
 
-#include "TftpClientImpl.hpp"
+#include "ClientImpl.hpp"
 
-#include "tftp/client/implementation/ReadOperationImpl.hpp"
-#include "tftp/client/implementation/WriteOperationImpl.hpp"
+#include "tftp/clients/implementation/ReadOperationImpl.hpp"
+#include "tftp/clients/implementation/WriteOperationImpl.hpp"
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
-TftpClientImpl::TftpClientImpl( boost::asio::io_context &ioContext ) :
+ClientImpl::ClientImpl( boost::asio::io_context &ioContext ) :
   ioContext{ ioContext }
 {
 }
 
-TftpClientImpl::~TftpClientImpl() = default;
+ClientImpl::~ClientImpl() = default;
 
-TftpClient& TftpClientImpl::tftpTimeoutDefault(
+Client& ClientImpl::tftpTimeoutDefault(
   const std::chrono::seconds timeout )
 {
   tftpTimeoutDefaultV = timeout;
   return *this;
 }
 
-TftpClient& TftpClientImpl::tftpRetriesDefault( const uint16_t retries )
+Client& ClientImpl::tftpRetriesDefault( const uint16_t retries )
 {
   tftpRetriesDefaultV = retries;
   return *this;
 }
 
-TftpClient& TftpClientImpl::dallyDefault( const bool dally )
+Client& ClientImpl::dallyDefault( const bool dally )
 {
   dallyDefaultV = dally;
   return *this;
 }
 
-TftpClient& TftpClientImpl::optionsConfigurationDefault(
+Client& ClientImpl::optionsConfigurationDefault(
   TftpOptionsConfiguration optionsConfiguration )
 {
   optionsConfigurationDefaultV = std::move( optionsConfiguration );
   return *this;
 }
 
-TftpClient& TftpClientImpl::additionalOptions(
+Client& ClientImpl::additionalOptions(
   Packets::Options additionalOptions )
 {
   additionalOptionsV = std::move( additionalOptions );
   return *this;
 }
 
-TftpClient& TftpClientImpl::localDefault( const boost::asio::ip::address local )
+Client& ClientImpl::localDefault( const boost::asio::ip::address local )
 {
   localV = local;
   return *this;
 }
 
-ReadOperationPtr TftpClientImpl::readOperation()
+ReadOperationPtr ClientImpl::readOperation()
 {
   auto operation{ std::make_shared< ReadOperationImpl >( ioContext ) };
 
@@ -101,7 +101,7 @@ ReadOperationPtr TftpClientImpl::readOperation()
   return operation;
 }
 
-WriteOperationPtr TftpClientImpl::writeOperation()
+WriteOperationPtr ClientImpl::writeOperation()
 {
   auto operation{ std::make_shared< WriteOperationImpl >( ioContext ) };
 

@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::ReadOperationImpl.
+ * @brief Declaration of Class Tftp::Clients::ReadOperationImpl.
  **/
 
-#ifndef TFTP_CLIENT_READOPERATIONIMPL_HPP
-#define TFTP_CLIENT_READOPERATIONIMPL_HPP
+#ifndef TFTP_CLIENTS_READOPERATIONIMPL_HPP
+#define TFTP_CLIENTS_READOPERATIONIMPL_HPP
 
-#include "tftp/client/Client.hpp"
-#include "tftp/client/ReadOperation.hpp"
+#include "tftp/clients/Clients.hpp"
+#include "tftp/clients/ReadOperation.hpp"
 
-#include "tftp/client/implementation/OperationImpl.hpp"
+#include "tftp/clients/implementation/OperationImpl.hpp"
 
 #include "tftp/packets/BlockNumber.hpp"
 
@@ -25,7 +25,7 @@
 
 #include <chrono>
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 //! TFTP %Client Read %Operation (TFTP RRQ).
 class ReadOperationImpl final :

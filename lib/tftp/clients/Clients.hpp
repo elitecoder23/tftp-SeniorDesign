@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Namespace Tftp::Client.
+ * @brief Declaration of Namespace Tftp::Clients.
  **/
 
 /**
  * @dir
- * @brief Declaration/ Definition of Namespace Tftp::Client.
+ * @brief Declaration/ Definition of Namespace Tftp::Clients.
  **/
 
-#ifndef TFTP_CLIENT_CLIENT_HPP
-#define TFTP_CLIENT_CLIENT_HPP
+#ifndef TFTP_CLIENTS_CLIENTS_HPP
+#define TFTP_CLIENTS_CLIENTS_HPP
 
 #include "tftp/Tftp.hpp"
 
@@ -30,24 +30,24 @@
  * @brief TFTP %Client.
  *
  * The main entry point for users of this part of the TFTP library is the
- * class @ref TftpClient.
+ * class @ref Client.
  * With an instance of this class the user can create TFTP client read and write
  * operations.
  *
- * @sa @ref TftpClient
+ * @sa @ref Client
  * @sa @ref ReadOperation
  * @sa @ref WriteOperation
  **/
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 // Forward declarations
-class TftpClient;
+class Client;
 class Operation;
 class ReadOperation;
 class WriteOperation;
 
 //! TFTP %Client Instance Pointer
-using TftpClientPtr = std::shared_ptr< TftpClient >;
+using ClientPtr = std::shared_ptr< Client >;
 
 //! TFTP %Client %Operation Instance Pointer
 using OperationPtr = std::shared_ptr< Operation >;

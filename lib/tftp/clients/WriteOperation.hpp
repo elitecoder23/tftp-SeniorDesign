@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::WriteOperation.
+ * @brief Declaration of Class Tftp::Clients::WriteOperation.
  **/
 
-#ifndef TFTP_CLIENT_WRITEOPERATION_HPP
-#define TFTP_CLIENT_WRITEOPERATION_HPP
+#ifndef TFTP_CLIENTS_WRITEOPERATION_HPP
+#define TFTP_CLIENTS_WRITEOPERATION_HPP
 
-#include "tftp/client/Client.hpp"
-#include "tftp/client/Operation.hpp"
+#include "tftp/clients/Clients.hpp"
+#include "tftp/clients/Operation.hpp"
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 /**
  * @brief TFTP %Client Write %Operation (TFTP WRQ).

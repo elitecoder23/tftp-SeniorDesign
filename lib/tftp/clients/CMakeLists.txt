@@ -15,20 +15,20 @@ target_sources(
     FILE_SET HEADERS
       FILES
         Client.hpp
+        Clients.hpp
         Operation.hpp
         ReadOperation.hpp
-        TftpClient.hpp
         WriteOperation.hpp
 
   PRIVATE
-    TftpClient.cpp
+    Client.cpp
 
+    implementation/ClientImpl.hpp
+    implementation/ClientImpl.cpp
     implementation/OperationImpl.hpp
     implementation/OperationImpl.cpp
     implementation/ReadOperationImpl.hpp
     implementation/ReadOperationImpl.cpp
-    implementation/TftpClientImpl.hpp
-    implementation/TftpClientImpl.cpp
     implementation/WriteOperationImpl.hpp
     implementation/WriteOperationImpl.cpp )
 

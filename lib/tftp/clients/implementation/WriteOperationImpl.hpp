@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::WriteOperationImpl.
+ * @brief Declaration of Class Tftp::Clients::WriteOperationImpl.
  **/
 
-#ifndef TFTP_CLIENT_WRITEOPERATIONIMPL_HPP
-#define TFTP_CLIENT_WRITEOPERATIONIMPL_HPP
+#ifndef TFTP_CLIENTS_WRITEOPERATIONIMPL_HPP
+#define TFTP_CLIENTS_WRITEOPERATIONIMPL_HPP
 
-#include "tftp/client/Client.hpp"
-#include "tftp/client/WriteOperation.hpp"
+#include "tftp/clients/Clients.hpp"
+#include "tftp/clients/WriteOperation.hpp"
 
-#include "tftp/client/implementation/OperationImpl.hpp"
+#include "tftp/clients/implementation/OperationImpl.hpp"
 
 #include "tftp/packets/BlockNumber.hpp"
 
@@ -25,7 +25,7 @@
 
 #include <chrono>
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 //! TFTP %Client Write %Operation (TFTP WRQ).
 class WriteOperationImpl final :

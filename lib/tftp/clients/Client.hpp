@@ -8,18 +8,18 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::TftpClient.
+ * @brief Declaration of Class Tftp::Clients::Client.
  **/
 
-#ifndef TFTP_CLIENT_TFTPCLIENT_HPP
-#define TFTP_CLIENT_TFTPCLIENT_HPP
+#ifndef TFTP_CLIENTS_CLIENT_HPP
+#define TFTP_CLIENTS_CLIENT_HPP
 
-#include "tftp/client/Client.hpp"
+#include "tftp/clients/Clients.hpp"
 
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/address.hpp>
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 /**
  * @brief TFTP %Client.
@@ -27,9 +27,9 @@ namespace Tftp::Client {
  * This class acts as factory for creating client operations, like read
  * requests or write requests.
  *
- * An instance is created by calling @ref TftpClient::instance().
+ * An instance is created by calling @ref Client::instance().
  **/
-class TFTP_EXPORT TftpClient
+class TFTP_EXPORT Client
 {
   public:
     /**
@@ -42,11 +42,11 @@ class TFTP_EXPORT TftpClient
      *
      * @return Created TFTP Client Instance.
      **/
-    [[nodiscard]] static TftpClientPtr instance(
+    [[nodiscard]] static ClientPtr instance(
       boost::asio::io_context &ioContext );
 
     //! Destructor
-    virtual ~TftpClient() noexcept = default;
+    virtual ~Client() noexcept = default;
 
     /**
      * @name Default Operation Configuration Operations
@@ -67,7 +67,7 @@ class TFTP_EXPORT TftpClient
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpClient& tftpTimeoutDefault( std::chrono::seconds timeout ) = 0;
+    virtual Client& tftpTimeoutDefault( std::chrono::seconds timeout ) = 0;
 
     /**
      * @brief Updates the Default Number of TFTP Packet Retries.
@@ -83,7 +83,7 @@ class TFTP_EXPORT TftpClient
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpClient& tftpRetriesDefault( uint16_t retries ) = 0;
+    virtual Client& tftpRetriesDefault( uint16_t retries ) = 0;
 
     /**
      * @brief Updates the Default Dally Parameter.
@@ -99,7 +99,7 @@ class TFTP_EXPORT TftpClient
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpClient& dallyDefault( bool dally ) = 0;
+    virtual Client& dallyDefault( bool dally ) = 0;
 
     /**
      * @brief Updates Default TFTP Options Configuration.
@@ -114,7 +114,7 @@ class TFTP_EXPORT TftpClient
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpClient& optionsConfigurationDefault(
+    virtual Client& optionsConfigurationDefault(
       TftpOptionsConfiguration optionsConfiguration ) = 0;
 
     /**
@@ -133,7 +133,7 @@ class TFTP_EXPORT TftpClient
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpClient& additionalOptions(
+    virtual Client& additionalOptions(
       Packets::Options additionalOptions ) = 0;
 
     /**
@@ -147,7 +147,7 @@ class TFTP_EXPORT TftpClient
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpClient& localDefault( boost::asio::ip::address local ) = 0;
+    virtual Client& localDefault( boost::asio::ip::address local ) = 0;
 
     /** @} **/
 
@@ -171,7 +171,7 @@ class TFTP_EXPORT TftpClient
 
   protected:
     //! Constructor.
-    TftpClient() = default;
+    Client() = default;
 };
 
 }

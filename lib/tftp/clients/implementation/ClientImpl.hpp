@@ -8,29 +8,29 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::TftpClientImpl.
+ * @brief Declaration of Class Tftp::Clients::ClientImpl.
  **/
 
-#ifndef TFTP_CLIENT_TFTPCLIENTIMPL_HPP
-#define TFTP_CLIENT_TFTPCLIENTIMPL_HPP
+#ifndef TFTP_CLIENTS_CLIENTIMPL_HPP
+#define TFTP_CLIENTS_CLIENTIMPL_HPP
 
-#include "tftp/client/Client.hpp"
+#include "tftp/clients/Clients.hpp"
+#include "tftp/clients/Client.hpp"
 
-#include "tftp/client/TftpClient.hpp"
 #include "tftp/TftpOptionsConfiguration.hpp"
 
 #include <boost/asio/io_context.hpp>
 
 #include <optional>
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 /**
  * @brief TFTP %Client.
  *
  * This factory class creates on request the concrete client operations.
  **/
-class TftpClientImpl final : public TftpClient
+class ClientImpl final : public Client
 {
   public:
     /**
@@ -39,37 +39,37 @@ class TftpClientImpl final : public TftpClient
      * @param[in] ioContext
      *   I/O context used for Communication.
      **/
-    explicit TftpClientImpl( boost::asio::io_context &ioContext );
+    explicit ClientImpl( boost::asio::io_context &ioContext );
 
     /**
      * @brief Destructor
      **/
-    ~TftpClientImpl() override;
+    ~ClientImpl() override;
 
-    //! @copydoc TftpClient::tftpTimeoutDefault()
-    TftpClient& tftpTimeoutDefault( std::chrono::seconds timeout ) override;
+    //! @copydoc Client::tftpTimeoutDefault()
+    Client& tftpTimeoutDefault( std::chrono::seconds timeout ) override;
 
-    //! @copydoc TftpClient::tftpRetriesDefault()
-    TftpClient& tftpRetriesDefault( uint16_t retries ) override;
+    //! @copydoc Client::tftpRetriesDefault()
+    Client& tftpRetriesDefault( uint16_t retries ) override;
 
-    //! @copydoc TftpClient::dallyDefault()
-    TftpClient& dallyDefault( bool dally ) override;
+    //! @copydoc Client::dallyDefault()
+    Client& dallyDefault( bool dally ) override;
 
-    //! @copydoc TftpClient::optionsConfigurationDefault()
-    TftpClient& optionsConfigurationDefault(
+    //! @copydoc Client::optionsConfigurationDefault()
+    Client& optionsConfigurationDefault(
       TftpOptionsConfiguration optionsConfiguration ) override;
 
-    //! @copydoc TftpClient::additionalOptions()
-    TftpClient& additionalOptions(
+    //! @copydoc Client::additionalOptions()
+    Client& additionalOptions(
       Packets::Options additionalOptions ) override;
 
-    //! @copydoc TftpClient::localDefault()
-    TftpClient& localDefault( boost::asio::ip::address local ) override;
+    //! @copydoc Client::localDefault()
+    Client& localDefault( boost::asio::ip::address local ) override;
 
-    //! @copydoc TftpClient::readOperation()
+    //! @copydoc Client::readOperation()
     ReadOperationPtr readOperation() override;
 
-    //! @copydoc TftpClient::writeOperation()
+    //! @copydoc Client::writeOperation()
     WriteOperationPtr writeOperation() override;
 
   private:

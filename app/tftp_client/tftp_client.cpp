@@ -11,20 +11,18 @@
  * @brief TFTP Client CLI Application.
  **/
 
-#include "tftp/Tftp.hpp"
-#include "tftp/TftpConfiguration.hpp"
-#include "tftp/TftpOptionsConfiguration.hpp"
-#include "tftp/TftpException.hpp"
-
-#include "tftp/RequestTypeDescription.hpp"
+#include "tftp/clients/ReadOperation.hpp"
+#include "tftp/clients/Client.hpp"
+#include "tftp/clients/WriteOperation.hpp"
 
 #include "tftp/file/StreamFile.hpp"
 
-#include "tftp/client/ReadOperation.hpp"
-#include "tftp/client/TftpClient.hpp"
-#include "tftp/client/WriteOperation.hpp"
-
 #include "tftp/packets/PacketStatistic.hpp"
+
+#include "tftp/TftpConfiguration.hpp"
+#include "tftp/TftpOptionsConfiguration.hpp"
+#include "tftp/TftpException.hpp"
+#include "tftp/RequestTypeDescription.hpp"
 
 #include "helper/Logger.hpp"
 #include "helper/BoostAsioProgramOptions.hpp"
@@ -89,8 +87,8 @@ static void operationCompleted(
  * @param address
  * @param ioContext
  **/
-static Tftp::Client::OperationPtr readOperation(
-  Tftp::Client::TftpClientPtr &tftpClient,
+static Tftp::Clients::OperationPtr readOperation(
+  Tftp::Clients::ClientPtr &tftpClient,
   Tftp::TftpConfiguration &tftpConfiguration,
   Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
   std::filesystem::path &localFile,
@@ -109,8 +107,8 @@ static Tftp::Client::OperationPtr readOperation(
  * @param address
  * @param ioContext
  **/
-static Tftp::Client::OperationPtr writeOperation(
-  Tftp::Client::TftpClientPtr &tftpClient,
+static Tftp::Clients::OperationPtr writeOperation(
+  Tftp::Clients::ClientPtr &tftpClient,
   Tftp::TftpConfiguration &tftpConfiguration,
   Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
   std::filesystem::path &localFile,
@@ -189,9 +187,9 @@ int main( int argc, char * argv[] )
     // Assemble TFTP configuration
     boost::asio::io_context ioContext;
 
-    auto tftpClient{ Tftp::Client::TftpClient::instance( ioContext ) };
+    auto tftpClient{ Tftp::Clients::Client::instance( ioContext ) };
 
-    Tftp::Client::OperationPtr tftpOperation{};
+    Tftp::Clients::OperationPtr tftpOperation{};
 
     if ( localFile.empty() )
     {
@@ -291,8 +289,8 @@ static void operationCompleted(
   ioContext.stop();
 }
 
-static Tftp::Client::OperationPtr readOperation(
-  Tftp::Client::TftpClientPtr &tftpClient,
+static Tftp::Clients::OperationPtr readOperation(
+  Tftp::Clients::ClientPtr &tftpClient,
   Tftp::TftpConfiguration &tftpConfiguration,
   Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
   std::filesystem::path &localFile,
@@ -319,8 +317,8 @@ static Tftp::Client::OperationPtr readOperation(
   return tftpOperation;
 }
 
-static  Tftp::Client::OperationPtr writeOperation(
-  Tftp::Client::TftpClientPtr &tftpClient,
+static  Tftp::Clients::OperationPtr writeOperation(
+  Tftp::Clients::ClientPtr &tftpClient,
   Tftp::TftpConfiguration &tftpConfiguration,
   Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
   std::filesystem::path &localFile,

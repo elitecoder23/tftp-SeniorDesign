@@ -16,23 +16,23 @@
 
 #include "tftp/packets/Packets.hpp"
 
+#include <iosfwd>
 #include <map>
-#include <tuple>
 #include <shared_mutex>
 #include <string>
-#include <iosfwd>
+#include <tuple>
 
 namespace Tftp::Packets {
 
 /**
- * @brief TFTP Packet Statistic
+ * @brief TFTP Packet Statistic.
  *
  * This class provides operations to count packets (count and total size).
  * The statistic is separated into packet type.
  *
  * The class provides to global instances for transmit and receive distinction.
  * The @ref PacketHandler used @ref globalReceive for logging received packets.
- * The @ref Client::Operation, @ref Server::TftpServer, and
+ * The @ref Clients::Operation, @ref Server::TftpServer, and
  * @ref Server::Operation used the @ref globalTransmit() for logging transmitted
  * packets.
  *

@@ -35,7 +35,7 @@
  * The library is divided into sections:
  * - @ref Tftp.
  * - @ref Tftp::Packets - TFTP Packets
- * - @ref Tftp::Client - TFTP Client
+ * - @ref Tftp::Clients - TFTP Client
  * - @ref Tftp::Server - TFTP Server
  * - @ref Tftp::File - %Helper Classes for file transfers
  *

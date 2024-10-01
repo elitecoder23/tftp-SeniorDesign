@@ -8,7 +8,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Client::OperationImpl.
+ * @brief Definition of Class Tftp::Clients::OperationImpl.
  **/
 
 #include "OperationImpl.hpp"
@@ -23,13 +23,12 @@
 #include "tftp/TftpException.hpp"
 
 #include "helper/Exception.hpp"
-#include "helper/SafeCast.hpp"
 
 #include <boost/exception/all.hpp>
 
 #include <boost/bind/bind.hpp>
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 OperationImpl::OperationImpl( boost::asio::io_context &ioContext ) :
   socket{ ioContext },

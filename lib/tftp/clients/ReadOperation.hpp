@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::ReadOperation.
+ * @brief Declaration of Class Tftp::Clients::ReadOperation.
  **/
 
-#ifndef TFTP_CLIENT_READOPERATION_HPP
-#define TFTP_CLIENT_READOPERATION_HPP
+#ifndef TFTP_CLIENTS_READOPERATION_HPP
+#define TFTP_CLIENTS_READOPERATION_HPP
 
-#include "tftp/client/Client.hpp"
-#include "tftp/client/Operation.hpp"
+#include "tftp/clients/Clients.hpp"
+#include "tftp/clients/Operation.hpp"
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 /**
  * @brief TFTP %Client Read %Operation (TFTP RRQ).

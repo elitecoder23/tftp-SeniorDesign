@@ -126,7 +126,7 @@ target_link_libraries( tftp_test PUBLIC tftp )
 
 add_subdirectory( file )
 add_subdirectory( packets )
-add_subdirectory( client )
+add_subdirectory( clients )
 add_subdirectory( server )
 
 set_property(

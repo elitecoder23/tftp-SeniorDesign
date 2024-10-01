@@ -8,14 +8,14 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Client::OperationImpl.
+ * @brief Declaration of Class Tftp::Clients::OperationImpl.
  **/
 
-#ifndef TFTP_CLIENT_OPERATIONIMPL_HPP
-#define TFTP_CLIENT_OPERATIONIMPL_HPP
+#ifndef TFTP_CLIENTS_OPERATIONIMPL_HPP
+#define TFTP_CLIENTS_OPERATIONIMPL_HPP
 
-#include "tftp/client/Client.hpp"
-#include "tftp/client/TftpClient.hpp"
+#include "tftp/clients/Clients.hpp"
+#include "tftp/clients/Client.hpp"
 
 #include "tftp/packets/ErrorPacket.hpp"
 #include "tftp/packets/PacketHandler.hpp"
@@ -27,7 +27,7 @@
 #include <memory>
 #include <string>
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
 /**
  * @brief TFTP %Client %Operation.

@@ -8,18 +8,18 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Client::TftpClient.
+ * @brief Definition of Class Tftp::Clients::Client.
  **/
 
-#include "TftpClient.hpp"
+#include "Client.hpp"
 
-#include "tftp/client/implementation/TftpClientImpl.hpp"
+#include "tftp/clients/implementation/ClientImpl.hpp"
 
-namespace Tftp::Client {
+namespace Tftp::Clients {
 
-TftpClientPtr TftpClient::instance( boost::asio::io_context &ioContext )
+ClientPtr Client::instance( boost::asio::io_context &ioContext )
 {
-  return std::make_shared< TftpClientImpl>( ioContext );
+  return std::make_shared< ClientImpl >( ioContext );
 }
 
 }
