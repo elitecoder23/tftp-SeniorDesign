@@ -62,7 +62,7 @@ void WriteOperationImpl::request()
     lastTransmittedBlockNumber = 0U;
     lastReceivedBlockNumber = 0xFFFFU;
 
-    // initialise Options with additional options
+    // initialise options with additional options
     Packets::Options options{ additionalOptionsV };
 
     // Block size Option
@@ -126,7 +126,7 @@ void WriteOperationImpl::abort()
   OperationImpl::abort();
 }
 
-const ErrorInfo& WriteOperationImpl::errorInfo() const
+const Packets::ErrorInfo& WriteOperationImpl::errorInfo() const
 {
   return OperationImpl::errorInfo();
 }
@@ -207,7 +207,7 @@ WriteOperation& WriteOperationImpl::local(
 
 void WriteOperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo ) noexcept
+  Packets::ErrorInfo &&errorInfo ) noexcept
 {
   BOOST_LOG_FUNCTION()
 
@@ -291,7 +291,6 @@ void WriteOperationImpl::acknowledgementPacket(
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::IllegalTftpOperation,
       "Wrong block number" };
-
     send( errorPacket );
 
     // Operation completed
@@ -304,13 +303,11 @@ void WriteOperationImpl::acknowledgementPacket(
   // if block number is 0 -> ACK of write without Options
   if ( acknowledgementPacket.blockNumber() == Packets::BlockNumber{ 0U } )
   {
-    // If empty options is returned - Abort Operation
-    Packets::Options options{};
-
-    // Call Option Negotiation Handler
+    // Call Option Negotiation Handler with empty options list.
     // If no Handler is registered - Continue Operation.
     // If options negotiation is aborted by Option Negotiation Handler - Abort
     //   Operation
+    Packets::Options options{};
     if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( options ) )
     {
       BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
@@ -368,7 +365,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   auto remoteOptions{ optionsAcknowledgementPacket.options() };
 
-  // check empty options - not allowed
+  // check empty options - OACK with no option is not allowed
   if ( remoteOptions.empty() )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
@@ -583,7 +580,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     return;
   }
 
-  // Perform additional Option Negotiation
+  // Perform additional option negotiation.
   // If no handler is registered - Accept options and continue operation
   if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( remoteOptions ) )
   {

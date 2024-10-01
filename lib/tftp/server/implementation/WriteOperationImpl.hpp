@@ -100,13 +100,13 @@ class WriteOperationImpl final :
     void abort() override;
 
     //! @copydoc WriteOperation::errorInfo() const
-    [[nodiscard]] const ErrorInfo& errorInfo() const override;
+    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const override;
 
   private:
     //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {} ) noexcept override;
+      Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket()

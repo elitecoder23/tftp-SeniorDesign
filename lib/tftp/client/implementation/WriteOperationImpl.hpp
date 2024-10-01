@@ -56,7 +56,7 @@ class WriteOperationImpl final :
     void abort() override;
 
     //! @copydoc WriteOperation::errorInfo() const
-    [[nodiscard]] const ErrorInfo& errorInfo() const override;
+    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const override;
 
     //! @copydoc WriteOperation::tftpTimeout()
     WriteOperation& tftpTimeout( std::chrono::seconds timeout ) override;
@@ -99,7 +99,7 @@ class WriteOperationImpl final :
     //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {} ) noexcept override;
+      Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @brief Sends the data to the host.
@@ -121,9 +121,6 @@ class WriteOperationImpl final :
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket()
-     *
-     * @throw InvalidPacketException
-     *   Invalid block number
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -134,8 +131,6 @@ class WriteOperationImpl final :
      *
      * @throw InvalidPacketException
      *   Empty option list
-     * @throw OptionNegotiationException
-     *   Option negotiation failed
      **/
     void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -163,7 +158,7 @@ class WriteOperationImpl final :
     //! Last received block number.
     Packets::BlockNumber lastReceivedBlockNumber{ 0U };
     //! Transfer Size obtained from Data Handler
-    std::optional< uint64_t > transferSize{};
+    std::optional< uint64_t > transferSize;
 };
 
 }

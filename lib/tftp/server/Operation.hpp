@@ -180,7 +180,7 @@ class TFTP_EXPORT Operation
      * @retval ErrorInfo()
      *   If no error occurred.
      **/
-    [[nodiscard]] virtual const ErrorInfo& errorInfo() const = 0;
+    [[nodiscard]] virtual const Packets::ErrorInfo& errorInfo() const = 0;
 };
 
 }

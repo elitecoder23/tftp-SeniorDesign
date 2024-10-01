@@ -84,7 +84,7 @@ class OperationImpl : protected Packets::PacketHandler
      * @retval ErrorInfo()
      *   If no error occurred.
      **/
-    [[nodiscard]] const ErrorInfo& errorInfo() const;
+    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const;
 
     /**
      * @brief Updates TFTP Timeout.
@@ -207,7 +207,7 @@ class OperationImpl : protected Packets::PacketHandler
      **/
     virtual void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {} );
+      Packets::ErrorInfo &&errorInfo = {} );
 
     /**
      * @copydoc Packets::PacketHandler::readRequestPacket()
@@ -338,7 +338,7 @@ class OperationImpl : protected Packets::PacketHandler
     //! Re-transmission counter
     unsigned int transmitCounter{ 0U };
     //! Error info
-    ErrorInfo errorInfoV;
+    Packets::ErrorInfo errorInfoV;
 };
 
 }

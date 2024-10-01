@@ -228,14 +228,14 @@ void ReadOperationImpl::abort()
   OperationImpl::abort();
 }
 
-const ErrorInfo& ReadOperationImpl::errorInfo() const
+const Packets::ErrorInfo& ReadOperationImpl::errorInfo() const
 {
   return OperationImpl::errorInfo();
 }
 
 void ReadOperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo ) noexcept
+  Packets::ErrorInfo &&errorInfo ) noexcept
 {
   BOOST_LOG_FUNCTION()
 

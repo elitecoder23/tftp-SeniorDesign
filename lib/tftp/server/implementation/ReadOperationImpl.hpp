@@ -98,13 +98,13 @@ class ReadOperationImpl final :
     void abort() override;
 
     //! @copydoc ReadOperation::errorInfo() const
-    [[nodiscard]] const ErrorInfo& errorInfo() const override;
+    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const override;
 
   private:
     //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {} ) noexcept override;
+      Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @brief Sends a data packet to the client.

@@ -119,7 +119,7 @@ void ReadOperationImpl::abort()
   OperationImpl::abort();
 }
 
-const ErrorInfo& ReadOperationImpl::errorInfo() const
+const Packets::ErrorInfo& ReadOperationImpl::errorInfo() const
 {
   return OperationImpl::errorInfo();
 }
@@ -213,7 +213,7 @@ ReadOperation& ReadOperationImpl::local(
 
 void ReadOperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo ) noexcept
+  Packets::ErrorInfo &&errorInfo ) noexcept
 {
   BOOST_LOG_FUNCTION()
 
@@ -303,7 +303,7 @@ void ReadOperationImpl::dataPacket(
   if ( ( dataPacket.blockNumber() == static_cast< uint16_t >( 1U ) )
     && ( !oackReceived ) )
   {
-    // Call Option Negotiation Handler
+    // Call Option Negotiation Handler with empty options list.
     // If no Handler is registered - Continue Operation.
     // If options negotiation is aborted by Option Negotiation Handler - Abort
     //   Operation
@@ -388,10 +388,10 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "OACK must occur after RRQ";
 
+    // send error packet
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::IllegalTftpOperation,
       "OACK must occur after RRQ" };
-
     send( errorPacket );
 
     // Operation completed
@@ -401,16 +401,16 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   auto remoteOptions{ optionsAcknowledgementPacket.options() };
 
-  // check empty options - not allowed
+  // check empty options - OACK with no option is not allowed
   if ( remoteOptions.empty() )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "Received option list is empty";
 
+    // send error packet
     Packets::ErrorPacket errorPacket{
       Packets::ErrorCode::IllegalTftpOperation,
       "Empty OACK not allowed" };
-
     send( errorPacket );
 
     // Operation completed
@@ -615,7 +615,7 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     }
   }
 
-  // Perform additional Option Negotiation
+  // Perform additional option negotiation.
   // If no handler is registered - Accept options and continue operation
   if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( remoteOptions ) )
   {

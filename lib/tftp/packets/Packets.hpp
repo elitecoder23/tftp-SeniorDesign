@@ -21,12 +21,12 @@
 
 #include "tftp/Tftp.hpp"
 
-#include <map>
-#include <vector>
-#include <span>
 #include <cstdint>
+#include <map>
+#include <optional>
+#include <span>
 #include <string>
-#include <string_view>
+#include <vector>
 
 /**
  * @brief TFTP %Packets.
@@ -36,7 +36,6 @@
  * static methods can be used.
  **/
 namespace Tftp::Packets {
-
 
 class Packet;
 class ReadRequestPacket;
@@ -163,6 +162,9 @@ using RawOptions = std::vector< uint8_t >;
 using RawOptionsSpan = std::span< const uint8_t >;
 //! TFTP Options (Maps Option Name to Option Value)
 using Options = std::map< std::string, std::string, std::less< > >;
+
+//! Error Information
+using ErrorInfo = std::optional< Packets::ErrorPacket >;
 
 }
 

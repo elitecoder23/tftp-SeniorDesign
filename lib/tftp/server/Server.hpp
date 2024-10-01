@@ -57,9 +57,6 @@ class Operation;
 class ReadOperation;
 class WriteOperation;
 
-//! Error Information
-using ErrorInfo = std::optional< Packets::ErrorPacket >;
-
 //! TFTP %Server Instance Pointer.
 using TftpServerPtr = std::shared_ptr< TftpServer >;
 

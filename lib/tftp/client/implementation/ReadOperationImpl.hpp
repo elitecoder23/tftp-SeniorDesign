@@ -56,7 +56,7 @@ class ReadOperationImpl final :
     void abort() override;
 
     //! @copydoc ReadOperation::errorInfo() const
-    [[nodiscard]] const ErrorInfo& errorInfo() const override;
+    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const override;
 
     //! @copydoc ReadOperation::tftpTimeout()
     ReadOperation& tftpTimeout( std::chrono::seconds timeout ) override;
@@ -102,7 +102,7 @@ class ReadOperationImpl final :
     //! @copydoc OperationImpl::finished()
     void finished(
       TransferStatus status,
-      ErrorInfo &&errorInfo = {} ) noexcept override;
+      Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket()
@@ -119,7 +119,7 @@ class ReadOperationImpl final :
      * @copydoc Packets::PacketHandler::acknowledgementPacket()
      *
      * ACK packets are not expected for this operation.
-     * They are rejected by error transmission
+     * They are rejected by error transmission.
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,

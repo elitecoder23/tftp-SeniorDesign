@@ -25,7 +25,6 @@
 
 #include <functional>
 #include <memory>
-#include <optional>
 
 /**
  * @brief TFTP %Client.
@@ -47,9 +46,6 @@ class Operation;
 class ReadOperation;
 class WriteOperation;
 
-//! Error Information
-using ErrorInfo = std::optional< Packets::ErrorPacket >;
-
 //! TFTP %Client Instance Pointer
 using TftpClientPtr = std::shared_ptr< TftpClient >;
 
@@ -63,19 +59,19 @@ using ReadOperationPtr = std::shared_ptr< ReadOperation >;
 using WriteOperationPtr = std::shared_ptr< WriteOperation >;
 
 /**
- * @brief TFTP Client Option Negotiation Handler
+ * @brief TFTP %Client Option Negotiation Handler
  *
- * When the TFTP Client operation receives the negotiated options from the TFTP
- * Server, all TFTP specific Options (i.e. block size, transfer size, and
+ * When the TFTP %Client operation receives the negotiated options from the TFTP
+ * %Server, all TFTP specific Options (i.e. block size, transfer size, and
  * timeout) are handled there and checked for valid values.
  * Additional TFTP options are provided to this callback and must be checked
  * here.
  * The handler must remove handled options from this list.
- * The TFTP Client Operation will reject the option negotiation, if
+ * The TFTP %Client %Operation will reject the option negotiation, if
  * @p serverOptions is not empty after the handler returns.
  *
  * @param[in,out] serverOptions
- *   Additional Options received from TFTP Server.
+ *   Additional Options received from TFTP %Server.
  *   Will be negotiated by this handler and removed from this list.
  *
  * @return If the TFTP Option Negotiation was successful.

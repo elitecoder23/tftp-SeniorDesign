@@ -117,7 +117,7 @@ class TFTP_EXPORT Operation
       OptionNegotiationHandler handler ) = 0;
 
     /**
-     * @brief Updates the Operation Completed Handler.
+     * @brief Updates the %Operation Completed Handler.
      *
      * @param[in] handler
      *   Handler which is called on completion of the operation.
@@ -216,7 +216,7 @@ class TFTP_EXPORT Operation
      * @retval ErrorInfo()
      *   If no error occurred.
      **/
-    [[nodiscard]] virtual const ErrorInfo& errorInfo() const = 0;
+    [[nodiscard]] virtual const Packets::ErrorInfo& errorInfo() const = 0;
 };
 
 }

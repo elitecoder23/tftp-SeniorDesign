@@ -103,7 +103,7 @@ void OperationImpl::abort()
   finished( TransferStatus::Aborted );
 }
 
-const ErrorInfo& OperationImpl::errorInfo() const
+const Packets::ErrorInfo& OperationImpl::errorInfo() const
 {
   return errorInfoV;
 }
@@ -231,7 +231,7 @@ void OperationImpl::receiveDally()
 
 void OperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo )
+  Packets::ErrorInfo &&errorInfo )
 {
   BOOST_LOG_FUNCTION()
 

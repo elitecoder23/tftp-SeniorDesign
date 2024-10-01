@@ -231,14 +231,14 @@ void WriteOperationImpl::abort()
   OperationImpl::abort();
 }
 
-const ErrorInfo& WriteOperationImpl::errorInfo() const
+const Packets::ErrorInfo& WriteOperationImpl::errorInfo() const
 {
   return OperationImpl::errorInfo();
 }
 
 void WriteOperationImpl::finished(
   const TransferStatus status,
-  ErrorInfo &&errorInfo ) noexcept
+  Packets::ErrorInfo &&errorInfo ) noexcept
 {
   BOOST_LOG_FUNCTION()
 
