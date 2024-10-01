@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Server::ReadOperation.
+ * @brief Declaration of Class Tftp::Servers::ReadOperation.
  **/
 
-#ifndef TFTP_SERVER_READOPERATION_HPP
-#define TFTP_SERVER_READOPERATION_HPP
+#ifndef TFTP_SERVERS_READOPERATION_HPP
+#define TFTP_SERVERS_READOPERATION_HPP
 
-#include "tftp/server/Server.hpp"
-#include "tftp/server/Operation.hpp"
+#include "tftp/servers/Servers.hpp"
+#include "tftp/servers/Operation.hpp"
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 /**
  * @brief TFTP %Server Read %Operation (TFTP RRQ).

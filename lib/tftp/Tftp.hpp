@@ -36,7 +36,7 @@
  * - @ref Tftp.
  * - @ref Tftp::Packets - TFTP Packets
  * - @ref Tftp::Clients - TFTP Client
- * - @ref Tftp::Server - TFTP Server
+ * - @ref Tftp::Servers - TFTP Server
  * - @ref Tftp::File - %Helper Classes for file transfers
  *
  * @par Referenced Documents

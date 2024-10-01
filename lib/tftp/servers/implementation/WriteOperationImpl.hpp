@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Server::WriteOperationImpl.
+ * @brief Declaration of Class Tftp::Servers::WriteOperationImpl.
  **/
 
-#ifndef TFTP_SERVER_WRITEOPERATIONIMPL_HPP
-#define TFTP_SERVER_WRITEOPERATIONIMPL_HPP
+#ifndef TFTP_SERVERS_WRITEOPERATIONIMPL_HPP
+#define TFTP_SERVERS_WRITEOPERATIONIMPL_HPP
 
-#include "tftp/server/Server.hpp"
-#include "tftp/server/WriteOperation.hpp"
+#include "tftp/servers/Servers.hpp"
+#include "tftp/servers/WriteOperation.hpp"
 
-#include "tftp/server/implementation/OperationImpl.hpp"
+#include "tftp/servers/implementation/OperationImpl.hpp"
 
 #include "tftp/packets/BlockNumber.hpp"
 #include "tftp/packets/TftpOptions.hpp"
@@ -29,7 +29,7 @@
 #include <chrono>
 #include <string>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 /**
  * @brief TFTP %Server Write %Operation (TFTP WRQ).

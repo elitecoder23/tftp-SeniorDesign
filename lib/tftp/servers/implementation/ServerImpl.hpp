@@ -8,14 +8,14 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Server::TftpServerImpl.
+ * @brief Declaration of Class Tftp::Servers::ServerImpl.
  **/
 
-#ifndef TFTP_SERVER_TFTPSERVERIMPL_HPP
-#define TFTP_SERVER_TFTPSERVERIMPL_HPP
+#ifndef TFTP_SERVERS_SERVERIMPL_HPP
+#define TFTP_SERVERS_SERVERIMPL_HPP
 
-#include "tftp/server/Server.hpp"
-#include "tftp/server/TftpServer.hpp"
+#include "tftp/servers/Servers.hpp"
+#include "tftp/servers/Server.hpp"
 
 #include "tftp/packets/PacketHandler.hpp"
 
@@ -26,7 +26,7 @@
 #include <map>
 #include <string>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 /**
  * @brief TFTP %Server.
@@ -39,8 +39,8 @@ namespace Tftp::Server {
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
-class TftpServerImpl final :
-  public TftpServer,
+class ServerImpl final :
+  public Server,
   private Packets::PacketHandler
 {
   public:
@@ -53,58 +53,58 @@ class TftpServerImpl final :
      * @throw CommunicationException
      *   When an error occurs during socket initialisation.
      **/
-    explicit TftpServerImpl( boost::asio::io_context &ioContext );
+    explicit ServerImpl( boost::asio::io_context &ioContext );
 
     /**
      * @brief Destructor
      **/
-    ~TftpServerImpl() override;
+    ~ServerImpl() override;
 
-    //! @copydoc TftpServer::requestHandler()
-    TftpServer& requestHandler( ReceivedTftpRequestHandler handler ) override;
+    //! @copydoc Server::requestHandler()
+    Server& requestHandler( ReceivedTftpRequestHandler handler ) override;
 
-    //! @copydoc TftpServer::serverAddress()
-    TftpServer& serverAddress(
+    //! @copydoc Server::serverAddress()
+    Server& serverAddress(
       boost::asio::ip::udp::endpoint serverAddress ) override;
 
-    //! @copydoc TftpServer::localEndpoint()
+    //! @copydoc Server::localEndpoint()
     [[nodiscard]] boost::asio::ip::udp::endpoint localEndpoint() const override;
 
-    //! @copydoc TftpServer::tftpTimeoutDefault()
-    TftpServer& tftpTimeoutDefault( std::chrono::seconds timeout ) override;
+    //! @copydoc Server::tftpTimeoutDefault()
+    Server& tftpTimeoutDefault( std::chrono::seconds timeout ) override;
 
-    //! @copydoc TftpServer::tftpRetriesDefault()
-    TftpServer& tftpRetriesDefault( uint16_t retries ) override;
+    //! @copydoc Server::tftpRetriesDefault()
+    Server& tftpRetriesDefault( uint16_t retries ) override;
 
-    //! @copydoc TftpServer::dallyDefault()
-    TftpServer& dallyDefault( bool dally ) override;
+    //! @copydoc Server::dallyDefault()
+    Server& dallyDefault( bool dally ) override;
 
-    //! @copydoc TftpServer::optionsConfigurationDefault()
-    TftpServer& optionsConfigurationDefault(
+    //! @copydoc Server::optionsConfigurationDefault()
+    Server& optionsConfigurationDefault(
       TftpOptionsConfiguration optionsConfiguration ) override;
 
-    //! @copydoc TftpServer::localDefault()
-    TftpServer& localDefault( boost::asio::ip::address local ) override;
+    //! @copydoc Server::localDefault()
+    Server& localDefault( boost::asio::ip::address local ) override;
 
-    //! @copydoc TftpServer::start()
+    //! @copydoc Server::start()
     void start() override;
 
-    //! @copydoc TftpServer::stop()
+    //! @copydoc Server::stop()
     void stop() override;
 
-    //! @copydoc TftpServer::readOperation()
+    //! @copydoc Server::readOperation()
     [[nodiscard]] ReadOperationPtr readOperation() override;
 
-    //! @copydoc TftpServer::writeOperation()
+    //! @copydoc Server::writeOperation()
     [[nodiscard]] WriteOperationPtr writeOperation() override;
 
-    //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
+    //! @copydoc Server::errorOperation(const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
     void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       Packets::ErrorCode errorCode,
       std::string errorMessage = {} ) override;
 
-    //! @copydoc TftpServer::errorOperation(const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
+    //! @copydoc Server::errorOperation(const boost::asio::ip::udp::endpoint&,const boost::asio::ip::udp::endpoint&,Packets::ErrorCode,std::string)
     void errorOperation(
       const boost::asio::ip::udp::endpoint &remote,
       const boost::asio::ip::udp::endpoint &local,

@@ -8,13 +8,13 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Server::Operation.
+ * @brief Declaration of Class Tftp::Servers::Operation.
  **/
 
-#ifndef TFTP_SERVER_OPERATION_HPP
-#define TFTP_SERVER_OPERATION_HPP
+#ifndef TFTP_SERVERS_OPERATION_HPP
+#define TFTP_SERVERS_OPERATION_HPP
 
-#include "tftp/server/Server.hpp"
+#include "tftp/servers/Servers.hpp"
 
 #include "tftp/packets/Packets.hpp"
 
@@ -22,7 +22,7 @@
 
 #include <string>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 /**
  * @brief TFTP %Server %Operation.

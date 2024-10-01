@@ -8,7 +8,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Server::OperationImpl.
+ * @brief Definition of Class Tftp::Servers::OperationImpl.
  **/
 
 #include "OperationImpl.hpp"
@@ -31,7 +31,7 @@
 
 #include <boost/bind/bind.hpp>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 OperationImpl::OperationImpl( boost::asio::io_context &ioContext ) :
   socket{ ioContext },

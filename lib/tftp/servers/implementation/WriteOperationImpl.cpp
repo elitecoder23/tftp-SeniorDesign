@@ -8,7 +8,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Server::WriteOperationImpl.
+ * @brief Definition of Class Tftp::Servers::WriteOperationImpl.
  **/
 
 #include "WriteOperationImpl.hpp"
@@ -27,7 +27,7 @@
 
 #include <utility>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 WriteOperationImpl::WriteOperationImpl( boost::asio::io_context &ioContext ) :
   OperationImpl{ ioContext }

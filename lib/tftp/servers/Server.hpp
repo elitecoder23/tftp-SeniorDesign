@@ -8,15 +8,15 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Server::TftpServer.
+ * @brief Declaration of Class Tftp::Servers::Server.
  *
- * The class TftpServer is the main entry for a TFTP server application.
+ * The class Server is the main entry for a TFTP server application.
  **/
 
-#ifndef TFTP_SERVER_TFTPSERVER_HPP
-#define TFTP_SERVER_TFTPSERVER_HPP
+#ifndef TFTP_SERVERS_SERVER_HPP
+#define TFTP_SERVERS_SERVER_HPP
 
-#include "tftp/server/Server.hpp"
+#include "tftp/servers/Servers.hpp"
 
 #include <boost/asio/io_context.hpp>
 
@@ -25,7 +25,7 @@
 #include <optional>
 #include <string>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 /**
  * @brief TFTP %Server.
@@ -38,11 +38,11 @@ namespace Tftp::Server {
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
-class TFTP_EXPORT TftpServer
+class TFTP_EXPORT Server
 {
   public:
     /**
-     * @brief Default UDP Endpoint, Where the TFTP Server Listens.
+     * @brief Default UDP Endpoint, Where the TFTP %Server Listens.
      *
      * The default local end-point where the TFTP server is listening is the
      * default TFTP Port any IP address.
@@ -50,21 +50,22 @@ class TFTP_EXPORT TftpServer
     static const boost::asio::ip::udp::endpoint DefaultLocalEndpoint;
 
     /**
-     * @brief Creates a TFTP Server Instance.
+     * @brief Creates a TFTP %Server Instance.
      *
      * @param[in] ioContext
      *   I/O context used for communication.
      *
-     * @return TFTP Server Instance.
+     * @return TFTP %Server Instance.
      **/
-    [[nodiscard]] static TftpServerPtr instance(
+    [[nodiscard]] static ServerPtr
+    instance(
       boost::asio::io_context &ioContext );
 
     //! Destructor
-    virtual ~TftpServer() = default;
+    virtual ~Server() = default;
 
     /**
-     * @name TFTP Server Configuration
+     * @name TFTP %Server Configuration
      * @{
      **/
 
@@ -76,7 +77,7 @@ class TFTP_EXPORT TftpServer
      *
      * @return *this for chaining.
      **/
-    virtual TftpServer& requestHandler(
+    virtual Server& requestHandler(
       ReceivedTftpRequestHandler handler ) = 0;
 
     /**
@@ -89,7 +90,7 @@ class TFTP_EXPORT TftpServer
      *
      * @return *this for chaining.
      **/
-    virtual TftpServer& serverAddress(
+    virtual Server& serverAddress(
       boost::asio::ip::udp::endpoint serverAddress ) = 0;
 
     /** @} **/
@@ -128,7 +129,7 @@ class TFTP_EXPORT TftpServer
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpServer& tftpTimeoutDefault( std::chrono::seconds timeout ) = 0;
+    virtual Server& tftpTimeoutDefault( std::chrono::seconds timeout ) = 0;
 
     /**
      * @brief Updates the Default Number of TFTP Packet Retries.
@@ -144,7 +145,7 @@ class TFTP_EXPORT TftpServer
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpServer& tftpRetriesDefault( uint16_t retries ) = 0;
+    virtual Server& tftpRetriesDefault( uint16_t retries ) = 0;
 
     /**
      * @brief Updates the Default Dally Parameter.
@@ -160,7 +161,7 @@ class TFTP_EXPORT TftpServer
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpServer& dallyDefault( bool dally ) = 0;
+    virtual Server& dallyDefault( bool dally ) = 0;
 
     /**
      * @brief Updates Default TFTP Options Configuration.
@@ -175,7 +176,7 @@ class TFTP_EXPORT TftpServer
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpServer& optionsConfigurationDefault(
+    virtual Server& optionsConfigurationDefault(
       TftpOptionsConfiguration optionsConfiguration ) = 0;
 
     /**
@@ -189,7 +190,7 @@ class TFTP_EXPORT TftpServer
      *
      * @return @p *this for chaining.
      **/
-    virtual TftpServer& localDefault( boost::asio::ip::address local ) = 0;
+    virtual Server& localDefault( boost::asio::ip::address local ) = 0;
 
     /** @} **/
 
@@ -260,7 +261,7 @@ class TFTP_EXPORT TftpServer
 
   protected:
     //! Constructor.
-    TftpServer() = default;
+    Server() = default;
 };
 
 }

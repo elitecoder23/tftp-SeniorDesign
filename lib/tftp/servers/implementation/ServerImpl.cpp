@@ -8,13 +8,13 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Server::TftpServerImpl.
+ * @brief Definition of Class Tftp::Servers::ServerImpl.
  **/
 
-#include "TftpServerImpl.hpp"
+#include "ServerImpl.hpp"
 
-#include "tftp/server/implementation/ReadOperationImpl.hpp"
-#include "tftp/server/implementation/WriteOperationImpl.hpp"
+#include "tftp/servers/implementation/ReadOperationImpl.hpp"
+#include "tftp/servers/implementation/WriteOperationImpl.hpp"
 
 #include "tftp/packets/AcknowledgementPacket.hpp"
 #include "tftp/packets/DataPacket.hpp"
@@ -33,68 +33,68 @@
 
 #include <boost/bind/bind.hpp>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
-TftpServerImpl::TftpServerImpl( boost::asio::io_context &ioContext ):
+ServerImpl::ServerImpl( boost::asio::io_context &ioContext ):
   ioContextV{ ioContext },
   socketV{ ioContextV },
   receivePacketV( Packets::DefaultMaxPacketSize )
 {
 }
 
-TftpServerImpl::~TftpServerImpl() = default;
+ServerImpl::~ServerImpl() = default;
 
-TftpServer& TftpServerImpl::requestHandler( ReceivedTftpRequestHandler handler )
+Server& ServerImpl::requestHandler( ReceivedTftpRequestHandler handler )
 {
   requestHandlerV = std::move( handler );
   return *this;
 }
 
-TftpServer& TftpServerImpl::serverAddress(
+Server& ServerImpl::serverAddress(
   boost::asio::ip::udp::endpoint serverAddress )
 {
   serverAddressV = std::move( serverAddress );
   return *this;
 }
 
-boost::asio::ip::udp::endpoint TftpServerImpl::localEndpoint() const
+boost::asio::ip::udp::endpoint ServerImpl::localEndpoint() const
 {
   return socketV.local_endpoint();
 }
 
-TftpServer& TftpServerImpl::tftpTimeoutDefault(
+Server& ServerImpl::tftpTimeoutDefault(
   const std::chrono::seconds timeout )
 {
   tftpTimeoutDefaultV = timeout;
   return *this;
 }
 
-TftpServer& TftpServerImpl::tftpRetriesDefault( const uint16_t retries )
+Server& ServerImpl::tftpRetriesDefault( const uint16_t retries )
 {
   tftpRetriesDefaultV = retries;
   return *this;
 }
 
-TftpServer& TftpServerImpl::dallyDefault( const bool dally )
+Server& ServerImpl::dallyDefault( const bool dally )
 {
   dallyDefaultV = dally;
   return *this;
 }
 
-TftpServer& TftpServerImpl::optionsConfigurationDefault(
+Server& ServerImpl::optionsConfigurationDefault(
   TftpOptionsConfiguration optionsConfiguration )
 {
   optionsConfigurationDefaultV = std::move( optionsConfiguration );
   return *this;
 }
 
-TftpServer& TftpServerImpl::localDefault( boost::asio::ip::address local )
+Server& ServerImpl::localDefault( boost::asio::ip::address local )
 {
   localV = std::move( local );
   return *this;
 }
 
-void TftpServerImpl::start()
+void ServerImpl::start()
 {
   BOOST_LOG_FUNCTION()
 
@@ -123,14 +123,14 @@ void TftpServerImpl::start()
   }
 }
 
-void TftpServerImpl::stop()
+void ServerImpl::stop()
 {
   socketV.cancel();
 
   socketV.close();
 }
 
-ReadOperationPtr TftpServerImpl::readOperation()
+ReadOperationPtr ServerImpl::readOperation()
 {
   auto operation{ std::make_shared< ReadOperationImpl >( ioContextV ) };
 
@@ -157,7 +157,7 @@ ReadOperationPtr TftpServerImpl::readOperation()
   return operation;
 }
 
-WriteOperationPtr TftpServerImpl::writeOperation()
+WriteOperationPtr ServerImpl::writeOperation()
 {
   auto operation{ std::make_shared< WriteOperationImpl >( ioContextV ) };
 
@@ -189,7 +189,7 @@ WriteOperationPtr TftpServerImpl::writeOperation()
   return operation;
 }
 
-void TftpServerImpl::errorOperation(
+void ServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ErrorCode errorCode,
   std::string errorMessage )
@@ -225,7 +225,7 @@ void TftpServerImpl::errorOperation(
   }
 }
 
-void TftpServerImpl::errorOperation(
+void ServerImpl::errorOperation(
   const boost::asio::ip::udp::endpoint &remote,
   const boost::asio::ip::udp::endpoint &local,
   const Packets::ErrorCode errorCode,
@@ -264,7 +264,7 @@ void TftpServerImpl::errorOperation(
   }
 }
 
-void TftpServerImpl::receive()
+void ServerImpl::receive()
 {
   BOOST_LOG_FUNCTION()
 
@@ -274,7 +274,7 @@ void TftpServerImpl::receive()
     socketV.async_receive_from(
       boost::asio::buffer( receivePacketV ),
       remoteEndpointV,
-      std::bind_front( &TftpServerImpl::receiveHandler, this ) );
+      std::bind_front( &ServerImpl::receiveHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -284,7 +284,7 @@ void TftpServerImpl::receive()
   }
 }
 
-void TftpServerImpl::receiveHandler(
+void ServerImpl::receiveHandler(
   const boost::system::error_code& errorCode,
   const std::size_t bytesTransferred )
 {
@@ -322,7 +322,7 @@ void TftpServerImpl::receiveHandler(
   receive();
 }
 
-void TftpServerImpl::readRequestPacket(
+void ServerImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket )
 {
@@ -358,7 +358,7 @@ void TftpServerImpl::readRequestPacket(
     receivedOptions );
 }
 
-void TftpServerImpl::writeRequestPacket(
+void ServerImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::WriteRequestPacket &writeRequestPacket )
 {
@@ -394,7 +394,7 @@ void TftpServerImpl::writeRequestPacket(
     receivedOptions );
 }
 
-void TftpServerImpl::dataPacket(
+void ServerImpl::dataPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket)
 {
@@ -410,7 +410,7 @@ void TftpServerImpl::dataPacket(
     "DATA packet not expected" );
 }
 
-void TftpServerImpl::acknowledgementPacket(
+void ServerImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
@@ -426,7 +426,7 @@ void TftpServerImpl::acknowledgementPacket(
     "ACK packet not expected" );
 }
 
-void TftpServerImpl::errorPacket(
+void ServerImpl::errorPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ErrorPacket &errorPacket )
 {
@@ -442,7 +442,7 @@ void TftpServerImpl::errorPacket(
     "ERR packet not expected" );
 }
 
-void TftpServerImpl::optionsAcknowledgementPacket(
+void ServerImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {
@@ -458,7 +458,7 @@ void TftpServerImpl::optionsAcknowledgementPacket(
     "OACK packet not expected" );
 }
 
-void TftpServerImpl::invalidPacket(
+void ServerImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   [[maybe_unused]] Packets::ConstRawTftpPacketSpan rawPacket )
 {
@@ -468,7 +468,8 @@ void TftpServerImpl::invalidPacket(
     << "RX: UNKNOWN: *Error* - IGNORE";
 }
 
-Packets::TftpOptions TftpServerImpl::tftpOptions(
+Packets::TftpOptions
+ServerImpl::tftpOptions(
   Packets::Options &clientOptions ) const
 {
   Packets::TftpOptions decodedOptions{};

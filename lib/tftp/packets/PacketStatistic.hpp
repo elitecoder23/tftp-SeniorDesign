@@ -32,9 +32,9 @@ namespace Tftp::Packets {
  *
  * The class provides to global instances for transmit and receive distinction.
  * The @ref PacketHandler used @ref globalReceive for logging received packets.
- * The @ref Clients::Operation, @ref Server::TftpServer, and
- * @ref Server::Operation used the @ref globalTransmit() for logging transmitted
- * packets.
+ * The @ref Clients::Operation, @ref Servers::Server, and
+ * @ref Servers::Operation used the @ref globalTransmit() for logging
+ * transmitted packets.
  *
  * There is no distinction between multiple clients, operations, nor
  * client/server.

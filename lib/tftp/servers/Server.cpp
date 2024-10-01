@@ -8,23 +8,23 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Server::TftpServer.
+ * @brief Definition of Class Tftp::Servers::Server.
  **/
 
-#include "TftpServer.hpp"
+#include "Server.hpp"
 
-#include "tftp/server/implementation/TftpServerImpl.hpp"
+#include "tftp/servers/implementation/ServerImpl.hpp"
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
-const boost::asio::ip::udp::endpoint TftpServer::DefaultLocalEndpoint{
+const boost::asio::ip::udp::endpoint Server::DefaultLocalEndpoint{
   boost::asio::ip::address_v4::any(),
   DefaultTftpPort };
 
-TftpServerPtr TftpServer::instance( boost::asio::io_context &ioContext )
+ServerPtr Server::instance( boost::asio::io_context &ioContext )
 {
   // create and return the real TFTP server
-  return std::make_shared< TftpServerImpl >( ioContext );
+  return std::make_shared< ServerImpl >( ioContext );
 }
 
 }

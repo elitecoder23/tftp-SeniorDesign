@@ -8,7 +8,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::Server::ReadOperationImpl.
+ * @brief Definition of Class Tftp::Servers::ReadOperationImpl.
  **/
 
 #include "ReadOperationImpl.hpp"
@@ -27,7 +27,7 @@
 
 #include <utility>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 ReadOperationImpl::ReadOperationImpl( boost::asio::io_context &ioContext ) :
   OperationImpl{ ioContext }

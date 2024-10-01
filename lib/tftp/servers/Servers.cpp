@@ -8,14 +8,14 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Namespace Tftp::Server.
+ * @brief Definition of Namespace Tftp::Servers.
  **/
 
-#include "Server.hpp"
+#include "Servers.hpp"
 
 #include "tftp/Logger.hpp"
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 std::optional< std::filesystem::path > checkFilename(
   const std::filesystem::path &baseDir,
@@ -48,8 +48,9 @@ std::optional< std::filesystem::path > checkFilename(
   }
 
   // Using "equal" we can check if "requested_file_path" starts
-  // with base_resolved_path. Because we previously canonicalized both paths
-  // they can't contain any ".." segments, so this check is sufficient.
+  // with base_resolved_path.
+  // Because we previously canonicalized both paths they can't contain any ".."
+  // segments, so this check is sufficient.
   if ( !std::equal(
          canonicalBaseDir.begin(),
          canonicalBaseDir.end(),

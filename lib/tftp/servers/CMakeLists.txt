@@ -17,19 +17,19 @@ target_sources(
         Operation.hpp
         ReadOperation.hpp
         Server.hpp
-        TftpServer.hpp
+        Servers.hpp
         WriteOperation.hpp
 
   PRIVATE
     Server.cpp
-    TftpServer.cpp
+    Servers.cpp
 
     implementation/OperationImpl.hpp
     implementation/OperationImpl.cpp
     implementation/ReadOperationImpl.hpp
     implementation/ReadOperationImpl.cpp
-    implementation/TftpServerImpl.hpp
-    implementation/TftpServerImpl.cpp
+    implementation/ServerImpl.hpp
+    implementation/ServerImpl.cpp
     implementation/WriteOperationImpl.hpp
     implementation/WriteOperationImpl.cpp )
 

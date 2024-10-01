@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Namespace Tftp::Server.
+ * @brief Declaration of Namespace Tftp::Servers.
  **/
 
 /**
  * @dir
- * @brief Declaration/ Definition of Namespace Tftp::Server.
+ * @brief Declaration/ Definition of Namespace Tftp::Servers.
  **/
 
-#ifndef TFTP_SERVER_SERVER_HPP
-#define TFTP_SERVER_SERVER_HPP
+#ifndef TFTP_SERVERS_SERVERS_HPP
+#define TFTP_SERVERS_SERVERS_HPP
 
 #include "tftp/Tftp.hpp"
 
@@ -36,29 +36,29 @@
  *
  * The user of this library uses following interface classes to interact with
  * it:
- * - @ref TftpServer
+ * - @ref Server
  *   The main entry point (is also a factory for all other classes).
  * - @ref ReceivedTftpRequestHandler
  *   This interface must be implemented by the user of this library to handle
  *   new TFTP requests.
  * - @ref Operation
  *   Class interface to execute the operations.
- *   The actual operations can be created by utilising the TftpServer class
+ *   The actual operations can be created by utilising the Server class
  *   instances.
  * - @ref ReceiveDataHandler and @ref TransmitDataHandler
  *   This interface class must be implemented by the user of this library to
  *   make use of the TFTP server operations.
  **/
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 // Forward declarations
-class TftpServer;
+class Server;
 class Operation;
 class ReadOperation;
 class WriteOperation;
 
 //! TFTP %Server Instance Pointer.
-using TftpServerPtr = std::shared_ptr< TftpServer >;
+using ServerPtr = std::shared_ptr< Server >;
 
 //! TFTP %Server %Operation Instance Pointer.
 using OperationPtr = std::shared_ptr< Operation >;
@@ -94,9 +94,9 @@ using WriteOperationPtr = std::shared_ptr< WriteOperation >;
  *   Received TFTP %Client %Options (All Others).
  *   For additional Option Negotiation.
  *
- * @sa TftpServer::errorOperation()
- * @sa TftpServer::readOperation()
- * @sa TftpServer::writeOperation()
+ * @sa Server::errorOperation()
+ * @sa Server::readOperation()
+ * @sa Server::writeOperation()
  **/
 using ReceivedTftpRequestHandler =
   std::function< void(

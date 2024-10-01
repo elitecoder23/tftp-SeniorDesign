@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::Server::ReadOperationImpl.
+ * @brief Declaration of Class Tftp::Servers::ReadOperationImpl.
  **/
 
-#ifndef TFTP_SERVER_READOPERATIONIMPL_HPP
-#define TFTP_SERVER_READOPERATIONIMPL_HPP
+#ifndef TFTP_SERVERS_READOPERATIONIMPL_HPP
+#define TFTP_SERVERS_READOPERATIONIMPL_HPP
 
-#include "tftp/server/Server.hpp"
-#include "tftp/server/ReadOperation.hpp"
+#include "tftp/servers/Servers.hpp"
+#include "tftp/servers/ReadOperation.hpp"
 
-#include "tftp/server/implementation/OperationImpl.hpp"
+#include "tftp/servers/implementation/OperationImpl.hpp"
 
 #include "tftp/packets/BlockNumber.hpp"
 #include "tftp/packets/TftpOptions.hpp"
@@ -29,7 +29,7 @@
 #include <chrono>
 #include <string>
 
-namespace Tftp::Server {
+namespace Tftp::Servers {
 
 /**
  * @brief TFTP %Server Read %Operation (TFTP RRQ).

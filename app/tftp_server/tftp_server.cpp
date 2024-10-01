@@ -11,10 +11,10 @@
  * @brief TFTP Server CLI Application.
  **/
 
-#include "tftp/server/Operation.hpp"
-#include "tftp/server/ReadOperation.hpp"
-#include "tftp/server/TftpServer.hpp"
-#include "tftp/server/WriteOperation.hpp"
+#include "tftp/servers/Operation.hpp"
+#include "tftp/servers/ReadOperation.hpp"
+#include "tftp/servers/Server.hpp"
+#include "tftp/servers/WriteOperation.hpp"
 
 #include "tftp/file/StreamFile.hpp"
 
@@ -124,10 +124,10 @@ static Tftp::TftpConfiguration tftpConfiguration{};
 static Tftp::TftpOptionsConfiguration tftpOptionsConfiguration{};
 
 //! TFTP Server Instance
-static Tftp::Server::TftpServerPtr server{};
+static Tftp::Servers::ServerPtr server;
 
 //! TFTP Server Operation
-static Tftp::Server::OperationPtr serverOperation;
+static Tftp::Servers::OperationPtr serverOperation;
 
 int main( int argc, char * argv[] )
 {
@@ -186,7 +186,7 @@ int main( int argc, char * argv[] )
       << "Starting TFTP server in " << baseDir.string() << "\n";
 
     // The TFTP server instance
-    server = Tftp::Server::TftpServer::instance( ioContext );
+    server = Tftp::Servers::Server::instance( ioContext );
     assert( server );
 
     // configure
@@ -270,7 +270,7 @@ static void receivedRequest(
   }
 
   // check and generate file path
-  const auto filePath{ Tftp::Server::checkFilename(
+  const auto filePath{ Tftp::Servers::checkFilename(
     baseDir,
     filename,
     Tftp::RequestType::Read == requestType ) };
