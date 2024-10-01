@@ -16,7 +16,7 @@
 #include "tftp/servers/Server.hpp"
 #include "tftp/servers/WriteOperation.hpp"
 
-#include "tftp/file/StreamFile.hpp"
+#include "tftp/files/StreamFile.hpp"
 
 #include "tftp/packets/PacketStatistic.hpp"
 #include "tftp/packets/TftpOptions.hpp"
@@ -345,8 +345,8 @@ static void transmitFile(
     .tftpRetries( tftpConfiguration.tftpRetries )
     .optionsConfiguration( tftpOptionsConfiguration )
     .completionHandler( std::bind_front( &operationCompleted ) )
-    .dataHandler( std::make_shared< Tftp::File::StreamFile >(
-      Tftp::File::TftpFile::Operation::Transmit,
+    .dataHandler( std::make_shared< Tftp::Files::StreamFile >(
+      Tftp::Files::File::Operation::Transmit,
       filename,
       std::filesystem::file_size( filename ) ) )
     .remote( remote)
@@ -390,8 +390,8 @@ static void receiveFile(
     .dally( tftpConfiguration.dally )
     .optionsConfiguration( tftpOptionsConfiguration )
     .completionHandler( std::bind_front( &operationCompleted ) )
-    .dataHandler( std::make_shared< Tftp::File::StreamFile >(
-      Tftp::File::TftpFile::Operation::Receive,
+    .dataHandler( std::make_shared< Tftp::Files::StreamFile >(
+      Tftp::Files::File::Operation::Receive,
       filename ) )
     .remote( remote )
     .clientOptions( clientOptions );

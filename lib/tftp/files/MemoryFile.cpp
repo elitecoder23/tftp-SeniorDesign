@@ -8,14 +8,14 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::File::MemoryFile.
+ * @brief Definition of Class Tftp::Files::MemoryFile.
  **/
 
 #include "MemoryFile.hpp"
 
 #include "tftp/Logger.hpp"
 
-namespace Tftp::File {
+namespace Tftp::Files {
 
 MemoryFile::MemoryFile():
   operationV{ Operation::Receive },

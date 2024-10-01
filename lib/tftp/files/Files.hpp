@@ -8,16 +8,16 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Namespace Tftp::File
+ * @brief Declaration of Namespace Tftp::Files.
  **/
 
 /**
  * @dir
- * @brief Declaration/ Definition of Namespace Tftp::File.
+ * @brief Declaration/ Definition of Namespace Tftp::Files.
  **/
 
-#ifndef TFTP_FILE_FILE_HPP
-#define TFTP_FILE_FILE_HPP
+#ifndef TFTP_FILES_FILES_HPP
+#define TFTP_FILES_FILES_HPP
 
 #include "tftp/Tftp.hpp"
 
@@ -38,17 +38,17 @@
  * The two implementations do not handle the data in the manner of encoding
  * handling, i.e. only the TFTP OCTET transfer mode is supported.
  **/
-namespace Tftp::File {
+namespace Tftp::Files {
 
-class TftpFile;
+class File;
 class MemoryFile;
 class StreamFile;
 class NullSinkFile;
 
-//! Memory File Pointer
+//! Memory %File Pointer
 using MemoryFilePtr = std::shared_ptr< MemoryFile>;
 
-//! Stream File Pointer
+//! Stream %File Pointer
 using StreamFilePtr = std::shared_ptr< StreamFile >;
 
 }

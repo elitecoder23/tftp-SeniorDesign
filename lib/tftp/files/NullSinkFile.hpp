@@ -8,18 +8,18 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::File::NullSinkFile.
+ * @brief Declaration of Class Tftp::Files::NullSinkFile.
  **/
 
-#ifndef TFTP_FILE_NULLSINKFILE_HPP
-#define TFTP_FILE_NULLSINKFILE_HPP
+#ifndef TFTP_FILES_NULLSINKFILE_HPP
+#define TFTP_FILES_NULLSINKFILE_HPP
 
-#include "tftp/file/File.hpp"
+#include "tftp/files/Files.hpp"
 #include "tftp/ReceiveDataHandler.hpp"
 
 #include <optional>
 
-namespace Tftp::File {
+namespace Tftp::Files {
 
 /**
  * @brief NULL Sink %File.

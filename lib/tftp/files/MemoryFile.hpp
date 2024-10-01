@@ -8,23 +8,23 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::File::MemoryFile.
+ * @brief Declaration of Class Tftp::Files::MemoryFile.
  **/
 
-#ifndef TFTP_FILE_MEMORYFILE_HPP
-#define TFTP_FILE_MEMORYFILE_HPP
+#ifndef TFTP_FILES_MEMORYFILE_HPP
+#define TFTP_FILES_MEMORYFILE_HPP
 
-#include "tftp/file/File.hpp"
-#include "tftp/file/TftpFile.hpp"
+#include "tftp/files/Files.hpp"
+#include "tftp/files/File.hpp"
 
-namespace Tftp::File {
+namespace Tftp::Files {
 
 /**
  * @brief Memory %File.
  *
- * File implementation, which holds all data in memory.
+ * %File implementation, which holds all data in memory.
  **/
-class TFTP_EXPORT MemoryFile final : public TftpFile
+class TFTP_EXPORT MemoryFile final : public File
 {
   public:
     /**
@@ -55,7 +55,7 @@ class TFTP_EXPORT MemoryFile final : public TftpFile
     explicit MemoryFile( Data &&data );
 
     /**
-     * @copydoc TftpFile::reset
+     * @copydoc File::reset
      *
      * If the file is received for receiving data, the content is cleared.
      * For write operation, the read pointer is reset to the beginning of the
@@ -71,14 +71,14 @@ class TFTP_EXPORT MemoryFile final : public TftpFile
     [[nodiscard]] DataSpan data() const noexcept;
 
     /**
-     * @copydoc TftpFile::finished()
+     * @copydoc File::finished()
      *
      * Reset current position.
      **/
     void finished() noexcept override;
 
     /**
-     * @copydoc TftpFile::receivedTransferSize()
+     * @copydoc File::receivedTransferSize()
      *
      * Value supplied is ignored.
      * @return Always true.
@@ -86,17 +86,17 @@ class TFTP_EXPORT MemoryFile final : public TftpFile
     [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) override;
 
     /**
-     * @copydoc TftpFile::receivedData()
+     * @copydoc File::receivedData()
      **/
     void receivedData( DataSpan data ) noexcept override;
 
     /**
-     * @copydoc TftpFile::requestedTransferSize()
+     * @copydoc File::requestedTransferSize()
      **/
     [[nodiscard]] std::optional< uint64_t> requestedTransferSize() override;
 
     /**
-     * @copydoc TftpFile::sendData()
+     * @copydoc File::sendData()
      **/
     [[nodiscard]] Data sendData( size_t maxSize ) noexcept override;
 

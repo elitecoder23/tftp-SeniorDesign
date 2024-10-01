@@ -15,10 +15,10 @@ target_sources(
     FILE_SET HEADERS
       FILES
         File.hpp
+        Files.hpp
         MemoryFile.hpp
         NullSinkFile.hpp
         StreamFile.hpp
-        TftpFile.hpp
 
   PRIVATE
     MemoryFile.cpp

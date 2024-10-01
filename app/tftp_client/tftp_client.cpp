@@ -15,7 +15,7 @@
 #include "tftp/clients/Client.hpp"
 #include "tftp/clients/WriteOperation.hpp"
 
-#include "tftp/file/StreamFile.hpp"
+#include "tftp/files/StreamFile.hpp"
 
 #include "tftp/packets/PacketStatistic.hpp"
 
@@ -307,8 +307,8 @@ static Tftp::Clients::OperationPtr readOperation(
     .optionsConfiguration( tftpOptionsConfiguration )
     .optionNegotiationHandler( std::bind_front( &optionNegotiation ) )
     .completionHandler( std::bind_front( &operationCompleted, std::ref( ioContext ) ) )
-    .dataHandler( std::make_shared< Tftp::File::StreamFile >(
-      Tftp::File::TftpFile::Operation::Receive,
+    .dataHandler( std::make_shared< Tftp::Files::StreamFile >(
+      Tftp::Files::File::Operation::Receive,
       localFile ) )
     .filename( remoteFile )
     .mode( Tftp::Packets::TransferMode::OCTET )
@@ -334,8 +334,8 @@ static  Tftp::Clients::OperationPtr writeOperation(
     .optionsConfiguration( tftpOptionsConfiguration )
     .optionNegotiationHandler( std::bind_front( &optionNegotiation ) )
     .completionHandler( std::bind_front( &operationCompleted, std::ref( ioContext ) ) )
-    .dataHandler( std::make_shared< Tftp::File::StreamFile >(
-      Tftp::File::TftpFile::Operation::Transmit,
+    .dataHandler( std::make_shared< Tftp::Files::StreamFile >(
+      Tftp::Files::File::Operation::Transmit,
       localFile,
       std::filesystem::file_size( localFile ) ) )
     .filename( remoteFile )

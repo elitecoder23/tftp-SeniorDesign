@@ -8,18 +8,18 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::File::TftpFile.
+ * @brief Declaration of Class Tftp::Files::File.
  **/
 
-#ifndef TFTP_FILE_TFTPFILE_HPP
-#define TFTP_FILE_TFTPFILE_HPP
+#ifndef TFTP_FILES_FILE_HPP
+#define TFTP_FILES_FILE_HPP
 
-#include "tftp/file/File.hpp"
+#include "tftp/files/Files.hpp"
 
 #include "tftp/ReceiveDataHandler.hpp"
 #include "tftp/TransmitDataHandler.hpp"
 
-namespace Tftp::File {
+namespace Tftp::Files {
 
 /**
  * @brief TFTP %File.
@@ -27,7 +27,7 @@ namespace Tftp::File {
  * Base class for a TFTP file operation handler, which can be used to transfer
  * files
  **/
-class TFTP_EXPORT TftpFile :
+class TFTP_EXPORT File :
   public ReceiveDataHandler,
   public TransmitDataHandler
 {

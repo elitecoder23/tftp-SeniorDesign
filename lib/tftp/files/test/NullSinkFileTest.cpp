@@ -8,14 +8,14 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Implementation of Unit Tests of Class Tftp::File::NullSinkFile.
+ * @brief Implementation of Unit Tests of Class Tftp::Files::NullSinkFile.
  **/
 
-#include "tftp/file/NullSinkFile.hpp"
+#include "tftp/files/NullSinkFile.hpp"
 
 #include <boost/test/unit_test.hpp>
 
-namespace Tftp::File {
+namespace Tftp::Files {
 
 BOOST_AUTO_TEST_SUITE( TftpTest)
 BOOST_AUTO_TEST_SUITE( FileTest)

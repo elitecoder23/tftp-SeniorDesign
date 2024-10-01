@@ -37,7 +37,7 @@
  * - @ref Tftp::Packets - TFTP Packets
  * - @ref Tftp::Clients - TFTP Client
  * - @ref Tftp::Servers - TFTP Server
- * - @ref Tftp::File - %Helper Classes for file transfers
+ * - @ref Tftp::Files - %Helper Classes for file transfers
  *
  * @par Referenced Documents
  * - RFC 1350 The TFTP Protocol (Revision 2)<br>

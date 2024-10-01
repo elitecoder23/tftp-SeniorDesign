@@ -8,12 +8,12 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::File::NullSinkFile.
+ * @brief Definition of Class Tftp::Files::NullSinkFile.
  **/
 
 #include "NullSinkFile.hpp"
 
-namespace Tftp::File {
+namespace Tftp::Files {
 
 NullSinkFile::NullSinkFile( const uint64_t size ):
   size{ size }

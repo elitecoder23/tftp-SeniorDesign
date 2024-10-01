@@ -8,7 +8,7 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Class Tftp::File::StreamFile.
+ * @brief Definition of Class Tftp::Files::StreamFile.
  **/
 
 #include "StreamFile.hpp"
@@ -22,7 +22,7 @@
 
 #include <utility>
 
-namespace Tftp::File {
+namespace Tftp::Files {
 
 StreamFile::StreamFile(
   const Operation operation,
@@ -48,13 +48,13 @@ void StreamFile::reset()
 
   switch ( operationV )
   {
-    case TftpFile::Operation::Receive:
+    case File::Operation::Receive:
       streamV.open(
         filenameV,
         std::ios::out | std::ios::trunc | std::ios::binary );
       break;
 
-    case TftpFile::Operation::Transmit:
+    case File::Operation::Transmit:
       streamV.open(
         filenameV,
         std::ios::in | std::ios::binary );

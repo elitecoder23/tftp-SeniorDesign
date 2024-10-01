@@ -124,7 +124,7 @@ target_compile_options(
 target_link_libraries( tftp_test PUBLIC tftp )
 
 
-add_subdirectory( file )
+add_subdirectory( files )
 add_subdirectory( packets )
 add_subdirectory( clients )
 add_subdirectory( servers )

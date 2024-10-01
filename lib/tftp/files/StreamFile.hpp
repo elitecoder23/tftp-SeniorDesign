@@ -8,26 +8,26 @@
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration of Class Tftp::File::StreamFile.
+ * @brief Declaration of Class Tftp::Files::StreamFile.
  **/
 
-#ifndef TFTP_FILE_STREAMFILE_HPP
-#define TFTP_FILE_STREAMFILE_HPP
+#ifndef TFTP_FILES_STREAMFILE_HPP
+#define TFTP_FILES_STREAMFILE_HPP
 
-#include "tftp/file/File.hpp"
-#include "tftp/file/TftpFile.hpp"
+#include "tftp/files/Files.hpp"
+#include "tftp/files/File.hpp"
 
 #include <fstream>
 #include <filesystem>
 
-namespace Tftp::File {
+namespace Tftp::Files {
 
 /**
  * @brief Stream %File.
  *
- * File implementation, which uses a std::fstream for file I/O handling.
+ * %File implementation, which uses a std::fstream for file I/O handling.
  **/
-class TFTP_EXPORT StreamFile final : public TftpFile
+class TFTP_EXPORT StreamFile final : public File
 {
   public:
     /**
@@ -61,36 +61,36 @@ class TFTP_EXPORT StreamFile final : public TftpFile
       size_t size );
 
     /**
-     * @copydoc TftpFile::reset
+     * @copydoc File::reset
      *
      * Reopens the file depending on @p operationV.
      **/
     void reset() override;
 
     /**
-     * @copydoc TftpFile::finished()
+     * @copydoc File::finished()
      *
      * Flushes the stream.
      **/
     void finished() noexcept override;
 
     /**
-     * @copydoc TftpFile::receivedTransferSize()
+     * @copydoc File::receivedTransferSize()
      **/
     [[nodiscard]] bool receivedTransferSize( uint64_t transferSize ) override;
 
     /**
-     * @copydoc TftpFile::receivedData()
+     * @copydoc File::receivedData()
      **/
     void receivedData( DataSpan data ) noexcept override;
 
     /**
-     * @copydoc TftpFile::requestedTransferSize()
+     * @copydoc File::requestedTransferSize()
      **/
     [[nodiscard]] std::optional< uint64_t> requestedTransferSize() override;
 
     /**
-     * @copydoc TftpFile::sendData()
+     * @copydoc File::sendData()
      **/
     [[nodiscard]] Data sendData( size_t maxSize ) noexcept override;
 
