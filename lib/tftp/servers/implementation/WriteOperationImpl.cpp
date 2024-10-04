@@ -159,13 +159,11 @@ void WriteOperationImpl::start()
           <= *optionsConfigurationV.timeoutOption ) )
       {
         receiveTimeout(
-          // NOLINTNEXTLINE(bugprone-unchecked-optional-access): false positive
           std::chrono::seconds{ *clientOptionsV.timeout } );
 
         // respond with timeout option set
         serverOptions.try_emplace(
           Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
-          // NOLINTNEXTLINE(bugprone-unchecked-optional-access): false positive
           std::to_string( *clientOptionsV.timeout ) );
       }
 

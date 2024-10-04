@@ -31,9 +31,8 @@ BOOST_AUTO_TEST_CASE( name )
   BOOST_CHECK( TftpOptions_name( KnownOptions::BlockSize ) == "blksize" );
   BOOST_CHECK( TftpOptions_name( KnownOptions::Timeout ) == "timeout" );
   BOOST_CHECK( TftpOptions_name( KnownOptions::TransferSize ) == "tsize" );
-  // NOLINTBEGIN( clang-analyzer-optin.core.EnumCastOutOfRange )
+  // NOLINTNEXTLINE( clang-analyzer-optin.core.EnumCastOutOfRange ): Test
   BOOST_CHECK( TftpOptions_name( KnownOptions{ 100 } ).empty() );
-  // NOLINTEND( clang-analyzer-optin.core.EnumCastOutOfRange )
 }
 
 //! TftpOptions_toString tests
