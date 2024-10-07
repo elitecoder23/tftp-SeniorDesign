@@ -34,6 +34,7 @@ target_sources(
       BASE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/..
         ${CMAKE_CURRENT_BINARY_DIR}/..
+
       FILES
         TftpQt.hpp
         PacketStatisticModel.hpp
@@ -48,7 +49,9 @@ target_compile_options(
   tftp_qt
 
   PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:-W3>
+    $<$<CXX_COMPILER_ID:MSVC>:/W3>
+    # Disable Warning for exporting classes with std::* private members
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4251>
 
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>

@@ -57,7 +57,7 @@ class TFTP_EXPORT WriteRequestPacket final : public ReadWriteRequestPacket
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      *
-     * @return *this
+     * @return @p *this
      **/
     WriteRequestPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 };

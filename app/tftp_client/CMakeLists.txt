@@ -32,7 +32,11 @@ target_compile_options(
   tftp_client
 
   PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:-W3>
+    $<$<CXX_COMPILER_ID:MSVC>:/W3>
+    # Disable Warning for exporting classes with std::* private members
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4251>
+    # Disable Warning for exporting classes, which derives from std::*
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4275>
 
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>

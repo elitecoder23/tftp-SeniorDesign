@@ -22,6 +22,11 @@
 
 namespace Tftp::Packets {
 
+/**
+ * @brief @name TFTP Error Codes
+ * @{
+ **/
+
 //! Description of TFTP Error Codes (ErrorCode)
 class TFTP_EXPORT ErrorCodeDescription :
   public Helper::Description< ErrorCodeDescription, ErrorCode >
@@ -43,6 +48,8 @@ class TFTP_EXPORT ErrorCodeDescription :
  **/
 TFTP_EXPORT std::ostream&
 operator<<( std::ostream& stream, ErrorCode errorCode );
+
+/** @} **/
 
 }
 

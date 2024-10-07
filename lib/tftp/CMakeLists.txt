@@ -65,7 +65,11 @@ target_compile_options(
   tftp
 
   PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:-W3>
+    $<$<CXX_COMPILER_ID:MSVC>:/W3>
+    # Disable Warning for exporting classes with std::* private members
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4251>
+    # Disable Warning for exporting classes, which derives from std::*
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4275>
 
     # remove absolute paths from __FILE__ macro
     #$<$<CXX_COMPILER_ID:GNU>:-fmacro-prefix-map=${PROJECT_SOURCE_DIR}/=>
@@ -113,7 +117,11 @@ target_compile_options(
   tftp_test
 
   PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:-W3>
+    $<$<CXX_COMPILER_ID:MSVC>:/W3>
+    # Disable Warning for exporting classes with std::* private members
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4251>
+    # Disable Warning for exporting classes, which derives from std::*
+    $<$<CXX_COMPILER_ID:MSVC>:/wd4275>
 
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
@@ -122,7 +130,6 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
 
 target_link_libraries( tftp_test PUBLIC tftp )
-
 
 add_subdirectory( files )
 add_subdirectory( packets )

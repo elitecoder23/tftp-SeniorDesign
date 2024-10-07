@@ -30,7 +30,7 @@ namespace Tftp::Packets {
  * - timeout, and
  * - transfer size.
  **/
-struct TFTP_EXPORT TftpOptions
+struct TFTP_EXPORT TftpOptions final
 {
   /**
    * @brief Block size option (RFC 2348)

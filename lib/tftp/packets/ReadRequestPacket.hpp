@@ -17,8 +17,8 @@
 #include "tftp/packets/Packets.hpp"
 #include "tftp/packets/ReadWriteRequestPacket.hpp"
 
-#include <string_view>
 #include <string>
+#include <string_view>
 
 namespace Tftp::Packets {
 

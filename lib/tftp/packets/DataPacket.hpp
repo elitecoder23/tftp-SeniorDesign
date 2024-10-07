@@ -18,8 +18,8 @@
 #include "tftp/packets/Packet.hpp"
 #include "tftp/packets/BlockNumber.hpp"
 
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 namespace Tftp::Packets {
 
@@ -30,7 +30,7 @@ namespace Tftp::Packets {
  * |:----:|:-------:|:------:|
  * |  2 B |   2 B   |  n B   |
  **/
-class TFTP_EXPORT DataPacket : public Packet
+class TFTP_EXPORT DataPacket final : public Packet
 {
   public:
     //! Minimum Header Size (Opcode + Block Number)
@@ -149,11 +149,11 @@ class TFTP_EXPORT DataPacket : public Packet
     //! @}
 
     // @copydoc Packet::operator std::string() const
-    explicit operator std::string() const final;
+    explicit operator std::string() const override;
 
   private:
     //! @copydoc Packet::encode()
-    [[nodiscard]] RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const override;
 
     /**
      * @brief Decodes the TFTP body.

@@ -16,9 +16,9 @@
 
 #include "tftp/Tftp.hpp"
 
-#include <vector>
-#include <span>
 #include <cstdint>
+#include <span>
+#include <vector>
 
 namespace Tftp {
 

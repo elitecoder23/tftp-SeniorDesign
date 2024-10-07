@@ -117,7 +117,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
     void decodeBody( ConstRawTftpPacketSpan rawPacket );
 
     //! Stored Options.
-    Options optionsV{};
+    Options optionsV;
 };
 
 }

@@ -33,7 +33,7 @@ namespace Tftp::Packets {
  * | 2 B |    2 B    |  str   | 1 B |
  *
  **/
-class TFTP_EXPORT ErrorPacket : public Packet
+class TFTP_EXPORT ErrorPacket final : public Packet
 {
   public:
     //! Minimum Header Size ( Opcode, Error Code, Empty String)
@@ -75,7 +75,7 @@ class TFTP_EXPORT ErrorPacket : public Packet
     ErrorPacket& operator=( ConstRawTftpPacketSpan rawPacket );
 
     // @copydoc Packet::operator std::string() const
-    explicit operator std::string() const final;
+    explicit operator std::string() const override;
 
     /**
      * @name Error Code
@@ -123,7 +123,7 @@ class TFTP_EXPORT ErrorPacket : public Packet
 
   private:
     //! @copydoc Packet::encode()
-    [[nodiscard]] RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const override;
 
     /**
      * @brief Decodes the TFTP body.

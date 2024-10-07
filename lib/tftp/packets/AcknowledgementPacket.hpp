@@ -30,7 +30,7 @@ namespace Tftp::Packets {
  * |:---:|:-------:|
  * | 2 B |   2 B   |
  **/
-class TFTP_EXPORT AcknowledgementPacket : public Packet
+class TFTP_EXPORT AcknowledgementPacket final : public Packet
 {
   public:
     //! Packet Size ( Opcode + Block Number)
@@ -92,11 +92,11 @@ class TFTP_EXPORT AcknowledgementPacket : public Packet
     //! @}
 
     // @copydoc Packet::operator std::string() const
-    explicit operator std::string() const final;
+    explicit operator std::string() const override;
 
   private:
     //! @copydoc Packet::encode() const
-    [[nodiscard]] RawTftpPacket encode() const final;
+    [[nodiscard]] RawTftpPacket encode() const override;
 
     /**
      * @brief Decodes the TFTP Body.

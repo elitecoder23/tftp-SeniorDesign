@@ -32,11 +32,11 @@ namespace Tftp::Packets {
  * @sa DataPacket
  * @sa AcknowledgementPacket
  **/
-class TFTP_EXPORT BlockNumber
+class TFTP_EXPORT BlockNumber final
 {
   public:
     //! Initialises a block number with value 0.
-    BlockNumber() noexcept;
+    BlockNumber() noexcept = default;
 
     /**
      * @brief Generates a new Block Number.
@@ -96,7 +96,6 @@ class TFTP_EXPORT BlockNumber
      *
      * @return The class itself
      **/
-
     BlockNumber operator++( int );
 
     /**
@@ -141,7 +140,7 @@ class TFTP_EXPORT BlockNumber
 
   private:
     //! Block Number Value
-    uint16_t blockNumberV;
+    uint16_t blockNumberV{ 0U };
 };
 
 /**

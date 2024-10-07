@@ -57,8 +57,7 @@ class TFTP_EXPORT Server
      *
      * @return TFTP %Server Instance.
      **/
-    [[nodiscard]] static ServerPtr
-    instance(
+    [[nodiscard]] static ServerPtr instance(
       boost::asio::io_context &ioContext );
 
     //! Destructor

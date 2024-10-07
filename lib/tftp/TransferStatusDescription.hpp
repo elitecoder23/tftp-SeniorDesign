@@ -22,13 +22,18 @@
 
 namespace Tftp {
 
+/**
+ * @name TFTP Transfer Status
+ * @{
+ **/
+
 //! Description of TFTP Transfer Status
 class TFTP_EXPORT TransferStatusDescription : public Helper::Description<
   TransferStatusDescription,
   TransferStatus >
 {
   public:
-    //! Initialises the Instance
+    //! Initialises the Instance.
     TransferStatusDescription();
 };
 
@@ -45,6 +50,8 @@ class TFTP_EXPORT TransferStatusDescription : public Helper::Description<
 TFTP_EXPORT std::ostream& operator<<(
   std::ostream& stream,
   TransferStatus transferStatus );
+
+/** @} **/
 
 }
 

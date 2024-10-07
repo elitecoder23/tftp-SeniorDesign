@@ -15,12 +15,8 @@
 
 namespace Tftp::Packets {
 
-BlockNumber::BlockNumber() noexcept: blockNumberV{ 0U}
-{
-}
-
-BlockNumber::BlockNumber( uint16_t blockNumber) noexcept:
-  blockNumberV{ blockNumber}
+BlockNumber::BlockNumber( const uint16_t blockNumber ) noexcept:
+  blockNumberV{ blockNumber }
 {
 }
 

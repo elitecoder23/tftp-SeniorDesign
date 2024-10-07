@@ -73,7 +73,7 @@ class TFTP_EXPORT NullSinkFile final : public ReceiveDataHandler
 
   private:
     //! Optional size (used for options negotiation)
-    std::optional< uint64_t > size{};
+    std::optional< uint64_t > size;
 };
 
 }

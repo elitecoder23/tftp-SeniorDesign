@@ -18,7 +18,14 @@
 
 #include "helper/Description.hpp"
 
+#include <iosfwd>
+
 namespace Tftp {
+
+/**
+ * @name TFTP Request Type
+ * @{
+ **/
 
 //! Description of Request Type (RequestType)
 class TFTP_EXPORT RequestTypeDescription :
@@ -42,6 +49,8 @@ class TFTP_EXPORT RequestTypeDescription :
 TFTP_EXPORT std::istream& operator>>(
   std::istream &stream,
   RequestType &requestType );
+
+/** @} **/
 
 }
 

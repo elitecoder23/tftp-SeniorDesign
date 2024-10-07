@@ -23,7 +23,7 @@ target_compile_options(
   tftp_unit_test
 
   PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:-W3>
+    $<$<CXX_COMPILER_ID:MSVC>:/W3>
 
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
@@ -31,7 +31,12 @@ target_compile_options(
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
     $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
 
-target_link_libraries( tftp_unit_test PRIVATE tftp_test helper_test )
+target_link_libraries(
+  tftp_unit_test
+
+  PRIVATE
+    tftp_test
+    helper_test )
 
 add_test( NAME tftp_unit_test COMMAND tftp_unit_test )
 
