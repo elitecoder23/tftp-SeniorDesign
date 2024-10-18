@@ -14,8 +14,8 @@
 #ifndef TFTP_SERVERS_WRITEOPERATION_HPP
 #define TFTP_SERVERS_WRITEOPERATION_HPP
 
-#include "tftp/servers/Servers.hpp"
-#include "tftp/servers/Operation.hpp"
+#include <tftp/servers/Servers.hpp>
+#include <tftp/servers/Operation.hpp>
 
 namespace Tftp::Servers {
 

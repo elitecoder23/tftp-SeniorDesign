@@ -14,9 +14,9 @@
 #ifndef TFTP_LOGGER_HPP
 #define TFTP_LOGGER_HPP
 
-#include "tftp/Tftp.hpp"
+#include <tftp/Tftp.hpp>
 
-#include "helper/Logger.hpp"
+#include <helper/Logger.hpp>
 
 #include <boost/log/sources/global_logger_storage.hpp>
 

@@ -14,7 +14,7 @@
 #ifndef TFTP_PACKETS_OPTIONS_HPP
 #define TFTP_PACKETS_OPTIONS_HPP
 
-#include "tftp/packets/Packets.hpp"
+#include <tftp/packets/Packets.hpp>
 
 #include <concepts>
 #include <limits>
@@ -110,6 +110,6 @@ template< std::unsigned_integral IntT >
 
 }
 
-#include "Options.ipp"
+#include <tftp/packets/Options.ipp>
 
 #endif

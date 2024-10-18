@@ -14,8 +14,8 @@
 #ifndef TFTP_FILES_STREAMFILE_HPP
 #define TFTP_FILES_STREAMFILE_HPP
 
-#include "tftp/files/Files.hpp"
-#include "tftp/files/File.hpp"
+#include <tftp/files/Files.hpp>
+#include <tftp/files/File.hpp>
 
 #include <fstream>
 #include <filesystem>

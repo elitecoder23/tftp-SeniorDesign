@@ -14,12 +14,12 @@
 #ifndef TFTP_SERVERS_SERVERIMPL_HPP
 #define TFTP_SERVERS_SERVERIMPL_HPP
 
-#include "tftp/servers/Servers.hpp"
-#include "tftp/servers/Server.hpp"
+#include <tftp/servers/Servers.hpp>
+#include <tftp/servers/Server.hpp>
 
-#include "tftp/packets/PacketHandler.hpp"
+#include <tftp/packets/PacketHandler.hpp>
 
-#include "tftp/TftpOptionsConfiguration.hpp"
+#include <tftp/TftpOptionsConfiguration.hpp>
 
 #include <boost/asio.hpp>
 

@@ -14,7 +14,7 @@
 #ifndef TFTP_TFTPOOPTIONSCONFIGURATION_HPP
 #define TFTP_TFTPOOPTIONSCONFIGURATION_HPP
 
-#include "tftp/Tftp.hpp"
+#include <tftp/Tftp.hpp>
 
 #include <boost/optional.hpp>
 

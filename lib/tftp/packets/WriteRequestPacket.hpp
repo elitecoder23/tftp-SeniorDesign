@@ -14,8 +14,8 @@
 #ifndef TFTP_PACKETS_WRITEREQUESTPACKET_HPP
 #define TFTP_PACKETS_WRITEREQUESTPACKET_HPP
 
-#include "tftp/packets/Packets.hpp"
-#include "tftp/packets/ReadWriteRequestPacket.hpp"
+#include <tftp/packets/Packets.hpp>
+#include <tftp/packets/ReadWriteRequestPacket.hpp>
 
 namespace Tftp::Packets {
 

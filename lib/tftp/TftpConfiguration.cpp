@@ -13,9 +13,9 @@
 
 #include "TftpConfiguration.hpp"
 
-#include "tftp/TftpException.hpp"
+#include <tftp/TftpException.hpp>
 
-#include "helper/SafeCast.hpp"
+#include <helper/SafeCast.hpp>
 
 #include <boost/property_tree/ptree.hpp>
 

@@ -14,9 +14,9 @@
 #ifndef TFTP_TRANSFERSTATUSDESCRIPTION_HPP
 #define TFTP_TRANSFERSTATUSDESCRIPTION_HPP
 
-#include "tftp/Tftp.hpp"
+#include <tftp/Tftp.hpp>
 
-#include "helper/Description.hpp"
+#include <helper/Description.hpp>
 
 #include <iosfwd>
 

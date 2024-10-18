@@ -14,7 +14,7 @@
 #ifndef TFTP_DATAHANDLER_HPP
 #define TFTP_DATAHANDLER_HPP
 
-#include "tftp/Tftp.hpp"
+#include <tftp/Tftp.hpp>
 
 #include <cstdint>
 #include <span>

@@ -13,7 +13,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "tftp/packets/BlockNumber.hpp"
+#include <tftp/packets/BlockNumber.hpp>
 
 namespace Tftp::Packets {
 

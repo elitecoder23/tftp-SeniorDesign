@@ -13,9 +13,9 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "tftp/packets/ReadWriteRequestPacket.hpp"
+#include <tftp/packets/ReadWriteRequestPacket.hpp>
 
-#include "helper/Dump.hpp"
+#include <helper/Dump.hpp>
 
 #include <iostream>
 

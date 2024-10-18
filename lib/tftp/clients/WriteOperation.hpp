@@ -14,8 +14,8 @@
 #ifndef TFTP_CLIENTS_WRITEOPERATION_HPP
 #define TFTP_CLIENTS_WRITEOPERATION_HPP
 
-#include "tftp/clients/Clients.hpp"
-#include "tftp/clients/Operation.hpp"
+#include <tftp/clients/Clients.hpp>
+#include <tftp/clients/Operation.hpp>
 
 namespace Tftp::Clients {
 

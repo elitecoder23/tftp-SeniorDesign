@@ -11,7 +11,7 @@
  * @brief Implementation of Unit Tests of Class Tftp::Files::NullSinkFile.
  **/
 
-#include "tftp/files/NullSinkFile.hpp"
+#include <tftp/files/NullSinkFile.hpp>
 
 #include <boost/test/unit_test.hpp>
 

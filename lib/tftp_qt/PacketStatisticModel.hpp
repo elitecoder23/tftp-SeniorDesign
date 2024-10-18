@@ -14,9 +14,9 @@
 #ifndef TFTP_QT_PACKETSTATISTICMODEL_HPP
 #define TFTP_QT_PACKETSTATISTICMODEL_HPP
 
-#include "tftp_qt/TftpQt.hpp"
+#include <tftp_qt/TftpQt.hpp>
 
-#include "tftp/packets/PacketStatistic.hpp"
+#include <tftp/packets/PacketStatistic.hpp>
 
 #include <QAbstractTableModel>
 

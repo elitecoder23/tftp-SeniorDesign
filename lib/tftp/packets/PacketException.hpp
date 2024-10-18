@@ -15,8 +15,8 @@
 #ifndef TFTP_PACKETS_PACKETEXCEPTION_HPP
 #define TFTP_PACKETS_PACKETEXCEPTION_HPP
 
-#include "tftp/Tftp.hpp"
-#include "tftp/TftpException.hpp"
+#include <tftp/Tftp.hpp>
+#include <tftp/TftpException.hpp>
 
 namespace Tftp::Packets {
 

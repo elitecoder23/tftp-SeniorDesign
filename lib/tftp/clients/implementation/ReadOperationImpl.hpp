@@ -14,14 +14,14 @@
 #ifndef TFTP_CLIENTS_READOPERATIONIMPL_HPP
 #define TFTP_CLIENTS_READOPERATIONIMPL_HPP
 
-#include "tftp/clients/Clients.hpp"
-#include "tftp/clients/ReadOperation.hpp"
+#include <tftp/clients/Clients.hpp>
+#include <tftp/clients/ReadOperation.hpp>
 
-#include "tftp/clients/implementation/OperationImpl.hpp"
+#include <tftp/clients/implementation/OperationImpl.hpp>
 
-#include "tftp/packets/BlockNumber.hpp"
+#include <tftp/packets/BlockNumber.hpp>
 
-#include "tftp/TftpOptionsConfiguration.hpp"
+#include <tftp/TftpOptionsConfiguration.hpp>
 
 #include <chrono>
 

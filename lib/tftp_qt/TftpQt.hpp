@@ -19,7 +19,7 @@
 #ifndef TFTP_QT_TFTPQT_HPP
 #define TFTP_QT_TFTPQT_HPP
 
-#include "tftp_qt/tftp_qt_export.h"
+#include <tftp_qt/tftp_qt_export.h>
 
 /**
  * @brief TFTP Qt
