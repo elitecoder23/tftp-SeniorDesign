@@ -34,7 +34,7 @@ class TFTP_EXPORT DataPacket final : public Packet
 {
   public:
     //! Minimum Header Size (Opcode + Block Number)
-    static constexpr size_t MinPacketSize{ HeaderSize + 2U };
+    static constexpr auto MinPacketSize{ HeaderSize + 2UZ };
 
     //! Data Type
     using Data = std::vector< uint8_t >;
@@ -63,7 +63,7 @@ class TFTP_EXPORT DataPacket final : public Packet
      *   Packet, which shall be decoded.
      *
      * @throw InvalidPacketException
-     *   When rawPacket is not an valid packet.
+     *   When rawPacket is not a valid packet.
      **/
     explicit DataPacket( ConstRawTftpPacketSpan rawPacket );
 

@@ -34,7 +34,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
 {
   public:
     //! Packet Size ( Opcode + Block Number)
-    static constexpr size_t PacketSize{ HeaderSize + 2U };
+    static constexpr auto PacketSize{ HeaderSize + 2UZ };
 
     /**
      * @brief Creates the packet with the given block number.
@@ -55,7 +55,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
      *   Packet, which shall be decoded.
      *
      * @throw InvalidPacketException
-     *   When rawPacket is not an valid packet.
+     *   When rawPacket is not a valid packet.
      **/
     explicit AcknowledgementPacket( ConstRawTftpPacketSpan rawPacket );
 

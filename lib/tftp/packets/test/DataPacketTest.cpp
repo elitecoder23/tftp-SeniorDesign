@@ -22,19 +22,19 @@
 
 namespace Tftp::Packets {
 
-BOOST_AUTO_TEST_SUITE( TftpTest)
-BOOST_AUTO_TEST_SUITE( PacketsTest)
-BOOST_AUTO_TEST_SUITE( TftpDataPacket)
+BOOST_AUTO_TEST_SUITE( TftpTest )
+BOOST_AUTO_TEST_SUITE( PacketsTest )
+BOOST_AUTO_TEST_SUITE( TftpDataPacket )
 
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor1 )
 {
   DataPacket dp1;
 
-  BOOST_CHECK( dp1.packetType() == PacketType::Data);
-  BOOST_CHECK( dp1.blockNumber() == BlockNumber());
-  BOOST_CHECK( dp1.dataSize() == 0);
-  BOOST_CHECK( dp1.data().empty());
+  BOOST_CHECK( dp1.packetType() == PacketType::Data );
+  BOOST_CHECK( dp1.blockNumber() == BlockNumber() );
+  BOOST_CHECK( dp1.dataSize() == 0 );
+  BOOST_CHECK( dp1.data().empty() );
 
   DataPacket dp2( BlockNumber(), {'H', 'E', 'L', 'L', 'O' });
   BOOST_CHECK( dp2.packetType() == PacketType::Data);

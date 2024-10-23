@@ -27,11 +27,11 @@ BOOST_AUTO_TEST_SUITE( PacketsTest )
 BOOST_AUTO_TEST_SUITE( AcknowledgementPacketTest )
 
 //! Constructor Test
-BOOST_AUTO_TEST_CASE( constructor1)
+BOOST_AUTO_TEST_CASE( constructor1 )
 {
   AcknowledgementPacket ack{ BlockNumber{ 10U } };
 
-  RawTftpPacket raw{ ack};
+  RawTftpPacket raw{ ack };
 
   std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
@@ -44,13 +44,12 @@ BOOST_AUTO_TEST_CASE( constructor1)
   BOOST_CHECK( ack.blockNumber() == BlockNumber{ 25U } );
 }
 
-//! Constructor Test
+//! Constructor Test - Raw decoding
 BOOST_AUTO_TEST_CASE( constructor2 )
 {
   RawTftpPacket raw{
-    // Opcode
-    0x00, 0x04,
-    0x10, 0x01
+    0x00, 0x04, // Opcode
+    0x10, 0x01  // block number
   };
 
   AcknowledgementPacket ack{ raw };

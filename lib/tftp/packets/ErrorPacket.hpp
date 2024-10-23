@@ -36,8 +36,8 @@ namespace Tftp::Packets {
 class TFTP_EXPORT ErrorPacket final : public Packet
 {
   public:
-    //! Minimum Header Size ( Opcode, Error Code, Empty String)
-    static constexpr size_t MinPacketSize{ HeaderSize + 2U + 1U };
+    //! Minimum Header Size (Opcode, Error Code, Empty String)
+    static constexpr auto MinPacketSize{ HeaderSize + 2UZ + 1UZ };
 
     /**
      * @brief Generates a TFTP error packet with the given error code and
@@ -54,13 +54,13 @@ class TFTP_EXPORT ErrorPacket final : public Packet
       std::string errorMessage = {} );
 
     /**
-     * @brief Generates a TFTP error packet from a data buffer
+     * @brief Generates a TFTP error packet from a data buffer.
      *
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      *
      * @throw InvalidPacketException
-     *   When rawPacket is not an valid packet.
+     *   When rawPacket is not a valid packet.
      **/
     explicit ErrorPacket( ConstRawTftpPacketSpan rawPacket );
 

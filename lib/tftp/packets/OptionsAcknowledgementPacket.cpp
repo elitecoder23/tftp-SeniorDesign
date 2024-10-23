@@ -22,11 +22,12 @@
 #include <boost/exception/all.hpp>
 
 #include <format>
+#include <utility>
 
 namespace Tftp::Packets {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  Options options ) noexcept:
+  Options options ) noexcept :
   Packet{ PacketType::OptionsAcknowledgement },
   optionsV{ std::move( options ) }
 {
@@ -75,10 +76,10 @@ RawTftpPacket OptionsAcknowledgementPacket::encode() const
 
   insertHeader( rawPacket );
 
-  auto packetIt{ rawPacket.begin() + HeaderSize };
+  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
 
   // options
-  std::copy( rawOptions.begin(), rawOptions.end(), packetIt );
+  std::copy( rawOptions.begin(), rawOptions.end(), rawSpan.begin() );
 
   return rawPacket;
 }
@@ -93,10 +94,13 @@ void OptionsAcknowledgementPacket::decodeBody(
       << Helper::AdditionalInfo{ "Invalid packet size of OACK packet" } );
   }
 
-  auto packetIt{ rawPacket.begin() + HeaderSize };
+  ConstRawTftpPacketSpan rawSpan{
+    rawPacket.begin() + HeaderSize,
+    rawPacket.end() };
 
   // assign options
-  optionsV = Options_options( RawOptionsSpan{ packetIt, rawPacket.end() } );
+  optionsV =
+    Options_options( RawOptionsSpan{ rawSpan.begin(), rawSpan.end() } );
 }
 
 }

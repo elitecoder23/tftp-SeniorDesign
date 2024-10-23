@@ -21,7 +21,6 @@
 
 namespace Tftp::Packets {
 
-
 /**
  * @brief TFTP Option Acknowledgement %Packet (ACK).
  *
@@ -53,7 +52,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
      *   Packet, which shall be decoded.
      *
      * @throw InvalidPacketException
-     *   When rawPacket is not an valid packet.
+     *   When rawPacket is not a valid packet.
      **/
     explicit OptionsAcknowledgementPacket( ConstRawTftpPacketSpan rawPacket );
 

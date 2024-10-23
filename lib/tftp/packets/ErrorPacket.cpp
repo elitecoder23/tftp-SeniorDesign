@@ -22,6 +22,7 @@
 #include <boost/exception/all.hpp>
 
 #include <format>
+#include <utility>
 
 namespace Tftp::Packets {
 
@@ -34,7 +35,7 @@ ErrorPacket::ErrorPacket(
 {
 }
 
-ErrorPacket::ErrorPacket( ConstRawTftpPacketSpan rawPacket ):
+ErrorPacket::ErrorPacket( ConstRawTftpPacketSpan rawPacket ) :
   Packet{ PacketType::Error, rawPacket },
   errorCodeV{ ErrorCode::Invalid }
 {
@@ -79,20 +80,20 @@ void ErrorPacket::errorMessage( std::string errorMessage )
 
 RawTftpPacket ErrorPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4U + errorMessageV.length() + 1U );
+  RawTftpPacket rawPacket( 4UZ + errorMessageV.length() + 1UZ );
 
-  insertHeader( rawPacket);
+  insertHeader( rawPacket );
 
-  auto packetIt{ rawPacket.begin() + HeaderSize };
+  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
 
   // error code
-  packetIt = Helper::setInt( packetIt, static_cast< uint16_t>( errorCodeV ) );
+  rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( errorCodeV ) );
 
   // error message
-  packetIt = std::copy(
+  auto packetIt{ std::copy(
     errorMessageV.begin(),
     errorMessageV.end(),
-    packetIt );
+    rawSpan.begin() ) };
   *packetIt = 0;
 
   return rawPacket;
@@ -107,21 +108,24 @@ void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of ERROR packet" } );
   }
 
-  auto packetIt{ rawPacket.begin() + HeaderSize};
+  ConstRawTftpPacketSpan rawSpan{
+    rawPacket.begin() + HeaderSize,
+    rawPacket.end() };
 
   // decode error code
   uint16_t errorCodeInt{};
-  packetIt = Helper::getInt< uint16_t >( packetIt, errorCodeInt );
-  errorCodeV = static_cast< ErrorCode>( errorCodeInt );
+  std::tie( rawSpan, errorCodeInt ) =
+    Helper::getInt< uint16_t >( rawSpan );
+  errorCodeV = static_cast< ErrorCode >( errorCodeInt );
 
   // check terminating 0 character
-  if ( rawPacket.back() != 0U)
+  if ( rawSpan.back() != 0U )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "error message not 0-terminated" } );
   }
 
-  errorMessageV = std::string{ packetIt, rawPacket.end()-1U };
+  errorMessageV = std::string{ rawSpan.begin(), rawPacket.end() -1U };
 }
 
 }

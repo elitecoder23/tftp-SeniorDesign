@@ -27,7 +27,7 @@ namespace Tftp::Packets {
 
 DataPacket::DataPacket(
   BlockNumber blockNumber,
-  Data data ) noexcept:
+  Data data ) noexcept :
   Packet{ PacketType::Data },
   blockNumberV{ blockNumber },
   dataV{ std::move( data ) }
@@ -92,17 +92,18 @@ DataPacket::operator std::string() const
 
 RawTftpPacket DataPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4U + dataV.size() );
+  RawTftpPacket rawPacket( MinPacketSize + dataV.size() );
 
   insertHeader( rawPacket );
 
-  auto packetIt{ rawPacket.begin() + HeaderSize };
+  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
 
   // block number
-  packetIt = Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV ) );
+  rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
+  assert( rawSpan.size() == dataV.size() );
 
   // data
-  std::ranges::copy( dataV, packetIt );
+  std::ranges::copy( dataV, rawSpan.begin() );
 
   return rawPacket;
 }
@@ -110,21 +111,22 @@ RawTftpPacket DataPacket::encode() const
 void DataPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
 {
   // check size
-  if (rawPacket.size() < MinPacketSize)
+  if ( rawPacket.size() < MinPacketSize )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "Invalid packet size of DATA packet" } );
   }
 
-  auto packetIt{ rawPacket.begin() + HeaderSize};
+  ConstRawTftpPacketSpan rawSpan{
+    rawPacket.begin() + HeaderSize,
+    rawPacket.end() };
 
   // decode block number
-  packetIt = Helper::getInt< uint16_t>(
-    packetIt,
-    static_cast< uint16_t&>( blockNumberV ));
+  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) =
+    Helper::getInt< uint16_t >( rawSpan );
 
   // copy data
-  dataV.assign( packetIt, rawPacket.end());
+  dataV.assign( rawSpan.begin(), rawPacket.end() );
 }
 
 }

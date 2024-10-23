@@ -23,15 +23,15 @@
 
 namespace Tftp::Packets {
 
-BOOST_AUTO_TEST_SUITE( TftpTest)
-BOOST_AUTO_TEST_SUITE( PacketsTest)
-BOOST_AUTO_TEST_SUITE( TftpOptionsAcknowledgementPacket)
+BOOST_AUTO_TEST_SUITE( TftpTest )
+BOOST_AUTO_TEST_SUITE( PacketsTest )
+BOOST_AUTO_TEST_SUITE( TftpOptionsAcknowledgementPacket )
 
 //! Constructor Test
 BOOST_AUTO_TEST_CASE( constructor )
 {
-  Options options{  {"blocksize", "4096"} };
-  OptionsAcknowledgementPacket oack{ options};
+  Options options{ { "blocksize", "4096" } };
+  OptionsAcknowledgementPacket oack{ options };
 
   RawTftpPacket raw{ oack};
 
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   OptionsAcknowledgementPacket oack2( raw );
 
-  BOOST_CHECK( oack.packetType()         == oack2.packetType() );
+  BOOST_CHECK( oack.packetType() == oack2.packetType() );
 
   auto options2{ oack.options() };
   BOOST_CHECK( options2.size() == 1);

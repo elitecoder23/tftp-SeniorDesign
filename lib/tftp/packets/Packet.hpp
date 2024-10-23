@@ -27,7 +27,7 @@ class TFTP_EXPORT Packet
 {
   public:
     //! Minimum Size is the Opcode Field.
-    static constexpr std::size_t HeaderSize{ sizeof( uint16_t ) };
+    static constexpr auto HeaderSize{ sizeof( uint16_t ) };
 
     /**
      * @brief Decodes the packet type of raw buffer.

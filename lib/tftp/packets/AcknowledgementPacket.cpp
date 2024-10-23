@@ -21,6 +21,7 @@
 #include <boost/exception/all.hpp>
 
 #include <format>
+#include <utility>
 
 namespace Tftp::Packets {
 
@@ -41,8 +42,8 @@ AcknowledgementPacket::AcknowledgementPacket(
 AcknowledgementPacket& AcknowledgementPacket::operator=(
   ConstRawTftpPacketSpan rawPacket )
 {
-  decodeHeader( rawPacket);
-  decodeBody( rawPacket);
+  decodeHeader( rawPacket );
+  decodeBody( rawPacket );
   return *this;
 }
 
@@ -64,15 +65,16 @@ AcknowledgementPacket::operator std::string() const
 
 RawTftpPacket AcknowledgementPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4U );
+  RawTftpPacket rawPacket( PacketSize );
 
   // insert header data
-  insertHeader( rawPacket);
+  insertHeader( rawPacket );
 
-  auto packetIt( rawPacket.begin() + HeaderSize );
+  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
 
-  // Add block number
-  Helper::setInt( packetIt, static_cast< uint16_t>( blockNumberV ) );
+  // block number
+  rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
+  assert( rawSpan.empty() );
 
   return rawPacket;
 }
@@ -86,10 +88,14 @@ void AcknowledgementPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of ACK packet" } );
   }
 
-  auto packetIt{ rawPacket.begin() + HeaderSize };
+  ConstRawTftpPacketSpan rawSpan{
+    rawPacket.begin() + HeaderSize,
+    rawPacket.end() };
 
   // decode block number
-  Helper::getInt< uint16_t>( packetIt, static_cast< uint16_t&>( blockNumberV ) );
+  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) =
+    Helper::getInt< uint16_t >( rawSpan );
+  assert( rawSpan.empty() );
 }
 
 }

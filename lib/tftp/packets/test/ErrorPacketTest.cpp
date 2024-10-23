@@ -22,12 +22,12 @@
 
 namespace Tftp::Packets {
 
-BOOST_AUTO_TEST_SUITE( TftpTest)
-BOOST_AUTO_TEST_SUITE( PacketsTest)
-BOOST_AUTO_TEST_SUITE( TftpErrorPacket)
+BOOST_AUTO_TEST_SUITE( TftpTest )
+BOOST_AUTO_TEST_SUITE( PacketsTest )
+BOOST_AUTO_TEST_SUITE( TftpErrorPacket )
 
 //! ErrorPacket Constructor Test
-BOOST_AUTO_TEST_CASE( constructor1)
+BOOST_AUTO_TEST_CASE( constructor1 )
 {
   ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE" };
 
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE( constructor1)
 BOOST_AUTO_TEST_CASE( constructor2)
 {
   using namespace std::literals;
-  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"s};
+  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"s };
 
   RawTftpPacket raw{ error };
 
@@ -63,8 +63,8 @@ BOOST_AUTO_TEST_CASE( constructor2)
   BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE");
 
   BOOST_CHECK( (raw == RawTftpPacket{
-    0x00U, 0x05U,
-    0x00U, 0x00U,
+    0x00U, 0x05U, // Opcode
+    0x00U, 0x00U, // Error Code
     'E', 'R', 'R', 'O', 'R', ' ', 'M', 'E', 'S', 'S', 'A', 'G', 'E', 0x00U
   } ) );
 }
@@ -73,8 +73,8 @@ BOOST_AUTO_TEST_CASE( constructor2)
 BOOST_AUTO_TEST_CASE( constructor3 )
 {
   RawTftpPacket raw{
-    0x00U, 0x05U,
-    0x00U, 0x01U,
+    0x00U, 0x05U, // Opcode
+    0x00U, 0x01U, // Error Code
     'E', 'R', 'R', 'O', 'R', 0x00U
   };
 

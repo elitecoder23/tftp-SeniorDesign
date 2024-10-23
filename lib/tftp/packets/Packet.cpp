@@ -131,10 +131,10 @@ void Packet::insertHeader( RawTftpPacketSpan rawPacket ) const
   // keep assertion --> programming error of subclasses.
   assert( rawPacket.size() >= HeaderSize );
 
-  auto packetIt{ rawPacket.begin() };
-
   // encode opcode
-  Helper::setInt( packetIt, std::to_underlying( packetTypeV ) );
+  Helper::setInt(
+    RawTftpPacketSpan{ rawPacket.begin(), rawPacket.end() },
+    std::to_underlying( packetTypeV ) );
 }
 
 void Packet::decodeHeader( ConstRawTftpPacketSpan rawPacket )
@@ -146,13 +146,13 @@ void Packet::decodeHeader( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size (HEADER SIZE)" } );
   }
 
-  auto packetIt{ rawPacket.begin() };
+  ConstRawTftpPacketSpan rawSpan{ rawPacket.begin(), rawPacket.end() };
 
   // Check Opcode
   uint16_t opcode{};
-  Helper::getInt< uint16_t>( packetIt, opcode );
+  std::tie( rawSpan, opcode ) = Helper::getInt< uint16_t>( rawSpan );
 
-  if ( PacketType{ opcode } != packetTypeV )
+  if ( opcode != std::to_underlying( packetTypeV ) )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "Invalid opcode" } );

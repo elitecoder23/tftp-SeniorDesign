@@ -67,7 +67,7 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
     /**
      * @brief Returns the request filename.
      *
-     * @return The filename
+     * @return Filename
      **/
     [[nodiscard]] std::string_view filename() const;
 
@@ -75,7 +75,7 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
      * @brief Sets the filename
      *
      * @param[in] filename
-     *   The new filename.
+     *   New filename.
      **/
     void filename( std::string filename );
 
@@ -136,7 +136,7 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
     /** @} **/
 
     // @copydoc Packet::operator std::string() const
-    explicit operator std::string() const final;
+    explicit operator std::string() const override;
 
   protected:
     /**
@@ -170,7 +170,7 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
      *   Packet, which shall be decoded.
      *
      * @throw InvalidPacketException
-     *   When rawPacket is not an valid packet.
+     *   When rawPacket is not a valid packet.
      **/
     ReadWriteRequestPacket(
       PacketType packetType,
@@ -197,7 +197,7 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
     std::string filenameV;
     //! Transfer Mode
     TransferMode modeV;
-    //! Stored Options
+    //! Stored Options.
     Options optionsV;
 };
 
