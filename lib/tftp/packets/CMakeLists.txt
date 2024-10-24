@@ -60,6 +60,7 @@ target_sources(
     test/ErrorPacketTest.cpp
     test/OptionsAcknowledgementPacketTest.cpp
     test/OptionsTest.cpp
+    test/PacketTest.cpp
     test/ReadRequestPacketTest.cpp
     test/ReadWriteRequestPacketTest.cpp
     test/TftpOptionsTest.cpp

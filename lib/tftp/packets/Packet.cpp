@@ -34,13 +34,11 @@ PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket ) noexcept
     return PacketType::Invalid;
   }
 
-  auto it{ rawPacket.begin() };
-
   // decode opcode value
-  uint16_t opcode{};
-  Helper::getInt< uint16_t>( it, opcode );
+  auto [ remainingData, opcode ]{ Helper::getInt< uint16_t >( rawPacket ) };
 
   // check valid opcodes
+  // NOLINTNEXTLINE( clang-analyzer-optin.core.EnumCastOutOfRange ): Validity Check
   switch ( PacketType{ opcode } )
   {
     case PacketType::ReadRequest:
