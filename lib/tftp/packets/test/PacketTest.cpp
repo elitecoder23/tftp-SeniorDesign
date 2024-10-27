@@ -25,14 +25,14 @@ BOOST_AUTO_TEST_SUITE( PacketTest )
 //! Constructor test
 BOOST_AUTO_TEST_CASE( packetType )
 {
-  BOOST_CHECK( Packet::packetType( std::to_array< uint8_t >( { 0x00, 0x01 } ) ) == PacketType::ReadRequest );
-  BOOST_CHECK( Packet::packetType( std::to_array< uint8_t >( { 0x00, 0x02 } ) ) == PacketType::WriteRequest );
-  BOOST_CHECK( Packet::packetType( std::to_array< uint8_t >( { 0x00, 0x03 } ) ) == PacketType::Data );
-  BOOST_CHECK( Packet::packetType( std::to_array< uint8_t >( { 0x00, 0x04 } ) ) == PacketType::Acknowledgement );
-  BOOST_CHECK( Packet::packetType( std::to_array< uint8_t >( { 0x00, 0x05 } ) ) == PacketType::Error );
-  BOOST_CHECK( Packet::packetType( std::to_array< uint8_t >( { 0x00, 0x06 } ) ) == PacketType::OptionsAcknowledgement );
+  BOOST_CHECK( Packet::packetType( RawTftpPacket{ 0x00, 0x01 } ) == PacketType::ReadRequest );
+  BOOST_CHECK( Packet::packetType( RawTftpPacket{ 0x00, 0x02 } ) == PacketType::WriteRequest );
+  BOOST_CHECK( Packet::packetType( RawTftpPacket{ 0x00, 0x03 } ) == PacketType::Data );
+  BOOST_CHECK( Packet::packetType( RawTftpPacket{ 0x00, 0x04 } ) == PacketType::Acknowledgement );
+  BOOST_CHECK( Packet::packetType( RawTftpPacket{ 0x00, 0x05 } ) == PacketType::Error );
+  BOOST_CHECK( Packet::packetType( RawTftpPacket{ 0x00, 0x06 } ) == PacketType::OptionsAcknowledgement );
 
-  BOOST_CHECK( Packet::packetType( std::to_array< uint8_t >( { 0x00, 0x00 } ) ) == PacketType::Invalid );
+  BOOST_CHECK( Packet::packetType( RawTftpPacket{ 0x00, 0x00 } ) == PacketType::Invalid );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

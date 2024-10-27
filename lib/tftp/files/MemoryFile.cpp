@@ -65,7 +65,7 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
   return true;
 }
 
-void MemoryFile::receivedData( DataSpan data ) noexcept
+void MemoryFile::receivedData( DataSpan data )
 {
   if ( !data.empty() )
   {
@@ -80,7 +80,7 @@ std::optional< uint64_t> MemoryFile::requestedTransferSize()
   return dataV.size();
 }
 
-MemoryFile::Data MemoryFile::sendData( const size_t maxSize ) noexcept
+MemoryFile::Data MemoryFile::sendData( const size_t maxSize )
 {
   Data::const_iterator startPtr{ dataPtr };
   Data::const_iterator endPtr;

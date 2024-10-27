@@ -54,7 +54,7 @@ class TFTP_EXPORT ReceiveDataHandler : public virtual DataHandler
      * @param[in] data
      *   Received data.
      **/
-    virtual void receivedData( DataSpan data ) noexcept = 0;
+    virtual void receivedData( DataSpan data ) = 0;
 };
 
 }

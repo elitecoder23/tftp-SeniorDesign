@@ -43,7 +43,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
      * @param[in] options
      *   TFTP Options List.
      **/
-    explicit OptionsAcknowledgementPacket( Options options ) noexcept;
+    explicit OptionsAcknowledgementPacket( Options options );
 
     /**
      * @brief Generates a TFTP Options Acknowledgement packet from a data buffer

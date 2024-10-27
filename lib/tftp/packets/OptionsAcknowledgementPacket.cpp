@@ -16,7 +16,6 @@
 #include <tftp/packets/PacketException.hpp>
 #include <tftp/packets/Options.hpp>
 
-#include <helper/Endianness.hpp>
 #include <helper/Exception.hpp>
 
 #include <boost/exception/all.hpp>
@@ -27,7 +26,7 @@
 namespace Tftp::Packets {
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  Options options ) noexcept :
+  Options options ) :
   Packet{ PacketType::OptionsAcknowledgement },
   optionsV{ std::move( options ) }
 {
@@ -70,16 +69,14 @@ OptionsAcknowledgementPacket::operator std::string() const
 
 RawTftpPacket OptionsAcknowledgementPacket::encode() const
 {
-  auto rawOptions{ Options_rawOptions( optionsV ) };
-
-  RawTftpPacket rawPacket( HeaderSize + rawOptions.size() );
+  RawTftpPacket rawPacket( HeaderSize );
 
   insertHeader( rawPacket );
 
-  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
-
-  // options
-  std::copy( rawOptions.begin(), rawOptions.end(), rawSpan.begin() );
+  // append options
+  // TODO change to rawPacket.append_range when GCC supports this
+  auto rawOptions{ Options_rawOptions( optionsV ) };
+  rawPacket.insert( rawPacket.end(), rawOptions.begin(), rawOptions.end() );
 
   return rawPacket;
 }

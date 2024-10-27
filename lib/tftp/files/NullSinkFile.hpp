@@ -69,7 +69,7 @@ class TFTP_EXPORT NullSinkFile final : public ReceiveDataHandler
      *
      * Drops the data immediately.
      **/
-    void receivedData( DataSpan data ) noexcept override;
+    void receivedData( DataSpan data ) override;
 
   private:
     //! Optional size (used for options negotiation)

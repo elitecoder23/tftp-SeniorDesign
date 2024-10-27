@@ -33,8 +33,9 @@ namespace Tftp::Packets {
 class TFTP_EXPORT DataPacket final : public Packet
 {
   public:
-    //! Minimum Header Size (Opcode + Block Number)
-    static constexpr auto MinPacketSize{ HeaderSize + 2UZ };
+    //! Minimum Packet Size (Opcode + Block Number)
+    //! @todo at the moment MSVC does not support `UZ` literal
+    static constexpr auto MinPacketSize{ HeaderSize + 2U };
 
     //! Data Type
     using Data = std::vector< uint8_t >;

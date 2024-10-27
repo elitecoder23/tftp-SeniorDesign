@@ -72,7 +72,7 @@ class TFTP_EXPORT StreamFile final : public File
      *
      * Flushes the stream.
      **/
-    void finished() noexcept override;
+    void finished() override;
 
     /**
      * @copydoc File::receivedTransferSize()
@@ -82,7 +82,7 @@ class TFTP_EXPORT StreamFile final : public File
     /**
      * @copydoc File::receivedData()
      **/
-    void receivedData( DataSpan data ) noexcept override;
+    void receivedData( DataSpan data ) override;
 
     /**
      * @copydoc File::requestedTransferSize()
@@ -92,7 +92,7 @@ class TFTP_EXPORT StreamFile final : public File
     /**
      * @copydoc File::sendData()
      **/
-    [[nodiscard]] Data sendData( size_t maxSize ) noexcept override;
+    [[nodiscard]] Data sendData( size_t maxSize ) override;
 
   private:
     //! Actual Operation

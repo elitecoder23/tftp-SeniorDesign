@@ -49,7 +49,7 @@ class TFTP_EXPORT DataHandler
     /**
      * @brief Called, when the operation has been finished.
      **/
-    virtual void finished() noexcept = 0;
+    virtual void finished() = 0;
 };
 
 }

@@ -13,8 +13,8 @@
 
 #include "ErrorPacket.hpp"
 
-#include <tftp/packets/PacketException.hpp>
 #include <tftp/packets/ErrorCodeDescription.hpp>
+#include <tftp/packets/PacketException.hpp>
 
 #include <helper/Endianness.hpp>
 #include <helper/Exception.hpp>
@@ -80,7 +80,7 @@ void ErrorPacket::errorMessage( std::string errorMessage )
 
 RawTftpPacket ErrorPacket::encode() const
 {
-  RawTftpPacket rawPacket( 4UZ + errorMessageV.length() + 1UZ );
+  RawTftpPacket rawPacket( MinPacketSize + errorMessageV.length() );
 
   insertHeader( rawPacket );
 

@@ -74,7 +74,7 @@ void StreamFile::reset()
   }
 }
 
-void StreamFile::finished() noexcept
+void StreamFile::finished()
 {
   streamV.flush();
   streamV.close();
@@ -93,7 +93,7 @@ bool StreamFile::receivedTransferSize( const uint64_t transferSize )
   return ( transferSize <= sizeV );
 }
 
-void StreamFile::receivedData( DataSpan data ) noexcept
+void StreamFile::receivedData( DataSpan data )
 {
   if ( !data.empty() )
   {
@@ -108,7 +108,7 @@ std::optional< uint64_t> StreamFile::requestedTransferSize()
   return sizeV;
 }
 
-StreamFile::Data StreamFile::sendData( const size_t maxSize ) noexcept
+StreamFile::Data StreamFile::sendData( const size_t maxSize )
 {
   Data data( maxSize );
 

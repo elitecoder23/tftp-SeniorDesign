@@ -88,7 +88,7 @@ class TFTP_EXPORT MemoryFile final : public File
     /**
      * @copydoc File::receivedData()
      **/
-    void receivedData( DataSpan data ) noexcept override;
+    void receivedData( DataSpan data ) override;
 
     /**
      * @copydoc File::requestedTransferSize()
@@ -98,7 +98,7 @@ class TFTP_EXPORT MemoryFile final : public File
     /**
      * @copydoc File::sendData()
      **/
-    [[nodiscard]] Data sendData( size_t maxSize ) noexcept override;
+    [[nodiscard]] Data sendData( size_t maxSize ) override;
 
   private:
     //! Operation Type
