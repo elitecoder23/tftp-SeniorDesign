@@ -19,7 +19,7 @@
 #include <concepts>
 #include <limits>
 #include <optional>
-#include <string>
+#include <string_view>
 
 namespace Tftp::Packets {
 
@@ -104,7 +104,7 @@ namespace Tftp::Packets {
 template< std::unsigned_integral IntT >
 [[nodiscard]] std::pair< bool, std::optional< IntT > > Options_getOption(
   Options &options,
-  const std::string &name,
+  std::string_view name,
   IntT min = std::numeric_limits< IntT >::min(),
   IntT max = std::numeric_limits< IntT >::max() );
 

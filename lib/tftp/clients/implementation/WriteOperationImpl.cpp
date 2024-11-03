@@ -69,7 +69,8 @@ void WriteOperationImpl::request()
     if ( optionsConfigurationV.blockSizeOption )
     {
       options.try_emplace(
-        Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+        std::string{
+          Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) },
         std::to_string( *optionsConfigurationV.blockSizeOption ) );
     }
 
@@ -77,7 +78,8 @@ void WriteOperationImpl::request()
     if ( optionsConfigurationV.timeoutOption )
     {
       options.try_emplace(
-        Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+        std::string{
+          Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) },
         std::to_string( static_cast< uint16_t >(
           optionsConfigurationV.timeoutOption->count() ) ) );
     }
@@ -91,7 +93,8 @@ void WriteOperationImpl::request()
       {
         // set transfer size TFTP option
         options.try_emplace(
-          Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
+          std::string{
+            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) },
           std::to_string( *transferSize ) );
       }
     }

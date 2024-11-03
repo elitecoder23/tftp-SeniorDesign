@@ -19,6 +19,7 @@
 #include <iosfwd>
 #include <optional>
 #include <string>
+#include <string_view>
 
 namespace Tftp::Packets {
 
@@ -76,7 +77,7 @@ struct TFTP_EXPORT TftpOptions final
  *
  * @return Returns the option name.
  **/
-[[nodiscard]] TFTP_EXPORT std::string TftpOptions_name(
+[[nodiscard]] TFTP_EXPORT std::string_view TftpOptions_name(
   KnownOptions option ) noexcept;
 
 /**

@@ -67,7 +67,8 @@ void ReadOperationImpl::request()
     if ( optionsConfigurationV.blockSizeOption )
     {
       options.try_emplace(
-        Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+        std::string{
+          Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) },
         std::to_string( *optionsConfigurationV.blockSizeOption ) );
     }
 
@@ -75,7 +76,8 @@ void ReadOperationImpl::request()
     if ( optionsConfigurationV.timeoutOption )
     {
       options.try_emplace(
-        Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+        std::string{
+          Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) },
         std::to_string( static_cast< uint16_t >(
           optionsConfigurationV.timeoutOption->count() ) ) );
     }
@@ -85,7 +87,8 @@ void ReadOperationImpl::request()
     {
       // assure that transfer size is set to zero for read request
       options.try_emplace(
-        Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
+        std::string{
+          Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) },
         "0" );
     }
 

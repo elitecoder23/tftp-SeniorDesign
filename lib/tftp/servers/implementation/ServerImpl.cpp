@@ -484,7 +484,9 @@ ServerImpl::tftpOptions(
 
   decodedOptions.blockSize = blockSize;
   // remove block size option
-  clientOptions.erase( Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) );
+  // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
+  clientOptions.erase(
+    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } );
 
   // check timeout option - if set use it
   const auto [ timeoutValid, timeout ] =
@@ -496,7 +498,9 @@ ServerImpl::tftpOptions(
 
   decodedOptions.timeout = timeout;
   // remove timeout option
-  clientOptions.erase( Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) );
+  // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
+  clientOptions.erase(
+    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } );
 
   // check transfer size option
   const auto [ transferSizeValid, transferSize ] =
@@ -506,7 +510,9 @@ ServerImpl::tftpOptions(
 
   decodedOptions.transferSize = transferSize;
   // remove timeout option
-  clientOptions.erase( Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
+  // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
+  clientOptions.erase( std::string{
+    Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) } );
 
   return decodedOptions;
 }

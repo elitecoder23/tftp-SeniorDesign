@@ -35,7 +35,7 @@ PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket ) noexcept
   }
 
   // decode opcode value
-  auto [ remainingData, opcode ]{ Helper::getInt< uint16_t >( rawPacket ) };
+  auto [ _, opcode ]{ Helper::getInt< uint16_t >( rawPacket ) };
 
   // check valid opcodes
   // NOLINTNEXTLINE( clang-analyzer-optin.core.EnumCastOutOfRange ): Validity Check

@@ -20,11 +20,12 @@ template< std::unsigned_integral IntT >
 std::pair< bool, std::optional< IntT > >
 Options_getOption(
   Options &options,
-  const std::string &name,
+  std::string_view name,
   const IntT min,
   const IntT max )
 {
-  auto option{ options.extract( name ) };
+  // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
+  auto option{ options.extract( std::string{ name } ) };
 
   // option not set
   if ( !option )

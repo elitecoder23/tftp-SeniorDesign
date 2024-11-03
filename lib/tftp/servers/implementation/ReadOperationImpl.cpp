@@ -133,7 +133,8 @@ void ReadOperationImpl::start()
 
         // respond option string
         serverOptions.try_emplace(
-          Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ),
+          std::string{
+            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) },
           std::to_string( transmitDataSize ) );
       }
 
@@ -148,7 +149,8 @@ void ReadOperationImpl::start()
 
         // respond with timeout option set
         serverOptions.try_emplace(
-          Packets::TftpOptions_name( Packets::KnownOptions::Timeout ),
+          std::string{
+            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) },
           std::to_string( *clientOptionsV.timeout ) );
       }
 
@@ -178,7 +180,8 @@ void ReadOperationImpl::start()
         {
           // respond option string
           serverOptions.try_emplace(
-            Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ),
+            std::string{
+              Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) },
             std::to_string( *newTransferSize ) );
         }
       }
