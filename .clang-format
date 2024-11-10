@@ -116,7 +116,7 @@ BreakFunctionDefinitionParameters: false
 BreakInheritanceList: BeforeColon
 BreakStringLiterals: true
 BreakTemplateDeclarations: Yes
-ColumnLimit:     80
+ColumnLimit:     120
 CommentPragmas:  '^ IWYU pragma:'
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 2
@@ -163,17 +163,17 @@ InsertBraces:    false
 InsertNewlineAtEOF: true
 InsertTrailingCommas: None
 IntegerLiteralSeparator:
-  Binary:          0
-  BinaryMinDigits: 0
-  Decimal:         0
-  DecimalMinDigits: 0
-  Hex:             0
-  HexMinDigits:    0
+  Binary:          4
+  BinaryMinDigits: 5
+  Decimal:         3
+  DecimalMinDigits: 6
+  Hex:             4
+  HexMinDigits:    5
 JavaScriptQuotes: Leave
 JavaScriptWrapImports: true
 KeepEmptyLines:
   AtEndOfFile:     false
-  AtStartOfBlock:  true
+  AtStartOfBlock:  false
   AtStartOfFile:   false
 LambdaBodyIndentation: Signature
 LineEnding:      DeriveLF
@@ -238,7 +238,7 @@ SpaceBeforeParensOptions:
   AfterRequiresInExpression: false
   BeforeNonEmptyParentheses: false
 SpaceBeforeRangeBasedForLoopColon: true
-SpaceBeforeSquareBrackets: false
+SpaceBeforeSquareBrackets: true
 SpaceInEmptyBlock: false
 SpacesBeforeTrailingComments: 0
 SpacesInAngles:  Always
