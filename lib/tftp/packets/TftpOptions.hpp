@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -38,8 +37,7 @@ struct TFTP_EXPORT TftpOptions final
    *
    * The number of octets in a block.
    * Valid values range between "8" and "65464" octets, inclusive.
-   * The *blocksize* refers to the number of data octets; it does not include
-   * the four octets of TFTP header.
+   * The *blocksize* refers to the number of data octets; it does not include the four octets of TFTP header.
    **/
   std::optional< uint16_t > blockSize;
   /**
@@ -63,7 +61,7 @@ struct TFTP_EXPORT TftpOptions final
    *
    * @return If any option is set
    **/
-  operator bool() const
+  explicit operator bool() const noexcept
   {
     return blockSize || timeout || transferSize;
   }
@@ -77,8 +75,7 @@ struct TFTP_EXPORT TftpOptions final
  *
  * @return Returns the option name.
  **/
-[[nodiscard]] TFTP_EXPORT std::string_view TftpOptions_name(
-  KnownOptions option ) noexcept;
+[[nodiscard]] TFTP_EXPORT std::string_view TftpOptions_name( KnownOptions option ) noexcept;
 
 /**
  * @brief Returns a string, which describes the TFTP Options.
@@ -92,8 +89,7 @@ struct TFTP_EXPORT TftpOptions final
  * @retval `(NONE)`
  *   When @p options is empty.
  **/
-[[nodiscard]] TFTP_EXPORT std::string TftpOptions_toString(
-  const TftpOptions &options );
+[[nodiscard]] TFTP_EXPORT std::string TftpOptions_toString( const TftpOptions &options );
 
 /**
  * @brief Outputs @p options to @p stream.
@@ -105,9 +101,7 @@ struct TFTP_EXPORT TftpOptions final
  *
  * @return @p stream
  **/
-TFTP_EXPORT std::ostream& operator<<(
-  std::ostream &stream,
-  const TftpOptions &options );
+TFTP_EXPORT std::ostream& operator<<( std::ostream &stream, const TftpOptions &options );
 
 }
 
