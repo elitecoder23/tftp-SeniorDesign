@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -58,9 +57,9 @@ BOOST_AUTO_TEST_CASE( constructor2)
   std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
 
-  BOOST_CHECK( error.packetType() == PacketType::Error);
-  BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined);
-  BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE");
+  BOOST_CHECK( error.packetType() == PacketType::Error );
+  BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined );
+  BOOST_CHECK( error.errorMessage() == "ERROR MESSAGE" );
 
   BOOST_CHECK( (raw == RawTftpPacket{
     0x00U, 0x05U, // Opcode
@@ -80,18 +79,18 @@ BOOST_AUTO_TEST_CASE( constructor3 )
 
   std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
-  ErrorPacket error{ raw};
+  ErrorPacket error{ raw };
 
-  BOOST_CHECK( error.packetType() == PacketType::Error);
-  BOOST_CHECK( error.errorCode() == ErrorCode::FileNotFound);
-  BOOST_CHECK( error.errorMessage() == "ERROR");
+  BOOST_CHECK( error.packetType() == PacketType::Error );
+  BOOST_CHECK( error.errorCode() == ErrorCode::FileNotFound );
+  BOOST_CHECK( error.errorMessage() == "ERROR" );
 
   ErrorPacket error2{ RawTftpPacket{
     0x00U, 0x05U,
     0x00U, 0x01U,
     0x00U
   } };
-  BOOST_CHECK( error2.packetType() == PacketType::Error);
+  BOOST_CHECK( error2.packetType() == PacketType::Error );
   BOOST_CHECK( error2.errorCode() == ErrorCode::FileNotFound );
   BOOST_CHECK( error2.errorMessage().empty() );
 

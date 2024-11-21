@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -26,9 +25,7 @@
 
 namespace Tftp::Packets {
 
-ErrorPacket::ErrorPacket(
-  const ErrorCode errorCode,
-  std::string errorMessage ):
+ErrorPacket::ErrorPacket( const ErrorCode errorCode, std::string errorMessage ) :
   Packet{ PacketType::Error },
   errorCodeV{ errorCode },
   errorMessageV{ std::move( errorMessage ) }
@@ -90,10 +87,7 @@ RawTftpPacket ErrorPacket::encode() const
   rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( errorCodeV ) );
 
   // error message
-  auto packetIt{ std::copy(
-    errorMessageV.begin(),
-    errorMessageV.end(),
-    rawSpan.begin() ) };
+  auto packetIt{ std::copy( errorMessageV.begin(), errorMessageV.end(), rawSpan.begin() ) };
   *packetIt = 0;
 
   return rawPacket;
@@ -108,14 +102,11 @@ void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of ERROR packet" } );
   }
 
-  ConstRawTftpPacketSpan rawSpan{
-    rawPacket.begin() + HeaderSize,
-    rawPacket.end() };
+  ConstRawTftpPacketSpan rawSpan{ rawPacket.subspan( HeaderSize ) };
 
   // decode error code
   uint16_t errorCodeInt{};
-  std::tie( rawSpan, errorCodeInt ) =
-    Helper::getInt< uint16_t >( rawSpan );
+  std::tie( rawSpan, errorCodeInt ) = Helper::getInt< uint16_t >( rawSpan );
   errorCodeV = static_cast< ErrorCode >( errorCodeInt );
 
   // check terminating 0 character
@@ -125,7 +116,7 @@ void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "error message not 0-terminated" } );
   }
 
-  errorMessageV = std::string{ rawSpan.begin(), rawPacket.end() -1U };
+  errorMessageV = std::string{ rawSpan.begin(), rawSpan.end() -1U };
 }
 
 }

@@ -2,14 +2,12 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of Unit Tests of Class
- *   Tftp::Packets::TftpOptionsAcknowledgementPacket.
+ * @brief Definition of Unit Tests of Class Tftp::Packets::TftpOptionsAcknowledgementPacket.
  **/
 
 #include <boost/test/unit_test.hpp>
@@ -31,10 +29,12 @@ BOOST_AUTO_TEST_SUITE( TftpOptionsAcknowledgementPacket )
 BOOST_AUTO_TEST_CASE( constructor )
 {
   Options options{ { "blocksize", "4096" } };
+  BOOST_REQUIRE( options.contains( "blocksize") );
+  auto blocksizeOption1{ options.find( "blocksize" ) };
+
   OptionsAcknowledgementPacket oack{ options };
 
-  RawTftpPacket raw{ oack};
-
+  RawTftpPacket raw{ oack };
   std::cout << "OACK:\n" << Helper::Dump( std::data( raw ), raw.size() ) << "\n";
 
   OptionsAcknowledgementPacket oack2( raw );
@@ -42,19 +42,23 @@ BOOST_AUTO_TEST_CASE( constructor )
   BOOST_CHECK( oack.packetType() == oack2.packetType() );
 
   auto options2{ oack.options() };
-  BOOST_CHECK( options2.size() == 1);
-  auto blocksizeOption1{ options.find( "blocksize" ) };
-  BOOST_CHECK( blocksizeOption1 != options2.end() );
+  BOOST_CHECK( options2.size() == 1 );
+  BOOST_REQUIRE( options2.contains( "blocksize" ) );
+  auto blocksizeOption2{ options2.find( "blocksize" ) };
 
   auto options3{ oack2.options() };
   BOOST_CHECK( options3.size() == 1 );
-  auto blocksizeOption2{ options.find( "blocksize" ) };
-  BOOST_CHECK( blocksizeOption2 != options3.end() );
+  BOOST_REQUIRE( options3.contains( "blocksize" ) );
+  auto blocksizeOption3{ options3.find( "blocksize" ) };
 
   BOOST_CHECK( blocksizeOption1->first == blocksizeOption2->first );
+  BOOST_CHECK( blocksizeOption1->first == blocksizeOption3->first );
   BOOST_CHECK( blocksizeOption1->second == blocksizeOption2->second );
+  BOOST_CHECK( blocksizeOption1->second == blocksizeOption3->second );
+
   BOOST_CHECK( blocksizeOption1->second == "4096" );
   BOOST_CHECK( blocksizeOption2->second == "4096" );
+  BOOST_CHECK( blocksizeOption3->second == "4096" );
 }
 
 //! Constructor Test

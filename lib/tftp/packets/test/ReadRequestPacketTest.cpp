@@ -2,13 +2,12 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Definition of unit tests of Class Tftp::Packets::ReadRequestPacket.
+ * @brief Definition of Unit Tests of Class Tftp::Packets::ReadRequestPacket.
  **/
 
 #include <boost/test/unit_test.hpp>
@@ -22,19 +21,21 @@
 
 namespace Tftp::Packets {
 
-BOOST_AUTO_TEST_SUITE( TftpTest)
-BOOST_AUTO_TEST_SUITE( PacketsTest)
-BOOST_AUTO_TEST_SUITE( TftpReadRequestPacket)
+BOOST_AUTO_TEST_SUITE( TftpTest )
+BOOST_AUTO_TEST_SUITE( PacketsTest )
+BOOST_AUTO_TEST_SUITE( TftpReadRequestPacket )
 
+//! Constructor Test
 BOOST_AUTO_TEST_CASE( constructor1 )
 {
   Options options{ { "blocksize", "4096" } };
+  BOOST_REQUIRE( options.contains( "blocksize") );
+  auto blocksizeOption1{ options.find( "blocksize" ) };
 
   ReadRequestPacket rrq{ "testfile.bin", TransferMode::OCTET, options };
 
   RawTftpPacket raw{ rrq };
-
-  std::cout << Helper::Dump( std::data( raw ), raw.size() );
+  std::cout << "RRQ:\n" << Helper::Dump( std::data( raw ), raw.size() ) << "\n";
 
   ReadRequestPacket rrq2{ raw };
 
@@ -43,21 +44,26 @@ BOOST_AUTO_TEST_CASE( constructor1 )
   BOOST_CHECK( rrq.mode() == rrq2.mode() );
 
   auto options2{ rrq.options() };
-  BOOST_CHECK( options2.size() == 1);
-  auto blocksizeOption1{ options.find( "blocksize")};
-  BOOST_CHECK( blocksizeOption1 != options2.end());
+  BOOST_CHECK( options2.size() == 1 );
+  BOOST_REQUIRE( options2.contains( "blocksize" ) );
+  auto blocksizeOption2{ options2.find( "blocksize" ) };
 
-  auto options3{ rrq2.options()};
-  BOOST_CHECK( options3.size() == 1);
-  auto blocksizeOption2{ options.find( "blocksize")};
-  BOOST_CHECK( blocksizeOption2 != options3.end());
+  auto options3{ rrq2.options() };
+  BOOST_CHECK( options3.size() == 1 );
+  BOOST_REQUIRE( options3.contains( "blocksize" ) );
+  auto blocksizeOption3{ options3.find( "blocksize" ) };
 
-  BOOST_CHECK( blocksizeOption1->first == blocksizeOption2->first);
-  BOOST_CHECK( blocksizeOption1->second == blocksizeOption2->second);
-  BOOST_CHECK( blocksizeOption1->second == "4096");
-  BOOST_CHECK( blocksizeOption2->second == "4096");
+  BOOST_CHECK( blocksizeOption1->first == blocksizeOption2->first );
+  BOOST_CHECK( blocksizeOption1->first == blocksizeOption3->first );
+  BOOST_CHECK( blocksizeOption1->second == blocksizeOption2->second );
+  BOOST_CHECK( blocksizeOption1->second == blocksizeOption3->second );
+
+  BOOST_CHECK( blocksizeOption1->second == "4096" );
+  BOOST_CHECK( blocksizeOption2->second == "4096" );
+  BOOST_CHECK( blocksizeOption3->second == "4096" );
 }
 
+//! Constructor Test
 BOOST_AUTO_TEST_CASE( constructor2 )
 {
   ReadRequestPacket rrq1{ RawTftpPacket{

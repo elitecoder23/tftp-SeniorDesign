@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -25,9 +24,7 @@
 
 namespace Tftp::Packets {
 
-DataPacket::DataPacket(
-  BlockNumber blockNumber,
-  Data data ) noexcept :
+DataPacket::DataPacket( BlockNumber blockNumber, Data data ) noexcept :
   Packet{ PacketType::Data },
   blockNumberV{ blockNumber },
   dataV{ std::move( data ) }
@@ -117,16 +114,13 @@ void DataPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of DATA packet" } );
   }
 
-  ConstRawTftpPacketSpan rawSpan{
-    rawPacket.begin() + HeaderSize,
-    rawPacket.end() };
+  ConstRawTftpPacketSpan rawSpan{ rawPacket.subspan( HeaderSize ) };
 
   // decode block number
-  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) =
-    Helper::getInt< uint16_t >( rawSpan );
+  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) = Helper::getInt< uint16_t >( rawSpan );
 
   // copy data
-  dataV.assign( rawSpan.begin(), rawPacket.end() );
+  dataV.assign( rawSpan.begin(), rawSpan.end() );
 }
 
 }

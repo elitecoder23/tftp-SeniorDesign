@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -48,10 +47,10 @@ BOOST_AUTO_TEST_CASE( constructor1 )
   BOOST_CHECK( dp3.packetType() == PacketType::Data);
   BOOST_CHECK( dp3.blockNumber() == BlockNumber(55));
   BOOST_CHECK( dp3.dataSize() == 5);
-  BOOST_CHECK( !dp3.data().empty());
+  BOOST_CHECK( !dp3.data().empty() );
 
   DataPacket data(
-    BlockNumber{10},
+    BlockNumber{ 10 },
     {
       'H',
       'E',
@@ -67,12 +66,12 @@ BOOST_AUTO_TEST_CASE( constructor1 )
       '!'
     });
 
-  RawTftpPacket raw( data);
+  RawTftpPacket raw( data );
 
   std::cout << Helper::Dump( &(*raw.begin()), raw.size());
   std::cout << static_cast< std::string>( data) << "\n";
 
-  DataPacket data2( raw);
+  DataPacket data2( raw );
 
   BOOST_CHECK( data.packetType()  == data2.packetType());
   BOOST_CHECK( data.blockNumber() == data2.blockNumber());
