@@ -124,6 +124,9 @@
         "value": "x64",
         "strategy": "external"
       },
+      "cacheVariables": {
+        "VCPKG_MANIFEST_FEATURES" : "with-qt"
+      },
       "vendor": {
         "jetbrains.com/clion": {
           "toolchain": "Visual Studio"
