@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -24,7 +23,8 @@
 
 #include <tftp/TftpOptionsConfiguration.hpp>
 
-#include <boost/asio.hpp>
+#include <boost/asio/io_context.hpp>
+#include <boost/asio/ip/udp.hpp>
 
 #include <chrono>
 #include <string>
@@ -34,8 +34,7 @@ namespace Tftp::Servers {
 /**
  * @brief TFTP %Server Read %Operation (TFTP RRQ).
  *
- * In this operation a client has requested to read a file, which is
- * transmitted form the server to the client.
+ * In this operation a client has requested to read a file, which is transmitted form the server to the client.
  * Therefore, the server performs a write operation.
  *
  * This operation is initiated by a client TFTP read request (RRQ)
@@ -57,18 +56,16 @@ class ReadOperationImpl final :
     ~ReadOperationImpl() override = default;
 
     //! @copydoc ReadOperation::tftpTimeout()
-    ReadOperation& tftpTimeout( std::chrono::seconds timeout ) override;
+    ReadOperation &tftpTimeout( std::chrono::seconds timeout ) override;
 
     //! @copydoc ReadOperation::tftpRetries()
-    ReadOperation& tftpRetries( uint16_t retries ) override;
+    ReadOperation &tftpRetries( uint16_t retries ) override;
 
     //! @copydoc ReadOperation::optionsConfiguration()
-    ReadOperation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) override;
+    ReadOperation &optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc ReadOperation::completionHandler()
-    ReadOperation& completionHandler(
-      OperationCompletedHandler handler ) override;
+    ReadOperation &completionHandler( OperationCompletedHandler handler ) override;
 
     //! @copydoc ReadOperation::dataHandler()
     ReadOperation& dataHandler( TransmitDataHandlerPtr handler ) override;
@@ -83,16 +80,13 @@ class ReadOperationImpl final :
     ReadOperation& clientOptions( Packets::TftpOptions clientOptions ) override;
 
     //! @copydoc ReadOperation::additionalNegotiatedOptions()
-    ReadOperation& additionalNegotiatedOptions(
-      Packets::Options additionalNegotiatedOptions ) override;
+    ReadOperation& additionalNegotiatedOptions( Packets::Options additionalNegotiatedOptions ) override;
 
     //! @copydoc ReadOperation::start()
     void start() override;
 
     //! @copydoc ReadOperation::gracefulAbort()
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) override;
+    void gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage = {} ) override;
 
     //! @copydoc ReadOperation::abort()
     void abort() override;
@@ -102,9 +96,7 @@ class ReadOperationImpl final :
 
   private:
     //! @copydoc OperationImpl::finished()
-    void finished(
-      TransferStatus status,
-      Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
+    void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @brief Sends a data packet to the client.
@@ -122,9 +114,7 @@ class ReadOperationImpl final :
      * Data packets are not expected and handled as invalid.
      * An error is sent back and the operation is cancelled.
      **/
-    void dataPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket ) override;
+    void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket()

@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -24,7 +23,8 @@
 
 #include <tftp/TftpOptionsConfiguration.hpp>
 
-#include <boost/asio.hpp>
+#include <boost/asio/ip/udp.hpp>
+#include <boost/asio/io_context.hpp>
 
 #include <chrono>
 #include <string>
@@ -39,9 +39,7 @@ namespace Tftp::Servers {
  *
  * This operation is initiated by a client TFTP write request (WRQ)
  **/
-class WriteOperationImpl final :
-  public WriteOperation,
-  private OperationImpl
+class WriteOperationImpl final : public WriteOperation, private OperationImpl
 {
   public:
     /**
@@ -69,8 +67,7 @@ class WriteOperationImpl final :
       TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc WriteOperation::completionHandler()
-    WriteOperation& completionHandler(
-      OperationCompletedHandler handler ) override;
+    WriteOperation& completionHandler( OperationCompletedHandler handler ) override;
 
     //! @copydoc WriteOperation::dataHandler()
     WriteOperation& dataHandler( ReceiveDataHandlerPtr handler ) override;
@@ -85,16 +82,13 @@ class WriteOperationImpl final :
     WriteOperation& clientOptions( Packets::TftpOptions clientOptions ) override;
 
     //! @copydoc WriteOperation::additionalNegotiatedOptions()
-    WriteOperation& additionalNegotiatedOptions(
-      Packets::Options additionalNegotiatedOptions ) override;
+    WriteOperation& additionalNegotiatedOptions( Packets::Options additionalNegotiatedOptions ) override;
 
     //! @copydoc WriteOperation::start()
     void start() override;
 
     //! @copydoc WriteOperation::gracefulAbort()
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) override;
+    void gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage = {} ) override;
 
     //! @copydoc WriteOperation::abort()
     void abort() override;
@@ -104,9 +98,7 @@ class WriteOperationImpl final :
 
   private:
     //! @copydoc OperationImpl::finished()
-    void finished(
-      TransferStatus status,
-      Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
+    void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket()
@@ -115,9 +107,7 @@ class WriteOperationImpl final :
      * TftpReadOperationHandler::receivedData() operation of the registered
      * handler is called.
      **/
-    void dataPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket ) override;
+    void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket()

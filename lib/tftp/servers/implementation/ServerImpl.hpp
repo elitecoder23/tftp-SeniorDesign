@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -21,7 +20,8 @@
 
 #include <tftp/TftpOptionsConfiguration.hpp>
 
-#include <boost/asio.hpp>
+#include <boost/asio/ip/udp.hpp>
+#include <boost/asio/io_context.hpp>
 
 #include <map>
 #include <string>
@@ -31,13 +31,10 @@ namespace Tftp::Servers {
 /**
  * @brief TFTP %Server.
  *
- * Waits on the specified port for a valid TFTP request and calls the
- * appropriate call-back, which has to handle the request.
- *
- * If not expected packets or invalid packets are received a error is send
- * back to the sender.
- *
- * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
+ * Waits on the specified port for a valid TFTP request and calls the appropriate call-back, which has to handle the
+ * request.
+ * If not expected packets or invalid packets are received a error is send back to the sender.
+ * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ).
  **/
 class ServerImpl final :
   public Server,
@@ -64,8 +61,7 @@ class ServerImpl final :
     Server& requestHandler( ReceivedTftpRequestHandler handler ) override;
 
     //! @copydoc Server::serverAddress()
-    Server& serverAddress(
-      boost::asio::ip::udp::endpoint serverAddress ) override;
+    Server& serverAddress( boost::asio::ip::udp::endpoint serverAddress ) override;
 
     //! @copydoc Server::localEndpoint()
     [[nodiscard]] boost::asio::ip::udp::endpoint localEndpoint() const override;
@@ -80,8 +76,7 @@ class ServerImpl final :
     Server& dallyDefault( bool dally ) override;
 
     //! @copydoc Server::optionsConfigurationDefault()
-    Server& optionsConfigurationDefault(
-      TftpOptionsConfiguration optionsConfiguration ) override;
+    Server& optionsConfigurationDefault( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc Server::localDefault()
     Server& localDefault( boost::asio::ip::address local ) override;

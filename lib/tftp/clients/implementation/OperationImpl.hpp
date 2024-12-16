@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -21,7 +20,9 @@
 #include <tftp/packets/PacketHandler.hpp>
 #include <tftp/packets/Packets.hpp>
 
-#include <boost/asio.hpp>
+#include <boost/asio/ip/udp.hpp>
+#include <boost/asio/io_context.hpp>
+#include <boost/asio/system_timer.hpp>
 
 #include <chrono>
 #include <memory>
@@ -32,8 +33,7 @@ namespace Tftp::Clients {
 /**
  * @brief TFTP %Client %Operation.
  *
- * This class is specialised for the two kinds of TFTP operations
- * (Read Operation, Write Operation).
+ * This class is specialised for the two kinds of TFTP operations (Read Operation, Write Operation).
  **/
 class OperationImpl : protected Packets::PacketHandler
 {
@@ -205,9 +205,7 @@ class OperationImpl : protected Packets::PacketHandler
      * @param[in] errorInfo
      *   In error case, this information is set accordingly.
      **/
-    virtual void finished(
-      TransferStatus status,
-      Packets::ErrorInfo &&errorInfo = {} );
+    virtual void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} );
 
     /**
      * @copydoc Packets::PacketHandler::readRequestPacket()
@@ -236,9 +234,7 @@ class OperationImpl : protected Packets::PacketHandler
      *
      * Terminate connection.
      **/
-    void errorPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ErrorPacket &errorPacket ) final;
+    void errorPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::ErrorPacket &errorPacket ) final;
 
     /**
      * @copydoc Packets::PacketHandler::invalidPacket()
@@ -264,9 +260,7 @@ class OperationImpl : protected Packets::PacketHandler
      * @throw CommunicationException
      *   On communication error.
      **/
-    void receiveFirstHandler(
-      const boost::system::error_code& errorCode,
-      std::size_t bytesTransferred );
+    void receiveFirstHandler( const boost::system::error_code &errorCode, std::size_t bytesTransferred );
 
     /**
      * @brief Handler, which is called when new data has been received.
@@ -276,9 +270,7 @@ class OperationImpl : protected Packets::PacketHandler
      * @param[in] bytesTransferred
      *   Number of bytes transferred.
      **/
-    void receiveHandler(
-      const boost::system::error_code& errorCode,
-      std::size_t bytesTransferred );
+    void receiveHandler( const boost::system::error_code &errorCode, std::size_t bytesTransferred );
 
     /**
      * @brief Called when no data is received for the first sent packet.
