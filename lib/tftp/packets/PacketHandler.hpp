@@ -53,7 +53,7 @@ class TFTP_EXPORT PacketHandler
      **/
     void packet(
       const boost::asio::ip::udp::endpoint &remote,
-      ConstRawTftpPacketSpan rawPacket );
+      ConstRawDataSpan rawPacket );
 
   protected:
     /**
@@ -138,7 +138,7 @@ class TFTP_EXPORT PacketHandler
      **/
     virtual void invalidPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      ConstRawTftpPacketSpan rawPacket) = 0;
+      ConstRawDataSpan rawPacket) = 0;
 };
 
 }

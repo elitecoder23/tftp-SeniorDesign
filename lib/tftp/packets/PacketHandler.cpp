@@ -28,7 +28,7 @@ namespace Tftp::Packets {
 
 void PacketHandler::packet(
   const boost::asio::ip::udp::endpoint &remote,
-  ConstRawTftpPacketSpan rawPacket )
+  ConstRawDataSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 

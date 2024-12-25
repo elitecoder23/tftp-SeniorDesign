@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -16,7 +15,7 @@
 #include <tftp/packets/PacketException.hpp>
 #include <tftp/packets/Options.hpp>
 
-#include <helper/Endianness.hpp>
+#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
 
 #include <boost/exception/all.hpp>
@@ -27,8 +26,7 @@
 
 namespace Tftp::Packets {
 
-std::string_view ReadWriteRequestPacket::decodeMode(
-  const TransferMode mode )
+std::string_view ReadWriteRequestPacket::decodeMode( const TransferMode mode )
 {
   switch ( mode )
   {
@@ -53,11 +51,7 @@ TransferMode ReadWriteRequestPacket::decodeMode( std::string_view mode )
   //! @todo check implementation of transform
   std::string upperMode{ mode };
 
-  std::transform(
-    upperMode.begin(),
-    upperMode.end(),
-    upperMode.begin(),
-    toupper );
+  std::transform( upperMode.begin(), upperMode.end(), upperMode.begin(), toupper );
 
   if ( upperMode == "OCTET" )
   {
@@ -126,7 +120,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   const PacketType packetType,
   std::string filename,
   const TransferMode mode,
-  Options options ):
+  Options options ) :
   Packet{ packetType },
   filenameV{ std::move( filename ) },
   modeV{ mode },
@@ -146,9 +140,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   }
 }
 
-ReadWriteRequestPacket::ReadWriteRequestPacket(
-  const PacketType packetType,
-  ConstRawTftpPacketSpan rawPacket ) :
+ReadWriteRequestPacket::ReadWriteRequestPacket( const PacketType packetType, ConstRawDataSpan rawPacket ) :
   Packet{ packetType, rawPacket },
   modeV{}
 {
@@ -168,7 +160,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   decodeBody( rawPacket );
 }
 
-void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
+void ReadWriteRequestPacket::decodeBody( ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() <= HeaderSize )
@@ -177,67 +169,66 @@ void ReadWriteRequestPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of RRQ/WRQ packet" } );
   }
 
-  ConstRawTftpPacketSpan rawSpan{
-    rawPacket.begin() + HeaderSize,
-    rawPacket.end() };
+  auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // check terminating 0 character
-  if ( rawSpan.back() != 0 )
+  if ( rawSpan.back() != std::byte{ 0 } )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "RRQ/WRQ message not 0-terminated" } );
   }
 
-  // filename
-  const auto filenameEnd{ std::find( rawSpan.begin(), rawSpan.end(), 0 ) };
+  auto rawRequestString{ std::string_view{ reinterpret_cast< char const * >( rawSpan.data() ), rawSpan.size() } };
 
-  if ( filenameEnd == rawSpan.end() )
+  // filename
+  const auto filenameEnd{ rawRequestString.find( '\0' ) };
+
+  if ( filenameEnd == std::string_view::npos )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "No 0-termination for filename found" } );
   }
-  filenameV.assign( rawSpan.begin(), filenameEnd );
-  auto modeStart{ filenameEnd + 1U };
+
+  filenameV = rawRequestString.substr( 0, filenameEnd );
+  rawRequestString = rawRequestString.substr( filenameEnd + 1U );
 
   // transfer mode
-  auto modeEnd{ std::find( modeStart, rawSpan.end(), 0 ) };
+  const auto modeEnd{ rawRequestString.find( '\0' ) };
 
-  if ( modeEnd == rawSpan.end() )
+  if ( modeEnd == std::string_view::npos )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "No 0-termination for operation found" } );
   }
-  modeV = decodeMode( std::string{ modeStart, modeEnd } );
-  auto optionsStart{ modeEnd + 1U };
+
+  modeV = decodeMode( rawRequestString.substr( 0, modeEnd ) );
+  rawRequestString = rawRequestString.substr( modeEnd + 1U );
 
   // assign options
-  optionsV = Options_options( RawOptionsSpan{ optionsStart, rawSpan.end() } );
+  optionsV = Options_options( rawRequestString );
 }
 
-RawTftpPacket ReadWriteRequestPacket::encode() const
+RawData ReadWriteRequestPacket::encode() const
 {
   const auto mode{ decodeMode( modeV ) };
   const auto rawOptions{ Options_rawOptions( optionsV ) };
 
-  RawTftpPacket rawPacket(
-    HeaderSize +
-    filenameV.size() + 1U +
-    mode.size() + 1U +
-    rawOptions.size() );
+  RawData rawPacket( HeaderSize + filenameV.size() + 1U + mode.size() + 1U + rawOptions.size() );
 
   insertHeader( rawPacket );
 
-  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
+  auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // encode filename
-  auto filenameEnd{
-    std::copy( filenameV.begin(), filenameV.end(), rawSpan.begin() ) };
-  *filenameEnd = 0;
+  auto rawFilename{ std::as_bytes( std::span{ filenameV } ) };
+  auto filenameEnd{ std::copy( rawFilename.begin(), rawFilename.end(), rawSpan.begin() ) };
+  *filenameEnd = std::byte{ 0 };
   ++filenameEnd;
 
   // encode transfer mode
-  auto modeEnd{ std::copy( mode.begin(), mode.end(), filenameEnd ) };
-  *modeEnd = 0;
+  auto rawMode{ std::as_bytes( std::span{ mode } ) };
+  auto modeEnd{ std::copy( rawMode.begin(), rawMode.end(), filenameEnd ) };
+  *modeEnd = std::byte{ 0 };
   ++modeEnd;
 
   // encode options

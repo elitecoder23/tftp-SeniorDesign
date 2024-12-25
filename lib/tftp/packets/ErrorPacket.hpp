@@ -63,7 +63,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    explicit ErrorPacket( ConstRawTftpPacketSpan rawPacket );
+    explicit ErrorPacket( ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -73,7 +73,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
      *
      * @return *this
      **/
-    ErrorPacket& operator=( ConstRawTftpPacketSpan rawPacket );
+    ErrorPacket& operator=( ConstRawDataSpan rawPacket );
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const override;
@@ -124,7 +124,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
 
   private:
     //! @copydoc Packet::encode()
-    [[nodiscard]] RawTftpPacket encode() const override;
+    [[nodiscard]] RawData encode() const override;
 
     /**
      * @brief Decodes the TFTP body.
@@ -139,7 +139,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
      * @throw InvalidPacketException
      *   When the error message is not 0-terminated.
      **/
-    void decodeBody( ConstRawTftpPacketSpan rawPacket );
+    void decodeBody( ConstRawDataSpan rawPacket );
 
     //! Error Code
     ErrorCode errorCodeV;

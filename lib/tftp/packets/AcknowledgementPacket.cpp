@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -15,7 +14,7 @@
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <helper/Endianness.hpp>
+#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
 
 #include <boost/exception/all.hpp>
@@ -25,22 +24,19 @@
 
 namespace Tftp::Packets {
 
-AcknowledgementPacket::AcknowledgementPacket(
-  const BlockNumber blockNumber ) noexcept :
+AcknowledgementPacket::AcknowledgementPacket( const BlockNumber blockNumber ) noexcept :
   Packet{ PacketType::Acknowledgement },
   blockNumberV{ blockNumber }
 {
 }
 
-AcknowledgementPacket::AcknowledgementPacket(
-  ConstRawTftpPacketSpan rawPacket ) :
+AcknowledgementPacket::AcknowledgementPacket( ConstRawDataSpan rawPacket ) :
   Packet{ PacketType::Acknowledgement, rawPacket }
 {
   decodeBody( rawPacket );
 }
 
-AcknowledgementPacket& AcknowledgementPacket::operator=(
-  ConstRawTftpPacketSpan rawPacket )
+AcknowledgementPacket& AcknowledgementPacket::operator=( ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -59,18 +55,17 @@ void AcknowledgementPacket::blockNumber( const BlockNumber blockNumber )
 
 AcknowledgementPacket::operator std::string() const
 {
-  return
-    std::format( "ACK: BLOCK NO: {}", static_cast< uint16_t>( blockNumberV ) );
+  return std::format( "ACK: BLOCK NO: {}", static_cast< uint16_t>( blockNumberV ) );
 }
 
-RawTftpPacket AcknowledgementPacket::encode() const
+RawData AcknowledgementPacket::encode() const
 {
-  RawTftpPacket rawPacket( PacketSize );
+  RawData rawPacket( PacketSize );
 
   // insert header data
   insertHeader( rawPacket );
 
-  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
+  auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // block number
   rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
@@ -79,7 +74,7 @@ RawTftpPacket AcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-void AcknowledgementPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
+void AcknowledgementPacket::decodeBody( ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() != PacketSize )
@@ -88,14 +83,11 @@ void AcknowledgementPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of ACK packet" } );
   }
 
-  ConstRawTftpPacketSpan rawSpan{
-    rawPacket.begin() + HeaderSize,
-    rawPacket.end() };
+  auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode block number
-  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) =
-    Helper::getInt< uint16_t >( rawSpan );
-  assert( rawSpan.empty() );
+  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) = Helper::getInt< uint16_t >( rawSpan );
+  assert( rawSpan.empty() ); // Keep assertion, as otherwise above runtime check would be wrong
 }
 
 }

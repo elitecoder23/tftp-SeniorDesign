@@ -33,12 +33,10 @@ namespace Tftp::Servers {
  *
  * Waits on the specified port for a valid TFTP request and calls the appropriate call-back, which has to handle the
  * request.
- * If not expected packets or invalid packets are received a error is send back to the sender.
+ * If not expected packets or invalid packets are received an error is sent back to the sender.
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ).
  **/
-class ServerImpl final :
-  public Server,
-  private Packets::PacketHandler
+class ServerImpl final : public Server, private Packets::PacketHandler
 {
   public:
     /**
@@ -126,16 +124,13 @@ class ServerImpl final :
      * @throw CommunicationException
      *   On communication failure.
      **/
-    void receiveHandler(
-      const boost::system::error_code& errorCode,
-      std::size_t bytesTransferred );
+    void receiveHandler( const boost::system::error_code &errorCode, std::size_t bytesTransferred );
 
     /**
      * @copydoc Packets::PacketHandler::readRequestPacket
      *
      * The packet is decoded, and when valid the handler
-     * NewRequestHandler::receivedReadRequest() is called, which actually
-     * handles the request.
+     * NewRequestHandler::receivedReadRequest() is called, which actually handles the request.
      **/
     void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -145,8 +140,7 @@ class ServerImpl final :
      * @copydoc Packets::PacketHandler::writeRequestPacket
      *
      * The packet is decoded, and when valid the handler
-     * NewRequestHandler::receivedWriteRequest() is called, which actually
-     * handles the request.
+     * NewRequestHandler::receivedWriteRequest() is called, which actually handles the request.
      **/
     void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -158,9 +152,7 @@ class ServerImpl final :
      * The TFTP server does not expect this packet.
      * This packet is responded with an TFTP Error Packet.
      **/
-    void dataPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket ) override;
+    void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket
@@ -185,8 +177,8 @@ class ServerImpl final :
     /**
      * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket
      *
-     * The TFTP server does not expect this packet. This packet is responded
-     * with an TFTP Error Packet.
+     * The TFTP server does not expect this packet.
+     * This packet is responded with an TFTP Error Packet.
      **/
     void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -198,9 +190,7 @@ class ServerImpl final :
      * The TFTP server does not expect this packet.
      * This packet is ignored.
      **/
-    void invalidPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      Packets::ConstRawTftpPacketSpan rawPacket ) override;
+    void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Packets::ConstRawDataSpan rawPacket ) override;
 
     /**
      * @brief Decodes the TFTP Options.
@@ -237,7 +227,7 @@ class ServerImpl final :
     boost::asio::ip::address localV;
 
     //! Buffer, which holds the received TFTP packet.
-    Packets::RawTftpPacket receivePacketV;
+    Packets::RawData receivePacketV;
     //! Remote endpoint on receive.
     boost::asio::ip::udp::endpoint remoteEndpointV;
 };

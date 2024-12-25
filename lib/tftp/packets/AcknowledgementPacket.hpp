@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -15,8 +14,8 @@
 #define TFTP_PACKETS_ACKNOWLEDGEMENTPACKET_HPP
 
 #include <tftp/packets/Packets.hpp>
-#include <tftp/packets/Packet.hpp>
 #include <tftp/packets/BlockNumber.hpp>
+#include <tftp/packets/Packet.hpp>
 
 namespace Tftp::Packets {
 
@@ -58,7 +57,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    explicit AcknowledgementPacket( ConstRawTftpPacketSpan rawPacket );
+    explicit AcknowledgementPacket( ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -68,7 +67,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
      *
      * @return *this
      **/
-    AcknowledgementPacket& operator=( ConstRawTftpPacketSpan rawPacket );
+    AcknowledgementPacket& operator=( ConstRawDataSpan rawPacket );
 
     /**
      * @name Block Number
@@ -97,7 +96,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
 
   private:
     //! @copydoc Packet::encode() const
-    [[nodiscard]] RawTftpPacket encode() const override;
+    [[nodiscard]] RawData encode() const override;
 
     /**
      * @brief Decodes the TFTP Body.
@@ -110,7 +109,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
      * @throw InvalidPacketException
      *   When packet size is invalid
      **/
-    void decodeBody( ConstRawTftpPacketSpan rawPacket );
+    void decodeBody( ConstRawDataSpan rawPacket );
 
     //! Block Number of Packet
     BlockNumber blockNumberV;

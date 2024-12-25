@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -154,11 +153,7 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
      * @throw InvalidPacketException
      *   When packetType is not valid.
      **/
-    ReadWriteRequestPacket(
-      PacketType packetType,
-      std::string filename,
-      TransferMode mode,
-      Options options );
+    ReadWriteRequestPacket( PacketType packetType, std::string filename, TransferMode mode, Options options );
 
     /**
      * @brief Generates a TFTP Read/ Write Request packet from a data buffer
@@ -172,9 +167,7 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    ReadWriteRequestPacket(
-      PacketType packetType,
-      ConstRawTftpPacketSpan rawPacket );
+    ReadWriteRequestPacket( PacketType packetType, ConstRawDataSpan rawPacket );
 
     /**
      * @brief Decodes the TFTP body.
@@ -185,13 +178,13 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( ConstRawTftpPacketSpan rawPacket );
+    void decodeBody( ConstRawDataSpan rawPacket );
 
   private:
     /**
      * @copydoc Packet::encode()
      **/
-    [[nodiscard]] RawTftpPacket encode() const final;
+    [[nodiscard]] RawData encode() const final;
 
     //! Filename
     std::string filenameV;

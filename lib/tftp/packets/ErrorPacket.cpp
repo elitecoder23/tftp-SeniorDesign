@@ -15,7 +15,7 @@
 #include <tftp/packets/ErrorCodeDescription.hpp>
 #include <tftp/packets/PacketException.hpp>
 
-#include <helper/Endianness.hpp>
+#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
 
 #include <boost/exception/all.hpp>
@@ -32,14 +32,14 @@ ErrorPacket::ErrorPacket( const ErrorCode errorCode, std::string errorMessage ) 
 {
 }
 
-ErrorPacket::ErrorPacket( ConstRawTftpPacketSpan rawPacket ) :
+ErrorPacket::ErrorPacket( ConstRawDataSpan rawPacket ) :
   Packet{ PacketType::Error, rawPacket },
   errorCodeV{ ErrorCode::Invalid }
 {
   decodeBody( rawPacket );
 }
 
-ErrorPacket& ErrorPacket::operator=( ConstRawTftpPacketSpan rawPacket )
+ErrorPacket& ErrorPacket::operator=( ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -75,25 +75,28 @@ void ErrorPacket::errorMessage( std::string errorMessage )
   errorMessageV = std::move( errorMessage );
 }
 
-RawTftpPacket ErrorPacket::encode() const
+RawData ErrorPacket::encode() const
 {
-  RawTftpPacket rawPacket( MinPacketSize + errorMessageV.length() );
+  RawData rawPacket( MinPacketSize + errorMessageV.length() );
 
   insertHeader( rawPacket );
 
-  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
+  auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // error code
   rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( errorCodeV ) );
 
   // error message
-  auto packetIt{ std::copy( errorMessageV.begin(), errorMessageV.end(), rawSpan.begin() ) };
-  *packetIt = 0;
+  auto rawErrorMessage{ std::span< const std::byte >{
+    reinterpret_cast< std::byte const * >( errorMessageV.data() ),
+    errorMessageV.size() } };
+  auto packetIt{ std::copy( rawErrorMessage.begin(), rawErrorMessage.end(), rawSpan.begin() ) };
+  *packetIt = std::byte{ 0 };
 
   return rawPacket;
 }
 
-void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
+void ErrorPacket::decodeBody( ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() < MinPacketSize )
@@ -102,7 +105,7 @@ void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of ERROR packet" } );
   }
 
-  ConstRawTftpPacketSpan rawSpan{ rawPacket.subspan( HeaderSize ) };
+  auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode error code
   uint16_t errorCodeInt{};
@@ -110,13 +113,13 @@ void ErrorPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
   errorCodeV = static_cast< ErrorCode >( errorCodeInt );
 
   // check terminating 0 character
-  if ( rawSpan.back() != 0U )
+  if ( rawSpan.back() != std::byte{ 0 } )
   {
     BOOST_THROW_EXCEPTION( InvalidPacketException()
       << Helper::AdditionalInfo{ "error message not 0-terminated" } );
   }
 
-  errorMessageV = std::string{ rawSpan.begin(), rawSpan.end() -1U };
+  errorMessageV = std::string_view{ reinterpret_cast< char const * >( rawSpan.data() ), rawSpan.size() - 1U };
 }
 
 }

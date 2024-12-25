@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -33,14 +32,14 @@ OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
 }
 
 OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  ConstRawTftpPacketSpan rawPacket ):
+  ConstRawDataSpan rawPacket ):
   Packet{ PacketType::OptionsAcknowledgement, rawPacket }
 {
   decodeBody( rawPacket );
 }
 
 OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
-  ConstRawTftpPacketSpan rawPacket )
+  ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -67,9 +66,9 @@ OptionsAcknowledgementPacket::operator std::string() const
   return std::format( "OACK: OPT: \"{}\"", Options_toString( optionsV ) );
 }
 
-RawTftpPacket OptionsAcknowledgementPacket::encode() const
+RawData OptionsAcknowledgementPacket::encode() const
 {
-  RawTftpPacket rawPacket( HeaderSize );
+  RawData rawPacket( HeaderSize );
 
   insertHeader( rawPacket );
 
@@ -81,8 +80,7 @@ RawTftpPacket OptionsAcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-void OptionsAcknowledgementPacket::decodeBody(
-  ConstRawTftpPacketSpan rawPacket )
+void OptionsAcknowledgementPacket::decodeBody( ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() <= HeaderSize )
@@ -91,13 +89,11 @@ void OptionsAcknowledgementPacket::decodeBody(
       << Helper::AdditionalInfo{ "Invalid packet size of OACK packet" } );
   }
 
-  ConstRawTftpPacketSpan rawSpan{
-    rawPacket.begin() + HeaderSize,
-    rawPacket.end() };
+  auto rawSpan{ rawPacket.subspan( HeaderSize ) };
 
   // assign options
-  optionsV =
-    Options_options( RawOptionsSpan{ rawSpan.begin(), rawSpan.end() } );
+  auto rawOptionsString{ std::string_view{ reinterpret_cast< char const * >( rawSpan.data() ), rawSpan.size() } };
+  optionsV = Options_options( rawOptionsString );
 }
 
 }

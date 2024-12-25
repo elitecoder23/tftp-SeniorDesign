@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -39,8 +38,7 @@ class TFTP_EXPORT Packet
      * @retval PacketType::INVALID
      *   If packet is too small or invalid opcode value.
      **/
-    [[nodiscard]] static PacketType packetType(
-      ConstRawTftpPacketSpan rawPacket ) noexcept;
+    [[nodiscard]] static PacketType packetType( ConstRawDataSpan rawPacket ) noexcept;
 
     /**
      * @brief Return the packet type of the TFTP Packet.
@@ -59,7 +57,7 @@ class TFTP_EXPORT Packet
      *
      * @return Binary packet data
      **/
-    explicit operator RawTftpPacket() const;
+    explicit operator RawData() const;
 
     /**
      * @brief Returns a string, which describes the packet.
@@ -89,7 +87,7 @@ class TFTP_EXPORT Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    Packet( PacketType packetType, ConstRawTftpPacketSpan rawPacket );
+    Packet( PacketType packetType, ConstRawDataSpan rawPacket );
 
     /**
      * @brief Copy Constructor
@@ -134,7 +132,7 @@ class TFTP_EXPORT Packet
      *
      * @return Binary packet data
      **/
-    [[nodiscard]] virtual RawTftpPacket encode() const = 0;
+    [[nodiscard]] virtual RawData encode() const = 0;
 
     /**
      * @brief Insert the header data to the raw packet.
@@ -145,7 +143,7 @@ class TFTP_EXPORT Packet
      * @param[in,out] rawPacket
      *   Raw packet, which will be filled with the appropriate data.
      **/
-    void insertHeader( RawTftpPacketSpan rawPacket ) const;
+    void insertHeader( RawDataSpan rawPacket ) const;
 
     /**
      * @brief Decodes the TFTP Header.
@@ -156,7 +154,7 @@ class TFTP_EXPORT Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    void decodeHeader( ConstRawTftpPacketSpan rawPacket );
+    void decodeHeader( ConstRawDataSpan rawPacket );
 
   private:
     //! TFTP Packet Type

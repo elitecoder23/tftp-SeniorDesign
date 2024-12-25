@@ -66,7 +66,7 @@ class TFTP_EXPORT DataPacket final : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    explicit DataPacket( ConstRawTftpPacketSpan rawPacket );
+    explicit DataPacket( ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -76,7 +76,7 @@ class TFTP_EXPORT DataPacket final : public Packet
      *
      * @return *this
      **/
-    DataPacket& operator=( ConstRawTftpPacketSpan rawPacket );
+    DataPacket& operator=( ConstRawDataSpan rawPacket );
 
     /**
      * @name Block Number
@@ -154,7 +154,7 @@ class TFTP_EXPORT DataPacket final : public Packet
 
   private:
     //! @copydoc Packet::encode()
-    [[nodiscard]] RawTftpPacket encode() const override;
+    [[nodiscard]] RawData encode() const override;
 
     /**
      * @brief Decodes the TFTP body.
@@ -165,7 +165,7 @@ class TFTP_EXPORT DataPacket final : public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( ConstRawTftpPacketSpan rawPacket );
+    void decodeBody( ConstRawDataSpan rawPacket );
 
     //! Block Number of Packet.
     BlockNumber blockNumberV;

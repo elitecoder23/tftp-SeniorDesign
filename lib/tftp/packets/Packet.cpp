@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -17,14 +16,14 @@
 
 #include <tftp/Logger.hpp>
 
-#include <helper/Endianness.hpp>
+#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
 
 #include <boost/exception/all.hpp>
 
 namespace Tftp::Packets {
 
-PacketType Packet::packetType( ConstRawTftpPacketSpan rawPacket ) noexcept
+PacketType Packet::packetType( ConstRawDataSpan rawPacket ) noexcept
 {
   // check minimum data size.
   if ( rawPacket.size() < HeaderSize )
@@ -97,15 +96,12 @@ Packet::Packet( const PacketType packetType ) noexcept:
 {
 }
 
-Packet::Packet(
-  const PacketType packetType,
-  ConstRawTftpPacketSpan rawPacket ):
-  packetTypeV{ packetType }
+Packet::Packet( const PacketType packetType, ConstRawDataSpan rawPacket ) : packetTypeV{ packetType }
 {
   decodeHeader( rawPacket );
 }
 
-Packet::operator RawTftpPacket() const
+Packet::operator RawData() const
 {
   return encode();
 }
@@ -124,18 +120,16 @@ Packet& Packet::operator=( Packet &&other [[maybe_unused]] ) noexcept
   return *this;
 }
 
-void Packet::insertHeader( RawTftpPacketSpan rawPacket ) const
+void Packet::insertHeader( RawDataSpan rawPacket ) const
 {
   // keep assertion --> programming error of subclasses.
   assert( rawPacket.size() >= HeaderSize );
 
   // encode opcode
-  Helper::setInt(
-    RawTftpPacketSpan{ rawPacket.begin(), rawPacket.end() },
-    std::to_underlying( packetTypeV ) );
+  Helper::setInt( rawPacket, std::to_underlying( packetTypeV ) );
 }
 
-void Packet::decodeHeader( ConstRawTftpPacketSpan rawPacket )
+void Packet::decodeHeader( ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() < HeaderSize )
@@ -144,11 +138,8 @@ void Packet::decodeHeader( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size (HEADER SIZE)" } );
   }
 
-  ConstRawTftpPacketSpan rawSpan{ rawPacket.begin(), rawPacket.end() };
-
   // Check Opcode
-  uint16_t opcode{};
-  std::tie( rawSpan, opcode ) = Helper::getInt< uint16_t>( rawSpan );
+  auto [ _, opcode ]{ Helper::getInt< uint16_t >( rawPacket ) };
 
   if ( opcode != std::to_underlying( packetTypeV ) )
   {

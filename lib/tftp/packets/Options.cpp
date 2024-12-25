@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -42,45 +41,35 @@ std::string Options_toString( const Options &options )
   return result;
 }
 
-Options Options_options( RawOptionsSpan rawOptions )
+Options Options_options( std::string_view rawOptions )
 {
-  Options options{};
+  Options options;
 
-  for( auto begin = rawOptions.begin(); begin != rawOptions.end(); )
+  for ( auto optionsString{ rawOptions }; !optionsString.empty(); )
   {
-    auto nameBegin{ begin };
+    const auto nameEnd{ optionsString.find( '\0' ) };
 
-    // Option Name is delimited by "\0" character
-    auto nameEnd{ std::find( nameBegin, rawOptions.end(), 0 ) };
-
-    if ( nameEnd == rawOptions.end() )
+    if ( nameEnd == std::string_view::npos )
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
         << Helper::AdditionalInfo{ "Unexpected end of input data" } );
     }
 
-    auto valueBegin{ nameEnd + 1U };
+    std::string name{ optionsString.substr( 0, nameEnd ) };
+    optionsString = optionsString.substr( nameEnd + 1U );
 
-    if ( valueBegin == rawOptions.end() )
-    {
-      BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
-        << Helper::AdditionalInfo{ "Unexpected end of input data"} );
-    }
+    const auto valueEnd{ optionsString.find( '\0' ) };
 
-    // Option Value is delimited by "\0" character
-    auto valueEnd{ std::find( valueBegin, rawOptions.end(), 0 ) };
-
-    if ( valueEnd == rawOptions.end() )
+    if ( valueEnd == std::string_view::npos )
     {
       BOOST_THROW_EXCEPTION( Packets::InvalidPacketException()
         << Helper::AdditionalInfo{ "Unexpected end of input data" } );
     }
 
-    options.emplace(
-      std::string{ nameBegin, nameEnd },
-      std::string{ valueBegin, valueEnd } );
+    std::string value{ optionsString.substr( 0, valueEnd ) };
+    optionsString = optionsString.substr( valueEnd + 1U );
 
-    begin = valueEnd + 1U;
+    options.emplace( std::move( name ), std::move( value ) );
   }
 
   return options;
@@ -88,22 +77,26 @@ Options Options_options( RawOptionsSpan rawOptions )
 
 RawOptions Options_rawOptions( const Options &options )
 {
-  RawOptions rawOptions{};
+  RawOptions rawOptions;
 
   // copy options
   for ( const auto &[ name, option ] : options )
   {
     // option name
-    rawOptions.insert( rawOptions.end(), name.begin(), name.end() );
+    auto rawName{
+      std::span< std::byte const >{ reinterpret_cast< std::byte const * >( std::data( name ) ), name.size() } };
+    rawOptions.insert( rawOptions.end(), rawName.begin(), rawName.end() );
 
     // name value divider
-    rawOptions.push_back( 0 );
+    rawOptions.push_back( std::byte{ 0 } );
 
     // option value
-    rawOptions.insert( rawOptions.end(), option.begin(), option.end() );
+    auto rawValue{
+      std::span< std::byte const >{ reinterpret_cast< std::byte const * >( std::data( option ) ), option.size() } };
+    rawOptions.insert( rawOptions.end(), rawValue.begin(), rawValue.end() );
 
     // option terminator
-    rawOptions.push_back( 0 );
+    rawOptions.push_back( std::byte{ 0 } );
   }
 
   return rawOptions;

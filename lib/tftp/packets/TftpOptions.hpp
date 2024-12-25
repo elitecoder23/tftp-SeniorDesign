@@ -51,8 +51,7 @@ struct TFTP_EXPORT TftpOptions final
    * @brief Transfer size option (RFC 2349)
    *
    * The size of the file to be transferred.
-   * Allows the side receiving the file to determine the ultimate size of the
-   * transfer before it begins.
+   * Allows the side receiving the file to determine the ultimate size of the transfer before it begins.
    **/
   std::optional< uint64_t > transferSize;
 

@@ -68,9 +68,7 @@ class OperationImpl : protected Packets::PacketHandler
      * @param[in] errorMessage
      *   An additional error message.
      **/
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage );
+    void gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage );
 
     /**
      * @brief Immediately Cancels the Transfer.
@@ -131,8 +129,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Updates the Maximum Receive Packet Size.
      *
-     * This operation should be called, if a block size option has been
-     * negotiated.
+     * This operation should be called, if a block size option has been negotiated.
      *
      * @param[in] maxReceivePacketSize
      *   New max receive packet size.
@@ -150,8 +147,7 @@ class OperationImpl : protected Packets::PacketHandler
     void receiveTimeout( std::chrono::seconds receiveTimeout ) noexcept;
 
     /**
-     * @brief Sends the packet to the TFTP server identified by its default
-     *   endpoint.
+     * @brief Sends the packet to the TFTP server identified by its default endpoint.
      *
      * @param[in] packet
      *   TFTP packet to send.
@@ -183,8 +179,7 @@ class OperationImpl : protected Packets::PacketHandler
     void receive();
 
     /**
-     * @brief Final Wait for possible resend of last package, when final ACK was
-     *   lost.
+     * @brief Final Wait for possible resend of last package, when final ACK was lost.
      *
      * Receive is handled as normal.
      * If timeout has occurred, operation is finished successfully.
@@ -197,8 +192,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Sets the Finished flag.
      *
-     * This operation is called, when the last packet has been received or
-     * transmitted to stop the reception loop.
+     * This operation is called, when the last packet has been received or transmitted to stop the reception loop.
      *
      * @param[in] status
      *   If the operation was successful, or an error occurred.
@@ -241,16 +235,14 @@ class OperationImpl : protected Packets::PacketHandler
      *
      * Send error packet and terminate connection.
      **/
-    void invalidPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      Packets::ConstRawTftpPacketSpan rawPacket ) final;
+    void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Packets::ConstRawDataSpan rawPacket ) final;
 
   private:
     /**
      * @brief Called, when data is received the first time.
      *
-     * In case the first time a TFTP packet has been received, the source is
-     * checked and the socket is connected to the final endpoint.
+     * In case the first time a TFTP packet has been received, the source is checked and the socket is connected to the
+     * final endpoint.
      *
      * @param[in] errorCode
      *   error status of operation.
@@ -275,8 +267,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Called when no data is received for the first sent packet.
      *
-     * If the retransmission counter has not exceeded, the last sent packet
-     * is retransmitted.
+     * If the retransmission counter has not exceeded, the last sent packet is retransmitted.
      *
      * @param[in] errorCode
      *   error status of operation.
@@ -286,8 +277,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Called when no data is received for the sent packet.
      *
-     * If the retransmission counter has not exceeded, the last sent packet
-     * is retransmitted.
+     * If the retransmission counter has not exceeded, the last sent packet is retransmitted.
      *
      * @param[in] errorCode
      *   error status of operation.
@@ -322,11 +312,11 @@ class OperationImpl : protected Packets::PacketHandler
     boost::asio::system_timer timer;
 
     //! Received Packet Data
-    Packets::RawTftpPacket receivePacket;
+    Packets::RawData receivePacket;
     //! Remote Address (set, when server sends first answer)
     boost::asio::ip::udp::endpoint receiveEndpoint;
     //! Last transmitted Packet ( used for retries)
-    Packets::RawTftpPacket transmitPacket;
+    Packets::RawData transmitPacket;
     //! Re-transmission counter
     unsigned int transmitCounter{ 0U };
     //! Error info

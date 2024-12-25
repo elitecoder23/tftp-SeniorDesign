@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -50,8 +49,7 @@ Server& ServerImpl::requestHandler( ReceivedTftpRequestHandler handler )
   return *this;
 }
 
-Server& ServerImpl::serverAddress(
-  boost::asio::ip::udp::endpoint serverAddress )
+Server& ServerImpl::serverAddress( boost::asio::ip::udp::endpoint serverAddress )
 {
   serverAddressV = std::move( serverAddress );
   return *this;
@@ -62,8 +60,7 @@ boost::asio::ip::udp::endpoint ServerImpl::localEndpoint() const
   return socketV.local_endpoint();
 }
 
-Server& ServerImpl::tftpTimeoutDefault(
-  const std::chrono::seconds timeout )
+Server& ServerImpl::tftpTimeoutDefault( const std::chrono::seconds timeout )
 {
   tftpTimeoutDefaultV = timeout;
   return *this;
@@ -81,8 +78,7 @@ Server& ServerImpl::dallyDefault( const bool dally )
   return *this;
 }
 
-Server& ServerImpl::optionsConfigurationDefault(
-  TftpOptionsConfiguration optionsConfiguration )
+Server& ServerImpl::optionsConfigurationDefault( TftpOptionsConfiguration optionsConfiguration )
 {
   optionsConfigurationDefaultV = std::move( optionsConfiguration );
   return *this;
@@ -209,12 +205,10 @@ void ServerImpl::errorOperation(
 
     errSocket.connect( remote );
 
-    auto rawPacket{ static_cast< Packets::RawTftpPacket >( errorPacket ) };
+    auto rawPacket{ static_cast< Packets::RawData >( errorPacket ) };
 
     // Update statistic
-    Packets::PacketStatistic::globalTransmit().packet(
-      errorPacket.packetType(),
-      rawPacket.size() );
+    Packets::PacketStatistic::globalTransmit().packet( errorPacket.packetType(), rawPacket.size() );
 
     errSocket.send( boost::asio::buffer( rawPacket ) );
   }
@@ -248,12 +242,10 @@ void ServerImpl::errorOperation(
 
     errSocket.connect( remote );
 
-    auto rawPacket{ static_cast< Packets::RawTftpPacket>( errorPacket ) };
+    auto rawPacket{ static_cast< Packets::RawData >( errorPacket ) };
 
     // Update statistic
-    Packets::PacketStatistic::globalTransmit().packet(
-      errorPacket.packetType(),
-      rawPacket.size() );
+    Packets::PacketStatistic::globalTransmit().packet( errorPacket.packetType(), rawPacket.size() );
 
     errSocket.send( boost::asio::buffer( rawPacket ) );
   }
@@ -284,9 +276,7 @@ void ServerImpl::receive()
   }
 }
 
-void ServerImpl::receiveHandler(
-  const boost::system::error_code& errorCode,
-  const std::size_t bytesTransferred )
+void ServerImpl::receiveHandler( const boost::system::error_code &errorCode, const std::size_t bytesTransferred )
 {
   BOOST_LOG_FUNCTION()
 
@@ -309,9 +299,7 @@ void ServerImpl::receiveHandler(
   try
   {
     // handle the received packet (decode it and call the appropriate handler)
-    packet(
-      remoteEndpointV,
-      Packets::ConstRawTftpPacketSpan{ receivePacketV.begin(), bytesTransferred } );
+    packet( remoteEndpointV, Packets::ConstRawDataSpan{ receivePacketV.begin(), bytesTransferred } );
   }
   catch ( const TftpException &e )
   {
@@ -338,10 +326,7 @@ void ServerImpl::readRequestPacket(
       << "No registered handler - reject";
 
     // execute error operation
-    errorOperation(
-      remote,
-      Packets::ErrorCode::FileNotFound,
-      "RRQ not accepted" );
+    errorOperation( remote, Packets::ErrorCode::FileNotFound, "RRQ not accepted" );
   }
 
   // extract known TFTP Options
@@ -374,10 +359,7 @@ void ServerImpl::writeRequestPacket(
       << "No registered handler - reject";
 
     // execute error operation
-    errorOperation(
-      remote,
-      Packets::ErrorCode::FileNotFound,
-      "WRQ" );
+    errorOperation( remote, Packets::ErrorCode::FileNotFound, "WRQ" );
   }
 
   // extract known TFTP Options
@@ -394,9 +376,7 @@ void ServerImpl::writeRequestPacket(
     receivedOptions );
 }
 
-void ServerImpl::dataPacket(
-  const boost::asio::ip::udp::endpoint &remote,
-  const Packets::DataPacket &dataPacket)
+void ServerImpl::dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -404,10 +384,7 @@ void ServerImpl::dataPacket(
     << "RX Error: " << static_cast< std::string >( dataPacket );
 
   // execute error operation
-  errorOperation(
-    remote,
-    Packets::ErrorCode::IllegalTftpOperation,
-    "DATA packet not expected" );
+  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "DATA packet not expected" );
 }
 
 void ServerImpl::acknowledgementPacket(
@@ -420,15 +397,10 @@ void ServerImpl::acknowledgementPacket(
     << "RX Error: " << static_cast< std::string >( acknowledgementPacket );
 
   // execute error operation
-  errorOperation(
-    remote,
-    Packets::ErrorCode::IllegalTftpOperation,
-    "ACK packet not expected" );
+  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "ACK packet not expected" );
 }
 
-void ServerImpl::errorPacket(
-  const boost::asio::ip::udp::endpoint &remote,
-  const Packets::ErrorPacket &errorPacket )
+void ServerImpl::errorPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::ErrorPacket &errorPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -436,10 +408,7 @@ void ServerImpl::errorPacket(
     << "RX Error: " << static_cast< std::string>( errorPacket );
 
   // execute error operation
-  errorOperation(
-    remote,
-    Packets::ErrorCode::IllegalTftpOperation,
-    "ERR packet not expected" );
+  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "ERR packet not expected" );
 }
 
 void ServerImpl::optionsAcknowledgementPacket(
@@ -452,15 +421,12 @@ void ServerImpl::optionsAcknowledgementPacket(
     << "RX Error: " << static_cast< std::string >( optionsAcknowledgementPacket );
 
   // execute error operation
-  errorOperation(
-    remote,
-    Packets::ErrorCode::IllegalTftpOperation,
-    "OACK packet not expected" );
+  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "OACK packet not expected" );
 }
 
 void ServerImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
-  [[maybe_unused]] Packets::ConstRawTftpPacketSpan rawPacket )
+  [[maybe_unused]] Packets::ConstRawDataSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -468,11 +434,9 @@ void ServerImpl::invalidPacket(
     << "RX: UNKNOWN: *Error* - IGNORE";
 }
 
-Packets::TftpOptions
-ServerImpl::tftpOptions(
-  Packets::Options &clientOptions ) const
+Packets::TftpOptions ServerImpl::tftpOptions( Packets::Options &clientOptions ) const
 {
-  Packets::TftpOptions decodedOptions{};
+  Packets::TftpOptions decodedOptions;
 
   // check block size option - if set use it
   const auto [ blockSizeValid, blockSize ] =
@@ -485,8 +449,7 @@ ServerImpl::tftpOptions(
   decodedOptions.blockSize = blockSize;
   // remove block size option
   // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
-  clientOptions.erase(
-    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } );
+  clientOptions.erase( std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } );
 
   // check timeout option - if set use it
   const auto [ timeoutValid, timeout ] =
@@ -499,8 +462,7 @@ ServerImpl::tftpOptions(
   decodedOptions.timeout = timeout;
   // remove timeout option
   // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
-  clientOptions.erase(
-    std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } );
+  clientOptions.erase( std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } );
 
   // check transfer size option
   const auto [ transferSizeValid, transferSize ] =
@@ -511,8 +473,7 @@ ServerImpl::tftpOptions(
   decodedOptions.transferSize = transferSize;
   // remove timeout option
   // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
-  clientOptions.erase( std::string{
-    Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) } );
+  clientOptions.erase( std::string{ Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) } );
 
   return decodedOptions;
 }

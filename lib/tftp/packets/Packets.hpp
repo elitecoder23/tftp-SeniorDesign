@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -22,6 +21,7 @@
 #include <tftp/Tftp.hpp>
 
 #include <cstdint>
+#include <cstddef>
 #include <map>
 #include <optional>
 #include <span>
@@ -32,8 +32,7 @@
  * @brief TFTP %Packets.
  *
  * The base for the packets is the class TftpPacket.
- * For raw-data to TFTP packet handling, the class PacketFactory with its
- * static methods can be used.
+ * For raw-data to TFTP packet handling, the class PacketFactory with its static methods can be used.
  **/
 namespace Tftp::Packets {
 
@@ -80,8 +79,7 @@ constexpr uint16_t DefaultDataSize{ 512U };
 constexpr uint16_t DefaultTftpDataPacketHeaderSize{ 4U };
 
 //! Maximum size of TFTP package (without blksize option)
-constexpr uint16_t DefaultMaxPacketSize{
-  DefaultDataSize + DefaultTftpDataPacketHeaderSize };
+constexpr uint16_t DefaultMaxPacketSize{ DefaultDataSize + DefaultTftpDataPacketHeaderSize };
 
 //! TFTP Transfer Modes.
 enum class TransferMode
@@ -96,10 +94,8 @@ enum class TransferMode
 /**
  * @brief TFTP Error Codes as Defined within the RFCs.
  *
- * The error codes, except the ErrorCode::TftpOptionRefused (8) are
- * described within RFC 1350.
- * The error code ErrorCode::TftpOptionRefused (8) is described within
- * RFC 2347.
+ * The error codes, except the ErrorCode::TftpOptionRefused (8) are described within RFC 1350.
+ * The error code ErrorCode::TftpOptionRefused (8) is described within RFC 2347.
  **/
 enum class ErrorCode : uint16_t
 {
@@ -150,16 +146,16 @@ constexpr uint8_t TimeoutOptionMin{ 1U };
 constexpr uint8_t TimeoutOptionMax{ 255U };
 
 //! Raw TFTP Packet.
-using RawTftpPacket = std::vector< uint8_t >;
+using RawData = std::vector< std::byte >;
 //! Raw TFTP Packet as std::span
-using RawTftpPacketSpan = std::span< uint8_t >;
+using RawDataSpan = std::span< std::byte >;
 //! Constant Raw TFTP Packet as std::span
-using ConstRawTftpPacketSpan = std::span< const uint8_t >;
+using ConstRawDataSpan = std::span< const std::byte >;
 
 //! Raw Options.
-using RawOptions = std::vector< uint8_t >;
+using RawOptions = std::vector< std::byte >;
 //! Constant Raw TFTP Options as std::span
-using RawOptionsSpan = std::span< const uint8_t >;
+using ConstRawOptionsSpan = std::span< const std::byte >;
 //! TFTP Options (Maps Option Name to Option Value)
 using Options = std::map< std::string, std::string, std::less< > >;
 

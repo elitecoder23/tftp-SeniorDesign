@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -25,6 +24,21 @@ BOOST_AUTO_TEST_SUITE( TftpTest )
 BOOST_AUTO_TEST_SUITE( PacketsTest )
 BOOST_AUTO_TEST_SUITE( OptionsTest )
 
+//! Option String
+//                              00000000 0111111 11112222 2222223
+//                              12345678 9012345 67890123 4567890
+static const char optionStr[]{ "OPTION1\0VALUE1\0OPTION2\0VALUE2" }; // auto null-terminate
+static_assert( sizeof( optionStr ) == 30U );
+
+//! Whole Option String
+static const std::string_view optionStr1{ optionStr, 30 };
+//! Option String - missing Null-character after name
+static const std::string_view optionStr2{ optionStr, 7 };
+//! Option String - missing option value after name
+static const std::string_view optionStr3{ optionStr, 8 };
+//! Option String - missing Null-character after option value
+static const std::string_view optionStr4{ optionStr, 14 };
+
 //! Options_options tests
 BOOST_AUTO_TEST_CASE( toString )
 {
@@ -38,28 +52,17 @@ BOOST_AUTO_TEST_CASE( toString )
 //! Options_options tests
 BOOST_AUTO_TEST_CASE( optionsDecode )
 {
-  RawOptions emptyRawOptions{};
-  BOOST_CHECK( Options_options( RawOptions{} ).empty() ) ;
+  BOOST_CHECK( Options_options( {} ).empty() ) ;
 
-  RawOptions rawOptions{
-    'O', 'P', 'T', 'I', 'O', 'N', '1', 0x00, 'V', 'A', 'L', 'U', 'E', '1', 0x00,
-    'O', 'P', 'T', 'I', 'O', 'N', '2', 0x00, 'V', 'A', 'L', 'U', 'E', '2', 0x00
-  };
-  auto options{ Options_options( RawOptionsSpan{ rawOptions.begin(), rawOptions.end() } ) };
+  auto options{ Options_options( optionStr1 ) };
 
   BOOST_CHECK( !options.empty() );
   BOOST_CHECK( options.size() == 2 );
   BOOST_CHECK( ( options == Options{ { "OPTION1", "VALUE1"}, { "OPTION2", "VALUE2" } } ) );
 
-  BOOST_CHECK_THROW(
-    boost::ignore_unused( Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+7U } ) ),
-    TftpException );
-  BOOST_CHECK_THROW(
-    boost::ignore_unused( Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+8U } ) ),
-    TftpException );
-  BOOST_CHECK_THROW(
-    boost::ignore_unused( Options_options( RawOptions{ rawOptions.begin(), rawOptions.begin()+14U } ) ),
-    TftpException );
+  BOOST_CHECK_THROW( boost::ignore_unused( Options_options( optionStr2 ) ), TftpException );
+  BOOST_CHECK_THROW( boost::ignore_unused( Options_options( optionStr3 ) ), TftpException );
+  BOOST_CHECK_THROW( boost::ignore_unused( Options_options( optionStr4 ) ), TftpException );
 }
 
 //! TftpOptions_getOption tests

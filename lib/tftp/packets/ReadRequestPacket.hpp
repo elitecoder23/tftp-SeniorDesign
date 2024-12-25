@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -38,10 +37,7 @@ class TFTP_EXPORT ReadRequestPacket final : public ReadWriteRequestPacket
      * @param[in] options
      *   Options, which are set
      **/
-    ReadRequestPacket(
-      std::string filename,
-      TransferMode mode,
-      Options options ) noexcept;
+    ReadRequestPacket( std::string filename, TransferMode mode, Options options ) noexcept;
 
     /**
      * @brief Generates a TFTP Read Request packet from a data buffer
@@ -52,7 +48,7 @@ class TFTP_EXPORT ReadRequestPacket final : public ReadWriteRequestPacket
      * @throw InvalidPacketException
      *   When rawPacket is not an valid packet.
      **/
-    explicit ReadRequestPacket( ConstRawTftpPacketSpan rawPacket );
+    explicit ReadRequestPacket( ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -62,7 +58,7 @@ class TFTP_EXPORT ReadRequestPacket final : public ReadWriteRequestPacket
      *
      * @return *this
      **/
-    ReadRequestPacket& operator=( ConstRawTftpPacketSpan rawPacket );
+    ReadRequestPacket& operator=( ConstRawDataSpan rawPacket );
 };
 
 }

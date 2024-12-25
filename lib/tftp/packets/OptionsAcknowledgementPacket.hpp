@@ -54,7 +54,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    explicit OptionsAcknowledgementPacket( ConstRawTftpPacketSpan rawPacket );
+    explicit OptionsAcknowledgementPacket( ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -64,7 +64,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
      *
      * @return *this
      **/
-    OptionsAcknowledgementPacket& operator=( ConstRawTftpPacketSpan rawPacket );
+    OptionsAcknowledgementPacket& operator=( ConstRawDataSpan rawPacket );
 
     /**
      * @name TFTP Options
@@ -102,7 +102,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
     /**
      * @copydoc Packet::encode()
      **/
-    [[nodiscard]] RawTftpPacket encode() const override;
+    [[nodiscard]] RawData encode() const override;
 
     /**
      * @brief Decodes the TFTP body.
@@ -113,7 +113,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( ConstRawTftpPacketSpan rawPacket );
+    void decodeBody( ConstRawDataSpan rawPacket );
 
     //! Stored Options.
     Options optionsV;

@@ -14,7 +14,7 @@
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <helper/Endianness.hpp>
+#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
 
 #include <boost/exception/all.hpp>
@@ -31,13 +31,13 @@ DataPacket::DataPacket( BlockNumber blockNumber, Data data ) noexcept :
 {
 }
 
-DataPacket::DataPacket( ConstRawTftpPacketSpan rawPacket ) :
+DataPacket::DataPacket( ConstRawDataSpan rawPacket ) :
   Packet{ PacketType::Data, rawPacket }
 {
   decodeBody( rawPacket );
 }
 
-DataPacket& DataPacket::operator=( ConstRawTftpPacketSpan rawPacket )
+DataPacket& DataPacket::operator=( ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -81,31 +81,30 @@ size_t DataPacket::dataSize() const
 
 DataPacket::operator std::string() const
 {
-  return std::format(
-    "DATA: BLOCK NO: {} DATA: {} bytes",
-    static_cast< uint16_t>( blockNumber() ),
-    dataSize() );
+  return std::format( "DATA: BLOCK NO: {} DATA: {} bytes", static_cast< uint16_t >( blockNumber() ), dataSize() );
 }
 
-RawTftpPacket DataPacket::encode() const
+RawData DataPacket::encode() const
 {
-  RawTftpPacket rawPacket( MinPacketSize + dataV.size() );
+  RawData rawPacket( MinPacketSize + dataV.size() );
 
   insertHeader( rawPacket );
 
-  RawTftpPacketSpan rawSpan{ rawPacket.begin() + HeaderSize, rawPacket.end() };
+  auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // block number
   rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
   assert( rawSpan.size() == dataV.size() );
 
   // data
-  std::ranges::copy( dataV, rawSpan.begin() );
+  std::ranges::copy(
+    dataV,
+    std::span< uint8_t >{ reinterpret_cast< uint8_t * >( rawSpan.data() ), rawSpan.size() }.begin() );
 
   return rawPacket;
 }
 
-void DataPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
+void DataPacket::decodeBody( ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() < MinPacketSize )
@@ -114,13 +113,14 @@ void DataPacket::decodeBody( ConstRawTftpPacketSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of DATA packet" } );
   }
 
-  ConstRawTftpPacketSpan rawSpan{ rawPacket.subspan( HeaderSize ) };
+  auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode block number
   std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) = Helper::getInt< uint16_t >( rawSpan );
 
   // copy data
-  dataV.assign( rawSpan.begin(), rawSpan.end() );
+  auto rawData{ std::span< const uint8_t >{ reinterpret_cast< uint8_t const * >( rawSpan.data() ), rawSpan.size() } };
+  dataV.assign( rawData.begin(), rawData.end() );
 }
 
 }

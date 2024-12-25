@@ -53,7 +53,7 @@ namespace Tftp::Packets {
  *
  * @sa TftpOptions_rawOptions()
  **/
-[[nodiscard]] TFTP_EXPORT Options Options_options( RawOptionsSpan rawOptions );
+[[nodiscard]] TFTP_EXPORT Options Options_options( std::string_view rawOptions );
 
 /**
  * @brief Returns the Option List as Raw Data.

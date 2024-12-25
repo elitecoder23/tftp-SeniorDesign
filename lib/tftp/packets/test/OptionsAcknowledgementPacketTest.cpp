@@ -25,6 +25,30 @@ BOOST_AUTO_TEST_SUITE( TftpTest )
 BOOST_AUTO_TEST_SUITE( PacketsTest )
 BOOST_AUTO_TEST_SUITE( TftpOptionsAcknowledgementPacket )
 
+//! Raw options acknowledgment packet
+static const uint8_t rawOptionsAcknowledgementPacketOk[]{
+  0x00U, 0x06U, // Opcode
+  0x00U, 0x01U,
+  'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U, 0x00U };
+
+//! Raw options acknowledgment packet - invalid opcode
+static const uint8_t rawOptionsAcknowledgementPacket1[]{
+  0x00U, 0x05U, // Opcode
+  0x00U, 0x01U,
+  'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U, 0x00U };
+
+//! Raw options acknowledgment packet - option string invalid 1
+static const uint8_t rawOptionsAcknowledgementPacket2[]{
+  0x00U, 0x06U, // Opcode
+  0x00U, 0x01U,
+  'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U };
+
+//! Raw options acknowledgment packet - option string invalid 2
+static const uint8_t rawOptionsAcknowledgementPacket3[]{
+  0x00U, 0x06U, // Opcode
+  0x00U, 0x01U,
+  'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U, 0x00U, 0x00U };
+
 //! Constructor Test
 BOOST_AUTO_TEST_CASE( constructor )
 {
@@ -34,7 +58,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   OptionsAcknowledgementPacket oack{ options };
 
-  RawTftpPacket raw{ oack };
+  RawData raw{ oack };
   std::cout << "OACK:\n" << Helper::Dump( std::data( raw ), raw.size() ) << "\n";
 
   OptionsAcknowledgementPacket oack2( raw );
@@ -64,25 +88,22 @@ BOOST_AUTO_TEST_CASE( constructor )
 //! Constructor Test
 BOOST_AUTO_TEST_CASE( constructor2 )
 {
+  OptionsAcknowledgementPacket oack{ std::as_bytes( std::span{ rawOptionsAcknowledgementPacketOk } ) };
+  BOOST_CHECK( oack.packetType() == PacketType::OptionsAcknowledgement );
+  auto options{ oack.options() };
+  BOOST_CHECK( options.size() == 2 );
+
   // Wrong Opcode
   BOOST_CHECK_THROW(
-    ( OptionsAcknowledgementPacket{ RawTftpPacket{
-      0x00U, 0x05U,
-      0x00U, 0x01U,
-      'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U, 0x00U } } ),
+    OptionsAcknowledgementPacket{ std::as_bytes( std::span{ rawOptionsAcknowledgementPacket1 } ) },
     Tftp::Packets::InvalidPacketException );
 
   BOOST_CHECK_THROW(
-    ( OptionsAcknowledgementPacket{ RawTftpPacket{
-      0x00U, 0x06U,
-      0x00U, 0x01U,
-      'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U } } ),
+    OptionsAcknowledgementPacket{ std::as_bytes( std::span{ rawOptionsAcknowledgementPacket2 } ) },
     Tftp::Packets::InvalidPacketException );
+
   BOOST_CHECK_THROW(
-    ( OptionsAcknowledgementPacket{ RawTftpPacket{
-      0x00U, 0x06U,
-      0x00U, 0x01U,
-      'o', 'p', 't', '1', 0x00U, 'v', 'a', 'l', '1', 0x00U, 0x00U, 0x00U } } ),
+    OptionsAcknowledgementPacket{ std::as_bytes( std::span{ rawOptionsAcknowledgementPacket3 } ) },
     Tftp::Packets::InvalidPacketException );
 }
 

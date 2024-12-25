@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -71,9 +70,7 @@ void OperationImpl::initialise()
   }
 }
 
-void OperationImpl::gracefulAbort(
-  const Packets::ErrorCode errorCode,
-  std::string errorMessage )
+void OperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::string errorMessage )
 {
   BOOST_LOG_FUNCTION()
 
@@ -139,8 +136,7 @@ void OperationImpl::maxReceivePacketSize( const uint16_t maxReceivePacketSize )
   receivePacket.resize( maxReceivePacketSize );
 }
 
-void OperationImpl::receiveTimeout(
-  const std::chrono::seconds receiveTimeout ) noexcept
+void OperationImpl::receiveTimeout( const std::chrono::seconds receiveTimeout ) noexcept
 {
   receiveTimeoutV = receiveTimeout;
 }
@@ -158,17 +154,13 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
     transmitCounter = 1U;
 
     // Encode raw packet
-    transmitPacket = static_cast< Packets::RawTftpPacket >( packet );
+    transmitPacket = static_cast< Packets::RawData >( packet );
 
     // Update statistic
-    Packets::PacketStatistic::globalTransmit().packet(
-      packet.packetType(),
-      transmitPacket.size() );
+    Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacket.size() );
 
     // Send the packet to the remote server
-    socket.send_to(
-      boost::asio::buffer( transmitPacket ),
-      remoteV );
+    socket.send_to( boost::asio::buffer( transmitPacket ), remoteV );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -193,12 +185,10 @@ void OperationImpl::send( const Packets::Packet &packet )
     transmitCounter = 1U;
 
     // Encode raw packet
-    transmitPacket = static_cast< Packets::RawTftpPacket>( packet );
+    transmitPacket = static_cast< Packets::RawData >( packet );
 
     // Update statistic
-    Packets::PacketStatistic::globalTransmit().packet(
-      packet.packetType(),
-      transmitPacket.size() );
+    Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacket.size() );
 
     // Send the packet to the remote server
     socket.send( boost::asio::buffer( transmitPacket ) );
@@ -229,9 +219,7 @@ void OperationImpl::receiveFirst()
     timer.expires_after( receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( std::bind_front(
-      &OperationImpl::timeoutFirstHandler,
-      this ) );
+    timer.async_wait( std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -283,8 +271,7 @@ void OperationImpl::receiveDally()
     timer.expires_after( 2U * receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait(
-      std::bind_front( &OperationImpl::timeoutDallyHandler, this ) );
+    timer.async_wait( std::bind_front( &OperationImpl::timeoutDallyHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -295,9 +282,7 @@ void OperationImpl::receiveDally()
   }
 }
 
-void OperationImpl::finished(
-  const TransferStatus status,
-  Packets::ErrorInfo &&errorInfo )
+void OperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo )
 {
   BOOST_LOG_FUNCTION()
 
@@ -326,9 +311,7 @@ void OperationImpl::readRequestPacket(
     << "RX Error: " << static_cast< std::string>( readRequestPacket );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{
-    Packets::ErrorCode::IllegalTftpOperation,
-    "RRQ not expected" };
+  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ not expected" };
 
   send( errorPacket );
 
@@ -346,9 +329,7 @@ void OperationImpl::writeRequestPacket(
     << "RX Error: " << static_cast< std::string>( writeRequestPacket );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{
-    Packets::ErrorCode::IllegalTftpOperation,
-    "WRQ not expected" };
+  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ not expected" };
 
   send( errorPacket );
 
@@ -393,7 +374,7 @@ void OperationImpl::errorPacket(
 
 void OperationImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
-  [[maybe_unused]] Packets::ConstRawTftpPacketSpan rawPacket )
+  [[maybe_unused]] Packets::ConstRawDataSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -401,9 +382,7 @@ void OperationImpl::invalidPacket(
     << "RX Error: INVALID Packet";
 
   // send error packet
-  Packets::ErrorPacket errorPacket{
-    Packets::ErrorCode::IllegalTftpOperation,
-    "Invalid packet not expected" };
+  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet not expected" };
 
   send( errorPacket );
 
@@ -411,9 +390,7 @@ void OperationImpl::invalidPacket(
   finished( TransferStatus::TransferError, std::move( errorPacket ) );
 }
 
-void OperationImpl::receiveFirstHandler(
-  const boost::system::error_code& errorCode,
-  std::size_t bytesTransferred )
+void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorCode, std::size_t bytesTransferred )
 {
   BOOST_LOG_FUNCTION()
 
@@ -445,16 +422,12 @@ void OperationImpl::receiveFirstHandler(
     try
     {
       // send error packet
-      const Packets::ErrorPacket err{
-        Packets::ErrorCode::UnknownTransferId,
-        "Packet from wrong source" };
+      const Packets::ErrorPacket err{ Packets::ErrorCode::UnknownTransferId, "Packet from wrong source" };
 
-      auto rawPacket{ static_cast< Packets::RawTftpPacket>( err ) };
+      auto rawPacket{ static_cast< Packets::RawData>( err ) };
 
       // Update statistic
-      Packets::PacketStatistic::globalTransmit().packet(
-        err.packetType(),
-        rawPacket.size() );
+      Packets::PacketStatistic::globalTransmit().packet( err.packetType(), rawPacket.size() );
 
       socket.send_to( boost::asio::buffer( rawPacket ), receiveEndpoint );
     }
@@ -499,14 +472,10 @@ void OperationImpl::receiveFirstHandler(
     return;
   }
 
-  packet(
-    receiveEndpoint,
-    Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
+  packet( receiveEndpoint, Packets::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
-void OperationImpl::receiveHandler(
-  const boost::system::error_code& errorCode,
-  const std::size_t bytesTransferred )
+void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, const std::size_t bytesTransferred )
 {
   BOOST_LOG_FUNCTION()
 
@@ -528,13 +497,10 @@ void OperationImpl::receiveHandler(
   }
 
   // handle the received packet
-  packet(
-    receiveEndpoint,
-    Packets::ConstRawTftpPacketSpan{ receivePacket.begin(), bytesTransferred } );
+  packet( receiveEndpoint, Packets::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
-void OperationImpl::timeoutFirstHandler(
-  const boost::system::error_code& errorCode )
+void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorCode )
 {
   BOOST_LOG_FUNCTION()
 
@@ -583,8 +549,7 @@ void OperationImpl::timeoutFirstHandler(
 
     timer.expires_after( receiveTimeoutV );
 
-    timer.async_wait(
-      std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
+    timer.async_wait( std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -653,8 +618,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
   }
 }
 
-void OperationImpl::timeoutDallyHandler(
-  const boost::system::error_code &errorCode )
+void OperationImpl::timeoutDallyHandler( const boost::system::error_code &errorCode )
 {
   BOOST_LOG_FUNCTION()
 
