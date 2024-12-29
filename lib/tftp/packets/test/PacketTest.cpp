@@ -15,6 +15,8 @@
 #include <tftp/packets/Packet.hpp>
 #include <tftp/packets/PacketException.hpp>
 
+#include <helper/Endianess.hpp>
+
 namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpTest )
@@ -24,28 +26,16 @@ BOOST_AUTO_TEST_SUITE( PacketTest )
 //! Constructor test
 BOOST_AUTO_TEST_CASE( packetType )
 {
-  BOOST_CHECK(
-    Packet::packetType( std::as_bytes( std::span< const uint8_t >{ (uint8_t []){ 0x00, 0x01 } } ) )
-      == PacketType::ReadRequest );
-  BOOST_CHECK(
-    Packet::packetType( std::as_bytes( std::span< const uint8_t >{ (uint8_t []){ 0x00, 0x02 } } ) )
-      == PacketType::WriteRequest );
-  BOOST_CHECK(
-    Packet::packetType( std::as_bytes( std::span< const uint8_t >{ (uint8_t []){ 0x00, 0x03 } } ) )
-      == PacketType::Data );
-  BOOST_CHECK(
-    Packet::packetType( std::as_bytes( std::span< const uint8_t >{ (uint8_t []){ 0x00, 0x04 } } ) )
-      == PacketType::Acknowledgement );
-  BOOST_CHECK(
-    Packet::packetType( std::as_bytes( std::span< const uint8_t >{ (uint8_t []){ 0x00, 0x05 } } ) )
-      == PacketType::Error );
-  BOOST_CHECK(
-    Packet::packetType( std::as_bytes( std::span< const uint8_t >{ (uint8_t[] ){0x00, 0x06 } } ) )
-      == PacketType::OptionsAcknowledgement );
+  using Helper::operator ""_b;
 
-  BOOST_CHECK(
-    Packet::packetType( std::as_bytes( std::span< const uint8_t >{ (uint8_t[] ){ 0x00, 0x00 } } ) )
-      == PacketType::Invalid );
+  BOOST_CHECK( Packet::packetType( RawData{ 0x00_b, 0x01_b } ) == PacketType::ReadRequest );
+  BOOST_CHECK( Packet::packetType( RawData{ 0x00_b, 0x02_b } ) == PacketType::WriteRequest );
+  BOOST_CHECK( Packet::packetType( RawData{ 0x00_b, 0x03_b } ) == PacketType::Data );
+  BOOST_CHECK( Packet::packetType( RawData{ 0x00_b, 0x04_b } ) == PacketType::Acknowledgement );
+  BOOST_CHECK( Packet::packetType( RawData{ 0x00_b, 0x05_b } ) == PacketType::Error );
+  BOOST_CHECK( Packet::packetType( RawData{ 0x00_b, 0x06_b } ) == PacketType::OptionsAcknowledgement );
+
+  BOOST_CHECK( Packet::packetType( RawData{ 0x00_b, 0x00_b } ) == PacketType::Invalid );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

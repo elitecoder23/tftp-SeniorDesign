@@ -63,13 +63,13 @@ BOOST_AUTO_TEST_CASE( constructor1 )
   BOOST_CHECK( dp2.blockNumber() == BlockNumber());
   BOOST_CHECK( dp2.dataSize() == 5);
   BOOST_CHECK( !dp2.data().empty() );
-  BOOST_CHECK( std::ranges::equal( dp2.data(), ( std::byte[] ){ 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } ) );
+  BOOST_CHECK( std::ranges::equal( dp2.data(), RawData{ 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } ) );
   BOOST_CHECK(
     std::ranges::equal(
       ( const_cast< const DataPacket & >( dp2 ).data() ),
-      (std::byte []){ 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } ) );
+      RawData{ 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } ) );
 
-  DataPacket dp3( BlockNumber{55}, { 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } );
+  DataPacket dp3( BlockNumber{ 55 }, { 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } );
   BOOST_CHECK( dp3.packetType() == PacketType::Data );
   BOOST_CHECK( dp3.blockNumber() == BlockNumber(55 ) );
   BOOST_CHECK( dp3.dataSize() == 5 );
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
       'L'_b,
       'D'_b,
       '!'_b
-    });
+    } );
 
   RawData raw( data );
 
