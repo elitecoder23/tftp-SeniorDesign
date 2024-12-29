@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -28,8 +27,7 @@ namespace Tftp {
 /**
  * @brief TFTP Configuration Parameters.
  *
- * Configuration can be load/ stored as Property Tree and Command Line
- * Parameters.
+ * Configuration can be load/ stored as Property Tree and Command Line Parameters.
  * TFTP Options are configured in a separate Configuration instance.
  *
  * @sa TftpOptionsConfiguration
@@ -43,8 +41,7 @@ class TFTP_EXPORT TftpConfiguration
      * @param[in] defaultTftpPort
      *   Default TFTP Port used for Configuration.
      **/
-    explicit TftpConfiguration(
-      uint16_t defaultTftpPort = DefaultTftpPort ) noexcept;
+    explicit TftpConfiguration( uint16_t defaultTftpPort = DefaultTftpPort ) noexcept;
 
     /**
      * @brief Loads the configuration via a Property Tree.
@@ -70,17 +67,14 @@ class TFTP_EXPORT TftpConfiguration
      * @brief Converts the configuration values to a Property Tree.
      *
      * @param[in] full
-     *   If set to true, all options are added to the property tree, even if
-     *   defaulted.
+     *   If set to true, all options are added to the property tree, even if defaulted.
      *
      * @return Configuration as Property Tree.
      **/
-    [[nodiscard]] boost::property_tree::ptree toProperties(
-      bool full = false ) const;
+    [[nodiscard]] boost::property_tree::ptree toProperties( bool full = false ) const;
 
     /**
-     * @brief Returns an option description, which can be used to parse a
-     *   command line.
+     * @brief Returns an option description, which can be used to parse a command line.
      *
      * @return TFTP Configuration Options Description.
      **/
@@ -98,9 +92,8 @@ class TFTP_EXPORT TftpConfiguration
     bool dally{ false };
 
   private:
-    //! Default TFTP Port ( can be overridden by configuration)
-    //! This value is used for loading and storing to determine the default
-    //! value.
+    //! Default TFTP Port (can be overridden by configuration).
+    //! This value is used for loading and storing to determine the default value.
     uint16_t defaultTftpPort;
 };
 
