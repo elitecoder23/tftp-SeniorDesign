@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -12,6 +11,8 @@
  **/
 
 #include <tftp/files/NullSinkFile.hpp>
+
+#include <helper/Endianess.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -24,11 +25,13 @@ BOOST_AUTO_TEST_SUITE( NullSinkFileTest )
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor1 )
 {
+  using Helper::operator ""_b;
+
   NullSinkFile file1{};
   BOOST_CHECK( file1.receivedTransferSize( 0 ) );
   BOOST_CHECK( file1.receivedTransferSize( UINT64_MAX ) );
   BOOST_CHECK_NO_THROW( file1.receivedData( {} ) );
-  BOOST_CHECK_NO_THROW( file1.receivedData( { { 0x01, 0x02, 0x03 } } ) );
+  BOOST_CHECK_NO_THROW( file1.receivedData( { { 0x01_b, 0x02_b, 0x03_b } } ) );
 
   NullSinkFile file2{ 1000 };
   BOOST_CHECK( file2.receivedTransferSize( 0 ) );
@@ -37,7 +40,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
   BOOST_CHECK( !file2.receivedTransferSize( 1001 ) );
   BOOST_CHECK( !file2.receivedTransferSize( UINT64_MAX ) );
   BOOST_CHECK_NO_THROW( file2.receivedData( {} ) );
-  BOOST_CHECK_NO_THROW( file2.receivedData( { { 0x01, 0x02, 0x03 } } ) );
+  BOOST_CHECK_NO_THROW( file2.receivedData( { { 0x01_b, 0x02_b, 0x03_b } } ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

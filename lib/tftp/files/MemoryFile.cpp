@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -23,7 +22,7 @@ MemoryFile::MemoryFile():
 {
 }
 
-MemoryFile::MemoryFile( DataSpan data ) :
+MemoryFile::MemoryFile( ConstDataSpan data ) :
   operationV{ Operation::Transmit },
   dataV{ data.begin(), data.end() },
   dataPtr{ dataV.begin() }
@@ -47,7 +46,7 @@ void MemoryFile::reset()
   dataPtr = dataV.begin();
 }
 
-MemoryFile::DataSpan MemoryFile::data() const noexcept
+MemoryFile::ConstDataSpan MemoryFile::data() const noexcept
 {
   return dataV;
 }
@@ -65,7 +64,7 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
   return true;
 }
 
-void MemoryFile::receivedData( DataSpan data )
+void MemoryFile::receivedData( ConstDataSpan data )
 {
   if ( !data.empty() )
   {
@@ -85,10 +84,7 @@ MemoryFile::Data MemoryFile::sendData( const size_t maxSize )
   Data::const_iterator startPtr{ dataPtr };
   Data::const_iterator endPtr;
 
-  if ( static_cast< size_t >(
-    std::distance< Data::const_iterator>(
-      startPtr,
-      dataV.end() ) ) <= maxSize )
+  if ( static_cast< size_t >( std::distance< Data::const_iterator >( startPtr, dataV.end() ) ) <= maxSize )
   {
     endPtr = dataV.end();
   }

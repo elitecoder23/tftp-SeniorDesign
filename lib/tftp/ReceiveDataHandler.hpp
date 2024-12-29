@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -22,18 +21,18 @@ namespace Tftp {
 /**
  * @brief Receive Data Handler
  *
- * Class interface, which must be implemented by an class, which wants to
- * receive data from a TFTP operation (TFTP client RRQ or TFTP server WRQ)
+ * Class interface, which must be implemented by an class, which wants to receive data from a TFTP operation.
+ * These operations are:
+ * - TFTP client RRQ, or
+ * - TFTP server WRQ.
  **/
 class TFTP_EXPORT ReceiveDataHandler : public virtual DataHandler
 {
   public:
     /**
-     * @brief This call-back is executed, when the transfer size of the data
-     *   to be transmitted is received.
+     * @brief This call-back is executed, when the transfer size of the data to be transmitted is received.
      *
-     * This call-back is called optional, when a transfer size option has been
-     * received.
+     * This call-back is called optional, when a transfer size option has been received.
      *
      * @param[in] transferSize
      *   Received transfer size.
@@ -45,8 +44,7 @@ class TFTP_EXPORT ReceiveDataHandler : public virtual DataHandler
      *   Received amount of data cannot be handled - the operation should be
      *   aborted.
      **/
-    [[nodiscard]] virtual bool receivedTransferSize(
-      uint64_t transferSize ) = 0;
+    [[nodiscard]] virtual bool receivedTransferSize( uint64_t transferSize ) = 0;
 
     /**
      * @brief Data has been received and must be processed.
@@ -54,7 +52,7 @@ class TFTP_EXPORT ReceiveDataHandler : public virtual DataHandler
      * @param[in] data
      *   Received data.
      **/
-    virtual void receivedData( DataSpan data ) = 0;
+    virtual void receivedData( ConstDataSpan data ) = 0;
 };
 
 }

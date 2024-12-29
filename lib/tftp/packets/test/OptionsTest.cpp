@@ -16,8 +16,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <cstdint>
-
 namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpTest )

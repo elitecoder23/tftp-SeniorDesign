@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -24,12 +23,10 @@ namespace Tftp::Files {
 /**
  * @brief NULL Sink %File.
  *
- * This class provides an receive data handler, which drops every received
- * data package.
+ * This class provides a receive data handler, which drops every received data package.
  * This handler can be used for testing purposes.
  *
- * If a size is given, this size is checked against the value given when calling
- * receivedTransferSize().
+ * If a size is given, this size is checked against the value given when calling receivedTransferSize().
  **/
 class TFTP_EXPORT NullSinkFile final : public ReceiveDataHandler
 {
@@ -69,7 +66,7 @@ class TFTP_EXPORT NullSinkFile final : public ReceiveDataHandler
      *
      * Drops the data immediately.
      **/
-    void receivedData( DataSpan data ) override;
+    void receivedData( ConstDataSpan data ) override;
 
   private:
     //! Optional size (used for options negotiation)

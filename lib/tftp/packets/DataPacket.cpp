@@ -97,9 +97,7 @@ RawData DataPacket::encode() const
   assert( rawSpan.size() == dataV.size() );
 
   // data
-  std::ranges::copy(
-    dataV,
-    std::span< uint8_t >{ reinterpret_cast< uint8_t * >( rawSpan.data() ), rawSpan.size() }.begin() );
+  std::ranges::copy( dataV, rawSpan.begin() );
 
   return rawPacket;
 }
@@ -113,14 +111,13 @@ void DataPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of DATA packet" } );
   }
 
-  auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto remaining{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode block number
-  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) = Helper::getInt< uint16_t >( rawSpan );
+  std::tie( remaining, static_cast< uint16_t & >( blockNumberV ) ) = Helper::getInt< uint16_t >( remaining );
 
   // copy data
-  auto rawData{ std::span< const uint8_t >{ reinterpret_cast< uint8_t const * >( rawSpan.data() ), rawSpan.size() } };
-  dataV.assign( rawData.begin(), rawData.end() );
+  dataV.assign( remaining.begin(), remaining.end() );
 }
 
 }

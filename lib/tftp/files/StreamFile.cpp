@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -24,18 +23,13 @@
 
 namespace Tftp::Files {
 
-StreamFile::StreamFile(
-  const Operation operation,
-  std::filesystem::path filename ) :
+StreamFile::StreamFile( const Operation operation, std::filesystem::path filename ) :
   operationV{ operation },
   filenameV{ std::move( filename ) }
 {
 }
 
-StreamFile::StreamFile(
-  const Operation operation,
-  std::filesystem::path filename,
-  const size_t size ) :
+StreamFile::StreamFile( const Operation operation, std::filesystem::path filename, const size_t size ) :
   operationV{ operation },
   filenameV{ std::move( filename ) },
   sizeV{ size }
@@ -49,15 +43,11 @@ void StreamFile::reset()
   switch ( operationV )
   {
     case File::Operation::Receive:
-      streamV.open(
-        filenameV,
-        std::ios::out | std::ios::trunc | std::ios::binary );
+      streamV.open( filenameV, std::ios::out | std::ios::trunc | std::ios::binary );
       break;
 
     case File::Operation::Transmit:
-      streamV.open(
-        filenameV,
-        std::ios::in | std::ios::binary );
+      streamV.open( filenameV, std::ios::in | std::ios::binary );
       break;
 
     default:
@@ -93,13 +83,11 @@ bool StreamFile::receivedTransferSize( const uint64_t transferSize )
   return ( transferSize <= sizeV );
 }
 
-void StreamFile::receivedData( DataSpan data )
+void StreamFile::receivedData( ConstDataSpan data )
 {
   if ( !data.empty() )
   {
-    streamV.write(
-      reinterpret_cast< const char * >( std::data( data ) ),
-      static_cast< std::streamsize >( data.size() ) );
+    streamV.write( reinterpret_cast< const char * >( data.data() ), static_cast< std::streamsize >( data.size() ) );
   }
 }
 
@@ -112,9 +100,7 @@ StreamFile::Data StreamFile::sendData( const size_t maxSize )
 {
   Data data( maxSize );
 
-  streamV.read(
-    reinterpret_cast< char*>( std::data( data ) ),
-    static_cast< std::streamsize >( maxSize ) );
+  streamV.read( reinterpret_cast< char * >( data.data() ), static_cast< std::streamsize >( maxSize ) );
 
   data.resize( streamV.gcount() );
 

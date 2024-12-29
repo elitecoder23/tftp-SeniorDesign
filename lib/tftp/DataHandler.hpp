@@ -15,7 +15,7 @@
 
 #include <tftp/Tftp.hpp>
 
-#include <cstdint>
+#include <cstddef>
 #include <span>
 #include <vector>
 
@@ -28,9 +28,9 @@ class TFTP_EXPORT DataHandler
 {
   public:
     //! Data Type.
-    using Data = std::vector< uint8_t >;
+    using Data = std::vector< std::byte >;
     //! Data Span.
-    using DataSpan = std::span< const uint8_t >;
+    using ConstDataSpan = std::span< const std::byte >;
 
     /**
      * @brief Destructor.

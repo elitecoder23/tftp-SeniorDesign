@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -16,8 +15,6 @@
 #include <tftp/packets/PacketException.hpp>
 
 #include <boost/test/unit_test.hpp>
-
-#include <cstdint>
 
 namespace Tftp::Packets {
 
@@ -39,12 +36,10 @@ BOOST_AUTO_TEST_CASE( name )
 BOOST_AUTO_TEST_CASE( toString )
 {
   TftpOptions options{};
-  BOOST_CHECK_NO_THROW(
-    boost::ignore_unused( TftpOptions_toString( options ) ) );
+  BOOST_CHECK_NO_THROW( boost::ignore_unused( TftpOptions_toString( options ) ) );
 
   options.transferSize=1000;
-  BOOST_CHECK_NO_THROW(
-    boost::ignore_unused( TftpOptions_toString( options ) ) );
+  BOOST_CHECK_NO_THROW( boost::ignore_unused( TftpOptions_toString( options ) ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

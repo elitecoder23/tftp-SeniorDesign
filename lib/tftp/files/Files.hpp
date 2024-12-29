@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -27,16 +26,15 @@
 /**
  * @brief TFTP %File Handling.
  *
- * This namespace provides common handler of data which shall be received from
- * or transmitted to another TFTP instance.
+ * This namespace provides common handler of data which shall be received from or transmitted to another TFTP instance.
  *
  * Currently there are two implementations:
- * @li MemoryFile, which handles the data within a local std::vector, and
- * @li StreamFile, which handles the data through a std::iostream
- * @li NullSinkFile, which drops every received data.
+ * - @ref MemoryFile, which handles the data within a local std::vector, and
+ * - @ref StreamFile, which handles the data through a std::iostream
+ * - @ref NullSinkFile, which drops every received data.
  *
- * The two implementations do not handle the data in the manner of encoding
- * handling, i.e. only the TFTP OCTET transfer mode is supported.
+ * The two implementations do not handle the data in the manner of encoding handling, i.e. only the TFTP OCTET transfer
+ * mode is supported.
  **/
 namespace Tftp::Files {
 

@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -18,7 +17,7 @@
 #include <tftp/packets/Packet.hpp>
 #include <tftp/packets/BlockNumber.hpp>
 
-#include <cstdint>
+#include <cstddef>
 #include <vector>
 
 namespace Tftp::Packets {
@@ -38,24 +37,21 @@ class TFTP_EXPORT DataPacket final : public Packet
     static constexpr auto MinPacketSize{ HeaderSize + 2U };
 
     //! Data Type
-    using Data = std::vector< uint8_t >;
+    using Data = std::vector< std::byte >;
 
     /**
      * @brief Generates a TFTP Data Packet with the given block number and data.
      *
      * If the data parameter is suppressed, no data is used.
      *
-     * If the blockNumber parameter is suppressed, a default block number is
-     * chosen.
+     * If the blockNumber parameter is suppressed, a default block number is chosen.
      *
      * @param[in] blockNumber
      *   Block number of the packet
      * @param[in] data
      *   The data within the packet.
      **/
-    DataPacket(
-      BlockNumber blockNumber = {},
-      Data data = {} ) noexcept;
+    DataPacket( BlockNumber blockNumber = {}, Data data = {} ) noexcept;
 
     /**
      * @brief Generates a TFTP Data packet from a data buffer.

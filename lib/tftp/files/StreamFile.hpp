@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -38,9 +37,7 @@ class TFTP_EXPORT StreamFile final : public File
      * @param[in] filename
      *   Filename to open/ create
      **/
-    explicit StreamFile(
-      Operation operation,
-      std::filesystem::path filename );
+    explicit StreamFile( Operation operation, std::filesystem::path filename );
 
     /**
      * @brief Creates the StreamFile with the given stream as in/ output and
@@ -55,10 +52,7 @@ class TFTP_EXPORT StreamFile final : public File
      *   In Receive Operation, the transfer is reject if size is to big.
      *   On Transmit Operation this size is provided.
      **/
-    StreamFile(
-      Operation operation,
-      std::filesystem::path filename,
-      size_t size );
+    StreamFile( Operation operation, std::filesystem::path filename, size_t size );
 
     /**
      * @copydoc File::reset
@@ -82,7 +76,7 @@ class TFTP_EXPORT StreamFile final : public File
     /**
      * @copydoc File::receivedData()
      **/
-    void receivedData( DataSpan data ) override;
+    void receivedData( ConstDataSpan data ) override;
 
     /**
      * @copydoc File::requestedTransferSize()
@@ -102,7 +96,7 @@ class TFTP_EXPORT StreamFile final : public File
     //! Data Stream
     std::fstream streamV;
     //! File Size
-    std::optional< size_t> sizeV;
+    std::optional< size_t > sizeV;
 };
 
 }
