@@ -12,14 +12,14 @@
 
 #include <tftp/files/NullSinkFile.hpp>
 
-#include <helper/Endianess.hpp>
+#include <helper/RawData.hpp>
 
 #include <boost/test/unit_test.hpp>
 
 namespace Tftp::Files {
 
-BOOST_AUTO_TEST_SUITE( TftpTest)
-BOOST_AUTO_TEST_SUITE( FileTest)
+BOOST_AUTO_TEST_SUITE( TftpTest )
+BOOST_AUTO_TEST_SUITE( FileTest )
 BOOST_AUTO_TEST_SUITE( NullSinkFileTest )
 
 //! Constructor test
