@@ -38,7 +38,7 @@ class TFTP_EXPORT Packet
      * @retval PacketType::INVALID
      *   If packet is too small or invalid opcode value.
      **/
-    [[nodiscard]] static PacketType packetType( ConstRawDataSpan rawPacket ) noexcept;
+    [[nodiscard]] static PacketType packetType( ConstRawDataSpan rawPacket );
 
     /**
      * @brief Return the packet type of the TFTP Packet.

@@ -23,7 +23,7 @@
 
 namespace Tftp::Packets {
 
-PacketType Packet::packetType( ConstRawDataSpan rawPacket ) noexcept
+PacketType Packet::packetType( ConstRawDataSpan rawPacket )
 {
   // check minimum data size.
   if ( rawPacket.size() < HeaderSize )
