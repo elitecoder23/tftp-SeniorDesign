@@ -93,7 +93,7 @@ void OptionsAcknowledgementPacket::decodeBody( ConstRawDataSpan rawPacket )
   auto rawSpan{ rawPacket.subspan( HeaderSize ) };
 
   // assign options
-  auto [ _, options ]{ Helper::RawData_toString( rawSpan, rawSpan.size() ) };
+  auto [ _, options ]{ Helper::RawData_getString( rawSpan, rawSpan.size() ) };
   optionsV = Options_options( options );
 }
 

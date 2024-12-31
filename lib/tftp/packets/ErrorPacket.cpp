@@ -87,7 +87,7 @@ RawData ErrorPacket::encode() const
   rawSpan = Helper::RawData_setInt( rawSpan, static_cast< uint16_t >( errorCodeV ) );
 
   // error message
-  rawSpan = Helper::RawData_setRaw( rawSpan, errorMessageV );
+  rawSpan = Helper::RawData_setString( rawSpan, errorMessageV );
   rawSpan.back() = std::byte{ 0 };
 
   return rawPacket;
@@ -116,7 +116,7 @@ void ErrorPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "error message not 0-terminated" } );
   }
 
-  std::tie( rawSpan, errorMessageV ) = Helper::RawData_toString( rawSpan, rawSpan.size() - 1U );
+  std::tie( rawSpan, errorMessageV ) = Helper::RawData_getString( rawSpan, rawSpan.size() - 1U );
 }
 
 }

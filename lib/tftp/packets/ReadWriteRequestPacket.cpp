@@ -178,7 +178,7 @@ void ReadWriteRequestPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "RRQ/WRQ message not 0-terminated" } );
   }
 
-  auto [ _, rawRequestString ]{ Helper::RawData_toString( rawSpan, rawSpan.size() ) };
+  auto [ _, rawRequestString ]{ Helper::RawData_getString( rawSpan, rawSpan.size() ) };
 
   // filename
   const auto filenameEnd{ rawRequestString.find( '\0' ) };
