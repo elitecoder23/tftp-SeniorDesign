@@ -14,8 +14,8 @@
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
+#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -81,7 +81,7 @@ size_t DataPacket::dataSize() const
 
 DataPacket::operator std::string() const
 {
-  return std::format( "DATA: BLOCK NO: {} DATA: {} bytes", static_cast< uint16_t >( blockNumber() ), dataSize() );
+  return std::format( "DATA: Block No: {} DATA: {} bytes", static_cast< uint16_t >( blockNumber() ), dataSize() );
 }
 
 RawData DataPacket::encode() const
@@ -93,7 +93,7 @@ RawData DataPacket::encode() const
   auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // block number
-  rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
+  rawSpan = Helper::RawData_setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
   assert( rawSpan.size() == dataV.size() );
 
   // data
@@ -114,7 +114,7 @@ void DataPacket::decodeBody( ConstRawDataSpan rawPacket )
   auto remaining{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode block number
-  std::tie( remaining, static_cast< uint16_t & >( blockNumberV ) ) = Helper::getInt< uint16_t >( remaining );
+  std::tie( remaining, static_cast< uint16_t & >( blockNumberV ) ) = Helper::RawData_getInt< uint16_t >( remaining );
 
   // copy data
   dataV.assign( remaining.begin(), remaining.end() );

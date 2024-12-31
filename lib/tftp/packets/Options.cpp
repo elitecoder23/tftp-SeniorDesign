@@ -15,6 +15,7 @@
 #include <tftp/packets/PacketException.hpp>
 
 #include <helper/Exception.hpp>
+#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -83,16 +84,14 @@ RawOptions Options_rawOptions( const Options &options )
   for ( const auto &[ name, option ] : options )
   {
     // option name
-    auto rawName{
-      std::span< std::byte const >{ reinterpret_cast< std::byte const * >( std::data( name ) ), name.size() } };
+    auto rawName{ Helper::RawData_toRawData( name ) };
     rawOptions.insert( rawOptions.end(), rawName.begin(), rawName.end() );
 
     // name value divider
     rawOptions.push_back( std::byte{ 0 } );
 
     // option value
-    auto rawValue{
-      std::span< std::byte const >{ reinterpret_cast< std::byte const * >( std::data( option ) ), option.size() } };
+    auto rawValue{ Helper::RawData_toRawData( option ) };
     rawOptions.insert( rawOptions.end(), rawValue.begin(), rawValue.end() );
 
     // option terminator

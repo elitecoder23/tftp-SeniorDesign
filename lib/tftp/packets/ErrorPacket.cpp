@@ -15,8 +15,8 @@
 #include <tftp/packets/ErrorCodeDescription.hpp>
 #include <tftp/packets/PacketException.hpp>
 
-#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
+#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -51,7 +51,7 @@ ErrorPacket::operator std::string() const
   return std::format(
     "ERR: EC: {} ({}) - DESC: \"{}\"",
     ErrorCodeDescription::instance().name( errorCode() ),
-    static_cast< uint16_t>( errorCode() ),
+    static_cast< uint16_t >( errorCode() ),
     errorMessage() );
 }
 
@@ -84,14 +84,11 @@ RawData ErrorPacket::encode() const
   auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // error code
-  rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( errorCodeV ) );
+  rawSpan = Helper::RawData_setInt( rawSpan, static_cast< uint16_t >( errorCodeV ) );
 
   // error message
-  auto rawErrorMessage{ std::span< const std::byte >{
-    reinterpret_cast< std::byte const * >( errorMessageV.data() ),
-    errorMessageV.size() } };
-  auto packetIt{ std::copy( rawErrorMessage.begin(), rawErrorMessage.end(), rawSpan.begin() ) };
-  *packetIt = std::byte{ 0 };
+  rawSpan = Helper::RawData_setRaw( rawSpan, errorMessageV );
+  rawSpan.back() = std::byte{ 0 };
 
   return rawPacket;
 }
@@ -109,7 +106,7 @@ void ErrorPacket::decodeBody( ConstRawDataSpan rawPacket )
 
   // decode error code
   uint16_t errorCodeInt{};
-  std::tie( rawSpan, errorCodeInt ) = Helper::getInt< uint16_t >( rawSpan );
+  std::tie( rawSpan, errorCodeInt ) = Helper::RawData_getInt< uint16_t >( rawSpan );
   errorCodeV = static_cast< ErrorCode >( errorCodeInt );
 
   // check terminating 0 character
@@ -119,7 +116,7 @@ void ErrorPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "error message not 0-terminated" } );
   }
 
-  errorMessageV = std::string_view{ reinterpret_cast< char const * >( rawSpan.data() ), rawSpan.size() - 1U };
+  std::tie( rawSpan, errorMessageV ) = Helper::RawData_toString( rawSpan, rawSpan.size() - 1U );
 }
 
 }

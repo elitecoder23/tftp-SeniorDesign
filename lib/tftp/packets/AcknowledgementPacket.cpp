@@ -14,8 +14,8 @@
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
+#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -68,7 +68,7 @@ RawData AcknowledgementPacket::encode() const
   auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // block number
-  rawSpan = Helper::setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
+  rawSpan = Helper::RawData_setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
   assert( rawSpan.empty() );
 
   return rawPacket;
@@ -86,7 +86,7 @@ void AcknowledgementPacket::decodeBody( ConstRawDataSpan rawPacket )
   auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode block number
-  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) = Helper::getInt< uint16_t >( rawSpan );
+  std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) = Helper::RawData_getInt< uint16_t >( rawSpan );
   assert( rawSpan.empty() ); // Keep assertion, as otherwise above runtime check would be wrong
 }
 

@@ -16,6 +16,7 @@
 #include <tftp/packets/Options.hpp>
 
 #include <helper/Exception.hpp>
+#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -92,8 +93,8 @@ void OptionsAcknowledgementPacket::decodeBody( ConstRawDataSpan rawPacket )
   auto rawSpan{ rawPacket.subspan( HeaderSize ) };
 
   // assign options
-  auto rawOptionsString{ std::string_view{ reinterpret_cast< char const * >( rawSpan.data() ), rawSpan.size() } };
-  optionsV = Options_options( rawOptionsString );
+  auto [ _, options ]{ Helper::RawData_toString( rawSpan, rawSpan.size() ) };
+  optionsV = Options_options( options );
 }
 
 }

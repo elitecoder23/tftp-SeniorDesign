@@ -16,8 +16,8 @@
 
 #include <tftp/Logger.hpp>
 
-#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
+#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -34,7 +34,7 @@ PacketType Packet::packetType( ConstRawDataSpan rawPacket ) noexcept
   }
 
   // decode opcode value
-  auto [ _, opcode ]{ Helper::getInt< uint16_t >( rawPacket ) };
+  auto [ _, opcode ]{ Helper::RawData_getInt< uint16_t >( rawPacket ) };
 
   // check valid opcodes
   // NOLINTNEXTLINE( clang-analyzer-optin.core.EnumCastOutOfRange ): Validity Check
@@ -126,7 +126,7 @@ void Packet::insertHeader( RawDataSpan rawPacket ) const
   assert( rawPacket.size() >= HeaderSize );
 
   // encode opcode
-  Helper::setInt( rawPacket, std::to_underlying( packetTypeV ) );
+  Helper::RawData_setInt( rawPacket, std::to_underlying( packetTypeV ) );
 }
 
 void Packet::decodeHeader( ConstRawDataSpan rawPacket )
@@ -139,7 +139,7 @@ void Packet::decodeHeader( ConstRawDataSpan rawPacket )
   }
 
   // Check Opcode
-  auto [ _, opcode ]{ Helper::getInt< uint16_t >( rawPacket ) };
+  auto [ _, opcode ]{ Helper::RawData_getInt< uint16_t >( rawPacket ) };
 
   if ( opcode != std::to_underlying( packetTypeV ) )
   {

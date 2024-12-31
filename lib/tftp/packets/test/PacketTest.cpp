@@ -15,7 +15,7 @@
 #include <tftp/packets/Packet.hpp>
 #include <tftp/packets/PacketException.hpp>
 
-#include <helper/Endianess.hpp>
+#include <helper/RawData.hpp>
 
 namespace Tftp::Packets {
 

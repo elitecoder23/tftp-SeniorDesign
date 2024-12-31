@@ -16,7 +16,7 @@
 #include <tftp/packets/PacketException.hpp>
 
 #include <helper/Dump.hpp>
-#include <helper/Endianess.hpp>
+#include <helper/RawData.hpp>
 
 #include <iostream>
 

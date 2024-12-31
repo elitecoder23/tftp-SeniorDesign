@@ -15,8 +15,8 @@
 #include <tftp/packets/PacketException.hpp>
 #include <tftp/packets/Options.hpp>
 
-#include <helper/Endianess.hpp>
 #include <helper/Exception.hpp>
+#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -178,7 +178,7 @@ void ReadWriteRequestPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "RRQ/WRQ message not 0-terminated" } );
   }
 
-  auto rawRequestString{ std::string_view{ reinterpret_cast< char const * >( rawSpan.data() ), rawSpan.size() } };
+  auto [ _, rawRequestString ]{ Helper::RawData_toString( rawSpan, rawSpan.size() ) };
 
   // filename
   const auto filenameEnd{ rawRequestString.find( '\0' ) };
@@ -220,13 +220,13 @@ RawData ReadWriteRequestPacket::encode() const
   auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // encode filename
-  auto rawFilename{ std::as_bytes( std::span{ filenameV } ) };
+  auto rawFilename{ Helper::RawData_toRawData( filenameV  ) };
   auto filenameEnd{ std::copy( rawFilename.begin(), rawFilename.end(), rawSpan.begin() ) };
   *filenameEnd = std::byte{ 0 };
   ++filenameEnd;
 
   // encode transfer mode
-  auto rawMode{ std::as_bytes( std::span{ mode } ) };
+  auto rawMode{ Helper::RawData_toRawData( mode ) };
   auto modeEnd{ std::copy( rawMode.begin(), rawMode.end(), filenameEnd ) };
   *modeEnd = std::byte{ 0 };
   ++modeEnd;
