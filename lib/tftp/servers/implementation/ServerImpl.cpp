@@ -34,7 +34,7 @@
 
 namespace Tftp::Servers {
 
-ServerImpl::ServerImpl( boost::asio::io_context &ioContext ):
+ServerImpl::ServerImpl( boost::asio::io_context &ioContext ) :
   ioContextV{ ioContext },
   socketV{ ioContextV },
   receivePacketV( Packets::DefaultMaxPacketSize )
@@ -94,12 +94,12 @@ void ServerImpl::start()
 {
   BOOST_LOG_FUNCTION()
 
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
+    << std::format( "Start TFTP Server on {}:{}", serverAddressV.address().to_string(), serverAddressV.port() );
+
   try
   {
-    // open the socket
     socketV.open( serverAddressV.protocol() );
-
-    // bind to the local address
     socketV.bind( serverAddressV );
 
     // start receive
@@ -121,8 +121,12 @@ void ServerImpl::start()
 
 void ServerImpl::stop()
 {
-  socketV.cancel();
+  BOOST_LOG_FUNCTION()
 
+  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
+    << "Stop TFTP Server";
+
+  socketV.cancel();
   socketV.close();
 }
 
@@ -465,10 +469,9 @@ Packets::TftpOptions ServerImpl::tftpOptions( Packets::Options &clientOptions ) 
   clientOptions.erase( std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) } );
 
   // check transfer size option
-  const auto [ transferSizeValid, transferSize ] =
-    Packets::Options_getOption< uint64_t >(
-      clientOptions,
-      Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
+  const auto [ transferSizeValid, transferSize ] = Packets::Options_getOption< uint64_t >(
+    clientOptions,
+    Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 
   decodedOptions.transferSize = transferSize;
   // remove timeout option
