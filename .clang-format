@@ -113,7 +113,7 @@ BreakBeforeInlineASMColon: OnlyMultiline
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: AfterColon
 BreakFunctionDefinitionParameters: false
-BreakInheritanceList: BeforeColon
+BreakInheritanceList: AfterColon
 BreakStringLiterals: true
 BreakTemplateDeclarations: Yes
 ColumnLimit:     120
@@ -187,7 +187,7 @@ ObjCBlockIndentWidth: 2
 ObjCBreakBeforeNestedBlockParam: true
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: true
-PackConstructorInitializers: BinPack
+PackConstructorInitializers: Never
 PenaltyBreakAssignment: 2
 PenaltyBreakBeforeFirstCallParameter: 19
 PenaltyBreakComment: 300
@@ -253,7 +253,7 @@ SpacesInParensOptions:
   InConditionalStatements: true
   InEmptyParentheses: false
   Other:           true
-SpacesInSquareBrackets: false
+SpacesInSquareBrackets: true
 Standard:        Latest
 StatementAttributeLikeMacros:
   - Q_EMIT
