@@ -55,6 +55,18 @@ class TFTP_EXPORT TftpConfiguration
       const boost::property_tree::ptree &properties,
       uint16_t defaultTftpPort = DefaultTftpPort );
 
+    //! Defaulted Copy Constructor
+    TftpConfiguration( const TftpConfiguration &other ) noexcept = default;
+
+    //! Defaulted Move Constructor
+    TftpConfiguration( TftpConfiguration &&other ) noexcept = default;
+
+    //! Defaulted Copy Assignment Operator
+    TftpConfiguration& operator=( const TftpConfiguration &other ) noexcept;
+
+    //! Defaulted Move Assignment Operator
+    TftpConfiguration& operator=( TftpConfiguration &&other ) noexcept;
+
     /**
      * @brief Load Configuration from given Property Tree.
      *
@@ -92,9 +104,12 @@ class TFTP_EXPORT TftpConfiguration
     bool dally{ false };
 
   private:
-    //! Default TFTP Port (can be overridden by configuration).
-    //! This value is used for loading and storing to determine the default value.
-    uint16_t defaultTftpPort;
+    /**
+     * @brief Default TFTP Port (can be overridden by configuration).
+     *
+     * This value is used for loading and storing to determine the default value.
+     **/
+    const uint16_t defaultTftpPort;
 };
 
 }

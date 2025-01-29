@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -19,26 +18,26 @@
 
 namespace Tftp {
 
-TftpOptionsConfiguration::TftpOptionsConfiguration(
-  const boost::property_tree::ptree &properties )
+TftpOptionsConfiguration::TftpOptionsConfiguration( const boost::property_tree::ptree &properties )
 {
   fromProperties( properties );
 }
 
-void TftpOptionsConfiguration::fromProperties(
-  const boost::property_tree::ptree &properties )
+void TftpOptionsConfiguration::fromProperties( const boost::property_tree::ptree &properties )
 {
-  handleTransferSizeOption = properties.get( "transfer_size", false );
+  handleTransferSizeOption = properties.get( "transfer_size", handleTransferSizeOption );
   blockSizeOption = properties.get_optional< uint16_t>( "block_size" );
   // convert to std::chrono (is similar to std::optional::transform)
   timeoutOption =
     properties.get_optional< std::chrono::seconds::rep >( "timeout" )
       .map(
-        []( const auto timeout ) { return std::chrono::seconds{ timeout }; } );
+        []( const auto timeout )
+        {
+          return std::chrono::seconds{ timeout };
+        } );
 }
 
-boost::property_tree::ptree TftpOptionsConfiguration::toProperties(
-  const bool full ) const
+boost::property_tree::ptree TftpOptionsConfiguration::toProperties( const bool full ) const
 {
   boost::property_tree::ptree properties{};
 
@@ -57,7 +56,11 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties(
     // like std::optional::transform
     properties.add(
       "timeout",
-      timeoutOption.map( []( const auto &timeOut ) { return timeOut.count(); } ) );
+      timeoutOption.map(
+        []( const auto &timeOut )
+        {
+          return timeOut.count();
+        } ) );
   }
 
   return properties;
@@ -65,8 +68,7 @@ boost::property_tree::ptree TftpOptionsConfiguration::toProperties(
 
 boost::program_options::options_description TftpOptionsConfiguration::options()
 {
-  boost::program_options::options_description options{
-    "TFTP Option Negotiation Options" };
+  boost::program_options::options_description options{ "TFTP Option Negotiation Options" };
 
   options.add_options()
   (
@@ -90,7 +92,9 @@ boost::program_options::options_description TftpOptionsConfiguration::options()
   )
   (
     "handle-transfer-size-option",
-    boost::program_options::bool_switch( &handleTransferSizeOption ),
+    boost::program_options::value( &handleTransferSizeOption )
+      ->implicit_value( true, "true" )
+      ->value_name( "true|false" ),
     "Handles the TFTP transfer size option negotiation"
   );
 

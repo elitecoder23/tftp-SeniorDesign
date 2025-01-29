@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -53,8 +52,7 @@ class TFTP_EXPORT TftpOptionsConfiguration
      * @param[in] properties
      *   Stored TFTP Option Configuration.
      **/
-    explicit TftpOptionsConfiguration(
-      const boost::property_tree::ptree &properties );
+    explicit TftpOptionsConfiguration( const boost::property_tree::ptree &properties );
 
     /**
      * @brief Load Configuration from given Property Tree.
@@ -73,8 +71,7 @@ class TFTP_EXPORT TftpOptionsConfiguration
      *
      * @return Configuration represented as Property Tree.
      **/
-    [[nodiscard]] boost::property_tree::ptree toProperties(
-      bool full = false ) const;
+    [[nodiscard]] boost::property_tree::ptree toProperties( bool full = false ) const;
 
     /**
      * @brief Returns an option description, which can be used to parse a
