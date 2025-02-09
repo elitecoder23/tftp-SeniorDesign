@@ -37,28 +37,28 @@ steps:
       - cmake --build --preset gcc-shared-release -j 4
       - ctest --preset gcc-shared-release
 
-  - name: CLang Static Debug
+  - name: Clang Static Debug
     image: infohoschie/build-gcc-clang-cmake:latest
     pull: never
     commands:
       - cmake --preset clang-static-debug
       - cmake --build --preset clang-static-debug -j 4
       - ctest --preset clang-static-debug
-  - name: CLang Static Release
+  - name: Clang Static Release
     image: infohoschie/build-gcc-clang-cmake:latest
     pull: never
     commands:
       - cmake --preset clang-static-release
       - cmake --build --preset clang-static-release -j 4
       - ctest --preset clang-static-release
-  - name: CLang Shared Debug
+  - name: Clang Shared Debug
     image: infohoschie/build-gcc-clang-cmake:latest
     pull: never
     commands:
       - cmake --preset clang-shared-debug
       - cmake --build --preset clang-shared-debug -j 4
       - ctest --preset clang-shared-debug
-  - name: CLang Shared Release
+  - name: Clang Shared Release
     image: infohoschie/build-gcc-clang-cmake:latest
     pull: never
     commands:

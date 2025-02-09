@@ -55,22 +55,22 @@ GCC Shared Release:
   variables:
     CMAKE_PRESET: "gcc-shared-release"
 
-CLang Static Debug:
+Clang Static Debug:
   extends: .cmake_build
   variables:
     CMAKE_PRESET: "clang-static-debug"
 
-CLang Static Release:
+Clang Static Release:
   extends: .cmake_build
   variables:
     CMAKE_PRESET: "clang-static-release"
 
-CLang Shared Debug:
+Clang Shared Debug:
   extends: .cmake_build
   variables:
     CMAKE_PRESET: "clang-shared-debug"
 
-CLang Shared Release:
+Clang Shared Release:
   extends: .cmake_build
   variables:
     CMAKE_PRESET: "clang-shared-release"

@@ -2,7 +2,7 @@
   "version": 6,
   "cmakeMinimumRequired": {
     "major": 3,
-    "minor": 30,
+    "minor": 31,
     "patch": 0
   },
   "configurePresets": [
@@ -77,8 +77,8 @@
     },
     {
       "name": "clang-static-debug",
-      "displayName": "CLang Static Debug",
-      "description": "CLang Static Debug",
+      "displayName": "Clang Static Debug",
+      "description": "Clang Static Debug",
       "inherits": "clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE" : "Debug"
@@ -86,8 +86,8 @@
     },
     {
       "name": "clang-static-release",
-      "displayName": "CLang Static Release",
-      "description": "CLang Static Release",
+      "displayName": "Clang Static Release",
+      "description": "Clang Static Release",
       "inherits": "clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE" : "Release"
@@ -95,8 +95,8 @@
     },
     {
       "name": "clang-shared-debug",
-      "displayName": "CLang Shared Debug",
-      "description": "CLang Shared Debug",
+      "displayName": "Clang Shared Debug",
+      "description": "Clang Shared Debug",
       "inherits": "clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE" : "Debug",
@@ -105,8 +105,8 @@
     },
     {
       "name": "clang-shared-release",
-      "displayName": "CLang Shared Release",
-      "description": "CLang Shared Release",
+      "displayName": "Clang Shared Release",
+      "description": "Clang Shared Release",
       "inherits": "clang-base",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE" : "Release",
@@ -241,45 +241,45 @@
 
     {
       "name": "clang-static-debug",
-      "displayName": "CLang Static Debug",
+      "displayName": "Clang Static Debug",
       "configurePreset": "clang-static-debug"
     },
     {
       "name": "clang-static-debug-doc",
-      "displayName": "CLang Static Debug Documentation",
+      "displayName": "Clang Static Debug Documentation",
       "configurePreset": "clang-static-debug",
       "targets": [ "doc" ]
     },
     {
       "name": "clang-static-release",
-      "displayName": "CLang Static Release",
+      "displayName": "Clang Static Release",
       "configurePreset": "clang-static-release"
     },
     {
       "name": "clang-static-release-doc",
-      "displayName": "CLang Static Release Documentation",
+      "displayName": "Clang Static Release Documentation",
       "configurePreset": "clang-static-release",
       "targets": [ "doc" ]
     },
     {
       "name": "clang-shared-debug",
-      "displayName": "CLang Shared Debug",
+      "displayName": "Clang Shared Debug",
       "configurePreset": "clang-shared-debug"
     },
     {
       "name": "clang-shared-debug-doc",
-      "displayName": "CLang Shared Debug Documentation",
+      "displayName": "Clang Shared Debug Documentation",
       "configurePreset": "clang-shared-debug",
       "targets": [ "doc" ]
     },
     {
       "name": "clang-shared-release",
-      "displayName": "CLang Shared Release",
+      "displayName": "Clang Shared Release",
       "configurePreset": "clang-shared-release"
     },
     {
       "name": "clang-shared-release-doc",
-      "displayName": "CLang Shared Release Documentation",
+      "displayName": "Clang Shared Release Documentation",
       "configurePreset": "clang-shared-release",
       "targets": [ "doc" ]
     },
@@ -352,22 +352,22 @@
     },
     {
       "name": "clang-static-debug",
-      "displayName": "CLang Static Debug",
+      "displayName": "Clang Static Debug",
       "configurePreset": "clang-static-debug"
     },
     {
       "name": "clang-static-release",
-      "displayName": "CLang Static Release",
+      "displayName": "Clang Static Release",
       "configurePreset": "clang-static-release"
     },
     {
       "name": "clang-shared-debug",
-      "displayName": "CLang Shared Debug",
+      "displayName": "Clang Shared Debug",
       "configurePreset": "clang-shared-debug"
     },
     {
       "name": "clang-shared-release",
-      "displayName": "CLang Shared Release",
+      "displayName": "Clang Shared Release",
       "configurePreset": "clang-shared-release"
     }
   ],
@@ -402,25 +402,25 @@
     },
     {
       "name": "clang-static-debug",
-      "displayName": "CLang Static Debug",
+      "displayName": "Clang Static Debug",
       "configurePreset": "clang-static-debug",
       "inherits": "base"
     },
     {
       "name": "clang-static-release",
-      "displayName": "CLang Static Release",
+      "displayName": "Clang Static Release",
       "configurePreset": "clang-static-release",
       "inherits": "base"
     },
     {
       "name": "clang-shared-debug",
-      "displayName": "CLang Shared Debug",
+      "displayName": "Clang Shared Debug",
       "configurePreset": "clang-shared-debug",
       "inherits": "base"
     },
     {
       "name": "clang-shared-release",
-      "displayName": "CLang Shared Release",
+      "displayName": "Clang Shared Release",
       "configurePreset": "clang-shared-release",
       "inherits": "base"
     }
