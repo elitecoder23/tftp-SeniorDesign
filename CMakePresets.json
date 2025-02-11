@@ -329,6 +329,7 @@
       "targets": [ "doc" ]
     }
   ],
+
   "testPresets": [
     {
       "name": "gcc-static-debug",
@@ -350,6 +351,7 @@
       "displayName": "GCC Shared Release",
       "configurePreset": "gcc-shared-release"
     },
+
     {
       "name": "clang-static-debug",
       "displayName": "Clang Static Debug",
@@ -369,13 +371,36 @@
       "name": "clang-shared-release",
       "displayName": "Clang Shared Release",
       "configurePreset": "clang-shared-release"
+    },
+
+    {
+      "name": "msvc-static-debug",
+      "displayName": "MSVC Static Debug",
+      "configurePreset": "msvc-static-debug"
+    },
+    {
+      "name": "msvc-static-release",
+      "displayName": "MSVC Static Release",
+      "configurePreset": "msvc-static-release"
+    },
+    {
+      "name": "msvc-shared-debug",
+      "displayName": "MSVC Shared Debug",
+      "configurePreset": "msvc-shared-debug"
+    },
+    {
+      "name": "msvc-shared-release",
+      "displayName": "MSVC Shared Release",
+      "configurePreset": "msvc-shared-release"
     }
   ],
+
   "packagePresets": [
     {
       "name": "base",
       "hidden": true
     },
+
     {
       "name": "gcc-static-debug",
       "displayName": "GCC Static Debug",
@@ -400,6 +425,7 @@
       "configurePreset": "gcc-shared-release",
       "inherits": "base"
     },
+
     {
       "name": "clang-static-debug",
       "displayName": "Clang Static Debug",
@@ -423,8 +449,34 @@
       "displayName": "Clang Shared Release",
       "configurePreset": "clang-shared-release",
       "inherits": "base"
+    },
+
+    {
+      "name": "msvc-static-debug",
+      "displayName": "MSVC Static Debug",
+      "configurePreset": "msvc-static-debug",
+      "inherits": "base"
+    },
+    {
+      "name": "msvc-static-release",
+      "displayName": "MSVC Static Release",
+      "configurePreset": "msvc-static-release",
+      "inherits": "base"
+    },
+    {
+      "name": "msvc-shared-debug",
+      "displayName": "MSVC Shared Debug",
+      "configurePreset": "msvc-shared-debug",
+      "inherits": "base"
+    },
+    {
+      "name": "msvc-shared-release",
+      "displayName": "MSVC Shared Release",
+      "configurePreset": "msvc-shared-release",
+      "inherits": "base"
     }
   ],
+
   "workflowPresets": [
     {
       "name": "gcc-static-debug",
