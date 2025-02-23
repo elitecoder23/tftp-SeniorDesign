@@ -58,7 +58,7 @@ class TFTP_EXPORT TransmitDataHandler : public virtual DataHandler
      *
      * @return The data, which will be transmitted.
      **/
-    [[nodiscard]] virtual Data sendData( std::size_t maxSize ) = 0;
+    [[nodiscard]] virtual Helper::RawData sendData( std::size_t maxSize ) = 0;
 };
 
 }

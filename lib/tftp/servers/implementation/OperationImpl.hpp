@@ -231,7 +231,7 @@ class OperationImpl : protected Packets::PacketHandler
      *
      * Send error packet and terminate connection.
      **/
-    void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Packets::ConstRawDataSpan rawPacket ) final;
+    void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Helper::ConstRawDataSpan rawPacket ) final;
 
   private:
     /**
@@ -283,9 +283,9 @@ class OperationImpl : protected Packets::PacketHandler
     boost::asio::system_timer timer;
 
     //! Received Packet Data
-    Packets::RawData receivePacket;
+    Helper::RawData receivePacket;
     //! Last transmitted Packet ( used for retries)
-    Packets::RawData transmitPacket;
+    Helper::RawData transmitPacket;
     //! Re-transmission counter
     unsigned int transmitCounter{ 0U };
     //! Error info

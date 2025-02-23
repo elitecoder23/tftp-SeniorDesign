@@ -209,7 +209,7 @@ void ServerImpl::errorOperation(
 
     errSocket.connect( remote );
 
-    auto rawPacket{ static_cast< Packets::RawData >( errorPacket ) };
+    auto rawPacket{ static_cast< Helper::RawData >( errorPacket ) };
 
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet( errorPacket.packetType(), rawPacket.size() );
@@ -246,7 +246,7 @@ void ServerImpl::errorOperation(
 
     errSocket.connect( remote );
 
-    auto rawPacket{ static_cast< Packets::RawData >( errorPacket ) };
+    auto rawPacket{ static_cast< Helper::RawData >( errorPacket ) };
 
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet( errorPacket.packetType(), rawPacket.size() );
@@ -303,7 +303,7 @@ void ServerImpl::receiveHandler( const boost::system::error_code &errorCode, con
   try
   {
     // handle the received packet (decode it and call the appropriate handler)
-    packet( remoteEndpointV, Packets::ConstRawDataSpan{ receivePacketV.begin(), bytesTransferred } );
+    packet( remoteEndpointV, Helper::ConstRawDataSpan{ receivePacketV.begin(), bytesTransferred } );
   }
   catch ( const TftpException &e )
   {
@@ -430,7 +430,7 @@ void ServerImpl::optionsAcknowledgementPacket(
 
 void ServerImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
-  [[maybe_unused]] Packets::ConstRawDataSpan rawPacket )
+  [[maybe_unused]] Helper::ConstRawDataSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 

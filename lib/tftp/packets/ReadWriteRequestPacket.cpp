@@ -16,7 +16,6 @@
 #include <tftp/packets/Options.hpp>
 
 #include <helper/Exception.hpp>
-#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -140,7 +139,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket(
   }
 }
 
-ReadWriteRequestPacket::ReadWriteRequestPacket( const PacketType packetType, ConstRawDataSpan rawPacket ) :
+ReadWriteRequestPacket::ReadWriteRequestPacket( const PacketType packetType, Helper::ConstRawDataSpan rawPacket ) :
   Packet{ packetType, rawPacket },
   modeV{}
 {
@@ -160,7 +159,7 @@ ReadWriteRequestPacket::ReadWriteRequestPacket( const PacketType packetType, Con
   decodeBody( rawPacket );
 }
 
-void ReadWriteRequestPacket::decodeBody( ConstRawDataSpan rawPacket )
+void ReadWriteRequestPacket::decodeBody( Helper::ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() <= HeaderSize )
@@ -169,7 +168,7 @@ void ReadWriteRequestPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of RRQ/WRQ packet" } );
   }
 
-  auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto rawSpan{ Helper::ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // check terminating 0 character
   if ( rawSpan.back() != std::byte{ 0 } )
@@ -208,16 +207,16 @@ void ReadWriteRequestPacket::decodeBody( ConstRawDataSpan rawPacket )
   optionsV = Options_options( rawRequestString );
 }
 
-RawData ReadWriteRequestPacket::encode() const
+Helper::RawData ReadWriteRequestPacket::encode() const
 {
   const auto mode{ decodeMode( modeV ) };
   const auto rawOptions{ Options_rawOptions( optionsV ) };
 
-  RawData rawPacket( HeaderSize + filenameV.size() + 1U + mode.size() + 1U + rawOptions.size() );
+  Helper::RawData rawPacket( HeaderSize + filenameV.size() + 1U + mode.size() + 1U + rawOptions.size() );
 
   insertHeader( rawPacket );
 
-  auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto rawSpan{ Helper::RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // encode filename
   auto rawFilename{ Helper::RawData_toRawData( filenameV  ) };

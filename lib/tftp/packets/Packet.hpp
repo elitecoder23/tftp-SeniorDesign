@@ -15,6 +15,8 @@
 
 #include <tftp/packets/Packets.hpp>
 
+#include <helper/RawData.hpp>
+
 #include <string>
 
 namespace Tftp::Packets {
@@ -38,7 +40,7 @@ class TFTP_EXPORT Packet
      * @retval PacketType::INVALID
      *   If packet is too small or invalid opcode value.
      **/
-    [[nodiscard]] static PacketType packetType( ConstRawDataSpan rawPacket );
+    [[nodiscard]] static PacketType packetType( Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @brief Return the packet type of the TFTP Packet.
@@ -57,7 +59,7 @@ class TFTP_EXPORT Packet
      *
      * @return Binary packet data
      **/
-    explicit operator RawData() const;
+    explicit operator Helper::RawData() const;
 
     /**
      * @brief Returns a string, which describes the packet.
@@ -87,7 +89,7 @@ class TFTP_EXPORT Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    Packet( PacketType packetType, ConstRawDataSpan rawPacket );
+    Packet( PacketType packetType, Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @brief Copy Constructor
@@ -132,7 +134,7 @@ class TFTP_EXPORT Packet
      *
      * @return Binary packet data
      **/
-    [[nodiscard]] virtual RawData encode() const = 0;
+    [[nodiscard]] virtual Helper::RawData encode() const = 0;
 
     /**
      * @brief Insert the header data to the raw packet.
@@ -143,7 +145,7 @@ class TFTP_EXPORT Packet
      * @param[in,out] rawPacket
      *   Raw packet, which will be filled with the appropriate data.
      **/
-    void insertHeader( RawDataSpan rawPacket ) const;
+    void insertHeader( Helper::RawDataSpan rawPacket ) const;
 
     /**
      * @brief Decodes the TFTP Header.
@@ -154,7 +156,7 @@ class TFTP_EXPORT Packet
      * @param[in] rawPacket
      *   Packet, which shall be decoded.
      **/
-    void decodeHeader( ConstRawDataSpan rawPacket );
+    void decodeHeader( Helper::ConstRawDataSpan rawPacket );
 
   private:
     //! TFTP Packet Type

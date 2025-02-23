@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 {
   AcknowledgementPacket ack{ BlockNumber{ 10U } };
 
-  RawData raw{ ack };
+  Helper::RawData raw{ ack };
 
   std::cout << Helper::Dump( std::data( raw ), raw.size() );
 

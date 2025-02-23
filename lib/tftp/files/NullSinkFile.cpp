@@ -40,7 +40,7 @@ bool NullSinkFile::receivedTransferSize( const uint64_t transferSize )
   return ( transferSize <= size );
 }
 
-void NullSinkFile::receivedData( [[maybe_unused]] ConstDataSpan data )
+void NullSinkFile::receivedData( [[maybe_unused]] Helper::ConstRawDataSpan data )
 {
   // Do nothing
 }

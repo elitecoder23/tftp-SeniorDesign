@@ -49,7 +49,7 @@ class TFTP_EXPORT StreamFile final : public File
      *   Filename to open/ create
      * @param[in] size
      *   Size of the file.
-     *   In Receive Operation, the transfer is reject if size is to big.
+     *   In Receive Operation, the transfer is reject if size is too big.
      *   On Transmit Operation this size is provided.
      **/
     StreamFile( Operation operation, std::filesystem::path filename, size_t size );
@@ -76,7 +76,7 @@ class TFTP_EXPORT StreamFile final : public File
     /**
      * @copydoc File::receivedData()
      **/
-    void receivedData( ConstDataSpan data ) override;
+    void receivedData( Helper::ConstRawDataSpan data ) override;
 
     /**
      * @copydoc File::requestedTransferSize()
@@ -86,7 +86,7 @@ class TFTP_EXPORT StreamFile final : public File
     /**
      * @copydoc File::sendData()
      **/
-    [[nodiscard]] Data sendData( size_t maxSize ) override;
+    [[nodiscard]] Helper::RawData sendData( size_t maxSize ) override;
 
   private:
     //! Actual Operation

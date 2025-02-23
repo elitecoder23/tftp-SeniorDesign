@@ -41,7 +41,7 @@ class TFTP_EXPORT MemoryFile final : public File
      * @param[in] data
      *   Initial data.
      **/
-    explicit MemoryFile( ConstDataSpan data );
+    explicit MemoryFile( Helper::ConstRawDataSpan data );
 
     /**
      * @brief Move constructor.
@@ -51,7 +51,7 @@ class TFTP_EXPORT MemoryFile final : public File
      * @param[in] data
      *   Data of memory file.
      **/
-    explicit MemoryFile( Data &&data );
+    explicit MemoryFile( Helper::RawData data );
 
     /**
      * @copydoc File::reset
@@ -67,7 +67,7 @@ class TFTP_EXPORT MemoryFile final : public File
      *
      * @return The locally stored data
      **/
-    [[nodiscard]] ConstDataSpan data() const noexcept;
+    [[nodiscard]] Helper::ConstRawDataSpan data() const noexcept;
 
     /**
      * @copydoc File::finished()
@@ -87,7 +87,7 @@ class TFTP_EXPORT MemoryFile final : public File
     /**
      * @copydoc File::receivedData()
      **/
-    void receivedData( ConstDataSpan data ) override;
+    void receivedData( Helper::ConstRawDataSpan data ) override;
 
     /**
      * @copydoc File::requestedTransferSize()
@@ -97,15 +97,15 @@ class TFTP_EXPORT MemoryFile final : public File
     /**
      * @copydoc File::sendData()
      **/
-    [[nodiscard]] Data sendData( size_t maxSize ) override;
+    [[nodiscard]] Helper::RawData sendData( size_t maxSize ) override;
 
   private:
     //! Operation Type
     const Operation operationV;
     //! Data
-    Data dataV;
+    Helper::RawData dataV;
     //! Current Read Position
-    Data::const_iterator dataPtr;
+    Helper::RawData::const_iterator dataPtr;
 };
 
 }

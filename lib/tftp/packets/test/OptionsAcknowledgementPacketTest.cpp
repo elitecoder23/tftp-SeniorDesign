@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE( constructor )
 
   OptionsAcknowledgementPacket oack{ options };
 
-  RawData raw{ oack };
+  Helper::RawData raw{ oack };
   std::cout << "OACK:\n" << Helper::Dump( std::data( raw ), raw.size() ) << "\n";
 
   OptionsAcknowledgementPacket oack2( raw );

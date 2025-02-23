@@ -15,7 +15,6 @@
 #include <tftp/packets/PacketException.hpp>
 
 #include <helper/Exception.hpp>
-#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -31,13 +30,13 @@ DataPacket::DataPacket( BlockNumber blockNumber, Data data ) noexcept :
 {
 }
 
-DataPacket::DataPacket( ConstRawDataSpan rawPacket ) :
+DataPacket::DataPacket( Helper::ConstRawDataSpan rawPacket ) :
   Packet{ PacketType::Data, rawPacket }
 {
   decodeBody( rawPacket );
 }
 
-DataPacket& DataPacket::operator=( ConstRawDataSpan rawPacket )
+DataPacket& DataPacket::operator=( Helper::ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -84,13 +83,13 @@ DataPacket::operator std::string() const
   return std::format( "DATA: Block No: {} DATA: {} bytes", static_cast< uint16_t >( blockNumber() ), dataSize() );
 }
 
-RawData DataPacket::encode() const
+Helper::RawData DataPacket::encode() const
 {
-  RawData rawPacket( MinPacketSize + dataV.size() );
+  Helper::RawData rawPacket( MinPacketSize + dataV.size() );
 
   insertHeader( rawPacket );
 
-  auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto rawSpan{ Helper::RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // block number
   rawSpan = Helper::RawData_setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
@@ -102,7 +101,7 @@ RawData DataPacket::encode() const
   return rawPacket;
 }
 
-void DataPacket::decodeBody( ConstRawDataSpan rawPacket )
+void DataPacket::decodeBody( Helper::ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() < MinPacketSize )
@@ -111,7 +110,7 @@ void DataPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of DATA packet" } );
   }
 
-  auto remaining{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto remaining{ Helper::ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode block number
   std::tie( remaining, static_cast< uint16_t & >( blockNumberV ) ) = Helper::RawData_getInt< uint16_t >( remaining );

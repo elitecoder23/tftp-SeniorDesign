@@ -22,14 +22,14 @@ MemoryFile::MemoryFile():
 {
 }
 
-MemoryFile::MemoryFile( ConstDataSpan data ) :
+MemoryFile::MemoryFile( Helper::ConstRawDataSpan data ) :
   operationV{ Operation::Transmit },
   dataV{ data.begin(), data.end() },
   dataPtr{ dataV.begin() }
 {
 }
 
-MemoryFile::MemoryFile( Data &&data ):
+MemoryFile::MemoryFile( Helper::RawData data ):
   operationV{ Operation::Transmit },
   dataV{ std::move( data ) },
   dataPtr{ dataV.begin() }
@@ -46,7 +46,7 @@ void MemoryFile::reset()
   dataPtr = dataV.begin();
 }
 
-MemoryFile::ConstDataSpan MemoryFile::data() const noexcept
+Helper::ConstRawDataSpan MemoryFile::data() const noexcept
 {
   return dataV;
 }
@@ -64,7 +64,7 @@ bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
   return true;
 }
 
-void MemoryFile::receivedData( ConstDataSpan data )
+void MemoryFile::receivedData( Helper::ConstRawDataSpan data )
 {
   if ( !data.empty() )
   {
@@ -79,12 +79,12 @@ std::optional< uint64_t> MemoryFile::requestedTransferSize()
   return dataV.size();
 }
 
-MemoryFile::Data MemoryFile::sendData( const size_t maxSize )
+Helper::RawData MemoryFile::sendData( const size_t maxSize )
 {
-  Data::const_iterator startPtr{ dataPtr };
-  Data::const_iterator endPtr;
+  Helper::RawData::const_iterator startPtr{ dataPtr };
+  Helper::RawData::const_iterator endPtr;
 
-  if ( static_cast< size_t >( std::distance< Data::const_iterator >( startPtr, dataV.end() ) ) <= maxSize )
+  if ( static_cast< size_t >( std::distance< Helper::RawData::const_iterator >( startPtr, dataV.end() ) ) <= maxSize )
   {
     endPtr = dataV.end();
   }

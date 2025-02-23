@@ -152,7 +152,7 @@ void OperationImpl::send( const Packets::Packet &packet )
     transmitCounter = 1U;
 
     // Encode raw packet
-    transmitPacket = static_cast< Packets::RawData >( packet );
+    transmitPacket = static_cast< Helper::RawData >( packet );
 
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacket.size() );
@@ -329,7 +329,7 @@ void OperationImpl::optionsAcknowledgementPacket(
 
 void OperationImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
-  [[maybe_unused]] Packets::ConstRawDataSpan rawPacket )
+  [[maybe_unused]] Helper::ConstRawDataSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -367,7 +367,7 @@ void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, 
   }
 
   // handle the received packet
-  packet( socket.remote_endpoint(), Packets::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
+  packet( socket.remote_endpoint(), Helper::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
 void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )

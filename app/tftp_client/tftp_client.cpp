@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -61,8 +60,7 @@ int main( int argc, char * argv[] );
  *
  * @return if @p serverOptions are empty.
  **/
-static bool optionNegotiation(
-  const Tftp::Packets::Options &serverOptions );
+static bool optionNegotiation( const Tftp::Packets::Options &serverOptions );
 
 /**
  * @brief Operation Completed callback
@@ -72,9 +70,7 @@ static bool optionNegotiation(
  * @param[in] transferStatus
  *   Transfer Status
  **/
-static void operationCompleted(
-  boost::asio::io_context &ioContext,
-  Tftp::TransferStatus transferStatus );
+static void operationCompleted( boost::asio::io_context &ioContext, Tftp::TransferStatus transferStatus );
 
 /**
  * @brief Initiates an executes the TFTP Client Read Operation.
@@ -166,12 +162,9 @@ int main( int argc, char * argv[] )
 
     std::cout << "TFTP Client\n";
 
-    boost::program_options::variables_map variablesMap{};
+    boost::program_options::variables_map variablesMap;
     boost::program_options::store(
-      boost::program_options::parse_command_line(
-        argc,
-        argv,
-        optionsDescription ),
+      boost::program_options::parse_command_line( argc, argv, optionsDescription ),
       variablesMap );
 
     if ( 0U != variablesMap.count( "help" ) )
@@ -276,8 +269,7 @@ int main( int argc, char * argv[] )
   }
 }
 
-static bool optionNegotiation(
-  const Tftp::Packets::Options &serverOptions )
+static bool optionNegotiation( const Tftp::Packets::Options &serverOptions )
 {
   return serverOptions.empty();
 }
@@ -307,9 +299,7 @@ static Tftp::Clients::OperationPtr readOperation(
     .optionsConfiguration( tftpOptionsConfiguration )
     .optionNegotiationHandler( std::bind_front( &optionNegotiation ) )
     .completionHandler( std::bind_front( &operationCompleted, std::ref( ioContext ) ) )
-    .dataHandler( std::make_shared< Tftp::Files::StreamFile >(
-      Tftp::Files::File::Operation::Receive,
-      localFile ) )
+    .dataHandler( std::make_shared< Tftp::Files::StreamFile >( Tftp::Files::File::Operation::Receive, localFile ) )
     .filename( remoteFile )
     .mode( Tftp::Packets::TransferMode::OCTET )
     .remote( boost::asio::ip::udp::endpoint{address,tftpConfiguration.tftpServerPort } );
@@ -334,10 +324,11 @@ static  Tftp::Clients::OperationPtr writeOperation(
     .optionsConfiguration( tftpOptionsConfiguration )
     .optionNegotiationHandler( std::bind_front( &optionNegotiation ) )
     .completionHandler( std::bind_front( &operationCompleted, std::ref( ioContext ) ) )
-    .dataHandler( std::make_shared< Tftp::Files::StreamFile >(
-      Tftp::Files::File::Operation::Transmit,
-      localFile,
-      std::filesystem::file_size( localFile ) ) )
+    .dataHandler(
+      std::make_shared< Tftp::Files::StreamFile >(
+        Tftp::Files::File::Operation::Transmit,
+        localFile,
+        std::filesystem::file_size( localFile ) ) )
     .filename( remoteFile )
     .mode( Tftp::Packets::TransferMode::OCTET )
     .remote( boost::asio::ip::udp::endpoint{address,tftpConfiguration.tftpServerPort } );

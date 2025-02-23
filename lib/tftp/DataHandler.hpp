@@ -15,9 +15,7 @@
 
 #include <tftp/Tftp.hpp>
 
-#include <cstddef>
-#include <span>
-#include <vector>
+#include <helper/RawData.hpp>
 
 namespace Tftp {
 
@@ -27,11 +25,6 @@ namespace Tftp {
 class TFTP_EXPORT DataHandler
 {
   public:
-    //! Data Type.
-    using Data = std::vector< std::byte >;
-    //! Data Span.
-    using ConstDataSpan = std::span< const std::byte >;
-
     /**
      * @brief Destructor.
      **/

@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -28,9 +27,7 @@
 namespace Tftp::Clients {
 
 //! TFTP %Client Write %Operation (TFTP WRQ).
-class WriteOperationImpl final :
-  public WriteOperation,
-  private OperationImpl
+class WriteOperationImpl final : public WriteOperation, private OperationImpl
 {
   public:
     /**
@@ -48,9 +45,7 @@ class WriteOperationImpl final :
     void request() override;
 
     //! @copydoc WriteOperation::gracefulAbort()
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) override;
+    void gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage = {} ) override;
 
     //! @copydoc WriteOperation::abort()
     void abort() override;
@@ -65,20 +60,16 @@ class WriteOperationImpl final :
     WriteOperation& tftpRetries( uint16_t retries ) override;
 
     //! @copydoc WriteOperation::optionsConfiguration()
-    WriteOperation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) override;
+    WriteOperation &optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc WriteOperation::additionalOptions()
-    WriteOperation& additionalOptions(
-      Packets::Options additionalOptions ) override;
+    WriteOperation &additionalOptions( Packets::Options additionalOptions ) override;
 
     //! @copydoc WriteOperation::optionNegotiationHandler()
-    WriteOperation& optionNegotiationHandler(
-      OptionNegotiationHandler handler ) override;
+    WriteOperation &optionNegotiationHandler( OptionNegotiationHandler handler ) override;
 
     //! @copydoc WriteOperation::completionHandler()
-    WriteOperation& completionHandler(
-      OperationCompletedHandler handler ) override;
+    WriteOperation &completionHandler( OperationCompletedHandler handler ) override;
 
     //! @copydoc WriteOperation::dataHandler()
     WriteOperation& dataHandler( TransmitDataHandlerPtr handler ) override;
@@ -97,9 +88,7 @@ class WriteOperationImpl final :
 
   private:
     //! @copydoc OperationImpl::finished()
-    void finished(
-      TransferStatus status,
-      Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
+    void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @brief Sends the data to the host.
@@ -113,11 +102,9 @@ class WriteOperationImpl final :
      * @copydoc Packets::PacketHandler::dataPacket()
      *
      * @throw InvalidPacketException
-     *   Always, because an this packet is invalid.
+     *   Always, because this packet is invalid.
      **/
-    void dataPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket ) override;
+    void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket()

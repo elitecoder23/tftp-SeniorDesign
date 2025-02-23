@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -28,9 +27,7 @@
 namespace Tftp::Clients {
 
 //! TFTP %Client Read %Operation (TFTP RRQ).
-class ReadOperationImpl final :
-  public ReadOperation,
-  private OperationImpl
+class ReadOperationImpl final : public ReadOperation, private OperationImpl
 {
   public:
     /**
@@ -48,9 +45,7 @@ class ReadOperationImpl final :
     void request() override;
 
     //! @copydoc ReadOperation::gracefulAbort()
-    void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) override;
+    void gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage = {} ) override;
 
     //! @copydoc ReadOperation::abort()
     void abort() override;
@@ -68,20 +63,16 @@ class ReadOperationImpl final :
     ReadOperation& dally( bool dally ) override;
 
     //! @copydoc ReadOperation::optionsConfiguration()
-    ReadOperation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) override;
+    ReadOperation &optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc ReadOperation::additionalOptions()
-    ReadOperation& additionalOptions(
-      Packets::Options additionalOptions ) override;
+    ReadOperation &additionalOptions( Packets::Options additionalOptions ) override;
 
     //! @copydoc ReadOperation::optionNegotiationHandler()
-    ReadOperation& optionNegotiationHandler(
-      OptionNegotiationHandler handler ) override;
+    ReadOperation &optionNegotiationHandler( OptionNegotiationHandler handler ) override;
 
     //! @copydoc ReadOperation::completionHandler()
-    ReadOperation& completionHandler(
-      OperationCompletedHandler handler ) override;
+    ReadOperation &completionHandler( OperationCompletedHandler handler ) override;
 
     //! @copydoc ReadOperation::dataHandler()
     ReadOperation& dataHandler( ReceiveDataHandlerPtr handler ) override;
@@ -100,9 +91,7 @@ class ReadOperationImpl final :
 
   private:
     //! @copydoc OperationImpl::finished()
-    void finished(
-      TransferStatus status,
-      Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
+    void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket()
@@ -111,9 +100,7 @@ class ReadOperationImpl final :
      * If everything is fine, handler is called with extracted data and the
      * reception operation is continued.
      **/
-    void dataPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket ) override;
+    void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;
 
     /**
      * @copydoc Packets::PacketHandler::acknowledgementPacket()

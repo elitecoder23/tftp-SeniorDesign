@@ -19,12 +19,12 @@ ReadRequestPacket::ReadRequestPacket( std::string filename, TransferMode mode, O
 {
 }
 
-ReadRequestPacket::ReadRequestPacket( ConstRawDataSpan rawPacket ) :
+ReadRequestPacket::ReadRequestPacket( Helper::ConstRawDataSpan rawPacket ) :
   ReadWriteRequestPacket( PacketType::ReadRequest, rawPacket )
 {
 }
 
-ReadRequestPacket& ReadRequestPacket::operator=( ConstRawDataSpan rawPacket )
+ReadRequestPacket& ReadRequestPacket::operator=( Helper::ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );

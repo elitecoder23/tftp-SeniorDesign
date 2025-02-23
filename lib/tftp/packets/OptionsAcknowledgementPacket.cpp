@@ -16,7 +16,6 @@
 #include <tftp/packets/Options.hpp>
 
 #include <helper/Exception.hpp>
-#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -25,22 +24,19 @@
 
 namespace Tftp::Packets {
 
-OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  Options options ) :
+OptionsAcknowledgementPacket::OptionsAcknowledgementPacket( Options options ) :
   Packet{ PacketType::OptionsAcknowledgement },
   optionsV{ std::move( options ) }
 {
 }
 
-OptionsAcknowledgementPacket::OptionsAcknowledgementPacket(
-  ConstRawDataSpan rawPacket ):
+OptionsAcknowledgementPacket::OptionsAcknowledgementPacket( Helper::ConstRawDataSpan rawPacket ):
   Packet{ PacketType::OptionsAcknowledgement, rawPacket }
 {
   decodeBody( rawPacket );
 }
 
-OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=(
-  ConstRawDataSpan rawPacket )
+OptionsAcknowledgementPacket& OptionsAcknowledgementPacket::operator=( Helper::ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -67,9 +63,9 @@ OptionsAcknowledgementPacket::operator std::string() const
   return std::format( "OACK: OPT: \"{}\"", Options_toString( optionsV ) );
 }
 
-RawData OptionsAcknowledgementPacket::encode() const
+Helper::RawData OptionsAcknowledgementPacket::encode() const
 {
-  RawData rawPacket( HeaderSize );
+  Helper::RawData rawPacket( HeaderSize );
 
   insertHeader( rawPacket );
 
@@ -81,7 +77,7 @@ RawData OptionsAcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-void OptionsAcknowledgementPacket::decodeBody( ConstRawDataSpan rawPacket )
+void OptionsAcknowledgementPacket::decodeBody( Helper::ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() <= HeaderSize )

@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -54,7 +53,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    explicit OptionsAcknowledgementPacket( ConstRawDataSpan rawPacket );
+    explicit OptionsAcknowledgementPacket( Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -64,7 +63,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
      *
      * @return *this
      **/
-    OptionsAcknowledgementPacket& operator=( ConstRawDataSpan rawPacket );
+    OptionsAcknowledgementPacket& operator=( Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @name TFTP Options
@@ -102,7 +101,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
     /**
      * @copydoc Packet::encode()
      **/
-    [[nodiscard]] RawData encode() const override;
+    [[nodiscard]] Helper::RawData encode() const override;
 
     /**
      * @brief Decodes the TFTP body.
@@ -113,7 +112,7 @@ class TFTP_EXPORT OptionsAcknowledgementPacket final : public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( ConstRawDataSpan rawPacket );
+    void decodeBody( Helper::ConstRawDataSpan rawPacket );
 
     //! Stored Options.
     Options optionsV;

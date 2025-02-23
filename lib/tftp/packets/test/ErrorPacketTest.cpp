@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 {
   ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE" };
 
-  RawData raw{ error };
+  Helper::RawData raw{ error };
 
   std::cout << Helper::Dump( std::data( raw ), raw.size() );
 
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE( constructor2)
   using namespace std::literals;
   ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"s };
 
-  RawData raw{ error };
+  Helper::RawData raw{ error };
 
   std::cout << Helper::Dump( std::data( raw ), raw.size() );
 

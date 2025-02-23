@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -34,8 +33,7 @@ PacketStatistic& PacketStatistic::globalTransmit()
   return globalTransmitPacketStatistics;
 }
 
-PacketStatistic::Value PacketStatistic::total(
-  const Statistic &statistic )
+PacketStatistic::Value PacketStatistic::total( const Statistic &statistic )
 {
   Value total{ 0, 0};
 
@@ -92,9 +90,7 @@ std::string PacketStatistic::toString() const
   return str;
 }
 
-std::ostream & operator<<(
-  std::ostream &stream,
-  const PacketStatistic &statistic )
+std::ostream& operator<<( std::ostream &stream, const PacketStatistic &statistic )
 {
   return ( stream << statistic.toString() );
 }

@@ -57,7 +57,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    explicit AcknowledgementPacket( ConstRawDataSpan rawPacket );
+    explicit AcknowledgementPacket( Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -67,7 +67,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
      *
      * @return *this
      **/
-    AcknowledgementPacket& operator=( ConstRawDataSpan rawPacket );
+    AcknowledgementPacket& operator=( Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @name Block Number
@@ -96,7 +96,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
 
   private:
     //! @copydoc Packet::encode() const
-    [[nodiscard]] RawData encode() const override;
+    [[nodiscard]] Helper::RawData encode() const override;
 
     /**
      * @brief Decodes the TFTP Body.
@@ -109,7 +109,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
      * @throw InvalidPacketException
      *   When packet size is invalid
      **/
-    void decodeBody( ConstRawDataSpan rawPacket );
+    void decodeBody( Helper::ConstRawDataSpan rawPacket );
 
     //! Block Number of Packet
     BlockNumber blockNumberV;

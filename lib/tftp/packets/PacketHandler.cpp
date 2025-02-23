@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -26,9 +25,7 @@
 
 namespace Tftp::Packets {
 
-void PacketHandler::packet(
-  const boost::asio::ip::udp::endpoint &remote,
-  ConstRawDataSpan rawPacket )
+void PacketHandler::packet( const boost::asio::ip::udp::endpoint &remote, Helper::ConstRawDataSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -40,9 +37,7 @@ void PacketHandler::packet(
         readRequestPacket( remote, Packets::ReadRequestPacket{ rawPacket } );
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::ReadRequest,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::ReadRequest, rawPacket.size() );
       }
       catch ( const Packets::InvalidPacketException &e )
       {
@@ -50,9 +45,7 @@ void PacketHandler::packet(
           << "Error decoding/ handling RRQ packet: " << e.what();
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Invalid,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
 
         invalidPacket( remote, rawPacket );
       }
@@ -64,9 +57,7 @@ void PacketHandler::packet(
         writeRequestPacket( remote, Packets::WriteRequestPacket{ rawPacket } );
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::WriteRequest,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::WriteRequest, rawPacket.size() );
       }
       catch ( const Packets::InvalidPacketException &e )
       {
@@ -74,9 +65,7 @@ void PacketHandler::packet(
           << "Error decoding/ handling WRQ packet: " << e.what();
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Invalid,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
 
         invalidPacket( remote, rawPacket );
       }
@@ -88,9 +77,7 @@ void PacketHandler::packet(
         dataPacket( remote, Packets::DataPacket{ rawPacket } );
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Data,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Data, rawPacket.size() );
       }
       catch ( const Packets::InvalidPacketException &e )
       {
@@ -98,9 +85,7 @@ void PacketHandler::packet(
           << "Error decoding/ handling DATA packet: " << e.what();
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Invalid,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
 
         invalidPacket( remote, rawPacket );
       }
@@ -109,14 +94,10 @@ void PacketHandler::packet(
     case PacketType::Acknowledgement:
       try
       {
-        acknowledgementPacket(
-          remote,
-          Packets::AcknowledgementPacket{ rawPacket } );
+        acknowledgementPacket( remote, Packets::AcknowledgementPacket{ rawPacket } );
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Acknowledgement,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Acknowledgement, rawPacket.size() );
       }
       catch ( const Packets::InvalidPacketException &e )
       {
@@ -124,9 +105,7 @@ void PacketHandler::packet(
           << "Error decoding/ handling ACK packet: " << e.what();
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Invalid,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
 
         invalidPacket( remote, rawPacket );
       }
@@ -138,9 +117,7 @@ void PacketHandler::packet(
         errorPacket( remote, Packets::ErrorPacket{ rawPacket } );
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Error,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Error, rawPacket.size() );
       }
       catch ( const Packets::InvalidPacketException &e )
       {
@@ -148,9 +125,7 @@ void PacketHandler::packet(
           << "Error decoding/ handling ERR packet: " << e.what();
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Invalid,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
 
         invalidPacket( remote, rawPacket );
       }
@@ -159,14 +134,10 @@ void PacketHandler::packet(
     case PacketType::OptionsAcknowledgement:
       try
       {
-        optionsAcknowledgementPacket(
-          remote,
-          Packets::OptionsAcknowledgementPacket{ rawPacket } );
+        optionsAcknowledgementPacket( remote, Packets::OptionsAcknowledgementPacket{ rawPacket } );
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::OptionsAcknowledgement,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::OptionsAcknowledgement, rawPacket.size() );
       }
       catch ( const Packets::InvalidPacketException &e )
       {
@@ -174,9 +145,7 @@ void PacketHandler::packet(
           << "Error decoding/ handling OACK packet: " << e.what();
 
         // Update statistic
-        PacketStatistic::globalReceive().packet(
-          PacketType::Invalid,
-          rawPacket.size() );
+        PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
 
         invalidPacket( remote, rawPacket );
       }
@@ -184,9 +153,7 @@ void PacketHandler::packet(
 
     default:
       // Update statistic
-      PacketStatistic::globalReceive().packet(
-        PacketType::Invalid,
-        rawPacket.size() );
+      PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
 
       invalidPacket( remote, rawPacket );
       break;

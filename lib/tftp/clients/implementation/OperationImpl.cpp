@@ -154,7 +154,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
     transmitCounter = 1U;
 
     // Encode raw packet
-    transmitPacket = static_cast< Packets::RawData >( packet );
+    transmitPacket = static_cast< Helper::RawData >( packet );
 
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacket.size() );
@@ -185,7 +185,7 @@ void OperationImpl::send( const Packets::Packet &packet )
     transmitCounter = 1U;
 
     // Encode raw packet
-    transmitPacket = static_cast< Packets::RawData >( packet );
+    transmitPacket = static_cast< Helper::RawData >( packet );
 
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacket.size() );
@@ -374,7 +374,7 @@ void OperationImpl::errorPacket(
 
 void OperationImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
-  [[maybe_unused]] Packets::ConstRawDataSpan rawPacket )
+  [[maybe_unused]] Helper::ConstRawDataSpan rawPacket )
 {
   BOOST_LOG_FUNCTION()
 
@@ -424,7 +424,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
       // send error packet
       const Packets::ErrorPacket err{ Packets::ErrorCode::UnknownTransferId, "Packet from wrong source" };
 
-      auto rawPacket{ static_cast< Packets::RawData>( err ) };
+      auto rawPacket{ static_cast< Helper::RawData>( err ) };
 
       // Update statistic
       Packets::PacketStatistic::globalTransmit().packet( err.packetType(), rawPacket.size() );
@@ -472,7 +472,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
     return;
   }
 
-  packet( receiveEndpoint, Packets::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
+  packet( receiveEndpoint, Helper::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
 void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, const std::size_t bytesTransferred )
@@ -497,7 +497,7 @@ void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, 
   }
 
   // handle the received packet
-  packet( receiveEndpoint, Packets::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
+  packet( receiveEndpoint, Helper::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
 }
 
 void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorCode )

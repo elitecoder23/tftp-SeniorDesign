@@ -167,7 +167,7 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    ReadWriteRequestPacket( PacketType packetType, ConstRawDataSpan rawPacket );
+    ReadWriteRequestPacket( PacketType packetType, Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @brief Decodes the TFTP body.
@@ -178,13 +178,13 @@ class TFTP_EXPORT ReadWriteRequestPacket : public Packet
      * @throw InvalidPacketException
      *   If data or packet is invalid.
      **/
-    void decodeBody( ConstRawDataSpan rawPacket );
+    void decodeBody( Helper::ConstRawDataSpan rawPacket );
 
   private:
     /**
      * @copydoc Packet::encode()
      **/
-    [[nodiscard]] RawData encode() const final;
+    [[nodiscard]] Helper::RawData encode() const final;
 
     //! Filename
     std::string filenameV;

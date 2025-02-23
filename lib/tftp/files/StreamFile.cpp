@@ -83,7 +83,7 @@ bool StreamFile::receivedTransferSize( const uint64_t transferSize )
   return ( transferSize <= sizeV );
 }
 
-void StreamFile::receivedData( ConstDataSpan data )
+void StreamFile::receivedData( Helper::ConstRawDataSpan data )
 {
   if ( !data.empty() )
   {
@@ -96,9 +96,9 @@ std::optional< uint64_t> StreamFile::requestedTransferSize()
   return sizeV;
 }
 
-StreamFile::Data StreamFile::sendData( const size_t maxSize )
+Helper::RawData StreamFile::sendData( const size_t maxSize )
 {
-  Data data( maxSize );
+  Helper::RawData data( maxSize );
 
   streamV.read( reinterpret_cast< char * >( data.data() ), static_cast< std::streamsize >( maxSize ) );
 

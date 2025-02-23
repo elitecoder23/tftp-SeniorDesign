@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -161,12 +160,9 @@ int main( int argc, char * argv[] )
     boost::asio::io_context ioContext;
     boost::asio::signal_set signals{ ioContext, SIGINT, SIGTERM };
 
-    boost::program_options::variables_map variablesMap{};
+    boost::program_options::variables_map variablesMap;
     boost::program_options::store(
-      boost::program_options::parse_command_line(
-        argc,
-        argv,
-        optionsDescription ),
+      boost::program_options::parse_command_line( argc, argv, optionsDescription ),
       variablesMap );
 
     if ( 0U != variablesMap.count( "help" ) )
@@ -192,9 +188,8 @@ int main( int argc, char * argv[] )
     // configure
     server
       ->requestHandler( std::bind_front( &receivedRequest ) )
-      .serverAddress( boost::asio::ip::udp::endpoint{
-        boost::asio::ip::address_v4::any(),
-        tftpConfiguration.tftpServerPort } );
+      .serverAddress(
+        boost::asio::ip::udp::endpoint{ boost::asio::ip::address_v4::any(), tftpConfiguration.tftpServerPort } );
 
     server->start();
 
@@ -261,27 +256,18 @@ static void receivedRequest(
   {
     std::cerr << "Wrong transfer mode\n";
 
-    server->errorOperation(
-      remote,
-      Tftp::Packets::ErrorCode::IllegalTftpOperation,
-      "wrong transfer mode" );
+    server->errorOperation( remote, Tftp::Packets::ErrorCode::IllegalTftpOperation, "wrong transfer mode" );
 
     return;
   }
 
   // check and generate file path
-  const auto filePath{ Tftp::Servers::checkFilename(
-    baseDir,
-    filename,
-    Tftp::RequestType::Read == requestType ) };
+  const auto filePath{ Tftp::Servers::checkFilename( baseDir, filename, Tftp::RequestType::Read == requestType ) };
   if ( !filePath )
   {
     std::cerr << "Error filename check\n";
 
-    server->errorOperation(
-      remote,
-      Tftp::Packets::ErrorCode::AccessViolation,
-      "Illegal filename" );
+    server->errorOperation( remote, Tftp::Packets::ErrorCode::AccessViolation, "Illegal filename" );
 
     return;
   }
@@ -329,10 +315,7 @@ static void transmitFile(
   {
     std::cerr << "Error opening file\n";
 
-    server->errorOperation(
-      remote,
-      Tftp::Packets::ErrorCode::FileNotFound,
-      "file not found" );
+    server->errorOperation( remote, Tftp::Packets::ErrorCode::FileNotFound, "file not found" );
 
     return;
   }
@@ -345,10 +328,11 @@ static void transmitFile(
     .tftpRetries( tftpConfiguration.tftpRetries )
     .optionsConfiguration( tftpOptionsConfiguration )
     .completionHandler( std::bind_front( &operationCompleted ) )
-    .dataHandler( std::make_shared< Tftp::Files::StreamFile >(
-      Tftp::Files::File::Operation::Transmit,
-      filename,
-      std::filesystem::file_size( filename ) ) )
+    .dataHandler(
+      std::make_shared< Tftp::Files::StreamFile >(
+        Tftp::Files::File::Operation::Transmit,
+        filename,
+        std::filesystem::file_size( filename ) ) )
     .remote( remote)
     .clientOptions( clientOptions );
 
@@ -365,18 +349,14 @@ static void receiveFile(
     << "WRQ: " << filename << " from: " << remote.address().to_string() << "\n";
 
   // open requested file
-  std::fstream fileStream(
-    filename.c_str(),
-    std::fstream::out | std::fstream::trunc );
+  std::fstream fileStream( filename.c_str(), std::fstream::out | std::fstream::trunc );
 
   // check that file was opened successfully
   if ( !fileStream.good() )
   {
     std::cerr << "Error opening file\n";
 
-    server->errorOperation(
-      remote,
-      Tftp::Packets::ErrorCode::AccessViolation );
+    server->errorOperation( remote, Tftp::Packets::ErrorCode::AccessViolation );
 
     return;
   }
@@ -390,9 +370,7 @@ static void receiveFile(
     .dally( tftpConfiguration.dally )
     .optionsConfiguration( tftpOptionsConfiguration )
     .completionHandler( std::bind_front( &operationCompleted ) )
-    .dataHandler( std::make_shared< Tftp::Files::StreamFile >(
-      Tftp::Files::File::Operation::Receive,
-      filename ) )
+    .dataHandler( std::make_shared< Tftp::Files::StreamFile >( Tftp::Files::File::Operation::Receive, filename ) )
     .remote( remote )
     .clientOptions( clientOptions );
 

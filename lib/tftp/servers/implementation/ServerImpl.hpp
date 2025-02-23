@@ -190,7 +190,7 @@ class ServerImpl final : public Server, private Packets::PacketHandler
      * The TFTP server does not expect this packet.
      * This packet is ignored.
      **/
-    void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Packets::ConstRawDataSpan rawPacket ) override;
+    void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Helper::ConstRawDataSpan rawPacket ) override;
 
     /**
      * @brief Decodes the TFTP Options.
@@ -227,7 +227,7 @@ class ServerImpl final : public Server, private Packets::PacketHandler
     boost::asio::ip::address localV;
 
     //! Buffer, which holds the received TFTP packet.
-    Packets::RawData receivePacketV;
+    Helper::RawData receivePacketV;
     //! Remote endpoint on receive.
     boost::asio::ip::udp::endpoint remoteEndpointV;
 };

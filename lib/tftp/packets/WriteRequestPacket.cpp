@@ -19,12 +19,12 @@ WriteRequestPacket::WriteRequestPacket( std::string filename, TransferMode mode,
 {
 }
 
-WriteRequestPacket::WriteRequestPacket( ConstRawDataSpan rawPacket ) :
+WriteRequestPacket::WriteRequestPacket( Helper::ConstRawDataSpan rawPacket ) :
   ReadWriteRequestPacket{ PacketType::WriteRequest, rawPacket }
 {
 }
 
-WriteRequestPacket& WriteRequestPacket::operator=( ConstRawDataSpan rawPacket )
+WriteRequestPacket& WriteRequestPacket::operator=( Helper::ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket);
   decodeBody( rawPacket);

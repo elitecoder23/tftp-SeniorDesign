@@ -145,13 +145,6 @@ constexpr uint8_t TimeoutOptionMin{ 1U };
 //! maximum TFTP timeout option as defined within RFC 2349
 constexpr uint8_t TimeoutOptionMax{ 255U };
 
-//! Raw TFTP Packet.
-using RawData = std::vector< std::byte >;
-//! Raw TFTP Packet as std::span
-using RawDataSpan = std::span< std::byte >;
-//! Constant Raw TFTP Packet as std::span
-using ConstRawDataSpan = std::span< const std::byte >;
-
 //! Raw Options.
 using RawOptions = std::vector< std::byte >;
 //! Constant Raw TFTP Options as std::span

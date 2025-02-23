@@ -66,7 +66,7 @@ class TFTP_EXPORT NullSinkFile final : public ReceiveDataHandler
      *
      * Drops the data immediately.
      **/
-    void receivedData( ConstDataSpan data ) override;
+    void receivedData( Helper::ConstRawDataSpan data ) override;
 
   private:
     //! Optional size (used for options negotiation)

@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -42,8 +41,7 @@ class TFTP_EXPORT Client
      *
      * @return Created TFTP Client Instance.
      **/
-    [[nodiscard]] static ClientPtr instance(
-      boost::asio::io_context &ioContext );
+    [[nodiscard]] static ClientPtr instance( boost::asio::io_context &ioContext );
 
     //! Destructor
     virtual ~Client() noexcept = default;
@@ -59,8 +57,7 @@ class TFTP_EXPORT Client
      * TFTP Timeout, when no timeout option is negotiated in seconds.
      * If the _TFTP Timeout_ parameter is not set, the TFTP defaults are used.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] timeout
      *   TFTP timeout.
@@ -72,11 +69,9 @@ class TFTP_EXPORT Client
     /**
      * @brief Updates the Default Number of TFTP Packet Retries.
      *
-     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
-     * used.
+     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are used.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] retries
      *   Number of TFTP Packet Retries.
@@ -88,11 +83,10 @@ class TFTP_EXPORT Client
     /**
      * @brief Updates the Default Dally Parameter.
      *
-     * If the _dally_ option is set, the operation waits after transmission of
-     * the last _Acknowledgment_ packet for potential retry operations.
+     * If the _dally_ option is set, the operation waits after transmission of the last _Acknowledgment_ packet for
+     * potential retry operations.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] dally
      *   If set to @p true, the @p dally handling is activated.
@@ -106,24 +100,21 @@ class TFTP_EXPORT Client
      *
      * If no TFTP Option configuration is provided, the defaults are used.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] optionsConfiguration
      *   TFTP Options Configuration.
      *
      * @return @p *this for chaining.
      **/
-    virtual Client& optionsConfigurationDefault(
-      TftpOptionsConfiguration optionsConfiguration ) = 0;
+    virtual Client& optionsConfigurationDefault( TftpOptionsConfiguration optionsConfiguration ) = 0;
 
     /**
      * @brief Updates Default additional TFTP Options
      *
      * This operation can be used to add addition options to the TFTP request.
      * By default, no additional Options are sent to the server.
-     * If the negotiated options, sent by the server shall be checked an
-     * _Option Negotiation Handler_ must be provided.
+     * If the negotiated options, sent by the server shall be checked an _Option Negotiation Handler_ must be provided.
      *
      * If this option is set, every created operation will be initialised with
      * the value.
@@ -133,14 +124,12 @@ class TFTP_EXPORT Client
      *
      * @return @p *this for chaining.
      **/
-    virtual Client& additionalOptions(
-      Packets::Options additionalOptions ) = 0;
+    virtual Client& additionalOptions( Packets::Options additionalOptions ) = 0;
 
     /**
      * @brief Updates the local address to use as connection source.
      *
-     * To set a fixed IP-address and leave the UDP port up to the IP-Stack,
-     * set the port to `0`.
+     * To set a fixed IP-address and leave the UDP port up to the IP-Stack, set the port to `0`.
      *
      * @param[in] local
      *   Local IP address

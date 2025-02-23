@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -15,6 +14,8 @@
 #define TFTP_PACKETS_PACKETHANDLER_HPP
 
 #include <tftp/packets/Packets.hpp>
+
+#include <helper/RawData.hpp>
 
 #include <boost/asio/ip/udp.hpp>
 
@@ -37,13 +38,12 @@ class TFTP_EXPORT PacketHandler
     /**
      * @brief The handler of all received packets.
      *
-     * This handler tries to decode the received packet as TFTP packet and calls
-     * the suitable handler method.
+     * This handler tries to decode the received packet as TFTP packet and calls the suitable handler method.
      *
      * If the packet cannot be decoded handleInvalidPacket() is called.
      *
-     * If during handling (including packet conversion) a InvalidPacketException
-     * exception is thrown, handleInvalidPacket is called automatically.
+     * If during handling (including packet conversion) a InvalidPacketException exception is thrown,
+     * @ref invalidPacket is called automatically.
      * This exception is not re-thrown.
      *
      * @param[in] remote
@@ -51,9 +51,7 @@ class TFTP_EXPORT PacketHandler
      * @param[in] rawPacket
      *   Received TFTP Packet.
      **/
-    void packet(
-      const boost::asio::ip::udp::endpoint &remote,
-      ConstRawDataSpan rawPacket );
+    void packet( const boost::asio::ip::udp::endpoint &remote, Helper::ConstRawDataSpan rawPacket );
 
   protected:
     /**
@@ -136,9 +134,7 @@ class TFTP_EXPORT PacketHandler
      * @param[in] rawPacket
      *   Invalid packet data.
      **/
-    virtual void invalidPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      ConstRawDataSpan rawPacket) = 0;
+    virtual void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Helper::ConstRawDataSpan rawPacket ) = 0;
 };
 
 }

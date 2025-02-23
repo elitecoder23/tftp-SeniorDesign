@@ -63,11 +63,11 @@ BOOST_AUTO_TEST_CASE( constructor1 )
   BOOST_CHECK( dp2.blockNumber() == BlockNumber());
   BOOST_CHECK( dp2.dataSize() == 5);
   BOOST_CHECK( !dp2.data().empty() );
-  BOOST_CHECK( std::ranges::equal( dp2.data(), RawData{ 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } ) );
+  BOOST_CHECK( std::ranges::equal( dp2.data(), Helper::RawData{ 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } ) );
   BOOST_CHECK(
     std::ranges::equal(
       ( const_cast< const DataPacket & >( dp2 ).data() ),
-      RawData{ 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } ) );
+      Helper::RawData{ 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } ) );
 
   DataPacket dp3( BlockNumber{ 55 }, { 'H'_b, 'E'_b, 'L'_b, 'L'_b, 'O'_b } );
   BOOST_CHECK( dp3.packetType() == PacketType::Data );
@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
       '!'_b
     } );
 
-  RawData raw( data );
+  Helper::RawData raw( data );
 
   std::cout << Helper::Dump( &(*raw.begin()), raw.size());
   std::cout << static_cast< std::string>( data) << "\n";

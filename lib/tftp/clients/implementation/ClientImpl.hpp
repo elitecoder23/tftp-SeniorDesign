@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -56,12 +55,10 @@ class ClientImpl final : public Client
     Client& dallyDefault( bool dally ) override;
 
     //! @copydoc Client::optionsConfigurationDefault()
-    Client& optionsConfigurationDefault(
-      TftpOptionsConfiguration optionsConfiguration ) override;
+    Client& optionsConfigurationDefault( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc Client::additionalOptions()
-    Client& additionalOptions(
-      Packets::Options additionalOptions ) override;
+    Client& additionalOptions( Packets::Options additionalOptions ) override;
 
     //! @copydoc Client::localDefault()
     Client& localDefault( boost::asio::ip::address local ) override;
@@ -74,7 +71,7 @@ class ClientImpl final : public Client
 
   private:
     //! I/O context, which handles the asynchronous reception operation
-    boost::asio::io_context &ioContext;
+    boost::asio::io_context &ioContextV;
     //! Default timeout for TFTP operations
     std::optional< std::chrono::seconds > tftpTimeoutDefaultV;
     //! Default number of retries for TFTP operations

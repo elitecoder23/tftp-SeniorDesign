@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 
   ReadRequestPacket rrq{ "testfile.bin", TransferMode::OCTET, options };
 
-  RawData raw{ rrq };
+  Helper::RawData raw{ rrq };
   std::cout << "RRQ:\n" << Helper::Dump( std::data( raw ), raw.size() ) << "\n";
 
   ReadRequestPacket rrq2{ raw };

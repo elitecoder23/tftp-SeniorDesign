@@ -45,7 +45,7 @@ class TFTP_EXPORT WriteRequestPacket final : public ReadWriteRequestPacket
      * @throw InvalidPacketException
      *   When the raw data does not represent a valid write request packet
      **/
-    explicit WriteRequestPacket( ConstRawDataSpan rawPacket );
+    explicit WriteRequestPacket( Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -55,7 +55,7 @@ class TFTP_EXPORT WriteRequestPacket final : public ReadWriteRequestPacket
      *
      * @return @p *this
      **/
-    WriteRequestPacket& operator=( ConstRawDataSpan rawPacket );
+    WriteRequestPacket& operator=( Helper::ConstRawDataSpan rawPacket );
 };
 
 }

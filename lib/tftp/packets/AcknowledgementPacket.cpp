@@ -30,13 +30,13 @@ AcknowledgementPacket::AcknowledgementPacket( const BlockNumber blockNumber ) no
 {
 }
 
-AcknowledgementPacket::AcknowledgementPacket( ConstRawDataSpan rawPacket ) :
+AcknowledgementPacket::AcknowledgementPacket( Helper::ConstRawDataSpan rawPacket ) :
   Packet{ PacketType::Acknowledgement, rawPacket }
 {
   decodeBody( rawPacket );
 }
 
-AcknowledgementPacket& AcknowledgementPacket::operator=( ConstRawDataSpan rawPacket )
+AcknowledgementPacket& AcknowledgementPacket::operator=( Helper::ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -58,14 +58,14 @@ AcknowledgementPacket::operator std::string() const
   return std::format( "ACK: BLOCK NO: {}", static_cast< uint16_t>( blockNumberV ) );
 }
 
-RawData AcknowledgementPacket::encode() const
+Helper::RawData AcknowledgementPacket::encode() const
 {
-  RawData rawPacket( PacketSize );
+  Helper::RawData rawPacket( PacketSize );
 
   // insert header data
   insertHeader( rawPacket );
 
-  auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto rawSpan{ Helper::RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // block number
   rawSpan = Helper::RawData_setInt( rawSpan, static_cast< uint16_t >( blockNumberV ) );
@@ -74,7 +74,7 @@ RawData AcknowledgementPacket::encode() const
   return rawPacket;
 }
 
-void AcknowledgementPacket::decodeBody( ConstRawDataSpan rawPacket )
+void AcknowledgementPacket::decodeBody( Helper::ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() != PacketSize )
@@ -83,7 +83,7 @@ void AcknowledgementPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of ACK packet" } );
   }
 
-  auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto rawSpan{ Helper::ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode block number
   std::tie( rawSpan, static_cast< uint16_t & >( blockNumberV ) ) = Helper::RawData_getInt< uint16_t >( rawSpan );

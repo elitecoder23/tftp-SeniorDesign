@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -32,12 +31,10 @@ namespace Tftp::Packets {
  *
  * The class provides to global instances for transmit and receive distinction.
  * The @ref PacketHandler used @ref globalReceive for logging received packets.
- * The @ref Clients::Operation, @ref Servers::Server, and
- * @ref Servers::Operation used the @ref globalTransmit() for logging
- * transmitted packets.
+ * The @ref Clients::Operation, @ref Servers::Server, and @ref Servers::Operation used the @ref globalTransmit() for
+ * logging transmitted packets.
  *
- * There is no distinction between multiple clients, operations, nor
- * client/server.
+ * There is no distinction between multiple clients, operations, nor client/server.
  **/
 class TFTP_EXPORT PacketStatistic
 {
@@ -120,9 +117,7 @@ class TFTP_EXPORT PacketStatistic
  *
  * @return @p stream for chaining.
  **/
-TFTP_EXPORT std::ostream& operator<<(
-  std::ostream &stream,
-  const PacketStatistic &statistic );
+TFTP_EXPORT std::ostream& operator<<( std::ostream &stream, const PacketStatistic &statistic );
 
 }
 

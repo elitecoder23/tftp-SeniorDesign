@@ -52,7 +52,7 @@ class TFTP_EXPORT ReceiveDataHandler : public virtual DataHandler
      * @param[in] data
      *   Received data.
      **/
-    virtual void receivedData( ConstDataSpan data ) = 0;
+    virtual void receivedData( Helper::ConstRawDataSpan data ) = 0;
 };
 
 }

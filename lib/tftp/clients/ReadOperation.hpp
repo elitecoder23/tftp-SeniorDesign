@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -22,8 +21,7 @@ namespace Tftp::Clients {
 /**
  * @brief TFTP %Client Read %Operation (TFTP RRQ).
  *
- * After executed, the class sends the TFTP RRQ packet to the destination and
- * waits for answer.
+ * After executed, the class sends the TFTP RRQ packet to the destination and waits for answer.
  * Received data is handled by the ReceiveDataHandler.
  **/
 class TFTP_EXPORT ReadOperation : public Operation
@@ -41,20 +39,16 @@ class TFTP_EXPORT ReadOperation : public Operation
     ReadOperation& tftpRetries( uint16_t retries ) override = 0;
 
     //! @copydoc Operation::optionsConfiguration()
-    ReadOperation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) override = 0;
+    ReadOperation& optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override = 0;
 
     //! @copydoc Operation::additionalOptions()
-    ReadOperation& additionalOptions(
-      Packets::Options additionalOptions ) override = 0;
+    ReadOperation& additionalOptions( Packets::Options additionalOptions ) override = 0;
 
     //! @copydoc Operation::optionNegotiationHandler()
-    ReadOperation& optionNegotiationHandler(
-      OptionNegotiationHandler handler ) override = 0;
+    ReadOperation& optionNegotiationHandler( OptionNegotiationHandler handler ) override = 0;
 
     //! @copydoc Operation::completionHandler()
-    ReadOperation& completionHandler(
-      OperationCompletedHandler handler ) override = 0;
+    ReadOperation& completionHandler( OperationCompletedHandler handler ) override = 0;
 
     //! @copydoc Operation::filename()
     ReadOperation& filename( std::string filename ) override = 0;

@@ -16,7 +16,6 @@
 #include <tftp/packets/PacketException.hpp>
 
 #include <helper/Exception.hpp>
-#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
@@ -32,14 +31,14 @@ ErrorPacket::ErrorPacket( const ErrorCode errorCode, std::string errorMessage ) 
 {
 }
 
-ErrorPacket::ErrorPacket( ConstRawDataSpan rawPacket ) :
+ErrorPacket::ErrorPacket( Helper::ConstRawDataSpan rawPacket ) :
   Packet{ PacketType::Error, rawPacket },
   errorCodeV{ ErrorCode::Invalid }
 {
   decodeBody( rawPacket );
 }
 
-ErrorPacket& ErrorPacket::operator=( ConstRawDataSpan rawPacket )
+ErrorPacket& ErrorPacket::operator=( Helper::ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -75,13 +74,13 @@ void ErrorPacket::errorMessage( std::string errorMessage )
   errorMessageV = std::move( errorMessage );
 }
 
-RawData ErrorPacket::encode() const
+Helper::RawData ErrorPacket::encode() const
 {
-  RawData rawPacket( MinPacketSize + errorMessageV.length() );
+  Helper::RawData rawPacket( MinPacketSize + errorMessageV.length() );
 
   insertHeader( rawPacket );
 
-  auto rawSpan{ RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto rawSpan{ Helper::RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // error code
   rawSpan = Helper::RawData_setInt( rawSpan, static_cast< uint16_t >( errorCodeV ) );
@@ -93,7 +92,7 @@ RawData ErrorPacket::encode() const
   return rawPacket;
 }
 
-void ErrorPacket::decodeBody( ConstRawDataSpan rawPacket )
+void ErrorPacket::decodeBody( Helper::ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() < MinPacketSize )
@@ -102,7 +101,7 @@ void ErrorPacket::decodeBody( ConstRawDataSpan rawPacket )
       << Helper::AdditionalInfo{ "Invalid packet size of ERROR packet" } );
   }
 
-  auto rawSpan{ ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
+  auto rawSpan{ Helper::ConstRawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // decode error code
   uint16_t errorCodeInt{};

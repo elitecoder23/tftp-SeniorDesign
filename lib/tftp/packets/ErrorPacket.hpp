@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -63,7 +62,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
      * @throw InvalidPacketException
      *   When rawPacket is not a valid packet.
      **/
-    explicit ErrorPacket( ConstRawDataSpan rawPacket );
+    explicit ErrorPacket( Helper::ConstRawDataSpan rawPacket );
 
     /**
      * @brief Assigns a Raw Packet to this Packet.
@@ -73,7 +72,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
      *
      * @return *this
      **/
-    ErrorPacket& operator=( ConstRawDataSpan rawPacket );
+    ErrorPacket& operator=( Helper::ConstRawDataSpan rawPacket );
 
     // @copydoc Packet::operator std::string() const
     explicit operator std::string() const override;
@@ -124,7 +123,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
 
   private:
     //! @copydoc Packet::encode()
-    [[nodiscard]] RawData encode() const override;
+    [[nodiscard]] Helper::RawData encode() const override;
 
     /**
      * @brief Decodes the TFTP body.
@@ -139,7 +138,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
      * @throw InvalidPacketException
      *   When the error message is not 0-terminated.
      **/
-    void decodeBody( ConstRawDataSpan rawPacket );
+    void decodeBody( Helper::ConstRawDataSpan rawPacket );
 
     //! Error Code
     ErrorCode errorCodeV;

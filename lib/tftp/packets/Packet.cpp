@@ -23,7 +23,7 @@
 
 namespace Tftp::Packets {
 
-PacketType Packet::packetType( ConstRawDataSpan rawPacket )
+PacketType Packet::packetType( Helper::ConstRawDataSpan rawPacket )
 {
   // check minimum data size.
   if ( rawPacket.size() < HeaderSize )
@@ -96,12 +96,12 @@ Packet::Packet( const PacketType packetType ) noexcept:
 {
 }
 
-Packet::Packet( const PacketType packetType, ConstRawDataSpan rawPacket ) : packetTypeV{ packetType }
+Packet::Packet( const PacketType packetType, Helper::ConstRawDataSpan rawPacket ) : packetTypeV{ packetType }
 {
   decodeHeader( rawPacket );
 }
 
-Packet::operator RawData() const
+Packet::operator Helper::RawData() const
 {
   return encode();
 }
@@ -120,7 +120,7 @@ Packet& Packet::operator=( Packet &&other [[maybe_unused]] ) noexcept
   return *this;
 }
 
-void Packet::insertHeader( RawDataSpan rawPacket ) const
+void Packet::insertHeader( Helper::RawDataSpan rawPacket ) const
 {
   // keep assertion --> programming error of subclasses.
   assert( rawPacket.size() >= HeaderSize );
@@ -129,7 +129,7 @@ void Packet::insertHeader( RawDataSpan rawPacket ) const
   Helper::RawData_setInt( rawPacket, std::to_underlying( packetTypeV ) );
 }
 
-void Packet::decodeHeader( ConstRawDataSpan rawPacket )
+void Packet::decodeHeader( Helper::ConstRawDataSpan rawPacket )
 {
   // check size
   if ( rawPacket.size() < HeaderSize )

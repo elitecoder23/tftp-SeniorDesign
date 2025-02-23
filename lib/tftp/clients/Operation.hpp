@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -57,8 +56,7 @@ class TFTP_EXPORT Operation
     /**
      * @brief Updates the Number of TFTP Packet Retries.
      *
-     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
-     * used.
+     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are used.
      *
      * @param[in] retries
      *   Number of TFTP Packet Retries.
@@ -77,16 +75,14 @@ class TFTP_EXPORT Operation
      *
      * @return @p *this for chaining.
      **/
-    virtual Operation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) = 0;
+    virtual Operation& optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) = 0;
 
     /**
      * @brief Updates additional TFTP Options
      *
      * This operation can be used to add addition options to the TFTP request.
      * By default, no additional Options are sent to the server.
-     * If the negotiated options, sent by the server shall be checked an
-     * _Option Negotiation Handler_ must be provided.
+     * If the negotiated options, sent by the server shall be checked an _Option Negotiation Handler_ must be provided.
      *
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.
@@ -95,16 +91,15 @@ class TFTP_EXPORT Operation
      *
      * @sa @ref ReadOperation::optionNegotiationHandler()
      **/
-    virtual Operation& additionalOptions(
-      Packets::Options additionalOptions ) = 0;
+    virtual Operation& additionalOptions( Packets::Options additionalOptions ) = 0;
 
     /**
      * @brief Updates the Option Negotiation Handler.
      *
-     * This handler is called for additional options received by TFTP Option
-     * Acknowledgment to verify, if the answer of the TFTP server is accepted.
-     * When no user-defined Option Negotiation Handler is registered, the
-     * Options acknowledged by the server are accepted.
+     * This handler is called for additional options received by TFTP Option Acknowledgment to verify, if the answer of
+     * the TFTP server is accepted.
+     * When no user-defined Option Negotiation Handler is registered, the Options acknowledged by the server are
+     * accepted.
      *
      * @param[in] handler
      *   Option negotiation handler.
@@ -113,8 +108,7 @@ class TFTP_EXPORT Operation
      *
      * @sa @ref ReadOperation::additionalOptions()
      **/
-    virtual Operation& optionNegotiationHandler(
-      OptionNegotiationHandler handler ) = 0;
+    virtual Operation& optionNegotiationHandler( OptionNegotiationHandler handler ) = 0;
 
     /**
      * @brief Updates the %Operation Completed Handler.
@@ -124,8 +118,7 @@ class TFTP_EXPORT Operation
      *
      * @return @p *this for chaining.
      **/
-    virtual Operation& completionHandler(
-      OperationCompletedHandler handler ) = 0;
+    virtual Operation& completionHandler( OperationCompletedHandler handler ) = 0;
 
     /**
      * @brief Updates the Request Filename.
@@ -166,8 +159,7 @@ class TFTP_EXPORT Operation
     /**
      * @brief Updates the local address to use as connection source.
      *
-     * To set a fixed IP-address and leave the UDP port up to the IP-Stack,
-     * set the port to `0`.
+     * To set a fixed IP-address and leave the UDP port up to the IP-Stack, set the port to `0`.
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -181,8 +173,7 @@ class TFTP_EXPORT Operation
     /**
      * @brief Executes the TFTP %Client %Operation.
      *
-     * It prepares the TFTP request packet, sends it to the remote endpoint and
-     * start the reception loop.
+     * It prepares the TFTP request packet, sends it to the remote endpoint and start the reception loop.
      *
      * It returns immediately after sending the request.
      **/
@@ -198,9 +189,7 @@ class TFTP_EXPORT Operation
      * @param[in] errorMessage
      *   An additional error message.
      **/
-    virtual void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) = 0;
+    virtual void gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage = {} ) = 0;
 
     /**
      * @brief Aborts the %Operation Immediately.
