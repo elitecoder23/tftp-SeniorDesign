@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -37,9 +36,7 @@ std::optional< std::filesystem::path > checkFilename(
   }
 
   // generate file path
-  auto filePath{ std::filesystem::weakly_canonical(
-    canonicalBaseDir / filename,
-    errorCode ) };
+  auto filePath{ std::filesystem::weakly_canonical( canonicalBaseDir / filename, errorCode ) };
   if ( errorCode )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
@@ -51,10 +48,7 @@ std::optional< std::filesystem::path > checkFilename(
   // with base_resolved_path.
   // Because we previously canonicalized both paths they can't contain any ".."
   // segments, so this check is sufficient.
-  if ( !std::equal(
-         canonicalBaseDir.begin(),
-         canonicalBaseDir.end(),
-         filePath.begin() ) )
+  if ( !std::equal( canonicalBaseDir.begin(), canonicalBaseDir.end(), filePath.begin() ) )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "File path not within base directory.";
@@ -62,8 +56,7 @@ std::optional< std::filesystem::path > checkFilename(
     return std::nullopt;
   }
 
-  if ( mustExist
-    && !std::filesystem::is_regular_file( filePath, errorCode ) && errorCode )
+  if ( mustExist && !std::filesystem::is_regular_file( filePath, errorCode ) && errorCode )
   {
     BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
       << "File does not exist.";

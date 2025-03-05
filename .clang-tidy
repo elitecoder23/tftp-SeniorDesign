@@ -8,11 +8,7 @@ Checks: >-
   -readability-convert-member-functions-to-static,
   -readability-function-cognitive-complexity,
   -readability-magic-numbers,
-  -google-default-arguments,
   -llvmlibc-*
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 FormatStyle: none
-CheckOptions:
-  readability-identifier-length.IgnoredParameterNames: 'id'
-  readability-identifier-length.IgnoredVariableNames: 'it'

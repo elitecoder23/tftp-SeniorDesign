@@ -1,0 +1,252 @@
+{
+  "version": 6,
+
+  "configurePresets": [
+    {
+      "name": "clang-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "cmake-build-${presetName}",
+      "installDir": "cmake-install-${presetName}",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER" : "clang",
+        "CMAKE_CXX_COMPILER" : "clang++",
+        "CMAKE_COMPILE_WARNING_AS_ERROR" : "True"
+      }
+    },
+    {
+      "name": "clang-static-debug",
+      "displayName": "Clang Static Debug",
+      "description": "Clang Static Debug",
+      "inherits": "clang-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Debug"
+      }
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "Clang Static Release",
+      "description": "Clang Static Release",
+      "inherits": "clang-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Release"
+      }
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "Clang Shared Debug",
+      "description": "Clang Shared Debug",
+      "inherits": "clang-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Debug",
+        "BUILD_SHARED_LIBS" : true
+      }
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "Clang Shared Release",
+      "description": "Clang Shared Release",
+      "inherits": "clang-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Release",
+        "BUILD_SHARED_LIBS" : true
+      }
+    }
+  ],
+
+  "buildPresets": [
+    {
+      "name": "clang-static-debug",
+      "displayName": "Clang Static Debug",
+      "configurePreset": "clang-static-debug"
+    },
+    {
+      "name": "clang-static-debug-doc",
+      "displayName": "Clang Static Debug Documentation",
+      "configurePreset": "clang-static-debug",
+      "targets": [ "doc" ]
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "Clang Static Release",
+      "configurePreset": "clang-static-release"
+    },
+    {
+      "name": "clang-static-release-doc",
+      "displayName": "Clang Static Release Documentation",
+      "configurePreset": "clang-static-release",
+      "targets": [ "doc" ]
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "Clang Shared Debug",
+      "configurePreset": "clang-shared-debug"
+    },
+    {
+      "name": "clang-shared-debug-doc",
+      "displayName": "Clang Shared Debug Documentation",
+      "configurePreset": "clang-shared-debug",
+      "targets": [ "doc" ]
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "Clang Shared Release",
+      "configurePreset": "clang-shared-release"
+    },
+    {
+      "name": "clang-shared-release-doc",
+      "displayName": "Clang Shared Release Documentation",
+      "configurePreset": "clang-shared-release",
+      "targets": [ "doc" ]
+    }
+  ],
+
+  "testPresets": [
+    {
+      "name": "clang-static-debug",
+      "displayName": "Clang Static Debug",
+      "configurePreset": "clang-static-debug"
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "Clang Static Release",
+      "configurePreset": "clang-static-release"
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "Clang Shared Debug",
+      "configurePreset": "clang-shared-debug"
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "Clang Shared Release",
+      "configurePreset": "clang-shared-release"
+    }
+  ],
+
+  "packagePresets": [
+    {
+      "name": "clang-static-debug",
+      "displayName": "Clang Static Debug",
+      "configurePreset": "clang-static-debug"
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "Clang Static Release",
+      "configurePreset": "clang-static-release"
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "Clang Shared Debug",
+      "configurePreset": "clang-shared-debug"
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "Clang Shared Release",
+      "configurePreset": "clang-shared-release"
+    }
+  ],
+
+  "workflowPresets": [
+    {
+      "name": "clang-static-debug",
+      "displayName": "MSVC Static Debug",
+      "description": "Build and package MSVC Static Debug Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-static-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-static-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-static-debug-doc"
+        },
+        {
+          "type": "test",
+          "name": "clang-static-debug"
+        },
+        {
+          "type": "package",
+          "name": "clang-static-debug"
+        }
+      ]
+    },
+    {
+      "name": "clang-static-release",
+      "displayName": "MSVC Static Release",
+      "description": "Build and package MSVC Static Release Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-static-release"
+        },
+        {
+          "type": "build",
+          "name": "clang-static-release"
+        },
+        {
+          "type": "build",
+          "name": "clang-static-release-doc"
+        },
+        {
+          "type": "test",
+          "name": "clang-static-release"
+        },
+        {
+          "type": "package",
+          "name": "clang-static-release"
+        }
+      ]
+    },
+    {
+      "name": "clang-shared-debug",
+      "displayName": "MSVC Shared Debug",
+      "description": "Build and package MSVC Shared Debug Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-shared-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-shared-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-shared-debug-doc"
+        },
+        {
+          "type": "package",
+          "name": "clang-shared-debug"
+        }
+      ]
+    },
+    {
+      "name": "clang-shared-release",
+      "displayName": "MSVC Shared Release",
+      "description": "Build and package MSVC Shared Release Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-shared-release"
+        },
+        {
+          "type": "build",
+          "name": "clang-shared-release"
+        },
+        {
+          "type": "build",
+          "name": "clang-shared-release-doc"
+        },
+        {
+          "type": "package",
+          "name": "clang-shared-release"
+        }
+      ]
+    }
+  ]
+}

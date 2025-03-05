@@ -1,0 +1,281 @@
+{
+  "version": 6,
+
+  "configurePresets": [
+    {
+      "name": "msvc-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "cmake-build-${presetName}",
+      "installDir": "cmake-install-${presetName}",
+      "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "VCPKG_MANIFEST_FEATURES" : "with-qt",
+        "CMAKE_COMPILE_WARNING_AS_ERROR" : "True"
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "Visual Studio"
+        }
+      }
+    },
+    {
+      "name": "msvc-static-debug",
+      "displayName": "MSVC Static Debug",
+      "description": "MSVC Static Debug",
+      "inherits": "msvc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Debug"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "msvc-static-release",
+      "displayName": "MSVC Static Release",
+      "description": "MSVC Static Release",
+      "inherits": "msvc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Release"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "msvc-shared-debug",
+      "displayName": "MSVC Shared Debug",
+      "description": "MSVC Shared Debug",
+      "inherits": "msvc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Debug",
+        "BUILD_SHARED_LIBS" : true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "msvc-shared-release",
+      "displayName": "MSVC Shared Release",
+      "description": "MSVC Shared Release",
+      "inherits": "msvc-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE" : "Release",
+        "BUILD_SHARED_LIBS" : true
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ],
+
+  "buildPresets": [
+    {
+      "name": "msvc-static-debug",
+      "displayName": "MSVC Static Debug",
+      "configurePreset": "msvc-static-debug"
+    },
+    {
+      "name": "msvc-static-debug-doc",
+      "displayName": "MSVC Static Debug Documentation",
+      "configurePreset": "msvc-static-debug",
+      "targets": [ "doc" ]
+    },
+    {
+      "name": "msvc-static-release",
+      "displayName": "MSVC Static Release",
+      "configurePreset": "msvc-static-release"
+    },
+    {
+      "name": "msvc-static-release-doc",
+      "displayName": "MSVC Static Release Documentation",
+      "configurePreset": "msvc-static-release",
+      "targets": [ "doc" ]
+    },
+    {
+      "name": "msvc-shared-debug",
+      "displayName": "MSVC Shared Debug",
+      "configurePreset": "msvc-shared-debug"
+    },
+    {
+      "name": "msvc-shared-debug-doc",
+      "displayName": "MSVC Shared Debug Documentation",
+      "configurePreset": "msvc-shared-debug",
+      "targets": [ "doc" ]
+    },
+    {
+      "name": "msvc-shared-release",
+      "displayName": "MSVC Shared Release",
+      "configurePreset": "msvc-shared-release"
+    },
+    {
+      "name": "msvc-shared-release-doc",
+      "displayName": "MSVC Shared Release Documentation",
+      "configurePreset": "msvc-shared-release",
+      "targets": [ "doc" ]
+    }
+  ],
+
+  "testPresets": [
+    {
+      "name": "msvc-static-debug",
+      "displayName": "MSVC Static Debug",
+      "configurePreset": "msvc-static-debug"
+    },
+    {
+      "name": "msvc-static-release",
+      "displayName": "MSVC Static Release",
+      "configurePreset": "msvc-static-release"
+    },
+    {
+      "name": "msvc-shared-debug",
+      "displayName": "MSVC Shared Debug",
+      "configurePreset": "msvc-shared-debug"
+    },
+    {
+      "name": "msvc-shared-release",
+      "displayName": "MSVC Shared Release",
+      "configurePreset": "msvc-shared-release"
+    }
+  ],
+
+  "packagePresets": [
+    {
+      "name": "msvc-static-debug",
+      "displayName": "MSVC Static Debug",
+      "configurePreset": "msvc-static-debug"
+    },
+    {
+      "name": "msvc-static-release",
+      "displayName": "MSVC Static Release",
+      "configurePreset": "msvc-static-release"
+    },
+    {
+      "name": "msvc-shared-debug",
+      "displayName": "MSVC Shared Debug",
+      "configurePreset": "msvc-shared-debug"
+    },
+    {
+      "name": "msvc-shared-release",
+      "displayName": "MSVC Shared Release",
+      "configurePreset": "msvc-shared-release"
+    }
+  ],
+
+  "workflowPresets": [
+    {
+      "name": "msvc-static-debug",
+      "displayName": "MSVC Static Debug",
+      "description": "Build and package MSVC Static Debug Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-static-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc-static-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc-static-debug-doc"
+        },
+        {
+          "type": "test",
+          "name": "msvc-static-debug"
+        },
+        {
+          "type": "package",
+          "name": "msvc-static-debug"
+        }
+      ]
+    },
+    {
+      "name": "msvc-static-release",
+      "displayName": "MSVC Static Release",
+      "description": "Build and package MSVC Static Release Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-static-release"
+        },
+        {
+          "type": "build",
+          "name": "msvc-static-release"
+        },
+        {
+          "type": "build",
+          "name": "msvc-static-release-doc"
+        },
+        {
+          "type": "test",
+          "name": "msvc-static-release"
+        },
+        {
+          "type": "package",
+          "name": "msvc-static-release"
+        }
+      ]
+    },
+    {
+      "name": "msvc-shared-debug",
+      "displayName": "MSVC Shared Debug",
+      "description": "Build and package MSVC Shared Debug Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-shared-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc-shared-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc-shared-debug-doc"
+        },
+        {
+          "type": "package",
+          "name": "msvc-shared-debug"
+        }
+      ]
+    },
+    {
+      "name": "msvc-shared-release",
+      "displayName": "MSVC Shared Release",
+      "description": "Build and package MSVC Shared Release Configuration",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-shared-release"
+        },
+        {
+          "type": "build",
+          "name": "msvc-shared-release"
+        },
+        {
+          "type": "build",
+          "name": "msvc-shared-release-doc"
+        },
+        {
+          "type": "package",
+          "name": "msvc-shared-release"
+        }
+      ]
+    }
+  ]
+}

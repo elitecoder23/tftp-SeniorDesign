@@ -12,6 +12,8 @@
 
 #include "BlockNumber.hpp"
 
+#include <limits>
+
 namespace Tftp::Packets {
 
 BlockNumber::BlockNumber( const uint16_t blockNumber ) noexcept:
@@ -22,7 +24,7 @@ BlockNumber::BlockNumber( const uint16_t blockNumber ) noexcept:
 uint16_t BlockNumber::next() const
 {
   // roll-over handling
-  if ( blockNumberV == 0xFFFFU )
+  if ( blockNumberV == std::numeric_limits< uint16_t >::max() )
   {
     return 1U;
   }
