@@ -150,8 +150,8 @@
   "workflowPresets": [
     {
       "name": "clang-static-debug",
-      "displayName": "MSVC Static Debug",
-      "description": "Build and package MSVC Static Debug Configuration",
+      "displayName": "Clang Static Debug",
+      "description": "Build and package Clang Static Debug Configuration",
       "steps": [
         {
           "type": "configure",
@@ -177,8 +177,8 @@
     },
     {
       "name": "clang-static-release",
-      "displayName": "MSVC Static Release",
-      "description": "Build and package MSVC Static Release Configuration",
+      "displayName": "Clang Static Release",
+      "description": "Build and package Clang Static Release Configuration",
       "steps": [
         {
           "type": "configure",
@@ -204,8 +204,8 @@
     },
     {
       "name": "clang-shared-debug",
-      "displayName": "MSVC Shared Debug",
-      "description": "Build and package MSVC Shared Debug Configuration",
+      "displayName": "Clang Shared Debug",
+      "description": "Build and package Clang Shared Debug Configuration",
       "steps": [
         {
           "type": "configure",
@@ -227,8 +227,8 @@
     },
     {
       "name": "clang-shared-release",
-      "displayName": "MSVC Shared Release",
-      "description": "Build and package MSVC Shared Release Configuration",
+      "displayName": "Clang Shared Release",
+      "description": "Build and package Clang Shared Release Configuration",
       "steps": [
         {
           "type": "configure",

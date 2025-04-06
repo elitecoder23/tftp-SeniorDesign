@@ -1,0 +1,9 @@
+<html>
+  <head>
+    <title>@DOXYGEN_PROJECT_NAME@</title>
+    <meta http-equiv="refresh" content="0; URL=@INDEX_HTML_OUTPUT_DIR@/index.html" >
+  </head>
+  <body>
+    <a href="@INDEX_HTML_OUTPUT_DIR@/index.html" >@DOXYGEN_PROJECT_NAME@</a>
+  </body>
+</html>

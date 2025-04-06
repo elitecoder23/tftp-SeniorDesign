@@ -33,20 +33,6 @@ endif()
 
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
-# find clang-tidy and add options to execute
-find_program( CLANG_TIDY_EXE NAMES clang-tidy )
-
-if( CLANG_TIDY_EXE )
-  set( CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} -p )
-endif()
-
-# find iwyu and add options to execute
-find_program( CLANG_IWYU_EXE NAMES iwyu )
-
-if( CLANG_IWYU_EXE )
-  #set( CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${CLANG_IWYU_EXE} )
-endif()
-
 enable_testing()
 
 include( GNUInstallDirs )
@@ -62,23 +48,6 @@ set( CMAKE_CXX_SCAN_FOR_MODULES OFF )
 include( FetchContent )
 
 FetchContent_Declare(
-  cmake_common
-  GIT_REPOSITORY https://git.thomas-vogt.de/thomas-vogt/cmake_common.git
-  GIT_TAG        main )
-
-if( IS_DIRECTORY ${CMAKE_SOURCE_DIR}/cmake_common )
-  set( FETCHCONTENT_SOURCE_DIR_CMAKE_COMMON ${CMAKE_SOURCE_DIR}/cmake_common )
-endif()
-
-FetchContent_GetProperties( cmake_common )
-if( NOT cmake_common_POPULATED )
-  FetchContent_MakeAvailable( cmake_common )
-  # Add own CMake scripts to module path
-  list( APPEND CMAKE_MODULE_PATH "${cmake_common_SOURCE_DIR}" )
-endif()
-
-
-FetchContent_Declare(
   helper
   GIT_REPOSITORY https://git.thomas-vogt.de/thomas-vogt/helper.git
   GIT_TAG        main )
@@ -88,6 +57,21 @@ if( IS_DIRECTORY ${CMAKE_SOURCE_DIR}/helper )
 endif()
 
 FetchContent_MakeAvailable( helper )
+
+
+# find clang-tidy and add options to execute
+find_program( CLANG_TIDY_EXE NAMES clang-tidy )
+
+if( CLANG_TIDY_EXE )
+  set( CMAKE_CXX_CLANG_TIDY ${CLANG_TIDY_EXE} -p )
+endif()
+
+# find iwyu and add options to execute
+find_program( CLANG_IWYU_EXE NAMES iwyu )
+
+if( CLANG_IWYU_EXE )
+  #set( CMAKE_CXX_INCLUDE_WHAT_YOU_USE ${CLANG_IWYU_EXE} )
+endif()
 
 add_subdirectory( lib )
 add_subdirectory( app )
