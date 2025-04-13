@@ -15,6 +15,8 @@
 
 #include <tftp/packets/Packets.hpp>
 
+#include <helper/RawData.hpp>
+
 #include <concepts>
 #include <limits>
 #include <optional>

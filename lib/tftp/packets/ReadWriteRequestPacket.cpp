@@ -219,13 +219,13 @@ Helper::RawData ReadWriteRequestPacket::encode() const
   auto rawSpan{ Helper::RawDataSpan{ rawPacket }.subspan( HeaderSize ) };
 
   // encode filename
-  auto rawFilename{ Helper::RawData_toRawData( filenameV  ) };
+  auto rawFilename{ Helper::RawData_asRawData( filenameV  ) };
   auto filenameEnd{ std::copy( rawFilename.begin(), rawFilename.end(), rawSpan.begin() ) };
   *filenameEnd = std::byte{ 0 };
   ++filenameEnd;
 
   // encode transfer mode
-  auto rawMode{ Helper::RawData_toRawData( mode ) };
+  auto rawMode{ Helper::RawData_asRawData( mode ) };
   auto modeEnd{ std::copy( rawMode.begin(), rawMode.end(), filenameEnd ) };
   *modeEnd = std::byte{ 0 };
   ++modeEnd;
