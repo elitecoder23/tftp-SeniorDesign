@@ -12,3 +12,5 @@ Checks: >-
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 FormatStyle: none
+CheckOptions:
+  readability-identifier-length.IgnoredVariableNames: '_\d?'

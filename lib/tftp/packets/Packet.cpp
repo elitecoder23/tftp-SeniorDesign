@@ -17,7 +17,6 @@
 #include <tftp/Logger.hpp>
 
 #include <helper/Exception.hpp>
-#include <helper/RawData.hpp>
 
 #include <boost/exception/all.hpp>
 
