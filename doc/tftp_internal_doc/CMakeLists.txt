@@ -39,6 +39,8 @@ if( WIN32 )
   # shorten filename otherwise exceeds 255 characters for paths
   set( DOXYGEN_SHORT_NAMES YES )
 endif()
+# restrict number of parallel dot-tasks (parallelisation performed by cmake)
+set( DOXYGEN_DOT_NUM_THREADS 1 )
 
 set(
   DOXYGEN_STRIP_FROM_PATH
