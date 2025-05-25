@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -47,15 +46,13 @@ ReadOperation& ReadOperationImpl::tftpRetries( const uint16_t retries )
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::optionsConfiguration(
-  TftpOptionsConfiguration optionsConfiguration )
+ReadOperation& ReadOperationImpl::optionsConfiguration( TftpOptionsConfiguration optionsConfiguration )
 {
   optionsConfigurationV = std::move( optionsConfiguration );
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::completionHandler(
-  OperationCompletedHandler handler )
+ReadOperation& ReadOperationImpl::completionHandler( OperationCompletedHandler handler )
 {
   OperationImpl::completionHandler( std::move( handler ) );
   return *this;
@@ -67,8 +64,7 @@ ReadOperation& ReadOperationImpl::dataHandler( TransmitDataHandlerPtr handler )
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::remote(
-  boost::asio::ip::udp::endpoint remote )
+ReadOperation& ReadOperationImpl::remote( boost::asio::ip::udp::endpoint remote )
 {
   OperationImpl::remote( std::move( remote ) );
   return *this;
@@ -80,15 +76,13 @@ ReadOperation& ReadOperationImpl::local( boost::asio::ip::udp::endpoint local )
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::clientOptions(
-  Packets::TftpOptions clientOptions )
+ReadOperation& ReadOperationImpl::clientOptions( Packets::TftpOptions clientOptions )
 {
   clientOptionsV = std::move( clientOptions );
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::additionalNegotiatedOptions(
-  Packets::Options additionalNegotiatedOptions )
+ReadOperation& ReadOperationImpl::additionalNegotiatedOptions( Packets::Options additionalNegotiatedOptions )
 {
   additionalNegotiatedOptionsV = std::move( additionalNegotiatedOptions );
   return *this;
@@ -127,45 +121,36 @@ void ReadOperationImpl::start()
       // check block size option - if set use it
       if ( optionsConfigurationV.blockSizeOption && clientOptionsV.blockSize )
       {
-        transmitDataSize = std::min(
-          *clientOptionsV.blockSize,
-          *optionsConfigurationV.blockSizeOption );
+        transmitDataSize = std::min( *clientOptionsV.blockSize, *optionsConfigurationV.blockSizeOption );
 
         // respond option string
         serverOptions.try_emplace(
-          std::string{
-            Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) },
+          std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) },
           std::to_string( transmitDataSize ) );
       }
 
       // check timeout option - if set use it
       if ( optionsConfigurationV.timeoutOption
         && clientOptionsV.timeout
-        && ( std::chrono::seconds{ *clientOptionsV.timeout }
-          <= *optionsConfigurationV.timeoutOption ) )
+        && ( std::chrono::seconds{ *clientOptionsV.timeout } <= *optionsConfigurationV.timeoutOption ) )
       {
-        receiveTimeout(
-          std::chrono::seconds{ *clientOptionsV.timeout } );
+        receiveTimeout( std::chrono::seconds{ *clientOptionsV.timeout } );
 
         // respond with timeout option set
         serverOptions.try_emplace(
-          std::string{
-            Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) },
+          std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) },
           std::to_string( *clientOptionsV.timeout ) );
       }
 
       // check transfer size option
-      if ( optionsConfigurationV.handleTransferSizeOption
-        && clientOptionsV.transferSize )
+      if ( optionsConfigurationV.handleTransferSizeOption && clientOptionsV.transferSize )
       {
         if ( 0U != *clientOptionsV.transferSize )
         {
           BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
             << "Received transfer size must be 0";
 
-          Packets::ErrorPacket errorPacket{
-            Packets::ErrorCode::TftpOptionRefused,
-            "transfer size must be 0" };
+          Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "transfer size must be 0" };
           send( errorPacket );
 
           // Operation completed
@@ -174,14 +159,11 @@ void ReadOperationImpl::start()
           return;
         }
 
-        if (
-          auto newTransferSize = dataHandlerV->requestedTransferSize();
-          newTransferSize )
+        if ( auto newTransferSize{ dataHandlerV->requestedTransferSize() }; newTransferSize )
         {
           // respond option string
           serverOptions.try_emplace(
-            std::string{
-              Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) },
+            std::string{ Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) },
             std::to_string( *newTransferSize ) );
         }
       }
@@ -191,8 +173,7 @@ void ReadOperationImpl::start()
       if ( !serverOptions.empty() )
       {
         // Send OACK
-        // Update last received block - number to handle OACK Acknowledgment
-        // correctly
+        // Update last received block - number to handle OACK Acknowledgement correctly
         lastReceivedBlockNumber = 0xFFFFU;
         send( Packets::OptionsAcknowledgementPacket{ serverOptions } );
       }
@@ -217,9 +198,7 @@ void ReadOperationImpl::start()
   }
 }
 
-void ReadOperationImpl::gracefulAbort(
-  Packets::ErrorCode errorCode,
-  std::string errorMessage )
+void ReadOperationImpl::gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage )
 {
   OperationImpl::gracefulAbort( errorCode, std::move( errorMessage ) );
 }
@@ -234,9 +213,7 @@ const Packets::ErrorInfo& ReadOperationImpl::errorInfo() const
   return OperationImpl::errorInfo();
 }
 
-void ReadOperationImpl::finished(
-  const TransferStatus status,
-  Packets::ErrorInfo &&errorInfo ) noexcept
+void ReadOperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo ) noexcept
 {
   BOOST_LOG_FUNCTION()
 
@@ -256,16 +233,14 @@ void ReadOperationImpl::sendData()
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
     << "Send Data #" << static_cast< uint16_t >( lastTransmittedBlockNumber );
 
-  const Packets::DataPacket data{
-    lastTransmittedBlockNumber,
-    dataHandlerV->sendData( transmitDataSize ) };
+  const Packets::DataPacket data{ lastTransmittedBlockNumber, dataHandlerV->sendData( transmitDataSize ) };
 
   if ( data.dataSize() < transmitDataSize )
   {
     lastDataPacketTransmitted = true;
   }
 
-  // send packet
+  // send data packet
   send( data );
 }
 
@@ -278,9 +253,7 @@ void ReadOperationImpl::dataPacket(
   BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
     << "RX Error: " << static_cast< std::string>( dataPacket );
 
-  Packets::ErrorPacket errorPacket{
-    Packets::ErrorCode::IllegalTftpOperation,
-    "DATA not expected" };
+  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "DATA not expected" };
 
   send( errorPacket );
 
@@ -304,7 +277,7 @@ void ReadOperationImpl::acknowledgementPacket(
       << "Received previous ACK packet: retry of last data package - "
          "IGNORE it due to Sorcerer's Apprentice Syndrome";
 
-    // receive next packet
+    // receive the next packet
     receive();
 
     return;
@@ -317,9 +290,7 @@ void ReadOperationImpl::acknowledgementPacket(
       << "Invalid block number received";
 
     // send error packet
-    Packets::ErrorPacket errorPacket{
-      Packets::ErrorCode::IllegalTftpOperation,
-      "Wrong block number" };
+    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Wrong block number" };
 
     send( errorPacket );
 
@@ -344,7 +315,7 @@ void ReadOperationImpl::acknowledgementPacket(
   // send data
   sendData();
 
-  // receive next packet
+  // receive the next packet
   receive();
 }
 

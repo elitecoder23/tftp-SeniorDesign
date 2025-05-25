@@ -40,8 +40,7 @@ class TFTP_EXPORT StreamFile final : public File
     explicit StreamFile( Operation operation, std::filesystem::path filename );
 
     /**
-     * @brief Creates the StreamFile with the given stream as in/ output and
-     *  the size information provided.
+     * @brief Creates the StreamFile with the given stream as in/ output and the size information provided.
      *
      * @param[in] operation
      *   Receive or Transmit Operation.
@@ -49,7 +48,7 @@ class TFTP_EXPORT StreamFile final : public File
      *   Filename to open/ create
      * @param[in] size
      *   Size of the file.
-     *   In Receive Operation, the transfer is reject if size is too big.
+     *   In Receive Operation, the transfer is rejected if @p size is too big.
      *   On Transmit Operation this size is provided.
      **/
     StreamFile( Operation operation, std::filesystem::path filename, size_t size );

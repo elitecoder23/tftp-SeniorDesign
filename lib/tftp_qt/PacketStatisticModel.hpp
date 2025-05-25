@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -27,7 +26,7 @@ namespace TftpQt {
  **/
 class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
 {
-  Q_OBJECT
+    Q_OBJECT
 
   public:
     //! Columns of Model
@@ -47,7 +46,7 @@ class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
      * @param[in] parent
      *   Parent QObject
      **/
-    explicit PacketStatisticModel( QObject * parent = nullptr );
+    explicit PacketStatisticModel( QObject *parent = nullptr );
 
     //! Destructor
     ~PacketStatisticModel() override = default;
@@ -86,9 +85,7 @@ class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
      *
      * @return Data dependent of the index and role.
      **/
-    [[nodiscard]] QVariant data(
-      const QModelIndex &index,
-      int role ) const override;
+    [[nodiscard]] QVariant data( const QModelIndex &index, int role ) const override;
 
     /**
      * @brief Returns the data for the given role and section in the header with
@@ -103,10 +100,7 @@ class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
      *
      * @return Header data for the given parameters.
      **/
-    [[nodiscard]] QVariant headerData(
-      int section,
-      Qt::Orientation orientation,
-      int role ) const override;
+    [[nodiscard]] QVariant headerData( int section, Qt::Orientation orientation, int role ) const override;
 
     /**
      * @brief Update Packet Statistic of Model.
@@ -118,7 +112,7 @@ class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
 
   private:
     //! Packet statistic
-    Tftp::Packets::PacketStatistic::Statistic statisticV{};
+    Tftp::Packets::PacketStatistic::Statistic statisticV;
 };
 
 }

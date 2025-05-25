@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -27,8 +26,7 @@ namespace Tftp::Servers {
 /**
  * @brief TFTP %Server %Operation.
  *
- * This class is specialised for the two kinds of TFTP operations
- * (Read Operation, Write Operation).
+ * This class is specialised for the two kinds of TFTP operations (Read Operation, Write Operation).
  **/
 class TFTP_EXPORT Operation
 {
@@ -57,8 +55,7 @@ class TFTP_EXPORT Operation
     /**
      * @brief Updates the Number of TFTP Packet Retries.
      *
-     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
-     * used.
+     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are used.
      *
      * @param[in] retries
      *   Number of TFTP Packet Retries.
@@ -106,8 +103,7 @@ class TFTP_EXPORT Operation
     /**
      * @brief Updates the local address to use as connection source.
      *
-     * To set a fixed IP-address and leave the UDP port up to the IP-Stack,
-     * set the port to `0`.
+     * To set a fixed IP-address and leave the UDP port up to the IP-Stack, set the port to `0`.
      *
      * @param[in] local
      *   Parameter to define the communication source
@@ -139,8 +135,7 @@ class TFTP_EXPORT Operation
      *
      * @return @p *this for chaining.
      **/
-    virtual Operation& additionalNegotiatedOptions(
-      Packets::Options additionalNegotiatedOptions ) = 0;
+    virtual Operation& additionalNegotiatedOptions( Packets::Options additionalNegotiatedOptions ) = 0;
 
     /** @} **/
 
@@ -154,17 +149,15 @@ class TFTP_EXPORT Operation
     /**
      * @brief Aborts the %Operation Gracefully.
      *
-     * With a graceful abort the transfer is canceled by sending an error packet
-     * to the client, signalling the abort of the transfer.
+     * With a _graceful abort_ the transfer is cancelled by sending an error packet to the client, signalling the abort
+     * of the transfer.
      *
      * @param[in] errorCode
      *   Abort error code.
      * @param errorMessage
      *   Abort error message.
      **/
-    virtual void gracefulAbort(
-      Packets::ErrorCode errorCode,
-      std::string errorMessage = {} ) = 0;
+    virtual void gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage = {} ) = 0;
 
     /**
      * @brief Aborts the %Operation Immediately.

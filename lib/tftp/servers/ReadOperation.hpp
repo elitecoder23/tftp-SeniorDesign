@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -22,8 +21,7 @@ namespace Tftp::Servers {
 /**
  * @brief TFTP %Server Read %Operation (TFTP RRQ).
  *
- * In this operation a client has requested to read a file, which is
- * transmitted form the server to the client.
+ * In this operation a client has requested to read a file, which is transmitted form the server to the client.
  * Therefore, the server performs a write operation.
  *
  * This operation is initiated by a client TFTP read request (RRQ)
@@ -46,18 +44,16 @@ class TFTP_EXPORT ReadOperation : public Operation
     ReadOperation& tftpRetries( uint16_t retries ) override = 0;
 
     //! @copydoc Operation::optionsConfiguration()
-    ReadOperation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) override = 0;
+    ReadOperation& optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override = 0;
 
     //! @copydoc Operation::completionHandler()
-    ReadOperation& completionHandler(
-      OperationCompletedHandler handler ) override = 0;
+    ReadOperation& completionHandler( OperationCompletedHandler handler ) override = 0;
 
     /**
      * @brief Updates the Transmit Data Handler.
      *
      * This handler is required.
-     * If not provided the operation will fail.
+     * If not provided, the operation will fail.
      *
      * @param[in] handler
      *   Handler for Transmit Data.
@@ -73,12 +69,10 @@ class TFTP_EXPORT ReadOperation : public Operation
     ReadOperation& local( boost::asio::ip::udp::endpoint local ) override = 0;
 
     //! @copydoc Operation::clientOptions()
-    ReadOperation& clientOptions(
-      Packets::TftpOptions clientOptions ) override = 0;
+    ReadOperation& clientOptions( Packets::TftpOptions clientOptions ) override = 0;
 
     //! @copydoc Operation::additionalNegotiatedOptions()
-    ReadOperation& additionalNegotiatedOptions(
-      Packets::Options additionalNegotiatedOptions ) override = 0;
+    ReadOperation& additionalNegotiatedOptions( Packets::Options additionalNegotiatedOptions ) override = 0;
 
     /** @} **/
 };

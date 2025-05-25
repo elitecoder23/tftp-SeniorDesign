@@ -41,8 +41,7 @@ class TFTP_EXPORT ReceiveDataHandler : public virtual DataHandler
      * @retval true
      *   Received amount of data can be handled - operation should be continued.
      * @retval false
-     *   Received amount of data cannot be handled - the operation should be
-     *   aborted.
+     *   Received amount of data cannot be handled - the operation should be aborted.
      **/
     [[nodiscard]] virtual bool receivedTransferSize( uint64_t transferSize ) = 0;
 

@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -46,8 +45,7 @@ int PacketStatisticModel::columnCount( const QModelIndex &parent ) const
   return static_cast< int >( Columns::ColumnsCount );
 }
 
-QVariant
-PacketStatisticModel::data( const QModelIndex &index, const int role ) const
+QVariant PacketStatisticModel::data( const QModelIndex &index, const int role ) const
 {
   if ( !index.isValid() )
   {
@@ -85,10 +83,8 @@ PacketStatisticModel::data( const QModelIndex &index, const int role ) const
       return {};
   }
 }
-QVariant PacketStatisticModel::headerData(
-  int const section,
-  Qt::Orientation const orientation,
-  int const role ) const
+
+QVariant PacketStatisticModel::headerData( int const section, Qt::Orientation const orientation, int const role ) const
 {
   if ( role != Qt::DisplayRole )
   {
@@ -116,8 +112,7 @@ QVariant PacketStatisticModel::headerData(
   }
 }
 
-void PacketStatisticModel::statistic(
-  Tftp::Packets::PacketStatistic::Statistic statistic )
+void PacketStatisticModel::statistic( Tftp::Packets::PacketStatistic::Statistic statistic )
 {
   beginResetModel();
   statisticV = std::move( statistic );

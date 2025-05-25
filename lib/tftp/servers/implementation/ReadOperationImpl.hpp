@@ -23,8 +23,8 @@
 
 #include <tftp/TftpOptionsConfiguration.hpp>
 
-#include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/udp.hpp>
+#include <boost/asio/io_context.hpp>
 
 #include <chrono>
 #include <string>
@@ -34,14 +34,12 @@ namespace Tftp::Servers {
 /**
  * @brief TFTP %Server Read %Operation (TFTP RRQ).
  *
- * In this operation a client has requested to read a file, which is transmitted form the server to the client.
+ * In this operation, a client has requested to read a file, which is transmitted from the server to the client.
  * Therefore, the server performs a write operation.
  *
  * This operation is initiated by a client TFTP read request (RRQ)
  **/
-class ReadOperationImpl final :
-  public ReadOperation,
-  private OperationImpl
+class ReadOperationImpl final : public ReadOperation, private OperationImpl
 {
   public:
     /**
@@ -56,16 +54,16 @@ class ReadOperationImpl final :
     ~ReadOperationImpl() override = default;
 
     //! @copydoc ReadOperation::tftpTimeout()
-    ReadOperation &tftpTimeout( std::chrono::seconds timeout ) override;
+    ReadOperation& tftpTimeout( std::chrono::seconds timeout ) override;
 
     //! @copydoc ReadOperation::tftpRetries()
-    ReadOperation &tftpRetries( uint16_t retries ) override;
+    ReadOperation& tftpRetries( uint16_t retries ) override;
 
     //! @copydoc ReadOperation::optionsConfiguration()
-    ReadOperation &optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
+    ReadOperation& optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc ReadOperation::completionHandler()
-    ReadOperation &completionHandler( OperationCompletedHandler handler ) override;
+    ReadOperation& completionHandler( OperationCompletedHandler handler ) override;
 
     //! @copydoc ReadOperation::dataHandler()
     ReadOperation& dataHandler( TransmitDataHandlerPtr handler ) override;
@@ -101,10 +99,8 @@ class ReadOperationImpl final :
     /**
      * @brief Sends a data packet to the client.
      *
-     * The Data packet is assembled by calling the registered handler
-     * operation TftpWriteOperationHandler::sendData().
-     * If the last data packet will be sent, the internal flag will be set
-     * appropriate.
+     * The Data packet is assembled by calling the registered handler operation TftpWriteOperationHandler::sendData().
+     * If the last data packet is sent, the internal flag will be set appropriate.
      **/
     void sendData();
 

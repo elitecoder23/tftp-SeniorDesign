@@ -34,8 +34,7 @@ namespace Tftp::Servers {
 /**
  * @brief TFTP %Server Write %Operation (TFTP WRQ).
  *
- * In this operation a client has requested to write a file, which is
- * transmitted form the client to the server.
+ * In this operation, a client has requested to write a file, which is transmitted form the client to the server.
  *
  * This operation is initiated by a client TFTP write request (WRQ)
  **/
@@ -63,8 +62,7 @@ class WriteOperationImpl final : public WriteOperation, private OperationImpl
     WriteOperation& dally( bool dally ) override;
 
     //! @copydoc WriteOperation::optionsConfiguration()
-    WriteOperation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) override;
+    WriteOperation& optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc WriteOperation::completionHandler()
     WriteOperation& completionHandler( OperationCompletedHandler handler ) override;
@@ -103,8 +101,7 @@ class WriteOperationImpl final : public WriteOperation, private OperationImpl
     /**
      * @copydoc Packets::PacketHandler::dataPacket()
      *
-     * The received data packet is checked and the
-     * TftpReadOperationHandler::receivedData() operation of the registered
+     * The received data packet is checked and the TftpReadOperationHandler::receivedData() operation of the registered
      * handler is called.
      **/
     void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;
@@ -119,8 +116,7 @@ class WriteOperationImpl final : public WriteOperation, private OperationImpl
       const boost::asio::ip::udp::endpoint &remote,
       const Packets::AcknowledgementPacket &acknowledgementPacket ) override;
 
-    //! If set to true, wait after transmission of the final ACK for potential
-    //! retries.
+    //! If set to true, wait after transmission of the final ACK for potential retries.
     bool dallyV{ false };
     //! TFTP Options Configuration.
     TftpOptionsConfiguration optionsConfigurationV;

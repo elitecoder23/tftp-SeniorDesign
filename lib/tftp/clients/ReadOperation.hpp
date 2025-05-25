@@ -65,8 +65,8 @@ class TFTP_EXPORT ReadOperation : public Operation
     /**
      * @brief Updates the Dally Parameter.
      *
-     * If the _dally_ option is set, the operation waits after transmission of
-     * the last _Acknowledgment_ packet for potential retry operations.
+     * If the _dally_ option is set, the operation waits after transmission of the last _Acknowledgment_ packet for
+     * potential retry operations.
      *
      * @param[in] dally
      *   If set to @p true, the @p dally handling is activated.
@@ -79,7 +79,7 @@ class TFTP_EXPORT ReadOperation : public Operation
      * @brief Updates the Receive Data Handler.
      *
      * This handler is required.
-     * If not provided the operation will fail.
+     * If not provided, the operation will fail.
      *
      * @param[in] handler
      *   Handler for Received Data.

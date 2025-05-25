@@ -18,16 +18,13 @@
 
 namespace Tftp {
 
-TftpConfiguration::TftpConfiguration(
-  const uint16_t defaultTftpPort ) noexcept :
+TftpConfiguration::TftpConfiguration( const uint16_t defaultTftpPort ) noexcept :
   tftpServerPort{ defaultTftpPort },
   defaultTftpPort{ defaultTftpPort }
 {
 }
 
-TftpConfiguration::TftpConfiguration(
-  const boost::property_tree::ptree &properties,
-  const uint16_t defaultTftpPort ) :
+TftpConfiguration::TftpConfiguration( const boost::property_tree::ptree &properties, const uint16_t defaultTftpPort ) :
   tftpServerPort{ defaultTftpPort },
   defaultTftpPort{ defaultTftpPort }
 {

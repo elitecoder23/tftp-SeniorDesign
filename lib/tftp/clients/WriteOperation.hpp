@@ -66,7 +66,7 @@ class TFTP_EXPORT WriteOperation : public Operation
      * @brief Updates the Transmit Data Handler.
      *
      * This handler is required.
-     * If not provided the operation will fail.
+     * If not provided, the operation will fail.
      *
      * @param[in] handler
      *   Handler for Transmit Data.

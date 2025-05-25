@@ -61,7 +61,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Aborts the Operation Gracefully.
      *
-     * Sends an error packet at next possible time point.
+     * Sends an error packet at the next possible time point.
      *
      * @param[in] errorCode
      *   The TFTP error code.
@@ -129,8 +129,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Updates the Maximum Receive Packet Size.
      *
-     * This operation should be called, if a block size option has been
-     * negotiated.
+     * This operation should be called if a block size option has been negotiated.
      *
      * @param[in] maxReceivePacketSize
      *   New max receive packet size.
@@ -140,7 +139,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Update the Receive Timeout Value.
      *
-     * This operation should be called, if a timout option has been negotiated.
+     * This operation should be called if a timout option has been negotiated.
      *
      * @param[in] receiveTimeout
      *   New receive timeout.
@@ -163,11 +162,10 @@ class OperationImpl : protected Packets::PacketHandler
     void receive();
 
     /**
-     * @brief Final Wait for possible resend of last package, when final ACK was
-     *   lost.
+     * @brief Final Wait for possible resend of last package, when final ACK was lost.
      *
      * Receive is handled as normal.
-     * If timeout has occurred, operation is finished successfully.
+     * If timeout has occurred, the operation is finished successfully.
      *
      * @sa receiveHandler
      * @sa timeoutDallyHandler
@@ -177,8 +175,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Sets the Finished flag.
      *
-     * This operation is called, when the last packet has been received or
-     * transmitted to stop the reception loop.
+     * This operation is called when the last packet has been received or transmitted to stop the reception loop.
      *
      * @param[in] status
      *   If the operation was successful, or an error occurred.
@@ -193,7 +190,7 @@ class OperationImpl : protected Packets::PacketHandler
      * A read request packet is handled as failure.
      * An error packet is sent to the origin and the finished flag is set.
      *
-     * This operation always throws an CommunicationException.
+     * This operation always throws a @ref CommunicationException.
      **/
     void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -219,8 +216,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket()
      *
-     * A OACK packet is not expected - therefore send an error packet and
-     * terminate connection.
+     * A OACK packet is not expected - therefore send an error packet and terminate connection.
      **/
      void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -247,8 +243,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Called when no data is received for the sent packet.
      *
-     * If the retransmission counter has not exceeded, the last sent packet
-     * is retransmitted.
+     * If the retransmission counter has not exceeded, the last sent packet is retransmitted.
      *
      * @param[in] errorCode
      *   error status of operation.

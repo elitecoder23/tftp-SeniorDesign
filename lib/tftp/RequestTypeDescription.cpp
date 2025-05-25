@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -34,13 +33,11 @@ std::istream& operator>>( std::istream &stream, RequestType &requestType )
   stream >> requestTypeStr;
 
   // decode Request Type
-  const auto optionalRequestType{
-    RequestTypeDescription::instance().enumeration( requestTypeStr ) };
+  const auto optionalRequestType{ RequestTypeDescription::instance().enumeration( requestTypeStr ) };
 
   if ( !optionalRequestType )
   {
-    BOOST_THROW_EXCEPTION(
-      boost::program_options::invalid_option_value{ requestTypeStr } );
+    BOOST_THROW_EXCEPTION( boost::program_options::invalid_option_value{ requestTypeStr } );
   }
 
   requestType = *optionalRequestType;

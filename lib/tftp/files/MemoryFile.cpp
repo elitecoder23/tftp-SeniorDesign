@@ -16,7 +16,7 @@
 
 namespace Tftp::Files {
 
-MemoryFile::MemoryFile():
+MemoryFile::MemoryFile() :
   operationV{ Operation::Receive },
   dataPtr{ dataV.begin() }
 {
@@ -29,7 +29,7 @@ MemoryFile::MemoryFile( Helper::ConstRawDataSpan data ) :
 {
 }
 
-MemoryFile::MemoryFile( Helper::RawData data ):
+MemoryFile::MemoryFile( Helper::RawData data ) :
   operationV{ Operation::Transmit },
   dataV{ std::move( data ) },
   dataPtr{ dataV.begin() }

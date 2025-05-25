@@ -76,11 +76,10 @@ using WriteOperationPtr = std::shared_ptr< WriteOperation >;
  * @retval false
  *   Additional option negotiation was failed.
  **/
-using OptionNegotiationHandler = std::function<
-  bool( Packets::Options &serverOptions ) >;
+using OptionNegotiationHandler = std::function< bool( Packets::Options &serverOptions ) >;
 
 /**
- * @brief Operation Completed handler, which indicates, if the transfer is completed.
+ * @brief Operation Completed handler, which indicates if the transfer is completed.
  *
  * @param[in] transferStatus
  *   Status of operation.

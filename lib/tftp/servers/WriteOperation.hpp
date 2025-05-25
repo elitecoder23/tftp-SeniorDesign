@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -22,8 +21,7 @@ namespace Tftp::Servers {
 /**
  * @brief TFTP %Server Write %Operation (TFTP WRQ).
  *
- * In this operation a client has requested to write a file, which is
- * transmitted form the client to the server.
+ * In this operation, a client has requested to write a file, which is transmitted from the client to the server.
  *
  * This operation is initiated by a client TFTP write request (WRQ)
  **/
@@ -47,29 +45,27 @@ class TFTP_EXPORT WriteOperation : public Operation
     /**
      * @brief Updates the Dally Parameter.
      *
-     * If the _dally_ option is set, the operation waits after transmission of
-     * the last _Acknowledgment_ packet for potential retry operations.
+     * If the _dally_ option is set, the operation waits after transmission of the last _Acknowledgement_ packet for
+     * potential retry operations.
      *
      * @param[in] dally
-     *   If set to @p true, the @p dally handling is activated.
+     *   If set to @p true, the _dally_ handling is activated.
      *
      * @return @p *this for chaining.
      **/
     virtual WriteOperation& dally( bool dally ) = 0;
 
     //! @copydoc Operation::optionsConfiguration()
-    WriteOperation& optionsConfiguration(
-      TftpOptionsConfiguration optionsConfiguration ) override = 0;
+    WriteOperation& optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override = 0;
 
     //! @copydoc Operation::completionHandler()
-    WriteOperation& completionHandler(
-      OperationCompletedHandler handler ) override = 0;
+    WriteOperation& completionHandler( OperationCompletedHandler handler ) override = 0;
 
     /**
      * @brief Updates the Receive Data Handler.
      *
      * This handler is required.
-     * If not provided the operation will fail.
+     * If not provided, the operation will fail.
      *
      * @param[in] handler
      *   Handler for Received Data.
@@ -79,19 +75,16 @@ class TFTP_EXPORT WriteOperation : public Operation
     virtual WriteOperation& dataHandler( ReceiveDataHandlerPtr handler ) = 0;
 
     //! @copydoc Operation::remote()
-    WriteOperation& remote(
-      boost::asio::ip::udp::endpoint remote ) override = 0;
+    WriteOperation& remote( boost::asio::ip::udp::endpoint remote ) override = 0;
 
     //! @copydoc Operation::local()
     WriteOperation& local( boost::asio::ip::udp::endpoint local ) override = 0;
 
     //! @copydoc Operation::clientOptions()
-    WriteOperation& clientOptions(
-      Packets::TftpOptions clientOptions ) override = 0;
+    WriteOperation& clientOptions( Packets::TftpOptions clientOptions ) override = 0;
 
     //! @copydoc Operation::additionalNegotiatedOptions()
-    WriteOperation& additionalNegotiatedOptions(
-      Packets::Options additionalNegotiatedOptions ) override = 0;
+    WriteOperation& additionalNegotiatedOptions( Packets::Options additionalNegotiatedOptions ) override = 0;
 
     /** @} **/
 };

@@ -178,7 +178,7 @@ class ServerImpl final : public Server, private Packets::PacketHandler
      * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket
      *
      * The TFTP server does not expect this packet.
-     * This packet is responded with an TFTP Error Packet.
+     * This packet is responded with a TFTP Error Packet.
      **/
     void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,

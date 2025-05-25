@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -28,7 +27,7 @@ namespace Tftp {
  **/
 
 //! Description of TFTP Transfer Status
-class TFTP_EXPORT TransferStatusDescription : public Helper::Description<
+class TFTP_EXPORT TransferStatusDescription final : public Helper::Description<
   TransferStatusDescription,
   TransferStatus >
 {
@@ -47,9 +46,7 @@ class TFTP_EXPORT TransferStatusDescription : public Helper::Description<
  *
  * @return The output stream.
  **/
-TFTP_EXPORT std::ostream& operator<<(
-  std::ostream& stream,
-  TransferStatus transferStatus );
+TFTP_EXPORT std::ostream &operator<<( std::ostream &stream, TransferStatus transferStatus );
 
 /** @} **/
 

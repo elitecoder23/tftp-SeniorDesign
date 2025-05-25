@@ -23,8 +23,7 @@ namespace Tftp::Clients {
 /**
  * @brief TFTP %Client.
  *
- * This class acts as factory for creating client operations, like read
- * requests or write requests.
+ * This class acts as factory for creating client operations, like read requests or write requests.
  *
  * An instance is created by calling @ref Client::instance().
  **/
@@ -34,7 +33,7 @@ class TFTP_EXPORT Client
     /**
      * @brief Creates a TFTP %Client Instance.
      *
-     * With the instance you can create any client operation instances.
+     * With the instance, you can create any client operation instances.
      *
      * @param[in] ioContext
      *   I/O context used for communication.
@@ -83,7 +82,7 @@ class TFTP_EXPORT Client
     /**
      * @brief Updates the Default Dally Parameter.
      *
-     * If the _dally_ option is set, the operation waits after transmission of the last _Acknowledgment_ packet for
+     * If the _dally_ option is set, the operation waits after transmission of the last _Acknowledgement_ packet for
      * potential retry operations.
      *
      * If this option is set, every created operation will be initialised with the value.
@@ -116,8 +115,7 @@ class TFTP_EXPORT Client
      * By default, no additional Options are sent to the server.
      * If the negotiated options, sent by the server shall be checked an _Option Negotiation Handler_ must be provided.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.

@@ -38,15 +38,12 @@
  * - @ref Server
  *   The main entry point (is also a factory for all other classes).
  * - @ref ReceivedTftpRequestHandler
- *   This interface must be implemented by the user of this library to handle
- *   new TFTP requests.
+ *   This interface must be implemented by the user of this library to handle new TFTP requests.
  * - @ref Operation
  *   Class interface to execute the operations.
- *   The actual operations can be created by utilising the Server class
- *   instances.
+ *   The actual operations can be created by using the Server class instances.
  * - @ref ReceiveDataHandler and @ref TransmitDataHandler
- *   This interface class must be implemented by the user of this library to
- *   make use of the TFTP server operations.
+ *   This interface class must be implemented by the user of this library to make use of the TFTP server operations.
  **/
 namespace Tftp::Servers {
 
@@ -71,9 +68,8 @@ using WriteOperationPtr = std::shared_ptr< WriteOperation >;
 /**
  * @brief Received TFTP Request Handler.
  *
- * The registered handler is called, when a TFTP Server instance received a
- * TFTP request.
- * The handler can analyse it and responds with:
+ * The registered handler is called when a TFTP Server instance received a TFTP request.
+ * The handler can analyse it and respond with:
  * - TFTP %Server Error %Operation
  * - TFTP %Server Read Request
  * - TFTP %Server Write Request
@@ -107,8 +103,7 @@ using ReceivedTftpRequestHandler =
     const Packets::Options &additionalClientOptions ) >;
 
 /**
- * @brief Operation Completed handler, which indicates, if the transfer is
- *   completed.
+ * @brief Operation Completed handler, which indicates if the transfer is completed.
  *
  * @param[in] transferStatus
  *   Status of operation.

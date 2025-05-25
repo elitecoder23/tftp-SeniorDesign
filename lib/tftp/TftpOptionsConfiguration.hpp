@@ -66,16 +66,14 @@ class TFTP_EXPORT TftpOptionsConfiguration
      * @brief Converts the configuration values to a Property Tree.
      *
      * @param[in] full
-     *   If set to true, all options are added to the property tree, even if
-     *   defaulted.
+     *   If set to true, all options are added to the property tree, even if defaulted.
      *
      * @return Configuration represented as Property Tree.
      **/
     [[nodiscard]] boost::property_tree::ptree toProperties( bool full = false ) const;
 
     /**
-     * @brief Returns an option description, which can be used to parse a
-     *   command line.
+     * @brief Returns an option description, which can be used to parse a command line.
      *
      * @return TFTP Options Configuration
      **/

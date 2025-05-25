@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -30,11 +29,10 @@ namespace Tftp::Servers {
 /**
  * @brief TFTP %Server.
  *
- * Waits on the specified port for a valid TFTP request and calls the
- * appropriate call-back, which has to handle the request.
+ * Waits on the specified port for a valid TFTP request and calls the appropriate call-back, which has to handle the
+ * request.
  *
- * If not expected packets or invalid packets are received an error is sent
- * back to the sender.
+ * If not expected packets or invalid packets are received an error is sent back to the sender.
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
@@ -44,8 +42,7 @@ class TFTP_EXPORT Server
     /**
      * @brief Default UDP Endpoint, Where the TFTP %Server Listens.
      *
-     * The default local end-point where the TFTP server is listening is the
-     * default TFTP Port any IP address.
+     * The default local end-point where the TFTP server is listening to is the default TFTP Port any IP address.
      **/
     static const boost::asio::ip::udp::endpoint DefaultLocalEndpoint;
 
@@ -57,8 +54,7 @@ class TFTP_EXPORT Server
      *
      * @return TFTP %Server Instance.
      **/
-    [[nodiscard]] static ServerPtr instance(
-      boost::asio::io_context &ioContext );
+    [[nodiscard]] static ServerPtr instance( boost::asio::io_context &ioContext );
 
     //! Destructor
     virtual ~Server() = default;
@@ -69,7 +65,7 @@ class TFTP_EXPORT Server
      **/
 
     /**
-     * @brief Set TFTP Request Received Handler
+     * @brief Set TFTP Request Received Handler.
      *
      * @param[in] handler
      *   TFTP Request Handler
@@ -80,34 +76,30 @@ class TFTP_EXPORT Server
       ReceivedTftpRequestHandler handler ) = 0;
 
     /**
-     * @brief Set Address where the TFTP server should listen on.
+     * @brief Set the Address where the TFTP server should listen to.
      *
-     * If address is not set @ref DefaultLocalEndpoint is used.
+     * If the address is not set, @ref DefaultLocalEndpoint is used.
      *
      * @param serverAddress
-     *   Address where the TFTP server should listen on.
+     *   Address where the TFTP server should listen to.
      *
      * @return *this for chaining.
      **/
-    virtual Server& serverAddress(
-      boost::asio::ip::udp::endpoint serverAddress ) = 0;
+    virtual Server& serverAddress( boost::asio::ip::udp::endpoint serverAddress ) = 0;
 
     /** @} **/
 
     /**
      * @brief Returns the effective local endpoint.
      *
-     * Is used to determine the local endpoint, when an automatic local endpoint
-     * is selected.
+     * Is used to determine the local endpoint, when an automatic local endpoint is selected.
      *
      * @note
-     * The return value is valid after calling @ref start(), when the port is
-     * bound, actually.
+     * The return value is valid after calling @ref start(), when the port is bound, actually.
      *
      * @return Local endpoint.
      **/
-    [[nodiscard]] virtual boost::asio::ip::udp::endpoint
-    localEndpoint() const = 0;
+    [[nodiscard]] virtual boost::asio::ip::udp::endpoint localEndpoint() const = 0;
 
     /**
      * @name Default Operation Configuration Operations
@@ -120,8 +112,7 @@ class TFTP_EXPORT Server
      * TFTP Timeout, when no timeout option is negotiated in seconds.
      * If the _TFTP Timeout_ parameter is not set, the TFTP defaults are used.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] timeout
      *   TFTP timeout.
@@ -133,11 +124,9 @@ class TFTP_EXPORT Server
     /**
      * @brief Updates the Default Number of TFTP Packet Retries.
      *
-     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are
-     * used.
+     * If the _TFTP Packet Retries_ parameter is not set, the TFTP defaults are used.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] retries
      *   Number of TFTP Packet Retries.
@@ -149,14 +138,13 @@ class TFTP_EXPORT Server
     /**
      * @brief Updates the Default Dally Parameter.
      *
-     * If the _dally_ option is set, the operation waits after transmission of
-     * the last _Acknowledgment_ packet for potential retry operations.
+     * If the _dally_ option is set, the operation waits after transmission of the last _Acknowledgement_ packet for
+     * potential retry operations.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] dally
-     *   If set to @p true, the @p dally handling is activated.
+     *   If set to @p true, the _dally_ handling is activated.
      *
      * @return @p *this for chaining.
      **/
@@ -167,22 +155,19 @@ class TFTP_EXPORT Server
      *
      * If no TFTP Option configuration is provided, the defaults are used.
      *
-     * If this option is set, every created operation will be initialised with
-     * the value.
+     * If this option is set, every created operation will be initialised with the value.
      *
      * @param[in] optionsConfiguration
      *   TFTP Options Configuration.
      *
      * @return @p *this for chaining.
      **/
-    virtual Server& optionsConfigurationDefault(
-      TftpOptionsConfiguration optionsConfiguration ) = 0;
+    virtual Server& optionsConfigurationDefault( TftpOptionsConfiguration optionsConfiguration ) = 0;
 
     /**
      * @brief Updates the local address to use as connection source.
      *
-     * To set a fixed IP-address and leave the UDP port up to the IP-Stack,
-     * set the port to `0`.
+     * To set a fixed IP-address and leave the UDP port up to the IP-Stack, set the port to `0`.
      *
      * @param[in] local
      *   Local IP address
@@ -205,13 +190,12 @@ class TFTP_EXPORT Server
      * @brief Stops the TFTP Server.
      *
      * This operation does not stop TFTP Server transfers.
-     * This must be handled by the caller.
+     * The caller must handle transfer aborts.
      **/
     virtual void stop() = 0;
 
     /**
-     * @brief Creates a TFTP %Server %Operation (TFTP RRQ), which reads data from
-     *   disk and sends them to a TFTP Client.
+     * @brief Creates a TFTP %Server %Operation (TFTP RRQ), which reads data from disk and sends them to a TFTP Client.
      *
      * Data is obtained from @p dataHandler and transmitted to TFTP Client.
      *
@@ -220,8 +204,8 @@ class TFTP_EXPORT Server
     [[nodiscard]] virtual ReadOperationPtr readOperation() = 0;
 
     /**
-     * @brief Creates a TFTP Server Operation (TFTP WRQ), which receives data
-     * from a TFTP Client and weites them to disk.
+     * @brief Creates a TFTP Server Operation (TFTP WRQ), which receives data from a TFTP Client and weites them to
+     *   disk.
      *
      * Data is received form the client and written to @p dataHandler.
      *

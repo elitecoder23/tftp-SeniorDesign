@@ -2,15 +2,13 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
- * @brief Declaration/ definition of classes Tftp::TftpException,
- *   Tftp::CommunicationException, Tftp::OptionNegotiationException, and
- *   Tftp::ErrorReceivedException.
+ * @brief Declaration/ definition of classes Tftp::TftpException, Tftp::CommunicationException,
+ *   Tftp::OptionNegotiationException, and Tftp::ErrorReceivedException.
  **/
 
 #ifndef TFTP_TFTPEXCEPTION_HPP
@@ -18,7 +16,6 @@
 
 #include <tftp/Tftp.hpp>
 
-#include <tftp/packets/Packets.hpp>
 #include <tftp/packets/ErrorPacket.hpp>
 
 #include <boost/exception/exception.hpp>
@@ -31,9 +28,7 @@ namespace Tftp {
 /**
  * @brief TFTP Exception.
  **/
-class TFTP_EXPORT TftpException :
-  public std::exception,
-  public boost::exception
+class TFTP_EXPORT TftpException : public std::exception, public boost::exception
 {
   public:
     /**
@@ -81,12 +76,10 @@ class TFTP_EXPORT ErrorReceivedException: public TftpException
 };
 
 //! TFTP Transfer Phase.
-using TransferPhaseInfo =
-  boost::error_info< struct TransferPhaseInfoTag, TransferPhase >;
+using TransferPhaseInfo = boost::error_info< struct TransferPhaseInfoTag, TransferPhase >;
 
 //! TFTP Error Packet Information.
-using ErrorPacketInfo =
-  boost::error_info< struct ErrorPacketInfoTag, Packets::ErrorPacket >;
+using ErrorPacketInfo = boost::error_info< struct ErrorPacketInfoTag, Packets::ErrorPacket >;
 
 }
 

@@ -57,8 +57,7 @@ class TFTP_EXPORT MemoryFile final : public File
      * @copydoc File::reset
      *
      * If the file is received for receiving data, the content is cleared.
-     * For write operation, the read pointer is reset to the beginning of the
-     * file.
+     * For write operation, the read pointer is reset to the beginning of the file.
      **/
     void reset() override;
 
