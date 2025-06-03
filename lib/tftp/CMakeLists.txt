@@ -73,12 +73,14 @@ target_compile_options(
     # warning level
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
+    $<$<CXX_COMPILER_ID:GNU>:-Wpedantic>
 
     # remove absolute paths from __FILE__ macro
     #$<$<CXX_COMPILER_ID:Clang>:-fmacro-prefix-map=${PROJECT_SOURCE_DIR}/=>
     # warning level
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
-    $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
+    $<$<CXX_COMPILER_ID:Clang>:-Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:-Wpedantic> )
 
 target_link_libraries(
   tftp
@@ -122,9 +124,11 @@ target_compile_options(
 
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
+    $<$<CXX_COMPILER_ID:GNU>:-Wpedantic>
 
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
-    $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
+    $<$<CXX_COMPILER_ID:Clang>:-Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:-Wpedantic> )
 
 target_link_libraries( tftp_test PUBLIC tftp )
 
@@ -138,8 +142,8 @@ set_property(
   APPEND
   PROPERTY DOC_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/tftp_export.h
     ${CMAKE_CURRENT_BINARY_DIR}/Version.hpp )
-
 
 install(
   TARGETS tftp
