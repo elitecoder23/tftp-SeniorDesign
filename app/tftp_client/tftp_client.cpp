@@ -23,7 +23,6 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/RequestTypeDescription.hpp>
 
-#include <helper/Logger.hpp>
 #include <helper/BoostAsioProgramOptions.hpp>
 
 #include <boost/asio.hpp>
@@ -114,10 +113,6 @@ static Tftp::Clients::OperationPtr writeOperation(
 
 int main( int argc, char * argv[] )
 {
-  BOOST_LOG_FUNCTION()
-
-  Helper::initLogging();
-
   try
   {
     Tftp::RequestType requestType{};

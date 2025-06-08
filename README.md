@@ -10,6 +10,7 @@ First level dependencies:
 - Boost Library
   - Boost::Log
   - Boost::Program Options
+- spdlog
 - Qt (Version 5 or 6) - Optionally
 
 ## Building

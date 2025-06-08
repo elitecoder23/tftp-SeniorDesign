@@ -18,10 +18,11 @@
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
 
-#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
 
 #include <helper/Exception.hpp>
+
+#include <spdlog/spdlog.h>
 
 #include <boost/exception/all.hpp>
 
@@ -56,8 +57,7 @@ void OperationImpl::initialise()
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Initialisation Error: " << err.what();
+    spdlog::error( "Initialisation Error: {}", err.what() );
 
     // On error and if socket is opened - close it.
     if ( socket.is_open() )
@@ -72,11 +72,10 @@ void OperationImpl::initialise()
 
 void OperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::string errorMessage )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "Graceful abort requested: "
-    << "'" << errorCode << "' '" << errorMessage << "'";
+  spdlog::warn(
+    "Graceful abort requested: '{}' '{}'",
+    Packets::ErrorCodeDescription::instance().name( errorCode ),
+    errorMessage );
 
   Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
@@ -92,10 +91,7 @@ void OperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::stri
 
 void OperationImpl::abort()
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "Abort requested";
+  spdlog::warn( "Abort requested" );
 
   // Operation completed
   finished( TransferStatus::Aborted );
@@ -143,17 +139,14 @@ void OperationImpl::receiveTimeout( const std::chrono::seconds receiveTimeout ) 
 
 void OperationImpl::sendFirst( const Packets::Packet &packet )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "TX: " << static_cast< std::string>( packet );
+  spdlog::trace( "TX: {}", static_cast< std::string>( packet ) );
 
   try
   {
     // Reset transmit counter
     transmitCounter = 1U;
 
-    // Encode raw packet
+    // Encode the raw packet
     transmitPacket = static_cast< Helper::RawData >( packet );
 
     // Update statistic
@@ -164,8 +157,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "TX Error: " << err.what();
+    spdlog::error( "TX Error: {}", err.what() );
 
     // Operation finished
     finished( TransferStatus::CommunicationError );
@@ -174,10 +166,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
 
 void OperationImpl::send( const Packets::Packet &packet )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "TX: " << static_cast< std::string>( packet );
+  spdlog::trace( "TX: {}", static_cast< std::string>( packet ) );
 
   try
   {
@@ -195,8 +184,7 @@ void OperationImpl::send( const Packets::Packet &packet )
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "TX Error: " << err.what();
+    spdlog::error( "TX Error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -204,8 +192,6 @@ void OperationImpl::send( const Packets::Packet &packet )
 
 void OperationImpl::receiveFirst()
 {
-  BOOST_LOG_FUNCTION()
-
   try
   {
     // the first time, we make receive_from (answer is not sent from destination)
@@ -223,8 +209,7 @@ void OperationImpl::receiveFirst()
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "RX Error: " << err.what();
+    spdlog::error( "RX Error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -232,11 +217,9 @@ void OperationImpl::receiveFirst()
 
 void OperationImpl::receive()
 {
-  BOOST_LOG_FUNCTION()
-
   try
   {
-    // start receive operation
+    // start the receive operation
     socket.async_receive(
       boost::asio::buffer( receivePacket ),
       std::bind_front( &OperationImpl::receiveHandler, this ) );
@@ -249,8 +232,7 @@ void OperationImpl::receive()
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "RX Error: " << err.what();
+    spdlog::error( "RX Error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -258,11 +240,9 @@ void OperationImpl::receive()
 
 void OperationImpl::receiveDally()
 {
-  BOOST_LOG_FUNCTION()
-
   try
   {
-    // start receive operation
+    // start the receive operation
     socket.async_receive(
       boost::asio::buffer( receivePacket ),
       std::bind_front( &OperationImpl::receiveHandler, this ) );
@@ -275,8 +255,7 @@ void OperationImpl::receiveDally()
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "RX Error: " << err.what();
+    spdlog::error( "RX Error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -284,10 +263,7 @@ void OperationImpl::receiveDally()
 
 void OperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-    << "TFTP Client Operation finished";
+  spdlog::info( "TFTP Client Operation finished" );
 
   errorInfoV = std::move( errorInfo );
 
@@ -305,10 +281,7 @@ void OperationImpl::readRequestPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX Error: " << static_cast< std::string>( readRequestPacket );
+  spdlog::error( "RX Error: {}", static_cast< std::string>( readRequestPacket ) );
 
   // send error packet
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ not expected" };
@@ -323,10 +296,7 @@ void OperationImpl::writeRequestPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::WriteRequestPacket &writeRequestPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX Error: " << static_cast< std::string>( writeRequestPacket );
+  spdlog::error( "RX Error: {}", static_cast< std::string>( writeRequestPacket ) );
 
   // send error packet
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ not expected" };
@@ -341,10 +311,7 @@ void OperationImpl::errorPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::ErrorPacket &errorPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX Error: " << static_cast< std::string>( errorPacket );
+  spdlog::error( "RX Error: {}", static_cast< std::string>( errorPacket ) );
 
   // Operation completed
   switch ( Packets::Packet::packetType( transmitPacket ) )
@@ -376,10 +343,7 @@ void OperationImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   [[maybe_unused]] Helper::ConstRawDataSpan rawPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX Error: INVALID Packet";
+  spdlog::error( "RX Error: INVALID Packet" );
 
   // send error packet
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet not expected" };
@@ -392,8 +356,6 @@ void OperationImpl::invalidPacket(
 
 void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorCode, std::size_t bytesTransferred )
 {
-  BOOST_LOG_FUNCTION()
-
   // operation has been aborted (maybe timeout)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
@@ -403,22 +365,19 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
   // (internal) receive error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Error when receiving message: " << errorCode.message();
+    spdlog::error( "Error when receiving message: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  // check, if packet has been received from not expected source
-  // send error packet and ignore it.
+  // check if the packet has been received from not expected source
+  // send an error packet and ignore it.
   if ( remoteV.address() != receiveEndpoint.address() )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Received packed from wrong source: "
-      << receiveEndpoint.address();
+    spdlog::error( "Received packed from wrong source: {}", receiveEndpoint.address().to_string() );
 
-    // sent Error packet to unknown partner
+    // sent an error packet to unknown partner
     try
     {
       // send error packet
@@ -434,8 +393,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
     catch ( const boost::system::system_error &err)
     {
       // ignore send error to unknown partner
-      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-        << "Error sending ERR packet: " << err.what();
+      spdlog::error( "Error sending ERR packet: {}", err.what() );
     }
 
     // restart receive operation
@@ -450,8 +408,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
     }
     catch ( const boost::system::system_error &err )
     {
-      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-        << "Start Receive: " << err.what();
+      spdlog::error( "Start Receive: {}", err.what() );
 
       finished( TransferStatus::CommunicationError );
       return;
@@ -465,8 +422,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Connect: " << err.what();
+    spdlog::error( "Connect: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -477,8 +433,6 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
 
 void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, const std::size_t bytesTransferred )
 {
-  BOOST_LOG_FUNCTION()
-
   // operation has been aborted (maybe timeout)
   // error is not handled here.
   if ( boost::asio::error::operation_aborted == errorCode )
@@ -489,8 +443,7 @@ void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, 
   // (internal) receive error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Error when receiving message: " << errorCode.message();
+    spdlog::error( "Error when receiving message: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -502,8 +455,6 @@ void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, 
 
 void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorCode )
 {
-  BOOST_LOG_FUNCTION()
-
   // wait aborted (packet received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
@@ -513,8 +464,7 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
   // internal (timer) error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Timer error: " + errorCode.message();
+    spdlog::error( "Timer error: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -523,16 +473,15 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
   // if maximum retries exceeded -> abort receive operation
   if ( transmitCounter > tftpRetriesV )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "TFTP Retry counter exceeded";
+    spdlog::error( "TFTP Retry counter exceeded" );
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "Retransmit last TFTP packet: "
-    << Packets::Packet::packetType( transmitPacket );
+  spdlog::warn(
+    "Retransmit last TFTP packet: {}",
+    Packets::PacketTypeDescription::instance().name( Packets::Packet::packetType( transmitPacket ) ) );
 
   try
   {
@@ -553,8 +502,7 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Re-TX error: " << err.what();
+    spdlog::error( "Re-TX error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -562,8 +510,6 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
 
 void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 {
-  BOOST_LOG_FUNCTION()
-
   // wait aborted (packet received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
@@ -573,8 +519,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
   // internal (timer) error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Timer error: " << errorCode.message();
+    spdlog::error( "Timer error: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -583,16 +528,15 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
   // if maximum retries exceeded -> abort receive operation
   if ( transmitCounter > tftpRetriesV )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "TFTP Retry counter exceeded";
+    spdlog::error( "TFTP Retry counter exceeded" );
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-    << "Retransmit last TFTP packet: "
-    << Packets::Packet::packetType( transmitPacket );
+  spdlog::info(
+    "Retransmit last TFTP packet: {}",
+    Packets::PacketTypeDescription::instance().name( Packets::Packet::packetType( transmitPacket ) ) );
 
   try
   {
@@ -611,8 +555,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Re-TX error: " << err.what();
+    spdlog::error( "Re-TX error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -620,8 +563,6 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 
 void OperationImpl::timeoutDallyHandler( const boost::system::error_code &errorCode )
 {
-  BOOST_LOG_FUNCTION()
-
   // operation aborted (packet received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
@@ -631,15 +572,13 @@ void OperationImpl::timeoutDallyHandler( const boost::system::error_code &errorC
   // internal (timer) error occurred
   if ( errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Timer error: " << errorCode.message();
+    spdlog::error( "Timer error: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-    << "Dally Timeout Completed - Finish";
+  spdlog::info( "Dally Timeout Completed - Finish" );
 
   finished( TransferStatus::Successful );
 }

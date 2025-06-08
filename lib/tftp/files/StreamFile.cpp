@@ -12,10 +12,11 @@
 
 #include "StreamFile.hpp"
 
-#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
 
 #include <helper/Exception.hpp>
+
+#include <spdlog/spdlog.h>
 
 #include <boost/exception/all.hpp>
 
@@ -38,8 +39,6 @@ StreamFile::StreamFile( const Operation operation, std::filesystem::path filenam
 
 void StreamFile::reset()
 {
-  BOOST_LOG_FUNCTION()
-
   switch ( operationV )
   {
     case File::Operation::Receive:
@@ -75,7 +74,7 @@ bool StreamFile::receivedTransferSize( const uint64_t transferSize )
   // If no size is provided
   if ( !sizeV )
   {
-    // Always accept file based on size
+    // Always accept a file based on size
     return true;
   }
 

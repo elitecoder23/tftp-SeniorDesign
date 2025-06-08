@@ -16,11 +16,12 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
-#include <tftp/Logger.hpp>
 #include <tftp/ReceiveDataHandler.hpp>
 #include <tftp/TftpException.hpp>
 
 #include <helper/Exception.hpp>
+
+#include <spdlog/spdlog.h>
 
 #include <boost/exception/all.hpp>
 
@@ -105,8 +106,6 @@ WriteOperation& WriteOperationImpl::additionalNegotiatedOptions( Packets::Option
 
 void WriteOperationImpl::start()
 {
-  BOOST_LOG_FUNCTION()
-
   if ( !dataHandlerV )
   {
     BOOST_THROW_EXCEPTION( TftpException()
@@ -195,8 +194,7 @@ void WriteOperationImpl::start()
   }
   catch ( const TftpException &e )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Error during Operation: " << e.what();
+    spdlog::error( "Error during Operation: {}", e.what() );
   }
   catch ( ... )
   {
@@ -221,8 +219,6 @@ const Packets::ErrorInfo& WriteOperationImpl::errorInfo() const
 
 void WriteOperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo ) noexcept
 {
-  BOOST_LOG_FUNCTION()
-
   // Complete data handler
   dataHandlerV->finished();
 
@@ -234,21 +230,17 @@ void WriteOperationImpl::dataPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "RX: " << static_cast< std::string>( dataPacket );
+  spdlog::trace( "RX: {}", static_cast< std::string>( dataPacket ) );
 
   // Check retransmission of last packet
   if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-      << "Retransmission of last packet - only send ACK";
+    spdlog::info( "Retransmission of last packet - only send ACK" );
 
     // Retransmit last ACK packet
     send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
-    // if received data size is smaller than the expected
+    // if the received data size is smaller than the expected
     if ( dataPacket.dataSize() < receiveDataSize )
     {
       // last packet has been received and the operation is finished
@@ -274,8 +266,7 @@ void WriteOperationImpl::dataPacket(
   // check unexpected block number
   if ( dataPacket.blockNumber() != lastReceivedBlockNumber.next() )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Wrong Data packet block number";
+    spdlog::error( "Wrong Data packet block number" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Block Number not expected" };
@@ -289,8 +280,7 @@ void WriteOperationImpl::dataPacket(
   // check for too much data
   if ( dataPacket.dataSize() > receiveDataSize )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Too much data received";
+    spdlog::error( "Too much data received" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Too much data" };
@@ -310,7 +300,7 @@ void WriteOperationImpl::dataPacket(
   // send ACK
   send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
-  // if received data size is smaller than the expected
+  // if the received data size is smaller than the expected
   if ( dataPacket.dataSize() < receiveDataSize )
   {
     // last packet has been received and the operation is finished
@@ -335,10 +325,7 @@ void WriteOperationImpl::acknowledgementPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX Error: " << static_cast< std::string>( acknowledgementPacket );
+  spdlog::error( "RX Error: {}", static_cast< std::string>( acknowledgementPacket ) );
 
   // send Error
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "ACK not expected" };

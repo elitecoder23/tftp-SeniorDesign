@@ -19,12 +19,13 @@
 #include <tftp/packets/TftpOptions.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
 
-#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataHandler.hpp>
 
 #include <helper/Dump.hpp>
 #include <helper/Exception.hpp>
+
+#include <spdlog/spdlog.h>
 
 #include <boost/exception/all.hpp>
 
@@ -39,8 +40,6 @@ WriteOperationImpl::WriteOperationImpl( boost::asio::io_context &ioContext ) :
 
 void WriteOperationImpl::request()
 {
-  BOOST_LOG_FUNCTION()
-
   if ( !dataHandlerV )
   {
     BOOST_THROW_EXCEPTION( TftpException()
@@ -102,8 +101,7 @@ void WriteOperationImpl::request()
   }
   catch ( const boost::exception &e )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Exception during request " << boost::diagnostic_information( e );
+    spdlog::error( "Exception during request {}", boost::diagnostic_information( e ) );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -192,8 +190,6 @@ WriteOperation &WriteOperationImpl::local( boost::asio::ip::udp::endpoint local 
 
 void WriteOperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo ) noexcept
 {
-  BOOST_LOG_FUNCTION()
-
   // Complete data handler
   dataHandlerV->finished();
 
@@ -203,12 +199,9 @@ void WriteOperationImpl::finished( const TransferStatus status, Packets::ErrorIn
 
 void WriteOperationImpl::sendData()
 {
-  BOOST_LOG_FUNCTION()
-
   lastTransmittedBlockNumber++;
 
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "Send Data #" << static_cast< uint16_t >( lastTransmittedBlockNumber );
+  spdlog::trace( "Send Data #{}", static_cast< uint16_t >( lastTransmittedBlockNumber ) );
 
   const Packets::DataPacket data{ lastTransmittedBlockNumber, dataHandlerV->sendData( transmitDataSize ) };
 
@@ -225,10 +218,7 @@ void WriteOperationImpl::dataPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX Error: " << static_cast< std::string>( dataPacket );
+  spdlog::error( "RX Error: {}", static_cast< std::string>( dataPacket ) );
 
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "DATA not expected" };
 
@@ -242,17 +232,14 @@ void WriteOperationImpl::acknowledgementPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "RX: " << static_cast< std::string>( acknowledgementPacket );
+  spdlog::trace( "RX: {}", static_cast< std::string>( acknowledgementPacket ) );
 
   // check retransmission
   if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-      << "Received previous ACK packet: retry of last data package - "
-         "IGNORE it due to Sorcerer's Apprentice Syndrome";
+    spdlog::warn(
+      "Received previous ACK packet: retry of last data package - "
+      "IGNORE it due to Sorcerer's Apprentice Syndrome" );
 
     // receive next packet
     receive();
@@ -263,8 +250,7 @@ void WriteOperationImpl::acknowledgementPacket(
   // check invalid block number
   if ( acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Invalid block number received";
+    spdlog::error( "Invalid block number received" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Wrong block number" };
@@ -287,8 +273,7 @@ void WriteOperationImpl::acknowledgementPacket(
     Packets::Options options{};
     if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( options ) )
     {
-      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-        << "Option Negotiation failed";
+      spdlog::error( "Option Negotiation failed" );
 
       Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Option Negotiation Failed" };
 
@@ -309,7 +294,7 @@ void WriteOperationImpl::acknowledgementPacket(
   // send data
   sendData();
 
-  // wait for next packet
+  // wait for the next packet
   receive();
 }
 
@@ -317,15 +302,11 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "RX: " << static_cast< std::string>( optionsAcknowledgementPacket );
+  spdlog::trace( "RX: {}", static_cast< std::string>( optionsAcknowledgementPacket ) );
 
   if ( lastReceivedBlockNumber != Packets::BlockNumber{ 0xFFFFU } )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "OACK must occur after WRQ";
+    spdlog::error( "OACK must occur after WRQ" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "OACK must occur after WRQ" };
@@ -341,8 +322,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   // check empty options - OACK with no option is not allowed
   if ( remoteOptions.empty() )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Received option list is empty";
+    spdlog::error( "Received option list is empty" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Empty OACK not allowed" };
@@ -363,8 +343,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !optionsConfigurationV.blockSizeOption && blockSizeValue )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Block Size Option not expected";
+    spdlog::error( "Block Size Option not expected" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Block Size Option not expected" };
 
@@ -377,8 +356,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !blockSizeValid )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Block Size Option decoding failed";
+    spdlog::error( "Block Size Option decoding failed" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Block Size Option decoding failed" };
 
@@ -393,8 +371,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   {
     if ( *blockSizeValue > *optionsConfigurationV.blockSizeOption )
     {
-      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-        << "Received Block Size Option bigger than negotiated";
+      spdlog::error( "Received Block Size Option bigger than negotiated" );
 
       Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Block size Option negotiation failed" };
 
@@ -418,8 +395,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !optionsConfigurationV.timeoutOption && timeoutValue )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Timeout Option not expected";
+    spdlog::error( "Timeout Option not expected" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Timeout Option not expected" };
 
@@ -432,8 +408,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !timeoutValid )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Timeout Option decoding failed";
+    spdlog::error( "Timeout Option decoding failed" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Timeout Option decoding failed" };
 
@@ -450,8 +425,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     if ( std::chrono::seconds{ *timeoutValue }
       != *optionsConfigurationV.timeoutOption )
     {
-      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-        << "Timeout Option not equal to requested";
+      spdlog::error( "Timeout Option not equal to requested" );
 
       Packets::ErrorPacket errorPacket{
         Packets::ErrorCode::TftpOptionRefused,
@@ -472,12 +446,9 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
     remoteOptions,
     Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) );
 
-  if ( ( !optionsConfigurationV.handleTransferSizeOption
-      || !transferSize )
-        && transferSizeValue )
+  if ( ( !optionsConfigurationV.handleTransferSizeOption || !transferSize ) && transferSizeValue )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Transfer Size Option not expected";
+    spdlog::error( "Transfer Size Option not expected" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Transfer Size Option not expected" };
 
@@ -490,8 +461,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( !transferSizeValid )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Transfer Size Option decoding failed";
+    spdlog::error( "Transfer Size Option decoding failed" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Transfer Size Option decoding failed" };
 
@@ -504,8 +474,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
 
   if ( transferSizeValue && *transferSizeValue != *transferSize )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Transfer size value not equal to sent value";
+    spdlog::error( "Transfer size value not equal to sent value" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "transfer size invalid" };
 
@@ -520,8 +489,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   // If no handler is registered - Accept options and continue operation
   if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( remoteOptions ) )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Option negotiation failed";
+    spdlog::error(  "Option negotiation failed" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Option negotiation failed" };
 
@@ -535,8 +503,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   // check that remaining remote options are empty
   if ( !remoteOptions.empty() )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Option negotiation failed - unexpected options";
+    spdlog::error( "Option negotiation failed - unexpected options" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Unexpected options" };
 

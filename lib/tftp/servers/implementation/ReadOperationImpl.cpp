@@ -16,11 +16,12 @@
 #include <tftp/packets/DataPacket.hpp>
 #include <tftp/packets/OptionsAcknowledgementPacket.hpp>
 
-#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataHandler.hpp>
 
 #include <helper/Exception.hpp>
+
+#include <spdlog/spdlog.h>
 
 #include <boost/exception/all.hpp>
 
@@ -90,8 +91,6 @@ ReadOperation& ReadOperationImpl::additionalNegotiatedOptions( Packets::Options 
 
 void ReadOperationImpl::start()
 {
-  BOOST_LOG_FUNCTION()
-
   if ( !dataHandlerV )
   {
     BOOST_THROW_EXCEPTION( TftpException()
@@ -147,8 +146,7 @@ void ReadOperationImpl::start()
       {
         if ( 0U != *clientOptionsV.transferSize )
         {
-          BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-            << "Received transfer size must be 0";
+          spdlog::error( "Received transfer size must be 0" );
 
           Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "transfer size must be 0" };
           send( errorPacket );
@@ -189,8 +187,7 @@ void ReadOperationImpl::start()
   }
   catch ( const TftpException &e )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Error during Operation: " << e.what();
+    spdlog::error( "Error during Operation: {}", e.what() );
   }
   catch ( ... )
   {
@@ -215,8 +212,6 @@ const Packets::ErrorInfo& ReadOperationImpl::errorInfo() const
 
 void ReadOperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo ) noexcept
 {
-  BOOST_LOG_FUNCTION()
-
   // Complete data handler
   dataHandlerV->finished();
 
@@ -226,12 +221,9 @@ void ReadOperationImpl::finished( const TransferStatus status, Packets::ErrorInf
 
 void ReadOperationImpl::sendData()
 {
-  BOOST_LOG_FUNCTION()
-
   lastTransmittedBlockNumber++;
 
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "Send Data #" << static_cast< uint16_t >( lastTransmittedBlockNumber );
+  spdlog::trace( "Send Data #{}", static_cast< uint16_t >( lastTransmittedBlockNumber ) );
 
   const Packets::DataPacket data{ lastTransmittedBlockNumber, dataHandlerV->sendData( transmitDataSize ) };
 
@@ -248,10 +240,7 @@ void ReadOperationImpl::dataPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-    << "RX Error: " << static_cast< std::string>( dataPacket );
+  spdlog::error( "RX Error: {}", static_cast< std::string>( dataPacket ) );
 
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "DATA not expected" };
 
@@ -265,17 +254,14 @@ void ReadOperationImpl::acknowledgementPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "RX: " << static_cast< std::string>( acknowledgementPacket );
+  spdlog::trace( "RX: {}", static_cast< std::string>( acknowledgementPacket ) );
 
   // check retransmission
   if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-      << "Received previous ACK packet: retry of last data package - "
-         "IGNORE it due to Sorcerer's Apprentice Syndrome";
+    spdlog::warn(
+      "Received previous ACK packet: retry of last data package - "
+      "IGNORE it due to Sorcerer's Apprentice Syndrome" );
 
     // receive the next packet
     receive();
@@ -286,8 +272,7 @@ void ReadOperationImpl::acknowledgementPacket(
   // check invalid block number
   if ( acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Invalid block number received";
+    spdlog::error( "Invalid block number received" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Wrong block number" };
@@ -304,8 +289,7 @@ void ReadOperationImpl::acknowledgementPacket(
   // if it was the last ACK of the last data packet - we are finished.
   if ( lastDataPacketTransmitted )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-      << "Last acknowledgement received";
+    spdlog::trace( "Last acknowledgement received" );
 
     finished( TransferStatus::Successful );
 

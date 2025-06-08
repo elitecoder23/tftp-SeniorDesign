@@ -23,10 +23,11 @@
 #include <tftp/packets/ReadRequestPacket.hpp>
 #include <tftp/packets/WriteRequestPacket.hpp>
 
-#include <tftp/Logger.hpp>
 #include <tftp/TftpException.hpp>
 
 #include <helper/Exception.hpp>
+
+#include <spdlog/spdlog.h>
 
 #include <boost/exception/all.hpp>
 
@@ -92,10 +93,7 @@ Server& ServerImpl::localDefault( boost::asio::ip::address local )
 
 void ServerImpl::start()
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-    << std::format( "Start TFTP Server on {}:{}", serverAddressV.address().to_string(), serverAddressV.port() );
+  spdlog::info( "Start TFTP Server on {}:{}", serverAddressV.address().to_string(), serverAddressV.port() );
 
   try
   {
@@ -121,10 +119,7 @@ void ServerImpl::start()
 
 void ServerImpl::stop()
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-    << "Stop TFTP Server";
+  spdlog::info( "Stop TFTP Server" );
 
   socketV.cancel();
   socketV.close();
@@ -194,12 +189,9 @@ void ServerImpl::errorOperation(
   const Packets::ErrorCode errorCode,
   std::string errorMessage )
 {
-  BOOST_LOG_FUNCTION()
-
   const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-    << "TX: " << static_cast< std::string>( errorPacket );
+  spdlog::info( "TX: {}", static_cast< std::string>( errorPacket ) );
 
   try
   {
@@ -218,8 +210,7 @@ void ServerImpl::errorOperation(
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << err.what();
+    spdlog::error( err.what() );
   }
 }
 
@@ -229,12 +220,9 @@ void ServerImpl::errorOperation(
   const Packets::ErrorCode errorCode,
   std::string errorMessage )
 {
-  BOOST_LOG_FUNCTION()
-
   const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-    << "TX: " << static_cast< std::string >( errorPacket );
+  spdlog::info( "TX: {}", static_cast< std::string >( errorPacket ) );
 
   try
   {
@@ -255,15 +243,12 @@ void ServerImpl::errorOperation(
   }
   catch ( const boost::system::system_error &err )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << err.what();
+    spdlog::error( err.what() );
   }
 }
 
 void ServerImpl::receive()
 {
-  BOOST_LOG_FUNCTION()
-
   try
   {
     // wait for incoming packet
@@ -282,8 +267,6 @@ void ServerImpl::receive()
 
 void ServerImpl::receiveHandler( const boost::system::error_code &errorCode, const std::size_t bytesTransferred )
 {
-  BOOST_LOG_FUNCTION()
-
   // handle abort
   if ( boost::asio::error::operation_aborted == errorCode )
   {
@@ -293,8 +276,7 @@ void ServerImpl::receiveHandler( const boost::system::error_code &errorCode, con
   // Check error
   if ( errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "receive error: " + errorCode.message();
+    spdlog::error( "receive error: " + errorCode.message() );
 
     BOOST_THROW_EXCEPTION( CommunicationException()
       << Helper::AdditionalInfo{ errorCode.message() } );
@@ -307,8 +289,7 @@ void ServerImpl::receiveHandler( const boost::system::error_code &errorCode, con
   }
   catch ( const TftpException &e )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "TFTP exception: " << e.what();
+    spdlog::error( "TFTP exception: {}", e.what() );
   }
 
   receive();
@@ -318,16 +299,12 @@ void ServerImpl::readRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "RX: " << static_cast< std::string>( readRequestPacket );
+  spdlog::trace( "RX: {}", static_cast< std::string>( readRequestPacket ) );
 
   // check handler
   if ( !requestHandlerV )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-      << "No registered handler - reject";
+    spdlog::warn( "No registered handler - reject" );
 
     // execute error operation
     errorOperation( remote, Packets::ErrorCode::FileNotFound, "RRQ not accepted" );
@@ -351,16 +328,12 @@ void ServerImpl::writeRequestPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::WriteRequestPacket &writeRequestPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::trace )
-    << "RX: " << static_cast< std::string>( writeRequestPacket );
+  spdlog::trace( "RX: {}", static_cast< std::string>( writeRequestPacket ) );
 
   // check handler
   if ( !requestHandlerV )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-      << "No registered handler - reject";
+    spdlog::warn( "No registered handler - reject" );
 
     // execute error operation
     errorOperation( remote, Packets::ErrorCode::FileNotFound, "WRQ" );
@@ -382,10 +355,7 @@ void ServerImpl::writeRequestPacket(
 
 void ServerImpl::dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX Error: " << static_cast< std::string >( dataPacket );
+  spdlog::warn( "RX Error: {}", static_cast< std::string >( dataPacket ) );
 
   // execute error operation
   errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "DATA packet not expected" );
@@ -395,10 +365,7 @@ void ServerImpl::acknowledgementPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket)
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX Error: " << static_cast< std::string >( acknowledgementPacket );
+  spdlog::warn( "RX Error: {}", static_cast< std::string >( acknowledgementPacket ) );
 
   // execute error operation
   errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "ACK packet not expected" );
@@ -406,10 +373,7 @@ void ServerImpl::acknowledgementPacket(
 
 void ServerImpl::errorPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::ErrorPacket &errorPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX Error: " << static_cast< std::string>( errorPacket );
+  spdlog::warn( "RX Error: {}", static_cast< std::string>( errorPacket ) );
 
   // execute error operation
   errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "ERR packet not expected" );
@@ -419,10 +383,7 @@ void ServerImpl::optionsAcknowledgementPacket(
   const boost::asio::ip::udp::endpoint &remote,
   const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX Error: " << static_cast< std::string >( optionsAcknowledgementPacket );
+  spdlog::warn( "RX Error: {}", static_cast< std::string >( optionsAcknowledgementPacket ) );
 
   // execute error operation
   errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "OACK packet not expected" );
@@ -432,10 +393,7 @@ void ServerImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   [[maybe_unused]] Helper::ConstRawDataSpan rawPacket )
 {
-  BOOST_LOG_FUNCTION()
-
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::warning )
-    << "RX: UNKNOWN: *Error* - IGNORE";
+  spdlog::warn( "RX: UNKNOWN: *Error* - IGNORE" );
 }
 
 Packets::TftpOptions ServerImpl::tftpOptions( Packets::Options &clientOptions ) const

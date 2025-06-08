@@ -26,8 +26,6 @@
 #include <tftp/TransferStatusDescription.hpp>
 #include <tftp/Version.hpp>
 
-#include <helper/Logger.hpp>
-
 #include <boost/asio.hpp>
 
 #include <boost/exception/all.hpp>
@@ -130,10 +128,6 @@ static Tftp::Servers::OperationPtr serverOperation;
 
 int main( int argc, char * argv[] )
 {
-  BOOST_LOG_FUNCTION()
-
-  Helper::initLogging();
-
   try
   {
     std::cout << "TFTP Server - " << Tftp::Version::VersionInformation << "\n";
@@ -348,8 +342,8 @@ static void receiveFile(
   std::cout
     << "WRQ: " << filename << " from: " << remote.address().to_string() << "\n";
 
-  // open requested file
-  std::fstream fileStream( filename.c_str(), std::fstream::out | std::fstream::trunc );
+  // open the requested file
+  std::fstream fileStream{ filename.c_str(), std::fstream::out | std::fstream::trunc };
 
   // check that file was opened successfully
   if ( !fileStream.good() )

@@ -12,7 +12,7 @@
 
 #include "MemoryFile.hpp"
 
-#include <tftp/Logger.hpp>
+#include <spdlog/spdlog.h>
 
 namespace Tftp::Files {
 
@@ -58,8 +58,7 @@ void MemoryFile::finished() noexcept
 
 bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
 {
-  BOOST_LOG_SEV( Logger::get(), Helper::Severity::info )
-    << "Received transfer size: " << transferSize;
+  spdlog::info( "Received transfer size: {}", transferSize );
 
   return true;
 }

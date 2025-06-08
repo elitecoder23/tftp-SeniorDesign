@@ -14,9 +14,9 @@
 
 #include <tftp/packets/PacketException.hpp>
 
-#include <tftp/Logger.hpp>
-
 #include <helper/Exception.hpp>
+
+#include <spdlog/spdlog.h>
 
 #include <boost/exception/all.hpp>
 
@@ -27,8 +27,7 @@ PacketType Packet::packetType( Helper::ConstRawDataSpan rawPacket )
   // check minimum data size.
   if ( rawPacket.size() < HeaderSize )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Packet to small";
+    spdlog::error( "Packet to small" );
     return PacketType::Invalid;
   }
 
@@ -50,8 +49,7 @@ PacketType Packet::packetType( Helper::ConstRawDataSpan rawPacket )
 
     default:
       // return INVALID for invalid values
-      BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-        << "Invalid opcode " << std::hex << opcode;
+      spdlog::error( "Invalid opcode 0x{:04X}", opcode );
       return PacketType::Invalid;
   }
 

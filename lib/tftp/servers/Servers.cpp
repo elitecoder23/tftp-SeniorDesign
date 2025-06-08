@@ -12,7 +12,7 @@
 
 #include "Servers.hpp"
 
-#include <tftp/Logger.hpp>
+#include <spdlog/spdlog.h>
 
 namespace Tftp::Servers {
 
@@ -21,16 +21,13 @@ std::optional< std::filesystem::path > checkFilename(
   const std::filesystem::path &filename,
   bool mustExist )
 {
-  BOOST_LOG_FUNCTION()
-
   std::error_code errorCode;
 
   // make base path canonical and check existence (implicit by canonical)
   auto canonicalBaseDir{ std::filesystem::canonical( baseDir, errorCode ) };
   if ( errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Could not make base directory canonical or does not exist.";
+    spdlog::error( "Could not make base directory canonical or does not exist." );
 
     return std::nullopt;
   }
@@ -39,8 +36,7 @@ std::optional< std::filesystem::path > checkFilename(
   auto filePath{ std::filesystem::weakly_canonical( canonicalBaseDir / filename, errorCode ) };
   if ( errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "Could not make file path canonical.";
+    spdlog::error( "Could not make file path canonical." );
     return std::nullopt;
   }
 
@@ -50,16 +46,14 @@ std::optional< std::filesystem::path > checkFilename(
   // segments, so this check is sufficient.
   if ( !std::equal( canonicalBaseDir.begin(), canonicalBaseDir.end(), filePath.begin() ) )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "File path not within base directory.";
+    spdlog::error( "File path not within base directory." );
 
     return std::nullopt;
   }
 
   if ( mustExist && !std::filesystem::is_regular_file( filePath, errorCode ) && errorCode )
   {
-    BOOST_LOG_SEV( Logger::get(), Helper::Severity::error )
-      << "File does not exist.";
+    spdlog::error( "File does not exist." );
 
     return std::nullopt;
   }

@@ -6,6 +6,7 @@
 cmake_minimum_required( VERSION 3.31 )
 
 find_package( Boost REQUIRED COMPONENTS program_options )
+find_package( spdlog REQUIRED )
 
 # prepare Version.cpp
 configure_file( Version.hpp.in Version.hpp )
@@ -26,7 +27,6 @@ target_sources(
 
       FILES
         DataHandler.hpp
-        Logger.hpp
         ReceiveDataHandler.hpp
         RequestTypeDescription.hpp
         Tftp.hpp
@@ -90,6 +90,7 @@ target_link_libraries(
     Boost::program_options
 
   PRIVATE
+    spdlog::spdlog
     # Windows Socket must be explicitly linked in MinGW
     $<$<PLATFORM_ID:Windows>:wsock32>
     $<$<PLATFORM_ID:Windows>:ws2_32> )
