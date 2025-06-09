@@ -10,7 +10,6 @@ find_package(
   REQUIRED
   COMPONENTS
     program_options
-    filesystem
     thread
     chrono )
 
@@ -51,7 +50,6 @@ target_link_libraries(
 
     Boost::boost
     Boost::program_options
-    Boost::filesystem
     Boost::thread
     Boost::chrono
 

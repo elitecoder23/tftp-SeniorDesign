@@ -132,8 +132,7 @@ int main( int argc, char * argv[] )
   {
     std::cout << "TFTP Server - " << Tftp::Version::VersionInformation << "\n";
 
-    boost::program_options::options_description optionsDescription{
-      "TFTP Server Options" };
+    boost::program_options::options_description optionsDescription{ "TFTP Server Options" };
 
     optionsDescription.add_options()
     (
@@ -218,16 +217,12 @@ int main( int argc, char * argv[] )
   }
   catch ( const boost::exception &e )
   {
-    std::cerr
-      << "Error: "
-      << boost::diagnostic_information( e ) << "\n";
+    std::cerr << "Error: " << boost::diagnostic_information( e ) << "\n";
     return EXIT_FAILURE;
   }
   catch ( const std::exception &e )
   {
-    std::cerr
-      << "Error: "
-      << boost::diagnostic_information( e ) << "\n";
+    std::cerr << "Error: " << boost::diagnostic_information( e ) << "\n";
     return EXIT_FAILURE;
   }
   catch ( ... )

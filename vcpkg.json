@@ -3,8 +3,9 @@
   "dependencies": [
     "boost-asio",
     "boost-endian",
-    "boost-log",
+    "boost-multi-index",
     "boost-program-options",
+    "boost-property-tree",
     "boost-serialization",
     "boost-test",
     "spdlog"

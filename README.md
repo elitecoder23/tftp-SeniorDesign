@@ -8,10 +8,9 @@ It also provides a commandline TFTP Server and Client.
 First level dependencies:
 - [Helper Library](https://git.thomas-vogt.de/thomas-vogt/helper)
 - Boost Library
-  - Boost::Log
-  - Boost::Program Options
+  - Boost.Program Options
 - spdlog
-- Qt (Version 5 or 6) - Optionally
+- Qt 6 - Optionally
 
 ## Building
 The library uses CMake to handle build configuration.
@@ -20,7 +19,7 @@ CMake Presets are provided to generate builds compiling with:
 - Clang, and
 - MSVC.
 
-For each compiler and environment, following variants can be built:
+For each compiler and environment, the following variants can be built:
 - Static debug,
 - Static release,
 - Shared debug, and
