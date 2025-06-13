@@ -146,7 +146,7 @@ void ReadOperationImpl::start()
       {
         if ( 0U != *clientOptionsV.transferSize )
         {
-          spdlog::error( "Received transfer size must be 0" );
+          SPDLOG_ERROR( "Received transfer size must be 0" );
 
           Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "transfer size must be 0" };
           send( errorPacket );
@@ -187,7 +187,7 @@ void ReadOperationImpl::start()
   }
   catch ( const TftpException &e )
   {
-    spdlog::error( "Error during Operation: {}", e.what() );
+    SPDLOG_ERROR( "Error during Operation: {}", e.what() );
   }
   catch ( ... )
   {
@@ -223,7 +223,7 @@ void ReadOperationImpl::sendData()
 {
   lastTransmittedBlockNumber++;
 
-  spdlog::trace( "Send Data #{}", static_cast< uint16_t >( lastTransmittedBlockNumber ) );
+  SPDLOG_TRACE( "Send Data #{}", static_cast< uint16_t >( lastTransmittedBlockNumber ) );
 
   const Packets::DataPacket data{ lastTransmittedBlockNumber, dataHandlerV->sendData( transmitDataSize ) };
 
@@ -240,7 +240,7 @@ void ReadOperationImpl::dataPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket )
 {
-  spdlog::error( "RX Error: {}", static_cast< std::string>( dataPacket ) );
+  SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( dataPacket ) );
 
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "DATA not expected" };
 
@@ -254,12 +254,12 @@ void ReadOperationImpl::acknowledgementPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
-  spdlog::trace( "RX: {}", static_cast< std::string>( acknowledgementPacket ) );
+  SPDLOG_TRACE( "RX: {}", static_cast< std::string>( acknowledgementPacket ) );
 
   // check retransmission
   if ( acknowledgementPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    spdlog::warn(
+    SPDLOG_WARN(
       "Received previous ACK packet: retry of last data package - "
       "IGNORE it due to Sorcerer's Apprentice Syndrome" );
 
@@ -272,7 +272,7 @@ void ReadOperationImpl::acknowledgementPacket(
   // check invalid block number
   if ( acknowledgementPacket.blockNumber() != lastTransmittedBlockNumber )
   {
-    spdlog::error( "Invalid block number received" );
+    SPDLOG_ERROR( "Invalid block number received" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Wrong block number" };
@@ -289,7 +289,7 @@ void ReadOperationImpl::acknowledgementPacket(
   // if it was the last ACK of the last data packet - we are finished.
   if ( lastDataPacketTransmitted )
   {
-    spdlog::trace( "Last acknowledgement received" );
+    SPDLOG_TRACE( "Last acknowledgement received" );
 
     finished( TransferStatus::Successful );
 

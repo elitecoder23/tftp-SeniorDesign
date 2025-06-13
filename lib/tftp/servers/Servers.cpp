@@ -27,7 +27,7 @@ std::optional< std::filesystem::path > checkFilename(
   auto canonicalBaseDir{ std::filesystem::canonical( baseDir, errorCode ) };
   if ( errorCode )
   {
-    spdlog::error( "Could not make base directory canonical or does not exist." );
+    SPDLOG_ERROR( "Could not make base directory canonical or does not exist." );
 
     return std::nullopt;
   }
@@ -36,7 +36,7 @@ std::optional< std::filesystem::path > checkFilename(
   auto filePath{ std::filesystem::weakly_canonical( canonicalBaseDir / filename, errorCode ) };
   if ( errorCode )
   {
-    spdlog::error( "Could not make file path canonical." );
+    SPDLOG_ERROR( "Could not make file path canonical." );
     return std::nullopt;
   }
 
@@ -46,14 +46,14 @@ std::optional< std::filesystem::path > checkFilename(
   // segments, so this check is sufficient.
   if ( !std::equal( canonicalBaseDir.begin(), canonicalBaseDir.end(), filePath.begin() ) )
   {
-    spdlog::error( "File path not within base directory." );
+    SPDLOG_ERROR( "File path not within base directory." );
 
     return std::nullopt;
   }
 
   if ( mustExist && !std::filesystem::is_regular_file( filePath, errorCode ) && errorCode )
   {
-    spdlog::error( "File does not exist." );
+    SPDLOG_ERROR( "File does not exist." );
 
     return std::nullopt;
   }

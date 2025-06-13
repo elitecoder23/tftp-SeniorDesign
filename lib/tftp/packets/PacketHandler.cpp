@@ -39,7 +39,7 @@ void PacketHandler::packet( const boost::asio::ip::udp::endpoint &remote, Helper
       }
       catch ( const Packets::InvalidPacketException &e )
       {
-        spdlog::error( "Error decoding/ handling RRQ packet: {}", e.what() );
+        SPDLOG_ERROR( "Error decoding/ handling RRQ packet: {}", e.what() );
 
         // Update statistic
         PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
@@ -58,7 +58,7 @@ void PacketHandler::packet( const boost::asio::ip::udp::endpoint &remote, Helper
       }
       catch ( const Packets::InvalidPacketException &e )
       {
-       spdlog::error( "Error decoding/ handling WRQ packet: {}", e.what() );
+       SPDLOG_ERROR( "Error decoding/ handling WRQ packet: {}", e.what() );
 
         // Update statistic
         PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
@@ -77,7 +77,7 @@ void PacketHandler::packet( const boost::asio::ip::udp::endpoint &remote, Helper
       }
       catch ( const Packets::InvalidPacketException &e )
       {
-        spdlog::error( "Error decoding/ handling DATA packet: {}", e.what() );
+        SPDLOG_ERROR( "Error decoding/ handling DATA packet: {}", e.what() );
 
         // Update statistic
         PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
@@ -96,7 +96,7 @@ void PacketHandler::packet( const boost::asio::ip::udp::endpoint &remote, Helper
       }
       catch ( const Packets::InvalidPacketException &e )
       {
-        spdlog::error( "Error decoding/ handling ACK packet: {}", e.what() );
+        SPDLOG_ERROR( "Error decoding/ handling ACK packet: {}", e.what() );
 
         // Update statistic
         PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
@@ -115,7 +115,7 @@ void PacketHandler::packet( const boost::asio::ip::udp::endpoint &remote, Helper
       }
       catch ( const Packets::InvalidPacketException &e )
       {
-        spdlog::error( "Error decoding/ handling ERR packet: {}", e.what() );
+        SPDLOG_ERROR( "Error decoding/ handling ERR packet: {}", e.what() );
 
         // Update statistic
         PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );
@@ -134,7 +134,7 @@ void PacketHandler::packet( const boost::asio::ip::udp::endpoint &remote, Helper
       }
       catch ( const Packets::InvalidPacketException &e )
       {
-        spdlog::error( "Error decoding/ handling OACK packet: {}", e.what() );
+        SPDLOG_ERROR( "Error decoding/ handling OACK packet: {}", e.what() );
 
         // Update statistic
         PacketStatistic::globalReceive().packet( PacketType::Invalid, rawPacket.size() );

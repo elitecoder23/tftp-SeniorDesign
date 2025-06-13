@@ -58,7 +58,7 @@ void MemoryFile::finished() noexcept
 
 bool MemoryFile::receivedTransferSize( const uint64_t transferSize )
 {
-  spdlog::info( "Received transfer size: {}", transferSize );
+  SPDLOG_INFO( "Received transfer size: {}", transferSize );
 
   return true;
 }

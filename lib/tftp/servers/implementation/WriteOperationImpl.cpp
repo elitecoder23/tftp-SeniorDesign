@@ -194,7 +194,7 @@ void WriteOperationImpl::start()
   }
   catch ( const TftpException &e )
   {
-    spdlog::error( "Error during Operation: {}", e.what() );
+    SPDLOG_ERROR( "Error during Operation: {}", e.what() );
   }
   catch ( ... )
   {
@@ -230,12 +230,12 @@ void WriteOperationImpl::dataPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::DataPacket &dataPacket )
 {
-  spdlog::trace( "RX: {}", static_cast< std::string>( dataPacket ) );
+  SPDLOG_TRACE( "RX: {}", static_cast< std::string>( dataPacket ) );
 
   // Check retransmission of last packet
   if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    spdlog::info( "Retransmission of last packet - only send ACK" );
+    SPDLOG_INFO( "Retransmission of last packet - only send ACK" );
 
     // Retransmit last ACK packet
     send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
@@ -266,7 +266,7 @@ void WriteOperationImpl::dataPacket(
   // check unexpected block number
   if ( dataPacket.blockNumber() != lastReceivedBlockNumber.next() )
   {
-    spdlog::error( "Wrong Data packet block number" );
+    SPDLOG_ERROR( "Wrong Data packet block number" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Block Number not expected" };
@@ -280,7 +280,7 @@ void WriteOperationImpl::dataPacket(
   // check for too much data
   if ( dataPacket.dataSize() > receiveDataSize )
   {
-    spdlog::error( "Too much data received" );
+    SPDLOG_ERROR( "Too much data received" );
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Too much data" };
@@ -325,7 +325,7 @@ void WriteOperationImpl::acknowledgementPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::AcknowledgementPacket &acknowledgementPacket )
 {
-  spdlog::error( "RX Error: {}", static_cast< std::string>( acknowledgementPacket ) );
+  SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( acknowledgementPacket ) );
 
   // send Error
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "ACK not expected" };

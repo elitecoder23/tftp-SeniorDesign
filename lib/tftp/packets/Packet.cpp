@@ -27,7 +27,7 @@ PacketType Packet::packetType( Helper::ConstRawDataSpan rawPacket )
   // check minimum data size.
   if ( rawPacket.size() < HeaderSize )
   {
-    spdlog::error( "Packet to small" );
+    SPDLOG_ERROR( "Packet to small" );
     return PacketType::Invalid;
   }
 
@@ -49,7 +49,7 @@ PacketType Packet::packetType( Helper::ConstRawDataSpan rawPacket )
 
     default:
       // return INVALID for invalid values
-      spdlog::error( "Invalid opcode 0x{:04X}", opcode );
+      SPDLOG_ERROR( "Invalid opcode 0x{:04X}", opcode );
       return PacketType::Invalid;
   }
 

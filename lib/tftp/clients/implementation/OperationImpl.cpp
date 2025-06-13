@@ -57,7 +57,7 @@ void OperationImpl::initialise()
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "Initialisation Error: {}", err.what() );
+    SPDLOG_ERROR( "Initialisation Error: {}", err.what() );
 
     // On error and if socket is opened - close it.
     if ( socket.is_open() )
@@ -72,7 +72,7 @@ void OperationImpl::initialise()
 
 void OperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::string errorMessage )
 {
-  spdlog::warn(
+  SPDLOG_WARN(
     "Graceful abort requested: '{}' '{}'",
     Packets::ErrorCodeDescription::instance().name( errorCode ),
     errorMessage );
@@ -91,7 +91,7 @@ void OperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::stri
 
 void OperationImpl::abort()
 {
-  spdlog::warn( "Abort requested" );
+  SPDLOG_WARN( "Abort requested" );
 
   // Operation completed
   finished( TransferStatus::Aborted );
@@ -139,7 +139,7 @@ void OperationImpl::receiveTimeout( const std::chrono::seconds receiveTimeout ) 
 
 void OperationImpl::sendFirst( const Packets::Packet &packet )
 {
-  spdlog::trace( "TX: {}", static_cast< std::string>( packet ) );
+  SPDLOG_TRACE( "TX: {}", static_cast< std::string>( packet ) );
 
   try
   {
@@ -157,7 +157,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "TX Error: {}", err.what() );
+    SPDLOG_ERROR( "TX Error: {}", err.what() );
 
     // Operation finished
     finished( TransferStatus::CommunicationError );
@@ -166,7 +166,7 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
 
 void OperationImpl::send( const Packets::Packet &packet )
 {
-  spdlog::trace( "TX: {}", static_cast< std::string>( packet ) );
+  SPDLOG_TRACE( "TX: {}", static_cast< std::string>( packet ) );
 
   try
   {
@@ -184,7 +184,7 @@ void OperationImpl::send( const Packets::Packet &packet )
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "TX Error: {}", err.what() );
+    SPDLOG_ERROR( "TX Error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -209,7 +209,7 @@ void OperationImpl::receiveFirst()
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "RX Error: {}", err.what() );
+    SPDLOG_ERROR( "RX Error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -232,7 +232,7 @@ void OperationImpl::receive()
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "RX Error: {}", err.what() );
+    SPDLOG_ERROR( "RX Error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -255,7 +255,7 @@ void OperationImpl::receiveDally()
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "RX Error: {}", err.what() );
+    SPDLOG_ERROR( "RX Error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -263,7 +263,7 @@ void OperationImpl::receiveDally()
 
 void OperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo )
 {
-  spdlog::info( "TFTP Client Operation finished" );
+  SPDLOG_INFO( "TFTP Client Operation finished" );
 
   errorInfoV = std::move( errorInfo );
 
@@ -281,7 +281,7 @@ void OperationImpl::readRequestPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::ReadRequestPacket &readRequestPacket )
 {
-  spdlog::error( "RX Error: {}", static_cast< std::string>( readRequestPacket ) );
+  SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( readRequestPacket ) );
 
   // send error packet
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ not expected" };
@@ -296,7 +296,7 @@ void OperationImpl::writeRequestPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::WriteRequestPacket &writeRequestPacket )
 {
-  spdlog::error( "RX Error: {}", static_cast< std::string>( writeRequestPacket ) );
+  SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( writeRequestPacket ) );
 
   // send error packet
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ not expected" };
@@ -311,7 +311,7 @@ void OperationImpl::errorPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   const Packets::ErrorPacket &errorPacket )
 {
-  spdlog::error( "RX Error: {}", static_cast< std::string>( errorPacket ) );
+  SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( errorPacket ) );
 
   // Operation completed
   switch ( Packets::Packet::packetType( transmitPacket ) )
@@ -343,7 +343,7 @@ void OperationImpl::invalidPacket(
   [[maybe_unused]] const boost::asio::ip::udp::endpoint &remote,
   [[maybe_unused]] Helper::ConstRawDataSpan rawPacket )
 {
-  spdlog::error( "RX Error: INVALID Packet" );
+  SPDLOG_ERROR( "RX Error: INVALID Packet" );
 
   // send error packet
   Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet not expected" };
@@ -365,7 +365,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
   // (internal) receive error occurred
   if ( errorCode )
   {
-    spdlog::error( "Error when receiving message: {}", errorCode.message() );
+    SPDLOG_ERROR( "Error when receiving message: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -375,7 +375,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
   // send an error packet and ignore it.
   if ( remoteV.address() != receiveEndpoint.address() )
   {
-    spdlog::error( "Received packed from wrong source: {}", receiveEndpoint.address().to_string() );
+    SPDLOG_ERROR( "Received packed from wrong source: {}", receiveEndpoint.address().to_string() );
 
     // sent an error packet to unknown partner
     try
@@ -393,7 +393,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
     catch ( const boost::system::system_error &err)
     {
       // ignore send error to unknown partner
-      spdlog::error( "Error sending ERR packet: {}", err.what() );
+      SPDLOG_ERROR( "Error sending ERR packet: {}", err.what() );
     }
 
     // restart receive operation
@@ -408,7 +408,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
     }
     catch ( const boost::system::system_error &err )
     {
-      spdlog::error( "Start Receive: {}", err.what() );
+      SPDLOG_ERROR( "Start Receive: {}", err.what() );
 
       finished( TransferStatus::CommunicationError );
       return;
@@ -422,7 +422,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "Connect: {}", err.what() );
+    SPDLOG_ERROR( "Connect: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -443,7 +443,7 @@ void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, 
   // (internal) receive error occurred
   if ( errorCode )
   {
-    spdlog::error( "Error when receiving message: {}", errorCode.message() );
+    SPDLOG_ERROR( "Error when receiving message: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -464,7 +464,7 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
   // internal (timer) error occurred
   if ( errorCode )
   {
-    spdlog::error( "Timer error: {}", errorCode.message() );
+    SPDLOG_ERROR( "Timer error: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -473,13 +473,13 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
   // if maximum retries exceeded -> abort receive operation
   if ( transmitCounter > tftpRetriesV )
   {
-    spdlog::error( "TFTP Retry counter exceeded" );
+    SPDLOG_ERROR( "TFTP Retry counter exceeded" );
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  spdlog::warn(
+  SPDLOG_WARN(
     "Retransmit last TFTP packet: {}",
     Packets::PacketTypeDescription::instance().name( Packets::Packet::packetType( transmitPacket ) ) );
 
@@ -502,7 +502,7 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "Re-TX error: {}", err.what() );
+    SPDLOG_ERROR( "Re-TX error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -519,7 +519,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
   // internal (timer) error occurred
   if ( errorCode )
   {
-    spdlog::error( "Timer error: {}", errorCode.message() );
+    SPDLOG_ERROR( "Timer error: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
@@ -528,13 +528,13 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
   // if maximum retries exceeded -> abort receive operation
   if ( transmitCounter > tftpRetriesV )
   {
-    spdlog::error( "TFTP Retry counter exceeded" );
+    SPDLOG_ERROR( "TFTP Retry counter exceeded" );
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  spdlog::info(
+  SPDLOG_INFO(
     "Retransmit last TFTP packet: {}",
     Packets::PacketTypeDescription::instance().name( Packets::Packet::packetType( transmitPacket ) ) );
 
@@ -555,7 +555,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
   }
   catch ( const boost::system::system_error &err )
   {
-    spdlog::error( "Re-TX error: {}", err.what() );
+    SPDLOG_ERROR( "Re-TX error: {}", err.what() );
 
     finished( TransferStatus::CommunicationError );
   }
@@ -572,13 +572,13 @@ void OperationImpl::timeoutDallyHandler( const boost::system::error_code &errorC
   // internal (timer) error occurred
   if ( errorCode )
   {
-    spdlog::error( "Timer error: {}", errorCode.message() );
+    SPDLOG_ERROR( "Timer error: {}", errorCode.message() );
 
     finished( TransferStatus::CommunicationError );
     return;
   }
 
-  spdlog::info( "Dally Timeout Completed - Finish" );
+  SPDLOG_INFO( "Dally Timeout Completed - Finish" );
 
   finished( TransferStatus::Successful );
 }
