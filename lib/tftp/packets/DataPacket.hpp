@@ -33,8 +33,7 @@ class TFTP_EXPORT DataPacket final : public Packet
 {
   public:
     //! Minimum Packet Size (Opcode + Block Number)
-    //! @todo at the moment MSVC does not support `UZ` literal
-    static constexpr auto MinPacketSize{ HeaderSize + 2U };
+    static constexpr auto MinPacketSize{ HeaderSize + 2UZ };
 
     //! Data Type
     using Data = std::vector< std::byte >;

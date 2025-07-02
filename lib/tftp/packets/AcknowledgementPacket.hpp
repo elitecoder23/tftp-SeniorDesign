@@ -33,8 +33,7 @@ class TFTP_EXPORT AcknowledgementPacket final : public Packet
 {
   public:
     //! Packet Size ( Opcode + Block Number)
-    //! @todo at the moment MSVC does not support `UZ` literal
-    static constexpr auto PacketSize{ HeaderSize + 2U };
+    static constexpr auto PacketSize{ HeaderSize + 2UZ };
 
     /**
      * @brief Creates the packet with the given block number.

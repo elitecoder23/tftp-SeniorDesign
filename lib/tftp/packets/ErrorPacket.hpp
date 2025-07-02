@@ -36,8 +36,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
 {
   public:
     //! Minimum Header Size (Opcode, Error Code, Empty String)
-    //! @todo at the moment MSVC does not support `UZ` literal
-    static constexpr auto MinPacketSize{ HeaderSize + 2U + 1U };
+    static constexpr auto MinPacketSize{ HeaderSize + 2UZ + 1UZ };
 
     /**
      * @brief Generates a TFTP error packet with the given error code and
