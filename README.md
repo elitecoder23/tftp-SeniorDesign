@@ -5,15 +5,22 @@ This repository provides a C++ Library which implements the TFTP Protocol.
 It also provides a commandline TFTP Server and Client.
 
 ## Dependencies
-First level dependencies:
 - [Helper Library](https://git.thomas-vogt.de/thomas-vogt/helper)
-- Boost Library
-  - Boost.Program Options
-- spdlog
-- Qt 6 - Optionally
+- [Boost Libraries](https://www.boost.org/)
+  - Boost.Asio
+  - Boost.Chrono
+  - Boost.Endian
+  - Boost.Exception
+  - Boost.MultiIndex
+  - Boost.ProgramOptions
+  - Boost.PropertyTree
+  - Boost.Serialization
+  - Boost.Test
+- [spdlog](https://github.com/gabime/spdlog)
+- Optionally [Qt 6](https://www.qt.io/)
 
 ## Building
-The library uses CMake to handle build configuration.
+The library uses [CMake](https://cmake.org/) to handle build configuration.
 CMake Presets are provided to generate builds compiling with:
 - GNU GCC,
 - Clang, and
