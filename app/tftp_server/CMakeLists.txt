@@ -5,11 +5,7 @@
 
 cmake_minimum_required( VERSION 3.31 )
 
-find_package(
-  Boost
-  REQUIRED
-  COMPONENTS
-    thread )
+find_package( Boost REQUIRED )
 
 add_executable( tftp_server )
 
@@ -35,9 +31,11 @@ target_compile_options(
 
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
+    $<$<CXX_COMPILER_ID:GNU>:-Wpedantic>
 
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
-    $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
+    $<$<CXX_COMPILER_ID:Clang>:-Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:-Wpedantic> )
 
 target_link_libraries(
   tftp_server
@@ -45,7 +43,6 @@ target_link_libraries(
   PRIVATE
     tftp
     helper
-    Boost::thread
     # Windows Socket must be explicitly linked in MinGW
     $<$<PLATFORM_ID:Windows>:wsock32 ws2_32> )
 

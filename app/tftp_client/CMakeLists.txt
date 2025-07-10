@@ -9,9 +9,7 @@ find_package(
   Boost
   REQUIRED
   COMPONENTS
-    program_options
-    thread
-    chrono )
+    program_options )
 
 add_executable( tftp_client )
 
@@ -37,9 +35,11 @@ target_compile_options(
 
     $<$<CXX_COMPILER_ID:GNU>:-Wall>
     $<$<CXX_COMPILER_ID:GNU>:-Wextra>
+    $<$<CXX_COMPILER_ID:GNU>:-Wpedantic>
 
     $<$<CXX_COMPILER_ID:Clang>:-Wall>
-    $<$<CXX_COMPILER_ID:Clang>:-Wextra> )
+    $<$<CXX_COMPILER_ID:Clang>:-Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:-Wpedantic> )
 
 target_link_libraries(
   tftp_client
@@ -50,8 +50,6 @@ target_link_libraries(
 
     Boost::boost
     Boost::program_options
-    Boost::thread
-    Boost::chrono
 
     # Windows Socket must be explicitly linked in MinGW
     $<$<PLATFORM_ID:Windows>:wsock32 ws2_32> )
