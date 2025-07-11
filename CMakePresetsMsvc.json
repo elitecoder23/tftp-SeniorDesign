@@ -17,6 +17,7 @@
         "VCPKG_MANIFEST_FEATURES" : "with-qt",
         "CMAKE_COMPILE_WARNING_AS_ERROR" : "True"
       },
+      "graphviz": "dependencies.dot",
       "vendor": {
         "jetbrains.com/clion": {
           "toolchain": "Visual Studio"

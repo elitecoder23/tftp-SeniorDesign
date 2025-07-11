@@ -12,7 +12,8 @@
         "CMAKE_C_COMPILER" : "clang",
         "CMAKE_CXX_COMPILER" : "clang++",
         "CMAKE_COMPILE_WARNING_AS_ERROR" : "True"
-      }
+      },
+      "graphviz": "dependencies.dot"
     },
     {
       "name": "clang-static-debug",

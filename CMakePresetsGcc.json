@@ -12,7 +12,8 @@
         "CMAKE_C_COMPILER" : "gcc",
         "CMAKE_CXX_COMPILER" : "g++",
         "CMAKE_COMPILE_WARNING_AS_ERROR" : "True"
-      }
+      },
+      "graphviz": "dependencies.dot"
     },
     {
       "name": "gcc-static-debug",

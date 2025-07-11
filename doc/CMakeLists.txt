@@ -11,3 +11,4 @@ endif()
 
 add_subdirectory( tftp_api_doc )
 add_subdirectory( tftp_internal_doc )
+add_subdirectory( tftp_dependencies )
