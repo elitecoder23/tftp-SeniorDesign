@@ -1,0 +1,32 @@
+= TFTP Operations
+
+<<rfc_1350>>
+
+== File Reception (Download)
+The file reception process follows these steps:
+
+. Client sends a Read Request (RRQ) to the server
+. Server responds with the first data block
+. Client acknowledges (ACK) the received block
+. Process continues until the final block (less than 512 bytes) is received
+
+== File Transmission (Upload)
+The file transmission process involves:
+
+. Client sends a Write Request (WRQ) to the server
+. Server responds with an acknowledgment
+. Client sends the first data block
+. Server acknowledges the received block
+. Process continues until the final block is sent
+
+== Error Handling
+TFTP implements basic error handling through error packets.
+Common error scenarios include:
+
+- File not found
+- Access violation
+- Disk full
+- Illegal TFTP operation
+- Unknown transfer ID
+- File already exists
+- No such user

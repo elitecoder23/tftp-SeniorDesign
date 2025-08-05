@@ -11,20 +11,22 @@ if( NOT PROJECT_IS_TOP_LEVEL OR NOT TARGET Doxygen::dot OR NOT EXISTS ${CMAKE_BI
   return()
 endif()
 
+set( DEPENDENCY_OUTPUT_FILE "${CMAKE_PROJECT_NAME}_dependencies.pdf" )
+
 add_custom_command(
-  OUTPUT dependencies.pdf
-  COMMAND $<TARGET_FILE:Doxygen::dot> -Tpdf -o dependencies.pdf ${CMAKE_BINARY_DIR}/dependencies.dot
+  OUTPUT ${DEPENDENCY_OUTPUT_FILE}
+  COMMAND $<TARGET_FILE:Doxygen::dot> -Tpdf -o ${DEPENDENCY_OUTPUT_FILE} ${CMAKE_BINARY_DIR}/dependencies.dot
   DEPENDS ${CMAKE_BINARY_DIR}/dependencies.dot
-  COMMENT "Generate TFTP Dependencies" )
+  COMMENT "Generating ${DEPENDENCY_OUTPUT_FILE}" )
 
 add_custom_target(
-  tftp_dependency_graph
-  DEPENDS dependencies.pdf )
+  dependency_graph
+  DEPENDS ${DEPENDENCY_OUTPUT_FILE} )
 
-add_dependencies( doc tftp_dependency_graph )
+add_dependencies( doc dependency_graph )
 
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/dependencies.pdf
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/${DEPENDENCY_OUTPUT_FILE}
   TYPE DOC
   COMPONENT development
   OPTIONAL )

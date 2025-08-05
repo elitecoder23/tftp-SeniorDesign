@@ -1,0 +1,46 @@
+= TFTP Timeout Option
+
+== Overview
+The TFTP timeout option is a critical configuration parameter that determines how long a TFTP client or server should wait for a response before considering the transmission failed and initiating a retry.
+
+== Purpose
+- Ensures reliable data transfer by detecting lost or delayed packets
+- Prevents indefinite hanging of transfers
+- Allows customisation based on network conditions
+
+== Technical Details
+- Specifies the duration to wait for acknowledgement packets
+- Applies to both read and write operations
+- Typically measured in seconds or milliseconds
+- Default timeout values vary by implementation
+
+== Benefits
+. Prevents transfer deadlocks
+. Enables automatic retry mechanisms
+. Allows tuning for different network conditions
+. Helps in handling network congestion
+
+== Configuration Considerations
+- Should be set based on network latency
+- Longer timeouts may be needed for:
+- Slow or congested networks
+- High-latency connections
+- Networks with packet loss
+
+- Shorter timeouts are suitable for:
+- Local network transfers
+- Low-latency connections
+- Reliable networks
+
+== Best Practices
+. Set timeout values appropriate for your network environment
+. Consider increasing timeout for transfers across WAN or Internet
+. Use shorter timeouts for local network operations
+. Account for network latency and potential congestion
+
+== Limitations
+- Too short timeouts may cause unnecessary retransmissions
+- Too long timeouts can slow down recovery from failures
+- Must balance between quick failure detection and avoiding premature timeouts
+
+The timeout option is essential for reliable TFTP operations and should be configured appropriately based on the specific network environment and requirements.

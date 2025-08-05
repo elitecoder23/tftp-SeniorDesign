@@ -79,7 +79,7 @@ struct TFTP_EXPORT TftpOptions final
 /**
  * @brief Returns a string, which describes the TFTP Options.
  *
- * This operation is used for debugging and information purposes.
+ * This operation is used for debugging and information.
  *
  * @param[in] options
  *   TFTP Options.

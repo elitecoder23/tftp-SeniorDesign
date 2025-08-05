@@ -130,20 +130,19 @@ int main( const int argc, char * argv[] )
 {
   try
   {
-    std::cout << "TFTP Server - " << Tftp::Version::VersionInformation << "\n";
+    std::cout << std::format( "TFTP Server - {}\n", Tftp::Version::VersionInformation );
 
     boost::program_options::options_description optionsDescription{ "TFTP Server Options" };
 
     optionsDescription.add_options()
     (
-      "help",
-      "print this help screen"
+      "help,h",
+      "Print this help screen."
     )
     (
-      "server-root",
-      boost::program_options::value( &baseDir )->default_value(
-        std::filesystem::current_path()),
-      "Directory path, where the server shall have its root"
+      "server-root,r",
+      boost::program_options::value( &baseDir )->default_value( std::filesystem::current_path() ),
+      "Directory path, where the server shall have its root."
     );
 
     // Add TFTP options
@@ -161,7 +160,7 @@ int main( const int argc, char * argv[] )
     if ( 0U != variablesMap.count( "help" ) )
     {
       std::cout
-        << "TFTP Server\n"
+        << "TFTP Server.\n\n"
         << optionsDescription << "\n";
       return EXIT_FAILURE;
     }

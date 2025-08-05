@@ -1,0 +1,84 @@
+= tftp_server(1)
+Thomas Vogt
+
+== Name
+tftp_server - Trivial File Transfer Protocol (TFTP) server implementation
+
+== Synopsis
+
+*tftp_server*
+[-h|--help]
+[-r|--server-root _value_]
+[-p|--server-port _value_]
+[-t|--tftp-timeout _value_]
+[-d|--dally [{*true*|*false*}]]
+[-b|--block-size-option [_value_]]
+[-i|--timeout-option [_value_]]
+[-s|--handle-transfer-size-option]
+
+== Description
+The tftp_server is an implementation of a TFTP (Trivial File Transfer Protocol) server that allows clients to upload and download files using the TFTP protocol.
+TFTP is a simple protocol for transferring files that is lighter than FTP and operates on UDP port 69 by default.
+
+== Options
+
+// tag::options[]
+*-h|--help*::
+Print help screen.
+
+*-r|--server-root* _TFTP server root directory_::
+Directory path, where the server shall have its root.
+
+// tag::options[]
+*-p|--server-port* _UDP port_::
+UDP port where the TFTP server is listen on.
+If not given, the default port ``69`` is used.
+
+// tag::options[]
+*-t|--tftp-timeout* _timeout_::
+Default TFTP packet timeout in seconds, when no timeout option is negotiated.
+Defaults to 2 seconds.
+
+// tag::options[]
+*-d|--dally* [{*true*|*false*}]::
+TFTP dally option.
+Wait when the last _ACK_ has been sent to prevent aborts on packet transmission errors on last packets.
+If the parameter value is not provided, _true_ is assumed.
+
+// tag::options[]
+*-b|--block-size-option* [_block-size_]::
+Negotiates the TFTP block size for transfers.
+If the _block-size_ parameter is not provided, the block-size option is set to ``1486`` bytes.
+
+// tag::options[]
+*-i|--timeout-option* [_timeout_]::
+Handles the TFTP timeout option negotiation with the given timeout in seconds.
+If the _timeout_ parameter is not provided, the timeout option is set to ``2`` seconds.
+
+// tag::options[]
+*-s|--handle-transfer-size-option* [{*true*|*false*}]::
+Handles the TFTP transfer size option negotiation.
+
+== Protocol Support
+- Implements RFC 1350 (TFTP Protocol Version 2)
+- Supports both read (RRQ) and write (WRQ) requests
+- Uses UDP for data transfer
+- Supports binary mode transfers
+
+== Security
+- TFTP does not provide authentication or encryption
+- It is recommended to use this server only in trusted networks
+- The server should be configured with appropriate file permissions
+
+== Examples
+
+Basic server start:
+
+[source,shell script]
+----
+tftp_server
+----
+
+== See Also
+
+link:[tftp_client(1)]

@@ -1,0 +1,31 @@
+= TFTP Transfer Size Option
+
+== Overview
+The Transfer Size option is an extension to the TFTP protocol as defined in RFC 2349.
+It allows the sending and receiving sides of a TFTP transfer to negotiate and communicate the size of the file being transferred before the actual transfer begins.
+
+== Purpose
+- Enables the receiving side to know the expected file size in advance
+- Allows for better resource allocation and progress monitoring
+- Helps in detecting incomplete transfers
+- Improves transfer reliability
+
+== Usage
+The Transfer Size option is automatically handled by the TFTP implementation when supported by both client and server.
+The option is negotiated during the initial request phase of the TFTP transfer.
+
+== Compatibility
+- Follows RFC 2349 specifications for TFTP options
+- Backward compatible with TFTP implementations that don't support the transfer size option
+- Works alongside other TFTP options like timeout interval
+
+== Benefits
+. Pre-allocation: Receiving side can pre-allocate required storage space
+. Validation: Helps ensure complete file transfer
+. Progress Tracking: Enables accurate progress monitoring during transfer
+. Resource Management: Better memory and storage management
+
+== Notes
+- The transfer size is specified in bytes
+- The option is optional and must be negotiated between client and server
+- Both sides must agree to use the option for it to be effective

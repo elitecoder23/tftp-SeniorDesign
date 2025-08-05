@@ -51,6 +51,12 @@ set_property(
   APPEND
   PROPERTY DOC_PATHS ${CMAKE_CURRENT_SOURCE_DIR} )
 
+set_property(
+  DIRECTORY ${PROJECT_SOURCE_DIR}
+  APPEND
+  PROPERTY MAN_PATHS
+    ${CMAKE_CURRENT_SOURCE_DIR}/tftp_server.adoc )
+
 install(
   TARGETS tftp_server
   RUNTIME_DEPENDENCY_SET tftp-runtime-deps

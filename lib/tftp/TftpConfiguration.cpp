@@ -99,13 +99,13 @@ boost::program_options::options_description TftpConfiguration::options()
 
   options.add_options()
   (
-    "server-port",
+    "server-port,p",
     boost::program_options::value( &tftpServerPort )
       ->value_name( "port" ),
-    "UDP port, where the server is listen"
+    "UDP port where the TFTP server is listen on."
   )
   (
-    "tftp-timeout",
+    "tftp-timeout,t",
     boost::program_options::value< std::chrono::seconds::rep >()
       ->value_name( "timeout" )
       ->notifier(
@@ -113,15 +113,15 @@ boost::program_options::options_description TftpConfiguration::options()
         {
           tftpTimeout = std::chrono::seconds{ timeoutInt };
         } ),
-    "Default TFTP packet timeout in seconds, when no timeout option is negotiated"
+    "Default TFTP packet timeout in seconds, when no timeout option is negotiated."
   )
   (
-    "dally",
+    "dally,d",
     boost::program_options::value( &dally )
       ->implicit_value( true, "true" )
       ->value_name( "true|false" ),
-    "TFTP Dally Option"
-    " - Wait when last ACK has been sent to prevent aborts on last ACK miss"
+    "TFTP dally option.\n"
+    "Wait when last ACK has been sent to prevent aborts on last ACK miss."
   );
 
   return options;

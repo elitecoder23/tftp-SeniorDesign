@@ -79,7 +79,7 @@ namespace Tftp::Packets {
  *
  * - Option not found -> @p { true, {} }
  * - Option value empty or invalid -> @p { false, {} }
- * - Option value not in range of @p min and @p max -> @p { false, {} }
+ * - Option value not in the range of @p min and @p max -> @p { false, {} }
  *
  * @tparam IntT
  *   Unsigned Integer Type.

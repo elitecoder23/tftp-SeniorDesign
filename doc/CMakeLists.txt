@@ -10,5 +10,7 @@ if( NOT TARGET doc )
 endif()
 
 add_subdirectory( tftp_api_doc )
-add_subdirectory( tftp_internal_doc )
 add_subdirectory( tftp_dependencies )
+add_subdirectory( tftp_internal_doc )
+add_subdirectory( tftp_manpage )
+add_subdirectory( tftp_user_manual )

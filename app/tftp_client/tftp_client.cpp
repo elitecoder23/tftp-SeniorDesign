@@ -19,9 +19,10 @@
 #include <tftp/packets/PacketStatistic.hpp>
 
 #include <tftp/TftpConfiguration.hpp>
-#include <tftp/TftpOptionsConfiguration.hpp>
 #include <tftp/TftpException.hpp>
+#include <tftp/TftpOptionsConfiguration.hpp>
 #include <tftp/RequestTypeDescription.hpp>
+#include <tftp/Version.hpp>
 
 #include <helper/BoostAsioProgramOptions.hpp>
 
@@ -111,10 +112,12 @@ static Tftp::Clients::OperationPtr writeOperation(
   boost::asio::ip::address &address,
   boost::asio::io_context &ioContext );
 
-int main( int argc, char * argv[] )
+int main( const int argc, char * argv[] )
 {
   try
   {
+    std::cout << std::format( "TFTP Client - {}\n", Tftp::Version::VersionInformation );
+
     Tftp::RequestType requestType{};
     std::filesystem::path localFile;
     std::string remoteFile;
@@ -126,35 +129,33 @@ int main( int argc, char * argv[] )
 
     optionsDescription.add_options()
     (
-      "help",
-      "print this help screen"
+      "help,h",
+      "Print this help screen."
     )
     (
-      "request-type",
+      "request-type,r",
       boost::program_options::value( &requestType )->required(),
-      R"(the desired operation ("Read"|"Write"))"
+      R"(The desired TFTP operation ("Read"|"Write").)"
     )
     (
-      "local-file",
+      "local-file,l",
       boost::program_options::value( &localFile ),
-      "filename of local file"
+      "Filename of local file."
     )
     (
-      "remote-file",
+      "remote-file,r",
       boost::program_options::value( &remoteFile )->required(),
-      "filename of remote file"
+      "Filename of remote file."
     )
     (
-      "address",
+      "address,a",
       boost::program_options::value( &address )->required(),
-      "remote address"
+      "Remote address of the TFTP server."
     );
 
     // Add TFTP options
     optionsDescription.add( tftpConfiguration.options() );
     optionsDescription.add( tftpOptionsConfiguration.options() );
-
-    std::cout << "TFTP Client\n";
 
     boost::program_options::variables_map variablesMap;
     boost::program_options::store(
@@ -164,7 +165,7 @@ int main( int argc, char * argv[] )
     if ( 0U != variablesMap.count( "help" ) )
     {
       std::cout
-        << "Performs TFTP Client transfer\n"
+        << "Performs a TFTP client transfer.\n\n"
         << optionsDescription << "\n";
       return EXIT_FAILURE;
     }
@@ -292,7 +293,7 @@ static Tftp::Clients::OperationPtr readOperation(
     .dataHandler( std::make_shared< Tftp::Files::StreamFile >( Tftp::Files::File::Operation::Receive, localFile ) )
     .filename( remoteFile )
     .mode( Tftp::Packets::TransferMode::OCTET )
-    .remote( boost::asio::ip::udp::endpoint{address,tftpConfiguration.tftpServerPort } );
+    .remote( boost::asio::ip::udp::endpoint{ address,tftpConfiguration.tftpServerPort } );
 
   return tftpOperation;
 }
@@ -321,7 +322,7 @@ static  Tftp::Clients::OperationPtr writeOperation(
         std::filesystem::file_size( localFile ) ) )
     .filename( remoteFile )
     .mode( Tftp::Packets::TransferMode::OCTET )
-    .remote( boost::asio::ip::udp::endpoint{address,tftpConfiguration.tftpServerPort } );
+    .remote( boost::asio::ip::udp::endpoint{ address,tftpConfiguration.tftpServerPort } );
 
   return tftpOperation;
 }

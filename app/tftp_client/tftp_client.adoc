@@ -1,0 +1,102 @@
+= tftp_client(1)
+Thomas Vogt
+
+== Name
+tftp_client - A TFTP (Trivial File Transfer Protocol) client application
+
+== Synopsis
+
+*tftp_client*
+-r|--request-type {*Read*|*Write*}
+-r|--remote-file _value_
+-a|--address _value_
+[-h|--help]
+[-l|--local-file _value_]
+[-p|--server-port _value_]
+[-t|--tftp-timeout _value_]
+[-d|--dally [{*true*|*false*}]]
+[-b|--block-size-option [_value_]]
+[-i|--timeout-option [_value_]]
+[-s|--handle-transfer-size-option]
+
+== Description
+tftp_client is a command-line application that implements the client side of the TFTP protocol (RFC 1350).
+It allows for transferring files to and from a TFTP server.
+
+TFTP (Trivial File Transfer Protocol) is a simple protocol used for transferring files that operates over UDP.
+It is particularly useful in scenarios where a simple, lightweight file transfer mechanism is needed.
+
+== Options
+
+// tag::options[]
+*-h|--help*::
+Print help screen.
+
+// tag::options[]
+*-r|--request-type* {*Read*|*Write*}::
+The desired TFTP operation:
+- _"Read"_ TFTP Read Operation (_RRQ_)
+- _"Write"_ Write Operation (_WRQ_)
+
+// tag::options[]
+*-l|--local-file* _filename_::
+Filename of local file.
+If not provided, the remote filename is used.
+
+// tag::options[]
+*-r|--remote-file* _filename_::
+Filename of remote file.
+
+// tag::options[]
+*-a|--address* _IP address_::
+IP Address of the TFTP server where the client connects.
+
+// tag::options[]
+*-p|--server-port* _UDP port_::
+UDP port where the TFTP server is listen on.
+If not given, the default port ``69`` is used.
+
+// tag::options[]
+*-t|--tftp-timeout* _timeout_::
+Default TFTP packet timeout in seconds, when no timeout option is negotiated.
+Defaults to 2 seconds.
+
+// tag::options[]
+*-d|--dally* [{*true*|*false*}]::
+TFTP dally option.
+Wait when the last _ACK_ has been sent to prevent aborts on packet transmission errors on last packets.
+If the parameter value is not provided, _true_ is assumed.
+
+// tag::options[]
+*-b|--block-size-option* [_block-size_]::
+Negotiates the TFTP block size for transfers.
+If the _block-size_ parameter is not provided, the block-size option is set to ``1486`` bytes.
+
+// tag::options[]
+*-i|--timeout-option* [_timeout_]::
+Handles the TFTP timeout option negotiation with the given timeout in seconds.
+If the _timeout_ parameter is not provided, the timeout option is set to ``2`` seconds.
+
+// tag::options[]
+*-s|--handle-transfer-size-option* [{*true*|*false*}]::
+Handles the TFTP transfer size option negotiation.
+
+== Examples
+
+Download a file:
+
+[source,bash]
+----
+tftp_client --request-type Read -a 192.168.1.100 --remote-file remotefile.txt --local-file localfile.txt
+----
+
+Upload a file:
+
+[source,bash]
+----
+tftp_client --request-type Write -a 192.168.1.100 --remote-file remotefile.txt --local-file localfile.txt
+----
+
+== See Also
+
+link:[tftp_server(1)]

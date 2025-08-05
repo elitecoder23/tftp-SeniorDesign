@@ -72,14 +72,14 @@ boost::program_options::options_description TftpOptionsConfiguration::options()
 
   options.add_options()
   (
-    "block-size-option",
+    "block-size-option,b",
     boost::program_options::value( &blockSizeOption )
       ->value_name( "block-size" )
       ->implicit_value( Packets::BlockSizeOptionDefault ),
-    "Negotiates the TFTP block size for transfers"
+    "Negotiates the TFTP block size for transfers."
   )
   (
-    "timeout-option",
+    "timeout-option,i",
     boost::program_options::value< std::chrono::seconds::rep >()
       ->value_name( "timeout" )
       ->implicit_value( DefaultTftpReceiveTimeout.count() )
@@ -88,14 +88,14 @@ boost::program_options::options_description TftpOptionsConfiguration::options()
           {
             timeoutOption = std::chrono::seconds{ timeoutOptionInt };
           } ),
-    "Handles the TFTP timeout option negotiation with the given timeout in seconds"
+    "Handles the TFTP timeout option negotiation with the given timeout in seconds."
   )
   (
-    "handle-transfer-size-option",
+    "handle-transfer-size-option,s",
     boost::program_options::value( &handleTransferSizeOption )
       ->implicit_value( true, "true" )
       ->value_name( "true|false" ),
-    "Handles the TFTP transfer size option negotiation"
+    "Handles the TFTP transfer size option negotiation."
   );
 
   return options;

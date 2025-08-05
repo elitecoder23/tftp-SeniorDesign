@@ -1,0 +1,29 @@
+= TFTP User Manual
+author Thomas Vogt
+email thomas@thomas-vogt.de
+:doctype: book
+:sectnums:
+:toc:
+
+[bibliography]
+== Referenced Documents
+* [[[rfc_1350, RFC 1350]]] RFC 1350 The TFTP Protocol (Revision 2): http://tools.ietf.org/html/rfc1350[]
+* [[[rfc_2347, RFC 2347]]] RFC 2347 TFTP Option Extension: http://tools.ietf.org/html/rfc2347[]
+* [[[rfc_2348, RFC 2348]]] RFC 2348 TFTP Blocksize Option: http://tools.ietf.org/html/rfc2348[]
+* [[[rfc_2349, RFC 2349]]] RFC 2349 TFTP Timeout Interval and Transfer Size Options: http://tools.ietf.org/html/rfc2349[]
+
+== Introduction
+TFTP (Trivial File Transfer Protocol) is a simple file transfer protocol that allows clients to send and receive files from a server.
+Despite its simplicity, TFTP remains widely used in scenarios where basic file transfer functionality is required, particularly in network booting, firmware updates, and configuration file transfers.
+
+[discrete]
+=== Basic TFTP Characteristics
+* **Connectionless Protocol**: TFTP operates over UDP (User Datagram Protocol)
+* **Simple Design**: No authentication or complex handshaking mechanisms
+* **Fixed Block Size**: Traditional TFTP uses 512-byte data blocks
+* **Basic Operations**: Supports two main operations:
+  ** READ (file download from server)
+  ** WRITE (file upload to server)
+
+include::tftp_operations.adoc[leveloffset=+1]
+include::tftp_options.adoc[leveloffset=+1]

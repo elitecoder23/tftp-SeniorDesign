@@ -1,0 +1,37 @@
+= TFTP Blocksize Option
+
+== Overview
+The TFTP blocksize option is an extension to the TFTP protocol defined in RFC 2348.
+It allows TFTP clients and servers to negotiate a block size different from the default 512 bytes for data transfers.
+
+== Purpose
+- Allows for more efficient transfers by using larger block sizes
+- Helps optimise network performance
+- Reduces the number of acknowledgement packets needed for large file transfers
+
+== Technical Details
+- The option is negotiated during the initial request (READ or WRITE)
+- Default block size if not specified: 512 bytes
+- The option is specified using the keyword "blocksize"
+- The value must be specified as a string representing a decimal number
+- Valid range: typically between 8 and 65464 bytes (implementation dependent)
+
+== Implementation Notes
+- The option is optional and must be negotiated between client and server
+- Both parties must agree on the block size
+- If the server does not support the requested block size, it may reject the option or propose a different value
+- The negotiated block size remains in effect for the entire transfer session
+
+== Benefits
+. Improved transfer efficiency for larger files
+. Reduced protocol overhead
+. Better network utilisation
+. Faster transfer speeds when using larger block sizes on reliable networks
+
+== Limitations
+- Both client and server must support the option
+- Network conditions should be considered when choosing block size
+- Very large block sizes may cause fragmentation at the IP level
+- Must be within the implementation's supported range
+
+This functionality is implemented according to RFC 2348 specifications and is one of the supported TFTP extensions in this implementation.
