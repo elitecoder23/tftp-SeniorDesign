@@ -67,7 +67,7 @@ static bool optionNegotiation( const Tftp::Packets::Options &serverOptions );
  * @param[in] ioContext
  *   IO Context
  * @param[in] transferStatus
- *   Transfer Status
+ *   Transfer Status.
  **/
 static void operationCompleted( boost::asio::io_context &ioContext, Tftp::TransferStatus transferStatus );
 
@@ -116,11 +116,11 @@ int main( int argc, char * argv[] )
   try
   {
     Tftp::RequestType requestType{};
-    std::filesystem::path localFile{};
-    std::string remoteFile{};
-    boost::asio::ip::address address{};
-    Tftp::TftpConfiguration tftpConfiguration{};
-    Tftp::TftpOptionsConfiguration tftpOptionsConfiguration{};
+    std::filesystem::path localFile;
+    std::string remoteFile;
+    boost::asio::ip::address address;
+    Tftp::TftpConfiguration tftpConfiguration;
+    Tftp::TftpOptionsConfiguration tftpOptionsConfiguration;
 
     boost::program_options::options_description optionsDescription{ "TFTP Client Options" };
 
@@ -132,7 +132,7 @@ int main( int argc, char * argv[] )
     (
       "request-type",
       boost::program_options::value( &requestType )->required(),
-      R"(the desired operation ("Read"|"Write" ))"
+      R"(the desired operation ("Read"|"Write"))"
     )
     (
       "local-file",
@@ -150,7 +150,7 @@ int main( int argc, char * argv[] )
       "remote address"
     );
 
-    // Add common TFTP options
+    // Add TFTP options
     optionsDescription.add( tftpConfiguration.options() );
     optionsDescription.add( tftpOptionsConfiguration.options() );
 
@@ -224,7 +224,6 @@ int main( int argc, char * argv[] )
     // start request
     tftpOperation->request();
 
-    // Start client and its operations
     ioContext.run();
 
     // Print Packet Statistic
@@ -236,20 +235,21 @@ int main( int argc, char * argv[] )
   }
   catch ( const boost::program_options::error &e )
   {
-    std::cerr
-      << "Error parsing command line: " << e.what() << "\n"
-      << "Enter " << argv[0]
-      << " --help for command line description\n";
+    std::cerr << std::format(
+      "Error parsing command line: {}\n"
+      "Enter '{} --help' for command line description.\n",
+      e.what(),
+      argv[ 0 ] );
     return EXIT_FAILURE;
   }
   catch ( const boost::exception &e )
   {
-    std::cerr << "Error: " << boost::diagnostic_information( e ) << "\n";
+    std::cerr << std::format( "Error: {}\n", boost::diagnostic_information( e ) );
     return EXIT_FAILURE;
   }
   catch ( const std::exception &e )
   {
-    std::cerr << "Error: " << boost::diagnostic_information( e ) << "\n";
+    std::cerr << std::format( "Error: {}\n", boost::diagnostic_information( e ) );
     return EXIT_FAILURE;
   }
   catch ( ... )

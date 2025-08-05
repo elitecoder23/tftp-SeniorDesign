@@ -107,7 +107,7 @@ static void receiveFile(
  * @brief Operation Completed callback
  *
  * @param[in] transferStatus
- *   Transfer status.
+ *   Transfer Status.
  **/
 static void operationCompleted( Tftp::TransferStatus transferStatus );
 
@@ -126,7 +126,7 @@ static Tftp::Servers::ServerPtr server;
 //! TFTP Server Operation
 static Tftp::Servers::OperationPtr serverOperation;
 
-int main( int argc, char * argv[] )
+int main( const int argc, char * argv[] )
 {
   try
   {
@@ -209,20 +209,21 @@ int main( int argc, char * argv[] )
   }
   catch ( const boost::program_options::error &e )
   {
-    std::cerr
-      << "Error parsing command line: " << e.what() << "\n"
-      << "Enter " << argv[0]
-      << " --help for command line description\n";
+    std::cerr << std::format(
+      "Error parsing command line: {}\n"
+      "Enter '{} --help' for command line description.\n",
+      e.what(),
+      argv[ 0 ] );
     return EXIT_FAILURE;
   }
   catch ( const boost::exception &e )
   {
-    std::cerr << "Error: " << boost::diagnostic_information( e ) << "\n";
+    std::cerr << std::format( "Error: {}\n", boost::diagnostic_information( e ) );
     return EXIT_FAILURE;
   }
   catch ( const std::exception &e )
   {
-    std::cerr << "Error: " << boost::diagnostic_information( e ) << "\n";
+    std::cerr << std::format( "Error: {}\n", boost::diagnostic_information( e ) );
     return EXIT_FAILURE;
   }
   catch ( ... )
