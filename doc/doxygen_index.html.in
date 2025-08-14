@@ -1,4 +1,4 @@
-<html>
+<html lang="en" >
   <head>
     <title>@DOXYGEN_PROJECT_NAME@</title>
     <meta http-equiv="refresh" content="0; URL=@INDEX_HTML_OUTPUT_DIR@/index.html" >

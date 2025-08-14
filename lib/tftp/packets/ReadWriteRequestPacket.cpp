@@ -47,10 +47,9 @@ std::string_view ReadWriteRequestPacket::decodeMode( const TransferMode mode )
 
 TransferMode ReadWriteRequestPacket::decodeMode( std::string_view mode )
 {
-  //! @todo check implementation of transform
-  std::string upperMode{ mode };
+  std::string upperMode;
 
-  std::transform( upperMode.begin(), upperMode.end(), upperMode.begin(), toupper );
+  std::ranges::transform( mode, std::back_inserter( upperMode ), toupper );
 
   if ( upperMode == "OCTET" )
   {
@@ -108,7 +107,7 @@ void ReadWriteRequestPacket::options( Options options )
 ReadWriteRequestPacket::operator std::string() const
 {
   return std::format(
-    "{}: FILE: \"{}\" MODE: \"{}\" OPT: \"{}\"",
+    "{}: FILE: '{}' MODE: '{}' OPT: '{}'",
     Packet::operator std::string(),
     filenameV,
     decodeMode( modeV ),
@@ -220,18 +219,18 @@ Helper::RawData ReadWriteRequestPacket::encode() const
 
   // encode filename
   auto rawFilename{ Helper::RawData_asRawData( filenameV  ) };
-  auto filenameEnd{ std::copy( rawFilename.begin(), rawFilename.end(), rawSpan.begin() ) };
+  auto filenameEnd{ std::ranges::copy( rawFilename, rawSpan.begin() ).out };
   *filenameEnd = std::byte{ 0 };
   ++filenameEnd;
 
   // encode transfer mode
   auto rawMode{ Helper::RawData_asRawData( mode ) };
-  auto modeEnd{ std::copy( rawMode.begin(), rawMode.end(), filenameEnd ) };
+  auto modeEnd{ std::ranges::copy( rawMode, filenameEnd ).out };
   *modeEnd = std::byte{ 0 };
   ++modeEnd;
 
   // encode options
-  std::copy( rawOptions.begin(), rawOptions.end(), modeEnd );
+  std::ranges::copy( rawOptions, modeEnd );
 
   return rawPacket;
 }

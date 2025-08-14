@@ -107,7 +107,7 @@ void WriteOperationImpl::request()
   }
 }
 
-void WriteOperationImpl::gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage )
+void WriteOperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::string errorMessage )
 {
   OperationImpl::gracefulAbort( errorCode, std::move( errorMessage ) );
 }
@@ -170,19 +170,19 @@ WriteOperation& WriteOperationImpl::filename( std::string filename )
   return *this;
 }
 
-WriteOperation& WriteOperationImpl::mode( Packets::TransferMode mode )
+WriteOperation& WriteOperationImpl::mode( const Packets::TransferMode mode )
 {
   modeV = mode;
   return *this;
 }
 
-WriteOperation &WriteOperationImpl::remote( boost::asio::ip::udp::endpoint remote )
+WriteOperation &WriteOperationImpl::remote( const boost::asio::ip::udp::endpoint remote )
 {
   OperationImpl::remote( remote );
   return *this;
 }
 
-WriteOperation &WriteOperationImpl::local( boost::asio::ip::udp::endpoint local )
+WriteOperation &WriteOperationImpl::local( const boost::asio::ip::udp::endpoint local )
 {
   OperationImpl::local( local );
   return *this;
@@ -199,7 +199,7 @@ void WriteOperationImpl::finished( const TransferStatus status, Packets::ErrorIn
 
 void WriteOperationImpl::sendData()
 {
-  lastTransmittedBlockNumber++;
+  ++lastTransmittedBlockNumber;
 
   SPDLOG_TRACE( "Send Data #{}", static_cast< uint16_t >( lastTransmittedBlockNumber ) );
 
@@ -210,7 +210,7 @@ void WriteOperationImpl::sendData()
     lastDataPacketTransmitted = true;
   }
 
-  // send packet
+  // send the packet
   send( data );
 }
 

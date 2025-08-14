@@ -54,7 +54,7 @@ class TFTP_EXPORT CommunicationException : public TftpException
 };
 
 //! TFTP Option Negotiation Exception.
-class TFTP_EXPORT OptionNegotiationException: public TftpException
+class TFTP_EXPORT OptionNegotiationException : public TftpException
 {
   public:
     //! @copydoc TftpException::what() const
@@ -65,7 +65,7 @@ class TFTP_EXPORT OptionNegotiationException: public TftpException
 };
 
 //! TFTP Error Packet Received Exception.
-class TFTP_EXPORT ErrorReceivedException: public TftpException
+class TFTP_EXPORT ErrorReceivedException : public TftpException
 {
   public:
     //! @copydoc TftpException::what() const

@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -23,8 +22,7 @@
 namespace Tftp::Packets {
 
 //! Description of TFTP Error Codes (ErrorCode)
-class TFTP_EXPORT PacketTypeDescription :
-  public Helper::Description< PacketTypeDescription, PacketType >
+class TFTP_EXPORT PacketTypeDescription final : public Helper::Description< PacketTypeDescription, PacketType >
 {
   public:
     //! Initialises the Instance
@@ -41,8 +39,7 @@ class TFTP_EXPORT PacketTypeDescription :
  *
  * @return @p stream for chaining.
  **/
-TFTP_EXPORT std::ostream&
-operator<<( std::ostream& stream, PacketType packetType );
+TFTP_EXPORT std::ostream& operator<<( std::ostream& stream, PacketType packetType );
 
 }
 

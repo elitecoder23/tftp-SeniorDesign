@@ -50,7 +50,7 @@ class TFTP_EXPORT DataPacket final : public Packet
      * @param[in] data
      *   The data within the packet.
      **/
-    DataPacket( BlockNumber blockNumber = {}, Data data = {} ) noexcept;
+    explicit DataPacket( BlockNumber blockNumber = {}, Data data = {} ) noexcept;
 
     /**
      * @brief Generates a TFTP Data packet from a data buffer.

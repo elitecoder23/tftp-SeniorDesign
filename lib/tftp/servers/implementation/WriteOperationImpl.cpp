@@ -202,7 +202,7 @@ void WriteOperationImpl::start()
   }
 }
 
-void WriteOperationImpl::gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage )
+void WriteOperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::string errorMessage )
 {
   OperationImpl::gracefulAbort( errorCode, std::move( errorMessage ) );
 }

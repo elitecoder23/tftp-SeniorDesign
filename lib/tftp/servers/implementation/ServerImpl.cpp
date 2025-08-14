@@ -400,7 +400,7 @@ Packets::TftpOptions ServerImpl::tftpOptions( Packets::Options &clientOptions ) 
 {
   Packets::TftpOptions decodedOptions;
 
-  // check block size option - if set use it
+  // check the block size option - if set, use it
   const auto [ blockSizeValid, blockSize ] =
     Packets::Options_getOption< uint16_t >(
       clientOptions,
@@ -413,7 +413,7 @@ Packets::TftpOptions ServerImpl::tftpOptions( Packets::Options &clientOptions ) 
   // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
   clientOptions.erase( std::string{ Packets::TftpOptions_name( Packets::KnownOptions::BlockSize ) } );
 
-  // check timeout option - if set use it
+  // check the timeout option - if set, use it
   const auto [ timeoutValid, timeout ] =
     Packets::Options_getOption< uint8_t >(
       clientOptions,

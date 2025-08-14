@@ -100,7 +100,7 @@ const Packets::ErrorInfo& OperationImpl::errorInfo() const
   return errorInfoV;
 }
 
-void OperationImpl::tftpTimeout( std::chrono::seconds timeout )
+void OperationImpl::tftpTimeout( const std::chrono::seconds timeout )
 {
   receiveTimeoutV = timeout;
 }

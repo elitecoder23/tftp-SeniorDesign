@@ -117,7 +117,7 @@ void ReadOperationImpl::start()
       // initialise server options with additional negotiated options
       Packets::Options serverOptions{ additionalNegotiatedOptionsV };
 
-      // check block size option - if set use it
+      // check for the block size option - if set, use it
       if ( optionsConfigurationV.blockSizeOption && clientOptionsV.blockSize )
       {
         transmitDataSize = std::min( *clientOptionsV.blockSize, *optionsConfigurationV.blockSizeOption );
@@ -128,14 +128,14 @@ void ReadOperationImpl::start()
           std::to_string( transmitDataSize ) );
       }
 
-      // check timeout option - if set use it
+      // check for the timeout option - if set, use it
       if ( optionsConfigurationV.timeoutOption
         && clientOptionsV.timeout
         && ( std::chrono::seconds{ *clientOptionsV.timeout } <= *optionsConfigurationV.timeoutOption ) )
       {
         receiveTimeout( std::chrono::seconds{ *clientOptionsV.timeout } );
 
-        // respond with timeout option set
+        // respond with the timeout option set
         serverOptions.try_emplace(
           std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) },
           std::to_string( *clientOptionsV.timeout ) );
@@ -157,7 +157,7 @@ void ReadOperationImpl::start()
           return;
         }
 
-        if ( auto newTransferSize{ dataHandlerV->requestedTransferSize() }; newTransferSize )
+        if ( const auto newTransferSize{ dataHandlerV->requestedTransferSize() }; newTransferSize )
         {
           // respond option string
           serverOptions.try_emplace(
@@ -166,8 +166,8 @@ void ReadOperationImpl::start()
         }
       }
 
-      // if transfer size option is the only option requested, but the handler
-      // does not supply it -> empty OACK is not sent but data directly
+      // if the transfer size option is the only option requested, but the handler does not supply it ->
+      // empty OACK is not sent but data directly
       if ( !serverOptions.empty() )
       {
         // Send OACK
@@ -195,7 +195,7 @@ void ReadOperationImpl::start()
   }
 }
 
-void ReadOperationImpl::gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage )
+void ReadOperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::string errorMessage )
 {
   OperationImpl::gracefulAbort( errorCode, std::move( errorMessage ) );
 }

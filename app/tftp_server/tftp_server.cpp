@@ -310,7 +310,7 @@ static void transmitFile(
   }
 
   // initiate TFTP operation
-  auto readOperation{ server->readOperation() };
+  const auto readOperation{ server->readOperation() };
 
   readOperation
     ->tftpTimeout( tftpConfiguration.tftpTimeout )
@@ -351,7 +351,7 @@ static void receiveFile(
   }
 
   // initiate TFTP operation
-  auto writeOperation{ server->writeOperation() };
+  const auto writeOperation{ server->writeOperation() };
 
   writeOperation
     ->tftpTimeout( tftpConfiguration.tftpTimeout )

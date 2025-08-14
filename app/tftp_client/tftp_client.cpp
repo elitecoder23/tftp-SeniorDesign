@@ -73,43 +73,57 @@ static bool optionNegotiation( const Tftp::Packets::Options &serverOptions );
 static void operationCompleted( boost::asio::io_context &ioContext, Tftp::TransferStatus transferStatus );
 
 /**
- * @brief Initiates an executes the TFTP Client Read Operation.
+ * @brief Initiates and executes the TFTP Client Read Operation.
  *
- * @param tftpClient
- * @param tftpConfiguration
- * @param tftpOptionsConfiguration
- * @param localFile
- * @param remoteFile
- * @param address
- * @param ioContext
+ * @param[in] tftpClient
+ *   TFTP Client
+ * @param[in] tftpConfiguration
+ *   TFTP Configuration
+ * @param[in] tftpOptionsConfiguration
+ *   TFTP Options Configuration
+ * @param[in] localFile
+ *   Local Filename
+ * @param[in] remoteFile
+ *   Remote Filename
+ * @param[in] address
+ *   Remote IP-Address
+ * @param[in] ioContext
+ *   ASIO IO-Context
  **/
 static Tftp::Clients::OperationPtr readOperation(
-  Tftp::Clients::ClientPtr &tftpClient,
-  Tftp::TftpConfiguration &tftpConfiguration,
-  Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
-  std::filesystem::path &localFile,
-  std::string &remoteFile,
-  boost::asio::ip::address &address,
+  const Tftp::Clients::ClientPtr &tftpClient,
+  const Tftp::TftpConfiguration &tftpConfiguration,
+  const Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
+  const std::filesystem::path &localFile,
+  const std::string &remoteFile,
+  const boost::asio::ip::address &address,
   boost::asio::io_context &ioContext );
 
 /**
- * @brief Initiates an executes the TFTP Client Read Operation.
+ * @brief Initiates and executes the TFTP Client Read Operation.
  *
- * @param tftpClient
- * @param tftpConfiguration
- * @param tftpOptionsConfiguration
- * @param localFile
- * @param remoteFile
- * @param address
- * @param ioContext
+* @param[in] tftpClient
+ *   TFTP Client
+ * @param[in] tftpConfiguration
+ *   TFTP Configuration
+ * @param[in] tftpOptionsConfiguration
+ *   TFTP Options Configuration
+ * @param[in] localFile
+ *   Local Filename
+ * @param[in] remoteFile
+ *   Remote Filename
+ * @param[in] address
+ *   Remote IP-Address
+ * @param[in] ioContext
+ *   ASIO IO-Context
  **/
 static Tftp::Clients::OperationPtr writeOperation(
-  Tftp::Clients::ClientPtr &tftpClient,
-  Tftp::TftpConfiguration &tftpConfiguration,
-  Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
-  std::filesystem::path &localFile,
-  std::string &remoteFile,
-  boost::asio::ip::address &address,
+  const Tftp::Clients::ClientPtr &tftpClient,
+  const Tftp::TftpConfiguration &tftpConfiguration,
+  const Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
+  const std::filesystem::path &localFile,
+  const std::string &remoteFile,
+  const boost::asio::ip::address &address,
   boost::asio::io_context &ioContext );
 
 int main( const int argc, char * argv[] )
@@ -273,12 +287,12 @@ static void operationCompleted(
 }
 
 static Tftp::Clients::OperationPtr readOperation(
-  Tftp::Clients::ClientPtr &tftpClient,
-  Tftp::TftpConfiguration &tftpConfiguration,
-  Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
-  std::filesystem::path &localFile,
-  std::string &remoteFile,
-  boost::asio::ip::address &address,
+  const Tftp::Clients::ClientPtr &tftpClient,
+  const Tftp::TftpConfiguration &tftpConfiguration,
+  const Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
+  const std::filesystem::path &localFile,
+  const std::string &remoteFile,
+  const boost::asio::ip::address &address,
   boost::asio::io_context &ioContext )
 {
   auto tftpOperation{ tftpClient->readOperation() };
@@ -299,12 +313,12 @@ static Tftp::Clients::OperationPtr readOperation(
 }
 
 static  Tftp::Clients::OperationPtr writeOperation(
-  Tftp::Clients::ClientPtr &tftpClient,
-  Tftp::TftpConfiguration &tftpConfiguration,
-  Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
-  std::filesystem::path &localFile,
-  std::string &remoteFile,
-  boost::asio::ip::address &address,
+  const Tftp::Clients::ClientPtr &tftpClient,
+  const Tftp::TftpConfiguration &tftpConfiguration,
+  const Tftp::TftpOptionsConfiguration &tftpOptionsConfiguration,
+  const std::filesystem::path &localFile,
+  const std::string &remoteFile,
+  const boost::asio::ip::address &address,
   boost::asio::io_context &ioContext )
 {
   auto tftpOperation{ tftpClient->writeOperation() };

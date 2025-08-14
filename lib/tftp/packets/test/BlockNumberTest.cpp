@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -17,9 +16,9 @@
 
 namespace Tftp::Packets {
 
-BOOST_AUTO_TEST_SUITE( TftpTest)
-BOOST_AUTO_TEST_SUITE( PacketsTest)
-BOOST_AUTO_TEST_SUITE( TftpBlockNumber)
+BOOST_AUTO_TEST_SUITE( TftpTest )
+BOOST_AUTO_TEST_SUITE( PacketsTest )
+BOOST_AUTO_TEST_SUITE( TftpBlockNumber )
 
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor1 )
@@ -30,8 +29,8 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 //! Constructor test
 BOOST_AUTO_TEST_CASE( constructor2 )
 {
-  BOOST_CHECK( 1 == BlockNumber{ 1});
-  BOOST_CHECK( 0xFFFFU == BlockNumber( 0xFFFFU));
+  BOOST_CHECK( 1 == BlockNumber{ 1 } );
+  BOOST_CHECK( 0xFFFFU == BlockNumber( 0xFFFFU ) );
 }
 
 //! increment test

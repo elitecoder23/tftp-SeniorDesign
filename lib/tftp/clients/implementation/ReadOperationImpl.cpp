@@ -22,7 +22,6 @@
 #include <tftp/ReceiveDataHandler.hpp>
 #include <tftp/TftpException.hpp>
 
-#include <helper/Dump.hpp>
 #include <helper/Exception.hpp>
 
 #include <spdlog/spdlog.h>
@@ -84,7 +83,7 @@ void ReadOperationImpl::request()
       options.try_emplace( std::string{ Packets::TftpOptions_name( Packets::KnownOptions::TransferSize ) }, "0" );
     }
 
-    // send read request packet
+    // send the read request packet
     sendFirst( Packets::ReadRequestPacket{ filenameV, modeV, std::move( options ) } );
 
     // wait for answers
@@ -125,7 +124,7 @@ ReadOperation& ReadOperationImpl::tftpRetries( const uint16_t retries )
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::dally( bool dally )
+ReadOperation& ReadOperationImpl::dally( const bool dally )
 {
   dallyV = dally;
   return *this;
@@ -175,19 +174,19 @@ ReadOperation& ReadOperationImpl::filename( std::string filename )
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::mode( Packets::TransferMode mode )
+ReadOperation& ReadOperationImpl::mode( const Packets::TransferMode mode )
 {
   modeV = mode;
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::remote( boost::asio::ip::udp::endpoint remote )
+ReadOperation& ReadOperationImpl::remote( const boost::asio::ip::udp::endpoint remote )
 {
   OperationImpl::remote( remote );
   return *this;
 }
 
-ReadOperation& ReadOperationImpl::local( boost::asio::ip::udp::endpoint local )
+ReadOperation& ReadOperationImpl::local( const boost::asio::ip::udp::endpoint local )
 {
   OperationImpl::local( local );
   return *this;
@@ -268,15 +267,12 @@ void ReadOperationImpl::dataPacket(
   }
 
   // if the block number is 1 -> DATA of write without Options
-  if ( ( dataPacket.blockNumber() == static_cast< uint16_t >( 1U ) )
-    && ( !oackReceived ) )
+  if ( ( dataPacket.blockNumber() == static_cast< uint16_t >( 1U ) ) && ( !oackReceived ) )
   {
-    // Call Option Negotiation Handler with empty options list.
+    // Call Option Negotiation Handler with an empty options list.
     // If no Handler is registered - Continue Operation.
-    // If options negotiation is aborted by Option Negotiation Handler - Abort
-    //   Operation
-    Packets::Options options{};
-    if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( options ) )
+    // If options negotiation is aborted by Option Negotiation Handler - Abort Operation
+    if ( Packets::Options options; optionNegotiationHandlerV && !optionNegotiationHandlerV( options ) )
     {
       SPDLOG_ERROR( "Option Negotiation failed" );
 
@@ -293,7 +289,7 @@ void ReadOperationImpl::dataPacket(
   dataHandlerV->receivedData( dataPacket.data() );
 
   // increment received block number
-  lastReceivedBlockNumber++;
+  ++lastReceivedBlockNumber;
 
   // send ACK
   send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );

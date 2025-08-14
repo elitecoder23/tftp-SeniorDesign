@@ -23,7 +23,7 @@
 
 namespace Tftp::Packets {
 
-DataPacket::DataPacket( BlockNumber blockNumber, Data data ) noexcept :
+DataPacket::DataPacket( const BlockNumber blockNumber, Data data ) noexcept :
   Packet{ PacketType::Data },
   blockNumberV{ blockNumber },
   dataV{ std::move( data ) }

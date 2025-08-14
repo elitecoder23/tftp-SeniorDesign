@@ -2,9 +2,8 @@
 /**
  * @file
  * @copyright
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+ * If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @author Thomas Vogt, thomas@thomas-vogt.de
  *
@@ -23,10 +22,8 @@ namespace Tftp::Packets {
 /**
  * @brief Block Number in TFTP Data and Acknowledgement %Packet.
  *
- * Block numbers are used within the TFTP Data and TFTP Acknowledgement
- * packet.
- * A block number is an 16-Bit integer, which has a special meaning of the
- * 0-value.
+ * Block numbers are used within the TFTP Data and TFTP Acknowledgement packet.
+ * A block number is a 16-Bit integer, which has a special meaning of the 0-value.
  * This 0-value handling is implemented within this class.
  *
  * @sa DataPacket
@@ -59,14 +56,14 @@ class TFTP_EXPORT BlockNumber final
     [[nodiscard]] uint16_t next() const;
 
     /**
-     * @brief Cast operator of the block number class to an uint16_t.
+     * @brief Casting-operator of the block number class to an uint16_t.
      *
      * @return The block number as uint16_t.
      **/
     explicit operator uint16_t() const;
 
     /**
-     * @brief Cast operator of the block number class to an uint16_t&.
+     * @brief Casting-operator of the block number class to an uint16_t&.
      *
      * This operator allows direct manipulation of the underlying base type.
      *
@@ -99,7 +96,7 @@ class TFTP_EXPORT BlockNumber final
     BlockNumber operator++( int );
 
     /**
-     * @brief Un-equality Comparison to Block Number.
+     * @brief Equality Comparison to Block Number.
      *
      * @param[in] rhs
      *   The block number to compare to.

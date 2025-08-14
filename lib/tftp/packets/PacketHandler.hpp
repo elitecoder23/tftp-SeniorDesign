@@ -24,7 +24,7 @@ namespace Tftp::Packets {
 /**
  * @brief TFTP Packet Handler
  *
- * Interface, which must be implemented by an TFTP packet Handler.
+ * Interface, which must be implemented by a TFTP packet Handler.
  *
  * The packet handlers are used internally.
  * A user of the TFTP library doesn't need to derive from this class.
@@ -64,7 +64,7 @@ class TFTP_EXPORT PacketHandler
      **/
     virtual void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ReadRequestPacket &readRequestPacket ) = 0;
+      const ReadRequestPacket &readRequestPacket ) = 0;
 
     /**
      * @brief Handler for TFTP Write Request Packets (WRQ).
@@ -76,7 +76,7 @@ class TFTP_EXPORT PacketHandler
      **/
     virtual void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::WriteRequestPacket &writeRequestPacket ) = 0;
+      const WriteRequestPacket &writeRequestPacket ) = 0;
 
     /**
      * @brief Handler for TFTP Data Packets (DATA).
@@ -86,9 +86,7 @@ class TFTP_EXPORT PacketHandler
      * @param[in] dataPacket
      *   Data packet.
      **/
-    virtual void dataPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      const Packets::DataPacket &dataPacket ) = 0;
+    virtual void dataPacket( const boost::asio::ip::udp::endpoint &remote, const DataPacket &dataPacket ) = 0;
 
     /**
      * @brief Handler for TFTP Acknowledgement Packets (ACK).
@@ -100,7 +98,7 @@ class TFTP_EXPORT PacketHandler
      **/
     virtual void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::AcknowledgementPacket &acknowledgementPacket ) = 0;
+      const AcknowledgementPacket &acknowledgementPacket ) = 0;
 
     /**
      * @brief Handler for TFTP Error Packets (ERR).
@@ -110,9 +108,7 @@ class TFTP_EXPORT PacketHandler
      * @param[in] errorPacket
      *   Error packet.
      **/
-    virtual void errorPacket(
-      const boost::asio::ip::udp::endpoint &remote,
-      const Packets::ErrorPacket &errorPacket ) = 0;
+    virtual void errorPacket( const boost::asio::ip::udp::endpoint &remote, const ErrorPacket &errorPacket ) = 0;
 
     /**
      * @brief Handler for TFTP Option Acknowledgement Packets (RRQ).
@@ -124,7 +120,7 @@ class TFTP_EXPORT PacketHandler
      **/
     virtual void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
-      const Packets::OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) = 0;
+      const OptionsAcknowledgementPacket &optionsAcknowledgementPacket ) = 0;
 
     /**
      * @brief Handler for Invalid TFTP Packets.

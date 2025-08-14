@@ -32,7 +32,7 @@ namespace Tftp::Servers {
  * Waits on the specified port for a valid TFTP request and calls the appropriate call-back, which has to handle the
  * request.
  *
- * If not expected packets or invalid packets are received an error is sent back to the sender.
+ * If no expected packets or invalid packets are received, an error is sent back to the sender.
  *
  * Valid requests are TFTP Read Request (RRQ) and TFTP Write Request (WRQ)
  **/
@@ -40,7 +40,7 @@ class TFTP_EXPORT Server
 {
   public:
     /**
-     * @brief Default UDP Endpoint, Where the TFTP %Server Listens.
+     * @brief Default UDP Endpoint, Where the TFTP %Server Listens for Requests.
      *
      * The default local end-point where the TFTP server is listening to is the default TFTP Port any IP address.
      **/
@@ -72,8 +72,7 @@ class TFTP_EXPORT Server
      *
      * @return *this for chaining.
      **/
-    virtual Server& requestHandler(
-      ReceivedTftpRequestHandler handler ) = 0;
+    virtual Server& requestHandler( ReceivedTftpRequestHandler handler ) = 0;
 
     /**
      * @brief Set the Address where the TFTP server should listen to.
@@ -92,7 +91,7 @@ class TFTP_EXPORT Server
     /**
      * @brief Returns the effective local endpoint.
      *
-     * Is used to determine the local endpoint, when an automatic local endpoint is selected.
+     * Is used to determine the local endpoint when an automatic local endpoint is selected.
      *
      * @note
      * The return value is valid after calling @ref start(), when the port is bound, actually.
@@ -207,7 +206,7 @@ class TFTP_EXPORT Server
      * @brief Creates a TFTP Server Operation (TFTP WRQ), which receives data from a TFTP Client and weites them to
      *   disk.
      *
-     * Data is received form the client and written to @p dataHandler.
+     * Data is received from the client and written to @p dataHandler.
      *
      * @return TFTP server write operation.
      **/

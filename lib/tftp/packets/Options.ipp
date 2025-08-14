@@ -23,18 +23,20 @@ std::pair< bool, std::optional< IntT > > Options_getOption(
   const IntT max )
 {
   // TODO remove std::string generation if P2077R3 is implemented within stdlibc++ (GCC)
-  auto option{ options.extract( std::string{ name } ) };
+  const auto option{ options.extract( std::string{ name } ) };
 
-  // option not set
+  // option with name not found in the option list
   if ( !option )
   {
+    // Option negotiation passed with not set option value
     return { true, {} };
   }
 
-  const auto optionString{ option.mapped() };
+  const auto &optionString{ option.mapped() };
 
   if ( optionString.empty() )
   {
+    // Option negotiation failed
     return { false, {} };
   }
 
@@ -44,21 +46,26 @@ std::pair< bool, std::optional< IntT > > Options_getOption(
 
     if ( ( optionValue < min ) || ( optionValue > max ) )
     {
+      // Option negotiation failed
       return { false, {} };
     }
 
+    // Option negotiation passed with value
     return { true, static_cast< IntT >( optionValue ) };
   }
   catch ( const std::invalid_argument & )
   {
+    // Option negotiation failed
     return { false, {} };
   }
   catch ( const std::out_of_range & )
   {
+    // Option negotiation failed
     return { false, {} };
   }
   catch ( ... )
   {
+    // Option negotiation failed
     return { false, {} };
   }
 }

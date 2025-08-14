@@ -21,14 +21,13 @@
 #include <tftp/Tftp.hpp>
 
 #include <memory>
-#include <iosfwd>
 
 /**
  * @brief TFTP %File Handling.
  *
- * This namespace provides common handler of data which shall be received from or transmitted to another TFTP instance.
+ * This namespace provides common handlers of data which shall be received from or transmitted to another TFTP instance.
  *
- * Currently there are two implementations:
+ * Currently, there are two implementations:
  * - @ref MemoryFile, which handles the data within a local std::vector, and
  * - @ref StreamFile, which handles the data through a std::iostream
  * - @ref NullSinkFile, which drops every received data.
