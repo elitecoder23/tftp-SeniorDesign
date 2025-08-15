@@ -7,7 +7,7 @@ cmake_minimum_required( VERSION 3.31 )
 
 project(
   tftp
-  VERSION 0.0.0.0
+  #VERSION 0.0.0.0
   DESCRIPTION "TFTP Protocol Library and Applications"
   HOMEPAGE_URL "https://git.thomas-vogt.de/thomas-vogt/tftp" )
 
@@ -30,6 +30,7 @@ if( PROJECT_VERSION_ADDITION )
 else()
   set( PROJECT_VERSION_FULL "${PROJECT_VERSION}" )
 endif()
+string( STRIP ${PROJECT_VERSION_FULL} PROJECT_VERSION_FULL )
 
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
