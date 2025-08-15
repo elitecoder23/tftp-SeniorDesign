@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE( version )
     << Version::Key << " " << Version::Name
     << " Version: "
     << Version::Number << " "
-    << Version::Addition << "\n"
+    << Version::Scm << "\n"
     << Version::Url << " " << Version::License << "\n";
 
   std::cout

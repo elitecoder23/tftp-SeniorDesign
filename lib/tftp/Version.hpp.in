@@ -18,7 +18,7 @@
 namespace Tftp {
 
 //! TFTP C++ Library %Version Information.
-class TFTP_EXPORT Version final
+class Version final
 {
   public:
     // Deleted Constructor
@@ -39,8 +39,8 @@ class TFTP_EXPORT Version final
     //! Version Number as String.
     static constexpr auto Number{ "${PROJECT_VERSION}" };
 
-    //! Additional Version Information.
-    static constexpr auto Addition{ "${PROJECT_VERSION_ADDITION}" };
+    //! Source Code Management Information.
+    static constexpr auto Scm{ "${PROJECT_GIT_HASH}" };
 
     //! Full Version Information as String.
     static constexpr auto VersionInformation{ "${PROJECT_VERSION_FULL}" };
