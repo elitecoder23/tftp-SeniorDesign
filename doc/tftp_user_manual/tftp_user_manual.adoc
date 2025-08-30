@@ -27,3 +27,8 @@ Despite its simplicity, TFTP remains widely used in scenarios where basic file t
 
 include::tftp_operations.adoc[leveloffset=+1]
 include::tftp_options.adoc[leveloffset=+1]
+
+[appendix]
+== Man Pages
+include::../../app/tftp_client/tftp_client.adoc[leveloffset=+2]
+include::../../app/tftp_server/tftp_server.adoc[leveloffset=+2]
