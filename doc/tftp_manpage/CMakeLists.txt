@@ -25,7 +25,7 @@ add_custom_target(
     --destination-dir ${CMAKE_CURRENT_BINARY_DIR}/man1
     ${MAN_PATHS}
 
-  COMMENT "Build ARINC 665 Manpages" )
+  COMMENT "Generating ARINC 665 Manpages" )
 
 # mandb --user-db ${CMAKE_CURRENT_BINARY_DIR}
 # man -M ${CMAKE_CURRENT_BINARY_DIR}

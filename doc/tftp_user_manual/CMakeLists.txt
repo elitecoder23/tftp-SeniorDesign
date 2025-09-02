@@ -19,7 +19,7 @@ add_custom_target(
     --source-dir ${CMAKE_CURRENT_SOURCE_DIR}
     --destination-dir ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/tftp_user_manual.adoc
-  COMMENT "Build tftp_user_manual.html" )
+  COMMENT "Generating tftp_user_manual.html" )
 
 add_dependencies( doc tftp_user_manual )
 

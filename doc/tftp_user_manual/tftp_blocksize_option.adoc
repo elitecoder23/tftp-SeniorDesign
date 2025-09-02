@@ -1,3 +1,4 @@
+[#tftp_blocksize_option]
 = TFTP Blocksize Option
 
 == Overview

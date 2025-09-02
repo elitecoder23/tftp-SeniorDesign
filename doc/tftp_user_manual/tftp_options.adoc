@@ -1,3 +1,4 @@
+[#tftp_options]
 = TFTP Options
 
 == Introduction
@@ -50,5 +51,5 @@ The option negotiation mechanism allows clients and servers to agree on specific
 . Test option combinations to find optimal settings for your environment
 
 include::tftp_blocksize_option.adoc[leveloffset=+1]
-include::tftp_transfersize_option.adoc[leveloffset=+1]
+include::tftp_transfer_size_option.adoc[leveloffset=+1]
 include::tftp_timeout_option.adoc[leveloffset=+1]
