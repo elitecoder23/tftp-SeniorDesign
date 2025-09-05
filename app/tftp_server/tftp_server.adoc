@@ -1,3 +1,4 @@
+[[manpage_tftp_server]]
 = tftp_server(1)
 Thomas Vogt
 

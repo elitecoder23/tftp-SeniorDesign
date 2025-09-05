@@ -34,9 +34,10 @@ include::tftp_operations.adoc[leveloffset=+1]
 include::tftp_options.adoc[leveloffset=+1]
 
 = Applications
-== TFTP Client
 
-== TFTP Server
+include::tftp_client.adoc[]
+
+include::tftp_server.adoc[]
 
 = Troubleshooting and FAQ
 

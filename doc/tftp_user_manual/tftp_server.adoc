@@ -1,0 +1,43 @@
+== TFTP Server
+
+The TFTP Server application provides a Trivial File Transfer Protocol (TFTP) service over UDP for simple, lightweight file transfers.
+
+Refer to <<manpage_tftp_server>> for a manual page.
+
+[discrete]
+=== Option Negotiation
+- Block Size (blksize): Allows adjusting data block size (default 512 bytes) to optimize throughput.
+- Timeout Interval (timeout): Negotiates per-packet timeout to better fit network latency.
+- Transfer Size (tsize): Communicates the total size of the file, enabling progress tracking and resource planning.
+- Behavior: The server replies with accepted values; unsupported options are ignored or defaulted per TFTP rules.
+
+[discrete]
+=== Error Handling
+
+Uses standard TFTP error packets for conditions such as:
+s
+- File not found
+- Access violation
+- Disk full
+- Illegal TFTP operation
+- Unknown transfer ID
+- File already exists
+- No such user
+
+Errors terminate the affected transfer with an explanatory code/message.
+
+[discrete]
+=== Typical Server Policies and Configuration
+
+- Root directory (tftp-root) restricting accessible paths.
+- Read/write permissions controlling downloads and uploads.
+- File overwrite rules (e.g., prevent overwriting existing files) depending on configuration.
+- Optional logging/diagnostics for transfers and errors.
+- Bind address and port settings; potential chroot/sandboxing in production.
+
+[discrete]
+=== Operational Notes
+
+- Best used on trusted networks or isolated environments due to lack of authentication and encryption.
+- For performance, adjust block size and timeouts according to network conditions.
+- Ensure adequate filesystem permissions and space, especially for uploads.

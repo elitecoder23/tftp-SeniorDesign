@@ -1,0 +1,34 @@
+== TFTP Client
+
+The TFTP Client is a command-line application for transferring files to and from a TFTP server using the Trivial File Transfer Protocol.
+It focuses on simplicity and standard compliance, making it suitable for tasks like firmware updates, boot images, and configuration file distribution.
+
+- Performs TFTP Read (download) and Write (upload) operations with a remote server.
+- Uses the standard TFTP “octet” (binary) transfer mode for exact byte-for-byte transfers.
+
+Refer to <<manpage_tftp_client>> for a manual page.
+
+[discrete]
+=== Key features
+* Read (RRQ) and Write (WRQ) operations:
+** Read: downloads a remote file and stores it locally.
+** Write: uploads a local file to a remote path on the server.
+* Simple command-line interface:
+** Remote server address
+** Operation (Read|Write)
+** Remote file path
+** Optional local file path (if omitted during Read, the local filename defaults to the remote filename).
+* Robustness controls:
+** Configurable timeout and retry behavior for lossy or slow networks.
+** Server port selection and optional “linger/dally” after transfer completion (to allow final acknowledgments in some environments).
+* Status and diagnostics:
+** Clear start-of-transfer summary indicating operation, endpoints, and filenames.
+** End-of-transfer receive/transmit packet statistics to aid troubleshooting.
+** Informative errors for typical TFTP conditions (file not found, access violation, disk full, illegal operation, unknown transfer ID, file exists, etc.).
+
+[discrete]
+=== Considerations and best practices
+- TFTP provides no authentication or encryption; use only on trusted networks.
+- Ensure the TFTP server has the necessary permissions and correct root directory configuration for the requested files.
+- Check firewall rules for UDP and the server’s TFTP port.
+- For large files or constrained networks, adjust timeout/retries accordingly.
