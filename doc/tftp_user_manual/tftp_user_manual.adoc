@@ -1,16 +1,21 @@
 = TFTP User Manual
 author Thomas Vogt
 email thomas@thomas-vogt.de
+:description: User Manual of TFTP Toolchain.
 :doctype: book
-:sectnums:
+:sectanchors:
+:sectnums: all
+:sectnumlevels: 4
+:url-repo: https://git.thomas-vogt.de/thomas-vogt/tftp
 :toc:
 
-[bibliography]
-== Referenced Documents
-* [[[rfc_1350, RFC 1350]]] RFC 1350 The TFTP Protocol (Revision 2): http://tools.ietf.org/html/rfc1350[]
-* [[[rfc_2347, RFC 2347]]] RFC 2347 TFTP Option Extension: http://tools.ietf.org/html/rfc2347[]
-* [[[rfc_2348, RFC 2348]]] RFC 2348 TFTP Blocksize Option: http://tools.ietf.org/html/rfc2348[]
-* [[[rfc_2349, RFC 2349]]] RFC 2349 TFTP Timeout Interval and Transfer Size Options: http://tools.ietf.org/html/rfc2349[]
+Thomas Vogt
+
+include::references.adoc[]
+
+include::glossary.adoc[]
+
+= Common Concepts and Setup
 
 == Introduction
 TFTP (Trivial File Transfer Protocol) is a simple file transfer protocol that allows clients to send and receive files from a server.
@@ -22,13 +27,28 @@ Despite its simplicity, TFTP remains widely used in scenarios where basic file t
 * **Simple Design**: No authentication or complex handshaking mechanisms
 * **Fixed Block Size**: Traditional TFTP uses 512-byte data blocks
 * **Basic Operations**: Supports two main operations:
-  ** READ (file download from server)
-  ** WRITE (file upload to server)
+  ** Read File Operation (file download from server)
+  ** Write File Operation (file upload to server)
 
 include::tftp_operations.adoc[leveloffset=+1]
 include::tftp_options.adoc[leveloffset=+1]
 
-[appendix]
+= Applications
+== TFTP Client
+
+== TFTP Server
+
+= Troubleshooting and FAQ
+
+- General troubleshooting flow (all apps)
+- Common error patterns and remedies
+- App-specific subsections (short pointers linking back to the app chapters)
+- Checklists (network, permissions, configuration)
+
+== Troubleshooting
+
+= References
+
 == Man Pages
 include::../../app/tftp_client/tftp_client.adoc[leveloffset=+2]
 include::../../app/tftp_server/tftp_server.adoc[leveloffset=+2]

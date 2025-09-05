@@ -1,0 +1,24 @@
+[bibliography]
+== References
+
+[discrete]
+=== IETF RFCs
+* [[[rfc_1350,RFC 1350]]]
+RFC 1350:
+The TFTP Protocol (Revision 2)
+http://tools.ietf.org/html/rfc1350[]
+
+* [[[rfc_2347,RFC 2347]]]
+RFC 2347:
+TFTP Option Extension
+http://tools.ietf.org/html/rfc2347[]
+
+* [[[rfc_2348,RFC 2348]]]
+RFC 2348:
+TFTP Blocksize Option
+http://tools.ietf.org/html/rfc2348[]
+
+* [[[rfc_2349,RFC 2349]]]
+RFC 2349:
+TFTP Timeout Interval and Transfer Size Options
+http://tools.ietf.org/html/rfc2349[]

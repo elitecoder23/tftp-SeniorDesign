@@ -23,6 +23,11 @@ namespace TftpQt {
 
 /**
  * @brief Qt Table Model listing the TFTP Packet Statistic.
+ *
+ * Is a Qt table model (QAbstractTableModel) that presents TFTP packet statistics for display in Qt views
+ * (e.g. QTableView).
+ * Each row represents a TFTP packet type.
+ * Columns expose packet type, total count, and cumulative size.
  **/
 class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
 {
@@ -32,8 +37,11 @@ class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
     //! Columns of Model
     enum class Columns : int
     {
+      //! TFTP Packet Type
       PacketType,
+      //! Number of packets observed for that type.
       PacketCount,
+      //! Aggregate size (e.g. total bytes) for that type.
       PacketSize,
 
       //! Column Count Indicator
@@ -46,7 +54,7 @@ class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
      * @param[in] parent
      *   Parent QObject
      **/
-    explicit PacketStatisticModel( QObject *parent = nullptr );
+    explicit PacketStatisticModel( QObject * parent = nullptr );
 
     //! Destructor
     ~PacketStatisticModel() override = default;
@@ -69,7 +77,7 @@ class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
      * @param[in] parent
      *   Parent Model Index.
      *
-     * @return Always Columns::ColumnsCount.
+     * @return Always @ref Columns::ColumnsCount.
      * @retval 0
      *   If @p is valid.
      **/
@@ -88,8 +96,7 @@ class TFTP_QT_EXPORT PacketStatisticModel final : public QAbstractTableModel
     [[nodiscard]] QVariant data( const QModelIndex &index, int role ) const override;
 
     /**
-     * @brief Returns the data for the given role and section in the header with
-     *   the specified orientation.
+     * @brief Returns the data for the given role and section in the header with the specified orientation.
      *
      * @param[in] section
      *   Section number

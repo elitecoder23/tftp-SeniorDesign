@@ -42,7 +42,7 @@ int PacketStatisticModel::columnCount( const QModelIndex &parent ) const
     return 0;
   }
 
-  return static_cast< int >( Columns::ColumnsCount );
+  return std::to_underlying( Columns::ColumnsCount );
 }
 
 QVariant PacketStatisticModel::data( const QModelIndex &index, const int role ) const
@@ -96,7 +96,7 @@ QVariant PacketStatisticModel::headerData( int const section, Qt::Orientation co
     return section;
   }
 
-  switch ( static_cast< Columns >( section ) )
+  switch ( Columns{ section } )
   {
     case Columns::PacketType:
       return tr( "Packet Type" );

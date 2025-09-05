@@ -1,0 +1,32 @@
+[glossary]
+== Glossary
+
+[glossary]
+
+CLI:: **C**ommand-**L**ine **I**nterface
+
+GUI:: **G**raphical **U**ser **I**nterface
+
+IP:: **I**nternet **P**rotocol
+
+IPv4:: **I**nternet **P**rotocol version 4
+
+MTU:: **M**aximum **T**ransmission **U**nit
+
+NAT:: **N**etwork **A**ddress **T**ranslation
+
+OS:: **O**perating **S**ystem
+
+RFC:: **R**equest **f**or **C**omments
+
+Source IP Address:: The local interface/address used to originate requests and bind the TFTP server.
+
+TFTP:: **T**rivial **F**ile **T**ransfer **P**rotocol
+
+Timeout Option:: TFTP option to negotiate the retransmission timeout.
+
+Transfer Size Option:: TFTP option to communicate total transfer size.
+
+UDP:: **U**ser **D**atagram **P**rotocol
+
+UI:: **U**ser **I**nterface
