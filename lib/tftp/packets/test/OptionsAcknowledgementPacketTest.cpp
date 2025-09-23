@@ -17,8 +17,6 @@
 
 #include <helper/Dump.hpp>
 
-#include <iostream>
-
 namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpTest )
@@ -54,12 +52,12 @@ BOOST_AUTO_TEST_CASE( constructor )
 {
   Options options{ { "blocksize", "4096" } };
   BOOST_REQUIRE( options.contains( "blocksize") );
-  auto blocksizeOption1{ options.find( "blocksize" ) };
+  const auto blocksizeOption1{ options.find( "blocksize" ) };
 
   OptionsAcknowledgementPacket oack{ options };
 
   Helper::RawData raw{ oack };
-  std::cout << "OACK:\n" << Helper::Dump( std::data( raw ), raw.size() ) << "\n";
+  BOOST_TEST_MESSAGE( "OACK:\n" << Helper::Dump( std::data( raw ), raw.size() ) );
 
   OptionsAcknowledgementPacket oack2( raw );
 

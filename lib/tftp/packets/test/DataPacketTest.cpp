@@ -18,8 +18,6 @@
 #include <helper/Dump.hpp>
 #include <helper/RawData.hpp>
 
-#include <iostream>
-
 namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpTest )
@@ -94,8 +92,8 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 
   Helper::RawData raw( data );
 
-  std::cout << Helper::Dump( &(*raw.begin()), raw.size());
-  std::cout << static_cast< std::string>( data) << "\n";
+  BOOST_TEST_MESSAGE( Helper::Dump( &(*raw.begin()), raw.size() ) );
+  BOOST_TEST_MESSAGE( static_cast< std::string>( data ) );
 
   DataPacket data2( raw );
 

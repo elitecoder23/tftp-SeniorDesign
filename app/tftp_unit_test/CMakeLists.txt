@@ -38,7 +38,9 @@ target_link_libraries(
     tftp_test
     helper_test )
 
-add_test( NAME tftp_unit_test COMMAND tftp_unit_test )
+add_test(
+  NAME tftp_unit_test
+  COMMAND tftp_unit_test --log_format=JUNIT --log_sink=${CMAKE_BINARY_DIR}/tftp_unit_test.junit.xml )
 
 set_property(
   DIRECTORY ${PROJECT_SOURCE_DIR}

@@ -16,8 +16,6 @@
 
 #include <helper/Dump.hpp>
 
-#include <iostream>
-
 namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpTest)

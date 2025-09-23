@@ -17,8 +17,6 @@
 
 #include <helper/Dump.hpp>
 
-#include <iostream>
-
 namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpTest )
@@ -68,7 +66,7 @@ BOOST_AUTO_TEST_CASE( constructor1 )
   ReadRequestPacket rrq{ "testfile.bin", TransferMode::OCTET, options };
 
   Helper::RawData raw{ rrq };
-  std::cout << "RRQ:\n" << Helper::Dump( std::data( raw ), raw.size() ) << "\n";
+  BOOST_TEST_MESSAGE( "RRQ:\n" << Helper::Dump( std::data( raw ), raw.size() ) );
 
   ReadRequestPacket rrq2{ raw };
 

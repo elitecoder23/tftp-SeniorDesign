@@ -17,8 +17,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <iostream>
-
 namespace Tftp::Packets {
 
 BOOST_AUTO_TEST_SUITE( TftpTest )
@@ -53,9 +51,9 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 {
   AcknowledgementPacket ack{ BlockNumber{ 10U } };
 
-  Helper::RawData raw{ ack };
+  const Helper::RawData raw{ ack };
 
-  std::cout << Helper::Dump( std::data( raw ), raw.size() );
+  BOOST_TEST_MESSAGE( Helper::Dump( std::data( raw ), raw.size() ) );
 
   BOOST_CHECK( ack.packetType() == PacketType::Acknowledgement );
   BOOST_CHECK( ack.blockNumber() == BlockNumber{ 10U } );
@@ -69,8 +67,8 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 //! Constructor Test - Raw decoding
 BOOST_AUTO_TEST_CASE( constructor2 )
 {
-  AcknowledgementPacket ack{ std::as_bytes( std::span{ rawAckPacket } ) };
-  std::cout << Helper::Dump( std::data( rawAckPacket ), std::size( rawAckPacket ) );
+  const AcknowledgementPacket ack{ std::as_bytes( std::span{ rawAckPacket } ) };
+  BOOST_TEST_MESSAGE( "ACK: " << Helper::Dump( std::data( rawAckPacket ), std::size( rawAckPacket ) ) );
 
   BOOST_CHECK( ack.packetType() == PacketType::Acknowledgement );
   BOOST_CHECK( ack.blockNumber() == BlockNumber( 0x1001U ) );

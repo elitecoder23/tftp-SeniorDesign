@@ -18,7 +18,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <array>
-#include <iostream>
 
 //! Raw Error Packet
 auto rawError{ std::to_array< uint8_t >( {
@@ -63,11 +62,11 @@ BOOST_AUTO_TEST_SUITE( TftpErrorPacket )
 //! ErrorPacket Constructor Test
 BOOST_AUTO_TEST_CASE( constructor1 )
 {
-  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE" };
+  const ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE" };
 
   Helper::RawData raw{ error };
 
-  std::cout << Helper::Dump( std::data( raw ), raw.size() );
+  BOOST_TEST_MESSAGE( Helper::Dump( std::data( raw ), raw.size() ) );
 
   BOOST_CHECK( error.packetType() == PacketType::Error );
   BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined );
@@ -80,11 +79,11 @@ BOOST_AUTO_TEST_CASE( constructor1 )
 BOOST_AUTO_TEST_CASE( constructor2)
 {
   using namespace std::literals;
-  ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"s };
+  const ErrorPacket error{ ErrorCode::NotDefined, "ERROR MESSAGE"s };
 
   Helper::RawData raw{ error };
 
-  std::cout << Helper::Dump( std::data( raw ), raw.size() );
+  BOOST_TEST_MESSAGE( Helper::Dump( std::data( raw ), raw.size() ) );
 
   BOOST_CHECK( error.packetType() == PacketType::Error );
   BOOST_CHECK( error.errorCode() == ErrorCode::NotDefined );
@@ -96,7 +95,7 @@ BOOST_AUTO_TEST_CASE( constructor2)
 //! ErrorPacket Constructor Test
 BOOST_AUTO_TEST_CASE( constructor3 )
 {
-  ErrorPacket error2{ std::as_bytes( std::span{ rawError2 } ) };
+  const ErrorPacket error2{ std::as_bytes( std::span{ rawError2 } ) };
   BOOST_CHECK( error2.packetType() == PacketType::Error );
   BOOST_CHECK( error2.errorCode() == ErrorCode::FileNotFound );
   BOOST_CHECK( error2.errorMessage().empty() );

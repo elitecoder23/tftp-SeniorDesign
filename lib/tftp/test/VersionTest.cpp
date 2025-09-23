@@ -14,8 +14,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <iostream>
-
 namespace Tftp {
 
 BOOST_AUTO_TEST_SUITE( TftpTest )
@@ -24,15 +22,14 @@ BOOST_AUTO_TEST_SUITE( VersionTest )
 //! Version Test
 BOOST_AUTO_TEST_CASE( version )
 {
-  std::cout
-    << Version::Key << " " << Version::Name
-    << " Version: "
-    << Version::Number << " "
-    << Version::Scm << "\n"
-    << Version::Url << " " << Version::License << "\n";
+  BOOST_TEST_MESSAGE( "Key " << Version::Key );
+  BOOST_TEST_MESSAGE( "Name " <<Version::Name );
+  BOOST_TEST_MESSAGE( "Number " << Version::Number );
+  BOOST_TEST_MESSAGE( "SCM " << Version::Scm );
+  BOOST_TEST_MESSAGE( "URL " << Version::Url );
+  BOOST_TEST_MESSAGE( "License " << Version::License );
 
-  std::cout
-    << "TFTP Version Information: " << Version::VersionInformation << "\n";
+  BOOST_TEST_MESSAGE( "TFTP Version Information: " << Version::VersionInformation );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

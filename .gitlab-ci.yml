@@ -31,9 +31,12 @@ workflow:
   script:
     - cmake --preset ${CMAKE_PRESET}
     - cmake --build --preset ${CMAKE_PRESET} --target all doc
-    - ctest --preset ${CMAKE_PRESET}
+    - ctest --preset ${CMAKE_PRESET} --output-junit test-log.junit.xml
   after_script:
     - ccache --show-stats
+  artifacts:
+    reports:
+      junit: cmake-build-*/*.junit.xml
 
 GCC Static Debug:
   extends: .cmake_build
