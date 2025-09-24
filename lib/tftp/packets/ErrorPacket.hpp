@@ -38,6 +38,9 @@ class TFTP_EXPORT ErrorPacket final : public Packet
     //! Minimum Header Size (Opcode, Error Code, Empty String)
     static constexpr auto MinPacketSize{ HeaderSize + 2UZ + 1UZ };
 
+    //! Creates default initialised Error Packet
+    ErrorPacket();
+
     /**
      * @brief Generates a TFTP error packet with the given error code and error message.
      *
@@ -117,6 +120,15 @@ class TFTP_EXPORT ErrorPacket final : public Packet
 
     //! @}
 
+    /**
+     * @brief Returns the error information of this packet.
+     *
+     * The error information is always valid (i.e. contains a value).
+     *
+     * @return TFTP error information
+     **/
+    [[nodiscard]] ErrorInformation errorInformation() const;
+
   private:
     //! @copydoc Packet::encode()
     [[nodiscard]] Helper::RawData encode() const override;
@@ -137,7 +149,7 @@ class TFTP_EXPORT ErrorPacket final : public Packet
     void decodeBody( Helper::ConstRawDataSpan rawPacket );
 
     //! Error Code.
-    ErrorCode errorCodeV;
+    ErrorCode errorCodeV{ ErrorCode::Invalid };
     //! Error Message.
     std::string errorMessageV;
 };

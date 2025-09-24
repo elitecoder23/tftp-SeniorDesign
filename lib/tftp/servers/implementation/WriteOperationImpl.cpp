@@ -53,8 +53,7 @@ WriteOperation& WriteOperationImpl::dally( const bool dally )
   return *this;
 }
 
-WriteOperation& WriteOperationImpl::optionsConfiguration(
-  TftpOptionsConfiguration optionsConfiguration )
+WriteOperation &WriteOperationImpl::optionsConfiguration( TftpOptionsConfiguration optionsConfiguration )
 {
   optionsConfigurationV = std::move( optionsConfiguration );
 
@@ -161,12 +160,11 @@ void WriteOperationImpl::start()
       {
         if ( !dataHandlerV->receivedTransferSize( *clientOptionsV.transferSize ) )
         {
-          Packets::ErrorPacket errorPacket{ Packets::ErrorCode::DiskFullOrAllocationExceeds, "File to big" };
-
+          const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::DiskFullOrAllocationExceeds, "File to big" };
           send( errorPacket );
 
           // Operation completed
-          finished( TransferStatus::TransferError, std::move( errorPacket ) );
+          finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 
           return;
         }
@@ -212,18 +210,18 @@ void WriteOperationImpl::abort()
   OperationImpl::abort();
 }
 
-const Packets::ErrorInfo& WriteOperationImpl::errorInfo() const
+const Packets::ErrorInformation& WriteOperationImpl::errorInformation() const
 {
-  return OperationImpl::errorInfo();
+  return OperationImpl::errorInformation();
 }
 
-void WriteOperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo ) noexcept
+void WriteOperationImpl::finished( const TransferStatus status, Packets::ErrorInformation errorInformation ) noexcept
 {
   // Complete data handler
   dataHandlerV->finished();
 
   // Inform base class
-  OperationImpl::finished( status, std::move( errorInfo ) );
+  OperationImpl::finished( status, std::move( errorInformation ) );
 }
 
 void WriteOperationImpl::dataPacket(
@@ -243,7 +241,7 @@ void WriteOperationImpl::dataPacket(
     // if the received data size is smaller than the expected
     if ( dataPacket.dataSize() < receiveDataSize )
     {
-      // last packet has been received and the operation is finished
+      // the last packet has been received and the operation is finished
       if ( dallyV )
       {
         // wait for potential retry of Data.
@@ -269,11 +267,11 @@ void WriteOperationImpl::dataPacket(
     SPDLOG_ERROR( "Wrong Data packet block number" );
 
     // send error packet
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Block Number not expected" };
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Block Number not expected" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket ) );
+    finished( TransferStatus::TransferError, errorPacket.errorInformation() );
     return;
   }
 
@@ -283,11 +281,11 @@ void WriteOperationImpl::dataPacket(
     SPDLOG_ERROR( "Too much data received" );
 
     // send error packet
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Too much data" };
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Too much data" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket ) );
+    finished( TransferStatus::TransferError, errorPacket.errorInformation() );
     return;
   }
 
@@ -303,7 +301,7 @@ void WriteOperationImpl::dataPacket(
   // if the received data size is smaller than the expected
   if ( dataPacket.dataSize() < receiveDataSize )
   {
-    // last packet has been received and the operation is finished
+    // the last packet has been received and the operation is finished
     if ( dallyV )
     {
       // wait for potential retry of Data.
@@ -328,12 +326,11 @@ void WriteOperationImpl::acknowledgementPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( acknowledgementPacket ) );
 
   // send Error
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "ACK not expected" };
-
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "ACK not expected" };
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 }

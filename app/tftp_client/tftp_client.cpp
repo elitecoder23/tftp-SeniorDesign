@@ -148,22 +148,28 @@ int main( const int argc, char * argv[] )
     )
     (
       "request-type,r",
-      boost::program_options::value( &requestType )->required(),
-      R"(The desired TFTP operation ("Read"|"Write").)"
+      boost::program_options::value( &requestType )
+        ->required()
+        ->value_name( "Read|Write" ),
+      R"(The desired TFTP operation.)"
     )
     (
       "local-file,l",
-      boost::program_options::value( &localFile ),
-      "Filename of local file."
+      boost::program_options::value( &localFile )
+        ->value_name( "filename" ),
+      "Filename of the local file."
     )
     (
       "remote-file,r",
-      boost::program_options::value( &remoteFile )->required(),
+      boost::program_options::value( &remoteFile )
+        ->required()
+        ->value_name( "filename" ),
       "Filename of remote file."
     )
     (
       "address,a",
-      boost::program_options::value( &address )->required(),
+      boost::program_options::value( &address )
+        ->required(),
       "Remote address of the TFTP server."
     );
 

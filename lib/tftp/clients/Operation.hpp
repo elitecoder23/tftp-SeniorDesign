@@ -82,7 +82,7 @@ class TFTP_EXPORT Operation
      *
      * This operation can be used to add addition options to the TFTP request.
      * By default, no additional Options are sent to the server.
-     * If the negotiated options, sent by the server shall be checked an _Option Negotiation Handler_ must be provided.
+     * If the negotiated options, sent by the server shall be checked, an _Option Negotiation Handler_ must be provided.
      *
      * @param[in] additionalOptions
      *   Additional TFTP options sent to the server.
@@ -96,7 +96,7 @@ class TFTP_EXPORT Operation
     /**
      * @brief Updates the Option Negotiation Handler.
      *
-     * This handler is called for additional options received by TFTP Option Acknowledgment to verify, if the answer of
+     * This handler is called for additional options received by TFTP Option Acknowledgement to verify if the answer of
      * the TFTP server is accepted.
      * When no user-defined Option Negotiation Handler is registered, the Options acknowledged by the server are
      * accepted.
@@ -126,7 +126,7 @@ class TFTP_EXPORT Operation
      * This parameter is required.
      *
      * @param[in] filename
-     *   Which file shall be requested
+     *   Identifies the file which shall be requested.
      *
      * @return @p *this for chaining.
      **/
@@ -157,7 +157,7 @@ class TFTP_EXPORT Operation
     virtual Operation& remote( boost::asio::ip::udp::endpoint remote ) = 0;
 
     /**
-     * @brief Updates the local address to use as connection source.
+     * @brief Updates the local address to use as source.
      *
      * To set a fixed IP-address and leave the UDP port up to the IP-Stack, set the port to `0`.
      *
@@ -182,7 +182,7 @@ class TFTP_EXPORT Operation
     /**
      * @brief Aborts the %Operation Gracefully.
      *
-     * Sends an error packet at next possible time point.
+     * Sends an error packet at the next possible time point.
      *
      * @param[in] errorCode
      *   TFTP error code.
@@ -202,10 +202,10 @@ class TFTP_EXPORT Operation
      * @brief Returns the Error Information of this %Operation.
      *
      * @return The error information of this operation
-     * @retval ErrorInfo()
+     * @retval Packets::ErrorInformation{}
      *   If no error occurred.
      **/
-    [[nodiscard]] virtual const Packets::ErrorInfo& errorInfo() const = 0;
+    [[nodiscard]] virtual const Packets::ErrorInformation& errorInformation() const = 0;
 };
 
 }

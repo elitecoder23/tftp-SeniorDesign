@@ -24,6 +24,11 @@
 
 namespace Tftp::Packets {
 
+ErrorPacket::ErrorPacket() :
+  Packet{ PacketType::Error }
+{
+}
+
 ErrorPacket::ErrorPacket( const ErrorCode errorCode, std::string errorMessage ) :
   Packet{ PacketType::Error },
   errorCodeV{ errorCode },
@@ -31,14 +36,13 @@ ErrorPacket::ErrorPacket( const ErrorCode errorCode, std::string errorMessage ) 
 {
 }
 
-ErrorPacket::ErrorPacket( Helper::ConstRawDataSpan rawPacket ) :
-  Packet{ PacketType::Error, rawPacket },
-  errorCodeV{ ErrorCode::Invalid }
+ErrorPacket::ErrorPacket( const Helper::ConstRawDataSpan rawPacket ) :
+  Packet{ PacketType::Error, rawPacket }
 {
   decodeBody( rawPacket );
 }
 
-ErrorPacket& ErrorPacket::operator=( Helper::ConstRawDataSpan rawPacket )
+ErrorPacket& ErrorPacket::operator=( const Helper::ConstRawDataSpan rawPacket )
 {
   decodeHeader( rawPacket );
   decodeBody( rawPacket );
@@ -74,6 +78,11 @@ void ErrorPacket::errorMessage( std::string errorMessage )
   errorMessageV = std::move( errorMessage );
 }
 
+ErrorInformation ErrorPacket::errorInformation() const
+{
+  return ErrorInformation{ std::make_tuple( errorCodeV, errorMessageV ) };
+}
+
 Helper::RawData ErrorPacket::encode() const
 {
   Helper::RawData rawPacket( MinPacketSize + errorMessageV.length() );
@@ -97,7 +106,7 @@ void ErrorPacket::decodeBody( Helper::ConstRawDataSpan rawPacket )
   // check size
   if ( rawPacket.size() < MinPacketSize )
   {
-    BOOST_THROW_EXCEPTION( InvalidPacketException()
+    BOOST_THROW_EXCEPTION( InvalidPacketException{}
       << Helper::AdditionalInfo{ "Invalid packet size of ERROR packet" } );
   }
 
@@ -111,7 +120,7 @@ void ErrorPacket::decodeBody( Helper::ConstRawDataSpan rawPacket )
   // check terminating 0 character
   if ( rawSpan.back() != std::byte{ 0 } )
   {
-    BOOST_THROW_EXCEPTION( InvalidPacketException()
+    BOOST_THROW_EXCEPTION( InvalidPacketException{}
       << Helper::AdditionalInfo{ "error message not 0-terminated" } );
   }
 

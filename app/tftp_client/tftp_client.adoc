@@ -9,15 +9,15 @@ tftp_client - A TFTP (Trivial File Transfer Protocol) client application
 
 *tftp_client*
 -r|--request-type {*Read*|*Write*}
--r|--remote-file _value_
--a|--address _value_
+-r|--remote-file _filename_
+-a|--address _IP Address_
 [-h|--help]
-[-l|--local-file _value_]
-[-p|--server-port _value_]
-[-t|--tftp-timeout _value_]
+[-l|--local-file _filename_]
+[-p|--server-port _UDP port_]
+[-t|--tftp-timeout _timeout_]
 [-d|--dally [{*true*|*false*}]]
-[-b|--block-size-option [_value_]]
-[-i|--timeout-option [_value_]]
+[-b|--block-size-option [_blocksize_]]
+[-i|--timeout-option [_timeout_]]
 [-s|--handle-transfer-size-option]
 
 == Description
@@ -69,7 +69,7 @@ Wait when the last _ACK_ has been sent to prevent aborts on packet transmission 
 If the parameter value is not provided, _true_ is assumed.
 
 // tag::options[]
-*-b|--block-size-option* [_block-size_]::
+*-b|--block-size-option* [_blocksize_]::
 Negotiates the TFTP block size for transfers.
 If the _block-size_ parameter is not provided, the block-size option is set to ``1486`` bytes.
 

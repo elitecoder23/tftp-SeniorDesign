@@ -150,7 +150,7 @@ class ServerImpl final : public Server, private Packets::PacketHandler
      * @copydoc Packets::PacketHandler::dataPacket
      *
      * The TFTP server does not expect this packet.
-     * This packet is responded with an TFTP Error Packet.
+     * This packet is responded with a TFTP Error Packet.
      **/
     void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;
 
@@ -158,7 +158,7 @@ class ServerImpl final : public Server, private Packets::PacketHandler
      * @copydoc Packets::PacketHandler::acknowledgementPacket
      *
      * The TFTP server does not expect this packet.
-     * This packet is responded with an TFTP Error Packet.
+     * This packet is responded with a TFTP Error Packet.
      **/
     void acknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -168,7 +168,7 @@ class ServerImpl final : public Server, private Packets::PacketHandler
      * @copydoc Packets::PacketHandler::errorPacket
      *
      * The TFTP server does not expect this packet.
-     * This packet is responded with an TFTP Error Packet.
+     * This packet is responded with a TFTP Error Packet.
      **/
     void errorPacket(
       const boost::asio::ip::udp::endpoint &remote,

@@ -170,10 +170,10 @@ class TFTP_EXPORT Operation
      * @brief Returns the Error Information of this %Operation.
      *
      * @return The error info of this operation
-     * @retval ErrorInfo()
+     * @retval Packets::ErrorInformation()
      *   If no error occurred.
      **/
-    [[nodiscard]] virtual const Packets::ErrorInfo& errorInfo() const = 0;
+    [[nodiscard]] virtual const Packets::ErrorInformation& errorInformation() const = 0;
 };
 
 }

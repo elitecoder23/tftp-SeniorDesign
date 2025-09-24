@@ -54,7 +54,7 @@ void OperationImpl::initialise()
       socket.bind( localV );
     }
 
-    // connect to client.
+    // connect to the client.
     socket.connect( remoteV );
   }
   catch ( const boost::system::system_error &err )
@@ -79,12 +79,11 @@ void OperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::stri
     Packets::ErrorCodeDescription::instance().name( errorCode ),
     errorMessage );
 
-  Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
-
+  const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::Aborted, std::move( errorPacket ) );
+  finished( TransferStatus::Aborted, errorPacket.errorInformation() );
 }
 
 void OperationImpl::abort()
@@ -95,9 +94,9 @@ void OperationImpl::abort()
   finished( TransferStatus::Aborted );
 }
 
-const Packets::ErrorInfo& OperationImpl::errorInfo() const
+const Packets::ErrorInformation& OperationImpl::errorInformation() const
 {
-  return errorInfoV;
+  return errorInformationV;
 }
 
 void OperationImpl::tftpTimeout( const std::chrono::seconds timeout )
@@ -207,11 +206,11 @@ void OperationImpl::receiveDally()
   }
 }
 
-void OperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo )
+void OperationImpl::finished( const TransferStatus status, Packets::ErrorInformation errorInformation )
 {
   SPDLOG_INFO( "TFTP Server operation finished" );
 
-  errorInfoV = std::move( errorInfo );
+  errorInformationV = std::move( errorInformation );
 
   timer.cancel();
   socket.cancel();
@@ -230,12 +229,11 @@ void OperationImpl::readRequestPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( readRequestPacket ) );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ packet isn't expected" };
-
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ packet isn't expected" };
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 void OperationImpl::writeRequestPacket(
@@ -245,12 +243,11 @@ void OperationImpl::writeRequestPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( writeRequestPacket ) );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ packet isn't expected" };
-
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ packet isn't expected" };
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 void OperationImpl::errorPacket(
@@ -267,18 +264,18 @@ void OperationImpl::errorPacket(
       {
         case Packets::ErrorCode::TftpOptionRefused:
           // TFTP Option negotiation refused
-          finished( TransferStatus::OptionNegotiationError, errorPacket );
+          finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
           break;
 
         default:
-          finished( TransferStatus::TransferError, errorPacket );
+          finished( TransferStatus::TransferError, errorPacket.errorInformation() );
           break;
       }
       break;
 
     default:
-      // error for other package
-      finished( TransferStatus::TransferError, errorPacket );
+      // error for another packet than OACK
+      finished( TransferStatus::TransferError, errorPacket.errorInformation() );
       break;
   }
 }
@@ -290,12 +287,11 @@ void OperationImpl::optionsAcknowledgementPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( optionsAcknowledgementPacket ) );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "OACK packet isn't expected" };
-
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "OACK packet isn't expected" };
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 void OperationImpl::invalidPacket(
@@ -305,12 +301,11 @@ void OperationImpl::invalidPacket(
   SPDLOG_ERROR( "RX Error: INVALID Packet" );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet isn't expected" };
-
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet isn't expected" };
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, const std::size_t bytesTransferred )
@@ -337,7 +332,7 @@ void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, 
 
 void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 {
-  // wait aborted (packet received)
+  // wait aborted (a packet has been received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;

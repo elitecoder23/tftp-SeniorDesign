@@ -16,9 +16,7 @@
 #include <tftp/servers/Servers.hpp>
 #include <tftp/servers/Operation.hpp>
 
-#include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/PacketHandler.hpp>
-#include <tftp/packets/Packets.hpp>
 
 #include <boost/asio/ip/udp.hpp>
 #include <boost/asio/io_context.hpp>
@@ -79,10 +77,10 @@ class OperationImpl : protected Packets::PacketHandler
      * @brief Returns the error information.
      *
      * @return The error information
-     * @retval ErrorInfo()
+     * @retval Packets::ErrorInformation{}
      *   If no error occurred.
      **/
-    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const;
+    [[nodiscard]] const Packets::ErrorInformation& errorInformation() const;
 
     /**
      * @brief Updates TFTP Timeout.
@@ -139,7 +137,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Update the Receive Timeout Value.
      *
-     * This operation should be called if a timout option has been negotiated.
+     * This operation should be called if a timeout option has been negotiated.
      *
      * @param[in] receiveTimeout
      *   New receive timeout.
@@ -162,7 +160,7 @@ class OperationImpl : protected Packets::PacketHandler
     void receive();
 
     /**
-     * @brief Final Wait for possible resend of last package, when final ACK was lost.
+     * @brief Final Wait for possible resend of the last package, when final ACK was lost.
      *
      * Receive is handled as normal.
      * If timeout has occurred, the operation is finished successfully.
@@ -179,16 +177,16 @@ class OperationImpl : protected Packets::PacketHandler
      *
      * @param[in] status
      *   If the operation was successful, or an error occurred.
-     * @param[in] errorInfo
+     * @param[in] errorInformation
      *   In error case, this information is set accordingly.
      **/
-    virtual void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} );
+    virtual void finished( TransferStatus status, Packets::ErrorInformation errorInformation = {} );
 
     /**
      * @copydoc Packets::PacketHandler::readRequestPacket()
      *
-     * A read request packet is handled as failure.
-     * An error packet is sent to the origin and the finished flag is set.
+     * A read request packet is handled as a failure.
+     * An error packet is sent to the origin, and the finished flag is set.
      *
      * This operation always throws a @ref CommunicationException.
      **/
@@ -199,8 +197,8 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @copydoc Packets::PacketHandler::writeRequestPacket()
      *
-     * A write request packet is handled as failure.
-     * An error packet is sent to the origin and the finished flag is set.
+     * A write request packet is handled as a failure.
+     * An error packet is sent to the origin, and the finished flag is set.
      **/
     void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -216,7 +214,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @copydoc Packets::PacketHandler::optionsAcknowledgementPacket()
      *
-     * A OACK packet is not expected - therefore send an error packet and terminate connection.
+     * A OACK packet is not expected - therefore, send an error packet and terminate the connection.
      **/
      void optionsAcknowledgementPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -225,7 +223,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @copydoc Packets::PacketHandler::invalidPacket()
      *
-     * Send error packet and terminate connection.
+     * Send an error packet and terminate the connection.
      **/
     void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Helper::ConstRawDataSpan rawPacket ) final;
 
@@ -279,12 +277,12 @@ class OperationImpl : protected Packets::PacketHandler
 
     //! Received Packet Data
     Helper::RawData receivePacket;
-    //! Last transmitted Packet ( used for retries)
+    //! Last transmitted Packet (used for retries)
     Helper::RawData transmitPacket;
     //! Re-transmission counter
     unsigned int transmitCounter{ 0U };
     //! Error info
-    Packets::ErrorInfo errorInfoV;
+    Packets::ErrorInformation errorInformationV;
 };
 
 }

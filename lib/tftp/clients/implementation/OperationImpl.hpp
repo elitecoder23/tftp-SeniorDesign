@@ -14,9 +14,7 @@
 #define TFTP_CLIENTS_OPERATIONIMPL_HPP
 
 #include <tftp/clients/Clients.hpp>
-#include <tftp/clients/Client.hpp>
 
-#include <tftp/packets/ErrorPacket.hpp>
 #include <tftp/packets/PacketHandler.hpp>
 #include <tftp/packets/Packets.hpp>
 
@@ -61,7 +59,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Aborts the Operation Gracefully.
      *
-     * Sends an error packet at next possible time point.
+     * Sends an error packet at the next possible time point.
      *
      * @param[in] errorCode
      *   The TFTP error code.
@@ -79,10 +77,10 @@ class OperationImpl : protected Packets::PacketHandler
      * @brief Returns the error information.
      *
      * @return The error information
-     * @retval ErrorInfo()
+     * @retval Packets::ErrorInformation()
      *   If no error occurred.
      **/
-    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const;
+    [[nodiscard]] const Packets::ErrorInformation& errorInformation() const;
 
     /**
      * @brief Updates TFTP Timeout.
@@ -139,7 +137,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @brief Update the Receive Timeout Value.
      *
-     * This operation should be called, if a timout option has been negotiated.
+     * This operation should be called if a timeout option has been negotiated.
      *
      * @param[in] receiveTimeout
      *   New receive timeout.
@@ -179,10 +177,10 @@ class OperationImpl : protected Packets::PacketHandler
     void receive();
 
     /**
-     * @brief Final Wait for possible resend of last package, when final ACK was lost.
+     * @brief Final Wait for possible resend of the last package, when final ACK was lost.
      *
      * Receive is handled as normal.
-     * If timeout has occurred, operation is finished successfully.
+     * If timeout has occurred, the operation is finished successfully.
      *
      * @sa receiveHandler
      * @sa timeoutDallyHandler
@@ -196,18 +194,18 @@ class OperationImpl : protected Packets::PacketHandler
      *
      * @param[in] status
      *   If the operation was successful, or an error occurred.
-     * @param[in] errorInfo
+     * @param[in] errorInformation
      *   In error case, this information is set accordingly.
      **/
-    virtual void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} );
+    virtual void finished( TransferStatus status, Packets::ErrorInformation errorInformation = {} );
 
     /**
      * @copydoc Packets::PacketHandler::readRequestPacket()
      *
-     * A read request packet is handled as failure.
-     * An error packet is sent to the origin and the finished flag is set.
+     * A read request packet is handled as a failure.
+     * An error packet is sent to the origin, and the finished flag is set.
      *
-     * This operation always throws an CommunicationException.
+     * This operation always throws a CommunicationException.
      **/
     void readRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -216,8 +214,8 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @copydoc Packets::PacketHandler::writeRequestPacket()
      *
-     * A write request packet is handled as failure.
-     * An error packet is sent to the origin and the finished flag is set.
+     * A write request packet is handled as a failure.
+     * An error packet is sent to the origin, and the finished flag is set.
      **/
     void writeRequestPacket(
       const boost::asio::ip::udp::endpoint &remote,
@@ -233,7 +231,7 @@ class OperationImpl : protected Packets::PacketHandler
     /**
      * @copydoc Packets::PacketHandler::invalidPacket()
      *
-     * Send error packet and terminate connection.
+     * Send an error packet and terminate the connection.
      **/
     void invalidPacket( const boost::asio::ip::udp::endpoint &remote, Helper::ConstRawDataSpan rawPacket ) final;
 
@@ -295,9 +293,9 @@ class OperationImpl : protected Packets::PacketHandler
     void timeoutDallyHandler( const boost::system::error_code &errorCode );
 
     //! Receive timeout (can be updated by option negotiation)
-    std::chrono::seconds receiveTimeoutV{ Tftp::DefaultTftpReceiveTimeout };
+    std::chrono::seconds receiveTimeoutV{ DefaultTftpReceiveTimeout };
     //! TFTP Retries
-    uint16_t tftpRetriesV{ Tftp::DefaultTftpRetries };
+    uint16_t tftpRetriesV{ DefaultTftpRetries };
 
     //! Handler which is called on completion of the operation.
     OperationCompletedHandler completionHandlerV;
@@ -307,20 +305,20 @@ class OperationImpl : protected Packets::PacketHandler
     boost::asio::ip::udp::endpoint localV;
 
     //! TFTP UDP Socket
-    boost::asio::ip::udp::socket socket;
+    boost::asio::ip::udp::socket socketV;
     //! Receive timeout timer
-    boost::asio::system_timer timer;
+    boost::asio::system_timer timerV;
 
     //! Received Packet Data
-    Helper::RawData receivePacket;
-    //! Remote Address (set, when server sends first answer)
-    boost::asio::ip::udp::endpoint receiveEndpoint;
-    //! Last transmitted Packet ( used for retries)
-    Helper::RawData transmitPacket;
+    Helper::RawData receivePacketV;
+    //! Remote Address (set, when server sends the first answer)
+    boost::asio::ip::udp::endpoint receiveEndpointV;
+    //! Last transmitted Packet (used for retries)
+    Helper::RawData transmitPacketV;
     //! Re-transmission counter
-    unsigned int transmitCounter{ 0U };
+    unsigned int transmitCounterV{ 0U };
     //! Error info
-    Packets::ErrorInfo errorInfoV;
+    Packets::ErrorInformation errorInformationV;
 };
 
 }

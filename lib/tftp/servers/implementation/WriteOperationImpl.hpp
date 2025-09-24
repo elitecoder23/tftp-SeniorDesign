@@ -91,17 +91,17 @@ class WriteOperationImpl final : public WriteOperation, private OperationImpl
     //! @copydoc WriteOperation::abort()
     void abort() override;
 
-    //! @copydoc WriteOperation::errorInfo() const
-    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const override;
+    //! @copydoc WriteOperation::errorInformation() const
+    [[nodiscard]] const Packets::ErrorInformation& errorInformation() const override;
 
   private:
     //! @copydoc OperationImpl::finished()
-    void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
+    void finished( TransferStatus status, Packets::ErrorInformation errorInformation = {} ) noexcept override;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket()
      *
-     * The received data packet is checked and the TftpReadOperationHandler::receivedData() operation of the registered
+     * The received data packet is checked, and the TftpReadOperationHandler::receivedData() operation of the registered
      * handler is called.
      **/
     void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;

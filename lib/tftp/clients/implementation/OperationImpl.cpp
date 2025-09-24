@@ -31,9 +31,9 @@
 namespace Tftp::Clients {
 
 OperationImpl::OperationImpl( boost::asio::io_context &ioContext ) :
-  socket{ ioContext },
-  timer{ ioContext },
-  receivePacket( Packets::DefaultMaxPacketSize )
+  socketV{ ioContext },
+  timerV{ ioContext },
+  receivePacketV( Packets::DefaultMaxPacketSize )
 {
 }
 
@@ -44,15 +44,15 @@ void OperationImpl::initialise()
   try
   {
     // reset remembered connected endpoint
-    receiveEndpoint = boost::asio::ip::udp::endpoint{};
+    receiveEndpointV = boost::asio::ip::udp::endpoint{};
 
     // Open the socket
-    socket.open( remoteV.protocol() );
+    socketV.open( remoteV.protocol() );
 
     // Bind socket to source address (from)
     if ( !localV.address().is_unspecified() )
     {
-      socket.bind( localV );
+      socketV.bind( localV );
     }
   }
   catch ( const boost::system::system_error &err )
@@ -60,9 +60,9 @@ void OperationImpl::initialise()
     SPDLOG_ERROR( "Initialisation Error: {}", err.what() );
 
     // On error and if socket is opened - close it.
-    if ( socket.is_open() )
+    if ( socketV.is_open() )
     {
-      socket.close();
+      socketV.close();
     }
 
     // Operation finished
@@ -77,16 +77,16 @@ void OperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::stri
     Packets::ErrorCodeDescription::instance().name( errorCode ),
     errorMessage );
 
-  Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
+  const Packets::ErrorPacket errorPacket{ errorCode, std::move( errorMessage ) };
 
   // skip transmission if not already received something from remote
-  if ( receiveEndpoint != boost::asio::ip::udp::endpoint{} )
+  if ( receiveEndpointV != boost::asio::ip::udp::endpoint{} )
   {
     send( errorPacket );
   }
 
   // Operation completed
-  finished( TransferStatus::Aborted, std::move( errorPacket ) );
+  finished( TransferStatus::Aborted, errorPacket.errorInformation() );
 }
 
 void OperationImpl::abort()
@@ -97,12 +97,12 @@ void OperationImpl::abort()
   finished( TransferStatus::Aborted );
 }
 
-const Packets::ErrorInfo& OperationImpl::errorInfo() const
+const Packets::ErrorInformation& OperationImpl::errorInformation() const
 {
-  return errorInfoV;
+  return errorInformationV;
 }
 
-void OperationImpl::tftpTimeout( std::chrono::seconds timeout )
+void OperationImpl::tftpTimeout( const std::chrono::seconds timeout )
 {
   receiveTimeoutV = timeout;
 }
@@ -129,7 +129,7 @@ void OperationImpl::completionHandler( OperationCompletedHandler handler )
 
 void OperationImpl::maxReceivePacketSize( const uint16_t maxReceivePacketSize )
 {
-  receivePacket.resize( maxReceivePacketSize );
+  receivePacketV.resize( maxReceivePacketSize );
 }
 
 void OperationImpl::receiveTimeout( const std::chrono::seconds receiveTimeout ) noexcept
@@ -144,16 +144,16 @@ void OperationImpl::sendFirst( const Packets::Packet &packet )
   try
   {
     // Reset transmit counter
-    transmitCounter = 1U;
+    transmitCounterV = 1U;
 
     // Encode the raw packet
-    transmitPacket = static_cast< Helper::RawData >( packet );
+    transmitPacketV = static_cast< Helper::RawData >( packet );
 
     // Update statistic
-    Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacket.size() );
+    Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacketV.size() );
 
     // Send the packet to the remote server
-    socket.send_to( boost::asio::buffer( transmitPacket ), remoteV );
+    socketV.send_to( boost::asio::buffer( transmitPacketV ), remoteV );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -171,16 +171,16 @@ void OperationImpl::send( const Packets::Packet &packet )
   try
   {
     // Reset transmit counter
-    transmitCounter = 1U;
+    transmitCounterV = 1U;
 
-    // Encode raw packet
-    transmitPacket = static_cast< Helper::RawData >( packet );
+    // Encode the raw packet
+    transmitPacketV = static_cast< Helper::RawData >( packet );
 
     // Update statistic
-    Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacket.size() );
+    Packets::PacketStatistic::globalTransmit().packet( packet.packetType(), transmitPacketV.size() );
 
     // Send the packet to the remote server
-    socket.send( boost::asio::buffer( transmitPacket ) );
+    socketV.send( boost::asio::buffer( transmitPacketV ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -196,16 +196,16 @@ void OperationImpl::receiveFirst()
   {
     // the first time, we make receive_from (answer is not sent from destination)
     // Start the reception operation
-    socket.async_receive_from(
-      boost::asio::buffer( receivePacket ),
-      receiveEndpoint,
+    socketV.async_receive_from(
+      boost::asio::buffer( receivePacketV ),
+      receiveEndpointV,
       std::bind_front( &OperationImpl::receiveFirstHandler, this ) );
 
     // Set receive timeout
-    timer.expires_after( receiveTimeoutV );
+    timerV.expires_after( receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
+    timerV.async_wait( std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -220,15 +220,15 @@ void OperationImpl::receive()
   try
   {
     // start the receive operation
-    socket.async_receive(
-      boost::asio::buffer( receivePacket ),
+    socketV.async_receive(
+      boost::asio::buffer( receivePacketV ),
       std::bind_front( &OperationImpl::receiveHandler, this ) );
 
     // set receive timeout
-    timer.expires_after( receiveTimeoutV );
+    timerV.expires_after( receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
+    timerV.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -243,15 +243,15 @@ void OperationImpl::receiveDally()
   try
   {
     // start the receive operation
-    socket.async_receive(
-      boost::asio::buffer( receivePacket ),
+    socketV.async_receive(
+      boost::asio::buffer( receivePacketV ),
       std::bind_front( &OperationImpl::receiveHandler, this ) );
 
     // set receive timeout
-    timer.expires_after( 2U * receiveTimeoutV );
+    timerV.expires_after( 2U * receiveTimeoutV );
 
     // start waiting for receive timeout
-    timer.async_wait( std::bind_front( &OperationImpl::timeoutDallyHandler, this ) );
+    timerV.async_wait( std::bind_front( &OperationImpl::timeoutDallyHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -261,15 +261,15 @@ void OperationImpl::receiveDally()
   }
 }
 
-void OperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo )
+void OperationImpl::finished( const TransferStatus status, Packets::ErrorInformation errorInformation )
 {
   SPDLOG_INFO( "TFTP Client Operation finished" );
 
-  errorInfoV = std::move( errorInfo );
+  errorInformationV = std::move( errorInformation );
 
-  timer.cancel();
-  socket.cancel();
-  socket.close();
+  timerV.cancel();
+  socketV.cancel();
+  socketV.close();
 
   if ( completionHandlerV )
   {
@@ -284,12 +284,12 @@ void OperationImpl::readRequestPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( readRequestPacket ) );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ not expected" };
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ not expected" };
 
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 void OperationImpl::writeRequestPacket(
@@ -299,12 +299,12 @@ void OperationImpl::writeRequestPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( writeRequestPacket ) );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ not expected" };
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ not expected" };
 
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 void OperationImpl::errorPacket(
@@ -314,7 +314,7 @@ void OperationImpl::errorPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( errorPacket ) );
 
   // Operation completed
-  switch ( Packets::Packet::packetType( transmitPacket ) )
+  switch ( Packets::Packet::packetType( transmitPacketV ) )
   {
     case Packets::PacketType::ReadRequest:
     case Packets::PacketType::WriteRequest:
@@ -322,19 +322,19 @@ void OperationImpl::errorPacket(
       {
         case Packets::ErrorCode::TftpOptionRefused:
           // TFTP Option negotiation refused
-          finished( TransferStatus::OptionNegotiationError, errorPacket );
+          finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
           break;
 
         default:
           // RRQ/ WRQ response with error
-          finished( TransferStatus::RequestError, errorPacket );
+          finished( TransferStatus::RequestError, errorPacket.errorInformation() );
           break;
       }
       break;
 
     default:
-      // error for other package
-      finished( TransferStatus::TransferError, errorPacket );
+      // error for an other packet
+      finished( TransferStatus::TransferError, errorPacket.errorInformation() );
       break;
   }
 }
@@ -346,15 +346,17 @@ void OperationImpl::invalidPacket(
   SPDLOG_ERROR( "RX Error: INVALID Packet" );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet not expected" };
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet isn't expected" };
 
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
-void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorCode, std::size_t bytesTransferred )
+void OperationImpl::receiveFirstHandler(
+  const boost::system::error_code &errorCode,
+  const std::size_t bytesTransferred )
 {
   // operation has been aborted (maybe timeout)
   if ( boost::asio::error::operation_aborted == errorCode )
@@ -371,13 +373,13 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
     return;
   }
 
-  // check if the packet has been received from not expected source
+  // check if the packet has been received from a not expected source
   // send an error packet and ignore it.
-  if ( remoteV.address() != receiveEndpoint.address() )
+  if ( remoteV.address() != receiveEndpointV.address() )
   {
-    SPDLOG_ERROR( "Received packed from wrong source: {}", receiveEndpoint.address().to_string() );
+    SPDLOG_ERROR( "Received packed from wrong source: {}", receiveEndpointV.address().to_string() );
 
-    // sent an error packet to unknown partner
+    // sent an error packet to the unknown partner
     try
     {
       // send error packet
@@ -388,7 +390,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
       // Update statistic
       Packets::PacketStatistic::globalTransmit().packet( err.packetType(), rawPacket.size() );
 
-      socket.send_to( boost::asio::buffer( rawPacket ), receiveEndpoint );
+      socketV.send_to( boost::asio::buffer( rawPacket ), receiveEndpointV );
     }
     catch ( const boost::system::system_error &err)
     {
@@ -399,9 +401,9 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
     // restart receive operation
     try
     {
-      socket.async_receive_from(
-        boost::asio::buffer( receivePacket ),
-        receiveEndpoint,
+      socketV.async_receive_from(
+        boost::asio::buffer( receivePacketV ),
+        receiveEndpointV,
         std::bind_front( &OperationImpl::receiveFirstHandler, this ) );
 
       return;
@@ -418,7 +420,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
   try
   {
     // connect to the server port
-    socket.connect( receiveEndpoint );
+    socketV.connect( receiveEndpointV );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -428,7 +430,7 @@ void OperationImpl::receiveFirstHandler( const boost::system::error_code &errorC
     return;
   }
 
-  packet( receiveEndpoint, Helper::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
+  packet( receiveEndpointV, Helper::ConstRawDataSpan{ receivePacketV.begin(), bytesTransferred } );
 }
 
 void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, const std::size_t bytesTransferred )
@@ -450,12 +452,12 @@ void OperationImpl::receiveHandler( const boost::system::error_code &errorCode, 
   }
 
   // handle the received packet
-  packet( receiveEndpoint, Helper::ConstRawDataSpan{ receivePacket.begin(), bytesTransferred } );
+  packet( receiveEndpointV, Helper::ConstRawDataSpan{ receivePacketV.begin(), bytesTransferred } );
 }
 
 void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorCode )
 {
-  // wait aborted (packet received)
+  // wait aborted (a packet has been received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;
@@ -471,7 +473,7 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
   }
 
   // if maximum retries exceeded -> abort receive operation
-  if ( transmitCounter > tftpRetriesV )
+  if ( transmitCounterV > tftpRetriesV )
   {
     SPDLOG_ERROR( "TFTP Retry counter exceeded" );
 
@@ -481,24 +483,24 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
 
   SPDLOG_WARN(
     "Retransmit last TFTP packet: {}",
-    Packets::PacketTypeDescription::instance().name( Packets::Packet::packetType( transmitPacket ) ) );
+    Packets::PacketTypeDescription::instance().name( Packets::Packet::packetType( transmitPacketV ) ) );
 
   try
   {
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet(
-      Packets::Packet::packetType( transmitPacket ),
-      transmitPacket.size() );
+      Packets::Packet::packetType( transmitPacketV ),
+      transmitPacketV.size() );
 
     // resent stored packet
-    socket.send_to( boost::asio::buffer( transmitPacket ), remoteV );
+    socketV.send_to( boost::asio::buffer( transmitPacketV ), remoteV );
 
     // increment transmit counter
-    ++transmitCounter;
+    ++transmitCounterV;
 
-    timer.expires_after( receiveTimeoutV );
+    timerV.expires_after( receiveTimeoutV );
 
-    timer.async_wait( std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
+    timerV.async_wait( std::bind_front( &OperationImpl::timeoutFirstHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -510,7 +512,7 @@ void OperationImpl::timeoutFirstHandler( const boost::system::error_code &errorC
 
 void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 {
-  // wait aborted (packet received)
+  // wait aborted (a packet has been received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;
@@ -526,7 +528,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
   }
 
   // if maximum retries exceeded -> abort receive operation
-  if ( transmitCounter > tftpRetriesV )
+  if ( transmitCounterV > tftpRetriesV )
   {
     SPDLOG_ERROR( "TFTP Retry counter exceeded" );
 
@@ -536,22 +538,22 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 
   SPDLOG_INFO(
     "Retransmit last TFTP packet: {}",
-    Packets::PacketTypeDescription::instance().name( Packets::Packet::packetType( transmitPacket ) ) );
+    Packets::PacketTypeDescription::instance().name( Packets::Packet::packetType( transmitPacketV ) ) );
 
   try
   {
     // Update statistic
     Packets::PacketStatistic::globalTransmit().packet(
-      Packets::Packet::packetType( transmitPacket ),
-      transmitPacket.size() );
+      Packets::Packet::packetType( transmitPacketV ),
+      transmitPacketV.size() );
 
-    socket.send( boost::asio::buffer( transmitPacket ) );
+    socketV.send( boost::asio::buffer( transmitPacketV ) );
 
-    ++transmitCounter;
+    ++transmitCounterV;
 
-    timer.expires_after( receiveTimeoutV );
+    timerV.expires_after( receiveTimeoutV );
 
-    timer.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
+    timerV.async_wait( std::bind_front( &OperationImpl::timeoutHandler, this ) );
   }
   catch ( const boost::system::system_error &err )
   {
@@ -563,7 +565,7 @@ void OperationImpl::timeoutHandler( const boost::system::error_code& errorCode )
 
 void OperationImpl::timeoutDallyHandler( const boost::system::error_code &errorCode )
 {
-  // operation aborted (packet received)
+  // operation aborted (a packet has been received)
   if ( boost::asio::error::operation_aborted == errorCode )
   {
     return;

@@ -89,18 +89,18 @@ class ReadOperationImpl final : public ReadOperation, private OperationImpl
     //! @copydoc ReadOperation::abort()
     void abort() override;
 
-    //! @copydoc ReadOperation::errorInfo() const
-    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const override;
+    //! @copydoc ReadOperation::errorInformation() const
+    [[nodiscard]] const Packets::ErrorInformation& errorInformation() const override;
 
   private:
     //! @copydoc OperationImpl::finished()
-    void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
+    void finished( TransferStatus status, Packets::ErrorInformation errorInformation = {} ) noexcept override;
 
     /**
      * @brief Sends a data packet to the client.
      *
      * The Data packet is assembled by calling the registered handler operation TftpWriteOperationHandler::sendData().
-     * If the last data packet is sent, the internal flag will be set appropriate.
+     * If the last data packet is sent, the internal flag will be set appropriately.
      **/
     void sendData();
 
@@ -133,7 +133,7 @@ class ReadOperationImpl final : public ReadOperation, private OperationImpl
 
     //! Contains the negotiated block size option.
     uint16_t transmitDataSize{ Packets::DefaultDataSize };
-    //! Indicates, if the last data packet has been transmitted (closing).
+    //! Indicates if the last data packet has been transmitted (closing).
     bool lastDataPacketTransmitted{ false };
     //! Block number of the last transmitted data packet.
     Packets::BlockNumber lastTransmittedBlockNumber{ 0U };

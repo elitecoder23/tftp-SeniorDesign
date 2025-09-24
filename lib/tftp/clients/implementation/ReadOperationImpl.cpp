@@ -97,7 +97,7 @@ void ReadOperationImpl::request()
   }
 }
 
-void ReadOperationImpl::gracefulAbort( Packets::ErrorCode errorCode, std::string errorMessage )
+void ReadOperationImpl::gracefulAbort( const Packets::ErrorCode errorCode, std::string errorMessage )
 {
   OperationImpl::gracefulAbort( errorCode, std::move( errorMessage ) );
 }
@@ -107,9 +107,9 @@ void ReadOperationImpl::abort()
   OperationImpl::abort();
 }
 
-const Packets::ErrorInfo& ReadOperationImpl::errorInfo() const
+const Packets::ErrorInformation& ReadOperationImpl::errorInformation() const
 {
-  return OperationImpl::errorInfo();
+  return OperationImpl::errorInformation();
 }
 
 ReadOperation& ReadOperationImpl::tftpTimeout( const std::chrono::seconds timeout )
@@ -192,13 +192,13 @@ ReadOperation& ReadOperationImpl::local( const boost::asio::ip::udp::endpoint lo
   return *this;
 }
 
-void ReadOperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo ) noexcept
+void ReadOperationImpl::finished( const TransferStatus status, Packets::ErrorInformation errorInformation ) noexcept
 {
   // Complete data handler
   dataHandlerV->finished();
 
   // Inform base class
-  OperationImpl::finished( status, std::move( errorInfo ) );
+  OperationImpl::finished( status, std::move( errorInformation ) );
 }
 
 void ReadOperationImpl::dataPacket(
@@ -210,7 +210,7 @@ void ReadOperationImpl::dataPacket(
   // Check retransmission of last packet
   if ( dataPacket.blockNumber() == lastReceivedBlockNumber )
   {
-    SPDLOG_WARN( "Received last data package again. Re-ACK them" );
+    SPDLOG_WARN( "Received the last data package again. Re-ACK them." );
 
     // Retransmit last ACK packet
     send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
@@ -218,7 +218,7 @@ void ReadOperationImpl::dataPacket(
     // if the received data size is smaller than the expected
     if ( dataPacket.dataSize() < receiveDataSize )
     {
-      // last packet has been received and operation is finished
+      // the last packet has been received and this operation is finished
       if ( dallyV )
       {
         // wait for potential retry of Data.
@@ -231,7 +231,7 @@ void ReadOperationImpl::dataPacket(
     }
     else
     {
-      // otherwise, wait for next data package
+      // otherwise, wait for the next data package
       receive();
     }
 
@@ -244,11 +244,11 @@ void ReadOperationImpl::dataPacket(
     SPDLOG_ERROR( "Wrong Data packet block number" );
 
     // send error packet
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Block Number not expected" };
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Block Number not expected" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket ) );
+    finished( TransferStatus::TransferError, errorPacket.errorInformation() );
     return;
   }
 
@@ -258,11 +258,11 @@ void ReadOperationImpl::dataPacket(
     SPDLOG_ERROR( "Too much data received" );
 
     // send error packet
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Too much data" };
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Too much data" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket ) );
+    finished( TransferStatus::TransferError, errorPacket.errorInformation() );
     return;
   }
 
@@ -276,11 +276,10 @@ void ReadOperationImpl::dataPacket(
     {
       SPDLOG_ERROR( "Option Negotiation failed" );
 
-      Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Option Negotiation Failed" };
-
+      const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Option Negotiation Failed" };
       send( errorPacket );
 
-      finished( TransferStatus::TransferError, std::move( errorPacket ) );
+      finished( TransferStatus::TransferError, errorPacket.errorInformation() );
       return;
     }
   }
@@ -294,10 +293,10 @@ void ReadOperationImpl::dataPacket(
   // send ACK
   send( Packets::AcknowledgementPacket{ lastReceivedBlockNumber } );
 
-  // if received data size is smaller than the expected
+  // if the received data size is smaller than the expected
   if ( dataPacket.dataSize() < receiveDataSize )
   {
-    // last packet has been received and operation is finished
+    // the last packet has been received and this operation is finished
     if ( dallyV )
     {
       // wait for potential retry of Data.
@@ -322,12 +321,11 @@ void ReadOperationImpl::acknowledgementPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( acknowledgementPacket ) );
 
   // send Error
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "ACK not expected" };
-
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "ACK not expected" };
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 void ReadOperationImpl::optionsAcknowledgementPacket(
@@ -341,11 +339,11 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     SPDLOG_ERROR( "OACK must occur after RRQ" );
 
     // send error packet
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "OACK must occur after RRQ" };
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "OACK must occur after RRQ" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket ) );
+    finished( TransferStatus::TransferError, errorPacket.errorInformation() );
     return;
   }
 
@@ -357,11 +355,11 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     SPDLOG_ERROR( "Received option list is empty" );
 
     // send error packet
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Empty OACK not allowed" };
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Empty OACK not allowed" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket ) );
+    finished( TransferStatus::TransferError, errorPacket.errorInformation() );
     return;
   }
 
@@ -375,14 +373,13 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( !optionsConfigurationV.blockSizeOption && blockSizeValue )
   {
-    SPDLOG_ERROR( "Block Size Option not expected" );
+    SPDLOG_ERROR( "Block Size Option isn't expected" );
 
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Block Size Option not expected" };
-
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Block Size Option not expected" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
     return;
   }
 
@@ -390,12 +387,11 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   {
     SPDLOG_ERROR( "Block Size Option decoding failed" );
 
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Block Size Option decoding failed" };
-
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Block Size Option decoding failed" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
     return;
   }
 
@@ -405,12 +401,13 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     {
       SPDLOG_ERROR( "Received Block Size Option bigger than negotiated" );
 
-      Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Block size Option negotiation failed" };
-
+      const Packets::ErrorPacket errorPacket{
+        Packets::ErrorCode::TftpOptionRefused,
+        "Block size Option negotiation failed" };
       send( errorPacket );
 
       // Operation completed
-      finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+      finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
       return;
     }
 
@@ -429,12 +426,11 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   {
     SPDLOG_ERROR( "Timeout Option not expected" );
 
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Timeout Option not expected" };
-
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Timeout Option isn't expected" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
     return;
   }
 
@@ -442,12 +438,11 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   {
     SPDLOG_ERROR( "Timeout Option decoding failed" );
 
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Timeout Option decoding failed" };
-
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Timeout Option decoding failed" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
     return;
   }
 
@@ -458,14 +453,13 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     {
       SPDLOG_ERROR( "Timeout option not equal to requested" );
 
-      Packets::ErrorPacket errorPacket{
+      const Packets::ErrorPacket errorPacket{
         Packets::ErrorCode::TftpOptionRefused,
         "Timeout option not equal to requested" };
-
       send( errorPacket );
 
       // Operation completed
-      finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+      finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
       return;
     }
 
@@ -479,14 +473,15 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
 
   if ( !optionsConfigurationV.handleTransferSizeOption && transferSizeValue )
   {
-    SPDLOG_ERROR( "Transfer Size Option not expected" );
+    SPDLOG_ERROR( "Transfer Size Option isn't expected" );
 
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Transfer Size Option not expected" };
-
+    const Packets::ErrorPacket errorPacket{
+      Packets::ErrorCode::TftpOptionRefused,
+      "Transfer Size Option isn't expected" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
     return;
   }
 
@@ -494,12 +489,13 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   {
     SPDLOG_ERROR( "Transfer Size Option decoding failed" );
 
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Transfer Size Option decoding failed" };
-
+    const Packets::ErrorPacket errorPacket{
+      Packets::ErrorCode::TftpOptionRefused,
+      "Transfer Size Option decoding failed" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
     return;
   }
 
@@ -507,12 +503,11 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   {
     if ( !dataHandlerV->receivedTransferSize( *transferSizeValue ) )
     {
-      Packets::ErrorPacket errorPacket{ Packets::ErrorCode::DiskFullOrAllocationExceeds, "File to big" };
-
+      const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::DiskFullOrAllocationExceeds, "File to big" };
       send( errorPacket );
 
       // Operation completed
-      finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+      finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
       return;
     }
   }
@@ -523,33 +518,31 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
   {
     SPDLOG_ERROR( "Option negotiation failed" );
 
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Option negotiation failed" };
-
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Option negotiation failed" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
     return;
   }
 
-  // check that remaining remote options are empty
+  // check that the remaining remote options are empty
   if ( !remoteOptions.empty() )
   {
     SPDLOG_ERROR( "Option negotiation failed - unexpected options" );
 
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Unexpected options" };
-
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Unexpected options" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::OptionNegotiationError, std::move( errorPacket ) );
+    finished( TransferStatus::OptionNegotiationError, errorPacket.errorInformation() );
     return;
   }
 
   // indicate Options acknowledgement
   oackReceived = true;
 
-  // send Acknowledgment with block number set to 0
+  // send Acknowledgement with block number set to 0
   send( Packets::AcknowledgementPacket{ Packets::BlockNumber{ 0 } } );
 
   // receive next packet

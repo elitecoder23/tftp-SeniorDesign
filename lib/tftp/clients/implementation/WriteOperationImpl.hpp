@@ -50,8 +50,8 @@ class WriteOperationImpl final : public WriteOperation, private OperationImpl
     //! @copydoc WriteOperation::abort()
     void abort() override;
 
-    //! @copydoc WriteOperation::errorInfo() const
-    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const override;
+    //! @copydoc WriteOperation::errorInformation() const
+    [[nodiscard]] const Packets::ErrorInformation& errorInformation() const override;
 
     //! @copydoc WriteOperation::tftpTimeout()
     WriteOperation& tftpTimeout( std::chrono::seconds timeout ) override;
@@ -60,16 +60,16 @@ class WriteOperationImpl final : public WriteOperation, private OperationImpl
     WriteOperation& tftpRetries( uint16_t retries ) override;
 
     //! @copydoc WriteOperation::optionsConfiguration()
-    WriteOperation &optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
+    WriteOperation& optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc WriteOperation::additionalOptions()
-    WriteOperation &additionalOptions( Packets::Options additionalOptions ) override;
+    WriteOperation& additionalOptions( Packets::Options additionalOptions ) override;
 
     //! @copydoc WriteOperation::optionNegotiationHandler()
-    WriteOperation &optionNegotiationHandler( OptionNegotiationHandler handler ) override;
+    WriteOperation& optionNegotiationHandler( OptionNegotiationHandler handler ) override;
 
     //! @copydoc WriteOperation::completionHandler()
-    WriteOperation &completionHandler( OperationCompletedHandler handler ) override;
+    WriteOperation& completionHandler( OperationCompletedHandler handler ) override;
 
     //! @copydoc WriteOperation::dataHandler()
     WriteOperation& dataHandler( TransmitDataHandlerPtr handler ) override;
@@ -88,7 +88,7 @@ class WriteOperationImpl final : public WriteOperation, private OperationImpl
 
   private:
     //! @copydoc OperationImpl::finished()
-    void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
+    void finished( TransferStatus status, Packets::ErrorInformation errorInformation = {} ) noexcept override;
 
     /**
      * @brief Sends the data to the host.

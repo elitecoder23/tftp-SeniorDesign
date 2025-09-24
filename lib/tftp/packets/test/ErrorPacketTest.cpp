@@ -59,6 +59,17 @@ BOOST_AUTO_TEST_SUITE( TftpTest )
 BOOST_AUTO_TEST_SUITE( PacketsTest )
 BOOST_AUTO_TEST_SUITE( TftpErrorPacket )
 
+//! Test default initialised Error Packet
+BOOST_AUTO_TEST_CASE( DefaultConstructor )
+{
+  const ErrorPacket errorPacket{};
+
+  BOOST_CHECK( errorPacket.packetType() == PacketType::Error );
+  BOOST_CHECK( errorPacket.errorCode() == ErrorCode::Invalid );
+  BOOST_CHECK( errorPacket.errorMessage().empty() );
+  BOOST_CHECK( errorPacket.errorInformation() == ErrorInformation{ std::make_tuple( ErrorCode::Invalid, std::string{} ) } );
+}
+
 //! ErrorPacket Constructor Test
 BOOST_AUTO_TEST_CASE( constructor1 )
 {

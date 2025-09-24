@@ -129,7 +129,7 @@ using OperationCompletedHandler = std::function< void( TransferStatus transferSt
  *
  * @return The processed file path
  * @retval std::nullopt
- *   When filename is not valid
+ *   When the filename is not valid
  **/
 [[nodiscard]] TFTP_EXPORT std::optional< std::filesystem::path > checkFilename(
   const std::filesystem::path &baseDir,

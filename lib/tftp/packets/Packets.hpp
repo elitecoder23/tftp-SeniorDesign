@@ -26,6 +26,7 @@
 #include <optional>
 #include <span>
 #include <string>
+#include <tuple>
 #include <vector>
 
 /**
@@ -152,7 +153,7 @@ using ConstRawOptionsSpan = std::span< const std::byte >;
 using Options = std::map< std::string, std::string, std::less< > >;
 
 //! Error Information
-using ErrorInfo = std::optional< ErrorPacket >;
+using ErrorInformation = std::optional< std::tuple< ErrorCode, std::string > >;
 
 }
 

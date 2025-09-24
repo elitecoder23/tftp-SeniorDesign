@@ -20,7 +20,6 @@
 #include <boost/asio/io_context.hpp>
 
 #include <chrono>
-#include <functional>
 #include <optional>
 #include <string>
 

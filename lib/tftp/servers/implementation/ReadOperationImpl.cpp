@@ -148,11 +148,11 @@ void ReadOperationImpl::start()
         {
           SPDLOG_ERROR( "Received transfer size must be 0" );
 
-          Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "transfer size must be 0" };
+          const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "transfer size must be 0" };
           send( errorPacket );
 
           // Operation completed
-          finished( TransferStatus::TransferError, std::move( errorPacket ) );
+          finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 
           return;
         }
@@ -205,18 +205,18 @@ void ReadOperationImpl::abort()
   OperationImpl::abort();
 }
 
-const Packets::ErrorInfo& ReadOperationImpl::errorInfo() const
+const Packets::ErrorInformation& ReadOperationImpl::errorInformation() const
 {
-  return OperationImpl::errorInfo();
+  return OperationImpl::errorInformation();
 }
 
-void ReadOperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo ) noexcept
+void ReadOperationImpl::finished( const TransferStatus status, Packets::ErrorInformation errorInformation ) noexcept
 {
   // Complete data handler
   dataHandlerV->finished();
 
   // Inform base class
-  OperationImpl::finished( status, std::move( errorInfo ) );
+  OperationImpl::finished( status, std::move( errorInformation ) );
 }
 
 void ReadOperationImpl::sendData()
@@ -242,12 +242,11 @@ void ReadOperationImpl::dataPacket(
 {
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( dataPacket ) );
 
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "DATA not expected" };
-
+  const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "DATA packet isn't expected" };
   send( errorPacket );
 
   // Operation completed
-  finished( TransferStatus::TransferError, std::move( errorPacket ) );
+  finished( TransferStatus::TransferError, errorPacket.errorInformation() );
 }
 
 void ReadOperationImpl::acknowledgementPacket(
@@ -275,11 +274,11 @@ void ReadOperationImpl::acknowledgementPacket(
     SPDLOG_ERROR( "Invalid block number received" );
 
     // send error packet
-    Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Wrong block number" };
+    const Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Wrong block number" };
     send( errorPacket );
 
     // Operation completed
-    finished( TransferStatus::TransferError, std::move( errorPacket ) );
+    finished( TransferStatus::TransferError, errorPacket.errorInformation() );
     return;
   }
 

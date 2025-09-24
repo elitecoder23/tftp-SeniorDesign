@@ -50,8 +50,8 @@ class ReadOperationImpl final : public ReadOperation, private OperationImpl
     //! @copydoc ReadOperation::abort()
     void abort() override;
 
-    //! @copydoc ReadOperation::errorInfo() const
-    [[nodiscard]] const Packets::ErrorInfo& errorInfo() const override;
+    //! @copydoc ReadOperation::errorInformation() const
+    [[nodiscard]] const Packets::ErrorInformation& errorInformation() const override;
 
     //! @copydoc ReadOperation::tftpTimeout()
     ReadOperation& tftpTimeout( std::chrono::seconds timeout ) override;
@@ -63,16 +63,16 @@ class ReadOperationImpl final : public ReadOperation, private OperationImpl
     ReadOperation& dally( bool dally ) override;
 
     //! @copydoc ReadOperation::optionsConfiguration()
-    ReadOperation &optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
+    ReadOperation& optionsConfiguration( TftpOptionsConfiguration optionsConfiguration ) override;
 
     //! @copydoc ReadOperation::additionalOptions()
-    ReadOperation &additionalOptions( Packets::Options additionalOptions ) override;
+    ReadOperation& additionalOptions( Packets::Options additionalOptions ) override;
 
     //! @copydoc ReadOperation::optionNegotiationHandler()
-    ReadOperation &optionNegotiationHandler( OptionNegotiationHandler handler ) override;
+    ReadOperation& optionNegotiationHandler( OptionNegotiationHandler handler ) override;
 
     //! @copydoc ReadOperation::completionHandler()
-    ReadOperation &completionHandler( OperationCompletedHandler handler ) override;
+    ReadOperation& completionHandler( OperationCompletedHandler handler ) override;
 
     //! @copydoc ReadOperation::dataHandler()
     ReadOperation& dataHandler( ReceiveDataHandlerPtr handler ) override;
@@ -91,14 +91,13 @@ class ReadOperationImpl final : public ReadOperation, private OperationImpl
 
   private:
     //! @copydoc OperationImpl::finished()
-    void finished( TransferStatus status, Packets::ErrorInfo &&errorInfo = {} ) noexcept override;
+    void finished( TransferStatus status, Packets::ErrorInformation errorInformation = {} ) noexcept override;
 
     /**
      * @copydoc Packets::PacketHandler::dataPacket()
      *
      * The TFTP DATA packet is decoded and checked.
-     * If everything is fine, handler is called with extracted data and the
-     * reception operation is continued.
+     * If everything is fine, the handler is called with extracted data and the reception operation is continued.
      **/
     void dataPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::DataPacket &dataPacket ) override;
 
@@ -137,7 +136,7 @@ class ReadOperationImpl final : public ReadOperation, private OperationImpl
     //! retries.
     bool dallyV{ false };
 
-    //! flag to hold information if OACK has been received (used when first data packet is received)
+    //! flag to hold information if OACK has been received (used when the first data packet is received)
     bool oackReceived{ false };
     //! Size of the data-section in the TFTP DATA packet - changed during option negotiation.
     uint16_t receiveDataSize{ Packets::DefaultDataSize };
