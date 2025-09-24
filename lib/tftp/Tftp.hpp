@@ -94,15 +94,15 @@ enum class TransferStatus
 {
   //! Transfer completed successfully
   Successful,
-  //! Communication error (i.e. timeout, read error) occurred
+  //! Communication error (i.e. timeout, read error) occurred.
   CommunicationError,
-  //! Error received/ transmitted - RRQ/ WRQ rejected
+  //! Error received/ transmitted - RRQ/ WRQ rejected.
   RequestError,
-  //! Error received/ transmitted - Option Negotiation Failed
+  //! Error received/ transmitted - Option Negotiation Failed.
   OptionNegotiationError,
-  //! Error received/ transmitted - Invalid data or packets
+  //! Error received/ transmitted - Invalid data or packets.
   TransferError,
-  //! User (own side) requested abort (gracefully or not gracefully)
+  //! User (own side) requested abort (gracefully or not gracefully).
   Aborted,
 };
 

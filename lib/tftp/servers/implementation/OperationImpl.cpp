@@ -61,7 +61,7 @@ void OperationImpl::initialise()
   {
     SPDLOG_ERROR( "Initialisation Error: {}", err.what() );
 
-    // On error and if socket is opened - close it.
+    // On error and if the socket is opened - close it.
     if ( socket.is_open() )
     {
       socket.close();
@@ -209,7 +209,7 @@ void OperationImpl::receiveDally()
 
 void OperationImpl::finished( const TransferStatus status, Packets::ErrorInfo &&errorInfo )
 {
-  SPDLOG_INFO( "TFTP Server Operation finished" );
+  SPDLOG_INFO( "TFTP Server operation finished" );
 
   errorInfoV = std::move( errorInfo );
 
@@ -230,7 +230,7 @@ void OperationImpl::readRequestPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( readRequestPacket ) );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ not expected" };
+  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "RRQ packet isn't expected" };
 
   send( errorPacket );
 
@@ -245,7 +245,7 @@ void OperationImpl::writeRequestPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( writeRequestPacket ) );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ not expected" };
+  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "WRQ packet isn't expected" };
 
   send( errorPacket );
 
@@ -290,7 +290,7 @@ void OperationImpl::optionsAcknowledgementPacket(
   SPDLOG_ERROR( "RX Error: {}", static_cast< std::string>( optionsAcknowledgementPacket ) );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "OACK not expected" };
+  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "OACK packet isn't expected" };
 
   send( errorPacket );
 
@@ -305,7 +305,7 @@ void OperationImpl::invalidPacket(
   SPDLOG_ERROR( "RX Error: INVALID Packet" );
 
   // send error packet
-  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet not expected" };
+  Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Invalid packet isn't expected" };
 
   send( errorPacket );
 

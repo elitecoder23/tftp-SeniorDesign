@@ -54,11 +54,11 @@ class TFTP_EXPORT StreamFile final : public File
     StreamFile( Operation operation, std::filesystem::path filename, size_t size );
 
     /**
-     * @copydoc File::reset
+     * @copydoc File::start
      *
      * Reopens the file depending on @p operationV.
      **/
-    void reset() override;
+    void start() override;
 
     /**
      * @copydoc File::finished()

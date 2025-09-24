@@ -55,10 +55,8 @@ class PacketStatistic;
 /**
  * @brief TFTP Packet Types.
  *
- * All packet types, except TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6), are
- * defined within RFC 1350.
- * The packet type TFTP_PACKET_OPTIONS_ACKNOWLEDGEMENT (6) is described within
- * RFC 2347.
+ * All packet types, except @ref PacketType::OptionsAcknowledgement (6), are defined within RFC 1350.
+ * The packet type @ref PacketType::OptionsAcknowledgement (6) is described within RFC 2347.
  **/
 enum class PacketType : uint16_t
 {
@@ -72,13 +70,13 @@ enum class PacketType : uint16_t
   Invalid                = 0xFFU //!< Invalid value
 };
 
-//! Maximum size of data field in data package (without blksize option)
+//! Maximum size of the data field in a TFTP data package (without the block size option)
 constexpr uint16_t DefaultDataSize{ 512U };
 
-//! Size of TFTP header in data package (Opcode + Block Number)
+//! Size of TFTP header in the TFTP data package (Opcode and block number)
 constexpr uint16_t DefaultTftpDataPacketHeaderSize{ 4U };
 
-//! Maximum size of TFTP package (without blksize option)
+//! Maximum size of a TFTP package (without the block size option)
 constexpr uint16_t DefaultMaxPacketSize{ DefaultDataSize + DefaultTftpDataPacketHeaderSize };
 
 //! TFTP Transfer Modes.
@@ -99,9 +97,9 @@ enum class TransferMode
  **/
 enum class ErrorCode : uint16_t
 {
-  //! Not defined, see error message (if any).
+  //! Not defined, see the error message (if any).
   NotDefined                  = 0U,
-  //! File not found
+  //! File not found.
   FileNotFound                = 1U,
   //! Access violation.
   AccessViolation             = 2U,
@@ -115,45 +113,46 @@ enum class ErrorCode : uint16_t
   FileAlreadyExists           = 6U,
   //! No such user.
   NoSuchUser                  = 7U,
-  //! TFTP options refused during option negotiation
+  //! TFTP options refused during option negotiation.
   TftpOptionRefused           = 8U,
 
+  //! Invalid Value.
   Invalid                     = 0xFFFFU
 };
 
 //! Enumeration of all known TFTP Options
 enum class KnownOptions
 {
-  //! Block size option (RFC 2348)
+  //! Block Size Option (RFC 2348)
   BlockSize,
-  //! Timeout option (RFC 2349)
+  //! Timeout Option (RFC 2349)
   Timeout,
-  //! Transfer size option (RFC 2349)
+  //! Transfer Size Option (RFC 2349)
   TransferSize
 };
 
-//! Minimum TFTP block size option as defined within RFC 2348
+//! Minimum TFTP block size option as defined within RFC 2348.
 constexpr uint16_t BlockSizeOptionMin{ 8U };
-//! Maximum TFTP block size option as defined within RFC 2348
+//! Maximum TFTP block size option as defined within RFC 2348.
 constexpr uint16_t BlockSizeOptionMax{ 65464U };
 //! Default TFTP block size option when using plain Ethernet with IPv4.
 //! Ethernet MTU (1500), IPv4 Header (20), UDP Header (8), and TFTP Header (4)
 constexpr uint16_t BlockSizeOptionDefault{ 1468U }; // TFTP Header
 
-//! Minimum TFTP timeout option as defined within RFC 2349
+//! Minimum TFTP timeout option as defined within RFC 2349.
 constexpr uint8_t TimeoutOptionMin{ 1U };
-//! maximum TFTP timeout option as defined within RFC 2349
+//! maximum TFTP timeout option as defined within RFC 2349.
 constexpr uint8_t TimeoutOptionMax{ 255U };
 
 //! Raw Options.
 using RawOptions = std::vector< std::byte >;
-//! Constant Raw TFTP Options as std::span
+//! Constant Raw TFTP Options as @p std::span.
 using ConstRawOptionsSpan = std::span< const std::byte >;
 //! TFTP Options (Maps Option Name to Option Value)
 using Options = std::map< std::string, std::string, std::less< > >;
 
 //! Error Information
-using ErrorInfo = std::optional< Packets::ErrorPacket >;
+using ErrorInfo = std::optional< ErrorPacket >;
 
 }
 

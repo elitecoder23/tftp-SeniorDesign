@@ -41,8 +41,8 @@ void ReadOperationImpl::request()
 {
   if ( !dataHandlerV )
   {
-    BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo{ "Parameter Invalid" }
+    BOOST_THROW_EXCEPTION( TftpException{}
+      << Helper::AdditionalInfo{ "Parameter invalid" }
       << TransferPhaseInfo{ TransferPhase::Initialisation } );
   }
 
@@ -52,7 +52,7 @@ void ReadOperationImpl::request()
     initialise();
 
     // Reset data handler
-    dataHandlerV->reset();
+    dataHandlerV->start();
 
     receiveDataSize = Packets::DefaultDataSize;
     lastReceivedBlockNumber = 0U;
@@ -310,7 +310,7 @@ void ReadOperationImpl::dataPacket(
   }
   else
   {
-    // otherwise, wait for next data package
+    // otherwise, wait for the next data packet
     receive();
   }
 }
@@ -456,11 +456,11 @@ void ReadOperationImpl::optionsAcknowledgementPacket(
     // Timeout Option Response from Server must be equal to Client Value
     if ( std::chrono::seconds{ *timeoutValue } != *optionsConfigurationV.timeoutOption )
     {
-      SPDLOG_ERROR( "Timeout Option not equal to requested" );
+      SPDLOG_ERROR( "Timeout option not equal to requested" );
 
       Packets::ErrorPacket errorPacket{
         Packets::ErrorCode::TftpOptionRefused,
-        "Timeout Option not equal to requested" };
+        "Timeout option not equal to requested" };
 
       send( errorPacket );
 

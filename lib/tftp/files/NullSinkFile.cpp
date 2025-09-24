@@ -19,7 +19,7 @@ NullSinkFile::NullSinkFile( const uint64_t size ):
 {
 }
 
-void NullSinkFile::reset()
+void NullSinkFile::start()
 {
 }
 

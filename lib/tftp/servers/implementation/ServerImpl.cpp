@@ -111,7 +111,7 @@ void ServerImpl::start()
       socketV.close();
     }
 
-    BOOST_THROW_EXCEPTION( CommunicationException()
+    BOOST_THROW_EXCEPTION( CommunicationException{}
       << Helper::AdditionalInfo{ err.what() }
       << TransferPhaseInfo{ TransferPhase::Initialisation } );
   }
@@ -251,7 +251,7 @@ void ServerImpl::receive()
 {
   try
   {
-    // wait for incoming packet
+    // wait for an incoming packet
     socketV.async_receive_from(
       boost::asio::buffer( receivePacketV ),
       remoteEndpointV,
@@ -276,10 +276,9 @@ void ServerImpl::receiveHandler( const boost::system::error_code &errorCode, con
   // Check error
   if ( errorCode )
   {
-    SPDLOG_ERROR( "receive error: " + errorCode.message() );
+    SPDLOG_ERROR( "receive error: {}", errorCode.message() );
 
-    BOOST_THROW_EXCEPTION( CommunicationException()
-      << Helper::AdditionalInfo{ errorCode.message() } );
+    BOOST_THROW_EXCEPTION( CommunicationException{} << Helper::AdditionalInfo{ errorCode.message() } );
   }
 
   try
@@ -307,12 +306,12 @@ void ServerImpl::readRequestPacket(
     SPDLOG_WARN( "No registered handler - reject" );
 
     // execute error operation
-    errorOperation( remote, Packets::ErrorCode::FileNotFound, "RRQ not accepted" );
+    errorOperation( remote, Packets::ErrorCode::FileNotFound, "RRQ packet isn't accepted" );
   }
 
   // extract known TFTP Options
   auto receivedOptions{ readRequestPacket.options() };
-  auto decodedOptions{ tftpOptions( receivedOptions ) };
+  const auto decodedOptions{ tftpOptions( receivedOptions ) };
 
   // call the handler, which handles the received request
   requestHandlerV(
@@ -341,7 +340,7 @@ void ServerImpl::writeRequestPacket(
 
   // extract known TFTP Options
   auto receivedOptions{ writeRequestPacket.options() };
-  auto decodedOptions{ tftpOptions( receivedOptions ) };
+  const auto decodedOptions{ tftpOptions( receivedOptions ) };
 
   // call the handler, which handles the received request
   requestHandlerV(
@@ -358,7 +357,7 @@ void ServerImpl::dataPacket( const boost::asio::ip::udp::endpoint &remote, const
   SPDLOG_WARN( "RX Error: {}", static_cast< std::string >( dataPacket ) );
 
   // execute error operation
-  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "DATA packet not expected" );
+  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "DATA packet isn't expected" );
 }
 
 void ServerImpl::acknowledgementPacket(
@@ -368,7 +367,7 @@ void ServerImpl::acknowledgementPacket(
   SPDLOG_WARN( "RX Error: {}", static_cast< std::string >( acknowledgementPacket ) );
 
   // execute error operation
-  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "ACK packet not expected" );
+  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "ACK packet isn't expected" );
 }
 
 void ServerImpl::errorPacket( const boost::asio::ip::udp::endpoint &remote, const Packets::ErrorPacket &errorPacket )
@@ -376,7 +375,7 @@ void ServerImpl::errorPacket( const boost::asio::ip::udp::endpoint &remote, cons
   SPDLOG_WARN( "RX Error: {}", static_cast< std::string>( errorPacket ) );
 
   // execute error operation
-  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "ERR packet not expected" );
+  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "ERR packet isn't expected" );
 }
 
 void ServerImpl::optionsAcknowledgementPacket(
@@ -386,7 +385,7 @@ void ServerImpl::optionsAcknowledgementPacket(
   SPDLOG_WARN( "RX Error: {}", static_cast< std::string >( optionsAcknowledgementPacket ) );
 
   // execute error operation
-  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "OACK packet not expected" );
+  errorOperation( remote, Packets::ErrorCode::IllegalTftpOperation, "OACK packet isn't expected" );
 }
 
 void ServerImpl::invalidPacket(

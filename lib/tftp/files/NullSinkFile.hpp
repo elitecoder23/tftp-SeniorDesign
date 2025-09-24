@@ -43,10 +43,10 @@ class TFTP_EXPORT NullSinkFile final : public ReceiveDataHandler
     explicit NullSinkFile( uint64_t size );
 
     /**
-     * @copydoc ReceiveDataHandler::reset
+     * @copydoc ReceiveDataHandler::start
      *
      **/
-    void reset() override;
+    void start() override;
 
     /**
      * @copydoc ReceiveDataHandler::finished

@@ -37,7 +37,7 @@ StreamFile::StreamFile( const Operation operation, std::filesystem::path filenam
 {
 }
 
-void StreamFile::reset()
+void StreamFile::start()
 {
   switch ( operationV )
   {
@@ -50,15 +50,15 @@ void StreamFile::reset()
       break;
 
     default:
-      BOOST_THROW_EXCEPTION( TftpException()
-        << Helper::AdditionalInfo{ "Invalid File Mode" }
+      BOOST_THROW_EXCEPTION( TftpException{}
+        << Helper::AdditionalInfo{ "Invalid file mode" }
         << boost::errinfo_file_name{ filenameV.string() } );
   }
 
   if ( !streamV )
   {
-    BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo{ "Error opening file" }
+    BOOST_THROW_EXCEPTION( TftpException{}
+      << Helper::AdditionalInfo{ "Error opening the file" }
       << boost::errinfo_file_name{ filenameV.string() } );
   }
 }
@@ -74,15 +74,15 @@ bool StreamFile::receivedTransferSize( const uint64_t transferSize )
   // If no size is provided
   if ( !sizeV )
   {
-    // Always accept a file based on size
+    // Always accept the file based on size
     return true;
   }
 
-  // Accept file if size is matching the maximum allowed one.
+  // Accept the file if size is matching the maximum allowed one.
   return ( transferSize <= sizeV );
 }
 
-void StreamFile::receivedData( Helper::ConstRawDataSpan data )
+void StreamFile::receivedData( const Helper::ConstRawDataSpan data )
 {
   if ( !data.empty() )
   {

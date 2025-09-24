@@ -54,12 +54,12 @@ class TFTP_EXPORT MemoryFile final : public File
     explicit MemoryFile( Helper::RawData data );
 
     /**
-     * @copydoc File::reset
+     * @copydoc File::start
      *
      * If the file is received for receiving data, the content is cleared.
      * For write operation, the read pointer is reset to the beginning of the file.
      **/
-    void reset() override;
+    void start() override;
 
     /**
      * @brief Returns a reference to the locally stored data.

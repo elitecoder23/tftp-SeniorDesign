@@ -19,7 +19,7 @@ namespace Tftp::Servers {
 std::optional< std::filesystem::path > checkFilename(
   const std::filesystem::path &baseDir,
   const std::filesystem::path &filename,
-  bool mustExist )
+  const bool mustExist )
 {
   std::error_code errorCode;
 
@@ -36,17 +36,15 @@ std::optional< std::filesystem::path > checkFilename(
   auto filePath{ std::filesystem::weakly_canonical( canonicalBaseDir / filename, errorCode ) };
   if ( errorCode )
   {
-    SPDLOG_ERROR( "Could not make file path canonical." );
+    SPDLOG_ERROR( "Could not make the file path canonical." );
     return std::nullopt;
   }
 
-  // Using "equal" we can check if "requested_file_path" starts
-  // with base_resolved_path.
-  // Because we previously canonicalized both paths they can't contain any ".."
-  // segments, so this check is sufficient.
+  // Using "equal", we can check if "requested_file_path" starts with base_resolved_path.
+  // Because we previously canonicalised both paths, they can't contain any ".." segments, so this check is sufficient.
   if ( !std::equal( canonicalBaseDir.begin(), canonicalBaseDir.end(), filePath.begin() ) )
   {
-    SPDLOG_ERROR( "File path not within base directory." );
+    SPDLOG_ERROR( "File path is not within the base directory." );
 
     return std::nullopt;
   }

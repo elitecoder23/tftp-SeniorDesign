@@ -93,8 +93,8 @@ void ReadOperationImpl::start()
 {
   if ( !dataHandlerV )
   {
-    BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo{ "Parameter Invalid" }
+    BOOST_THROW_EXCEPTION( TftpException{}
+      << Helper::AdditionalInfo{ "Parameter invalid" }
       << TransferPhaseInfo{ TransferPhase::Initialisation } );
   }
 
@@ -104,9 +104,9 @@ void ReadOperationImpl::start()
     initialise();
 
     // Reset data handler
-    dataHandlerV->reset();
+    dataHandlerV->start();
 
-    // option negotiation leads to empty option list
+    // option negotiation leads to an empty option list
     if ( !clientOptionsV && additionalNegotiatedOptionsV.empty() )
     {
       // Then no OACK is sent back - data is sent immediately
@@ -141,7 +141,7 @@ void ReadOperationImpl::start()
           std::to_string( *clientOptionsV.timeout ) );
       }
 
-      // check transfer size option
+      // check for the transfer size option
       if ( optionsConfigurationV.handleTransferSizeOption && clientOptionsV.transferSize )
       {
         if ( 0U != *clientOptionsV.transferSize )
@@ -221,7 +221,7 @@ void ReadOperationImpl::finished( const TransferStatus status, Packets::ErrorInf
 
 void ReadOperationImpl::sendData()
 {
-  lastTransmittedBlockNumber++;
+  ++lastTransmittedBlockNumber;
 
   SPDLOG_TRACE( "Send Data #{}", static_cast< uint16_t >( lastTransmittedBlockNumber ) );
 
@@ -276,7 +276,6 @@ void ReadOperationImpl::acknowledgementPacket(
 
     // send error packet
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::IllegalTftpOperation, "Wrong block number" };
-
     send( errorPacket );
 
     // Operation completed

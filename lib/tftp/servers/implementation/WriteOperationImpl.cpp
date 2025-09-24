@@ -108,8 +108,8 @@ void WriteOperationImpl::start()
 {
   if ( !dataHandlerV )
   {
-    BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo{ "Parameter Invalid" }
+    BOOST_THROW_EXCEPTION( TftpException{}
+      << Helper::AdditionalInfo{ "Parameter invalid" }
       << TransferPhaseInfo{ TransferPhase::Initialisation } );
   }
 
@@ -119,7 +119,7 @@ void WriteOperationImpl::start()
     initialise();
 
     // Reset data handler
-    dataHandlerV->reset();
+    dataHandlerV->start();
 
     // option negotiation leads to an empty option list
     if ( !clientOptionsV && additionalNegotiatedOptionsV.empty() )
@@ -132,7 +132,7 @@ void WriteOperationImpl::start()
       // initialise server options with additional negotiated options
       Packets::Options serverOptions{ additionalNegotiatedOptionsV };
 
-      // check block size option - if set use it
+      // check for the block size option - if set, use it
       if ( optionsConfigurationV.blockSizeOption && clientOptionsV.blockSize )
       {
         receiveDataSize = std::min( *clientOptionsV.blockSize, *optionsConfigurationV.blockSizeOption );
@@ -143,25 +143,25 @@ void WriteOperationImpl::start()
           std::to_string( receiveDataSize ) );
       }
 
-      // check timeout option - if set use it
+      // check for the timeout option - if set, use it
       if ( optionsConfigurationV.timeoutOption
         && clientOptionsV.timeout
         && ( std::chrono::seconds{ *clientOptionsV.timeout } <= *optionsConfigurationV.timeoutOption ) )
       {
         receiveTimeout( std::chrono::seconds{ *clientOptionsV.timeout } );
 
-        // respond with timeout option set
+        // respond with the timeout option set
         serverOptions.try_emplace(
           std::string{ Packets::TftpOptions_name( Packets::KnownOptions::Timeout ) },
           std::to_string( *clientOptionsV.timeout ) );
       }
 
-      // check transfer size option
+      // check for the transfer size option
       if ( optionsConfigurationV.handleTransferSizeOption && clientOptionsV.transferSize )
       {
         if ( !dataHandlerV->receivedTransferSize( *clientOptionsV.transferSize ) )
         {
-          Packets::ErrorPacket errorPacket{ Packets::ErrorCode::DiskFullOrAllocationExceeds, "FILE TO BIG" };
+          Packets::ErrorPacket errorPacket{ Packets::ErrorCode::DiskFullOrAllocationExceeds, "File to big" };
 
           send( errorPacket );
 

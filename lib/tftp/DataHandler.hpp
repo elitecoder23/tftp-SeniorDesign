@@ -31,12 +31,12 @@ class TFTP_EXPORT DataHandler
     virtual ~DataHandler() noexcept = default;
 
     /**
-     * @brief Data Handler Reset Request.
+     * @brief Data Handler Start Request.
      *
      * Is called once before any data is requested or provided.
      * Should reset the data handler.
      **/
-    virtual void reset() = 0;
+    virtual void start() = 0;
 
     /**
      * @brief Called, when the operation has been finished.

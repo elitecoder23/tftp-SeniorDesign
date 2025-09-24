@@ -36,7 +36,7 @@ MemoryFile::MemoryFile( Helper::RawData data ) :
 {
 }
 
-void MemoryFile::reset()
+void MemoryFile::start()
 {
   if ( Operation::Receive == operationV )
   {

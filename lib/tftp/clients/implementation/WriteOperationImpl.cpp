@@ -22,7 +22,6 @@
 #include <tftp/TftpException.hpp>
 #include <tftp/TransmitDataHandler.hpp>
 
-#include <helper/Dump.hpp>
 #include <helper/Exception.hpp>
 
 #include <spdlog/spdlog.h>
@@ -42,8 +41,8 @@ void WriteOperationImpl::request()
 {
   if ( !dataHandlerV )
   {
-    BOOST_THROW_EXCEPTION( TftpException()
-      << Helper::AdditionalInfo{ "Parameter Invalid" }
+    BOOST_THROW_EXCEPTION( TftpException{}
+      << Helper::AdditionalInfo{ "Parameter invalid" }
       << TransferPhaseInfo{ TransferPhase::Initialisation } );
   }
 
@@ -53,7 +52,7 @@ void WriteOperationImpl::request()
     initialise();
 
     // Reset data handler
-    dataHandlerV->reset();
+    dataHandlerV->start();
 
     transmitDataSize = Packets::DefaultDataSize;
     lastDataPacketTransmitted = false;
@@ -79,7 +78,7 @@ void WriteOperationImpl::request()
         std::to_string( static_cast< uint16_t >( optionsConfigurationV.timeoutOption->count() ) ) );
     }
 
-    // Add transfer size option if requested.
+    // Add the transfer size option if requested.
     if ( optionsConfigurationV.handleTransferSizeOption )
     {
       // If the handler supplies a transfer size
@@ -93,7 +92,7 @@ void WriteOperationImpl::request()
       }
     }
 
-    // send write request packet
+    // send the write request packet
     sendFirst( Packets::WriteRequestPacket{ filenameV, modeV, std::move( options ) } );
 
     // wait for answers
@@ -263,15 +262,13 @@ void WriteOperationImpl::acknowledgementPacket(
 
   lastReceivedBlockNumber = acknowledgementPacket.blockNumber();
 
-  // if block number is 0 -> ACK of write without Options
+  // if the block number is 0 -> ACK of write without Options
   if ( acknowledgementPacket.blockNumber() == Packets::BlockNumber{ 0U } )
   {
-    // Call Option Negotiation Handler with empty options list.
+    // Call Option Negotiation Handler with an empty options list.
     // If no Handler is registered - Continue Operation.
-    // If options negotiation is aborted by Option Negotiation Handler - Abort
-    //   Operation
-    Packets::Options options{};
-    if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( options ) )
+    // If options negotiation is aborted by Option Negotiation Handler - Abort Operation
+    if ( Packets::Options options; optionNegotiationHandlerV && !optionNegotiationHandlerV( options ) )
     {
       SPDLOG_ERROR( "Option Negotiation failed" );
 
@@ -422,14 +419,13 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   if ( timeoutValue )
   {
     // Timeout Option Response from Server must be equal to Client Value
-    if ( std::chrono::seconds{ *timeoutValue }
-      != *optionsConfigurationV.timeoutOption )
+    if ( std::chrono::seconds{ *timeoutValue } != *optionsConfigurationV.timeoutOption )
     {
-      SPDLOG_ERROR( "Timeout Option not equal to requested" );
+      SPDLOG_ERROR( "Timeout option not equal to requested" );
 
       Packets::ErrorPacket errorPacket{
         Packets::ErrorCode::TftpOptionRefused,
-        "Timeout Option not equal to requested" };
+        "Timeout option not equal to requested" };
 
       send( errorPacket );
 
@@ -489,7 +485,7 @@ void WriteOperationImpl::optionsAcknowledgementPacket(
   // If no handler is registered - Accept options and continue operation
   if ( optionNegotiationHandlerV && !optionNegotiationHandlerV( remoteOptions ) )
   {
-    SPDLOG_ERROR(  "Option negotiation failed" );
+    SPDLOG_ERROR( "Option negotiation failed" );
 
     Packets::ErrorPacket errorPacket{ Packets::ErrorCode::TftpOptionRefused, "Option negotiation failed" };
 

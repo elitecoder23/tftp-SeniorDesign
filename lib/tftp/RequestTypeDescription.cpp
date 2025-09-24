@@ -28,7 +28,7 @@ RequestTypeDescription::RequestTypeDescription() :
 
 std::istream& operator>>( std::istream &stream, RequestType &requestType )
 {
-  std::string requestTypeStr{};
+  std::string requestTypeStr;
 
   stream >> requestTypeStr;
 
