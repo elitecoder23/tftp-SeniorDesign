@@ -18,6 +18,7 @@ add_custom_target(
     --backend html5
     --source-dir ${CMAKE_CURRENT_SOURCE_DIR}
     --destination-dir ${CMAKE_CURRENT_BINARY_DIR}
+    --attribute source-highlighter=pygments
     ${CMAKE_CURRENT_SOURCE_DIR}/tftp_user_manual.adoc
   COMMENT "Generating tftp_user_manual.html" )
 

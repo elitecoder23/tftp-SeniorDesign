@@ -7,6 +7,7 @@ email thomas@thomas-vogt.de
 :sectnums: all
 :sectnumlevels: 4
 :url-repo: https://git.thomas-vogt.de/thomas-vogt/tftp
+:icons: font
 :toc:
 
 Thomas Vogt
