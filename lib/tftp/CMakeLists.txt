@@ -91,7 +91,7 @@ target_link_libraries(
     Boost::program_options
 
   PRIVATE
-    spdlog::spdlog
+    spdlog::spdlog_header_only
     # Windows Socket must be explicitly linked in MinGW
     $<$<PLATFORM_ID:Windows>:wsock32>
     $<$<PLATFORM_ID:Windows>:ws2_32> )
