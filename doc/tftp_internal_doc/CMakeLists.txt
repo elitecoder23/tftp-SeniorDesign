@@ -8,7 +8,7 @@ cmake_minimum_required( VERSION 3.31 )
 find_package( Doxygen )
 find_package( Boost )
 
-if( NOT DOXYGEN_FOUND )
+if( NOT Doxygen_FOUND )
   return()
 endif()
 
@@ -34,6 +34,12 @@ set( DOXYGEN_QUIET YES )
 set( DOXYGEN_HTML_DYNAMIC_SECTIONS YES )
 set( DOXYGEN_GENERATE_TREEVIEW YES )
 set( DOXYGEN_INCLUDED_BY_GRAPH NO )
+
+# TODO: Workaround for dot does not found suitable font for "Helvetica" on Debian
+if( UNIX )
+  set( DOXYGEN_DOT_COMMON_ATTR "fontname=sans-serif,fontsize=10" )
+  set( DOXYGEN_DOT_EDGE_ATTR "labelfontname=sans-serif,labelfontsize=10" )
+endif()
 
 if( WIN32 )
   # shorten filename otherwise exceeds 255 characters for paths
