@@ -15,7 +15,12 @@
       },
       "cacheVariables": {
         "VCPKG_MANIFEST_FEATURES" : "with-qt",
-        "CMAKE_COMPILE_WARNING_AS_ERROR" : "True"
+        "CMAKE_COMPILE_WARNING_AS_ERROR": "True"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       },
       "graphviz": "dependencies.dot",
       "vendor": {
@@ -30,12 +35,7 @@
       "description": "MSVC Static Debug",
       "inherits": "msvc-base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE" : "Debug"
-      },
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
@@ -44,12 +44,7 @@
       "description": "MSVC Static Release",
       "inherits": "msvc-base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE" : "Release"
-      },
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
+        "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
@@ -58,13 +53,8 @@
       "description": "MSVC Shared Debug",
       "inherits": "msvc-base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE" : "Debug",
-        "BUILD_SHARED_LIBS" : true
-      },
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BUILD_SHARED_LIBS": true
       }
     },
     {
@@ -73,13 +63,8 @@
       "description": "MSVC Shared Release",
       "inherits": "msvc-base",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE" : "Release",
-        "BUILD_SHARED_LIBS" : true
-      },
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_SHARED_LIBS": true
       }
     }
   ],
