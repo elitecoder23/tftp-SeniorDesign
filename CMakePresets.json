@@ -1,5 +1,5 @@
 {
-  "version": 10,
+  "version": 6,
 
   "include": [
     "CMakePresetsGcc.json",
@@ -7,3 +7,4 @@
     "CMakePresetsMsvc.json"
   ]
 }
+

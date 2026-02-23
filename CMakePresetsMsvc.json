@@ -1,5 +1,5 @@
 {
-  "version": 10,
+  "version": 6,
 
   "configurePresets": [
     {
@@ -22,7 +22,6 @@
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
       },
-      "graphviz": "dependencies.dot",
       "vendor": {
         "jetbrains.com/clion": {
           "toolchain": "Visual Studio"
